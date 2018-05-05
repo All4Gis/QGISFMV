@@ -1,6 +1,6 @@
 # QGIS Full Motion Video (FMV) #
  
-![a](images/banner.png)
+![a](banner.png)
 
 Plugin for QGIS > 2.99 which allows to analyze, visualize and process videos inside the QGIS environment. QGIS FMV accepts multiple video formats such as mp4, ts, avi, etc. It is also able to extract video frames, to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more. It also offers the possibility to create reports with video metadata.
 
@@ -127,7 +127,7 @@ Want to buy me a beer (or gadget)? Please use Paypal button on the project page,
 If this plugin is useful for you, consider to donate to the author.
 
 
-[© All4gis 2018]
+[Â© All4gis 2018]
 
 
 
