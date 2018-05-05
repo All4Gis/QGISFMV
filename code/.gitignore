@@ -1,0 +1,8 @@
+.project
+.pydevproject
+Compile.bat
+py3-env.bat
+Hidden.bat
+*.pyc
+.settings/
+__pycache__/

@@ -1,0 +1,4 @@
+Deploy/
+release/
+vendor/
+*.pyc
