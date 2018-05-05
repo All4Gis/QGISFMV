@@ -6,7 +6,7 @@ Plugin for QGIS > 2.99 which allows to analyze, visualize and process videos ins
 
 Standards supported:
 
-  - "UAS Datalink Local Set", [ST0601.11](http://www.gwg.nga.mil/misb/docs/standards/ST0601.8.pdf)
+  - "UAS Datalink Local Set", [ST0601.11](http://www.gwg.nga.mil/misb/docs/standards/ST0601.11.pdf)
 
   
 ## Motivation
