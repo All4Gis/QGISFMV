@@ -1,0 +1,11 @@
+[main]
+host = https://www.transifex.com
+
+[QGISFMV.qgisfmv-plugin]
+file_filter = code/i18n/qgisfmv_<lang>.json
+minimum_perc = 10
+source_file = code/i18n/qgisfmv_es.ts
+source_lang = es
+trans.en = code/i18n/qgisfmv_en.ts
+type = QT
+
