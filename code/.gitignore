@@ -2,6 +2,7 @@
 .pydevproject
 Compile.bat
 py3-env.bat
+ReleaseI18n.bat
 Hidden.bat
 *.pyc
 .settings/
