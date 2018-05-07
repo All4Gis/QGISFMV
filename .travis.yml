@@ -1,0 +1,20 @@
+language: python
+
+# sudo false implies containerized builds
+sudo: false
+
+python:
+  - "3.5"
+  - "3.6"
+
+branches:
+  only:
+  - master
+
+# Install dependencies
+install:
+  - pip install -r code/requirements.txt
+  - pip install coveralls
+
+script:
+  - python tests/test.py

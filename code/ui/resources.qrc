@@ -1,0 +1,34 @@
+<RCC>
+    <qresource prefix="imgFMV">
+        <file>../images/icon.png</file>
+        <file>../images/Critical.png</file>
+        <file>../images/Information.png</file>
+        <file>../images/Question.png</file>
+        <file>../images/Warning.png</file>
+        <file>../images/fast-forward.png</file>
+        <file>../images/fast-rewind.png</file>
+        <file>../images/pause.png</file>
+        <file>../images/play-arrow.png</file>
+        <file>../images/skip-next.png</file>
+        <file>../images/skip-previous.png</file>
+        <file>../images/stop.png</file>
+        <file>../images/metadata.png</file>
+        <file>../images/manager.png</file>
+        <file>../images/volume_off.png</file>
+        <file>../images/volume_30.png</file>
+        <file>../images/volume_60.png</file>
+        <file>../images/volume_up.png</file>
+        <file>../images/down.png</file>
+        <file>../images/up.png</file>
+        <file>../images/color_picker.png</file>
+        <file>../images/screenshot.png</file>
+        <file>../images/repeat.png</file>
+        <file>../images/platform.svg</file>
+        <file>../images/pdf.png</file>
+        <file>../images/csv.png</file>
+        <file>../images/video_information.png</file>
+        <file>../images/record.png</file> 
+        <file>../images/record.gif</file> 
+        <file>../images/mosaic.png</file> 
+    </qresource>
+</RCC>

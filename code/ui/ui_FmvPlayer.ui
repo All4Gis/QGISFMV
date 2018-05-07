@@ -1,0 +1,1412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PlayerWindow</class>
+ <widget class="QMainWindow" name="PlayerWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>612</width>
+    <height>617</height>
+   </rect>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>Player</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/imgFMV/images/icon.png</normaloff>:/imgFMV/images/icon.png</iconset>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
+  </property>
+  <property name="locale">
+   <locale language="English" country="UnitedStates"/>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>true</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0">
+      <property name="margin">
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="VideoWidget" name="videoWidget" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>3</horstretch>
+          <verstretch>3</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>350</height>
+         </size>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QWidget {
+ background-color:black;
+ } </string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QSlider" name="sliderDuration">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelDuration">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Video Tools</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="btn_Color">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Color dialog&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/color_picker.png</normaloff>:/imgFMV/images/color_picker.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+C</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_Rec">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Record&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/record.png</normaloff>
+           <normalon>:/imgFMV/images/rec_on.png</normalon>:/imgFMV/images/record.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+Shift+R</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_GeoReferencing">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create Mosaic&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/mosaic.png</normaloff>:/imgFMV/images/mosaic.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+Shift+M</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lb_cursor_coord">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_CaptureFrame">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capture current frame&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/screenshot.png</normaloff>:/imgFMV/images/screenshot.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+Shift+Q</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="gb_PlayerControls">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QGroupBox::indicator {
+                 width: 13px;
+                 height: 13px;
+            }  
+           QGroupBox::indicator:unchecked {
+                 image: url(:/imgFMV/images/up.png);
+            }
+           QGroupBox::indicator:checked {
+               image: url(:/imgFMV/images/down.png);
+                }</string>
+      </property>
+      <property name="title">
+       <string>Controls</string>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="btn_previous">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Start Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/skip-previous.png</normaloff>:/imgFMV/images/skip-previous.png</iconset>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_rewind">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rewind&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/fast-rewind.png</normaloff>:/imgFMV/images/fast-rewind.png</iconset>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_stop">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/stop.png</normaloff>:/imgFMV/images/stop.png</iconset>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_play">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Play/Pause&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/play-arrow.png</normaloff>:/imgFMV/images/play-arrow.png</iconset>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_forward">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Forward&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/fast-forward.png</normaloff>:/imgFMV/images/fast-forward.png</iconset>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="autoDefault">
+          <bool>true</bool>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_next">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;End Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/skip-next.png</normaloff>:/imgFMV/images/skip-next.png</iconset>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_repeat">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/imgFMV/images/repeat.png</normaloff>:/imgFMV/images/repeat.png</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QFormLayout" name="formLayout">
+         <property name="fieldGrowthPolicy">
+          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+         </property>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="btn_volume">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mute/Unmute&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="resources.qrc">
+             <normaloff>:/imgFMV/images/volume_up.png</normaloff>:/imgFMV/images/volume_up.png</iconset>
+           </property>
+           <property name="shortcut">
+            <string>Ctrl+Shift+U</string>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSlider" name="volumeSlider">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Volume&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="maximum">
+            <number>100</number>
+           </property>
+           <property name="value">
+            <number>100</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="v_label">
+         <property name="styleSheet">
+          <string notr="true">color: #898989</string>
+         </property>
+         <property name="text">
+          <string>100%</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QProgressBar" name="progressBarProcessor">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>13</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>13</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Calibri</family>
+          <pointsize>5</pointsize>
+          <weight>50</weight>
+          <italic>true</italic>
+          <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QProgressBar
+{
+    border: 0px solid grey;
+    border-radius: 5px;
+    text-align: center;
+}
+QProgressBar::chunk
+{
+    background-color: #2196f3;
+    width: 2px;
+    margin: 0.2px;
+}</string>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+        <property name="format">
+         <string>Background Progress . . . %p%</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubarwidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>612</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QMenuBar {
+    background-color: transparent;
+}</string>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>Filters</string>
+    </property>
+    <addaction name="actionGray"/>
+    <addaction name="actionInvert_Color"/>
+    <addaction name="actionMono_Filter"/>
+    <addaction name="actionCanny_edge_detection"/>
+    <addaction name="actionAuto_Contrast_Filter"/>
+   </widget>
+   <widget class="QMenu" name="menuFrames">
+    <property name="title">
+     <string>Frames</string>
+    </property>
+    <addaction name="actionCapture_Current_Frame"/>
+    <addaction name="actionExtract_All_Frames"/>
+   </widget>
+   <widget class="QMenu" name="menuMetadata">
+    <property name="title">
+     <string>Metadata</string>
+    </property>
+    <addaction name="actionShow_Metadata"/>
+   </widget>
+   <widget class="QMenu" name="menuConverter">
+    <property name="title">
+     <string>Converter</string>
+    </property>
+    <addaction name="actionConverter_Video"/>
+   </widget>
+   <widget class="QMenu" name="menuInfo">
+    <property name="title">
+     <string>Information</string>
+    </property>
+    <addaction name="actionShow_Video_Info"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_Video_Info"/>
+   </widget>
+   <widget class="QMenu" name="menuPlot_Bitrate">
+    <property name="title">
+     <string>Plot Bitrate</string>
+    </property>
+    <addaction name="actionAudio"/>
+    <addaction name="actionVideo"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_Audio"/>
+    <addaction name="actionSave_Video"/>
+   </widget>
+   <widget class="QMenu" name="menuUtils">
+    <property name="title">
+     <string>Utils</string>
+    </property>
+    <addaction name="actionZoom_Rectangle"/>
+    <addaction name="actionMagnifying_glass"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuUtils"/>
+   <addaction name="menuFrames"/>
+   <addaction name="menuMetadata"/>
+   <addaction name="menuConverter"/>
+   <addaction name="menuInfo"/>
+   <addaction name="menuPlot_Bitrate"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGray">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Gray Scale</string>
+   </property>
+  </action>
+  <action name="actionEdge_Detection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Edge Detection</string>
+   </property>
+  </action>
+  <action name="actionCapture_Current_Frame">
+   <property name="text">
+    <string>Capture Current Frame</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Q</string>
+   </property>
+  </action>
+  <action name="actionExtract_All_Frames">
+   <property name="text">
+    <string>Extract All Frames</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
+   </property>
+  </action>
+  <action name="actionShow_Metadata">
+   <property name="text">
+    <string>Show Metadata</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+M</string>
+   </property>
+  </action>
+  <action name="actionConverter_Video">
+   <property name="text">
+    <string>Converter Video</string>
+   </property>
+  </action>
+  <action name="actionSave_Video_Info">
+   <property name="text">
+    <string>Save Video Info to Json</string>
+   </property>
+  </action>
+  <action name="actionAudio">
+   <property name="text">
+    <string>Show Audio</string>
+   </property>
+  </action>
+  <action name="actionVideo">
+   <property name="text">
+    <string>Show Video</string>
+   </property>
+  </action>
+  <action name="actionAudio_Video">
+   <property name="text">
+    <string>Show All</string>
+   </property>
+  </action>
+  <action name="actionSave_Audio">
+   <property name="text">
+    <string>Save Audio</string>
+   </property>
+  </action>
+  <action name="actionSave_Video">
+   <property name="text">
+    <string>Save Video</string>
+   </property>
+  </action>
+  <action name="actionSave_All">
+   <property name="text">
+    <string>Save All</string>
+   </property>
+  </action>
+  <action name="actionShow_Video_Info">
+   <property name="text">
+    <string>Show Video Info</string>
+   </property>
+  </action>
+  <action name="actionInvert_Color">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Invert Color</string>
+   </property>
+  </action>
+  <action name="actionMono_Filter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Mono Filter</string>
+   </property>
+  </action>
+  <action name="actionCanny_edge_detection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Canny edge detection</string>
+   </property>
+  </action>
+  <action name="actionZoom_Rectangle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Zoom Rectangle</string>
+   </property>
+  </action>
+  <action name="actionMagnifying_glass">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Magnifying glass</string>
+   </property>
+  </action>
+  <action name="actionAuto_Contrast_Filter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Auto Contrast Filter</string>
+   </property>
+  </action>
+  <action name="actionCreate_Mosaic">
+   <property name="text">
+    <string>Create Mosaic</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VideoWidget</class>
+   <extends>QWidget</extends>
+   <header>QGIS_FMV.video.QgsVideo</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>gb_PlayerControls</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleGroup(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>554</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_play</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>playClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>544</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>11</x>
+     <y>398</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sliderDuration</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>seek(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>425</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>518</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>volumeSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>setVolume(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>557</x>
+     <y>542</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>490</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionGray</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>grayFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>346</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_CaptureFrame</sender>
+   <signal>clicked()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>ExtractCurrentFrame()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>592</x>
+     <y>481</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>442</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_Color</sender>
+   <signal>clicked()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>showColorDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>38</x>
+     <y>476</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>497</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_volume</sender>
+   <signal>clicked()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>setMuted()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>439</x>
+     <y>544</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>349</x>
+     <y>569</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_stop</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>stop(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>544</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>112</x>
+     <y>532</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_previous</sender>
+   <signal>clicked()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>StartMedia()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>22</x>
+     <y>537</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>556</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_next</sender>
+   <signal>clicked()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>EndMedia()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>199</x>
+     <y>540</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>212</x>
+     <y>571</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_repeat</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>AutoRepeat(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>243</x>
+     <y>539</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>566</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShow_Metadata</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>OpenQgsFmvMetadata()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>346</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExtract_All_Frames</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>ExtractAllFrames()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>346</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCapture_Current_Frame</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>ExtractCurrentFrame()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>346</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave_Video_Info</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>saveInfoToJson()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAudio_Video</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>CreateBitratePlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAudio</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>CreateBitratePlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionVideo</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>CreateBitratePlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave_All</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>CreateBitratePlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave_Audio</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>CreateBitratePlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave_Video</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>CreateBitratePlot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShow_Video_Info</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>showVideoInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionConverter_Video</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>convertVideo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>311</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_rewind</sender>
+   <signal>clicked()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>rewindMedia()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>65</x>
+     <y>536</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>26</x>
+     <y>592</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_forward</sender>
+   <signal>clicked()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>forwardMedia()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>173</x>
+     <y>541</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>594</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_Rec</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>RecordVideo(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>74</x>
+     <y>467</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>44</x>
+     <y>598</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionInvert_Color</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>invertColorFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCanny_edge_detection</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>edgeFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMono_Filter</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>monoFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoom_Rectangle</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>zoomRect(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMagnifying_glass</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>magnifier(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAuto_Contrast_Filter</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>autoContrastFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCreate_Mosaic</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>createMosaic(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_GeoReferencing</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>createMosaic(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>472</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>110</x>
+     <y>594</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>toggleGroup(bool)</slot>
+  <slot>playClicked(bool)</slot>
+  <slot>seek(int)</slot>
+  <slot>setVolume(int)</slot>
+  <slot>setMuted()</slot>
+  <slot>stop(bool)</slot>
+  <slot>stabilizeFilter(bool)</slot>
+  <slot>edgeFilter(bool)</slot>
+  <slot>saveCurrentFrame()</slot>
+  <slot>showColorDialog()</slot>
+  <slot>StartMedia()</slot>
+  <slot>EndMedia()</slot>
+  <slot>forwardMedia()</slot>
+  <slot>rewindMedia()</slot>
+  <slot>AutoRepeat(bool)</slot>
+  <slot>OpenQgsFmvMetadata()</slot>
+  <slot>ExtractAllFrames()</slot>
+  <slot>ExtractCurrentFrame()</slot>
+  <slot>saveInfoToJson()</slot>
+  <slot>CreateBitratePlot()</slot>
+  <slot>showVideoInfo()</slot>
+  <slot>SaveVideoInfoToJson()</slot>
+  <slot>convertVideo()</slot>
+  <slot>RecordVideo(bool)</slot>
+  <slot>invertColorFilter(bool)</slot>
+  <slot>grayFilter(bool)</slot>
+  <slot>monoFilter(bool)</slot>
+  <slot>magnifier(bool)</slot>
+  <slot>zoomRect(bool)</slot>
+  <slot>autoContrastFilter(bool)</slot>
+  <slot>createMosaic(bool)</slot>
+ </slots>
+</ui>
