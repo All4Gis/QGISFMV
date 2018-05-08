@@ -82,14 +82,6 @@ The installation can be done from the executable if it is in windows or from the
 - Apply sobel filters, edge detection ...
 
 
-## TODO
-
-* Open videos via UDP / TCP
-* Possibility of drawing on the video and create shapes
-
-....
-
-
 ## Contributing
 
 Contributions are welcome!
