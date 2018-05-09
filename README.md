@@ -61,7 +61,7 @@ For more information about the Unmanned Air System (UAS) metadata from STANAG 46
 
 ## Installation
 
-The installation can be done from the executable if it is in windows or from the zip
+The installation can be done from the executable if it is in windows or from the zip.[Releases](https://github.com/All4Gis/QGISFMV/releases)
 
 
 ## Screenshots
