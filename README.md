@@ -61,7 +61,7 @@ For more information about the Unmanned Air System (UAS) metadata from STANAG 46
 
 ## Installation
 
-The installation can be done from the executable if it is in windows or from the zip.[Releases](https://github.com/All4Gis/QGISFMV/releases)
+The installation can be done from the executable if it is in windows or from the zip. [Releases](https://github.com/All4Gis/QGISFMV/releases)
 
 
 ## Screenshots
@@ -75,10 +75,9 @@ The installation can be done from the executable if it is in windows or from the
 - Extract metadata from video file
 - Show Platform,trajectory and beams position in a QGIS
 - Possibility of extracting parts of the video
-- Change of color, contrast, etc. of the video
 - Capture of the current frame
 - Extraction of all frames of the video
-- Extrac lon/lat cursor coordinates
+- Extract lon/lat cursor coordinates
 - Apply sobel filters, edge detection ...
 
 
