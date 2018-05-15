@@ -22,9 +22,9 @@ for this reason, I decided to develop this open source project and, this way, of
 
 * [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `fmvConfig.py` with the corresponding path.
 
-* [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python`
+* [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python==3.4.0.12`
 
-* [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib`
+* [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib==2.0.0`
 
 * [Klvdata](https://github.com/paretech/klvdata) : customized version of this library.
 
