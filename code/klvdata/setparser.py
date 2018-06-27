@@ -57,6 +57,7 @@ class SetParser(Element, metaclass=ABCMeta):
         self._SensorHorizontalFieldOfView = None
         self._SensorVerticalFieldOfView = None
         self._targetWidth = None
+        self._slantRange = None
         self._SensorRelativeAzimuthAngle = None
         self._OffsetCornerLatitudePoint1 = None
         self._OffsetCornerLongitudePoint1 = None
@@ -155,6 +156,8 @@ class SetParser(Element, metaclass=ABCMeta):
                         self.SetSensorVerticalFieldOfView(item.value.value)
                     elif item.TAG == 18:
                         self.SetSensorRelativeAzimuthAngle(item.value.value)
+                    elif item.TAG == 21:
+                        self.SetSlantRange(item.value.value)
                     elif item.TAG == 22:
                         self.SettargetWidth(item.value.value)
                     elif item.TAG == 26:
@@ -245,6 +248,12 @@ class SetParser(Element, metaclass=ABCMeta):
 
     def GettargetWidth(self):
         return self._targetWidth
+    
+    def GetSlantRange(self):
+        return self._slantRange
+
+    def SetSlantRange(self, value):
+        self._slantRange = float(value)
 
     def SettargetWidth(self, value):
         self._targetWidth = float(value)
