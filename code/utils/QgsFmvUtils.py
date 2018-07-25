@@ -625,9 +625,15 @@ def CornerEstimationWithoutOffsets(packet):
         headingAngle = packet.GetPlatformHeadingAngle()
         sensorRelativeAzimut = packet.GetSensorRelativeAzimuthAngle()
         targetWidth = packet.GettargetWidth()
+        slantRange = packet.GetSlantRange()
 
         if sensorLatitude == 0:
             return False
+        
+        if targetWidth == 0 and slantRange != 0:
+            targetWidth = 2*slantRange*tan(radians(sensorHorizontalFOV/2))
+        else:
+            targetWidth = 100
 
         initialPoint = (sensorLongitude, sensorLatitude)
         destPoint = (frameCenterLon, frameCenterLat)
