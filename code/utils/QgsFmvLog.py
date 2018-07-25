@@ -60,7 +60,7 @@ class log(object):
             logger.setLevel(logging.DEBUG)
             logger.addHandler(log.handler)
             log.info("----------------- Start Log -----------------")
-        except Exception as e:
+        except Exception:
             pass
 
     @staticmethod

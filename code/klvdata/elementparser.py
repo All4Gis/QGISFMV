@@ -25,17 +25,15 @@
 
 from abc import ABCMeta
 from abc import abstractmethod
-import re
 
-from QGIS_FMV.klvdata.common import bytes_to_datetime
-from QGIS_FMV.klvdata.common import bytes_to_float
-from QGIS_FMV.klvdata.common import bytes_to_hexstr
-from QGIS_FMV.klvdata.common import bytes_to_int
-from QGIS_FMV.klvdata.common import bytes_to_str
-from QGIS_FMV.klvdata.common import datetime_to_bytes
-from QGIS_FMV.klvdata.common import float_to_bytes
-from QGIS_FMV.klvdata.common import packet_checksum
-from QGIS_FMV.klvdata.common import str_to_bytes
+from QGIS_FMV.klvdata.common import (bytes_to_datetime,
+                                     bytes_to_float,
+                                     bytes_to_hexstr,
+                                     bytes_to_int,
+                                     bytes_to_str,
+                                     datetime_to_bytes,
+                                     float_to_bytes,
+                                     str_to_bytes)
 from QGIS_FMV.klvdata.element import Element
 
 

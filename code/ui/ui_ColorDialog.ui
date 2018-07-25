@@ -144,8 +144,8 @@
    <slot>ResetColorValues()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>214</x>
-     <y>154</y>
+     <x>223</x>
+     <y>151</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -155,7 +155,7 @@
   </connection>
   <connection>
    <sender>brightnessSlider</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>ColorDialog</receiver>
    <slot>ColorChange(int)</slot>
    <hints>
@@ -171,7 +171,7 @@
   </connection>
   <connection>
    <sender>contrastSlider</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>ColorDialog</receiver>
    <slot>ColorChange(int)</slot>
    <hints>
@@ -187,7 +187,7 @@
   </connection>
   <connection>
    <sender>hueSlider</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>ColorDialog</receiver>
    <slot>ColorChange(int)</slot>
    <hints>
@@ -203,7 +203,7 @@
   </connection>
   <connection>
    <sender>saturationSlider</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>ColorDialog</receiver>
    <slot>ColorChange(int)</slot>
    <hints>

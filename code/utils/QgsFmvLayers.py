@@ -2,7 +2,11 @@ import os
 
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
-from QGIS_FMV.fmvConfig import Platform_lyr, Beams_lyr, Footprint_lyr, frames_g
+from QGIS_FMV.fmvConfig import (Platform_lyr,
+                                Beams_lyr,
+                                Footprint_lyr,
+                                frames_g,
+                                Trajectory_lyr)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QVariant, QSettings
 from qgis.core import (
@@ -45,8 +49,7 @@ def RemoveGroupByName(name=frames_g):
     if not group is None:
         for child in group.children():
             dump = child.name()
-            id = dump.split("=")[-1].strip()
-            QgsProject.instance().removeMapLayer(id)
+            QgsProject.instance().removeMapLayer(dump.split("=")[-1].strip())
         root.removeChildNode(group)
     return
 
@@ -55,40 +58,80 @@ def CreateVideoLayers():
     ''' Create Video Layers '''
     if qgsu.selectLayerByName(Footprint_lyr) is None:
         lyr_footprint = newPolygonsLayer(
-            None, ["Corner Longitude Point 1", "Corner Latitude Point 1", "Corner Longitude Point 2", "Corner Latitude Point 2", "Corner Longitude Point 3", "Corner Latitude Point 3", "Corner Longitude Point 4", "Corner Latitude Point 4"], 'EPSG:4326', Footprint_lyr)
+            None,
+            ["Corner Longitude Point 1",
+             "Corner Latitude Point 1",
+             "Corner Longitude Point 2",
+             "Corner Latitude Point 2",
+             "Corner Longitude Point 3",
+             "Corner Latitude Point 3",
+             "Corner Longitude Point 4",
+             "Corner Latitude Point 4"],
+            'EPSG:4326',
+            Footprint_lyr)
         SetDefaultFootprintStyle(lyr_footprint)
         addLayerNoCrsDialog(lyr_footprint)
 
     if qgsu.selectLayerByName(Beams_lyr) is None:
         lyr_beams = newLinesLayer(
-            None, ["longitude", "latitude", "altitude", "Corner Longitude", "Corner Latitude"], 'EPSG:4326', Beams_lyr)
+            None,
+            ["longitude",
+             "latitude",
+             "altitude",
+             "Corner Longitude",
+             "Corner Latitude"],
+            'EPSG:4326',
+            Beams_lyr)
         SetDefaultBeamsStyle(lyr_beams)
         addLayerNoCrsDialog(lyr_beams)
 
+    if qgsu.selectLayerByName(Trajectory_lyr) is None:
+        lyr_Trajectory = newLinesLayer(
+            None,
+            ["longitude", "latitude", "altitude"], 'EPSG:4326', Trajectory_lyr)
+        SetDefaultTrajectoryStyle(lyr_Trajectory)
+        addLayerNoCrsDialog(lyr_Trajectory)
+
     if qgsu.selectLayerByName(Platform_lyr) is None:
         lyr_platform = newPointsLayer(
-            None, ["longitude", "latitude", "altitude"], 'EPSG:4326', Platform_lyr)
+            None,
+            ["longitude", "latitude", "altitude"], 'EPSG:4326', Platform_lyr)
         SetDefaultPlatformStyle(lyr_platform)
         addLayerNoCrsDialog(lyr_platform)
 
-    # QApplication.processEvents(QEventLoop.AllEvents, 50)
+    QApplication.processEvents()
+    return
+
+
+def ExpandLayer(layer, value=True):
+    '''Collapse/Expand layer'''
+    ltl = QgsProject.instance().layerTreeRoot().findLayer(layer.id())
+    ltl.setExpanded(value)
     QApplication.processEvents()
     return
 
 
 def RemoveVideoLayers():
-    ''' Create Video Layers '''
+    ''' Remove Video Layers '''
     try:
-        QgsProject.instance().removeMapLayer(qgsu.selectLayerByName(Platform_lyr).id())
-    except:
+        QgsProject.instance().removeMapLayer(
+            qgsu.selectLayerByName(Platform_lyr).id())
+    except Exception:
         None
     try:
-        QgsProject.instance().removeMapLayer(qgsu.selectLayerByName(Beams_lyr).id())
-    except:
+        QgsProject.instance().removeMapLayer(
+            qgsu.selectLayerByName(Beams_lyr).id())
+    except Exception:
         None
     try:
-        QgsProject.instance().removeMapLayer(qgsu.selectLayerByName(Footprint_lyr).id())
-    except:
+        QgsProject.instance().removeMapLayer(
+            qgsu.selectLayerByName(Footprint_lyr).id())
+    except Exception:
+        None
+    try:
+        QgsProject.instance().removeMapLayer(
+            qgsu.selectLayerByName(Trajectory_lyr).id())
+    except Exception:
         None
     iface.mapCanvas().refresh()
     QApplication.processEvents()
@@ -103,6 +146,14 @@ def SetDefaultFootprintStyle(layer):
                                            'outline_width': '1'})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
+    return
+
+
+def SetDefaultTrajectoryStyle(layer):
+    ''' Trajectory Symbol '''
+    symbol = layer.renderer().symbol()
+    symbol.setColor(QColor.fromRgb(0, 0, 255))
+    symbol.setWidth(1)
     return
 
 
@@ -174,7 +225,7 @@ try:
         QGis.WKBMultiLineString: 'MultiLineString',
         QGis.WKBMultiPolygon: 'MultiPolygon',
     }
-except:
+except Exception:
     GEOM_TYPE_MAP = {
         QgsWkbTypes.Point: 'Point',
         QgsWkbTypes.LineString: 'LineString',

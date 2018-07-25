@@ -44,8 +44,8 @@ class QJsonTreeItem(object):
     def setValue(self, value):
         self.mValue = value
 
-    def setType(self, type):
-        self.mType = type
+    def setType(self, t):
+        self.mType = t
 
     def key(self):
         return self.mKey
@@ -112,7 +112,7 @@ class QJsonModel(QAbstractItemModel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.mRootItem = QJsonTreeItem()
-        self.mHeaders = ["key", "value", "type"]
+        self.mHeaders = ["key", "value"]
 
     def load(self, fileName):
         if fileName is None or fileName is False:
@@ -222,5 +222,5 @@ class QJsonModel(QAbstractItemModel):
 
         return parentItem.childCount()
 
-    def columnCount(self, parent):
+    def columnCount(self, _):
         return 2

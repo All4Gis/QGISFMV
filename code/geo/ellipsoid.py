@@ -1,7 +1,7 @@
 from math import (
     degrees, radians,
-    sin, cos, asin, tan, atan, atan2, pi,
-    sqrt, exp, log, fabs
+    sin, cos, tan, atan, atan2,
+    sqrt, exp, log
 )
 
 from QGIS_FMV.geo.constants import WGS84, QUARTER_PI, HALF_PI

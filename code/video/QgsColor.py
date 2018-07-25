@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtMultimedia import QMediaPlayer
 from PyQt5.QtWidgets import QDialog, QApplication
-from QGIS_FMV.gui.generated.ui_ColorDialog import Ui_ColorDialog
+from QGIS_FMV.gui.ui_ColorDialog import Ui_ColorDialog
 
 
 try:
@@ -19,32 +18,7 @@ class ColorDialog(QDialog, Ui_ColorDialog):
         self.setupUi(self)
         self.parent = parent
 
-        p = self.parent.player.position()
-        self.state = self.parent.player.state()
-
-        self.parent.player.setVideoOutput(self.parent.videoWidget)
-        QApplication.processEvents()
-        self.parent.player.setPosition(p)
-
-        if self.state == QMediaPlayer.PausedState:
-            self.parent.player.play()
-            self.parent.player.pause()
-        elif self.state == QMediaPlayer.StoppedState:
-            self.parent.player.play()
-            self.parent.player.stop()
-
-        # self.parent.videoWidget.update()
-        QApplication.processEvents()
-
         self.videoWidget = self.parent.videoWidget
-
-        # TODO : Esto no funciona y si le pongo el valor a fuego si
-        # Implemetar el cambio de color en videosurface?
-        self.videoWidget.setBrightness(int(self.videoWidget.brightness()))
-        self.videoWidget.setContrast(self.contrastSlider.value())
-        self.videoWidget.setHue(self.hueSlider.value())
-        self.videoWidget.setSaturation(self.saturationSlider.value())
-        QApplication.processEvents()
 
         self.LoadInitialValues()
         QApplication.processEvents()
@@ -57,6 +31,8 @@ class ColorDialog(QDialog, Ui_ColorDialog):
             self.hueSlider.setValue)
         self.videoWidget.saturationChanged.connect(
             self.saturationSlider.setValue)
+
+        self.contrastSlider.setValue(80)
 
     def ColorChange(self, value):
         """ Color Video Change """
@@ -83,15 +59,4 @@ class ColorDialog(QDialog, Ui_ColorDialog):
         self.contrastSlider.setValue(self.videoWidget.contrast())
         self.hueSlider.setValue(self.videoWidget.hue())
         self.saturationSlider.setValue(self.videoWidget.saturation())
-
         self.ResetColorValues()
-
-    def closeEvent(self, evt):
-        """ Close Event"""
-        # TODO : SE QUEDA NEGRA LA PANTALLA
-        if self.state == QMediaPlayer.PausedState:
-            self.parent.player.play()
-            self.parent.player.pause()
-        elif self.state == QMediaPlayer.StoppedState:
-            self.parent.player.play()
-            self.parent.player.stop()
