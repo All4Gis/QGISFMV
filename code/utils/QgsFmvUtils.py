@@ -673,7 +673,7 @@ def CornerEstimationWithoutOffsets(packet):
 
         # CP Up Left
         bearing = (value2 + 360.0 - value21) % 360.0
-        cornerPointUL = sphere.destination(destPoint, value19, bearing)
+        cornerPointUL = list(reversed(sphere.destination(destPoint, value19, bearing)))
 
         # TODO: Use Geopy?
 #         from geopy import Point
@@ -684,15 +684,15 @@ def CornerEstimationWithoutOffsets(packet):
 
         # CP Up Right
         bearing = (value2 + value21) % 360.0
-        cornerPointUR = sphere.destination(destPoint, value19, bearing)
+        cornerPointUR = list(reversed(sphere.destination(destPoint, value19, bearing)))
 
         # CP Low Right
         bearing = (value2 + 180.0 - value20) % 360.0
-        cornerPointLR = sphere.destination(destPoint, distance2, bearing)
+        cornerPointLR = list(reversed(sphere.destination(destPoint, distance2, bearing)))
 
         # CP Low Left
         bearing = (value2 + 180.0 + value20) % 360.0
-        cornerPointLL = sphere.destination(destPoint, distance2, bearing)
+        cornerPointLL = list(reversed(sphere.destination(destPoint, distance2, bearing)))
 
         UpdateFootPrintData(
             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
