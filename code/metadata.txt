@@ -16,9 +16,18 @@ about= Plugin for QGIS which allows to analyze, visualize and process videos ins
 	   </a>
 	   <p>If this plugin is useful for you, consider to donate to the author.</p>
 
-version=1.0
+version=1.1
 author=<a href="https://goo.gl/wwVhng">Fran Raga</a>
 email=franka1986@gmail.com
+
+# changelog=
+homepage=https://github.com/All4Gis/QGISFMV
+tracker=https://github.com/All4Gis/QGISFMV/issues
+repository=https://github.com/All4Gis/QGISFMV
+
+# tags are comma separated with spaces allowed
+tags=fmv, uav, python, dron, telemetry
+
 icon=images/icon.png
 experimental=False
 
