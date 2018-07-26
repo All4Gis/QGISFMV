@@ -27,6 +27,7 @@ from qgis.core import (QgsApplication,
                        QgsPointXY,
                        QgsRasterLayer)
 from qgis.gui import *
+from homography import Homography, from_points
 from qgis.utils import iface
 
 
@@ -55,6 +56,7 @@ windows = platform.system() == 'Windows'
 xSize = 0
 ySize = 0
 geotransform = None
+defaultTargetWidth = 200.0
 
 gcornerPointUL = None
 gcornerPointUR = None
@@ -249,26 +251,13 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     global gframeCenterLon
     gframeCenterLon = frameCenterLon
 
-    Height = 0
-    gcp = gdal.GCP(cornerPointUL[1], cornerPointUL[0],
-                   Height, 0, 0, "Corner Upper Left", "1")
-    gcps.append(gcp)
-    gcp = gdal.GCP(cornerPointUR[1], cornerPointUR[0],
-                   Height, xSize, 0, "Corner Upper Right", "2")
-    gcps.append(gcp)
-    gcp = gdal.GCP(cornerPointLR[1], cornerPointLR[0],
-                   Height, xSize, ySize, "Corner Lower Right", "3")
-    gcps.append(gcp)
-    gcp = gdal.GCP(cornerPointLL[1], cornerPointLL[0],
-                   Height, 0, ySize, "Corner Lower Left", "4")
-    gcps.append(gcp)
-    gcp = gdal.GCP(frameCenterLon, frameCenterLat, Height,
-                   xSize / 2, ySize / 2, "Center", "5")
-    gcps.append(gcp)
-
     global geotransform
     geotransform = gdal.GCPsToGeoTransform(gcps)
 
+    src = np.float64(np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize]]))
+    dst = np.float64(np.array([cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]))
+    geotransform = from_points(src, dst)
+    
     if geotransform is None:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", 'Unable to extract a geotransform.'), onlyLog=True)
@@ -289,6 +278,13 @@ def SetImageSize(w, h):
     ySize = h
     return
 
+def GetImageWidth():
+    global xSize
+    return xSize
+
+def GetImageHeight():
+    global ySize
+    return ySize
 
 def _check_output(cmds, t="ffmpeg"):
     ''' Check Output Commands in Python '''
@@ -797,27 +793,43 @@ def CornerEstimationWithOffsets(packet):
 
 def CornerEstimationWithoutOffsets(packet):
     ''' Corner estimation without Offsets '''
+    global defaultTargetWidth
+    
     try:
         sensorLatitude = packet.GetSensorLatitude()
         sensorLongitude = packet.GetSensorLongitude()
         sensorTrueAltitude = packet.GetSensorTrueAltitude()
         frameCenterLat = packet.GetFrameCenterLatitude()
         frameCenterLon = packet.GetFrameCenterLongitude()
+        frameCenterElevation = packet.GetFrameCenterElevation()
         sensorVerticalFOV = packet.GetSensorVerticalFieldOfView()
         sensorHorizontalFOV = packet.GetSensorHorizontalFieldOfView()
         headingAngle = packet.GetPlatformHeadingAngle()
         sensorRelativeAzimut = packet.GetSensorRelativeAzimuthAngle()
         targetWidth = packet.GettargetWidth()
-
         slantRange = packet.GetSlantRange()
 
+        #If target width = 0 (occurs on some platforms), compute it with the slate range.
+        #Otherwise it leaves the footprint as a point.
+        if targetWidth == 0 and slantRange != 0:
+            targetWidth = 2.0*slantRange*tan(radians(sensorHorizontalFOV/2.0))
+        elif targetWidth == 0 and slantRange == 0:
+            #default target width to not leave footprint as a point.
+            targetWidth = defaultTargetWidth
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvUtils", "Target width unknown, defaults to: "+str(targetWidth)+"m."), level=QGis.Info)        
+
+        #compute distance to ground
+        if frameCenterElevation != 0:
+            sensorGroundAltitude = sensorTrueAltitude - frameCenterElevation
+        else:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvUtils", "Sensor ground elevation narrowed to true altitude: "+str(sensorTrueAltitude)+"m."), level=QGis.Info)  
+            sensorGroundAltitude = sensorTrueAltitude
+        
         if sensorLatitude == 0:
             return False
 
-        if targetWidth == 0 and slantRange != 0:
-            targetWidth = 2*slantRange*tan(radians(sensorHorizontalFOV/2))
-        else:
-            targetWidth = 100
 
         initialPoint = (sensorLongitude, sensorLatitude)
         destPoint = (frameCenterLon, frameCenterLat)
@@ -835,17 +847,17 @@ def CornerEstimationWithoutOffsets(packet):
         value2 = (headingAngle + sensorRelativeAzimut) % 360.0  # Heading
         value3 = targetWidth / 2.0
 
-        value5 = sqrt(pow(distance, 2.0) + pow(sensorTrueAltitude, 2.0))
+        value5 = sqrt(pow(distance, 2.0) + pow(sensorGroundAltitude, 2.0))
         value6 = targetWidth * aspectRatio / 2.0
 
         degrees = rad2deg(atan(value3 / distance))
 
-        value8 = rad2deg(atan(distance / sensorTrueAltitude))
+        value8 = rad2deg(atan(distance / sensorGroundAltitude))
         value9 = rad2deg(atan(value6 / value5))
         value10 = value8 + value9
-        value11 = sensorTrueAltitude * tan(radians(value10))
+        value11 = sensorGroundAltitude * tan(radians(value10))
         value12 = value8 - value9
-        value13 = sensorTrueAltitude * tan(radians(value12))
+        value13 = sensorGroundAltitude * tan(radians(value12))
         value14 = distance - value13
         value15 = value11 - distance
         value16 = value3 - value14 * tan(radians(degrees))
