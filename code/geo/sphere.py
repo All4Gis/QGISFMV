@@ -10,9 +10,7 @@ from QGIS_FMV.geo.constants import (
     EARTH_MEAN_DIAMETER,
     EARTH_EQUATORIAL_RADIUS,
     EARTH_EQUATORIAL_METERS_PER_DEGREE,
-    I_EARTH_EQUATORIAL_METERS_PER_DEGREE,
-    HALF_PI,
-    QUARTER_PI,
+    HALF_PI
 )
 
 
@@ -59,7 +57,6 @@ def _py_distance(point1, point2):
     lon2, lat2 = (radians(coord) for coord in point2)
 
     dlon = fabs(lon1 - lon2)
-    dlat = fabs(lat1 - lat2)
 
     numerator = sqrt(
         (cos(lat2) * sin(dlon)) ** 2 +
@@ -81,7 +78,6 @@ def bearing(point1, point2):
     lon1, lat1 = (radians(coord) for coord in point1)
     lon2, lat2 = (radians(coord) for coord in point2)
 
-    dlat = (lat2 - lat1)
     dlon = (lon2 - lon1)
     numerator = sin(dlon) * cos(lat2)
     denominator = (

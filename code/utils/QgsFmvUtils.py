@@ -1,28 +1,41 @@
 # -*- coding: utf-8 -*-
-import datetime
-from math import *
+import inspect
+from math import atan, tan, sqrt, radians, pi
 import os
 import platform
 import shutil
-from subprocess import Popen, PIPE, check_output, STDOUT
+from subprocess import Popen, PIPE, check_output
 import threading
 
-from PyQt5.QtCore import QCoreApplication, QBuffer, QIODevice
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QImage
-from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QApplication
-from QGIS_FMV.fmvConfig import Platform_lyr, Beams_lyr, Footprint_lyr, frames_g
+from PyQt5.QtWidgets import QFileDialog
+from QGIS_FMV.fmvConfig import (Platform_lyr,
+                                Beams_lyr,
+                                Footprint_lyr,
+                                Trajectory_lyr,
+                                frames_g)
 from QGIS_FMV.fmvConfig import ffmpeg as ffmpeg_path
 from QGIS_FMV.fmvConfig import ffprobe as ffprobe_path
 from QGIS_FMV.geo import sphere as sphere
-from QGIS_FMV.utils.QgsFmvLayers import addLayerNoCrsDialog
+from QGIS_FMV.utils.QgsFmvLayers import addLayerNoCrsDialog, ExpandLayer
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from qgis.core import QgsApplication, QgsFeature, QgsGeometry, QgsPointXY, QgsRasterLayer
+from qgis.PyQt.QtCore import QSettings
+from qgis.core import (QgsApplication,
+                       QgsFeature,
+                       QgsGeometry,
+                       QgsPointXY,
+                       QgsRasterLayer)
 from qgis.gui import *
+from qgis.utils import iface
 
+
+settings = QSettings()
 
 try:
-    from cv2 import COLOR_BGR2RGB, cvtColor, GaussianBlur, COLOR_GRAY2RGB, COLOR_BGR2GRAY
+    from cv2 import (COLOR_BGR2RGB,
+                     cvtColor,
+                     COLOR_GRAY2RGB)
     import numpy as np
 except ImportError:
     None
@@ -62,11 +75,11 @@ else:
 class callBackMetadataThread(threading.Thread):
     '''  Test : CallBack metadata in other thread  '''
 
-    def __init__(self, cmds, type="ffmpeg"):
+    def __init__(self, cmds, t="ffmpeg"):
         self.stdout = None
         self.stderr = None
         self.cmds = cmds
-        self.type = type
+        self.type = t
         self.p = None
         threading.Thread.__init__(self)
 
@@ -82,6 +95,117 @@ class callBackMetadataThread(threading.Thread):
                        close_fds=(not windows))
 
         self.stdout, self.stderr = self.p.communicate()
+
+
+LAST_PATH = "LAST_PATH"
+BOOL = "bool"
+NUMBER = "number"
+_settings = {}
+try:
+    from qgis.PyQt.QtCore import QPyNullVariant
+except Exception:
+    pass
+
+
+def pluginSetting(name, namespace=None, typ=None):
+    def _find_in_cache(name, key):
+        try:
+            for setting in _settings[namespace]:
+                if setting["name"] == name:
+                    return setting[key]
+        except Exception:
+            return None
+        return None
+
+    def _type_map(t):
+        """Return setting python type"""
+        if t == BOOL:
+            return bool
+        elif t == NUMBER:
+            return float
+        else:
+            return unicode
+
+    namespace = namespace or _callerName().split(".")[0]
+    full_name = namespace + "/" + name
+    if settings.contains(full_name):
+        if typ is None:
+            typ = _type_map(_find_in_cache(name, 'type'))
+        v = settings.value(full_name, None, type=typ)
+        try:
+            if isinstance(v, QPyNullVariant):
+                v = None
+        except Exception:
+            pass
+        return v
+    else:
+        return _find_in_cache(name, 'default')
+
+
+def _callerName():
+    stack = inspect.stack()
+    parentframe = stack[2][0]
+    name = []
+    module = inspect.getmodule(parentframe)
+    name.append(module.__name__)
+    if 'self' in parentframe.f_locals:
+        name.append(parentframe.f_locals['self'].__class__.__name__)
+    codename = parentframe.f_code.co_name
+    if codename != '<module>':
+        name.append(codename)
+    del parentframe
+    return ".".join(name)
+
+
+def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
+    msg = msg or 'Select file'
+    caller = _callerName().split(".")
+    name = "/".join([LAST_PATH, caller[-1]])
+    namespace = caller[0]
+    path = pluginSetting(name, namespace)
+    f = None
+    if not isinstance(exts, list):
+        exts = [exts]
+    extString = ";; ".join([" %s files (*.%s)" % (e.upper(), e)
+                            if e != "*" else "All files (*.*)" for e in exts])
+    if allowMultiple:
+        ret = QFileDialog.getOpenFileNames(parent, msg, path, '*.' + extString)
+        if ret:
+            f = ret[0]
+        else:
+            f = ret = None
+    else:
+        if isSave:
+            ret = QFileDialog.getSaveFileName(
+                parent, msg, path, '*.' + extString) or None
+            if ret is not None and not ret.endswith(exts[0]):
+                ret += "." + exts[0]
+        else:
+            ret = QFileDialog.getOpenFileName(
+                parent, msg, path, '*.' + extString) or None
+        f = ret
+
+    if f is not None:
+        setPluginSetting(name, os.path.dirname(f[0]), namespace)
+
+    return ret
+
+
+def setPluginSetting(name, value, namespace=None):
+    namespace = namespace or _callerName().split(".")[0]
+    settings.setValue(namespace + "/" + name, value)
+
+
+def askForFolder(parent, msg=None):
+    msg = msg or 'Select folder'
+    caller = _callerName().split(".")
+    name = "/".join([LAST_PATH, caller[-1]])
+    namespace = caller[0]
+    path = pluginSetting(name, namespace)
+    folder = QFileDialog.getExistingDirectory(parent, msg, path)
+    if folder:
+        setPluginSetting(name, folder, namespace)
+    return folder
 
 
 def convertQImageToMat(img):
@@ -167,10 +291,10 @@ def SetImageSize(w, h):
     return
 
 
-def _check_output(cmds, type="ffmpeg"):
+def _check_output(cmds, t="ffmpeg"):
     ''' Check Output Commands in Python '''
 
-    if type is "ffmpeg":
+    if t is "ffmpeg":
         cmds.insert(0, ffmpeg_path)
     else:
         cmds.insert(0, ffprobe_path)
@@ -178,15 +302,16 @@ def _check_output(cmds, type="ffmpeg"):
     return check_output(cmds, shell=True, close_fds=(not windows))
 
 
-def _spawn(cmds, type="ffmpeg"):
+def _spawn(cmds, t="ffmpeg"):
     ''' Subprocess and Shell Commands in Python '''
 
-    if type is "ffmpeg":
+    if t is "ffmpeg":
         cmds.insert(0, ffmpeg_path)
     else:
         cmds.insert(0, ffprobe_path)
 
-    return Popen(cmds, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=0,
+    return Popen(cmds, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE,
+                 bufsize=0,
                  close_fds=(not windows))
 
 
@@ -196,18 +321,18 @@ def install_pip_requirements():
         import pip
     except ImportError:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Import Pip! : "), str(e), onlyLog=True)
+            "QgsFmvUtils", "Failed Import Pip! : "), "", onlyLog=True)
         raise
 
     package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
     requirements_file = os.path.join(package_dir, 'requirements.txt')
     if not os.path.isfile(requirements_file):
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", 'No requirements file found in {}'.format(requirements_file)), str(e), onlyLog=True)
+            "QgsFmvUtils", 'No requirements file found in {}'.format(requirements_file)), "", onlyLog=True)
         raise
     try:
         pip.main(['install', '-r', requirements_file])
-    except:
+    except Exception:
         raise
     return
 
@@ -223,7 +348,7 @@ def install_requirements_copy(lib="all"):
         if lib == "cv2":
             copytree(ext_libs_dir + "cv2", site_packages + "cv2")
         else:
-            try:  # TODO: permissions denied
+            try:
                 copytree(os.path.join(ext_libs_dir, "matplotlib"),
                          os.path.join(site_packages, "matplotlib"))
                 copytree(os.path.join(ext_libs_dir, "cv2"),
@@ -236,7 +361,8 @@ def install_requirements_copy(lib="all"):
     # Directories are the same
     except shutil.Error as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", 'Library not copied.Directories are the same'), str(e), onlyLog=True)
+            "QgsFmvUtils", 'Library not copied.Directories are the same'),
+            str(e), onlyLog=True)
     # Any error saying that the directory doesn't exist
     except OSError as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -269,6 +395,7 @@ def deg2rad(degrees):
 def UpdateLayers(packet, parent=None, mosaic=False):
     ''' Update Layers Values '''
     UpdatePlatformData(packet)
+    UpdateTrajectoryData(packet)
 
     OffsetLat1 = packet.GetOffsetCornerLatitudePoint1()
     LatitudePoint1Full = packet.GetCornerLatitudePoint1Full()
@@ -318,7 +445,7 @@ def georeferencingVideo(parent):
     """ Extract Current Frame Thread """
     # only works on custom video surface
     image = parent.videoWidget.GetCurrentFrame()
-    root, ext = os.path.splitext(os.path.basename(parent.fileName))
+    root, _ = os.path.splitext(os.path.basename(parent.fileName))
     out = os.path.join(os.path.expanduser("~"), "QGIS_FMV", root)
     GeoreferenceFrame(image, out, parent)
     return
@@ -327,8 +454,7 @@ def georeferencingVideo(parent):
 def GeoreferenceFrame(image, output, parent):
     ''' Save Current Image '''
 
-    # TODO : Add in a custom group?Remove when close dialog?Create memory
-    # raster?
+    # TODO : Create memory raster?
 
     p = str(parent.player.position())
     if p == "0":
@@ -376,7 +502,8 @@ def GeoreferenceFrame(image, output, parent):
     # Add Layer to canvas
     layer = QgsRasterLayer(dst_filename, name)
     addLayerNoCrsDialog(layer, False, frames_g)
-    QApplication.processEvents()
+    ExpandLayer(layer, False)
+    iface.mapCanvas().refresh()
     return
 
 
@@ -451,7 +578,9 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
                 beamsLyr.dataProvider().changeAttributeValues(
                     {fetId: attrib})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(cornerPointUR[1], cornerPointUR[0])])})
+                    {fetId: QgsGeometry.fromPolylineXY([
+                        QgsPointXY(lon, lat),
+                        QgsPointXY(cornerPointUR[1], cornerPointUR[0])])})
                 # LR
                 fetId = 3
                 attrib = {0: lon, 1: lat, 2: alt,
@@ -459,7 +588,9 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
                 beamsLyr.dataProvider().changeAttributeValues(
                     {fetId: attrib})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(cornerPointLR[1], cornerPointLR[0])])})
+                    {fetId: QgsGeometry.fromPolylineXY([
+                        QgsPointXY(lon, lat),
+                        QgsPointXY(cornerPointLR[1], cornerPointLR[0])])})
                 # LL
                 fetId = 4
                 attrib = {0: lon, 1: lat, 2: alt,
@@ -467,7 +598,10 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
                 beamsLyr.dataProvider().changeAttributeValues(
                     {fetId: attrib})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(cornerPointLL[1], cornerPointLL[0])])})
+                    {fetId: QgsGeometry.fromPolylineXY([
+                        QgsPointXY(lon, lat),
+                        QgsPointXY(cornerPointLL[1],
+                                   cornerPointLL[0])])})
 
                 beamsLyr.endEditCommand()
 
@@ -488,15 +622,19 @@ def UpdateFootPrintData(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoint
             footprintLyr.startEditing()
             if footprintLyr.featureCount() == 0:
                 feature = QgsFeature()
-                feature.setAttributes([cornerPointUL[1], cornerPointUL[0], cornerPointUR[1], cornerPointUR[0],
-                                       cornerPointLR[1], cornerPointLR[0], cornerPointLL[1], cornerPointLL[0]])
-                surface = QgsGeometry.fromPolygonXY([[QgsPointXY(cornerPointUL[1], cornerPointUL[0]),
-                                                      QgsPointXY(
-                    cornerPointUR[1], cornerPointUR[0]),
+                feature.setAttributes([cornerPointUL[1], cornerPointUL[0],
+                                       cornerPointUR[1], cornerPointUR[0],
+                                       cornerPointLR[1], cornerPointLR[0],
+                                       cornerPointLL[1], cornerPointLL[0]])
+                surface = QgsGeometry.fromPolygonXY([[
+                    QgsPointXY(cornerPointUL[1],
+                               cornerPointUL[0]),
                     QgsPointXY(
-                    cornerPointLR[1], cornerPointLR[0]),
+                        cornerPointUR[1], cornerPointUR[0]),
                     QgsPointXY(
-                    cornerPointLL[1], cornerPointLL[0]),
+                        cornerPointLR[1], cornerPointLR[0]),
+                    QgsPointXY(
+                        cornerPointLL[1], cornerPointLL[0]),
                     QgsPointXY(cornerPointUL[1], cornerPointUL[0])]])
                 feature.setGeometry(surface)
                 footprintLyr.addFeatures([feature])
@@ -504,8 +642,14 @@ def UpdateFootPrintData(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoint
                 footprintLyr.beginEditCommand(
                     "ChangeGeometry + ChangeAttribute")
                 fetId = 1
-                attrib = {0: cornerPointUL[1], 1: cornerPointUL[0], 2: cornerPointUR[1], 3: cornerPointUR[0],
-                          4: cornerPointLR[1], 5: cornerPointLR[0], 6: cornerPointLL[1], 7: cornerPointLL[0]}
+                attrib = {0: cornerPointUL[1],
+                          1: cornerPointUL[0],
+                          2: cornerPointUR[1],
+                          3: cornerPointUR[0],
+                          4: cornerPointLR[1],
+                          5: cornerPointLR[0],
+                          6: cornerPointLL[1],
+                          7: cornerPointLL[0]}
 
                 footprintLyr.dataProvider().changeAttributeValues(
                     {fetId: attrib})
@@ -527,6 +671,45 @@ def UpdateFootPrintData(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoint
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update FootPrint Layer! : "), str(e))
+    return
+
+
+def UpdateTrajectoryData(packet):
+    ''' Update Trajectory Values '''
+    lat = packet.GetSensorLatitude()
+    lon = packet.GetSensorLongitude()
+    alt = packet.GetSensorTrueAltitude()
+
+    trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
+
+    try:
+        if trajectoryLyr is not None:
+            trajectoryLyr.startEditing()
+            if trajectoryLyr.featureCount() == 0:
+                f = QgsFeature()
+                f.setAttributes(
+                    [lon, lat, alt])
+                surface = QgsGeometry.fromPolylineXY(
+                    [QgsPointXY(lon, lat), QgsPointXY(lon, lat)])
+                f.setGeometry(surface)
+                trajectoryLyr.addFeatures([f])
+
+            else:
+                f_last = trajectoryLyr.getFeature(trajectoryLyr.featureCount())
+                f = QgsFeature()
+                f.setAttributes(
+                    [lon, lat, alt])
+                surface = QgsGeometry.fromPolylineXY(
+                    [QgsPointXY(lon, lat),
+                     QgsPointXY(f_last.attribute(0), f_last.attribute(1))])
+                f.setGeometry(surface)
+                trajectoryLyr.addFeatures([f])
+
+            CommonLayer(trajectoryLyr)
+
+    except Exception as e:
+        qgsu.showUserAndLogMessage(QCoreApplication.translate(
+            "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
     return
 
 
@@ -652,6 +835,7 @@ def CornerEstimationWithoutOffsets(packet):
         if sensorLatitude == 0:
             return False
 
+
         initialPoint = (sensorLongitude, sensorLatitude)
         destPoint = (frameCenterLon, frameCenterLat)
 
@@ -692,13 +876,6 @@ def CornerEstimationWithoutOffsets(packet):
         bearing = (value2 + 360.0 - value21) % 360.0
         cornerPointUL = list(reversed(sphere.destination(destPoint, value19, bearing)))
 
-        # TODO: Use Geopy?
-#         from geopy import Point
-#         from geopy.distance import distance, VincentyDistance
-#
-#         # given: lat1, lon1, bearing, distMiles
-#         lat2, lon2 = VincentyDistance(kilometers=value19).destination(Point(destPoint[1], destPoint[0]), bearing)
-
         # CP Up Right
         bearing = (value2 + value21) % 360.0
         cornerPointUR = list(reversed(sphere.destination(destPoint, value19, bearing)))
@@ -718,7 +895,8 @@ def CornerEstimationWithoutOffsets(packet):
                         cornerPointLR, cornerPointLL)
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
-                              cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
+                              cornerPointLR, cornerPointLL,
+                              frameCenterLon, frameCenterLat)
     except:
         return False
 

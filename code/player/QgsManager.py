@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 import os
 
 from PyQt5.QtCore import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
-from PyQt5.QtWidgets import QFileDialog, QDockWidget, QTableWidgetItem, QAction, QMenu
-from QGIS_FMV.gui.generated.ui_FmvManager import Ui_ManagerWindow
+from PyQt5.QtWidgets import QDockWidget, QTableWidgetItem, QAction, QMenu
+from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
+from QGIS_FMV.player.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
+from QGIS_FMV.utils.QgsFmvUtils import askForFiles
 import qgis.utils
 
 
@@ -25,11 +28,13 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.iface = iface
         self._PlayerDlg = None
 
+        self.actionOpen_Stream.setVisible(False)
+
         self.VManager.viewport().installEventFilter(self)
 
         # Context Menu
         self.VManager.customContextMenuRequested.connect(self.__context_menu)
-        self.removeAct = QAction(QCoreApplication.translate("ManagerDock", "&Remove"), self,
+        self.removeAct = QAction(QCoreApplication.translate("ManagerDock", "Remove"), self,
                                  statusTip=QCoreApplication.translate(
                                      "ManagerDock", "Remove the current selection's video"),
                                  triggered=self.remove)
@@ -42,7 +47,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     @pyqtSlot(QPoint)
     def __context_menu(self, position):
-        ''' Context Menu Rows '''
+        ''' Context Menu Manager Rows '''
         if self.VManager.itemAt(position) is None:
             return
         menu = QMenu()
@@ -54,44 +59,54 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.removeRow(self.VManager.currentRow())
         return
 
+    def openStreamDialog(self):
+        ''' Open Stream Dialog '''
+        self.OpenStream = OpenStream(self.iface, parent=self)
+        self.OpenStream.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
+        self.OpenStream.exec_()
+        return
+
+    def AddFileRowToManager(self, name, filename):
+        ''' Add file Video to new Row '''
+        rowPosition = self.VManager.rowCount()
+
+        self.VManager.insertRow(rowPosition)
+        self.VManager.setItem(
+            rowPosition, 0, QTableWidgetItem(str(rowPosition)))
+        self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
+        self.VManager.setItem(rowPosition, 2, QTableWidgetItem("False"))
+        self.VManager.setItem(rowPosition, 3, QTableWidgetItem(filename))
+
+        self.VManager.setVisible(False)
+        self.VManager.resizeColumnsToContents()
+        self.VManager.horizontalHeader().setStretchLastSection(True)
+        self.VManager.setVisible(True)
+
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
-        lastopened = s.value("QGIS_FMV/Manager/lastopened")
-        filename, _ = QFileDialog.getOpenFileName(self, QCoreApplication.translate(
-            "ManagerDock", "Open video"), lastopened, 'Videos (*.mpeg4 *.mp4 *.ts *.avi *.mpg *.H264)')
-
+        filename, _ = askForFiles(self,
+                                  QCoreApplication.translate(
+                                      "ManagerDock", "Open video"),
+                                  exts='*.mpeg4 *.mp4 *.ts *.avi *.mpg *.H264 *.mov')
         if filename:
-            path, name = os.path.split(filename)
-            s.setValue("QGIS_FMV/Manager/lastopened", path)
-            rowPosition = self.VManager.rowCount()
+            _, name = os.path.split(filename)
+            self.AddFileRowToManager(name, filename)
 
-            self.VManager.insertRow(rowPosition)
-            self.VManager.setItem(
-                rowPosition, 0, QTableWidgetItem(str(rowPosition)))
-            self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
-            self.VManager.setItem(rowPosition, 2, QTableWidgetItem("False"))
-            self.VManager.setItem(rowPosition, 3, QTableWidgetItem(filename))
-
-            self.VManager.setVisible(False)
-            self.VManager.resizeColumnsToContents()
-            self.VManager.horizontalHeader().setStretchLastSection(True)
-            self.VManager.setVisible(True)
         return
 
     def PlayVideoFromManager(self, model):
         ''' Play video from manager dock '''
         path = self.VManager.item(model.row(), 3).text()
-        title = self.VManager.item(model.row(), 1).text()
         self.ToggleActiveRow(model.row())
 
         if self._PlayerDlg is None:
-            self.CreatePlayer(path, title)
+            self.CreatePlayer(path)
         else:
             self.ToggleActiveFromTitle()
             self._PlayerDlg.playFile(path)
             return
 
-    def CreatePlayer(self, path, title):
+    def CreatePlayer(self, path):
         ''' Create Player '''
         self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self)
         self._PlayerDlg.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
@@ -113,12 +128,12 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.setItem(row, 2, QTableWidgetItem(value))
         return
 
-    def closeEvent(self, evnt):
+    def closeEvent(self, _):
         ''' Close Manager Event '''
         FmvDock = qgis.utils.plugins["QGIS_FMV"]
         FmvDock._FMVManager = None
         try:
-            self._PlayerDlg.close()  # TODO : Close player too?
-        except:
+            self._PlayerDlg.close()
+        except Exception:
             None
         return

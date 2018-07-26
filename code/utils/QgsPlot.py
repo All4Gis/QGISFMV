@@ -1,14 +1,10 @@
 # Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
 
-import os
-import shutil
 import traceback
 
-from PyQt5.QtCore import QCoreApplication, QObject, pyqtSignal, pyqtSlot
-from QGIS_FMV.utils.QgsFmvLog import log
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from QGIS_FMV.utils.QgsFmvUtils import _spawn
-from qgis.gui import QgsMessageBar
 
 
 try:
@@ -22,7 +18,6 @@ except ImportError:
     import xml.etree.ElementTree as etree
 
 
-# TODO : Disabled if video not have audio stream
 class CreatePlotsBitrate(QObject):
     """ Create Plot Bitrate """
     finished = pyqtSignal(str, str)
@@ -31,7 +26,7 @@ class CreatePlotsBitrate(QObject):
     return_fig = pyqtSignal(dict, int, str)
 
     @pyqtSlot(str, str, str)
-    def CreatePlot(self, file, output, type):
+    def CreatePlot(self, file, output, t):
         """ Create Plot Bitrate Slot"""
         try:
             self.progress.emit(10)
@@ -42,13 +37,14 @@ class CreatePlotsBitrate(QObject):
             frame_time = 0.0
 
             # set ffprobe stream specifier
-            if type == 'audio':
+            if t == 'audio':
                 stream_spec = 'a'
-            elif type == 'video':
+            elif t == 'video':
                 stream_spec = 'V'
             else:
                 self.error.emit(
-                    "CreatePlotsBitrate", "Invalid stream type", traceback.format_exc())
+                    "CreatePlotsBitrate", "Invalid stream type",
+                    traceback.format_exc())
                 return
 
             # get frame data for the selected stream
@@ -56,13 +52,12 @@ class CreatePlotsBitrate(QObject):
                     "-select_streams", stream_spec,
                     "-print_format", "xml",
                     file]
-            self.progress.emit(20)
             try:
-                with _spawn(cmds, type="probe") as proc_frame:
+                with _spawn(cmds, t="probe") as proc_frame:
                     self.progress.emit(22)
                     # process xml elements as they close
                     for event in etree.iterparse(proc_frame.stdout):
-                        self.progress.emit(25)
+                        self.progress.emit(40)
                         # skip non-frame elements
                         node = event[1]
                         if node.tag != 'frame':
@@ -72,18 +67,15 @@ class CreatePlotsBitrate(QObject):
                         frame_count += 1
 
                         # get type of frame
-                        if type == 'audio':
+                        if t == 'audio':
                             frame_type = 'A'  # pseudo frame type
                         else:
                             frame_type = node.get('pict_type')
 
-                        # get frame rate only once (assumes non-variable
-                        # framerate)
-                        self.progress.emit(30)
+                        # get frame rate only once
                         if frame_rate is None:
-
                             # audio frame rate, 1 / frame duration
-                            if type == 'audio':
+                            if t == 'audio':
                                 frame_rate = 1.0 / \
                                     float(node.get('pkt_duration_time'))
 
@@ -94,7 +86,7 @@ class CreatePlotsBitrate(QObject):
                                         "-print_format", "xml",
                                         file
                                         ]
-                                with _spawn(cmds, type="probe") as proc_stream:
+                                with _spawn(cmds, t="probe") as proc_stream:
 
                                     # parse stream header xml
                                     stream_data = etree.parse(
@@ -109,7 +101,6 @@ class CreatePlotsBitrate(QObject):
                                         dividend) / float(divisor)
 
                         # collect frame data
-                        self.progress.emit(35)
                         try:
                             frame_time = float(
                                 node.get('best_effort_timestamp_time'))
@@ -119,8 +110,6 @@ class CreatePlotsBitrate(QObject):
                             except:
                                 if frame_count > 1:
                                     frame_time += float(node.get('pkt_duration_time'))
-
-                        self.progress.emit(40)
 
                         frame_bitrate = (float(node.get('pkt_size'))
                                          * 8 / 1000) * frame_rate
@@ -138,19 +127,22 @@ class CreatePlotsBitrate(QObject):
                     # check if ffprobe was successful
                     if frame_count == 0:
                         self.error.emit(
-                            "CreatePlotsBitrate", "Error: No frame data, failed to execute ffprobe", traceback.format_exc())
+                            "CreatePlotsBitrate",
+                            "Error: No frame data, failed to execute ffprobe",
+                            traceback.format_exc())
                         return
             except:
                 self.error.emit(
-                    "CreatePlotsBitrate", "Error: No frame data, failed to execute ffprobe", traceback.format_exc())
+                    "CreatePlotsBitrate",
+                    "Error: No frame data, failed to execute ffprobe",
+                    traceback.format_exc())
                 return
             # end frame subprocess
-            # Start MatPlot Setup new figure
             self.progress.emit(80)
-
             self.return_fig.emit(bitrate_data, frame_count, output)
-            self.finished.emit("CreatePlotsBitrate",
-                               "Bitrate correct Finished!")
+            self.finished.emit(
+                "CreatePlotsBitrate",
+                "Bitrate correct Finished!")
             return
 
         except Exception as e:

@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 
-from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox
 from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.core import Qgis as QGis
 from qgis.core import QgsProject
-from qgis.gui import QgsMessageBar
 from qgis.utils import iface
 
 
@@ -22,6 +20,7 @@ class QgsUtils(object):
 
     @staticmethod
     def GetIcon(icon):
+        ''' Get Icon for Custom Informative Message '''
         if icon == "Question":
             i = QPixmap(":/imgFMV/images/Question.png")
         elif icon == "Information":
@@ -34,6 +33,7 @@ class QgsUtils(object):
 
     @staticmethod
     def CustomMessage(title, msg, informative="", icon="Critical"):
+        ''' Custom Informative Message '''
         d = QMessageBox()
         d.setWindowTitle(title)
         d.setText(msg)
@@ -48,6 +48,7 @@ class QgsUtils(object):
 
     @staticmethod
     def selectLayerByName(layerName):
+        ''' Select Layer by Name '''
         returnLayer = None
         try:
             returnLayer = QgsProject.instance().mapLayersByName(layerName)[0]
@@ -57,6 +58,7 @@ class QgsUtils(object):
 
     @staticmethod
     def createFolderByName(path, name):
+        ''' Create Folder by Name '''
         directory = os.path.join(path, name)
         try:
             if not os.path.exists(directory):

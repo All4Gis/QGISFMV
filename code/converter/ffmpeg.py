@@ -133,14 +133,14 @@ class MediaStreamInfo(object):
     def parse_float(val, default=0.0):
         try:
             return float(val)
-        except:
+        except ValueError:
             return default
 
     @staticmethod
     def parse_int(val, default=0):
         try:
             return int(val)
-        except:
+        except ValueError:
             return default
 
     def parse_ffprobe(self, key, val):
@@ -212,7 +212,9 @@ class MediaStreamInfo(object):
 
         if self.type == 'audio':
             d = 'type=%s, codec=%s, channels=%d, rate=%.0f' % (self.type,
-                                                               self.codec, self.audio_channels, self.audio_samplerate)
+                                                               self.codec,
+                                                               self.audio_channels,
+                                                               self.audio_samplerate)
         elif self.type == 'video':
             d = 'type=%s, codec=%s, width=%d, height=%d, fps=%.1f' % (
                 self.type, self.codec, self.video_width, self.video_height,
@@ -330,24 +332,26 @@ class FFMpeg(object):
             return None
 
     def probeToJson(self, fname, Output=None):
+        """ Save video data in json format """
         p = _spawn(['-v', 'quiet',
                     '-print_format', 'json',
                     '-show_format',
                     '-show_streams',
                     fname,
-                    '>', Output], type="probe")
+                    '>', Output], t="probe")
         p.communicate()
         return
 
-    def probeGetJson(self, fname, Output=None):
+    def probeGetJson(self, fname):
+        """ Show json info in table """
         p = _spawn(['-v', 'quiet',
                     '-print_format', 'json',
                     '-show_format',
                     '-show_streams',
-                    fname], type="probe")
+                    fname], t="probe")
 
-        (output, err) = p.communicate()
-        p_status = p.wait()
+        (output, _) = p.communicate()
+        p.wait()
 
         return output
 
@@ -381,7 +385,7 @@ class FFMpeg(object):
 
         info = MediaInfo(posters_as_video)
 
-        p = _spawn(['-show_format', '-show_streams', fname], type="probe")
+        p = _spawn(['-show_format', '-show_streams', fname], t="probe")
         stdout_data, _ = p.communicate()
         stdout_data = stdout_data.decode(console_encoding)
         info.parse_ffprobe(stdout_data)

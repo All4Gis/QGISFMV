@@ -29,11 +29,7 @@ from PyQt5.QtWidgets import QAction
 from QGIS_FMV.player.QgsFmvAbout import FmvAbout
 from QGIS_FMV.player.QgsManager import FmvManager
 from QGIS_FMV.utils.QgsFmvLog import log
-from QGIS_FMV.utils.QgsFmvUtils import install_pip_requirements, install_requirements_copy
-from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import Qt
-from qgis.core import QgsApplication
-from qgis.gui import QgsMessageBar
 
 
 try:
@@ -65,7 +61,8 @@ class Fmv:
 
     def initGui(self):
         ''' FMV Action '''
-        self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"), u"FMV", self.iface.mainWindow(),
+        self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
+                                 u"FMV", self.iface.mainWindow(),
                                  statusTip=QCoreApplication.translate(
                                      "Fmv", "Show Video Manager"),
                                  triggered=self.run)

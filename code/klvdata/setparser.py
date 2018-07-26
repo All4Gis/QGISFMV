@@ -269,6 +269,12 @@ class SetParser(Element, metaclass=ABCMeta):
 
     def GettargetWidth(self):
         return self._targetWidth
+    
+    def GetSlantRange(self):
+        return self._slantRange
+
+    def SetSlantRange(self, value):
+        self._slantRange = float(value)
 
     def SettargetWidth(self, value):
         self._targetWidth = float(value)

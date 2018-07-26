@@ -11,4 +11,5 @@ SOURCES = ../QgsFmv.py \
 ../video/QgsVideoProcessor.py
 
 TRANSLATIONS = qgisfmv_en.ts \
-qgisfmv_es.ts
+qgisfmv_es.ts \
+qgisfmv_ca.ts

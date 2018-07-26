@@ -2,39 +2,61 @@
 import os.path
 import threading
 
-from PyQt5.QtCore import QUrl, QThread, QPoint, QCoreApplication, Qt, QMetaObject, Q_ARG
+from PyQt5.QtCore import (QUrl,
+                          QThread,
+                          QPoint,
+                          QCoreApplication,
+                          Qt,
+                          QMetaObject,
+                          Q_ARG)
 from PyQt5.QtGui import QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
-from PyQt5.QtWidgets import (QToolTip, QHeaderView, QStyleOptionSlider, QTreeView, QVBoxLayout,
-                             QDialog, QMainWindow, QFileDialog, QMessageBox, QMenu, QApplication, QTableWidgetItem)
+from PyQt5.QtWidgets import (QToolTip,
+                             QAbstractSlider,
+                             QHeaderView,
+                             QStyleOptionSlider,
+                             QTreeView,
+                             QVBoxLayout,
+                             QDialog,
+                             QMainWindow,
+                             QFileDialog,
+                             QMessageBox,
+                             QMenu,
+                             QApplication,
+                             QTableWidgetItem)
 from QGIS_FMV.converter.Converter import Converter
-from QGIS_FMV.gui.generated.ui_FmvPlayer import Ui_PlayerWindow
+from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.player.QgsFmvMetadata import QgsFmvMetadata
-from QGIS_FMV.utils.QgsFmvLayers import CreateVideoLayers, RemoveVideoLayers, CreateGroupByName, RemoveGroupByName
-from QGIS_FMV.utils.QgsFmvUtils import callBackMetadataThread, _spawn, _check_output, UpdateLayers, _seconds_to_time, _seconds_to_time_frac
+from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
+                                         RemoveVideoLayers,
+                                         CreateGroupByName,
+                                         RemoveGroupByName)
+from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
+                                        _spawn,
+                                        UpdateLayers,
+                                        _seconds_to_time,
+                                        _seconds_to_time_frac)
+from QGIS_FMV.utils.QgsFmvUtils import askForFiles
 from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
 from QGIS_FMV.video.QgsVideoProcessor import ExtractFramesProcessor
+#from QGIS_FMV.videoStremaing.Client import UDPClient
 from qgis.core import Qgis as QGis
 
 
-# from QGIS_FMV.utils.QgsUtils import RepeatFunctionTimer as RepeatFunctionTimer
 try:
     from pydevd import *
 except ImportError:
     None
 
-# check for matplot lib
 try:
     import numpy
     import matplotlib.pyplot as matplot
 except ImportError:
     None
-
-# TODO : Check if video have video and audio for disabled plot bitrate buttons
 
 
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
@@ -53,23 +75,29 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
 
+        self.videoWidget2.setVisible(False)
+
+        self.resize(730, 350)
+
         self.videoWidget.customContextMenuRequested[QPoint].connect(
             self.contextMenuRequested)
+#         self.videoWidget2.customContextMenuRequested[QPoint].connect(
+#             self.contextMenuRequested)
 
         self.duration = 0
         self.playerMuted = False
-        self.HasFileAudio=False
+        self.HasFileAudio = False
 
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        self.player.setNotifyInterval(1000)  # One second
-        self.pass_time = 0.1
+        self.player.setNotifyInterval(700)  # Metadata Callback Interval
+        self.pass_time = 0.08
         self.playlist = QMediaPlaylist()
 
-#         self.player.setVideoOutput(
-#             self.videoWidget)  # Standar Surface
-
         self.player.setVideoOutput(
-            self.videoWidget.videoSurface())  # Custom Surface
+            self.videoWidget.videoSurface())  # Abstract Surface
+
+#         self.player.setVideoOutput(
+#             self.videoWidget2)  # Standar Surface
 
         self.player.durationChanged.connect(self.durationChanged)
         self.player.positionChanged.connect(self.positionChanged)
@@ -103,42 +131,40 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             if stdout_data == b'':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "This video don't have Metadata ! : "), level=QGis.Info)
+                    "QgsFmvPlayer", "This video don't have Metadata ! "),
+                    level=QGis.Info)
                 return False
 
             return True
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e), level=QGis.Info)
+                "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e),
+                level=QGis.Info)
 
     def HasAudio(self, videoPath):
         """ Check if video have Metadata or not """
         try:
             p = _spawn(['-i', videoPath,
                         '-show_streams', '-select_streams', 'a',
-                        '-loglevel', 'error'], type="ffprobe")
+                        '-loglevel', 'error'], t="probe")
 
             stdout_data, _ = p.communicate()
 
             if stdout_data == b'':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "This video don't have Audio ! : "), level=QGis.Info)
+                    "QgsFmvPlayer", "This video don't have Audio ! "),
+                    level=QGis.Info)
                 return False
 
             return True
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Audio check Failed! : "), str(e), level=QGis.Info)
+                "QgsFmvPlayer", "Audio check Failed! : "), str(e),
+                level=QGis.Info)
 
     def callBackMetadata(self, currentTime, nextTime):
         """ Metadata CallBack """
         try:
-            # TODO : Speed this function
-            #             stdout_data = _check_output(['-i', self.fileName,
-            #                         '-ss', currentTime,
-            #                         '-to', nextTime,
-            #                         '-f', 'data', '-'])
-
             t = callBackMetadataThread(cmds=['-i', self.fileName,
                                              '-ss', currentTime,
                                              '-to', nextTime,
@@ -189,7 +215,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         try:
             self.sliderPosition = self.metadataDlg.VManager.verticalScrollBar().sliderPosition()
             self.metadataDlg.VManager.setRowCount(0)
-        except:
+        except Exception:
             None
 
     def saveInfoToJson(self):
@@ -201,23 +227,23 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if out_json == "":
             return
         try:
-            self.VPProbeToJson = Converter()
-            self.VPTProbeToJson = QThread()
+            self.infoJson = Converter()
+            self.infoJsonT = QThread()
 
-            self.VPProbeToJson.moveToThread(
-                self.VPTProbeToJson)
+            self.infoJson.moveToThread(
+                self.infoJsonT)
 
-            self.VPProbeToJson.finished.connect(
+            self.infoJson.finished.connect(
                 self.QThreadFinished)
 
-            self.VPProbeToJson.error.connect(self.QThreadError)
+            self.infoJson.error.connect(self.QThreadError)
 
-            self.VPProbeToJson.progress.connect(
+            self.infoJson.progress.connect(
                 self.progressBarProcessor.setValue)
 
-            self.VPTProbeToJson.start(QThread.LowPriority)
+            self.infoJsonT.start(QThread.LowPriority)
 
-            QMetaObject.invokeMethod(self.VPProbeToJson, 'probeToJson',
+            QMetaObject.invokeMethod(self.infoJson, 'probeToJson',
                                      Qt.QueuedConnection, Q_ARG(
                                          str, self.fileName),
                                      Q_ARG(
@@ -225,36 +251,36 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Error saving Json"))
+                "QgsFmvPlayer", "Error saving Json : " + str(e)))
             self.QThreadFinished("probeToJson", "Closing ProbeToJson")
 
     def showVideoInfo(self):
         ''' Show default probe info '''
         try:
 
-            self.VPProbe = Converter()
-            self.VPTProbe = QThread()
+            self.showInfo = Converter()
+            self.showInfoT = QThread()
 
-            self.VPProbe.moveToThread(
-                self.VPTProbe)
+            self.showInfo.moveToThread(
+                self.showInfoT)
 
-            self.VPProbe.finishedJson.connect(
+            self.showInfo.finishedJson.connect(
                 self.QThreadFinished)
 
-            self.VPProbe.error.connect(self.QThreadError)
+            self.showInfo.error.connect(self.QThreadError)
 
-            self.VPProbe.progress.connect(
+            self.showInfo.progress.connect(
                 self.progressBarProcessor.setValue)
 
-            self.VPTProbe.start(QThread.LowPriority)
+            self.showInfoT.start(QThread.LowPriority)
 
-            QMetaObject.invokeMethod(self.VPProbe, 'probeShow',
+            QMetaObject.invokeMethod(self.showInfo, 'probeShow',
                                      Qt.QueuedConnection, Q_ARG(
                                          str, self.fileName))
 
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Error Info Show"))
+                "QgsFmvPlayer", "Error Info Show : " + str(e)))
             self.QThreadFinished("probeShow", "Closing Probe")
         return
 
@@ -266,7 +292,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Set Current State '''
         if state != self.playerState:
             self.playerState = state
-
             if state == QMediaPlayer.StoppedState:
                 self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
 
@@ -279,7 +304,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # Fail if not uncheked
         self.actionMagnifying_glass.setChecked(False)
         self.actionZoom_Rectangle.setChecked(False)
+        self.toggleVideoWidget(top="standar")
         self.ColorDialog.exec_()
+        QApplication.processEvents()
+        self.ColorDialog.contrastSlider.setValue(80)
+        self.ColorDialog.contrastSlider.triggerAction(
+            QAbstractSlider.SliderMove)
         return
 
     def createMosaic(self, value):
@@ -288,7 +318,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         qgsu.createFolderByName(home, "QGIS_FMV")
         homefmv = os.path.join(home, "QGIS_FMV")
-        root, ext = os.path.splitext(os.path.basename(self.fileName))
+        root, _ = os.path.splitext(os.path.basename(self.fileName))
         qgsu.createFolderByName(homefmv, root)
         self.createingMosaic = value
         # Create Group
@@ -299,10 +329,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Context Menu Video '''
         menu = QMenu()
 
-#         actionColors = menu.addAction(
-#             QCoreApplication.translate("QgsFmvPlayer", "Color Options"))
-#         actionColors.setShortcut("Ctrl+May+C")
-#         actionColors.triggered.connect(self.showColorDialog)
+        actionColors = menu.addAction(
+            QCoreApplication.translate("QgsFmvPlayer", "Color Options"))
+        actionColors.setShortcut("Ctrl+May+C")
+        actionColors.triggered.connect(self.showColorDialog)
 
         actionMute = menu.addAction(
             QCoreApplication.translate("QgsFmvPlayer", "Mute/Unmute"))
@@ -316,7 +346,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         actionAllFrames.triggered.connect(self.ExtractAllFrames)
 
         actionCurrentFrames = menu.addAction(
-            QCoreApplication.translate("QgsFmvPlayer", "Extract Current Frame"))
+            QCoreApplication.translate("QgsFmvPlayer",
+                                       "Extract Current Frame"))
         actionCurrentFrames.setShortcut("Ctrl+May+Q")
         actionCurrentFrames.triggered.connect(self.ExtractCurrentFrame)
 
@@ -330,52 +361,57 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     # Start Snnipet FILTERS
     def grayFilter(self, value):
+        ''' Gray Video Filter '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetGray(value)
         self.videoWidget.UpdateSurface()
         return
 
     def edgeFilter(self, value):
+        ''' Edge Detection Video Filter '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetEdgeDetection(value)
         self.videoWidget.UpdateSurface()
         return
 
     def invertColorFilter(self, value):
+        ''' Invert Color Video Filter '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetInvertColor(value)
         self.videoWidget.UpdateSurface()
         return
 
     def autoContrastFilter(self, value):
+        ''' Auto Contrast Video Filter '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetAutoContrastFilter(value)
         self.videoWidget.UpdateSurface()
         return
 
     def monoFilter(self, value):
+        ''' Filter Mono Video '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetMonoFilter(value)
         self.videoWidget.UpdateSurface()
         return
 
     def magnifier(self, value):
+        ''' Magnifier Glass Utils '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetMagnifier(value)
         self.videoWidget.UpdateSurface()
         return
 
     def zoomRect(self, value):
+        ''' Zoom Rectangle Utils '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetZoomRect(value)
         self.videoWidget.UpdateSurface()
         return
 
     def UncheckUtils(self, sender, value):
-        #         p = self.player.position()
-        #         self.player.setVideoOutput(
-        #             self.videoWidget.videoSurface())  # Custom surface
-        #         self.player.setPosition(p)
+        ''' Uncheck Utils Video '''
+        self.toggleVideoWidget()
         QApplication.processEvents()
         name = sender.objectName()
         self.actionMagnifying_glass.setChecked(
@@ -387,11 +423,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def UncheckFilters(self, sender, value):
-        #         p = self.player.position()
-        #         self.player.setVideoOutput(
-        #             self.videoWidget.videoSurface())  # Custom surface
-        #         self.player.setPosition(p)
-        #         QApplication.processEvents()
+        ''' Uncheck Filters Video '''
+        self.toggleVideoWidget()
         name = sender.objectName()
 
         self.actionGray.setChecked(True if name == "actionGray" else False)
@@ -434,10 +467,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.volumeSlider.setEnabled(False)
         return
 
+    # TODO: SI LE DOY AL STOP LUEGO NO SE VE EL VIDEO (SE QUEDA NEGRO)
     def stop(self):
         ''' Stop video'''
+        # Prevent Error in a Video Utils.Disable Magnifier and zoom
+        if self.actionMagnifying_glass.isChecked():
+            self.actionMagnifying_glass.trigger()
+        elif self.actionZoom_Rectangle.isChecked():
+            self.actionZoom_Rectangle.trigger()
+        # Stop Video
         self.player.stop()
-        self.videoWidget.update()
         return
 
     def volume(self):
@@ -445,7 +484,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return self.volumeSlider.value()
 
     def setVolume(self, volume):
-        ''' Tooltip and set value'''
+        ''' Tooltip and set Volume value and icon '''
         self.player.setVolume(volume)
         self.showVolumeTip(volume)
         if 0 < volume <= 30:
@@ -559,7 +598,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def handleCursor(self, status):
         ''' Change cursor '''
-        if status in (QMediaPlayer.LoadingMedia, QMediaPlayer.BufferingMedia, QMediaPlayer.StalledMedia):
+        if status in (QMediaPlayer.LoadingMedia,
+                      QMediaPlayer.BufferingMedia,
+                      QMediaPlayer.StalledMedia):
             self.setCursor(Qt.BusyCursor)
         else:
             self.unsetCursor()
@@ -567,12 +608,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def statusChanged(self, status):
         ''' Signal Status video change '''
         self.handleCursor(status)
-        if status == QMediaPlayer.LoadingMedia:
+        if status is QMediaPlayer.LoadingMedia or status is QMediaPlayer.StalledMedia or status is QMediaPlayer.InvalidMedia:
             self.videoAvailableChanged(False)
-        elif status == QMediaPlayer.StalledMedia:
-            self.videoAvailableChanged(False)
-        if status == QMediaPlayer.EndOfMedia:
-            self.videoAvailableChanged(True)
         elif status == QMediaPlayer.InvalidMedia:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", self.player.errorString()), level=QGis.Warning)
@@ -580,20 +617,62 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         else:
             self.videoAvailableChanged(True)
 
+    def toggleVideoWidget(self, top="custom"):
+        ''' Toggle visibility video Widgets '''
+        if top != "custom":
+            # self.videoWidget.setVisible(False)
+            # self.videoWidget2.setVisible(True)
+            state = self.state
+            self.player.setVideoOutput(
+                self.videoWidget)  # Standar Surface
+            self.resetState(state)
+            self.videoWidget.setContrast(80)
+            self.videoWidget.update()
+            self.videoWidget.setContrast(81)
+            return
+        # self.videoWidget2.setVisible(False)
+        # self.videoWidget.setVisible(True)
+        state = self.state
+        self.player.setVideoOutput(
+            self.videoWidget.videoSurface())  # Abstract Surface
+        self.resetState(state)
+        return
+
+    def resetState(self, state):
+        ''' Reset Video State '''
+        if state == QMediaPlayer.PausedState:
+            self.player.play()
+            self.player.pause()
+        elif state == QMediaPlayer.StoppedState:
+            self.player.play()
+            self.player.stop()
+
     def playFile(self, videoPath):
         ''' Play file from path '''
         try:
             RemoveVideoLayers()
             RemoveGroupByName()
+            # TODO: Make UDP stream
+#             if "udp://" in videoPath:
+#                 host, port = videoPath.split("://")[1].split(":")
+#                 receiver = UDPClient(host, int(port), type="udp")
+#                 receiver.show()
+#                 self.close()
+#                 return
+# #             if "tcp://" in videoPath:
+# #                 host, port = videoPath.split("://")[1].split(":")
+# #                 receiver = UDPClient(host, port, type="tcp")
+# #                 receiver.show()
+# #                 self.close()
+# #                 return
             self.fileName = videoPath
             self.playlist = QMediaPlaylist()
             url = QUrl.fromLocalFile(videoPath)
             self.playlist.addMedia(QMediaContent(url))
-            self.playlist.setPlaybackMode(QMediaPlaylist.Sequential)
             self.player.setPlaylist(self.playlist)
 
-            self.setWindowTitle(
-                "Playing : " + os.path.basename(os.path.normpath(videoPath)))
+            self.setWindowTitle(QCoreApplication.translate(
+                "QgsFmvPlayer", 'Playing : ') + os.path.basename(os.path.normpath(videoPath)))
 
             if self.HasMetadata(videoPath):
                 CreateVideoLayers()
@@ -608,12 +687,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     "<span style='font-size:9pt; font-weight:normal;'>Null</span>")
             else:
                 self.btn_GeoReferencing.setEnabled(False)
-            
-            self.HasFileAudio=True
+
+            self.HasFileAudio = True
             if not self.HasAudio(videoPath):
                 self.actionAudio.setEnabled(False)
                 self.actionSave_Audio.setEnabled(False)
-                self.HasFileAudio=False
+                self.HasFileAudio = False
 
             self.playClicked(True)
 
@@ -621,7 +700,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Open Video File : '), str(e), level=QGis.Warning)
 
-    def ReciconUpdate(self, frame):
+    def ReciconUpdate(self, _):
+        ''' Record Button Icon Effect '''
         self.btn_Rec.setIcon(QIcon(self.RecGIF.currentPixmap()))
 
     def RecordVideo(self, value):
@@ -663,7 +743,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def videoAvailableChanged(self, available):
         ''' Buttons for video available '''
-        # self.btn_Color.setEnabled(available)
+        #self.btn_Color.setEnabled(available)
         self.btn_CaptureFrame.setEnabled(available)
         self.gb_PlayerControls.setEnabled(available)
         return
@@ -676,9 +756,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         else:
             sender.setFixedHeight(15)
 
-    def playClicked(self, state):
+    def playClicked(self, _):
         ''' Stop and Play video '''
-        if self.playerState in (QMediaPlayer.StoppedState, QMediaPlayer.PausedState):
+        if self.playerState in (QMediaPlayer.StoppedState,
+                                QMediaPlayer.PausedState):
             self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
             self.player.play()
         elif self.playerState == QMediaPlayer.PlayingState:
@@ -704,8 +785,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             return False
 
         lfn = out.lower()
-        if not lfn.endswith(('.ogg', '.avi', '.mkv', '.webm', '.flv', '.mov', '.mp4', '.mp3', '.mpg')):
-            # The default.
+        if not lfn.endswith((
+            '.ogg',
+            '.avi',
+            '.mkv',
+            '.webm',
+            '.flv',
+            '.mov',
+            '.mp4',
+            '.mp3',
+                '.mpg')):
+            # default.
             out += '.mp4'
 
         try:
@@ -756,13 +846,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     }}
             else:
                 options = {
-                'format': out_ext[1:],
-                'video': {
-                    'codec': video_codec,
-                    'width': video_width,
-                    'height': video_height,
-                    'fps': video_fps
-                }}
+                    'format': out_ext[1:],
+                    'video': {
+                        'codec': video_codec,
+                        'width': video_width,
+                        'height': video_height,
+                        'fps': video_fps
+                    }}
             QMetaObject.invokeMethod(self.VPConverter, 'convert',
                                      Qt.QueuedConnection, Q_ARG(
                                          str, self.fileName),
@@ -775,7 +865,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Error converting video "))
+                "QgsFmvPlayer", "Error converting video : " + str(e)))
             self.QThreadFinished("convert", "Closing convert")
 
     def ShowPlot(self, bitrate_data, frame_count, output=None):
@@ -846,7 +936,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # draw mean as think black line w/ text
         matplot.axhline(global_mean_bitrate, linewidth=2, color='black')
         matplot.text(mean_text_x, mean_text_y, mean_text,
-                     horizontalalignment='center', fontweight='bold', color='black')
+                     horizontalalignment='center', fontweight='bold',
+                     color='black')
 
         matplot.legend()
         if output != "":
@@ -854,6 +945,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         else:
             matplot.show()
 
+        self.matplot = matplot
         self.progressBarProcessor.setValue(100)
 
     def CreateBitratePlot(self):
@@ -946,7 +1038,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Failed creating Plot Bitrate"))
+                "QgsFmvPlayer", "Failed creating Plot Bitrate : " + str(e)))
 
     def ExtractAllFrames(self):
         """ Extract All Video Frames Thread """
@@ -956,7 +1048,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         options = QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly
         directory = QFileDialog.getExistingDirectory(self,
                                                      QCoreApplication.translate(
-                                                         "QgsFmvPlayer", "Save images"),
+                                                         "QgsFmvPlayer",
+                                                         "Save images"),
                                                      '', options=options)
 
         if directory:
@@ -983,7 +1076,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Extract Current Frame Thread """
         image = self.videoWidget.GetCurrentFrame()
         out_image, _ = QFileDialog.getSaveFileName(
-            self, "Save Current Frame", "", "Image File (*.png *.jpg *.bmp *.tiff)")
+            self, "Save Current Frame", "",
+            "Image File (*.png *.jpg *.bmp *.tiff)")
 
         if out_image == "":
             return
@@ -1000,7 +1094,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         QApplication.processEvents()
         return
 
-    def QThreadFinished(self, process, msg, outjson=None):
+    def QThreadFinished(self, process, msg="", outjson=None):
         ''' Finish Threads '''
         if process == "ExtractFramesProcessor":
             self.VPExtractFrames.deleteLater()
@@ -1015,13 +1109,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.VPTConverter.terminate()
             self.VPTConverter.deleteLater()
         elif process == "probeToJson":
-            self.VPProbeToJson.deleteLater()
-            self.VPTProbeToJson.terminate()
-            self.VPTProbeToJson.deleteLater()
+            self.infoJson.deleteLater()
+            self.infoJsonT.terminate()
+            self.infoJsonT.deleteLater()
         elif process == "probeShow":
-            self.VPProbe.deleteLater()
-            self.VPTProbe.terminate()
-            self.VPTProbe.deleteLater()
+            self.showInfo.deleteLater()
+            self.showInfoT.terminate()
+            self.showInfoT.deleteLater()
             self.showVideoInfoDialog(outjson)
 
         QApplication.processEvents()
@@ -1030,7 +1124,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def QThreadError(self, processor, e, exception_string):
         """ Threads Errors"""
-        qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", processor), 'Failed!\n'.format(
+        qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer",
+                                                              processor),
+                                   'Failed! ' + str(e) + ' \n'.format(
             exception_string), level=QGis.Warning)
 
         self.QThreadFinished(processor, "Closing Processor")
@@ -1048,64 +1144,80 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def KillAllProcessors(self):
-        """Kill All Processors"""
+        """ Kill All Processors """
         """ Extract all frames Processors """
         try:
             if self.VPTExtractAllFrames.isRunning():
-                ret = qgsu.CustomMessage(QCoreApplication.translate("QgsFmvPlayer", "HEY...Active background process!"),
-                                         QCoreApplication.translate("QgsFmvPlayer", "Do you really want close?"))
+                ret = qgsu.CustomMessage(
+                    QCoreApplication.translate("QgsFmvPlayer",
+                                               "HEY...Active background process!"),
+                    QCoreApplication.translate("QgsFmvPlayer",
+                                               "Do you really want close?"))
                 if ret == QMessageBox.Yes:
                     self.QThreadFinished(
                         "ExtractFramesProcessor", "Closing Extract Frames Processor")
                 else:
                     return False
-        except:
+        except Exception:
             None
 
         """ Bitrates Processors"""
         try:
             if self.VPTBitratePlot.isRunning():
-                ret = qgsu.CustomMessage(QCoreApplication.translate("QgsFmvPlayer", "HEY...Active background process!"),
-                                         QCoreApplication.translate("QgsFmvPlayer", "Do you really want close?"))
+                ret = qgsu.CustomMessage(
+                    QCoreApplication.translate("QgsFmvPlayer",
+                                               "HEY...Active background process!"),
+                    QCoreApplication.translate("QgsFmvPlayer",
+                                               "Do you really want close?"))
                 if ret == QMessageBox.Yes:
                     self.QThreadFinished(
                         "CreatePlotsBitrate", "Closing Plot Bitrate")
                 else:
                     return False
-        except:
+        except Exception:
             None
         """ Converter Processors """
         try:
             if self.VPTConverter.isRunning():
-                ret = qgsu.CustomMessage(QCoreApplication.translate("QgsFmvPlayer", "HEY...Active background process!"),
-                                         QCoreApplication.translate("QgsFmvPlayer", "Do you really want close?"))
+                ret = qgsu.CustomMessage(
+                    QCoreApplication.translate("QgsFmvPlayer",
+                                               "HEY...Active background process!"),
+                    QCoreApplication.translate("QgsFmvPlayer",
+                                               "Do you really want close?"))
                 if ret == QMessageBox.Yes:
                     self.QThreadFinished("convert", "Closing convert")
                 else:
                     return False
-        except:
+        except Exception:
             None
         """ probeToJson Processors """
         try:
-            if self.VPTProbeToJson.isRunning():
-                ret = qgsu.CustomMessage(QCoreApplication.translate("QgsFmvPlayer", "HEY...Active background process!"),
-                                         QCoreApplication.translate("QgsFmvPlayer", "Do you really want close?"))
+            if self.infoJsonT.isRunning():
+                ret = qgsu.CustomMessage(
+                    QCoreApplication.translate("QgsFmvPlayer",
+                                               "HEY...Active background process!"),
+                    QCoreApplication.translate("QgsFmvPlayer",
+                                               "Do you really want close?"))
                 if ret == QMessageBox.Yes:
                     self.QThreadFinished("probeToJson", "Closing Info to Json")
                 else:
                     return False
-        except:
+        except Exception:
             None
         """ probeShow Processors """
         try:
-            if self.VPTProbe.isRunning():
-                ret = qgsu.CustomMessage(QCoreApplication.translate("QgsFmvPlayer", "HEY...Active background process!"),
-                                         QCoreApplication.translate("QgsFmvPlayer", "Do you really want close?"))
+            if self.showInfoT.isRunning():
+                ret = qgsu.CustomMessage(
+                    QCoreApplication.translate("QgsFmvPlayer",
+                                               "HEY...Active background process!"),
+                    QCoreApplication.translate("QgsFmvPlayer",
+                                               "Do you really want close?"))
                 if ret == QMessageBox.Yes:
-                    self.QThreadFinished("probeShow", "Closing Show Video Info")
+                    self.QThreadFinished(
+                        "probeShow", "Closing Show Video Info")
                 else:
                     return False
-        except:
+        except Exception:
             None
         return True
 
@@ -1117,8 +1229,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         model.loadJsonFromConsole(outjson)
 
         self.VideoInfoDialog = QDialog(self)
-        self.VideoInfoDialog.setWindowTitle(
-            "Video Information : " + self.fileName)
+        self.VideoInfoDialog.setWindowTitle(QCoreApplication.translate(
+                "QgsFmvPlayer", "Video Information : ") + self.fileName)
         self.VideoInfoDialog.setWindowIcon(
             QIcon(":/imgFMV/images/video_information.png"))
 
@@ -1145,7 +1257,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         RemoveVideoLayers()
         RemoveGroupByName()
 
+        try:
+            self.metadataDlg.close()
+        except Exception:
+            None
+        try:
+            self.matplot.close()
+        except Exception:
+            None
         # Restore Filters State
         self.videoWidget.RestoreFilters()
-        # QApplication.processEvents()
         del self.player

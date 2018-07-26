@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtCore import Qt, QCoreApplication, QRect, QPoint, QBasicTimer, QSize, QPointF, QThread
-from PyQt5.QtGui import QImage, QPalette, QPixmap, QPainter, QRegion, QPainterPath, QRadialGradient, QColor, QBrush
+from PyQt5.QtCore import Qt, QCoreApplication, QRect, QPoint, QBasicTimer, QSize, QPointF
+from PyQt5.QtGui import (QImage,
+                         QPalette,
+                         QPixmap,
+                         QPainter,
+                         QRegion,
+                         QPainterPath,
+                         QRadialGradient,
+                         QColor,
+                         QBrush)
 from PyQt5.QtMultimedia import QAbstractVideoBuffer, QVideoFrame, QVideoSurfaceFormat, QAbstractVideoSurface
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand, QApplication
+from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
 from QGIS_FMV.utils.QgsFmvUtils import SetImageSize, GetGCPGeoTransform
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
@@ -29,6 +37,7 @@ MAX_MAGNIFIER = 229
 class VideoWidgetSurface(QAbstractVideoSurface):
 
     def __init__(self, widget, parent=None):
+        ''' Constructor '''
         super(VideoWidgetSurface, self).__init__(parent)
 
         self.widget = widget
@@ -37,6 +46,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         self.zoomedrect = None
 
     def supportedPixelFormats(self, handleType=QAbstractVideoBuffer.NoHandle):
+        ''' Available Frames Format '''
         formats = [QVideoFrame.PixelFormat()]
         if handleType == QAbstractVideoBuffer.NoHandle:
             for f in [QVideoFrame.Format_RGB32,
@@ -49,6 +59,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         return formats
 
     def isFormatSupported(self, _format):
+        ''' Check if is supported VideFrame format '''
         imageFormat = QVideoFrame.imageFormatFromPixelFormat(
             _format.pixelFormat())
         size = _format.frameSize()
@@ -83,6 +94,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         self.widget.update()
 
     def present(self, frame):
+        ''' Present Frame '''
         if (self.surfaceFormat().pixelFormat() != frame.pixelFormat() or
                 self.surfaceFormat().frameSize() != frame.size()):
             self.setError(QAbstractVideoSurface.IncorrectFormatError)
@@ -121,7 +133,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         return
 
     def paint(self, painter):
-        ''' Paint '''
+        ''' Paint Frame'''
         if (self.currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
             oldTransform = painter.transform()
 
@@ -157,18 +169,10 @@ class VideoWidgetSurface(QAbstractVideoSurface):
                 self.currentFrame.unmap()
                 return
 
-            # self.image = filter.change_contrast(self.image,20)
-
             painter.drawImage(self.targetRect, self.image, self.sourceRect)
-            # painter.setTransform(oldTransform)
+            painter.setTransform(oldTransform)
             self.currentFrame.unmap()
             self.currentFrame.release()
-            # self.widget.update()
-            # QApplication.processEvents()
-
-    # TODO: Make
-    def updateColors(self, brightness, contrast, hue, saturation):
-        return
 
 
 class VideoWidget(QVideoWidget):
@@ -195,11 +199,7 @@ class VideoWidget(QVideoWidget):
         self.setSizePolicy(QSizePolicy.MinimumExpanding,
                            QSizePolicy.MinimumExpanding)
 
-        # self.surfaceTread = QThread()
         self.surface = VideoWidgetSurface(self)
-#         self.surface.moveToThread(
-#             self.surfaceTread)
-#         self.surfaceTread.start(QThread.HighPriority)
 
         self.setAttribute(Qt.WA_OpaquePaintEvent)
         self.gt = None
@@ -240,9 +240,6 @@ class VideoWidget(QVideoWidget):
 
     def UpdateSurface(self):
         self.surface.widget.update()
-
-    def closeEvent(self, event):
-        del self.surface
 
     def sizeHint(self):
         return self.surface.surfaceFormat().sizeHint()
@@ -289,7 +286,7 @@ class VideoWidget(QVideoWidget):
 
             try:
                 self.surface.paint(painter)
-            except:
+            except Exception:
                 None
         else:
             painter.fillRect(event.rect(), self.palette().window())
@@ -340,7 +337,7 @@ class VideoWidget(QVideoWidget):
                 painter = QPainter(self.zoomPixmap)
                 painter.translate(-xy)
                 self.largePixmap = QPixmap.fromImage(self.surface.image)
-                painter.drawPixmap(self.offset * 2, self.largePixmap)
+                painter.drawPixmap(self.offset, self.largePixmap)
                 painter.end()
 
             clipPath = QPainterPath()
@@ -349,14 +346,17 @@ class VideoWidget(QVideoWidget):
             painter.setRenderHint(QPainter.Antialiasing)
             painter.setClipPath(clipPath)
             painter.drawPixmap(corner, self.zoomPixmap)
-            # painter.setClipping(False)
             painter.drawPixmap(corner, self.maskPixmap)
             painter.setPen(Qt.gray)
             painter.drawPath(clipPath)
-
-        # QApplication.processEvents()
+        return
 
     def resizeEvent(self, event):
+        """
+        :type event: QMouseEvent
+        :param event:
+        :return:
+        """
         QWidget.resizeEvent(self, event)
         self.zoomed = False
         if zoomRect and self.surface.zoomedrect is not None:
@@ -421,10 +421,12 @@ class VideoWidget(QVideoWidget):
 
 #     TODO: MAKE PAINT GEOMETRY ACTION AND CREATE SHAPES
     def pan(self, delta):
+        """ Pan Action """
         self.offset += delta
         self.surface.updateVideoRect()
 
-    def timerEvent(self, event):
+    def timerEvent(self, _):
+        """ Time Event """
         if not self.zoomed:
             self.activateMagnifier()
         self.surface.updateVideoRect()
@@ -448,19 +450,22 @@ class VideoWidget(QVideoWidget):
             self.changeRubberBand = True
 
     def activateMagnifier(self):
+        """ Activate Magnifier Glass """
         self.zoomed = True
         self.tapTimer.stop()
         self.surface.updateVideoRect()
 
     def SetMagnifier(self, value):
+        """ Set Magnifier Glass """
         global magnifier
         magnifier = value
 
     def SetZoomRect(self, value):
+        """ Set Zoom Rectangle """
         global zoomRect
         zoomRect = value
 
-    def mouseReleaseEvent(self, event):
+    def mouseReleaseEvent(self, _):
         """
         :type event: QMouseEvent
         :param event:
@@ -476,7 +481,7 @@ class VideoWidget(QVideoWidget):
             self.rubberBand.hide()
             self.zoomedRect = True
 
-            # TODO :  ACTUALIZAR LA IMAGEN DE ALGUNA FORMA
+            # TODO :  ACTUALIZAR LA IMAGEN
             selRect = self.rubberBand.geometry()
 
             orig2widgScale = self.surface.widget.contentsRect().width() / \
@@ -494,15 +499,14 @@ class VideoWidget(QVideoWidget):
 
             wid2origRect = QRect(X1, Y1, X2, Y2)
             zoom_img = self.surface.image.copy(wid2origRect)
-            # zoom_img.save('D:\\heaahe.png')
-
+            # zoom_img.save('D:\\test.png')
 #             n_img = self.surface.image.copy(selRect)
-#             n_img.save('D:\\hehe.png')
+#             n_img.save('D:\\test.png')
             zoom_img.scaled(1920, 1080)
             self.surface.currentFrame = QVideoFrame(zoom_img)
 #             self.surface.targetRect=selRect
             self.surface.currentFrame.unmap()
             self.UpdateSurface()
 
-    def leaveEvent(self, event):
+    def leaveEvent(self, _):
         self.parent.lb_cursor_coord.setText("")
