@@ -42,6 +42,7 @@ windows = platform.system() == 'Windows'
 xSize = 0
 ySize = 0
 geotransform = None
+defaultTargetWidth = 200.0
 
 gcornerPointUL = None
 gcornerPointUR = None
@@ -614,18 +615,40 @@ def CornerEstimationWithOffsets(packet):
 
 def CornerEstimationWithoutOffsets(packet):
     ''' Corner estimation without Offsets '''
+    global defaultTargetWidth
+    
     try:
         sensorLatitude = packet.GetSensorLatitude()
         sensorLongitude = packet.GetSensorLongitude()
         sensorTrueAltitude = packet.GetSensorTrueAltitude()
         frameCenterLat = packet.GetFrameCenterLatitude()
         frameCenterLon = packet.GetFrameCenterLongitude()
+        frameCenterElevation = packet.GetFrameCenterElevation()
         sensorVerticalFOV = packet.GetSensorVerticalFieldOfView()
         sensorHorizontalFOV = packet.GetSensorHorizontalFieldOfView()
         headingAngle = packet.GetPlatformHeadingAngle()
         sensorRelativeAzimut = packet.GetSensorRelativeAzimuthAngle()
         targetWidth = packet.GettargetWidth()
+        slantRange = packet.GetSlantRange()
 
+        #If target width = 0 (occurs on some platforms), compute it with the slate range.
+        #Otherwise it leaves the footprint as a point.
+        if targetWidth == 0 and slantRange != 0:
+            targetWidth = 2.0*slantRange*tan(radians(sensorHorizontalFOV/2.0))
+        elif targetWidth == 0 and slantRange == 0:
+            #default target width to not leave footprint as a point.
+            targetWidth = defaultTargetWidth
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvUtils", "Target width unknown, defaults to: "+str(targetWidth)+"m."), level=QGis.Info)        
+
+        #compute distance to ground
+        if frameCenterElevation != 0:
+            sensorGroundAltitude = sensorTrueAltitude - frameCenterElevation
+        else:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvUtils", "Sensor ground elevation narrowed to true altitude: "+str(sensorTrueAltitude)+"m."), level=QGis.Info)  
+            sensorGroundAltitude = sensorTrueAltitude
+        
         if sensorLatitude == 0:
             return False
 
@@ -645,17 +668,17 @@ def CornerEstimationWithoutOffsets(packet):
         value2 = (headingAngle + sensorRelativeAzimut) % 360.0  # Heading
         value3 = targetWidth / 2.0
 
-        value5 = sqrt(pow(distance, 2.0) + pow(sensorTrueAltitude, 2.0))
+        value5 = sqrt(pow(distance, 2.0) + pow(sensorGroundAltitude, 2.0))
         value6 = targetWidth * aspectRatio / 2.0
 
         degrees = rad2deg(atan(value3 / distance))
 
-        value8 = rad2deg(atan(distance / sensorTrueAltitude))
+        value8 = rad2deg(atan(distance / sensorGroundAltitude))
         value9 = rad2deg(atan(value6 / value5))
         value10 = value8 + value9
-        value11 = sensorTrueAltitude * tan(radians(value10))
+        value11 = sensorGroundAltitude * tan(radians(value10))
         value12 = value8 - value9
-        value13 = sensorTrueAltitude * tan(radians(value12))
+        value13 = sensorGroundAltitude * tan(radians(value12))
         value14 = distance - value13
         value15 = value11 - distance
         value16 = value3 - value14 * tan(radians(degrees))
@@ -667,7 +690,7 @@ def CornerEstimationWithoutOffsets(packet):
 
         # CP Up Left
         bearing = (value2 + 360.0 - value21) % 360.0
-        cornerPointUL = sphere.destination(destPoint, value19, bearing)
+        cornerPointUL = list(reversed(sphere.destination(destPoint, value19, bearing)))
 
         # TODO: Use Geopy?
 #         from geopy import Point
@@ -678,15 +701,15 @@ def CornerEstimationWithoutOffsets(packet):
 
         # CP Up Right
         bearing = (value2 + value21) % 360.0
-        cornerPointUR = sphere.destination(destPoint, value19, bearing)
+        cornerPointUR = list(reversed(sphere.destination(destPoint, value19, bearing)))
 
         # CP Low Right
         bearing = (value2 + 180.0 - value20) % 360.0
-        cornerPointLR = sphere.destination(destPoint, distance2, bearing)
+        cornerPointLR = list(reversed(sphere.destination(destPoint, distance2, bearing)))
 
         # CP Low Left
         bearing = (value2 + 180.0 + value20) % 360.0
-        cornerPointLL = sphere.destination(destPoint, distance2, bearing)
+        cornerPointLL = list(reversed(sphere.destination(destPoint, distance2, bearing)))
 
         UpdateFootPrintData(
             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
