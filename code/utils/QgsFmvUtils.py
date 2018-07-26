@@ -55,6 +55,7 @@ windows = platform.system() == 'Windows'
 xSize = 0
 ySize = 0
 geotransform = None
+defaultTargetWidth = 200.0
 
 gcornerPointUL = None
 gcornerPointUR = None
@@ -797,27 +798,43 @@ def CornerEstimationWithOffsets(packet):
 
 def CornerEstimationWithoutOffsets(packet):
     ''' Corner estimation without Offsets '''
+    global defaultTargetWidth
+    
     try:
         sensorLatitude = packet.GetSensorLatitude()
         sensorLongitude = packet.GetSensorLongitude()
         sensorTrueAltitude = packet.GetSensorTrueAltitude()
         frameCenterLat = packet.GetFrameCenterLatitude()
         frameCenterLon = packet.GetFrameCenterLongitude()
+        frameCenterElevation = packet.GetFrameCenterElevation()
         sensorVerticalFOV = packet.GetSensorVerticalFieldOfView()
         sensorHorizontalFOV = packet.GetSensorHorizontalFieldOfView()
         headingAngle = packet.GetPlatformHeadingAngle()
         sensorRelativeAzimut = packet.GetSensorRelativeAzimuthAngle()
         targetWidth = packet.GettargetWidth()
-
         slantRange = packet.GetSlantRange()
 
+        #If target width = 0 (occurs on some platforms), compute it with the slate range.
+        #Otherwise it leaves the footprint as a point.
+        if targetWidth == 0 and slantRange != 0:
+            targetWidth = 2.0*slantRange*tan(radians(sensorHorizontalFOV/2.0))
+        elif targetWidth == 0 and slantRange == 0:
+            #default target width to not leave footprint as a point.
+            targetWidth = defaultTargetWidth
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvUtils", "Target width unknown, defaults to: "+str(targetWidth)+"m."), level=QGis.Info)        
+
+        #compute distance to ground
+        if frameCenterElevation != 0:
+            sensorGroundAltitude = sensorTrueAltitude - frameCenterElevation
+        else:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvUtils", "Sensor ground elevation narrowed to true altitude: "+str(sensorTrueAltitude)+"m."), level=QGis.Info)  
+            sensorGroundAltitude = sensorTrueAltitude
+        
         if sensorLatitude == 0:
             return False
 
-        if targetWidth == 0 and slantRange != 0:
-            targetWidth = 2*slantRange*tan(radians(sensorHorizontalFOV/2))
-        else:
-            targetWidth = 100
 
         initialPoint = (sensorLongitude, sensorLatitude)
         destPoint = (frameCenterLon, frameCenterLat)
@@ -835,17 +852,17 @@ def CornerEstimationWithoutOffsets(packet):
         value2 = (headingAngle + sensorRelativeAzimut) % 360.0  # Heading
         value3 = targetWidth / 2.0
 
-        value5 = sqrt(pow(distance, 2.0) + pow(sensorTrueAltitude, 2.0))
+        value5 = sqrt(pow(distance, 2.0) + pow(sensorGroundAltitude, 2.0))
         value6 = targetWidth * aspectRatio / 2.0
 
         degrees = rad2deg(atan(value3 / distance))
 
-        value8 = rad2deg(atan(distance / sensorTrueAltitude))
+        value8 = rad2deg(atan(distance / sensorGroundAltitude))
         value9 = rad2deg(atan(value6 / value5))
         value10 = value8 + value9
-        value11 = sensorTrueAltitude * tan(radians(value10))
+        value11 = sensorGroundAltitude * tan(radians(value10))
         value12 = value8 - value9
-        value13 = sensorTrueAltitude * tan(radians(value12))
+        value13 = sensorGroundAltitude * tan(radians(value12))
         value14 = distance - value13
         value15 = value11 - distance
         value16 = value3 - value14 * tan(radians(degrees))
