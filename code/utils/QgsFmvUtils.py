@@ -19,6 +19,7 @@ from QGIS_FMV.utils.QgsFmvLayers import addLayerNoCrsDialog
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import QgsApplication, QgsFeature, QgsGeometry, QgsPointXY, QgsRasterLayer
 from qgis.gui import *
+from homography import Homography, from_points
 
 
 try:
@@ -125,26 +126,13 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     global gframeCenterLon
     gframeCenterLon = frameCenterLon
 
-    Height = 0
-    gcp = gdal.GCP(cornerPointUL[1], cornerPointUL[0],
-                   Height, 0, 0, "Corner Upper Left", "1")
-    gcps.append(gcp)
-    gcp = gdal.GCP(cornerPointUR[1], cornerPointUR[0],
-                   Height, xSize, 0, "Corner Upper Right", "2")
-    gcps.append(gcp)
-    gcp = gdal.GCP(cornerPointLR[1], cornerPointLR[0],
-                   Height, xSize, ySize, "Corner Lower Right", "3")
-    gcps.append(gcp)
-    gcp = gdal.GCP(cornerPointLL[1], cornerPointLL[0],
-                   Height, 0, ySize, "Corner Lower Left", "4")
-    gcps.append(gcp)
-    gcp = gdal.GCP(frameCenterLon, frameCenterLat, Height,
-                   xSize / 2, ySize / 2, "Center", "5")
-    gcps.append(gcp)
-
     global geotransform
     geotransform = gdal.GCPsToGeoTransform(gcps)
 
+    src = np.float64(np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize]]))
+    dst = np.float64(np.array([cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]))
+    geotransform = from_points(src, dst)
+    
     if geotransform is None:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", 'Unable to extract a geotransform.'), onlyLog=True)
@@ -165,6 +153,13 @@ def SetImageSize(w, h):
     ySize = h
     return
 
+def GetImageWidth():
+    global xSize
+    return xSize
+
+def GetImageHeight():
+    global ySize
+    return ySize
 
 def _check_output(cmds, type="ffmpeg"):
     ''' Check Output Commands in Python '''

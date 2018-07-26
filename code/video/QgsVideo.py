@@ -4,7 +4,7 @@ from PyQt5.QtGui import QImage, QPalette, QPixmap, QPainter, QRegion, QPainterPa
 from PyQt5.QtMultimedia import QAbstractVideoBuffer, QVideoFrame, QVideoSurfaceFormat, QAbstractVideoSurface
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand, QApplication
-from QGIS_FMV.utils.QgsFmvUtils import SetImageSize, GetGCPGeoTransform
+from QGIS_FMV.utils.QgsFmvUtils import SetImageSize, GetGCPGeoTransform, GetImageWidth, GetImageHeight
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 
@@ -274,8 +274,41 @@ class VideoWidget(QVideoWidget):
         global invertColorFilter, grayColorFilter, edgeDetectionFilter, monoFilter, contrastFilter
         invertColorFilter = grayColorFilter = edgeDetectionFilter = monoFilter = contrastFilter = False
 
+    def GetXBlackZone(self):
+        x = 0.0
+        normalizedWidth = self.surface.widget.height()*(GetImageWidth()/GetImageHeight())
+        if (self.surface.widget.width()/self.surface.widget.height()) > (GetImageWidth()/GetImageHeight()):
+            x = (self.surface.widget.width() - (normalizedWidth))/2.0
+        return x
+
+    def GetYBlackZone(self):
+        y = 0.0
+        normalizedHeight = self.surface.widget.width()/(GetImageWidth()/GetImageHeight())   
+        if (self.surface.widget.width()/self.surface.widget.height()) < (GetImageWidth()/GetImageHeight()):
+            y = (self.surface.widget.height() - (normalizedHeight))/2.0
+        return y
+
+    #determines if a clicked point lands on the image (False if lands on the black borders or outside)
+    def IsPointOnScreen(self, x, y):
+        res=True
+        normalizedWidth = self.surface.widget.height()*(GetImageWidth()/GetImageHeight())
+        normalizedHeight = self.surface.widget.width()/(GetImageWidth()/GetImageHeight())   
+        if x > (normalizedWidth + self.GetXBlackZone()) or x < self.GetXBlackZone():
+            res = False
+        if y > (normalizedHeight + self.GetYBlackZone()) or y < self.GetYBlackZone():
+            res = False
+        return res
+
+    #ratio between event.x() and real image width on screen. 
+    def GetXRatio(self):
+        return GetImageWidth() / (self.surface.widget.width() - (2 * self.GetXBlackZone()))
+        
+    #ratio between event.y() and real image height on screen.
+    def GetYRatio(self):
+        return GetImageHeight() / (self.surface.widget.height() - (2 * self.GetYBlackZone()))
+
     def paintEvent(self, event):
-        self.gt = GetGCPGeoTransform()  # TODO : Here?
+        self.gt = GetGCPGeoTransform()
         painter = QPainter(self)
 
         if (self.surface.isActive()):
@@ -372,10 +405,17 @@ class VideoWidget(QVideoWidget):
         """
         # Cursor Coordinates
         if self.gt is not None:
-            Longitude = self.gt[0] + event.x() * self.gt[1] + \
-                event.y() * self.gt[2]
-            Latitude = self.gt[3] + event.x() * self.gt[4] + \
-                event.y() * self.gt[5]
+
+            #check if the point  is on picture (not in black borders)
+            if(not self.IsPointOnScreen(event.x(), event.y())):
+                return
+            
+            transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])
+
+            Longitude = transf[1]
+            Latitude = transf[0]
+            Altitude = 0.0
+            
             self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" +
                                                 "<span style='font-size:9pt; font-weight:normal;'>" + ("%.3f" % Longitude) + "</span>" +
                                                 "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" +
