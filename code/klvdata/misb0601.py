@@ -25,10 +25,10 @@
 
 from QGIS_FMV.klvdata.common import hexstr_to_bytes
 from QGIS_FMV.klvdata.element import UnknownElement
-from QGIS_FMV.klvdata.elementparser import BytesElementParser
-from QGIS_FMV.klvdata.elementparser import DateTimeElementParser
-from QGIS_FMV.klvdata.elementparser import MappedElementParser
-from QGIS_FMV.klvdata.elementparser import StringElementParser
+from QGIS_FMV.klvdata.elementparser import (BytesElementParser,
+                                            DateTimeElementParser,
+                                            MappedElementParser,
+                                            StringElementParser)
 from QGIS_FMV.klvdata.setparser import SetParser
 from QGIS_FMV.klvdata.streamparser import StreamParser
 

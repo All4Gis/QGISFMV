@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="en" sourcelanguage="">
+<!DOCTYPE TS><TS version="2.0" language="ca" sourcelanguage="">
 <context>
     <name>ColorDialog</name>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="20"/>
         <source>Color Options</source>
-        <translation>Color Options</translation>
+        <translation>Opcions de color</translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="35"/>
         <source>Brightness</source>
-        <translation>Brightness</translation>
+        <translation>Brillantor</translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="55"/>
@@ -20,17 +20,17 @@
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="62"/>
         <source>Hue</source>
-        <translation>Hue</translation>
+        <translation>To</translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="69"/>
         <source>Saturation</source>
-        <translation>Saturation</translation>
+        <translation>Saturació</translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="130"/>
         <source>Reset</source>
-        <translation>Reset</translation>
+        <translation>Reniciar</translation>
     </message>
 </context>
 <context>
@@ -38,7 +38,7 @@
     <message>
         <location filename="../QgsFmv.py" line="64"/>
         <source>Show Video Manager</source>
-        <translation>Show Video Manager</translation>
+        <translation>Mostrar administrador de vídeos</translation>
     </message>
     <message>
         <location filename="../QgsFmv.py" line="86"/>
@@ -48,7 +48,7 @@
     <message>
         <location filename="../QgsFmv.py" line="74"/>
         <source>Show About FMV</source>
-        <translation>Show About FMV</translation>
+        <translation>Mostrar a sobre de FMV</translation>
     </message>
 </context>
 <context>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="20"/>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation>Diàleg</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="30"/>
@@ -69,12 +69,12 @@
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="17"/>
         <source>Metadata</source>
-        <translation>Metadata</translation>
+        <translation>Metadades</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="36"/>
         <source>Save</source>
-        <translation>Save</translation>
+        <translation>Desar</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="106"/>
@@ -84,17 +84,17 @@
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="111"/>
         <source>Key</source>
-        <translation>Key</translation>
+        <translation>Clau</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="116"/>
         <source>Value</source>
-        <translation>Value</translation>
+        <translation>Valor</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="129"/>
         <source>Save as PDF</source>
-        <translation>Save as PDF</translation>
+        <translation>Desar com a PDF</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="132"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="141"/>
         <source>Save as CSV</source>
-        <translation>Save as CSV</translation>
+        <translation>Desar com a CSV</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="144"/>
@@ -115,24 +115,24 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="34"/>
+        <location filename="../player/QgsManager.py" line="32"/>
         <source>&amp;Remove</source>
-        <translation type="obsolete">&amp;Remove</translation>
+        <translation type="obsolete">&amp;Eliminar</translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="37"/>
         <source>Remove the current selection&apos;s video</source>
-        <translation>Remove the current selection&apos;s video</translation>
+        <translation>Eliminar la selecció actual</translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="87"/>
         <source>Open video</source>
-        <translation>Open video</translation>
+        <translation>Obrir vídeo</translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="37"/>
         <source>Remove</source>
-        <translation>Remove</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -140,12 +140,12 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="24"/>
         <source>Video Manager</source>
-        <translation>Video Manager</translation>
+        <translation>Gestor de vídeos</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="37"/>
         <source>File</source>
-        <translation>File</translation>
+        <translation>Obrir</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="113"/>
@@ -155,57 +155,57 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="118"/>
         <source>Name</source>
-        <translation>Name</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="123"/>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation>Estat</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="128"/>
         <source>Source</source>
-        <translation>Source</translation>
+        <translation>Font</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="136"/>
         <source>Open Video</source>
-        <translation type="obsolete">Open Video</translation>
+        <translation type="obsolete">Obrir vídeo</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="141"/>
         <source>Metadata</source>
-        <translation type="obsolete">Metadata</translation>
+        <translation type="obsolete">Metadades</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="146"/>
         <source>Converter Video</source>
-        <translation type="obsolete">Converter Video</translation>
+        <translation type="obsolete">Convertir vídeo</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="151"/>
         <source>Extract All Frames</source>
-        <translation type="obsolete">Extract All Frames</translation>
+        <translation type="obsolete">Extreure tots els fotogrames</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="156"/>
         <source>Save Video Info To Json</source>
-        <translation type="obsolete">Save Video Info To Json</translation>
+        <translation type="obsolete">Desar informació en Json</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="161"/>
         <source>Show Video Info</source>
-        <translation type="obsolete">Show Video Info</translation>
+        <translation type="obsolete">Mostrat informació del vídeo</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="137"/>
         <source>Open Stream</source>
-        <translation>Open Stream</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="142"/>
         <source>Open MPEG2 File</source>
-        <translation>Open MPEG2 File</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -218,12 +218,12 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="140"/>
         <source>Video Tools</source>
-        <translation>Video Tools</translation>
+        <translation>Eines de vídeo</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="158"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Color dialog&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Color dialog&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Diàleg de color&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="168"/>
@@ -233,7 +233,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="181"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Record&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Record&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gravar&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="192"/>
@@ -243,7 +243,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="208"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create Mosaic&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create Mosaic&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Crear mosaic&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="731"/>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="270"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capture current frame&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capture current frame&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capturar el fotograma actual&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="715"/>
@@ -268,42 +268,42 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="332"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Start Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Start Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Inici&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="352"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rewind&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rewind&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rebobinar&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="375"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Detenir&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="395"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Play/Pause&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Play/Pause&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reproduir/Pausar&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="415"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Forward&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Forward&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Endavant&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="441"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;End Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;End Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Fi&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="461"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Repetir&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="505"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mute/Unmute&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mute/Unmute&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Silenciar / Activar&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="515"/>
@@ -313,7 +313,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="525"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Volume&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Volume&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Volum&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="546"/>
@@ -323,62 +323,62 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="609"/>
         <source>Background Progress . . . %p%</source>
-        <translation>Background Progress . . . %p%</translation>
+        <translation>Progres . . . %p%</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="633"/>
         <source>Filters</source>
-        <translation>Filters</translation>
+        <translation>Filtres</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="643"/>
         <source>Frames</source>
-        <translation>Frames</translation>
+        <translation>Fotogrames</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="650"/>
         <source>Metadata</source>
-        <translation>Metadata</translation>
+        <translation>Metadades</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="656"/>
         <source>Converter</source>
-        <translation>Converter</translation>
+        <translation>Convertir</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="662"/>
         <source>Information</source>
-        <translation>Information</translation>
+        <translation>Informació</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="670"/>
         <source>Plot Bitrate</source>
-        <translation>Plot Bitrate</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="680"/>
         <source>Utils</source>
-        <translation>Utils</translation>
+        <translation>Utilitats</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="699"/>
         <source>Gray Scale</source>
-        <translation>Gray Scale</translation>
+        <translation>Escala de grisos</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="707"/>
         <source>Edge Detection</source>
-        <translation>Edge Detection</translation>
+        <translation>Detecció de vores</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="712"/>
         <source>Capture Current Frame</source>
-        <translation>Capture Current Frame</translation>
+        <translation>Capturar fotogrames</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="720"/>
         <source>Extract All Frames</source>
-        <translation>Extract All Frames</translation>
+        <translation>Extraure tots los fotogrames</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="723"/>
@@ -388,200 +388,170 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="728"/>
         <source>Show Metadata</source>
-        <translation>Show Metadata</translation>
+        <translation>Mostrar Metadades</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="736"/>
         <source>Converter Video</source>
-        <translation>Converter Video</translation>
+        <translation>Convertir vídeo</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="741"/>
         <source>Save Video Info to Json</source>
-        <translation>Save Video Info to Json</translation>
+        <translation>Desar la informació del vídeo en Json</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="746"/>
         <source>Show Audio</source>
-        <translation>Show Audio</translation>
+        <translation>Mostrar àudio</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="751"/>
         <source>Show Video</source>
-        <translation>Show Video</translation>
+        <translation>Mostrar vídeo</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="756"/>
         <source>Show All</source>
-        <translation>Show All</translation>
+        <translation>Mostrar tot</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="761"/>
         <source>Save Audio</source>
-        <translation>Save Audio</translation>
+        <translation>Desar Àudio</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="766"/>
         <source>Save Video</source>
-        <translation>Save Video</translation>
+        <translation>Desar Vídeo</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="771"/>
         <source>Save All</source>
-        <translation>Save All</translation>
+        <translation>Desar Tot</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="776"/>
         <source>Show Video Info</source>
-        <translation>Show Video Info</translation>
+        <translation>Mostrar vídeo info</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="784"/>
         <source>Invert Color</source>
-        <translation>Invert Color</translation>
+        <translation>Inversió de color</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="792"/>
         <source>Mono Filter</source>
-        <translation>Mono Filter</translation>
+        <translation>Mono Filtre</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="800"/>
         <source>Canny edge detection</source>
-        <translation>Canny edge detection</translation>
+        <translation>Detecció de vores</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="811"/>
         <source>Zoom Rectangle</source>
-        <translation>Zoom Rectangle</translation>
+        <translation>Zoom Àrea</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="819"/>
         <source>Magnifying glass</source>
-        <translation>Magnifying glass</translation>
+        <translation>Lupa</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="827"/>
         <source>Auto Contrast Filter</source>
-        <translation>Auto Contrast Filter</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="832"/>
         <source>Create Mosaic</source>
-        <translation>Create Mosaic</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>QgsFmvPlayer</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="130"/>
-        <source>This video don&apos;t have Metadata ! : </source>
-        <translation type="obsolete">This video don&apos;t have Metadata ! :</translation>
-    </message>
-    <message>
         <location filename="../player/QgsFmvPlayer.py" line="192"/>
         <source>Metadata Callback Failed! : </source>
-        <translation>Metadata Callback Failed! : </translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="151"/>
-        <source>This video don&apos;t have Audio ! : </source>
-        <translation type="obsolete">This video don&apos;t have Audio ! :</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="161"/>
         <source>Audio check Failed! : </source>
-        <translation>Audio check Failed! :</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="245"/>
-        <source>Error saving Json</source>
-        <translation type="obsolete">Error saving Json</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="255"/>
-        <source>Error Info Show</source>
-        <translation type="obsolete">Error Info Show</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="332"/>
         <source>Color Options</source>
-        <translation>Color Options</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="337"/>
         <source>Mute/Unmute</source>
-        <translation>Mute/Unmute</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="343"/>
         <source>Extract All Frames</source>
-        <translation>Extract All Frames</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="348"/>
         <source>Extract Current Frame</source>
-        <translation>Extract Current Frame</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="355"/>
         <source>Show Metadata</source>
-        <translation>Show Metadata</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="701"/>
         <source>Open Video File : </source>
-        <translation>Open Video File : </translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="733"/>
         <source>Save file succesfully!</source>
-        <translation>Save file succesfully!</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="788"/>
-        <source>Error converting video </source>
-        <translation type="obsolete">Error converting video </translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="996"/>
-        <source>Failed creating Plot Bitrate</source>
-        <translation type="obsolete">Failed creating Plot Bitrate</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1050"/>
         <source>Save images</source>
-        <translation>Save images</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1211"/>
         <source>HEY...Active background process!</source>
-        <translation>HEY...Active background process!</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1211"/>
         <source>Do you really want close?</source>
-        <translation>Do you really want close?</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="133"/>
         <source>This video don&apos;t have Metadata ! </source>
-        <translation>This video don&apos;t have Metadata ! </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="154"/>
         <source>This video don&apos;t have Audio ! </source>
-        <translation>This video don&apos;t have Audio ! </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="675"/>
         <source>Playing : </source>
-        <translation>Playing : </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1233"/>
         <source>Video Information : </source>
-        <translation>Video Information : </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -589,7 +559,7 @@
     <message>
         <location filename="../video/QgsVideoProcessor.py" line="16"/>
         <source>Error: Missing OpenCV packages</source>
-        <translation>Error: Missing OpenCV packages</translation>
+        <translation>Error: Falten paquets OpenCV</translation>
     </message>
 </context>
 </TS>

@@ -6,7 +6,8 @@ from PyQt5.QtGui import (QCursor, QTextCursor, QTextDocument, QTextCharFormat,
                          QTextTableFormat, QBrush, QColor)
 from PyQt5.QtPrintSupport import QPrinter
 from PyQt5.QtWidgets import QDockWidget, QApplication, QFileDialog
-from QGIS_FMV.gui.generated.ui_FmvMetadata import Ui_FmvMetadata
+from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
+from QGIS_FMV.utils.QgsFmvUtils import askForFiles
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import Qgis as QGis
 
@@ -106,7 +107,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         except Exception as e:
             QApplication.restoreOverrideCursor()
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvMetadata", "Failed creating PDF"), level=QGis.Warning)
+                "QgsFmvMetadata", "Failed creating PDF : " + str(e)), level=QGis.Warning)
             return
         return
 
@@ -141,10 +142,10 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         except Exception as e:
             QApplication.restoreOverrideCursor()
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvMetadata", "Failed creating CSV"), level=QGis.Warning)
+                "QgsFmvMetadata", "Failed creating CSV : " + str(e)), level=QGis.Warning)
 
         return
 
-    def closeEvent(self, evt):
+    def closeEvent(self, _):
         """ Close Dock Event """
         self.parent.metadataDlg = None

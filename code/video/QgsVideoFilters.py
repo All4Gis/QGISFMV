@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtGui import QImage, QColor
+from PyQt5.QtGui import QImage
 from QGIS_FMV.utils.QgsFmvUtils import convertMatToQImage, convertQImageToMat
 
 
 try:
-    from cv2 import GaussianBlur, COLOR_BGR2GRAY, cvtColor, Canny, COLOR_BGR2LAB, COLOR_LAB2BGR, cvtColor, createCLAHE, merge, split, cvtColor
+    from cv2 import (cvtColor,
+                     Canny,
+                     COLOR_BGR2LAB,
+                     COLOR_LAB2BGR,
+                     cvtColor,
+                     createCLAHE,
+                     merge,
+                     split,
+                     cvtColor)
 except ImportError:
     None
 
@@ -15,6 +23,7 @@ except ImportError:
 
 
 class VideoFilters():
+    """ VideoFilters Class """
 
     @staticmethod
     def GrayFilter(image):
@@ -32,7 +41,6 @@ class VideoFilters():
         gray = convertQImageToMat(VideoFilters.GrayFilter(image))
         canny = Canny(gray, 100, 150)
         return convertMatToQImage(canny)
-#         return VideoFilters.EqualizeContrastFilter(image)
 
     @staticmethod
     def AutoContrastFilter(image):

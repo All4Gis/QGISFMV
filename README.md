@@ -22,9 +22,9 @@ for this reason, I decided to develop this open source project and, this way, of
 
 * [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `fmvConfig.py` with the corresponding path.
 
-* [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python==3.4.0.12`
+* [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python`
 
-* [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib==2.0.0`
+* [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib`
 
 * [Klvdata](https://github.com/paretech/klvdata) : customized version of this library.
 
@@ -61,7 +61,7 @@ For more information about the Unmanned Air System (UAS) metadata from STANAG 46
 
 ## Installation
 
-The installation can be done from the executable if it is in windows or from the zip. [Releases](https://github.com/All4Gis/QGISFMV/releases)
+The installation can be done from the executable if it is in windows or from the zip
 
 
 ## Screenshots
@@ -75,9 +75,10 @@ The installation can be done from the executable if it is in windows or from the
 - Extract metadata from video file
 - Show Platform,trajectory and beams position in a QGIS
 - Possibility of extracting parts of the video
+- Change of color, contrast, etc. of the video
 - Capture of the current frame
 - Extraction of all frames of the video
-- Extract lon/lat cursor coordinates
+- Extrac lon/lat cursor coordinates
 - Apply sobel filters, edge detection ...
 
 

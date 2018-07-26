@@ -25,7 +25,6 @@
 
 from datetime import datetime
 from datetime import timezone
-import re
 from struct import pack
 from struct import unpack
 
@@ -95,7 +94,8 @@ def str_to_bytes(value):
 
 
 def hexstr_to_bytes(value):
-    """Return bytes object and filter out formatting characters from a string of hexadecimal numbers."""
+    """Return bytes object and filter out formatting characters from
+    a string of hexadecimal numbers."""
     return bytes.fromhex(''.join(filter(str.isalnum, value)))
 
 

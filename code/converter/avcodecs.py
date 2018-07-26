@@ -122,8 +122,8 @@ class SubtitleCodec(BaseCodec):
                 del safe['default']
 
         if 'language' in safe:
-            l = safe['language']
-            if len(l) > 3:
+            lan = safe['language']
+            if len(lan) > 3:
                 del safe['language']
 
         safe = self._codec_specific_parse_options(safe)

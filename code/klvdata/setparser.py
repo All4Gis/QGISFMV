@@ -50,13 +50,16 @@ class SetParser(Element, metaclass=ABCMeta):
         self.items = OrderedDict()
         self.parse()
 
+        self._PlatformTailNumber = None
         self._PlatformHeadingAngle = None
+        self._ImageSourceSensor = None
         self._SensorLatitude = None
         self._SensorLongitude = None
         self._SensorTrueAltitude = None
         self._SensorHorizontalFieldOfView = None
         self._SensorVerticalFieldOfView = None
         self._targetWidth = None
+        self._slantRange = None
         self._SensorRelativeAzimuthAngle = None
         self._OffsetCornerLatitudePoint1 = None
         self._OffsetCornerLongitudePoint1 = None
@@ -68,6 +71,7 @@ class SetParser(Element, metaclass=ABCMeta):
         self._OffsetCornerLongitudePoint4 = None
         self._FrameCenterLatitude = None
         self._FrameCenterLongitude = None
+        self._FrameCenterElevation = None
         self._CornerLatitudePoint1Full = None
         self._CornerLongitudePoint1Full = None
         self._CornerLatitudePoint2Full = None
@@ -141,9 +145,13 @@ class SetParser(Element, metaclass=ABCMeta):
             for item in items:
                 try:
                     metadata[item.TAG] = (item.LDSName, str(item.value.value))
-                    if item.TAG == 5:
+                    if item.TAG == 4:
+                        self.SetPlatformTailNumber(item.value.value)
+                    elif item.TAG == 5:
                         self.SetPlatformHeadingAngle(item.value.value)
-                    if item.TAG == 13:
+                    elif item.TAG == 11:
+                        self.SetImageSourceSensor(item.value.value)
+                    elif item.TAG == 13:
                         self.SetSensorLatitude(item.value.value)
                     elif item.TAG == 14:
                         self.SetSensorLongitude(item.value.value)
@@ -155,6 +163,8 @@ class SetParser(Element, metaclass=ABCMeta):
                         self.SetSensorVerticalFieldOfView(item.value.value)
                     elif item.TAG == 18:
                         self.SetSensorRelativeAzimuthAngle(item.value.value)
+                    elif item.TAG == 21:
+                        self.SetSlantRange(item.value.value)
                     elif item.TAG == 22:
                         self.SettargetWidth(item.value.value)
                     elif item.TAG == 26:
@@ -177,6 +187,8 @@ class SetParser(Element, metaclass=ABCMeta):
                         self.SetFrameCenterLatitude(item.value.value)
                     elif item.TAG == 24:
                         self.SetFrameCenterLongitude(item.value.value)
+                    elif item.TAG == 25:
+                        self.SetFrameCenterElevation(item.value.value)
                     elif item.TAG == 82:
                         self.SetCornerLatitudePoint1Full(item.value.value)
                     elif item.TAG == 83:
@@ -201,11 +213,23 @@ class SetParser(Element, metaclass=ABCMeta):
         return OrderedDict(metadata)
 
     # ------------ START Setters/Getters ------------
+    def GetPlatformTailNumber(self):
+        return self._PlatformTailNumber
+
+    def SetPlatformTailNumber(self, value):
+        self._PlatformTailNumber = value
+        
     def GetPlatformHeadingAngle(self):
         return self._PlatformHeadingAngle
 
     def SetPlatformHeadingAngle(self, value):
         self._PlatformHeadingAngle = float(value)
+
+    def GetImageSourceSensor(self):
+        return self._ImageSourceSensor
+
+    def SetImageSourceSensor(self, value):
+        self._ImageSourceSensor = value
 
     def GetSensorLatitude(self):
         return self._SensorLatitude
@@ -245,9 +269,21 @@ class SetParser(Element, metaclass=ABCMeta):
 
     def GettargetWidth(self):
         return self._targetWidth
+    
+    def GetSlantRange(self):
+        return self._slantRange
+
+    def SetSlantRange(self, value):
+        self._slantRange = float(value)
 
     def SettargetWidth(self, value):
         self._targetWidth = float(value)
+        
+    def GetSlantRange(self):
+        return self._slantRange
+
+    def SetSlantRange(self, value):
+        self._slantRange = float(value)
 
     def GetOffsetCornerLatitudePoint1(self):
         return self._OffsetCornerLatitudePoint1
@@ -308,6 +344,12 @@ class SetParser(Element, metaclass=ABCMeta):
 
     def SetFrameCenterLongitude(self, value):
         self._FrameCenterLongitude = float(value)
+
+    def GetFrameCenterElevation(self):
+        return self._FrameCenterElevation
+
+    def SetFrameCenterElevation(self, value):
+        self._FrameCenterElevation = float(value)
 
     def GetCornerLatitudePoint1Full(self):
         return self._CornerLatitudePoint1Full
