@@ -21,6 +21,13 @@ author=<a href="https://goo.gl/wwVhng">Fran Raga</a>
 email=franka1986@gmail.com
 
 # changelog=
+    ** General **
+	1.1:
+		- PR #2, PR #3 ,PR #4 ,PR #5 and PR #6 thanks to ltbam 
+		- Minor changes
+	1.0:
+		-Start of plugin.
+
 homepage=https://github.com/All4Gis/QGISFMV
 tracker=https://github.com/All4Gis/QGISFMV/issues
 repository=https://github.com/All4Gis/QGISFMV
