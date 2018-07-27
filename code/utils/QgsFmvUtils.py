@@ -27,7 +27,7 @@ from qgis.core import (QgsApplication,
                        QgsPointXY,
                        QgsRasterLayer)
 from qgis.gui import *
-from homography import Homography, from_points
+from homography import from_points
 from qgis.utils import iface
 
 
