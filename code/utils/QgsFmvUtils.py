@@ -27,7 +27,10 @@ from qgis.core import (QgsApplication,
                        QgsPointXY,
                        QgsRasterLayer)
 from qgis.gui import *
-from homography import Homography, from_points
+try:
+    from homography import from_points
+except ImportError:
+    None
 from qgis.utils import iface
 
 
@@ -254,10 +257,12 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     global geotransform
     geotransform = gdal.GCPsToGeoTransform(gcps)
 
-    src = np.float64(np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize]]))
-    dst = np.float64(np.array([cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]))
+    src = np.float64(
+        np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize]]))
+    dst = np.float64(
+        np.array([cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]))
     geotransform = from_points(src, dst)
-    
+
     if geotransform is None:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", 'Unable to extract a geotransform.'), onlyLog=True)
@@ -278,13 +283,16 @@ def SetImageSize(w, h):
     ySize = h
     return
 
+
 def GetImageWidth():
     global xSize
     return xSize
 
+
 def GetImageHeight():
     global ySize
     return ySize
+
 
 def _check_output(cmds, t="ffmpeg"):
     ''' Check Output Commands in Python '''
@@ -326,42 +334,13 @@ def install_pip_requirements():
             "QgsFmvUtils", 'No requirements file found in {}'.format(requirements_file)), "", onlyLog=True)
         raise
     try:
-        pip.main(['install', '-r', requirements_file])
+        if float(pip.__version__) <= 10:
+            pip.main(['install', '-r', requirements_file])
+        else:
+            from pip._internal import main
+            main(['install', '-r', requirements_file])
     except Exception:
         raise
-    return
-
-
-def install_requirements_copy(lib="all"):
-    ''' Install Requeriments from ext-libs '''
-    ext_libs_dir = QgsApplication.qgisSettingsDirPath(
-    ) + 'python/plugins/QGIS_FMV/ext-libs/'
-
-    site_packages = os.path.dirname(
-        QgsApplication.prefixPath()) + '/Python36/lib/site-packages/'
-    try:
-        if lib == "cv2":
-            copytree(ext_libs_dir + "cv2", site_packages + "cv2")
-        else:
-            try:
-                copytree(os.path.join(ext_libs_dir, "matplotlib"),
-                         os.path.join(site_packages, "matplotlib"))
-                copytree(os.path.join(ext_libs_dir, "cv2"),
-                         os.path.join(site_packages, "cv2"))
-            except:
-                return
-
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", 'Libraries copied satisfactorily'), onlyLog=True)
-    # Directories are the same
-    except shutil.Error as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", 'Library not copied.Directories are the same'),
-            str(e), onlyLog=True)
-    # Any error saying that the directory doesn't exist
-    except OSError as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", 'Library not copied'), str(e), onlyLog=True)
     return
 
 
@@ -794,7 +773,7 @@ def CornerEstimationWithOffsets(packet):
 def CornerEstimationWithoutOffsets(packet):
     ''' Corner estimation without Offsets '''
     global defaultTargetWidth
-    
+
     try:
         sensorLatitude = packet.GetSensorLatitude()
         sensorLongitude = packet.GetSensorLongitude()
@@ -809,27 +788,27 @@ def CornerEstimationWithoutOffsets(packet):
         targetWidth = packet.GettargetWidth()
         slantRange = packet.GetSlantRange()
 
-        #If target width = 0 (occurs on some platforms), compute it with the slate range.
-        #Otherwise it leaves the footprint as a point.
+        # If target width = 0 (occurs on some platforms), compute it with the slate range.
+        # Otherwise it leaves the footprint as a point.
         if targetWidth == 0 and slantRange != 0:
-            targetWidth = 2.0*slantRange*tan(radians(sensorHorizontalFOV/2.0))
+            targetWidth = 2.0 * slantRange * \
+                tan(radians(sensorHorizontalFOV / 2.0))
         elif targetWidth == 0 and slantRange == 0:
-            #default target width to not leave footprint as a point.
+            # default target width to not leave footprint as a point.
             targetWidth = defaultTargetWidth
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvUtils", "Target width unknown, defaults to: "+str(targetWidth)+"m."), level=QGis.Info)        
+                "QgsFmvUtils", "Target width unknown, defaults to: " + str(targetWidth) + "m."), level=QGis.Info)
 
-        #compute distance to ground
+        # compute distance to ground
         if frameCenterElevation != 0:
             sensorGroundAltitude = sensorTrueAltitude - frameCenterElevation
         else:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvUtils", "Sensor ground elevation narrowed to true altitude: "+str(sensorTrueAltitude)+"m."), level=QGis.Info)  
+                "QgsFmvUtils", "Sensor ground elevation narrowed to true altitude: " + str(sensorTrueAltitude) + "m."), level=QGis.Info)
             sensorGroundAltitude = sensorTrueAltitude
-        
+
         if sensorLatitude == 0:
             return False
-
 
         initialPoint = (sensorLongitude, sensorLatitude)
         destPoint = (frameCenterLon, frameCenterLat)
@@ -869,19 +848,23 @@ def CornerEstimationWithoutOffsets(packet):
 
         # CP Up Left
         bearing = (value2 + 360.0 - value21) % 360.0
-        cornerPointUL = list(reversed(sphere.destination(destPoint, value19, bearing)))
+        cornerPointUL = list(
+            reversed(sphere.destination(destPoint, value19, bearing)))
 
         # CP Up Right
         bearing = (value2 + value21) % 360.0
-        cornerPointUR = list(reversed(sphere.destination(destPoint, value19, bearing)))
+        cornerPointUR = list(
+            reversed(sphere.destination(destPoint, value19, bearing)))
 
         # CP Low Right
         bearing = (value2 + 180.0 - value20) % 360.0
-        cornerPointLR = list(reversed(sphere.destination(destPoint, distance2, bearing)))
+        cornerPointLR = list(
+            reversed(sphere.destination(destPoint, distance2, bearing)))
 
         # CP Low Left
         bearing = (value2 + 180.0 + value20) % 360.0
-        cornerPointLL = list(reversed(sphere.destination(destPoint, distance2, bearing)))
+        cornerPointLL = list(
+            reversed(sphere.destination(destPoint, distance2, bearing)))
 
         UpdateFootPrintData(
             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)

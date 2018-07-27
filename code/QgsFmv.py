@@ -31,7 +31,6 @@ from QGIS_FMV.player.QgsManager import FmvManager
 from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.PyQt.QtCore import Qt
 
-
 try:
     from pydevd import *
 except ImportError:

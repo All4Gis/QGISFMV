@@ -218,7 +218,7 @@ class SetParser(Element, metaclass=ABCMeta):
 
     def SetPlatformTailNumber(self, value):
         self._PlatformTailNumber = value
-        
+
     def GetPlatformHeadingAngle(self):
         return self._PlatformHeadingAngle
 
@@ -269,7 +269,7 @@ class SetParser(Element, metaclass=ABCMeta):
 
     def GettargetWidth(self):
         return self._targetWidth
-    
+
     def GetSlantRange(self):
         return self._slantRange
 
@@ -278,7 +278,7 @@ class SetParser(Element, metaclass=ABCMeta):
 
     def SettargetWidth(self, value):
         self._targetWidth = float(value)
-        
+
     def GetSlantRange(self):
         return self._slantRange
 
