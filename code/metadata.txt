@@ -16,7 +16,7 @@ about= Plugin for QGIS which allows to analyze, visualize and process videos ins
 	   </a>
 	   <p>If this plugin is useful for you, consider to donate to the author.</p>
 
-version=1.1
+version=1.2
 author= Fran Raga
 email=franka1986@gmail.com
 

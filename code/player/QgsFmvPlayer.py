@@ -43,7 +43,7 @@ from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
 from QGIS_FMV.video.QgsVideoProcessor import ExtractFramesProcessor
-#from QGIS_FMV.videoStremaing.Client import UDPClient
+from QGIS_FMV.videoStremaing.TestClient import UDPClient
 from qgis.core import Qgis as QGis
 
 
@@ -652,19 +652,19 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         try:
             RemoveVideoLayers()
             RemoveGroupByName()
-            # TODO: Make UDP stream
+#             settrace()
 #             if "udp://" in videoPath:
 #                 host, port = videoPath.split("://")[1].split(":")
 #                 receiver = UDPClient(host, int(port), type="udp")
 #                 receiver.show()
 #                 self.close()
 #                 return
-# #             if "tcp://" in videoPath:
-# #                 host, port = videoPath.split("://")[1].split(":")
-# #                 receiver = UDPClient(host, port, type="tcp")
-# #                 receiver.show()
-# #                 self.close()
-# #                 return
+#             if "tcp://" in videoPath:
+#                 host, port = videoPath.split("://")[1].split(":")
+#                 receiver = UDPClient(host, port, type="tcp")
+#                 receiver.show()
+#                 self.close()
+#                 return
             self.fileName = videoPath
             self.playlist = QMediaPlaylist()
             url = QUrl.fromLocalFile(videoPath)
