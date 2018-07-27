@@ -743,7 +743,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def videoAvailableChanged(self, available):
         ''' Buttons for video available '''
-        #self.btn_Color.setEnabled(available)
+        # self.btn_Color.setEnabled(available)
         self.btn_CaptureFrame.setEnabled(available)
         self.gb_PlayerControls.setEnabled(available)
         return
@@ -1230,7 +1230,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.VideoInfoDialog = QDialog(self)
         self.VideoInfoDialog.setWindowTitle(QCoreApplication.translate(
-                "QgsFmvPlayer", "Video Information : ") + self.fileName)
+            "QgsFmvPlayer", "Video Information : ") + self.fileName)
         self.VideoInfoDialog.setWindowIcon(
             QIcon(":/imgFMV/images/video_information.png"))
 

@@ -14,7 +14,7 @@ try:
 except ImportError:
     None
 
-# TODO :Make this functionality
+# TODO : Class for draft conexions
 
 
 class UDPClient(QDialog):
@@ -26,27 +26,27 @@ class UDPClient(QDialog):
         type = type
         self.statusLabel = QLabel("Listening for broadcasted messages")
         quitButton = QPushButton("&Quit")
- 
+
         self.udpSocket = QUdpSocket(self)
         dstAddress = QHostAddress()
         dstAddress.setAddress(mcast_addr)
         self.udpSocket.bind(dstAddress, mcast_port)
- 
+
         self.udpSocket.readyRead.connect(self.processPendingDatagrams)
         quitButton.clicked.connect(self.close)
- 
+
         buttonLayout = QHBoxLayout()
         buttonLayout.addStretch(1)
         buttonLayout.addWidget(quitButton)
         buttonLayout.addStretch(1)
- 
+
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.statusLabel)
         mainLayout.addLayout(buttonLayout)
         self.setLayout(mainLayout)
- 
+
         self.setWindowTitle("Broadcast Receiver")
- 
+
     def processPendingDatagrams(self):
         while self.udpSocket.hasPendingDatagrams():
             datagram, host, port = self.udpSocket.readDatagram(
