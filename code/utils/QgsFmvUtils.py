@@ -334,7 +334,8 @@ def install_pip_requirements():
             "QgsFmvUtils", 'No requirements file found in {}'.format(requirements_file)), "", onlyLog=True)
         raise
     try:
-        if float(pip.__version__) <= 10:
+        version_num = pip.__version__[:pip.__version__.find('.')]
+        if int(version_num) <= 10:
             pip.main(['install', '-r', requirements_file])
         else:
             from pip._internal import main
