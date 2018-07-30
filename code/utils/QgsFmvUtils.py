@@ -93,7 +93,7 @@ class BufferedMetaReader():
         self.bufferParalell(start, size)
 
     def _check_buffer(self, start):
-        qgsu.showUserAndLogMessage("QgsFmvUtils", '_check_buffer: ' + start, onlyLog=True)
+        #qgsu.showUserAndLogMessage("QgsFmvUtils", '_check_buffer: ' + start, onlyLog=True)
         self.bufferParalell(start, self._min_buffer_size)
 
     def bufferParalell(self, start, size):
@@ -104,7 +104,7 @@ class BufferedMetaReader():
             nTime = (k + self.pass_time) / 1000.0
             new_key = _seconds_to_time_frac(cTime)
             if new_key not in self._meta:
-                qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
+                #qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
                 self._meta[new_key] = callBackMetadataThread(cmds=['-i', self.video_path,
                                                                                   '-ss', _seconds_to_time_frac(cTime),
                                                                                   '-to', _seconds_to_time_frac(nTime),
@@ -133,20 +133,20 @@ class BufferedMetaReader():
                 new_t = _add_secs_to_time(date, 1) + ".0000"
         except:
             qgsu.showUserAndLogMessage("QgsFmvUtils", "wrong value for time, need . decimal" + t, onlyLog=True)
-        #try:
-        if self._meta[new_t].p.returncode is None:
-            value = 'NOT_READY'
-            qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" values not ready yet.", onlyLog=True)      
-        elif self._meta[new_t].stdout:
-            value = self._meta[new_t].stdout
-        else:
-            qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" values ready but empty.", onlyLog=True)
+        try:
+            if self._meta[new_t].p.returncode is None:
+                value = 'NOT_READY'
+                qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" values not ready yet.", onlyLog=True)      
+            elif self._meta[new_t].stdout:
+                value = self._meta[new_t].stdout
+            else:
+                qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" values ready but empty.", onlyLog=True)
 
-        self._check_buffer(new_t)
-        #except:
-        #    qgsu.showUserAndLogMessage("QgsFmvUtils", "No value found for: " + t + " rounded: " + new_t, onlyLog=True)
+            self._check_buffer(new_t)
+        except:
+            qgsu.showUserAndLogMessage("QgsFmvUtils", "No value found for: " + t + " rounded: " + new_t, onlyLog=True)
 
-        qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
+        #qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
         
         return value
     
@@ -761,7 +761,7 @@ def UpdateTrajectoryData(packet):
     lon = packet.GetSensorLongitude()
     alt = packet.GetSensorTrueAltitude()
 
-    qgsu.showUserAndLogMessage("QgsFmvUtils", 'UpdateTrajectoryData: lon:' + str(lon) + ' lat:'+str(lat) + ' alt:'+str(alt), onlyLog=True)
+    #qgsu.showUserAndLogMessage("QgsFmvUtils", 'UpdateTrajectoryData: lon:' + str(lon) + ' lat:'+str(lat) + ' alt:'+str(alt), onlyLog=True)
     
     trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
 
