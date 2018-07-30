@@ -6,7 +6,8 @@ from PyQt5.QtWidgets import QDockWidget, QTableWidgetItem, QAction, QMenu
 from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
 from QGIS_FMV.player.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
-from QGIS_FMV.utils.QgsFmvUtils import askForFiles
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.utils.QgsFmvUtils import askForFiles, BufferedMetaReader, getVideoLocationInfo
 import qgis.utils
 
 
@@ -27,6 +28,13 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.parent = parent
         self.iface = iface
         self._PlayerDlg = None
+
+        self.meta_reader = {}
+        self.initialPt = {}
+        #don't go too low with pass_time or we won't catch any metadata at all.
+        self.pass_time = 250
+        self.buffer_intervall = 500
+        self.min_buffer_size = 8
 
         self.actionOpen_Stream.setVisible(False)
 
@@ -82,6 +90,14 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.horizontalHeader().setStretchLastSection(True)
         self.VManager.setVisible(True)
 
+        #init non-blocking metadata buffered reader
+        self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, pass_time=self.pass_time, intervall=self.buffer_intervall, min_buffer_size=self.min_buffer_size)
+        qgsu.showUserAndLogMessage("QgsManager: ", "buffered non-blocking metadata reader initialized.", onlyLog=True)
+
+        #init point we can center the video on
+        self.initialPt[str(rowPosition)] = getVideoLocationInfo(filename)
+
+
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
         filename, _ = askForFiles(self,
@@ -100,15 +116,15 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.ToggleActiveRow(model.row())
 
         if self._PlayerDlg is None:
-            self.CreatePlayer(path)
+            self.CreatePlayer(path, model.row())
         else:
             self.ToggleActiveFromTitle()
             self._PlayerDlg.playFile(path)
             return
 
-    def CreatePlayer(self, path):
+    def CreatePlayer(self, path, row):
         ''' Create Player '''
-        self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self)
+        self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(row)], pass_time=self.pass_time, initialPt=self.initialPt[str(row)])
         self._PlayerDlg.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()
