@@ -4,12 +4,14 @@ from math import atan, tan, sqrt, radians, pi
 import os
 import platform
 import shutil
+from datetime import datetime
 from subprocess import Popen, PIPE, check_output
 import threading
 
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QFileDialog
+from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
                                 Footprint_lyr,
@@ -25,7 +27,8 @@ from qgis.core import (QgsApplication,
                        QgsFeature,
                        QgsGeometry,
                        QgsPointXY,
-                       QgsRasterLayer)
+                       QgsRasterLayer,
+                       Qgis as QGis)
 from qgis.gui import *
 try:
     from homography import from_points
@@ -75,7 +78,78 @@ else:
     ffmpeg_path = ffmpeg_path + '\\linux\\ffmpeg'
     ffprobe_path = ffprobe_path + '\\linux\\ffprobe'
 
+class BufferedMetaReader():
+    '''  Test : Non-Blocking metadata reader with buffer  '''
+    
+    def __init__(self, video_path, pass_time=100, intervall=200, min_buffer_size=10):
+        self.video_path = video_path
+        self.pass_time = pass_time
+        self.intervall = intervall
+        self._meta = {}
+        self._min_buffer_size = min_buffer_size
+        self._initialize('00:00:00.0000', self._min_buffer_size)
 
+    def _initialize(self, start, size):
+        self.bufferParalell(start, size)
+
+    def _check_buffer(self, start):
+        #qgsu.showUserAndLogMessage("QgsFmvUtils", '_check_buffer: ' + start, onlyLog=True)
+        self.bufferParalell(start, self._min_buffer_size)
+
+    def bufferParalell(self, start, size):
+        start_sec = _time_to_seconds(start)
+        start_milisec = int(start_sec*1000)
+        for k in range(start_milisec, start_milisec + (size * self.intervall), self.intervall):
+            cTime = k / 1000.0
+            nTime = (k + self.pass_time) / 1000.0
+            new_key = _seconds_to_time_frac(cTime)
+            if new_key not in self._meta:
+                #qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
+                self._meta[new_key] = callBackMetadataThread(cmds=['-i', self.video_path,
+                                                                                  '-ss', _seconds_to_time_frac(cTime),
+                                                                                  '-to', _seconds_to_time_frac(nTime),
+                                                                                  '-map', 'data-re',
+                                                                                  '-f', 'data', '-'])
+                self._meta[new_key].start()
+    
+    # read a value and check the buffer
+    def get(self, t):
+        value = b''
+        #get the closest value for this time from the buffer
+        s = t.split(".")
+        new_t = ''
+        try:
+            milis = int(s[1][:-1])
+            r_milis = round(milis / self.intervall) * self.intervall
+            if r_milis != 1000:
+                if r_milis < 1000:
+                    new_t = s[0] + "." + str(r_milis) + "0"
+                if r_milis < 100:
+                    new_t = s[0] + ".0" + str(r_milis) + "0"
+                if r_milis < 10:
+                    new_t = s[0] + ".00" + str(r_milis) + "0"
+            else:
+                date = datetime.strptime(s[0], '%H:%M:%S')
+                new_t = _add_secs_to_time(date, 1) + ".0000"
+        except:
+            qgsu.showUserAndLogMessage("QgsFmvUtils", "wrong value for time, need . decimal" + t, onlyLog=True)
+        try:
+            if self._meta[new_t].p.returncode is None:
+                value = 'NOT_READY'
+                qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" values not ready yet.", onlyLog=True)      
+            elif self._meta[new_t].stdout:
+                value = self._meta[new_t].stdout
+            else:
+                qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" values ready but empty.", onlyLog=True)
+
+            self._check_buffer(new_t)
+        except:
+            qgsu.showUserAndLogMessage("QgsFmvUtils", "No value found for: " + t + " rounded: " + new_t, onlyLog=True)
+
+        #qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
+        
+        return value
+    
 class callBackMetadataThread(threading.Thread):
     '''  Test : CallBack metadata in other thread  '''
 
@@ -100,6 +174,38 @@ class callBackMetadataThread(threading.Thread):
 
         self.stdout, self.stderr = self.p.communicate()
 
+def getVideoLocationInfo(videoPath): 
+        """ Get basic location info about the video """
+        location = []
+
+        try:
+            p = _spawn(['-i', videoPath,
+                        '-ss', '00:00:00',
+                        '-to', '00:00:01',
+                        '-map', 'data-re',
+                        '-f', 'data', '-'])
+
+            stdout_data, _ = p.communicate()
+            
+            if stdout_data == b'':
+                return
+
+            for packet in StreamParser(stdout_data):
+                packet.MetadataList()                       
+                frameCenterLat = packet.GetFrameCenterLatitude()
+                frameCenterLon = packet.GetFrameCenterLongitude()
+                location = [frameCenterLat, frameCenterLon]
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvUtils", "Got Location: lon: "+str(frameCenterLon) + " lat: "+str(frameCenterLat) ), onlyLog=True)
+                break
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvUtils", "This video doesn't have Metadata ! : "), level=QGis.Info)
+                    
+        except Exception as e:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvUtils", "Video info callback failed! : "), str(e), level=QGis.Info)
+            
+        return location
 
 LAST_PATH = "LAST_PATH"
 BOOL = "bool"
@@ -655,6 +761,8 @@ def UpdateTrajectoryData(packet):
     lon = packet.GetSensorLongitude()
     alt = packet.GetSensorTrueAltitude()
 
+    #qgsu.showUserAndLogMessage("QgsFmvUtils", 'UpdateTrajectoryData: lon:' + str(lon) + ' lat:'+str(lat) + ' alt:'+str(alt), onlyLog=True)
+    
     trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
 
     try:
@@ -893,6 +1001,15 @@ def _convert_timestamp(ts):
     end += float(ts.group(8)) / 10 ** len(ts.group(8))
     return start, end
 
+def _add_secs_to_time(timeval, secs_to_add):
+    secs = timeval.hour * 3600 + timeval.minute * 60 + timeval.second
+    secs += secs_to_add
+    return _seconds_to_time(secs)
+
+def _time_to_seconds(dateStr):
+    timeval = datetime.strptime(dateStr, '%H:%M:%S.%f')
+    secs = timeval.hour * 3600 + timeval.minute * 60 + timeval.second + timeval.microsecond/1000000
+    return secs
 
 def _seconds_to_time(sec):
     '''Returns a string representation of the length of time provided.

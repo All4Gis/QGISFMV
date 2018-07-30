@@ -105,8 +105,8 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         else:
             self.currentFrame = frame
             self.widget.repaint(self.targetRect)
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsVideo", 'Video : '), "Repaint Video", onlyLog=True)
+            #qgsu.showUserAndLogMessage(QCoreApplication.translate(
+            #    "QgsVideo", 'Video : '), "Repaint Video", onlyLog=True)
             return True
 
     def videoRect(self):
