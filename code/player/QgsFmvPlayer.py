@@ -32,7 +32,8 @@ from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          RemoveVideoLayers,
                                          CreateGroupByName,
                                          RemoveGroupByName)
-from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
+from QGIS_FMV.utils.QgsFmvUtils import (BufferedMetaReader,
+                                        callBackMetadataThread,
                                         _spawn,
                                         UpdateLayers,
                                         _seconds_to_time,
@@ -45,6 +46,7 @@ from QGIS_FMV.video.QgsColor import ColorDialog
 from QGIS_FMV.video.QgsVideoProcessor import ExtractFramesProcessor
 #from QGIS_FMV.videoStremaing.TestClient import UDPClient
 from qgis.core import Qgis as QGis
+from qgis.core import QgsRectangle, QgsPoint
 
 
 try:
@@ -62,7 +64,7 @@ except ImportError:
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     """ Video Player Class """
 
-    def __init__(self, iface, path=None, parent=None):
+    def __init__(self, iface, path=None, parent=None, meta_reader=None, pass_time=None, initialPt=None):
         """ Constructor """
         super(QgsFmvPlayer, self).__init__(parent)
         self.setupUi(self)
@@ -70,6 +72,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.iface = iface
         self.fileName = None
         self.metadataDlg = None
+        self.initialPt = initialPt
+        self.meta_reader = meta_reader
         self.createingMosaic = False
         self.currentInfo = 0.0
 
@@ -89,8 +93,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.HasFileAudio = False
 
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+        self.pass_time=pass_time
         self.player.setNotifyInterval(700)  # Metadata Callback Interval
-        self.pass_time = 0.08
         self.playlist = QMediaPlaylist()
 
         self.player.setVideoOutput(
@@ -162,23 +166,27 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 "QgsFmvPlayer", "Audio check Failed! : "), str(e),
                 level=QGis.Info)
 
-    def callBackMetadata(self, currentTime, nextTime):
+    def get_metadata_from_buffer(self, currentTime):
         """ Metadata CallBack """
         try:
-            t = callBackMetadataThread(cmds=['-i', self.fileName,
-                                             '-ss', currentTime,
-                                             '-to', nextTime,
-                                             '-map', 'data-re',
-                                             '-f', 'data', '-'])
-            t.start()
-            t.join(1)
-            if t.is_alive():
-                t.p.terminate()
-                t.join()
-            if t.stdout == b'':
+
+            #There is no way to spawn a thread and call after join() without blocking the video UI thread.
+            #callBackMetadata can be as fast as possible, it will always create a small video lag every time meta are read.
+            #To get rid of this, we fill a buffer (BufferedMetaReader) in the QManager with some Metadata in advance,
+            #and hope they'll be ready to read here in a totaly non-blocking way (increase the buffer size if needed in QManager).
+            
+            stdout_data = self.meta_reader.get(currentTime)
+
+            if stdout_data == 'NOT_READY':
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), "", level=QGis.Info)
+                return
+            elif stdout_data == b'' or len(stdout_data) == 0:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvPlayer", "Buffer returned empty metadata, check pass_time. : "), "", onlyLog=True)
                 return
 
-            for packet in StreamParser(t.stdout):
+            for packet in StreamParser(stdout_data):
                 try:
                     self.addMetadata(packet.MetadataList())
                     UpdateLayers(packet, parent=self,
@@ -186,11 +194,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     self.iface.mapCanvas().refresh()
                     QApplication.processEvents()
                     return
-                except Exception as e:
-                    None
-        except Exception as e:
+                except Exception as inst:
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                        "QgsFmvPlayer", "Meta update failed! "), " Packet:" + str(i) + ", error:" + str(inst), level=QGis.Info)
+                    
+        except Exception as inst:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e), level=QGis.Info)
+                "QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst), level=QGis.Info)
 
     def addMetadata(self, packet):
         ''' Add Metadata to List '''
@@ -588,8 +598,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             nextTime = currentInfo + self.pass_time
             currentTimeInfo = _seconds_to_time_frac(currentInfo)
             nextTimeInfo = _seconds_to_time_frac(nextTime)
-            # Metadata CallBack
-            self.callBackMetadata(currentTimeInfo, nextTimeInfo)
+            
+            #Get Metadata from buffer 
+            self.get_metadata_from_buffer(currentTimeInfo)
 
         else:
             tStr = ""
@@ -694,6 +705,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.actionSave_Audio.setEnabled(False)
                 self.HasFileAudio = False
 
+            #recenter map on video initial point
+            if self.initialPt:
+                map_pos = QgsPoint(self.initialPt[1], self.initialPt[0])
+                rect = QgsRectangle(self.initialPt[1], self.initialPt[0], self.initialPt[1], self.initialPt[0])
+                self.iface.mapCanvas().setExtent(rect)
+                self.iface.mapCanvas().refresh()
+            
             self.playClicked(True)
 
         except Exception as e:
