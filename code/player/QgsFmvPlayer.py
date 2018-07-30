@@ -43,7 +43,7 @@ from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
 from QGIS_FMV.video.QgsVideoProcessor import ExtractFramesProcessor
-from QGIS_FMV.videoStremaing.TestClient import UDPClient
+#from QGIS_FMV.videoStremaing.TestClient import UDPClient
 from qgis.core import Qgis as QGis
 
 
