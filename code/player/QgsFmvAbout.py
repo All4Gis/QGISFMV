@@ -21,6 +21,4 @@ class FmvAbout(QDialog, Ui_FmvAbout):
         QDialog.__init__(self)
         self.setupUi(self)
         self.webView.setContextMenuPolicy(Qt.NoContextMenu)
-        path = os.path.normpath(os.path.abspath(
-            QgsApplication.qgisSettingsDirPath() + "\\python\\plugins\\QGIS_FMV\\documents\\about\\about.html"))
-        self.webView.load(QUrl.fromLocalFile(path))
+        self.webView.load(QUrl("http://qgisfmv-docs.readthedocs.io/en/latest/"))
