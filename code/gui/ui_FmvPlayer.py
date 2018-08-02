@@ -410,6 +410,9 @@ class Ui_PlayerWindow(object):
             "actionAuto_Contrast_Filter")
         self.actionCreate_Mosaic = QtWidgets.QAction(PlayerWindow)
         self.actionCreate_Mosaic.setObjectName("actionCreate_Mosaic")
+        self.actionDraw_Pinpoint = QtWidgets.QAction(PlayerWindow)
+        self.actionDraw_Pinpoint.setCheckable(True)
+        self.actionDraw_Pinpoint.setObjectName("actionDraw_Pinpoint")
         self.menuFile.addAction(self.actionGray)
         self.menuFile.addAction(self.actionInvert_Color)
         self.menuFile.addAction(self.actionMono_Filter)
@@ -429,6 +432,7 @@ class Ui_PlayerWindow(object):
         self.menuPlot_Bitrate.addAction(self.actionSave_Video)
         self.menuUtils.addAction(self.actionZoom_Rectangle)
         self.menuUtils.addAction(self.actionMagnifying_glass)
+        self.menuUtils.addAction(self.actionDraw_Pinpoint)
         self.menubarwidget.addAction(self.menuFile.menuAction())
         self.menubarwidget.addAction(self.menuUtils.menuAction())
         self.menubarwidget.addAction(self.menuFrames.menuAction())
@@ -482,6 +486,8 @@ class Ui_PlayerWindow(object):
             PlayerWindow.zoomRect)
         self.actionMagnifying_glass.triggered['bool'].connect(
             PlayerWindow.magnifier)
+        self.actionDraw_Pinpoint.triggered['bool'].connect(
+            PlayerWindow.pointDrawer)
         self.actionAuto_Contrast_Filter.triggered['bool'].connect(
             PlayerWindow.autoContrastFilter)
         self.actionCreate_Mosaic.triggered['bool'].connect(
@@ -580,6 +586,8 @@ class Ui_PlayerWindow(object):
             _translate("PlayerWindow", "Auto Contrast Filter"))
         self.actionCreate_Mosaic.setText(
             _translate("PlayerWindow", "Create Mosaic"))
+        self.actionDraw_Pinpoint.setText(
+            _translate("PlayerWindow", "Draw Pinpoint"))
 
 
 from QGIS_FMV.video.QgsVideo import VideoWidget

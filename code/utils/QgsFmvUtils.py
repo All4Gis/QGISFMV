@@ -70,6 +70,10 @@ gcornerPointLR = None
 gcornerPointLL = None
 gframeCenterLon = None
 gframeCenterLat = None
+frameCenterElevation = None
+sensorLatitude = None
+sensorLongitude = None
+sensorTrueAltitude = None
 
 crtSensorSrc = 'DEFAULT'
 crtPltTailNum = 'DEFAULT'
@@ -378,6 +382,33 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
 
     return
 
+def GetSensor():
+    global sensorLatitude
+    global sensorLongitude
+    global sensorTrueAltitude
+    return [sensorLatitude, sensorLongitude, sensorTrueAltitude]
+
+def GetFrameCenter():
+    global gframeCenterLon
+    global gframeCenterLat
+    global frameCenterElevation
+    return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
+
+def GetcornerPointUL():
+    global gcornerPointUL
+    return gcornerPointUL
+
+def GetcornerPointUR():
+    global gcornerPointUR
+    return gcornerPointUR
+
+def GetcornerPointLR():
+    global gcornerPointLR
+    return gcornerPointLR
+
+def GetcornerPointLL():
+    global gcornerPointLL
+    return gcornerPointLL
 
 def GetGCPGeoTransform():
     ''' Return Geotransform '''

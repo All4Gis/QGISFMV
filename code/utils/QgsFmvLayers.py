@@ -5,11 +5,13 @@ from PyQt5.QtWidgets import QApplication
 from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
                                 Footprint_lyr,
+                                Point_lyr,
                                 frames_g,
                                 Trajectory_lyr)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QVariant, QSettings
 from qgis.core import (
+    QgsMarkerSymbol,
     QgsLayerTreeLayer,
     QgsField,
     QgsFields,
@@ -99,6 +101,12 @@ def CreateVideoLayers():
         SetDefaultPlatformStyle(lyr_platform)
         addLayerNoCrsDialog(lyr_platform)
 
+    if qgsu.selectLayerByName(Point_lyr) is None:
+        lyr_point = newPointsLayer(
+            None, ["longitude", "latitude", "altitude"], 'EPSG:4326', Point_lyr)
+        SetDefaultPointStyle(lyr_point)
+        addLayerNoCrsDialog(lyr_point)
+
     QApplication.processEvents()
     return
 
@@ -132,6 +140,10 @@ def RemoveVideoLayers():
         QgsProject.instance().removeMapLayer(
             qgsu.selectLayerByName(Trajectory_lyr).id())
     except Exception:
+        None
+    try:
+        QgsProject.instance().removeMapLayer(qgsu.selectLayerByName(Point_lyr).id())
+    except:
         None
     iface.mapCanvas().refresh()
     QApplication.processEvents()
@@ -177,6 +189,14 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
     layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
     return
 
+def SetDefaultPointStyle(layer):
+    ''' Point Symbol '''
+    style = S.getDrawingPoint()
+    
+    symbol = QgsMarkerSymbol.createSimple({'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size':style["SIZE"]})
+    renderer = QgsSingleSymbolRenderer(symbol)
+    layer.setRenderer(renderer)
+    return
 
 def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
     ''' Beams Symbol'''

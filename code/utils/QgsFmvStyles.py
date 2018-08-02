@@ -13,6 +13,9 @@ class FmvLayerStyles(object):
 
     #beam holder
     B = {}
+
+    #drawings holder
+    D = {}
     
     #
     # SENSOR STYLES (based on meta attribute "Image Source Sensor")
@@ -83,9 +86,17 @@ class FmvLayerStyles(object):
     #
     B['DEFAULT'] = {}
     B['DEFAULT']['COLOR'] = qRgba(138, 138, 138, 180)
-        
-    
-    
+
+    #
+    # DRAWINGS STYLES
+    #
+    D['DEFAULT'] = {}
+    D['DEFAULT']['NAME'] = 'cross'
+    D['DEFAULT']['LINE_COLOR'] = '#FF0000'
+    D['DEFAULT']['LINE_WIDTH'] = '1' 
+    D['DEFAULT']['SIZE'] = '4'
+
+     
     def getPlatform(name):
         style = None        
         try:
@@ -117,4 +128,8 @@ class FmvLayerStyles(object):
             style = FmvLayerStyles.B[name]
         except:
             style = FmvLayerStyles.B['DEFAULT']
+        return style
+
+    def getDrawingPoint():
+        style = FmvLayerStyles.D['DEFAULT']
         return style

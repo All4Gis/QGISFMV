@@ -681,6 +681,7 @@ QProgressBar::chunk
     </property>
     <addaction name="actionZoom_Rectangle"/>
     <addaction name="actionMagnifying_glass"/>
+	<addaction name="actionDraw_Pinpoint"/>									   
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuUtils"/>
@@ -832,6 +833,14 @@ QProgressBar::chunk
     <string>Create Mosaic</string>
    </property>
   </action>
+  <action name="actionDraw_Pinpoint">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Draw Pinpoint</string>
+   </property>
+  </action>								    
  </widget>
  <customwidgets>
   <customwidget>
@@ -1329,6 +1338,22 @@ QProgressBar::chunk
    <signal>triggered(bool)</signal>
    <receiver>PlayerWindow</receiver>
    <slot>zoomRect(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDraw_Pinpoint</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>pointDrawer(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

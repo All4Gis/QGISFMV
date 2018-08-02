@@ -13,11 +13,17 @@ from PyQt5.QtMultimedia import QAbstractVideoBuffer, QVideoFrame, QVideoSurfaceF
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand, QApplication
-from QGIS_FMV.utils.QgsFmvUtils import SetImageSize, GetGCPGeoTransform, GetImageWidth, GetImageHeight
+from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
+                                        GetSensor,
+                                        GetFrameCenter,
+                                        GetGCPGeoTransform,
+                                        GetImageWidth,
+                                        GetImageHeight)
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
-
+from QGIS_FMV.fmvConfig import Point_lyr
+from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
 
 try:
     from pydevd import *
@@ -30,6 +36,7 @@ grayColorFilter = False
 monoFilter = False
 contrastFilter = False
 magnifier = False
+pointDrawer = False
 zoomRect = False
 
 HOLD_TIME = 701
@@ -491,6 +498,36 @@ class VideoWidget(QVideoWidget):
             self.tapTimer.stop()
             self.tapTimer.start(HOLD_TIME, self)
 
+            #point drawer            
+            if self.gt is not None and pointDrawer:
+                if(not self.IsPointOnScreen(event.x(), event.y())):
+                    return
+                
+                transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
+                sensor=GetSensor()
+                targetAlt=GetFrameCenter()[2]
+                Longitude = transf[1]
+                Latitude = transf[0]
+                Altitude = targetAlt
+                #add pin point on the map
+                pointLyr = qgsu.selectLayerByName(Point_lyr)
+                pointLyr.startEditing()
+                feature = QgsFeature()
+                feature.setAttributes([Longitude, Latitude, Altitude])
+                p = QgsPointXY()
+                p.set(Longitude, Latitude)
+                geom = QgsGeometry.fromPointXY(p)
+                feature.setGeometry(geom)
+                pointLyr.addFeatures([feature])
+                pointLyr.commitChanges()
+                pointLyr.updateExtents()
+                pointLyr.triggerRepaint()
+                
+                #self.drawPtPos.append([Longitude, Latitude])
+                #if not called, the paint event is not triggered.
+                self.UpdateSurface()
+                
+
         if zoomRect and event.button() == Qt.LeftButton:
             self.origin = event.pos()
             self.rubberBand.setGeometry(QRect(self.origin, QSize()))
@@ -507,6 +544,10 @@ class VideoWidget(QVideoWidget):
         """ Set Magnifier Glass """
         global magnifier
         magnifier = value
+
+    def SetPointDrawer(self, value):
+        global pointDrawer
+        pointDrawer = value
 
     def SetZoomRect(self, value):
         """ Set Zoom Rectangle """

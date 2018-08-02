@@ -412,6 +412,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetMagnifier(value)
         self.videoWidget.UpdateSurface()
         return
+    
+    def pointDrawer(self, value):
+        self.UncheckUtils(self.sender(), value)
+        self.videoWidget.SetPointDrawer(value)
+        self.videoWidget.UpdateSurface()
 
     def zoomRect(self, value):
         ''' Zoom Rectangle Utils '''
