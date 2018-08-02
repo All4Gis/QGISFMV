@@ -32,14 +32,11 @@ from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          RemoveVideoLayers,
                                          CreateGroupByName,
                                          RemoveGroupByName)
-from QGIS_FMV.utils.QgsFmvUtils import (BufferedMetaReader,
-                                        ResetData,
-                                        callBackMetadataThread,
+from QGIS_FMV.utils.QgsFmvUtils import (ResetData,
                                         _spawn,
                                         UpdateLayers,
                                         _seconds_to_time,
                                         _seconds_to_time_frac)
-from QGIS_FMV.utils.QgsFmvUtils import askForFiles
 from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
