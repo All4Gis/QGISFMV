@@ -33,6 +33,7 @@ from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          CreateGroupByName,
                                          RemoveGroupByName)
 from QGIS_FMV.utils.QgsFmvUtils import (BufferedMetaReader,
+                                        ResetData,
                                         callBackMetadataThread,
                                         _spawn,
                                         UpdateLayers,
@@ -1274,7 +1275,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.parent.ToggleActiveFromTitle()
         RemoveVideoLayers()
         RemoveGroupByName()
-
+        ResetData()
+        
         try:
             self.metadataDlg.close()
         except Exception:
