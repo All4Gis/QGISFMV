@@ -20,7 +20,7 @@ from QGIS_FMV.fmvConfig import (Platform_lyr,
 from QGIS_FMV.fmvConfig import ffmpeg as ffmpeg_path
 from QGIS_FMV.fmvConfig import ffprobe as ffprobe_path
 from QGIS_FMV.geo import sphere as sphere
-from QGIS_FMV.utils.QgsFmvLayers import addLayerNoCrsDialog, ExpandLayer
+from QGIS_FMV.utils.QgsFmvLayers import addLayerNoCrsDialog, ExpandLayer, SetDefaultFootprintStyle, SetDefaultPlatformStyle
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QSettings
 from qgis.core import (QgsApplication,
@@ -70,6 +70,9 @@ gcornerPointLR = None
 gcornerPointLL = None
 gframeCenterLon = None
 gframeCenterLat = None
+
+crtSensorSrc = 'DEFAULT'
+crtPltTailNum = 'DEFAULT'
 
 if windows:
     ffmpeg_path = ffmpeg_path + '\\win\\ffmpeg.exe'
@@ -472,6 +475,12 @@ def deg2rad(degrees):
     radians = pi * degrees / 180
     return radians
 
+def ResetData():
+    global crtSensorSrc
+    global crtPltTailNum
+    
+    crtSensorSrc = 'DEFAULT'
+    crtPltTailNum = 'DEFAULT'
 
 def UpdateLayers(packet, parent=None, mosaic=False):
     ''' Update Layers Values '''
@@ -506,7 +515,7 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     ), packet.GetCornerLongitudePoint4Full()]
 
     UpdateFootPrintData(
-        cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
+        packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
     UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
                     cornerPointLR, cornerPointLL)
@@ -694,12 +703,19 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
     return
 
 
-def UpdateFootPrintData(cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
+def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
     ''' Update Footprint Values '''
+    global crtSensorSrc
+    imgSS = packet.GetImageSourceSensor()
     footprintLyr = qgsu.selectLayerByName(Footprint_lyr)
-
+        
     try:
         if footprintLyr is not None:
+
+            if(imgSS != crtSensorSrc):
+                SetDefaultFootprintStyle(footprintLyr, imgSS)
+                crtSensorSrc = imgSS
+                
             footprintLyr.startEditing()
             if footprintLyr.featureCount() == 0:
                 feature = QgsFeature()
@@ -798,14 +814,20 @@ def UpdateTrajectoryData(packet):
 
 def UpdatePlatformData(packet):
     ''' Update PlatForm Values '''
+    global crtPltTailNum
     lat = packet.GetSensorLatitude()
     lon = packet.GetSensorLongitude()
     alt = packet.GetSensorTrueAltitude()
     PlatformHeading = packet.GetPlatformHeadingAngle()
+    platformTailNumber = packet.GetPlatformTailNumber()
     platformLyr = qgsu.selectLayerByName(Platform_lyr)
 
     try:
         if all(v is not None for v in [platformLyr, lat, lon, alt, PlatformHeading]):
+            if platformTailNumber != crtPltTailNum:
+                SetDefaultPlatformStyle(platformLyr, platformTailNumber)
+                crtPltTailNum = platformTailNumber
+        
             platformLyr.startEditing()
             platformLyr.renderer().symbol().setAngle(float(PlatformHeading))
 
@@ -864,7 +886,7 @@ def CornerEstimationWithOffsets(packet):
         cornerPointLL = (OffsetLat4 + frameCenterLat,
                          OffsetLon4 + frameCenterLon)
 
-        UpdateFootPrintData(
+        UpdateFootPrintData(packet,
             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
         UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
@@ -975,7 +997,7 @@ def CornerEstimationWithoutOffsets(packet):
         cornerPointLL = list(
             reversed(sphere.destination(destPoint, distance2, bearing)))
 
-        UpdateFootPrintData(
+        UpdateFootPrintData(packet,
             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
         UpdateBeamsData(packet, cornerPointUL, cornerPointUR,

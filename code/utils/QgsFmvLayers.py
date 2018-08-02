@@ -1,6 +1,6 @@
 import os
 
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor,qRgba
 from PyQt5.QtWidgets import QApplication
 from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
@@ -23,7 +23,7 @@ from qgis.core import (
 from qgis.core import Qgis as QGis, QgsWkbTypes
 from qgis.core import QgsProject
 from qgis.utils import iface
-
+from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
 
 try:
     from pydevd import *
@@ -138,12 +138,16 @@ def RemoveVideoLayers():
     return
 
 
-def SetDefaultFootprintStyle(layer):
+def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
     ''' Footprint Symbol '''
-    fill_sym = QgsFillSymbol.createSimple({'color': '0, 0, 255,40',
-                                           'outline_color': '#ff5733',
-                                           'outline_style': 'solid',
-                                           'outline_width': '1'})
+
+    style = S.getSensor(sensor)
+       
+    fill_sym = QgsFillSymbol.createSimple({'color': style['COLOR'],
+                                           'outline_color': style['OUTLINE_COLOR'],
+                                           'outline_style': style['OUTLINE_STYLE'],
+                                           'outline_width': style['OUTLINE_WIDTH']})
+    
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
     return
@@ -151,29 +155,36 @@ def SetDefaultFootprintStyle(layer):
 
 def SetDefaultTrajectoryStyle(layer):
     ''' Trajectory Symbol '''
+    style = S.getTrajectory('DEFAULT')
     symbol = layer.renderer().symbol()
-    symbol.setColor(QColor.fromRgb(0, 0, 255))
-    symbol.setWidth(1)
+    symbol.setColor(style['COLOR'])
+    symbol.setWidth(style['WIDTH'])
     return
 
 
-def SetDefaultPlatformStyle(layer):
+def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
     ''' Platform Symbol '''
+    style = S.getPlatform(platform)
+    
     svgStyle = {}
-    svgStyle['name'] = ":/imgFMV/images/platform.svg"
-    svgStyle['outline'] = '#FFFFFF'
-    svgStyle['outline-width'] = '1'
-    svgStyle['size'] = '18'
+    svgStyle['name'] = style["NAME"]
+    svgStyle['outline'] = style["OUTLINE"]
+    svgStyle['outline-width'] = style["OUTLINE_WIDTH"]
+    svgStyle['size'] = style["SIZE"]
+    
+
     symbol_layer = QgsSvgMarkerSymbolLayer.create(svgStyle)
     layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
     return
 
 
-def SetDefaultBeamsStyle(layer):
+def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
     ''' Beams Symbol'''
+    style = S.getBeam(beam)
     symbol = layer.renderer().symbol()
-    symbol.setColor(QColor.fromRgb(255, 87, 51))
-    symbol.setWidth(1)
+    symbol.setColor(QColor.fromRgba(style['COLOR']))
+    #symbol.setColor(QColor.fromRgb(255, 87, 51))
+    #symbol.setWidth(1)
     return
 
 
