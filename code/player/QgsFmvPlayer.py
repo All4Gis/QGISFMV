@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-			   
 import os.path
 import threading
 
@@ -33,6 +33,7 @@ from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          CreateGroupByName,
                                          RemoveGroupByName)
 from QGIS_FMV.utils.QgsFmvUtils import (BufferedMetaReader,
+                                        ResetData,
                                         callBackMetadataThread,
                                         _spawn,
                                         UpdateLayers,
@@ -411,6 +412,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetMagnifier(value)
         self.videoWidget.UpdateSurface()
         return
+    
+    def pointDrawer(self, value):
+        self.UncheckUtils(self.sender(), value)
+        self.videoWidget.SetPointDrawer(value)
+        self.videoWidget.UpdateSurface()
 
     def zoomRect(self, value):
         ''' Zoom Rectangle Utils '''
@@ -1274,7 +1280,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.parent.ToggleActiveFromTitle()
         RemoveVideoLayers()
         RemoveGroupByName()
-
+        ResetData()
+        
         try:
             self.metadataDlg.close()
         except Exception:
