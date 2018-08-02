@@ -24,7 +24,7 @@ changelog=
     ** General **
 	1.1:
 		- Install requirements automatically.
-		- PR #2, #3, #4 ,#5 and #6 thanks to ltbam.
+		- PR #2, #3, #4 ,#5,# 10 and #6 thanks to ltbam.
 		- Minor changes
 	1.0:
 		-Start of plugin.
