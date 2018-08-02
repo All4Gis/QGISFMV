@@ -380,23 +380,30 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
 
     return
 
+
 def GetSensor():
     return [sensorLatitude, sensorLongitude, sensorTrueAltitude]
+
 
 def GetFrameCenter():
     return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
 
+
 def GetcornerPointUL():
     return gcornerPointUL
+
 
 def GetcornerPointUR():
     return gcornerPointUR
 
+
 def GetcornerPointLR():
     return gcornerPointLR
 
+
 def GetcornerPointLL():
     return gcornerPointLL
+
 
 def GetGCPGeoTransform():
     ''' Return Geotransform '''
