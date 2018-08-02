@@ -220,6 +220,7 @@ class VideoWidget(QVideoWidget):
 
         self.offset = QPoint()
         self.pressPos = QPoint()
+        self.drawPtPos = []
         self.dragPos = QPoint()
         self.tapTimer = QBasicTimer()
         self.zoomPixmap = QPixmap()
@@ -343,6 +344,11 @@ class VideoWidget(QVideoWidget):
         except:
             None
 
+        #Draw clicked points on video
+        for pt in self.drawPtPos:
+            #adds a mark on the video
+            self.drawPointOnVideo(pt)
+        
         # Magnifier Glass
         if self.zoomed and magnifier:
             dim = min(self.width(), self.height())
@@ -398,6 +404,47 @@ class VideoWidget(QVideoWidget):
             painter.drawPath(clipPath)
         return
 
+    
+    def drawPointOnVideo(self, pt):
+        #inverse matrix transformation (lon-lat to video units x,y)
+        transf = (~self.gt)([pt[1] , pt[0]])
+        scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
+        scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
+
+        #
+        #TODO: Find a better way to display a point on video (just copied the magnifier example)
+        #
+        dim = min(self.width(), self.height())
+        magnifierSize = min(MAX_MAGNIFIER, dim * 2 / 3)
+        radius = 20
+        ring = radius - 15
+        box = QSize(magnifierSize, magnifierSize)
+        mp = QPixmap(box)
+        mp.fill(Qt.red) 
+
+        center = QPoint(scr_x, scr_y)
+        corner = center - QPoint(radius, radius)
+        xy = center * 2 - QPoint(radius, radius)
+        zp = QPixmap(box)
+        zp.fill(Qt.lightGray)
+
+        painter = QPainter(zp)
+        painter.translate(-xy)
+        lp = QPixmap.fromImage(self.surface.image)
+        painter.drawPixmap(self.offset * 2, lp)
+        painter.end()
+
+        clipPath = QPainterPath()
+        clipPath.addEllipse(QPointF(center), ring, ring)
+                        
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setClipPath(clipPath)
+        painter.drawPixmap(corner, zp)
+        painter.drawPixmap(corner, mp)
+        painter.setPen(Qt.gray)
+        painter.drawPath(clipPath)
+    
     def resizeEvent(self, event):
         """
         :type event: QMouseEvent
@@ -523,7 +570,7 @@ class VideoWidget(QVideoWidget):
                 pointLyr.updateExtents()
                 pointLyr.triggerRepaint()
                 
-                #self.drawPtPos.append([Longitude, Latitude])
+                self.drawPtPos.append([Longitude, Latitude])
                 #if not called, the paint event is not triggered.
                 self.UpdateSurface()
                 
