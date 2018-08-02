@@ -352,7 +352,6 @@ def convertMatToQImage(img):
 
 def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat):
     ''' Make Geotranform from pixel to lon lat coordinates '''
-    gcps = []
 
     global gcornerPointUL
     gcornerPointUL = cornerPointUL
@@ -368,7 +367,6 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     gframeCenterLon = frameCenterLon
 
     global geotransform
-    geotransform = gdal.GCPsToGeoTransform(gcps)
 
     src = np.float64(
         np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize]]))
@@ -383,31 +381,21 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     return
 
 def GetSensor():
-    global sensorLatitude
-    global sensorLongitude
-    global sensorTrueAltitude
     return [sensorLatitude, sensorLongitude, sensorTrueAltitude]
 
 def GetFrameCenter():
-    global gframeCenterLon
-    global gframeCenterLat
-    global frameCenterElevation
     return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
 
 def GetcornerPointUL():
-    global gcornerPointUL
     return gcornerPointUL
 
 def GetcornerPointUR():
-    global gcornerPointUR
     return gcornerPointUR
 
 def GetcornerPointLR():
-    global gcornerPointLR
     return gcornerPointLR
 
 def GetcornerPointLL():
-    global gcornerPointLL
     return gcornerPointLL
 
 def GetGCPGeoTransform():

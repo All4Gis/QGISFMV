@@ -174,7 +174,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             #and hope they'll be ready to read here in a totaly non-blocking way (increase the buffer size if needed in QManager).
 
             stdout_data = self.meta_reader.get(currentTime)
-            
+
             if stdout_data == 'NOT_READY':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), "", level=QGis.Info)
@@ -409,7 +409,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetMagnifier(value)
         self.videoWidget.UpdateSurface()
         return
-    
+
     def pointDrawer(self, value):
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetPointDrawer(value)
@@ -1278,7 +1278,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         RemoveVideoLayers()
         RemoveGroupByName()
         ResetData()
-        
+
         try:
             self.metadataDlg.close()
         except Exception:
