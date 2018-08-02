@@ -172,9 +172,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             #callBackMetadata can be as fast as possible, it will always create a small video lag every time meta are read.
             #To get rid of this, we fill a buffer (BufferedMetaReader) in the QManager with some Metadata in advance,
             #and hope they'll be ready to read here in a totaly non-blocking way (increase the buffer size if needed in QManager).
-            
-            stdout_data = self.meta_reader.get(currentTime)
 
+            stdout_data = self.meta_reader.get(currentTime)
+            
             if stdout_data == 'NOT_READY':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), "", level=QGis.Info)
@@ -194,8 +194,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     return
                 except Exception as inst:
                     qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", "Meta update failed! "), " Packet:" + str(i) + ", error:" + str(inst), level=QGis.Info)
-                    
+                        "QgsFmvPlayer", "Meta update failed! "), " Packet:" + str(packet) + ", error:" + str(inst), level=QGis.Warning)
+
         except Exception as inst:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst), level=QGis.Info)
