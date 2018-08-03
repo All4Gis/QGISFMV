@@ -177,11 +177,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             if stdout_data == 'NOT_READY':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), "", level=QGis.Info)
+                "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), str(self.meta_reader.getSize()), level=QGis.Info)
                 return
             elif stdout_data == b'' or len(stdout_data) == 0:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Buffer returned empty metadata, check pass_time. : "), "", onlyLog=True)
+                "QgsFmvPlayer", "Buffer returned empty metadata, check pass_time. : "), str(self.meta_reader.pass_time), onlyLog=True)
                 return
 
             for packet in StreamParser(stdout_data):
@@ -194,7 +194,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     return
                 except Exception as inst:
                     qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", "Meta update failed! "), " Packet:" + str(i) + ", error:" + str(inst), level=QGis.Info)
+                        "QgsFmvPlayer", "Meta update failed! "), " error:" + str(inst), level=QGis.Info)
                     
         except Exception as inst:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
