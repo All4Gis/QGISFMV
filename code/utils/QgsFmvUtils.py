@@ -86,9 +86,10 @@ else:
     ffmpeg_path = ffmpeg_path + '\\linux\\ffmpeg'
     ffprobe_path = ffprobe_path + '\\linux\\ffprobe'
 
+
 class BufferedMetaReader():
     '''  Test : Non-Blocking metadata reader with buffer  '''
-    
+
     def __init__(self, video_path, pass_time=100, intervall=200, min_buffer_size=10):
         self.video_path = video_path
         self.pass_time = pass_time
@@ -106,7 +107,7 @@ class BufferedMetaReader():
 
     def getSize(self):
         return len(self._meta)
-    
+
     def bufferParalell(self, start, size):
         start_sec = _time_to_seconds(start)
         start_milisec = int(start_sec*1000)
@@ -122,7 +123,7 @@ class BufferedMetaReader():
                                                                                   '-map', 'data-re',
                                                                                   '-f', 'data', '-'])
                 self._meta[new_key].start()
-    
+
     # read a value and check the buffer
     def get(self, t):
         value = b''
@@ -158,9 +159,10 @@ class BufferedMetaReader():
             qgsu.showUserAndLogMessage("QgsFmvUtils", "No value found for: " + t + " rounded: " + new_t, onlyLog=True)
 
         #qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
-        
+
         return value
-    
+
+
 class callBackMetadataThread(threading.Thread):
     '''  Test : CallBack metadata in other thread  '''
 
@@ -185,6 +187,7 @@ class callBackMetadataThread(threading.Thread):
 
         self.stdout, self.stderr = self.p.communicate()
 
+
 def getVideoLocationInfo(videoPath): 
         """ Get basic location info about the video """
         location = []
@@ -197,12 +200,12 @@ def getVideoLocationInfo(videoPath):
                         '-f', 'data', '-'])
 
             stdout_data, _ = p.communicate()
-            
+
             if stdout_data == b'':
                 return
 
             for packet in StreamParser(stdout_data):
-                packet.MetadataList()                       
+                packet.MetadataList()
                 frameCenterLat = packet.GetFrameCenterLatitude()
                 frameCenterLon = packet.GetFrameCenterLongitude()
                 location = [frameCenterLat, frameCenterLon]
@@ -211,11 +214,11 @@ def getVideoLocationInfo(videoPath):
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvUtils", "This video doesn't have Metadata ! : "), level=QGis.Info)
-                    
+
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvUtils", "Video info callback failed! : "), str(e), level=QGis.Info)
-            
+
         return location
 
 LAST_PATH = "LAST_PATH"
@@ -371,6 +374,7 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     global gframeCenterLon
     gframeCenterLon = frameCenterLon
     global geotransform
+    global geotransform_affine
 
     Height = 0.0
     gcp = gdal.GCP(cornerPointUL[1], cornerPointUL[0], 
@@ -388,14 +392,9 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     gcp = gdal.GCP(frameCenterLon, frameCenterLat, Height, 
                    xSize / 2, ySize / 2, "Center", "5") 
     gcps.append(gcp) 
- 
- 
-    global geotransform_affine
+
     geotransform_affine = gdal.GCPsToGeoTransform(gcps) 
 
-
-
-    
     src = np.float64(
         np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize]]))
     dst = np.float64(
@@ -408,33 +407,30 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
 
     return
 
+
 def GetSensor():
-    global sensorLatitude
-    global sensorLongitude
-    global sensorTrueAltitude
     return [sensorLatitude, sensorLongitude, sensorTrueAltitude]
 
+
 def GetFrameCenter():
-    global gframeCenterLon
-    global gframeCenterLat
-    global frameCenterElevation
     return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
 
+
 def GetcornerPointUL():
-    global gcornerPointUL
     return gcornerPointUL
 
+
 def GetcornerPointUR():
-    global gcornerPointUR
     return gcornerPointUR
 
+
 def GetcornerPointLR():
-    global gcornerPointLR
     return gcornerPointLR
 
+
 def GetcornerPointLL():
-    global gcornerPointLL
     return gcornerPointLL
+
 
 def GetGCPGeoTransform():
     ''' Return Geotransform '''
@@ -532,12 +528,14 @@ def deg2rad(degrees):
     radians = pi * degrees / 180
     return radians
 
+
 def ResetData():
     global crtSensorSrc
     global crtPltTailNum
-    
+
     crtSensorSrc = 'DEFAULT'
     crtPltTailNum = 'DEFAULT'
+
 
 def UpdateLayers(packet, parent=None, mosaic=False):
     ''' Update Layers Values '''
@@ -765,14 +763,14 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
     global crtSensorSrc
     imgSS = packet.GetImageSourceSensor()
     footprintLyr = qgsu.selectLayerByName(Footprint_lyr)
-        
+
     try:
         if footprintLyr is not None:
 
             if(imgSS != crtSensorSrc):
                 SetDefaultFootprintStyle(footprintLyr, imgSS)
                 crtSensorSrc = imgSS
-                
+
             footprintLyr.startEditing()
             if footprintLyr.featureCount() == 0:
                 feature = QgsFeature()
@@ -835,7 +833,7 @@ def UpdateTrajectoryData(packet):
     alt = packet.GetSensorTrueAltitude()
 
     #qgsu.showUserAndLogMessage("QgsFmvUtils", 'UpdateTrajectoryData: lon:' + str(lon) + ' lat:'+str(lat) + ' alt:'+str(alt), onlyLog=True)
-    
+
     trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
 
     try:
@@ -884,7 +882,7 @@ def UpdatePlatformData(packet):
             if platformTailNumber != crtPltTailNum:
                 SetDefaultPlatformStyle(platformLyr, platformTailNumber)
                 crtPltTailNum = platformTailNumber
-        
+
             platformLyr.startEditing()
             platformLyr.renderer().symbol().setAngle(float(PlatformHeading))
 
@@ -1080,15 +1078,18 @@ def _convert_timestamp(ts):
     end += float(ts.group(8)) / 10 ** len(ts.group(8))
     return start, end
 
+
 def _add_secs_to_time(timeval, secs_to_add):
     secs = timeval.hour * 3600 + timeval.minute * 60 + timeval.second
     secs += secs_to_add
     return _seconds_to_time(secs)
 
+
 def _time_to_seconds(dateStr):
     timeval = datetime.strptime(dateStr, '%H:%M:%S.%f')
     secs = timeval.hour * 3600 + timeval.minute * 60 + timeval.second + timeval.microsecond/1000000
     return secs
+
 
 def _seconds_to_time(sec):
     '''Returns a string representation of the length of time provided.
