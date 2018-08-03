@@ -609,25 +609,23 @@ def GeoreferenceFrame(image, output, parent):
 
     t = "out_" + p + ext
     name = "g_" + p
-    f_g = name + ext
 
     src_file = os.path.join(output, t)
 
     image.save(src_file)
-
-    dst_filename = os.path.join(os.path.dirname(src_file), f_g)
 
     # Opens source dataset
     src_ds = gdal.Open(src_file)
     driver = gdal.GetDriverByName("GTiff")
 
     # Open destination dataset
-    dst_ds = driver.CreateCopy(dst_filename, src_ds, 0)
+    dst_filename = os.path.join(output, name + ext)
+    dst_ds = driver.CreateCopy(dst_filename, src_ds, \
+        options = ['BLOCKYSIZE=16', 'COMPRESS=DEFLATE', 'NUM_THREADS=ALL_CPUS'])
 
     # Get raster projection
-    epsg = 4326
     srs = osr.SpatialReference()
-    srs.ImportFromEPSG(epsg)
+    srs.ImportFromEPSG(4326)
 
     # Set projection
     dst_ds.SetProjection(srs.ExportToWkt())
@@ -640,15 +638,16 @@ def GeoreferenceFrame(image, output, parent):
     dst_ds = None
     src_ds = None
 
-    try:
-        os.remove(src_file)
-    except OSError:
-        pass
     # Add Layer to canvas
     layer = QgsRasterLayer(dst_filename, name)
     addLayerNoCrsDialog(layer, False, frames_g)
     ExpandLayer(layer, False)
     iface.mapCanvas().refresh()
+    try:
+        os.remove(src_file)
+    except OSError:
+        pass
+
     return
 
 
