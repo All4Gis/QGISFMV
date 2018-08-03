@@ -1,5 +1,6 @@
 from PyQt5.QtGui import QColor, qRgba
 
+
 class FmvLayerStyles(object):
 
     #sensor holder
@@ -16,11 +17,11 @@ class FmvLayerStyles(object):
 
     #drawings holder
     D = {}
-    
+
     #
     # SENSOR STYLES (based on meta attribute "Image Source Sensor")
     #
-    
+
     #Default
     S['DEFAULT'] = {} 
     S['DEFAULT']['COLOR'] = '126, 217, 255, 60'
@@ -59,7 +60,7 @@ class FmvLayerStyles(object):
     #
     # PLATFORM STYLES (based on meta attribute platform)
     #
-    
+
     #Default
     P['DEFAULT'] = {} 
     P['DEFAULT']['NAME'] = ':/imgFMV/images/platform.svg'
@@ -68,7 +69,7 @@ class FmvLayerStyles(object):
     P['DEFAULT']['SIZE'] = '18'
 
     #Super Puma Platform
-    P['Super Puma TH06'] = {} 
+    P['Super Puma TH06'] = {}
     P['Super Puma TH06']['NAME'] = '../apps/qgis/python/plugins/QGIS_FMV/images/plat_super_puma.svg'
     P['Super Puma TH06']['OUTLINE'] = '255, 255, 255, 60'
     P['Super Puma TH06']['OUTLINE_WIDTH'] = '1'
@@ -93,43 +94,47 @@ class FmvLayerStyles(object):
     D['DEFAULT'] = {}
     D['DEFAULT']['NAME'] = 'cross'
     D['DEFAULT']['LINE_COLOR'] = '#FF0000'
-    D['DEFAULT']['LINE_WIDTH'] = '1' 
+    D['DEFAULT']['LINE_WIDTH'] = '1'
     D['DEFAULT']['SIZE'] = '4'
 
-     
+
+    @staticmethod
     def getPlatform(name):
-        style = None        
+        style = None
         try:
             style = FmvLayerStyles.P[name]
         except:
             style = FmvLayerStyles.P['DEFAULT']
         return style
-           
-        
+
+    @staticmethod
     def getSensor(name):
-        style = None        
+        style = None
         try:
             style = FmvLayerStyles.S[name]
         except:
             style = FmvLayerStyles.S['DEFAULT']
         return style
 
+    @staticmethod
     def getTrajectory(name):
-        style = None        
+        style = None
         try:
             style = FmvLayerStyles.T[name]
         except:
             style = FmvLayerStyles.T['DEFAULT']
         return style
 
+    @staticmethod
     def getBeam(name):
-        style = None        
+        style = None
         try:
             style = FmvLayerStyles.B[name]
         except:
             style = FmvLayerStyles.B['DEFAULT']
         return style
 
+    @staticmethod
     def getDrawingPoint():
         style = FmvLayerStyles.D['DEFAULT']
         return style

@@ -154,12 +154,12 @@ def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
     ''' Footprint Symbol '''
 
     style = S.getSensor(sensor)
-       
+
     fill_sym = QgsFillSymbol.createSimple({'color': style['COLOR'],
                                            'outline_color': style['OUTLINE_COLOR'],
                                            'outline_style': style['OUTLINE_STYLE'],
                                            'outline_width': style['OUTLINE_WIDTH']})
-    
+
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
     return
@@ -177,26 +177,27 @@ def SetDefaultTrajectoryStyle(layer):
 def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
     ''' Platform Symbol '''
     style = S.getPlatform(platform)
-    
+
     svgStyle = {}
     svgStyle['name'] = style["NAME"]
     svgStyle['outline'] = style["OUTLINE"]
     svgStyle['outline-width'] = style["OUTLINE_WIDTH"]
     svgStyle['size'] = style["SIZE"]
-    
 
     symbol_layer = QgsSvgMarkerSymbolLayer.create(svgStyle)
     layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
     return
 
+
 def SetDefaultPointStyle(layer):
     ''' Point Symbol '''
     style = S.getDrawingPoint()
-    
+
     symbol = QgsMarkerSymbol.createSimple({'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size':style["SIZE"]})
     renderer = QgsSingleSymbolRenderer(symbol)
     layer.setRenderer(renderer)
     return
+
 
 def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
     ''' Beams Symbol'''
