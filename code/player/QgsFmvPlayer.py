@@ -177,7 +177,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             if stdout_data == 'NOT_READY':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), "", level=QGis.Info)
+                "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), "", onlyLog=True)
                 return
             elif stdout_data == b'' or len(stdout_data) == 0:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
