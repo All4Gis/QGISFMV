@@ -315,12 +315,12 @@ class VideoWidget(QVideoWidget):
             res = False
         return res
 
-    # ratio between event.x() and real image width on screen.
     def GetXRatio(self):
+        ''' ratio between event.x() and real image width on screen. '''
         return GetImageWidth() / (self.surface.widget.width() - (2 * self.GetXBlackZone()))
 
-    # ratio between event.y() and real image height on screen.
     def GetYRatio(self):
+        ''' ratio between event.y() and real image height on screen. '''
         return GetImageHeight() / (self.surface.widget.height() - (2 * self.GetYBlackZone()))
 
     def paintEvent(self, event):
@@ -357,41 +357,6 @@ class VideoWidget(QVideoWidget):
         for pt in self.drawLines:
             #adds a mark on the video
             self.drawLinesOnVideo(pt)
-        
-#         #Test : Peta QGIS
-#         if len(self.drawLines)>1:
-#             transf = (~self.gt)([self.drawLines[0][1] , self.drawLines[0][0]])
-#             scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
-#             scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
-#     
-#             dim = min(self.width(), self.height())
-#             magnifierSize = min(MAX_MAGNIFIER, dim * 2 / 3)
-#             radius = 20
-#             ring = radius - 15
-#             box = QSize(magnifierSize, magnifierSize)
-#             mp = QPixmap(box)
-#             mp.fill(Qt.yellow)
-#     
-#             center = QPoint(scr_x, scr_y)
-#             corner = center - QPoint(radius, radius)
-#     
-#             bluePath = QPainterPath()
-#             p1=QPointF(center)
-#             bluePath.moveTo (QPointF(center));
-#             
-#             transf = (~self.gt)([self.drawLines[1][1] , self.drawLines[1][0]])
-#             scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
-#             scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
-#             center = QPoint(scr_x, scr_y)
-#             corner = center - QPoint(radius, radius)
-#             p2=QPointF(center)
-#             bluePath.lineTo (QPointF(center));
-#     
-#             painter = QPainter(self)
-#             painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
-#             painter.setClipPath(bluePath)
-#             painter.drawPixmap(corner, mp)
-#             painter.drawLine(p1,p2)
 
         # Magnifier Glass
         if self.zoomed and magnifier:
@@ -448,30 +413,42 @@ class VideoWidget(QVideoWidget):
             painter.drawPath(clipPath)
         return
 
-    def drawLinesOnVideo(self, pt):
-        #inverse matrix transformation (lon-lat to video units x,y)
-        transf = (~self.gt)([pt[1] , pt[0]])
+    def GetInverseMatrix(self, x, y):
+        ''' inverse matrix transformation (lon-lat to video units x,y) '''
+        transf = (~self.gt)([x , y])
         scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
         scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
+        return scr_x, scr_y
 
-        radius = 10
+    def drawLinesOnVideo(self, pt):
+        ''' Draw Lines on Video '''
+        scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+
+        radius = 3
         center = QPoint(scr_x, scr_y)
 
         pen = QPen(Qt.yellow)
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
+        pen.setDashPattern([1, 4, 5, 4])
         painter_p = QPainter(self)
         painter_p.setPen(pen)
         painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
         painter_p.drawPoint(center)
 
+        if len(self.drawLines) > 1:
+            try:
+                idx = self.drawLines.index(pt)
+                scr_x, scr_y = self.GetInverseMatrix(self.drawLines[idx+1][1] , self.drawLines[idx+1][0])
+                end = QPoint(scr_x, scr_y)
+                painter_p.drawLine(center, end)
+            except:
+                None
+
         return
 
     def drawPointOnVideo(self, pt):
-        #inverse matrix transformation (lon-lat to video units x,y)
-        transf = (~self.gt)([pt[1] , pt[0]])
-        scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
-        scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
+        scr_x, scr_y = self.GetInverseMatrix(pt[1] , pt[0])
 
         radius = 10
         center = QPoint(scr_x, scr_y)
@@ -505,12 +482,38 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
+        # check if the point  is on picture (not in black borders)
+        if(not self.IsPointOnScreen(event.x(), event.y())):
+            return
+
+#         # Draw Line on the fly
+#         if self.gt is not None and lineDrawer:
+#                 if len(self.drawLines) > 0:
+#                     scr_x, scr_y = self.GetInverseMatrix(self.drawLines[-1][1],self.drawLines[-1][1])
+# 
+#                     radius = 3
+#                     center = QPoint(scr_x, scr_y)
+# 
+#                     pen = QPen(Qt.yellow)
+#                     pen.setWidth(radius)
+#                     pen.setCapStyle(Qt.RoundCap)
+#                     pen.setDashPattern([1, 4, 5, 4])
+#                     painter_p = QPainter(self)
+#                     painter_p.setPen(pen)
+#                     painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
+#                     painter_p.drawPoint(center)
+# 
+#                     try:
+#                         transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
+#                         scr_x, scr_y = self.GetInverseMatrix(float(round(transf[1], 4)) , float(round(transf[0], 4)))
+#                         end = QPoint(scr_x, scr_y)
+#                         painter_p.drawLine(center, end)
+#                         self.UpdateSurface()
+#                     except:
+#                         None
+
         # Cursor Coordinates
         if self.gt is not None:
-
-            # check if the point  is on picture (not in black borders)
-            if(not self.IsPointOnScreen(event.x(), event.y())):
-                return
 
             transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(),
                               (event.y() - self.GetYBlackZone()) * self.GetYRatio()])
@@ -701,7 +704,7 @@ class VideoWidget(QVideoWidget):
             self.rubberBand.hide()
             self.zoomedRect = True
 
-            # TODO :  ACTUALIZAR LA IMAGEN
+            # TODO :  make zoom rectangle functionality
             selRect = self.rubberBand.geometry()
 
             orig2widgScale = self.surface.widget.contentsRect().width() / \
