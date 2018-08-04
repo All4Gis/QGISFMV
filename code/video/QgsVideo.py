@@ -8,6 +8,7 @@ from PyQt5.QtGui import (QImage,
                          QPainterPath,
                          QRadialGradient,
                          QColor,
+                         QPen,
                          QBrush)
 from PyQt5.QtMultimedia import QAbstractVideoBuffer, QVideoFrame, QVideoSurfaceFormat, QAbstractVideoSurface
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -356,6 +357,41 @@ class VideoWidget(QVideoWidget):
         for pt in self.drawLines:
             #adds a mark on the video
             self.drawLinesOnVideo(pt)
+        
+#         #Test : Peta QGIS
+#         if len(self.drawLines)>1:
+#             transf = (~self.gt)([self.drawLines[0][1] , self.drawLines[0][0]])
+#             scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
+#             scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
+#     
+#             dim = min(self.width(), self.height())
+#             magnifierSize = min(MAX_MAGNIFIER, dim * 2 / 3)
+#             radius = 20
+#             ring = radius - 15
+#             box = QSize(magnifierSize, magnifierSize)
+#             mp = QPixmap(box)
+#             mp.fill(Qt.yellow)
+#     
+#             center = QPoint(scr_x, scr_y)
+#             corner = center - QPoint(radius, radius)
+#     
+#             bluePath = QPainterPath()
+#             p1=QPointF(center)
+#             bluePath.moveTo (QPointF(center));
+#             
+#             transf = (~self.gt)([self.drawLines[1][1] , self.drawLines[1][0]])
+#             scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
+#             scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
+#             center = QPoint(scr_x, scr_y)
+#             corner = center - QPoint(radius, radius)
+#             p2=QPointF(center)
+#             bluePath.lineTo (QPointF(center));
+#     
+#             painter = QPainter(self)
+#             painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+#             painter.setClipPath(bluePath)
+#             painter.drawPixmap(corner, mp)
+#             painter.drawLine(p1,p2)
 
         # Magnifier Glass
         if self.zoomed and magnifier:
@@ -418,28 +454,16 @@ class VideoWidget(QVideoWidget):
         scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
         scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
 
-        dim = min(self.width(), self.height())
-        magnifierSize = min(MAX_MAGNIFIER, dim * 2 / 3)
-        radius = 20
-        box = QSize(magnifierSize, magnifierSize)
-        mp = QPixmap(box)
-        mp.fill(Qt.yellow)
-
+        radius = 10
         center = QPoint(scr_x, scr_y)
-        corner = center - QPoint(radius, radius)
 
-        bluePath = QPainterPath()
-#         if len(self.drawLines) > 1:
-#             bluePath.lineTo(QPointF(center))
-#         else:
-#             bluePath.moveTo(QPointF(center))
-
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
-        painter.setClipPath(bluePath)
-        #painter.setPen(Qt.red)
-        painter.drawPixmap(corner, mp)
-        painter.drawPath(bluePath)
+        pen = QPen(Qt.yellow)
+        pen.setWidth(radius)
+        pen.setCapStyle(Qt.RoundCap)
+        painter_p = QPainter(self)
+        painter_p.setPen(pen)
+        painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
+        painter_p.drawPoint(center)
 
         return
 
@@ -448,28 +472,19 @@ class VideoWidget(QVideoWidget):
         transf = (~self.gt)([pt[1] , pt[0]])
         scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
         scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
-        #
-        #TODO: Find a better way to display a point on video (just copied the magnifier example)
-        #
-        dim = min(self.width(), self.height())
-        magnifierSize = min(MAX_MAGNIFIER, dim * 2 / 3)
-        radius = 20
-        ring = radius - 15
-        box = QSize(magnifierSize, magnifierSize)
-        mp_p = QPixmap(box)
-        mp_p.fill(Qt.red)
 
+        radius = 10
         center = QPoint(scr_x, scr_y)
-        corner = center - QPoint(radius, radius)
 
-        p_Path = QPainterPath()
-        p_Path.addEllipse(QPointF(center), ring, ring)
-
+        pen = QPen(Qt.red)
+        pen.setWidth(radius)
+        pen.setCapStyle(Qt.RoundCap)
         painter_p = QPainter(self)
+        painter_p.setPen(pen)
         painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
-        painter_p.setClipPath(p_Path)
-        painter_p.drawPixmap(corner, mp_p)
-        painter_p.drawPath(p_Path)
+        painter_p.drawPoint(center)
+
+        return
 
     def resizeEvent(self, event):
         """
