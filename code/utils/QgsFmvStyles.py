@@ -15,15 +15,18 @@ class FmvLayerStyles(object):
     #beam holder
     B = {}
 
-    #drawings holder
-    D = {}
+    #drawings Point holder
+    DP = {}
+
+    #drawings Line holder
+    DL = {}
 
     #
     # SENSOR STYLES (based on meta attribute "Image Source Sensor")
     #
 
     #Default
-    S['DEFAULT'] = {} 
+    S['DEFAULT'] = {}
     S['DEFAULT']['COLOR'] = '126, 217, 255, 60'
     S['DEFAULT']['OUTLINE_COLOR'] = '#5392fa'
     S['DEFAULT']['OUTLINE_STYLE'] = 'solid'
@@ -51,7 +54,7 @@ class FmvLayerStyles(object):
     S['BLEND']['OUTLINE_WIDTH'] = '1'
 
     #Short Wave Infra Red sensor
-    S['EON_SWIR'] = {} 
+    S['EON_SWIR'] = {}
     S['EON_SWIR']['COLOR'] = '234, 135, 8, 60'
     S['EON_SWIR']['OUTLINE_COLOR'] = '#ba340f'
     S['EON_SWIR']['OUTLINE_STYLE'] = 'solid'
@@ -89,21 +92,27 @@ class FmvLayerStyles(object):
     B['DEFAULT']['COLOR'] = qRgba(138, 138, 138, 180)
 
     #
-    # DRAWINGS STYLES
+    # DRAWINGS POINT STYLES
     #
-    D['DEFAULT'] = {}
-    D['DEFAULT']['NAME'] = 'cross'
-    D['DEFAULT']['LINE_COLOR'] = '#FF0000'
-    D['DEFAULT']['LINE_WIDTH'] = '1'
-    D['DEFAULT']['SIZE'] = '4'
+    DP['DEFAULT'] = {}
+    DP['DEFAULT']['NAME'] = 'cross'
+    DP['DEFAULT']['LINE_COLOR'] = '#FF0000'
+    DP['DEFAULT']['LINE_WIDTH'] = '1'
+    DP['DEFAULT']['SIZE'] = '4'
 
+    #
+    # DRAWINGS LINE STYLES
+    #
+    DL['DEFAULT'] = {}
+    DL['DEFAULT']['COLOR'] = QColor.fromRgb(245, 255, 15)
+    DL['DEFAULT']['WIDTH'] = 1
 
     @staticmethod
     def getPlatform(name):
         style = None
         try:
             style = FmvLayerStyles.P[name]
-        except:
+        except Exception:
             style = FmvLayerStyles.P['DEFAULT']
         return style
 
@@ -112,7 +121,7 @@ class FmvLayerStyles(object):
         style = None
         try:
             style = FmvLayerStyles.S[name]
-        except:
+        except Exception:
             style = FmvLayerStyles.S['DEFAULT']
         return style
 
@@ -121,7 +130,7 @@ class FmvLayerStyles(object):
         style = None
         try:
             style = FmvLayerStyles.T[name]
-        except:
+        except Exception:
             style = FmvLayerStyles.T['DEFAULT']
         return style
 
@@ -130,11 +139,20 @@ class FmvLayerStyles(object):
         style = None
         try:
             style = FmvLayerStyles.B[name]
-        except:
+        except Exception:
             style = FmvLayerStyles.B['DEFAULT']
         return style
 
     @staticmethod
     def getDrawingPoint():
-        style = FmvLayerStyles.D['DEFAULT']
+        style = FmvLayerStyles.DP['DEFAULT']
+        return style
+
+    @staticmethod
+    def getDrawingLine(name):
+        style = None
+        try:
+            style = FmvLayerStyles.DL[name]
+        except Exception:
+            style = FmvLayerStyles.DL['DEFAULT']
         return style

@@ -6,6 +6,7 @@ from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
                                 Footprint_lyr,
                                 Point_lyr,
+                                Line_lyr,
                                 frames_g,
                                 Trajectory_lyr)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
@@ -107,6 +108,12 @@ def CreateVideoLayers():
         SetDefaultPointStyle(lyr_point)
         addLayerNoCrsDialog(lyr_point)
 
+    if qgsu.selectLayerByName(Line_lyr) is None:
+        lyr_line = newLinesLayer(
+            None, ["longitude", "latitude", "altitude"], 'EPSG:4326', Line_lyr)
+        SetDefaultLineStyle(lyr_line)
+        addLayerNoCrsDialog(lyr_line)
+
     QApplication.processEvents()
     return
 
@@ -143,7 +150,11 @@ def RemoveVideoLayers():
         None
     try:
         QgsProject.instance().removeMapLayer(qgsu.selectLayerByName(Point_lyr).id())
-    except:
+    except Exception:
+        None
+    try:
+        QgsProject.instance().removeMapLayer(qgsu.selectLayerByName(Line_lyr).id())
+    except Exception:
         None
     iface.mapCanvas().refresh()
     QApplication.processEvents()
@@ -196,6 +207,15 @@ def SetDefaultPointStyle(layer):
     symbol = QgsMarkerSymbol.createSimple({'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size':style["SIZE"]})
     renderer = QgsSingleSymbolRenderer(symbol)
     layer.setRenderer(renderer)
+    return
+
+
+def SetDefaultLineStyle(layer):
+    ''' Line Symbol '''
+    style = S.getDrawingLine('DEFAULT')
+    symbol = layer.renderer().symbol()
+    symbol.setColor(style['COLOR'])
+    symbol.setWidth(style['WIDTH'])
     return
 
 

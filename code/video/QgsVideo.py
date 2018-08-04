@@ -12,9 +12,10 @@ from PyQt5.QtGui import (QImage,
 from PyQt5.QtMultimedia import QAbstractVideoBuffer, QVideoFrame, QVideoSurfaceFormat, QAbstractVideoSurface
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
-from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand, QApplication
+from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
 from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         GetSensor,
+                                        CommonLayer,
                                         GetFrameCenter,
                                         GetGCPGeoTransform,
                                         GetImageWidth,
@@ -22,7 +23,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
-from QGIS_FMV.fmvConfig import Point_lyr
+from QGIS_FMV.fmvConfig import Point_lyr, Line_lyr
 from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
 
 try:
@@ -37,6 +38,7 @@ monoFilter = False
 contrastFilter = False
 magnifier = False
 pointDrawer = False
+lineDrawer = False
 zoomRect = False
 
 HOLD_TIME = 701
@@ -221,6 +223,7 @@ class VideoWidget(QVideoWidget):
         self.offset = QPoint()
         self.pressPos = QPoint()
         self.drawPtPos = []
+        self.drawLines = []
         self.dragPos = QPoint()
         self.tapTimer = QBasicTimer()
         self.zoomPixmap = QPixmap()
@@ -348,7 +351,12 @@ class VideoWidget(QVideoWidget):
         for pt in self.drawPtPos:
             #adds a mark on the video
             self.drawPointOnVideo(pt)
-        
+
+        #Draw clicked lines on video
+        for pt in self.drawLines:
+            #adds a mark on the video
+            self.drawLinesOnVideo(pt)
+
         # Magnifier Glass
         if self.zoomed and magnifier:
             dim = min(self.width(), self.height())
@@ -404,13 +412,42 @@ class VideoWidget(QVideoWidget):
             painter.drawPath(clipPath)
         return
 
-    
-    def drawPointOnVideo(self, pt):
+    def drawLinesOnVideo(self, pt):
         #inverse matrix transformation (lon-lat to video units x,y)
         transf = (~self.gt)([pt[1] , pt[0]])
         scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
         scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
 
+        dim = min(self.width(), self.height())
+        magnifierSize = min(MAX_MAGNIFIER, dim * 2 / 3)
+        radius = 20
+        box = QSize(magnifierSize, magnifierSize)
+        mp = QPixmap(box)
+        mp.fill(Qt.yellow)
+
+        center = QPoint(scr_x, scr_y)
+        corner = center - QPoint(radius, radius)
+
+        bluePath = QPainterPath()
+#         if len(self.drawLines) > 1:
+#             bluePath.lineTo(QPointF(center))
+#         else:
+#             bluePath.moveTo(QPointF(center))
+
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+        painter.setClipPath(bluePath)
+        #painter.setPen(Qt.red)
+        painter.drawPixmap(corner, mp)
+        painter.drawPath(bluePath)
+
+        return
+
+    def drawPointOnVideo(self, pt):
+        #inverse matrix transformation (lon-lat to video units x,y)
+        transf = (~self.gt)([pt[1] , pt[0]])
+        scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
+        scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
         #
         #TODO: Find a better way to display a point on video (just copied the magnifier example)
         #
@@ -419,32 +456,21 @@ class VideoWidget(QVideoWidget):
         radius = 20
         ring = radius - 15
         box = QSize(magnifierSize, magnifierSize)
-        mp = QPixmap(box)
-        mp.fill(Qt.red) 
+        mp_p = QPixmap(box)
+        mp_p.fill(Qt.red)
 
         center = QPoint(scr_x, scr_y)
         corner = center - QPoint(radius, radius)
-        xy = center * 2 - QPoint(radius, radius)
-        zp = QPixmap(box)
-        zp.fill(Qt.lightGray)
 
-        painter = QPainter(zp)
-        painter.translate(-xy)
-        lp = QPixmap.fromImage(self.surface.image)
-        painter.drawPixmap(self.offset * 2, lp)
-        painter.end()
+        p_Path = QPainterPath()
+        p_Path.addEllipse(QPointF(center), ring, ring)
 
-        clipPath = QPainterPath()
-        clipPath.addEllipse(QPointF(center), ring, ring)
-                        
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setClipPath(clipPath)
-        painter.drawPixmap(corner, zp)
-        painter.drawPixmap(corner, mp)
-        painter.setPen(Qt.gray)
-        painter.drawPath(clipPath)
-    
+        painter_p = QPainter(self)
+        painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
+        painter_p.setClipPath(p_Path)
+        painter_p.drawPixmap(corner, mp_p)
+        painter_p.drawPath(p_Path)
+
     def resizeEvent(self, event):
         """
         :type event: QMouseEvent
@@ -476,7 +502,7 @@ class VideoWidget(QVideoWidget):
 
             Longitude = transf[1]
             Latitude = transf[0]
-            Altitude = 0.0
+            #Altitude = 0.0
 
             self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" +
                                                 "<span style='font-size:9pt; font-weight:normal;'>" + ("%.3f" % Longitude) + "</span>" +
@@ -521,7 +547,6 @@ class VideoWidget(QVideoWidget):
             self.dragPos = event.pos()
             self.surface.updateVideoRect()
 
-#     TODO: MAKE PAINT GEOMETRY ACTION AND CREATE SHAPES
     def pan(self, delta):
         """ Pan Action """
         self.offset += delta
@@ -545,17 +570,17 @@ class VideoWidget(QVideoWidget):
             self.tapTimer.stop()
             self.tapTimer.start(HOLD_TIME, self)
 
-            #point drawer            
+            #point drawer
             if self.gt is not None and pointDrawer:
                 if(not self.IsPointOnScreen(event.x(), event.y())):
                     return
-                
+
                 transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
-                sensor=GetSensor()
-                targetAlt=GetFrameCenter()[2]
-                Longitude = transf[1]
-                Latitude = transf[0]
-                Altitude = targetAlt
+                #targetAlt = GetFrameCenter()[2]
+                Longitude = float(round(transf[1], 4))
+                Latitude = float(round(transf[0], 4))
+                #Altitude = targetAlt
+                Altitude = 0.0
                 #add pin point on the map
                 pointLyr = qgsu.selectLayerByName(Point_lyr)
                 pointLyr.startEditing()
@@ -566,14 +591,52 @@ class VideoWidget(QVideoWidget):
                 geom = QgsGeometry.fromPointXY(p)
                 feature.setGeometry(geom)
                 pointLyr.addFeatures([feature])
-                pointLyr.commitChanges()
-                pointLyr.updateExtents()
-                pointLyr.triggerRepaint()
-                
+
+                CommonLayer(pointLyr)
+
                 self.drawPtPos.append([Longitude, Latitude])
                 #if not called, the paint event is not triggered.
                 self.UpdateSurface()
-                
+
+            #line drawer
+            if self.gt is not None and lineDrawer:
+                if(not self.IsPointOnScreen(event.x(), event.y())):
+                    return
+
+                transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
+                #targetAlt = GetFrameCenter()[2]
+                Longitude = float(round(transf[1], 4))
+                Latitude = float(round(transf[0], 4))
+                #Altitude = targetAlt
+                Altitude = 0.0
+                #add pin point on the map
+                linelyr = qgsu.selectLayerByName(Line_lyr)
+                linelyr.startEditing()
+                feature = QgsFeature()
+                f = QgsFeature()
+                if linelyr.featureCount() == 0:
+                    f.setAttributes(
+                        [Longitude, Latitude, Altitude])
+                    surface = QgsGeometry.fromPolylineXY(
+                        [QgsPointXY(Longitude, Latitude), QgsPointXY(Longitude, Latitude)])
+                    f.setGeometry(surface)
+                    linelyr.addFeatures([f])
+
+                else:
+                    f_last = linelyr.getFeature(linelyr.featureCount())
+                    f.setAttributes(
+                        [Longitude, Latitude, Altitude])
+                    surface = QgsGeometry.fromPolylineXY(
+                        [QgsPointXY(Longitude, Latitude),
+                         QgsPointXY(f_last.attribute(0), f_last.attribute(1))])
+                    f.setGeometry(surface)
+                    linelyr.addFeatures([f])
+
+                CommonLayer(linelyr)
+
+                self.drawLines.append([Longitude, Latitude])
+                #if not called, the paint event is not triggered.
+                self.UpdateSurface()
 
         if zoomRect and event.button() == Qt.LeftButton:
             self.origin = event.pos()
@@ -593,8 +656,14 @@ class VideoWidget(QVideoWidget):
         magnifier = value
 
     def SetPointDrawer(self, value):
+        """ Set Point Drawer """
         global pointDrawer
         pointDrawer = value
+
+    def SetLineDrawer(self, value):
+        """ Set Line Drawer """
+        global lineDrawer
+        lineDrawer = value
 
     def SetZoomRect(self, value):
         """ Set Zoom Rectangle """
@@ -635,7 +704,7 @@ class VideoWidget(QVideoWidget):
 
             wid2origRect = QRect(X1, Y1, X2, Y2)
             zoom_img = self.surface.image.copy(wid2origRect)
-            # zoom_img.save('D:\\test.png')
+#             zoom_img.save('D:\\test.png')
 #             n_img = self.surface.image.copy(selRect)
 #             n_img.save('D:\\test.png')
             zoom_img.scaled(1920, 1080)

@@ -411,8 +411,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def pointDrawer(self, value):
+        ''' Draw Point '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetPointDrawer(value)
+        self.videoWidget.UpdateSurface()
+
+    def lineDrawer(self, value):
+        ''' Draw Line '''
+        self.UncheckUtils(self.sender(), value)
+        self.videoWidget.SetLineDrawer(value)
         self.videoWidget.UpdateSurface()
 
     def zoomRect(self, value):
@@ -424,20 +431,30 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def UncheckUtils(self, sender, value):
         ''' Uncheck Utils Video '''
-        self.toggleVideoWidget()
+        #self.toggleVideoWidget()
         QApplication.processEvents()
         name = sender.objectName()
         self.actionMagnifying_glass.setChecked(
             True if name == "actionMagnifying_glass" else False)
+        self.actionDraw_Pinpoint.setChecked(
+            True if name == "actionDraw_Pinpoint" else False)
+        self.actionDraw_Line.setChecked(
+            True if name == "actionDraw_Line" else False)
         self.actionZoom_Rectangle.setChecked(
             True if name == "actionZoom_Rectangle" else False)
 
+        self.videoWidget.SetMagnifier(True if name == "actionMagnifying_glass" else False)
+        self.videoWidget.SetPointDrawer(
+            True if name == "actionDraw_Pinpoint" else False)
+        self.videoWidget.SetLineDrawer(
+            True if name == "actionDraw_Line" else False)
+        
         sender.setChecked(value)
         return
 
     def UncheckFilters(self, sender, value):
         ''' Uncheck Filters Video '''
-        self.toggleVideoWidget()
+        #self.toggleVideoWidget()
         name = sender.objectName()
 
         self.actionGray.setChecked(True if name == "actionGray" else False)

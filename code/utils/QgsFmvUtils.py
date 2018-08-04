@@ -838,8 +838,8 @@ def UpdateTrajectoryData(packet):
     try:
         if trajectoryLyr is not None:
             trajectoryLyr.startEditing()
+            f = QgsFeature()
             if trajectoryLyr.featureCount() == 0:
-                f = QgsFeature()
                 f.setAttributes(
                     [lon, lat, alt])
                 surface = QgsGeometry.fromPolylineXY(
@@ -849,7 +849,6 @@ def UpdateTrajectoryData(packet):
 
             else:
                 f_last = trajectoryLyr.getFeature(trajectoryLyr.featureCount())
-                f = QgsFeature()
                 f.setAttributes(
                     [lon, lat, alt])
                 surface = QgsGeometry.fromPolylineXY(
