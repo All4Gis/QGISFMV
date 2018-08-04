@@ -23,7 +23,8 @@
         <file>../images/color_picker.png</file>
         <file>../images/screenshot.png</file>
         <file>../images/repeat.png</file>
-        <file>../images/platform.svg</file>
+        <file>../images/platforms/platform_default.svg</file>
+        <file>../images/platforms/plat_super_puma.svg</file>
         <file>../images/pdf.png</file>
         <file>../images/csv.png</file>
         <file>../images/video_information.png</file>

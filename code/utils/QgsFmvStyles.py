@@ -66,14 +66,14 @@ class FmvLayerStyles(object):
 
     #Default
     P['DEFAULT'] = {} 
-    P['DEFAULT']['NAME'] = ':/imgFMV/images/platform.svg'
+    P['DEFAULT']['NAME'] = ':/imgFMV/images/platforms/platform_default.svg'
     P['DEFAULT']['OUTLINE'] = '255, 255, 255, 60'
     P['DEFAULT']['OUTLINE_WIDTH'] = '1'
     P['DEFAULT']['SIZE'] = '18'
 
     #Super Puma Platform
     P['Super Puma TH06'] = {}
-    P['Super Puma TH06']['NAME'] = '../apps/qgis/python/plugins/QGIS_FMV/images/plat_super_puma.svg'
+    P['Super Puma TH06']['NAME'] = ':/imgFMV/images/platforms/plat_super_puma.svg'
     P['Super Puma TH06']['OUTLINE'] = '255, 255, 255, 60'
     P['Super Puma TH06']['OUTLINE_WIDTH'] = '1'
     P['Super Puma TH06']['SIZE'] = '18'

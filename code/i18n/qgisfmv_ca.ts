@@ -519,27 +519,27 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="729"/>
+        <location filename="../player/QgsFmvPlayer.py" line="739"/>
         <source>Open Video File : </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="761"/>
+        <location filename="../player/QgsFmvPlayer.py" line="771"/>
         <source>Save file succesfully!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1078"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1088"/>
         <source>Save images</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1239"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1249"/>
         <source>HEY...Active background process!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1239"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1249"/>
         <source>Do you really want close?</source>
         <translation></translation>
     </message>
@@ -554,12 +554,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="696"/>
+        <location filename="../player/QgsFmvPlayer.py" line="706"/>
         <source>Playing : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1261"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1271"/>
         <source>Video Information : </source>
         <translation type="unfinished"></translation>
     </message>

@@ -539,12 +539,12 @@
         <translation>Mostrar metadatos</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="729"/>
+        <location filename="../player/QgsFmvPlayer.py" line="739"/>
         <source>Open Video File : </source>
         <translation>Abrir archivo de video:</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="761"/>
+        <location filename="../player/QgsFmvPlayer.py" line="771"/>
         <source>Save file succesfully!</source>
         <translation>¡Guardado exitosamente!</translation>
     </message>
@@ -559,17 +559,17 @@
         <translation type="obsolete">Error al crear el gráfico</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1078"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1088"/>
         <source>Save images</source>
         <translation>Guardar imágenes</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1239"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1249"/>
         <source>HEY...Active background process!</source>
         <translation>HEY ... ¡Proceso activo!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1239"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1249"/>
         <source>Do you really want close?</source>
         <translation>¿De verdad quieres cerrar?</translation>
     </message>
@@ -584,12 +584,12 @@
         <translation>Este video no tiene audio!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="696"/>
+        <location filename="../player/QgsFmvPlayer.py" line="706"/>
         <source>Playing : </source>
         <translation>Reproduciendo :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1261"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1271"/>
         <source>Video Information : </source>
         <translation>Información del video : </translation>
     </message>
