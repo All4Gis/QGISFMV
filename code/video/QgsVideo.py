@@ -16,9 +16,12 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
 from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         GetSensor,
+                                        GetLine3DIntersectionWithDEM,
+                                        GetLine3DIntersectionWithPlane,
                                         CommonLayer,
                                         GetFrameCenter,
                                         GetGCPGeoTransform,
+                                        hasElevationModel,
                                         GetImageWidth,
                                         GetImageHeight)
 
@@ -422,6 +425,9 @@ class VideoWidget(QVideoWidget):
 
     def drawLinesOnVideo(self, pt):
         ''' Draw Lines on Video '''
+        if hasElevationModel():   
+            pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+            
         scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
 
         radius = 3
@@ -448,6 +454,10 @@ class VideoWidget(QVideoWidget):
         return
 
     def drawPointOnVideo(self, pt):
+         
+        if hasElevationModel():   
+            pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+
         scr_x, scr_y = self.GetInverseMatrix(pt[1] , pt[0])
 
         radius = 10
@@ -514,23 +524,45 @@ class VideoWidget(QVideoWidget):
 
         # Cursor Coordinates
         if self.gt is not None:
-
             transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(),
                               (event.y() - self.GetYBlackZone()) * self.GetYRatio()])
-
+            targetAlt=GetFrameCenter()[2]
             Longitude = transf[1]
             Latitude = transf[0]
-            #Altitude = 0.0
+            Altitude = targetAlt
 
-            self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" +
-                                                "<span style='font-size:9pt; font-weight:normal;'>" + ("%.3f" % Longitude) + "</span>" +
-                                                "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" +
-                                                "<span style='font-size:9pt; font-weight:normal;'>" + ("%.3f" % Latitude) + "</span>")
+            if hasElevationModel():
+                sensor=GetSensor()
+                target=[transf[0], transf[1], targetAlt]                
+                projPt = GetLine3DIntersectionWithDEM(sensor, target)
+
+                if projPt:
+                    Longitude = projPt[1]
+                    Latitude = projPt[0]
+                    Altitude = projPt[2]
+
+
+            txt =  "<span style='font-size:10pt; font-weight:bold;'>Lon :</span>"
+            txt += "<span style='font-size:9pt; font-weight:normal;'>" + ("%.3f" % Longitude) + "</span>" 
+            txt += "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" 
+            txt += "<span style='font-size:9pt; font-weight:normal;'>" + ("%.3f" % Latitude) + "</span>"
+
+            if hasElevationModel():
+                txt += "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>"
+                txt += "<span style='font-size:9pt; font-weight:normal;'>" + ("%.0f" % Altitude) + "</span>"
+            else:
+                txt += "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>"
+                txt += "<span style='font-size:9pt; font-weight:normal;'>-</span>"
+                
+            self.parent.lb_cursor_coord.setText(txt)
+            
         else:
             self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" +
-                                                "<span style='font-size:9pt; font-weight:normal;'>Null</span>" +
+                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
                                                 "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" +
-                                                "<span style='font-size:9pt; font-weight:normal;'>Null</span>")
+                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>"+
+                                                "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" +
+                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>")
 
         if not event.buttons():
             return
@@ -592,13 +624,23 @@ class VideoWidget(QVideoWidget):
             if self.gt is not None and pointDrawer:
                 if(not self.IsPointOnScreen(event.x(), event.y())):
                     return
-
-                transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
-                #targetAlt = GetFrameCenter()[2]
+            
+                transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])
+                targetAlt = GetFrameCenter()[2]
+                
                 Longitude = float(round(transf[1], 4))
                 Latitude = float(round(transf[0], 4))
-                #Altitude = targetAlt
-                Altitude = 0.0
+                Altitude = float(round(targetAlt, 0))
+                
+                if hasElevationModel():
+                    sensor=GetSensor()
+                    target=[transf[0], transf[1], targetAlt]                    
+                    projPt = GetLine3DIntersectionWithDEM(sensor, target)
+                    if projPt:
+                        Longitude = float(round(projPt[1], 4))
+                        Latitude = float(round(projPt[0], 4))
+                        Altitude = float(round(projPt[2], 0))
+
                 #add pin point on the map
                 pointLyr = qgsu.selectLayerByName(Point_lyr)
                 pointLyr.startEditing()
@@ -612,7 +654,7 @@ class VideoWidget(QVideoWidget):
 
                 CommonLayer(pointLyr)
 
-                self.drawPtPos.append([Longitude, Latitude])
+                self.drawPtPos.append([Longitude, Latitude, Altitude])
                 #if not called, the paint event is not triggered.
                 self.UpdateSurface()
 
@@ -622,11 +664,20 @@ class VideoWidget(QVideoWidget):
                     return
 
                 transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
-                #targetAlt = GetFrameCenter()[2]
+                targetAlt = GetFrameCenter()[2]
+                
                 Longitude = float(round(transf[1], 4))
                 Latitude = float(round(transf[0], 4))
-                #Altitude = targetAlt
-                Altitude = 0.0
+                Altitude = float(round(targetAlt, 0))
+                
+                if hasElevationModel():
+                    sensor=GetSensor()
+                    target=[transf[0], transf[1], targetAlt]                    
+                    projPt = GetLine3DIntersectionWithDEM(sensor, target)
+                    if projPt:
+                        Longitude = float(round(projPt[1], 4))
+                        Latitude = float(round(projPt[0], 4))
+                        Altitude = float(round(projPt[2], 0))
                 #add pin point on the map
                 linelyr = qgsu.selectLayerByName(Line_lyr)
                 linelyr.startEditing()
@@ -652,7 +703,7 @@ class VideoWidget(QVideoWidget):
 
                 CommonLayer(linelyr)
 
-                self.drawLines.append([Longitude, Latitude])
+                self.drawLines.append([Longitude, Latitude, Altitude])
                 #if not called, the paint event is not triggered.
                 self.UpdateSurface()
 
