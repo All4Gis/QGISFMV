@@ -7,6 +7,7 @@ from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Footprint_lyr,
                                 Point_lyr,
                                 Line_lyr,
+                                Polygon_lyr,
                                 frames_g,
                                 Trajectory_lyr)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
@@ -114,6 +115,12 @@ def CreateVideoLayers():
         SetDefaultLineStyle(lyr_line)
         addLayerNoCrsDialog(lyr_line)
 
+    if qgsu.selectLayerByName(Polygon_lyr) is None:
+        lyr_polygon = newPolygonsLayer(
+            None, ["longitude", "latitude", "altitude"], 'EPSG:4326', Polygon_lyr)
+        SetDefaultFootprintStyle(lyr_polygon)
+        addLayerNoCrsDialog(lyr_polygon)
+
     QApplication.processEvents()
     return
 
@@ -149,11 +156,18 @@ def RemoveVideoLayers():
     except Exception:
         None
     try:
-        QgsProject.instance().removeMapLayer(qgsu.selectLayerByName(Point_lyr).id())
+        QgsProject.instance().removeMapLayer(
+            qgsu.selectLayerByName(Point_lyr).id())
     except Exception:
         None
     try:
-        QgsProject.instance().removeMapLayer(qgsu.selectLayerByName(Line_lyr).id())
+        QgsProject.instance().removeMapLayer(
+            qgsu.selectLayerByName(Line_lyr).id())
+    except Exception:
+        None
+    try:
+        QgsProject.instance().removeMapLayer(
+            qgsu.selectLayerByName(Polygon_lyr).id())
     except Exception:
         None
     iface.mapCanvas().refresh()
@@ -163,14 +177,11 @@ def RemoveVideoLayers():
 
 def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
     ''' Footprint Symbol '''
-
     style = S.getSensor(sensor)
-
     fill_sym = QgsFillSymbol.createSimple({'color': style['COLOR'],
                                            'outline_color': style['OUTLINE_COLOR'],
                                            'outline_style': style['OUTLINE_STYLE'],
                                            'outline_width': style['OUTLINE_WIDTH']})
-
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
     return
@@ -203,7 +214,6 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
 def SetDefaultPointStyle(layer):
     ''' Point Symbol '''
     style = S.getDrawingPoint()
-
     symbol = QgsMarkerSymbol.createSimple({'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size':style["SIZE"]})
     renderer = QgsSingleSymbolRenderer(symbol)
     layer.setRenderer(renderer)
@@ -224,8 +234,6 @@ def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
     style = S.getBeam(beam)
     symbol = layer.renderer().symbol()
     symbol.setColor(QColor.fromRgba(style['COLOR']))
-    #symbol.setColor(QColor.fromRgb(255, 87, 51))
-    #symbol.setWidth(1)
     return
 
 

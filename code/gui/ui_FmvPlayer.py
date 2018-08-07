@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_PlayerWindow(object):
     def setupUi(self, PlayerWindow):
         PlayerWindow.setObjectName("PlayerWindow")
-        PlayerWindow.resize(742, 951)
+        PlayerWindow.resize(742, 679)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -34,21 +34,6 @@ class Ui_PlayerWindow(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.verticalLayout.addWidget(self.line)
-        self.videoWidget2 = VideoWidget(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(3)
-        sizePolicy.setVerticalStretch(3)
-        sizePolicy.setHeightForWidth(self.videoWidget2.sizePolicy().hasHeightForWidth())
-        self.videoWidget2.setSizePolicy(sizePolicy)
-        self.videoWidget2.setMinimumSize(QtCore.QSize(0, 350))
-        self.videoWidget2.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.videoWidget2.setVisible(True)
-        self.videoWidget2.setToolTip("")
-        self.videoWidget2.setStyleSheet("QWidget {\n"
-" background-color:red;\n"
-" } ")
-        self.videoWidget2.setObjectName("videoWidget2")
-        self.verticalLayout.addWidget(self.videoWidget2)
         self.videoWidget = VideoWidget(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(3)
@@ -358,7 +343,7 @@ class Ui_PlayerWindow(object):
         self.actionCanny_edge_detection.setObjectName("actionCanny_edge_detection")
         self.actionZoom_Rectangle = QtWidgets.QAction(PlayerWindow)
         self.actionZoom_Rectangle.setCheckable(True)
-        self.actionZoom_Rectangle.setEnabled(False)
+        self.actionZoom_Rectangle.setEnabled(True)
         self.actionZoom_Rectangle.setObjectName("actionZoom_Rectangle")
         self.actionMagnifying_glass = QtWidgets.QAction(PlayerWindow)
         self.actionMagnifying_glass.setCheckable(True)
@@ -374,6 +359,10 @@ class Ui_PlayerWindow(object):
         self.actionDraw_Line = QtWidgets.QAction(PlayerWindow)
         self.actionDraw_Line.setCheckable(True)
         self.actionDraw_Line.setObjectName("actionDraw_Line")
+        self.actionDraw_Polygon = QtWidgets.QAction(PlayerWindow)
+        self.actionDraw_Polygon.setObjectName("actionDraw_Polygon")
+        self.actionObject_Tracking = QtWidgets.QAction(PlayerWindow)
+        self.actionObject_Tracking.setObjectName("actionObject_Tracking")
         self.menuFile.addAction(self.actionGray)
         self.menuFile.addAction(self.actionInvert_Color)
         self.menuFile.addAction(self.actionMono_Filter)
@@ -395,6 +384,8 @@ class Ui_PlayerWindow(object):
         self.menuUtils.addAction(self.actionMagnifying_glass)
         self.menuUtils.addAction(self.actionDraw_Pinpoint)
         self.menuUtils.addAction(self.actionDraw_Line)
+        self.menuUtils.addAction(self.actionDraw_Polygon)
+        self.menuUtils.addAction(self.actionObject_Tracking)
         self.menubarwidget.addAction(self.menuFile.menuAction())
         self.menubarwidget.addAction(self.menuUtils.menuAction())
         self.menubarwidget.addAction(self.menuFrames.menuAction())
@@ -441,6 +432,7 @@ class Ui_PlayerWindow(object):
         self.actionCreate_Mosaic.triggered['bool'].connect(PlayerWindow.createMosaic)
         self.btn_GeoReferencing.clicked['bool'].connect(PlayerWindow.createMosaic)
         self.actionDraw_Line.triggered['bool'].connect(PlayerWindow.lineDrawer)
+        self.actionObject_Tracking.triggered['bool'].connect(PlayerWindow.ojectTracking)
         QtCore.QMetaObject.connectSlotsByName(PlayerWindow)
 
     def retranslateUi(self, PlayerWindow):
@@ -501,6 +493,8 @@ class Ui_PlayerWindow(object):
         self.actionCreate_Mosaic.setText(_translate("PlayerWindow", "Create Mosaic"))
         self.actionDraw_Pinpoint.setText(_translate("PlayerWindow", "Draw Pinpoint"))
         self.actionDraw_Line.setText(_translate("PlayerWindow", "Draw Line"))
+        self.actionDraw_Polygon.setText(_translate("PlayerWindow", "Draw Polygon"))
+        self.actionObject_Tracking.setText(_translate("PlayerWindow", "Object Tracking"))
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc

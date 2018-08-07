@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtCore import Qt, QCoreApplication, QRect, QPoint, QBasicTimer, QSize, QPointF
+from PyQt5.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize, QPointF
 from PyQt5.QtGui import (QImage,
                          QPalette,
                          QPixmap,
@@ -10,7 +10,10 @@ from PyQt5.QtGui import (QImage,
                          QColor,
                          QPen,
                          QBrush)
-from PyQt5.QtMultimedia import QAbstractVideoBuffer, QVideoFrame, QVideoSurfaceFormat, QAbstractVideoSurface
+from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
+                                QVideoFrame,
+                                QVideoSurfaceFormat,
+                                QAbstractVideoSurface)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
@@ -32,14 +35,21 @@ try:
 except ImportError:
     None
 
+try:
+    import cv2
+except ImportError:
+    None
+
 invertColorFilter = False
 edgeDetectionFilter = False
 grayColorFilter = False
 monoFilter = False
 contrastFilter = False
+objectTracking = False
 magnifier = False
 pointDrawer = False
 lineDrawer = False
+polygonDrawer = False
 zoomRect = False
 
 HOLD_TIME = 701
@@ -115,8 +125,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         else:
             self.currentFrame = frame
             self.widget.repaint(self.targetRect)
-            #qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            #    "QgsVideo", 'Video : '), "Repaint Video", onlyLog=True)
             return True
 
     def videoRect(self):
@@ -133,16 +141,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         size.scale(self.widget.size().boundedTo(size), Qt.KeepAspectRatio)
         self.targetRect = QRect(QPoint(0, 0), size)
         self.targetRect.moveCenter(self.widget.rect().center())
-
-    def updateVideoZoomRect(self, rect):  # TODO : Make this function
-        size = self.surfaceFormat().sizeHint()
-        size.scale(rect.width(), rect.height(), Qt.KeepAspectRatio)
-        self.zoomedrect = rect
-        self.zoomedrect.moveCenter(rect.center())
-        self.widget.update()
-
-    def updatetest(self):
-        return
 
     def paint(self, painter):
         ''' Paint Frame'''
@@ -184,7 +182,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             painter.drawImage(self.targetRect, self.image, self.sourceRect)
             painter.setTransform(oldTransform)
             self.currentFrame.unmap()
-            self.currentFrame.release()
 
 
 class VideoWidget(QVideoWidget):
@@ -198,13 +195,15 @@ class VideoWidget(QVideoWidget):
         self.setUpdatesEnabled(True)
         self.setMouseTracking(True)
         self.origin = QPoint()
-        self.changeRubberBand = False
+        self.pressed = self.snapped = self.zoomed = self.zoomedRect = self.changeRubberBand = False
+        self.gt = None
 
         self.parent = parent.parent()
         self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
 
         self.setAttribute(Qt.WA_NoSystemBackground, True)
         self.setAttribute(Qt.WA_PaintOnScreen, True)
+        self.setAttribute(Qt.WA_OpaquePaintEvent, True)
         palette = self.palette()
         palette.setColor(QPalette.Background, Qt.black)
         self.setPalette(palette)
@@ -213,18 +212,11 @@ class VideoWidget(QVideoWidget):
 
         self.surface = VideoWidgetSurface(self)
 
-        self.setAttribute(Qt.WA_OpaquePaintEvent)
-        self.gt = None
-
-        self.pressed = False
-        self.snapped = False
-        self.zoomed = False
-        self.zoomedRect = False
-
         self.offset = QPoint()
         self.pressPos = QPoint()
         self.drawPtPos = []
         self.drawLines = []
+        self.drawPolygon = []
         self.dragPos = QPoint()
         self.tapTimer = QBasicTimer()
         self.zoomPixmap = QPixmap()
@@ -259,29 +251,46 @@ class VideoWidget(QVideoWidget):
         return self.surface.surfaceFormat().sizeHint()
 
     def GetCurrentFrame(self):
+        ''' Return current frame QImage '''
         return self.surface.image
 
     def SetInvertColor(self, value):
+        ''' Set Invert color filter '''
         global invertColorFilter
         invertColorFilter = value
 
+    def SetObjectTracking(self, value):
+        ''' Set Object Tracking '''
+        global objectTracking
+        objectTracking = value
+        if value:
+            self.video_cv2 = self.parent.video_cv2
+            p = self.parent.player.position()
+            self.video_cv2.set(cv2.CAP_PROP_POS_MSEC, p)
+            success, image = self.video_cv2.read()
+
     def SetGray(self, value):
+        ''' Set gray scale '''
         global grayColorFilter
         grayColorFilter = value
 
     def SetEdgeDetection(self, value):
+        ''' Set Canny Edge filter '''
         global edgeDetectionFilter
         edgeDetectionFilter = value
 
     def SetAutoContrastFilter(self, value):
+        ''' Set Automatic Contrast filter '''
         global contrastFilter
         contrastFilter = value
 
     def SetMonoFilter(self, value):
+        ''' Set mono filter '''
         global monoFilter
         monoFilter = value
 
     def RestoreFilters(self):
+        ''' Remove and restore all video filters '''
         global invertColorFilter, grayColorFilter, edgeDetectionFilter, monoFilter, contrastFilter
         invertColorFilter = grayColorFilter = edgeDetectionFilter = monoFilter = contrastFilter = False
 
@@ -301,9 +310,10 @@ class VideoWidget(QVideoWidget):
             y = (self.surface.widget.height() - (normalizedHeight)) / 2.0
         return y
 
-    # determines if a clicked point lands on the image (False if lands on the
-    # black borders or outside)
     def IsPointOnScreen(self, x, y):
+        ''' determines if a clicked point lands on the image (False if lands on the
+            black borders or outside)
+         '''
         res = True
         normalizedWidth = self.surface.widget.height(
         ) * (GetImageWidth() / GetImageHeight())
@@ -323,7 +333,12 @@ class VideoWidget(QVideoWidget):
         ''' ratio between event.y() and real image height on screen. '''
         return GetImageHeight() / (self.surface.widget.height() - (2 * self.GetYBlackZone()))
 
+    def GetTransf(self, event):
+        ''' Return video coordinates to map coordinates '''
+        return self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
+
     def paintEvent(self, event):
+        ''' Paint Event '''
         self.gt = GetGCPGeoTransform()
         painter = QPainter(self)
 
@@ -345,7 +360,7 @@ class VideoWidget(QVideoWidget):
         try:
             SetImageSize(self.surface.currentFrame.width(),
                          self.surface.currentFrame.height())
-        except:
+        except Exception:
             None
 
         #Draw clicked points on video
@@ -355,8 +370,11 @@ class VideoWidget(QVideoWidget):
 
         #Draw clicked lines on video
         for pt in self.drawLines:
-            #adds a mark on the video
             self.drawLinesOnVideo(pt)
+
+        #Draw clicked Polygons on video adds a mark on the video
+        # TODO
+        self.drawPolygonOnVideo(self.drawPolygon)
 
         # Magnifier Glass
         if self.zoomed and magnifier:
@@ -415,7 +433,7 @@ class VideoWidget(QVideoWidget):
 
     def GetInverseMatrix(self, x, y):
         ''' inverse matrix transformation (lon-lat to video units x,y) '''
-        transf = (~self.gt)([x , y])
+        transf = (~self.gt)([x, y])
         scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
         scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
         return scr_x, scr_y
@@ -439,16 +457,17 @@ class VideoWidget(QVideoWidget):
         if len(self.drawLines) > 1:
             try:
                 idx = self.drawLines.index(pt)
-                scr_x, scr_y = self.GetInverseMatrix(self.drawLines[idx+1][1] , self.drawLines[idx+1][0])
+                scr_x, scr_y = self.GetInverseMatrix(self.drawLines[idx+1][1], self.drawLines[idx+1][0])
                 end = QPoint(scr_x, scr_y)
                 painter_p.drawLine(center, end)
-            except:
+            except Exception:
                 None
 
         return
 
     def drawPointOnVideo(self, pt):
-        scr_x, scr_y = self.GetInverseMatrix(pt[1] , pt[0])
+        ''' Draw Points on Video '''
+        scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
 
         radius = 10
         center = QPoint(scr_x, scr_y)
@@ -460,7 +479,22 @@ class VideoWidget(QVideoWidget):
         painter_p.setPen(pen)
         painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
         painter_p.drawPoint(center)
+        return
 
+    def drawPolygonOnVideo(self, pt):
+        ''' Draw Polygons on Video '''
+#         scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+# 
+#         radius = 10
+#         center = QPoint(scr_x, scr_y)
+# 
+#         pen = QPen(Qt.red)
+#         pen.setWidth(radius)
+#         pen.setCapStyle(Qt.RoundCap)
+#         painter_p = QPainter(self)
+#         painter_p.setPen(pen)
+#         painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
+#         painter_p.drawPoint(center)
         return
 
     def resizeEvent(self, event):
@@ -471,9 +505,6 @@ class VideoWidget(QVideoWidget):
         """
         QWidget.resizeEvent(self, event)
         self.zoomed = False
-        if zoomRect and self.surface.zoomedrect is not None:
-            self.surface.updatetest()
-            return
         self.surface.updateVideoRect()
 
     def mouseMoveEvent(self, event):
@@ -486,38 +517,34 @@ class VideoWidget(QVideoWidget):
         if(not self.IsPointOnScreen(event.x(), event.y())):
             return
 
-#         # Draw Line on the fly
-#         if self.gt is not None and lineDrawer:
-#                 if len(self.drawLines) > 0:
-#                     scr_x, scr_y = self.GetInverseMatrix(self.drawLines[-1][1],self.drawLines[-1][1])
-# 
-#                     radius = 3
-#                     center = QPoint(scr_x, scr_y)
-# 
-#                     pen = QPen(Qt.yellow)
-#                     pen.setWidth(radius)
-#                     pen.setCapStyle(Qt.RoundCap)
-#                     pen.setDashPattern([1, 4, 5, 4])
-#                     painter_p = QPainter(self)
-#                     painter_p.setPen(pen)
-#                     painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
-#                     painter_p.drawPoint(center)
-# 
-#                     try:
-#                         transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
-#                         scr_x, scr_y = self.GetInverseMatrix(float(round(transf[1], 4)) , float(round(transf[0], 4)))
-#                         end = QPoint(scr_x, scr_y)
-#                         painter_p.drawLine(center, end)
-#                         self.UpdateSurface()
-#                     except:
-#                         None
+        # Draw Line on the fly
+        if self.gt is not None and lineDrawer:
+                if len(self.drawLines) > 0:
+                    scr_x, scr_y = self.GetInverseMatrix(self.drawLines[-1][1],self.drawLines[-1][1])
+
+                    radius = 3
+                    center = QPoint(scr_x, scr_y)
+
+                    pen = QPen(Qt.yellow)
+                    pen.setWidth(radius)
+                    pen.setCapStyle(Qt.RoundCap)
+                    pen.setDashPattern([1, 4, 5, 4])
+                    painter_p = QPainter(self)
+                    painter_p.setPen(pen)
+                    painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True) 
+                    try:
+                        transf = self.GetTransf(event)
+                        scr_x, scr_y = self.GetInverseMatrix(float(round(transf[1], 4)) , float(round(transf[0], 4)))
+                        end = QPoint(scr_x, scr_y)
+                        painter_p.drawLine(center, end)
+                        self.UpdateSurface()
+                    except Exception:
+                        None
 
         # Cursor Coordinates
         if self.gt is not None:
 
-            transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(),
-                              (event.y() - self.GetYBlackZone()) * self.GetYRatio()])
-
+            transf = self.GetTransf(event)
             Longitude = transf[1]
             Latitude = transf[0]
             #Altitude = 0.0
@@ -588,18 +615,17 @@ class VideoWidget(QVideoWidget):
             self.tapTimer.stop()
             self.tapTimer.start(HOLD_TIME, self)
 
-            #point drawer
-            if self.gt is not None and pointDrawer:
-                if(not self.IsPointOnScreen(event.x(), event.y())):
+            if(not self.IsPointOnScreen(event.x(), event.y())):
                     return
 
-                transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
+            #point drawer
+            if self.gt is not None and pointDrawer:
+                transf = self.GetTransf(event)
                 #targetAlt = GetFrameCenter()[2]
                 Longitude = float(round(transf[1], 4))
                 Latitude = float(round(transf[0], 4))
                 #Altitude = targetAlt
                 Altitude = 0.0
-                #add pin point on the map
                 pointLyr = qgsu.selectLayerByName(Point_lyr)
                 pointLyr.startEditing()
                 feature = QgsFeature()
@@ -613,21 +639,21 @@ class VideoWidget(QVideoWidget):
                 CommonLayer(pointLyr)
 
                 self.drawPtPos.append([Longitude, Latitude])
-                #if not called, the paint event is not triggered.
-                self.UpdateSurface()
+
+            #polygon drawer
+            if self.gt is not None and polygonDrawer:
+                transf = self.GetTransf(event)
+                Longitude = float(round(transf[1], 4))
+                Latitude = float(round(transf[0], 4))
+                Altitude = 0.0
+                return
 
             #line drawer
             if self.gt is not None and lineDrawer:
-                if(not self.IsPointOnScreen(event.x(), event.y())):
-                    return
-
-                transf = self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
-                #targetAlt = GetFrameCenter()[2]
+                transf = self.GetTransf(event)
                 Longitude = float(round(transf[1], 4))
                 Latitude = float(round(transf[0], 4))
-                #Altitude = targetAlt
                 Altitude = 0.0
-                #add pin point on the map
                 linelyr = qgsu.selectLayerByName(Line_lyr)
                 linelyr.startEditing()
                 feature = QgsFeature()
@@ -653,8 +679,8 @@ class VideoWidget(QVideoWidget):
                 CommonLayer(linelyr)
 
                 self.drawLines.append([Longitude, Latitude])
-                #if not called, the paint event is not triggered.
-                self.UpdateSurface()
+
+        self.UpdateSurface()
 
         if zoomRect and event.button() == Qt.LeftButton:
             self.origin = event.pos()
@@ -683,6 +709,11 @@ class VideoWidget(QVideoWidget):
         global lineDrawer
         lineDrawer = value
 
+    def SetPolygonDrawer(self, value):
+        """ Set Polygon Drawer """
+        global polygonDrawer
+        polygonDrawer = value
+
     def SetZoomRect(self, value):
         """ Set Zoom Rectangle """
         global zoomRect
@@ -701,10 +732,9 @@ class VideoWidget(QVideoWidget):
         if not zoomRect:
             self.surface.updateVideoRect()
         else:
+            # todo: remove and make object tracking
             self.rubberBand.hide()
             self.zoomedRect = True
-
-            # TODO :  make zoom rectangle functionality
             selRect = self.rubberBand.geometry()
 
             orig2widgScale = self.surface.widget.contentsRect().width() / \
@@ -717,18 +747,7 @@ class VideoWidget(QVideoWidget):
             Y2 = selRect.bottomRight().y() / self.surface.widget.contentsRect().bottomRight().y() * \
                 self.surface.image.height()
 
-            self.surface.image.width()
-            self.surface.image.height()
-
             wid2origRect = QRect(X1, Y1, X2, Y2)
-            zoom_img = self.surface.image.copy(wid2origRect)
-#             zoom_img.save('D:\\test.png')
-#             n_img = self.surface.image.copy(selRect)
-#             n_img.save('D:\\test.png')
-            zoom_img.scaled(1920, 1080)
-            self.surface.currentFrame = QVideoFrame(zoom_img)
-#             self.surface.targetRect=selRect
-            self.surface.currentFrame.unmap()
             self.UpdateSurface()
 
     def leaveEvent(self, _):

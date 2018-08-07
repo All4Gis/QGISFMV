@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>742</width>
-    <height>951</height>
+    <height>679</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,36 +44,6 @@
      <widget class="Line" name="line">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="VideoWidget" name="videoWidget2" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-        <horstretch>3</horstretch>
-        <verstretch>3</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>350</height>
-       </size>
-      </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
-      </property>
-      <property name="visible">
-       <bool>true</bool>
-      </property>
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QWidget {
- background-color:red;
- } </string>
       </property>
      </widget>
     </item>
@@ -683,6 +653,8 @@ QProgressBar::chunk
     <addaction name="actionMagnifying_glass"/>
     <addaction name="actionDraw_Pinpoint"/>
     <addaction name="actionDraw_Line"/>
+    <addaction name="actionDraw_Polygon"/>
+    <addaction name="actionObject_Tracking"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuUtils"/>
@@ -807,7 +779,7 @@ QProgressBar::chunk
     <bool>true</bool>
    </property>
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Zoom Rectangle</string>
@@ -850,6 +822,16 @@ QProgressBar::chunk
     <string>Draw Line</string>
    </property>
   </action>
+  <action name="actionDraw_Polygon">
+   <property name="text">
+    <string>Draw Polygon</string>
+   </property>
+  </action>
+  <action name="actionObject_Tracking">
+   <property name="text">
+    <string>Object Tracking</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -869,8 +851,8 @@ QProgressBar::chunk
    <slot>toggleGroup(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>900</y>
+     <x>128</x>
+     <y>628</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -886,7 +868,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>147</x>
-     <y>890</y>
+     <y>618</y>
     </hint>
     <hint type="destinationlabel">
      <x>11</x>
@@ -901,8 +883,8 @@ QProgressBar::chunk
    <slot>seek(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>40</x>
-     <y>773</y>
+     <x>50</x>
+     <y>501</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -918,7 +900,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>687</x>
-     <y>888</y>
+     <y>616</y>
     </hint>
     <hint type="destinationlabel">
      <x>509</x>
@@ -950,7 +932,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>722</x>
-     <y>827</y>
+     <y>555</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -966,7 +948,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>46</x>
-     <y>827</y>
+     <y>555</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -982,7 +964,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>504</x>
-     <y>890</y>
+     <y>618</y>
     </hint>
     <hint type="destinationlabel">
      <x>349</x>
@@ -998,7 +980,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>113</x>
-     <y>890</y>
+     <y>618</y>
     </hint>
     <hint type="destinationlabel">
      <x>112</x>
@@ -1013,8 +995,8 @@ QProgressBar::chunk
    <slot>StartMedia()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>40</x>
-     <y>890</y>
+     <x>45</x>
+     <y>618</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1030,7 +1012,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>215</x>
-     <y>890</y>
+     <y>618</y>
     </hint>
     <hint type="destinationlabel">
      <x>212</x>
@@ -1046,7 +1028,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>249</x>
-     <y>890</y>
+     <y>618</y>
     </hint>
     <hint type="destinationlabel">
      <x>511</x>
@@ -1254,7 +1236,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>79</x>
-     <y>890</y>
+     <y>618</y>
     </hint>
     <hint type="destinationlabel">
      <x>26</x>
@@ -1270,7 +1252,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>181</x>
-     <y>890</y>
+     <y>618</y>
     </hint>
     <hint type="destinationlabel">
      <x>179</x>
@@ -1286,7 +1268,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>80</x>
-     <y>827</y>
+     <y>555</y>
     </hint>
     <hint type="destinationlabel">
      <x>44</x>
@@ -1430,7 +1412,7 @@ QProgressBar::chunk
    <hints>
     <hint type="sourcelabel">
      <x>114</x>
-     <y>827</y>
+     <y>555</y>
     </hint>
     <hint type="destinationlabel">
      <x>110</x>
@@ -1451,6 +1433,22 @@ QProgressBar::chunk
     <hint type="destinationlabel">
      <x>370</x>
      <y>475</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionObject_Tracking</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>ojectTracking(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>370</x>
+     <y>339</y>
     </hint>
    </hints>
   </connection>
@@ -1488,5 +1486,7 @@ QProgressBar::chunk
   <slot>autoContrastFilter(bool)</slot>
   <slot>createMosaic(bool)</slot>
   <slot>lineDrawer(bool)</slot>
+  <slot>polygonDrawer(bool)</slot>
+  <slot>ojectTracking(bool)</slot>
  </slots>
 </ui>

@@ -16,12 +16,19 @@ about= Plugin for QGIS which allows to analyze, visualize and process videos ins
 	   </a>
 	   <p>If this plugin is useful for you, consider to donate to the author.</p>
 
-version=1.1
+version=1.2
 author= Francisco Raga
 email=franka1986@gmail.com
 
 changelog=
     ** General **
+    1.2:
+    	- Object Tracking
+    	- Display altitude with OnMouseOver.
+		- Drawn points and lines are "drapped" on DTM on map and video.
+		- Drawn points and lines have altitude attribute.
+    	- Draw Lines on video
+    	- Draw Polygons on video
 	1.1:
 		- Install requirements automatically.
 		- About point to read the docs

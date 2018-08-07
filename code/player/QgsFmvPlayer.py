@@ -55,6 +55,7 @@ except ImportError:
 try:
     import numpy
     import matplotlib.pyplot as matplot
+    import cv2
 except ImportError:
     None
 
@@ -77,29 +78,22 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
 
-        self.videoWidget2.setVisible(False)
-
         self.resize(730, 350)
 
         self.videoWidget.customContextMenuRequested[QPoint].connect(
             self.contextMenuRequested)
-#         self.videoWidget2.customContextMenuRequested[QPoint].connect(
-#             self.contextMenuRequested)
 
         self.duration = 0
         self.playerMuted = False
         self.HasFileAudio = False
 
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        self.pass_time=pass_time
+        self.pass_time = pass_time
         self.player.setNotifyInterval(700)  # Metadata Callback Interval
         self.playlist = QMediaPlaylist()
 
         self.player.setVideoOutput(
             self.videoWidget.videoSurface())  # Abstract Surface
-
-#         self.player.setVideoOutput(
-#             self.videoWidget2)  # Standar Surface
 
         self.player.durationChanged.connect(self.durationChanged)
         self.player.positionChanged.connect(self.positionChanged)
@@ -312,7 +306,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # Fail if not uncheked
         self.actionMagnifying_glass.setChecked(False)
         self.actionZoom_Rectangle.setChecked(False)
-        self.toggleVideoWidget(top="standar")
         self.ColorDialog.exec_()
         QApplication.processEvents()
         self.ColorDialog.contrastSlider.setValue(80)
@@ -422,6 +415,18 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetLineDrawer(value)
         self.videoWidget.UpdateSurface()
 
+    def polygonDrawer(self, value):
+        ''' Draw Polygon '''
+        self.UncheckUtils(self.sender(), value)
+        self.videoWidget.SetPolygonDrawer(value)
+        self.videoWidget.UpdateSurface()
+
+    def ojectTracking(self, value):
+        ''' Object Tracking '''
+        self.UncheckUtils(self.sender(), value)
+        self.videoWidget.SetObjectTracking(value)
+        self.videoWidget.UpdateSurface()
+
     def zoomRect(self, value):
         ''' Zoom Rectangle Utils '''
         self.UncheckUtils(self.sender(), value)
@@ -431,7 +436,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def UncheckUtils(self, sender, value):
         ''' Uncheck Utils Video '''
-        #self.toggleVideoWidget()
         QApplication.processEvents()
         name = sender.objectName()
         self.actionMagnifying_glass.setChecked(
@@ -442,19 +446,25 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             True if name == "actionDraw_Line" else False)
         self.actionZoom_Rectangle.setChecked(
             True if name == "actionZoom_Rectangle" else False)
+        self.actionObject_Tracking.setChecked(
+            True if name == "actionObject_Tracking" else False)
 
-        self.videoWidget.SetMagnifier(True if name == "actionMagnifying_glass" else False)
+        self.videoWidget.SetMagnifier(
+            True if name == "actionMagnifying_glass" else False)
         self.videoWidget.SetPointDrawer(
             True if name == "actionDraw_Pinpoint" else False)
         self.videoWidget.SetLineDrawer(
             True if name == "actionDraw_Line" else False)
-        
+        self.videoWidget.SetPolygonDrawer(
+            True if name == "actionDraw_Polygon" else False)
+        self.videoWidget.SetObjectTracking(
+            True if name == "actionObject_Tracking" else False)
+
         sender.setChecked(value)
         return
 
     def UncheckFilters(self, sender, value):
         ''' Uncheck Filters Video '''
-        #self.toggleVideoWidget()
         name = sender.objectName()
 
         self.actionGray.setChecked(True if name == "actionGray" else False)
@@ -497,7 +507,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.volumeSlider.setEnabled(False)
         return
 
-    # TODO: SI LE DOY AL STOP LUEGO NO SE VE EL VIDEO (SE QUEDA NEGRO)
+    # TODO: stop create black screen
     def stop(self):
         ''' Stop video'''
         # Prevent Error in a Video Utils.Disable Magnifier and zoom
@@ -614,11 +624,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             totalTime = _seconds_to_time(duration)
             currentTime = _seconds_to_time(currentInfo)
             tStr = currentTime + " / " + totalTime
-
-            nextTime = currentInfo + self.pass_time
             currentTimeInfo = _seconds_to_time_frac(currentInfo)
-            nextTimeInfo = _seconds_to_time_frac(nextTime)
-            
+
             #Get Metadata from buffer 
             self.get_metadata_from_buffer(currentTimeInfo)
 
@@ -647,27 +654,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.videoAvailableChanged(False)
         else:
             self.videoAvailableChanged(True)
-
-    def toggleVideoWidget(self, top="custom"):
-        ''' Toggle visibility video Widgets '''
-        if top != "custom":
-            # self.videoWidget.setVisible(False)
-            # self.videoWidget2.setVisible(True)
-            state = self.state
-            self.player.setVideoOutput(
-                self.videoWidget)  # Standar Surface
-            self.resetState(state)
-            self.videoWidget.setContrast(80)
-            self.videoWidget.update()
-            self.videoWidget.setContrast(81)
-            return
-        # self.videoWidget2.setVisible(False)
-        # self.videoWidget.setVisible(True)
-        state = self.state
-        self.player.setVideoOutput(
-            self.videoWidget.videoSurface())  # Abstract Surface
-        self.resetState(state)
-        return
 
     def resetState(self, state):
         ''' Reset Video State '''
@@ -727,12 +713,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             #recenter map on video initial point
             if self.initialPt:
-                map_pos = QgsPoint(self.initialPt[1], self.initialPt[0])
                 rect = QgsRectangle(self.initialPt[1], self.initialPt[0], self.initialPt[1], self.initialPt[0])
                 self.iface.mapCanvas().setExtent(rect)
                 self.iface.mapCanvas().refresh()
-            
+
             self.playClicked(True)
+
+            # Read video
+            self.video_cv2 = cv2.VideoCapture(videoPath)
 
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
