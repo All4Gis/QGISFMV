@@ -2,3 +2,6 @@ Deploy/
 release/
 vendor/
 *.pyc
+data/SRTM/SRTM_SE_250m.tif
+data/SRTM/SRTM_W_250m.tif
+data/SRTM/SRTM_W_250m.tif.aux.xml
