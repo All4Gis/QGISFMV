@@ -16,7 +16,8 @@ from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
                                 Footprint_lyr,
                                 Trajectory_lyr,
-                                frames_g)
+                                frames_g,
+                                DTM_buffer_size as dtm_buffer)
 from QGIS_FMV.fmvConfig import ffmpeg as ffmpeg_path
 from QGIS_FMV.fmvConfig import ffprobe as ffprobe_path
 from QGIS_FMV.geo import sphere as sphere
@@ -79,6 +80,14 @@ sensorTrueAltitude = None
 crtSensorSrc = 'DEFAULT'
 crtPltTailNum = 'DEFAULT'
 
+dtm_data = []
+dtm_transform = None
+dtm_colLowerBound = 0
+dtm_rowLowerBound = 0
+
+tLastLon = 0.0
+tLastLat = 0.0
+
 if windows:
     ffmpeg_path = ffmpeg_path + '\\win\\ffmpeg.exe'
     ffprobe_path = ffprobe_path + '\\win\\ffprobe.exe'
@@ -102,7 +111,6 @@ class BufferedMetaReader():
         self.bufferParalell(start, size)
 
     def _check_buffer(self, start):
-        #qgsu.showUserAndLogMessage("QgsFmvUtils", '_check_buffer: ' + start, onlyLog=True)
         self.bufferParalell(start, self._min_buffer_size)
 
     def getSize(self):
@@ -144,19 +152,19 @@ class BufferedMetaReader():
                 date = datetime.strptime(s[0], '%H:%M:%S')
                 new_t = _add_secs_to_time(date, 1) + ".0000"
         except:
-            qgsu.showUserAndLogMessage("QgsFmvUtils", "wrong value for time, need . decimal" + t, onlyLog=True)
+            qgsu.showUserAndLogMessage("", "wrong value for time, need . decimal" + t, onlyLog=True)
         try:
             if self._meta[new_t].p.returncode is None:
                 value = 'NOT_READY'
-                qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" values not ready yet.", onlyLog=True)      
+                qgsu.showUserAndLogMessage("", "Meta reader -> get: " + t + " cache: "+ new_t +" values not ready yet.", onlyLog=True)      
             elif self._meta[new_t].stdout:
                 value = self._meta[new_t].stdout
             else:
-                qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" values ready but empty.", onlyLog=True)
+                qgsu.showUserAndLogMessage("", "Meta reader -> get: " + t + " cache: "+ new_t +" values ready but empty.", onlyLog=True)
 
             self._check_buffer(new_t)
         except:
-            qgsu.showUserAndLogMessage("QgsFmvUtils", "No value found for: " + t + " rounded: " + new_t, onlyLog=True)
+            qgsu.showUserAndLogMessage("", "No value found for: " + t + " rounded: " + new_t, onlyLog=True)
 
         #qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
 
@@ -209,7 +217,7 @@ def getVideoLocationInfo(videoPath):
                 frameCenterLat = packet.GetFrameCenterLatitude()
                 frameCenterLon = packet.GetFrameCenterLongitude()
                 location = [frameCenterLat, frameCenterLon]
-                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvUtils", "Got Location: lon: "+str(frameCenterLon) + " lat: "+str(frameCenterLat) ), onlyLog=True)
+                qgsu.showUserAndLogMessage("", "Got Location: lon: "+str(frameCenterLon) + " lat: "+str(frameCenterLat), onlyLog=True)
                 break
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -376,7 +384,7 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     global geotransform
     global geotransform_affine
 
-    Height = 0.0
+    Height = GetFrameCenter()[2]
     gcp = gdal.GCP(cornerPointUL[1], cornerPointUL[0], 
                    Height, 0, 0, "Corner Upper Left", "1") 
     gcps.append(gcp) 
@@ -402,33 +410,39 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     geotransform = from_points(src, dst)
 
     if geotransform is None:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", 'Unable to extract a geotransform.'), onlyLog=True)
+        qgsu.showUserAndLogMessage("", "Unable to extract a geotransform.", onlyLog=True)
 
     return
 
 
 def GetSensor():
+    global sensorLatitude
+    global sensorLongitude
+    global sensorTrueAltitude
     return [sensorLatitude, sensorLongitude, sensorTrueAltitude]
 
 
 def GetFrameCenter():
+    global gframeCenterLon
+    global gframeCenterLat
+    global frameCenterElevation
     return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
 
 
 def GetcornerPointUL():
+    global gcornerPointUL
     return gcornerPointUL
 
-
 def GetcornerPointUR():
+    global gcornerPointUR
     return gcornerPointUR
 
-
 def GetcornerPointLR():
+    global gcornerPointLR
     return gcornerPointLR
 
-
 def GetcornerPointLL():
+    global gcornerPointLL
     return gcornerPointLL
 
 
@@ -436,6 +450,11 @@ def GetGCPGeoTransform():
     ''' Return Geotransform '''
     return geotransform
 
+def hasElevationModel():
+    if len(dtm_data) > 0:
+        return True
+    else:
+        return False
 
 def SetImageSize(w, h):
     ''' Set Image Size '''
@@ -528,17 +547,67 @@ def deg2rad(degrees):
     radians = pi * degrees / 180
     return radians
 
-
 def ResetData():
+    global dtm_data
     global crtSensorSrc
     global crtPltTailNum
-
+    global tLastLon
+    global tLastLat
+    
+    dtm_data = []
     crtSensorSrc = 'DEFAULT'
     crtPltTailNum = 'DEFAULT'
+    tLastLon = 0.0
+    tLastLat = 0.0
+
+def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
+    global dtm_data
+    global dtm_transform
+    global dtm_colLowerBound
+    global dtm_rowLowerBound
+    
+    #Initialize the dtm once, based on a zone arouind the target
+    qgsu.showUserAndLogMessage("", "Initializing DTM." , onlyLog=True)
+    driver = gdal.GetDriverByName('GTiff')
+    dataset = gdal.Open(dtm_path)
+    if dataset is None:
+        qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvUtils", "Failed to read DTM file. "), level=QGis.Warning)
+        return
+    band = dataset.GetRasterBand(1)
+    dtm_transform = dataset.GetGeoTransform()
+    xOrigin = dtm_transform[0]
+    yOrigin = dtm_transform[3]
+    pixelWidth = dtm_transform[1]
+    pixelHeight = -dtm_transform[5]
+    cIndex = int((frameCenterLon-xOrigin)/pixelWidth)
+    rIndex = int((frameCenterLat-yOrigin)/(-pixelHeight))
+    dtm_colLowerBound = cIndex-dtm_buffer
+    dtm_rowLowerBound = rIndex-dtm_buffer
+    if dtm_colLowerBound < 0 or dtm_rowLowerBound < 0:
+        qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvUtils", "There is no DTM for theses bounds. Check/increase DTM_buffer_size in fmvConfig.py"), level=QGis.Warning)
+    else:
+        #qgsu.showUserAndLogMessage("UpdateLayers: ", " dtm_colLowerBound:"+str(dtm_colLowerBound)+" dtm_rowLowerBound:"+str(dtm_rowLowerBound)+" dtm_buffer:"+str(dtm_buffer), onlyLog=True)
+        dtm_data = band.ReadAsArray(dtm_colLowerBound, dtm_rowLowerBound, 2 * dtm_buffer, 2 * dtm_buffer)
+        if dtm_data is not None:
+            qgsu.showUserAndLogMessage("", "DTM successfully initialized, len: " + str(len(dtm_data)), onlyLog=True)
 
 
 def UpdateLayers(packet, parent=None, mosaic=False):
     ''' Update Layers Values '''
+    global frameCenterElevation
+    global sensorLatitude
+    global sensorLongitude
+    global sensorTrueAltitude
+
+    frameCenterLat = packet.GetFrameCenterLatitude()
+    frameCenterLon = packet.GetFrameCenterLongitude()
+    frameCenterElevation = packet.GetFrameCenterElevation()    
+    sensorLatitude = packet.GetSensorLatitude()
+    sensorLongitude = packet.GetSensorLongitude()
+    sensorTrueAltitude = packet.GetSensorTrueAltitude()
+    
     UpdatePlatformData(packet)
     UpdateTrajectoryData(packet)
 
@@ -575,8 +644,7 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
                     cornerPointLR, cornerPointLL)
 
-    frameCenterLat = packet.GetFrameCenterLatitude()
-    frameCenterLon = packet.GetFrameCenterLongitude()
+
 
     SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                           cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
@@ -827,12 +895,25 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
 
 def UpdateTrajectoryData(packet):
     ''' Update Trajectory Values '''
+    global tLastLon
+    global tLastLat
+    
     lat = packet.GetSensorLatitude()
     lon = packet.GetSensorLongitude()
     alt = packet.GetSensorTrueAltitude()
 
-    #qgsu.showUserAndLogMessage("QgsFmvUtils", 'UpdateTrajectoryData: lon:' + str(lon) + ' lat:'+str(lat) + ' alt:'+str(alt), onlyLog=True)
-
+    if tLastLon == 0.0 and tLastLat == 0.0:
+        tLastLon = lon
+        tLastLat = lat
+    else:
+        #little check to see if telemetry data are plausible before drawing.
+        distance = sphere.distance((tLastLon, tLastLat), (lon, lat))
+        #qgsu.showUserAndLogMessage("QgsFmvUtils", 'distance:' + str(distance), onlyLog=True)
+        if distance > 10000:
+            return
+    
+    tLastLon = lon
+    tLastLat = lat
     trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
 
     try:
@@ -1049,7 +1130,7 @@ def CornerEstimationWithoutOffsets(packet):
         bearing = (value2 + 180.0 + value20) % 360.0
         cornerPointLL = list(
             reversed(sphere.destination(destPoint, distance2, bearing)))
-
+                        
         UpdateFootPrintData(packet,
             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
@@ -1059,11 +1140,84 @@ def CornerEstimationWithoutOffsets(packet):
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL,
                               frameCenterLon, frameCenterLat)
-    except:
+    except Exception as e:
+        qgsu.showUserAndLogMessage(QCoreApplication.translate(
+            "QgsFmvUtils", "CornerEstimationWithoutOffsets failed! : "), str(e), level=QGis.Info)
         return False
 
     return True
 
+def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
+    global dtm_data 
+    global dtm_transform
+    global dtm_colLowerBound
+    global dtm_rowLowerBound
+    
+    pt = []
+        
+    sensorLat = sensorPt[0]
+    sensorLon = sensorPt[1]
+    sensorAlt = sensorPt[2]
+    targetLat = targetPt[0]
+    targetLon = targetPt[1]
+    try:
+        targetAlt = targetPt[2]
+    except:
+        targetAlt = GetFrameCenter()[2]
+       
+    distance = sphere.distance([sensorLat, sensorLon], [targetLat, targetLon])
+    distance = sqrt(distance ** 2 + (targetAlt-sensorAlt) ** 2)
+    dLat=(targetLat-sensorLat)/distance
+    dLon=(targetLon-sensorLon)/distance
+    dAlt=(targetAlt-sensorAlt)/distance
+
+    xOrigin = dtm_transform[0]
+    yOrigin = dtm_transform[3]
+    pixelWidth = dtm_transform[1]
+    pixelHeight = -dtm_transform[5]
+
+    pixelWidthMeter = pixelWidth * (pi/180.0)*6378137.0
+    
+    #start at k = sensor point, then test every pixel a point on the 3D line until we cross the dtm (diffAlt >= 0).
+    diffAlt = -1
+    for k in range(0, int(dtm_buffer * pixelWidthMeter), int(pixelWidthMeter)):
+        point = [sensorLon + k * dLon, sensorLat + k * dLat, sensorAlt + k * dAlt]
+        col = int((point[0] - xOrigin) / pixelWidth)
+        row = int((yOrigin - point[1] ) / pixelHeight)
+        try:
+            diffAlt = point[2] - dtm_data[row - dtm_rowLowerBound][col -  dtm_colLowerBound]
+        except:
+            qgsu.showUserAndLogMessage("", "DEM point not found after all iterations.", onlyLog=True)
+            break
+        if diffAlt <= 0:
+            pt = [point[1], point[0], point[2]]
+            break
+        
+    if not pt:
+        qgsu.showUserAndLogMessage("", "DEM point not found, last computed delta high: "+str(diffAlt), onlyLog=True)
+        
+    return pt
+
+def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
+    pt = []
+    sensorLat = sensorPt[0]
+    sensorLon = sensorPt[1]
+    sensorAlt = sensorPt[2]
+    demPtLat = demPt[1]
+    demPtLon = demPt[0]
+    demPtAlt = demPt[2]
+
+    distance = sphere.distance([sensorLat, sensorLon], [demPtLat, demPtLon])
+    distance = sqrt(distance ** 2 + (demPtAlt-demPtAlt) ** 2)
+    dLat=(demPtLat-sensorLat)/distance
+    dLon=(demPtLon-sensorLon)/distance
+    dAlt=(demPtAlt-sensorAlt)/distance
+    
+    k = ((demPtAlt-planeHeight)/(sensorAlt-demPtAlt))*distance
+    pt = [sensorLon +(distance+k)*dLon, sensorLat+(distance+k)*dLat, sensorAlt+(distance+k)*dAlt]
+    
+    return pt
+    
 
 def _convert_timestamp(ts):
     '''Translates the values from a regex match for two timestamps of the

@@ -11,6 +11,11 @@ Line_lyr = "Drawings Line"
 # Group Name
 frames_g = "FMV Georeferenced Frames"
 
+#DTM (Digital terrain Model - look data folder globe.tif) 
+DTM_file = ""
+#Raster square size in pixel that will be loaded from DTM
+DTM_buffer_size = 80
+
 # FFmpeg path
 ffmpeg = "D:\\FFMPEG"
 ffprobe = "D:\\FFMPEG"
