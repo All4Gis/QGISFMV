@@ -694,14 +694,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             if self.HasMetadata(videoPath):
                 CreateVideoLayers()
                 self.clearMetadata()
-                self.lb_cursor_coord.setText(
-                    "<span style='font-size:10pt; font-weight:bold;'>Lon :</span>"
-                    +
-                    "<span style='font-size:9pt; font-weight:normal;'>Null</span>"
-                    +
-                    "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>"
-                    +
-                    "<span style='font-size:9pt; font-weight:normal;'>Null</span>")
             else:
                 self.btn_GeoReferencing.setEnabled(False)
 

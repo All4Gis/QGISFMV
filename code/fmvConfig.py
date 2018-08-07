@@ -12,8 +12,9 @@ Polygon_lyr = "Drawings Polygon"
 # Group Name
 frames_g = "FMV Georeferenced Frames"
 
-#DTM (Digital terrain Model - look data folder globe.tif) 
-DTM_file = ""
+# DTM (Digital terrain Model - look data folder globe.tif)
+# Change it using your path
+DTM_file = "D:\\GitHub\\QGISFMV\\data\\globe.tif"
 #Raster square size in pixel that will be loaded from DTM
 DTM_buffer_size = 80
 
