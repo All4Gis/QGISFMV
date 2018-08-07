@@ -8,8 +8,10 @@ from QGIS_FMV.player.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.fmvConfig import DTM_file as dtm_path
-from QGIS_FMV.utils.QgsFmvUtils import askForFiles, BufferedMetaReader, initElevationModel, getVideoLocationInfo
-from qgis.core import Qgis as QGis
+from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
+                                        BufferedMetaReader,
+                                        initElevationModel,
+                                        getVideoLocationInfo)
 import qgis.utils
 
 
@@ -95,10 +97,10 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         #init non-blocking metadata buffered reader
         self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, pass_time=self.pass_time, intervall=self.buffer_intervall, min_buffer_size=self.min_buffer_size)
         qgsu.showUserAndLogMessage("", "buffered non-blocking metadata reader initialized.", onlyLog=True)
-        
+
         #init point we can center the video on
         self.initialPt[str(rowPosition)] = getVideoLocationInfo(filename)
-        
+
         if self.initialPt[str(rowPosition)] and dtm_path != '':
             initElevationModel(self.initialPt[str(rowPosition)][0], self.initialPt[str(rowPosition)][1], dtm_path)
             qgsu.showUserAndLogMessage("", "Elevation model initialized.", onlyLog=True)
