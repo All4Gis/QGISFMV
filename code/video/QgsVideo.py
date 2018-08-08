@@ -346,6 +346,25 @@ class VideoWidget(QVideoWidget):
         ''' Return video coordinates to map coordinates '''
         return self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
 
+    def GetPointCommonCoords(self, event):
+        ''' Common functon for get coordinates on mousepressed '''
+        transf = self.GetTransf(event)
+        targetAlt = GetFrameCenter()[2]
+
+        Longitude = float(round(transf[1], 4))
+        Latitude = float(round(transf[0], 4))
+        Altitude = float(round(targetAlt, 0))
+
+        if hasElevationModel():
+            sensor = GetSensor()
+            target = [transf[0], transf[1], targetAlt]
+            projPt = GetLine3DIntersectionWithDEM(sensor, target)
+            if projPt:
+                Longitude = float(round(projPt[1], 4))
+                Latitude = float(round(projPt[0], 4))
+                Altitude = float(round(projPt[2], 0))
+        return Longitude, Latitude, Altitude
+
     def paintEvent(self, event):
         ''' Paint Event '''
         self.gt = GetGCPGeoTransform()
@@ -639,22 +658,7 @@ class VideoWidget(QVideoWidget):
 
             #point drawer
             if self.gt is not None and pointDrawer:
-                transf = self.GetTransf(event)
-                targetAlt = GetFrameCenter()[2]
-
-                Longitude = float(round(transf[1], 4))
-                Latitude = float(round(transf[0], 4))
-                Altitude = float(round(targetAlt, 0))
-
-                if hasElevationModel():
-                    sensor = GetSensor()
-                    target = [transf[0], transf[1], targetAlt]
-                    projPt = GetLine3DIntersectionWithDEM(sensor, target)
-                    if projPt:
-                        Longitude = float(round(projPt[1], 4))
-                        Latitude = float(round(projPt[0], 4))
-                        Altitude = float(round(projPt[2], 0))
-
+                Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
                 #add pin point on the map
                 pointLyr = qgsu.selectLayerByName(Point_lyr)
                 pointLyr.startEditing()
@@ -669,35 +673,17 @@ class VideoWidget(QVideoWidget):
                 CommonLayer(pointLyr)
 
                 self.drawPtPos.append([Longitude, Latitude, Altitude])
-                self.UpdateSurface()
 
             #polygon drawer
             if self.gt is not None and polygonDrawer:
-                transf = self.GetTransf(event)
-                Longitude = float(round(transf[1], 4))
-                Latitude = float(round(transf[0], 4))
-                Altitude = 0.0
+                Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
                 return
 
             #line drawer
             if self.gt is not None and lineDrawer:
-                transf = self.GetTransf(event)
-                targetAlt = GetFrameCenter()[2]
+                Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
 
-                Longitude = float(round(transf[1], 4))
-                Latitude = float(round(transf[0], 4))
-                Altitude = float(round(targetAlt, 0))
-
-                if hasElevationModel():
-                    sensor = GetSensor()
-                    target = [transf[0], transf[1], targetAlt]
-                    projPt = GetLine3DIntersectionWithDEM(sensor, target)
-                    if projPt:
-                        Longitude = float(round(projPt[1], 4))
-                        Latitude = float(round(projPt[0], 4))
-                        Altitude = float(round(projPt[2], 0))
-                #add pin point on the map
-
+                #add pin on the map
                 linelyr = qgsu.selectLayerByName(Line_lyr)
                 linelyr.startEditing()
                 feature = QgsFeature()
@@ -723,8 +709,9 @@ class VideoWidget(QVideoWidget):
                 CommonLayer(linelyr)
 
                 self.drawLines.append([Longitude, Latitude, Altitude])
-                #if not called, the paint event is not triggered.
-                self.UpdateSurface()
+
+        #if not called, the paint event is not triggered.
+        self.UpdateSurface()
 
         if zoomRect and event.button() == Qt.LeftButton:
             self.origin = event.pos()
