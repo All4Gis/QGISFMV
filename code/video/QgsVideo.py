@@ -57,7 +57,7 @@ pointDrawer = False
 lineDrawer = False
 polygonDrawer = False
 
-HOLD_TIME = 701
+HOLD_TIME = 100
 MAX_MAGNIFIER = 229
 
 
