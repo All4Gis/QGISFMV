@@ -76,6 +76,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.createingMosaic = False
         self.currentInfo = 0.0
 
+        self.btn_Color.hide() # Hide Color Button
+
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
 
         self.resize(730, 350)
@@ -330,10 +332,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Context Menu Video '''
         menu = QMenu()
 
-        actionColors = menu.addAction(
-            QCoreApplication.translate("QgsFmvPlayer", "Color Options"))
-        actionColors.setShortcut("Ctrl+May+C")
-        actionColors.triggered.connect(self.showColorDialog)
+#         actionColors = menu.addAction(
+#             QCoreApplication.translate("QgsFmvPlayer", "Color Options"))
+#         actionColors.setShortcut("Ctrl+May+C")
+#         actionColors.triggered.connect(self.showColorDialog)
 
         actionMute = menu.addAction(
             QCoreApplication.translate("QgsFmvPlayer", "Mute/Unmute"))
