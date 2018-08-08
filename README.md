@@ -82,7 +82,7 @@ The installation can be done from the executable if it is in windows or from the
 - Apply sobel filters, edge detection ...
 
 
-## Contributing
+## Contributing Code
 
 Contributions are welcome!
 
@@ -97,6 +97,13 @@ Follow these steps:
 	Send a pull request.
 	
 And thanks for your code.
+
+
+## Contributing translations
+
+Contributions are welcome!
+
+[transifex](https://www.transifex.com/all4gis/QGISFMV/)
 
 
 ## License
