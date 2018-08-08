@@ -649,7 +649,6 @@ QProgressBar::chunk
     <property name="title">
      <string>Utils</string>
     </property>
-    <addaction name="actionZoom_Rectangle"/>
     <addaction name="actionMagnifying_glass"/>
     <addaction name="actionDraw_Pinpoint"/>
     <addaction name="actionDraw_Line"/>
@@ -823,6 +822,9 @@ QProgressBar::chunk
    </property>
   </action>
   <action name="actionDraw_Polygon">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Draw Polygon</string>
    </property>
@@ -1325,22 +1327,6 @@ QProgressBar::chunk
    </hints>
   </connection>
   <connection>
-   <sender>actionZoom_Rectangle</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>PlayerWindow</receiver>
-   <slot>zoomRect(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>305</x>
-     <y>319</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionDraw_Pinpoint</sender>
    <signal>triggered(bool)</signal>
    <receiver>PlayerWindow</receiver>
@@ -1441,6 +1427,22 @@ QProgressBar::chunk
    <signal>triggered(bool)</signal>
    <receiver>PlayerWindow</receiver>
    <slot>ojectTracking(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>370</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDraw_Polygon</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>polygonDrawer(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

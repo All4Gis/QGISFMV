@@ -360,6 +360,7 @@ class Ui_PlayerWindow(object):
         self.actionDraw_Line.setCheckable(True)
         self.actionDraw_Line.setObjectName("actionDraw_Line")
         self.actionDraw_Polygon = QtWidgets.QAction(PlayerWindow)
+        self.actionDraw_Polygon.setCheckable(True)
         self.actionDraw_Polygon.setObjectName("actionDraw_Polygon")
         self.actionObject_Tracking = QtWidgets.QAction(PlayerWindow)
         self.actionObject_Tracking.setObjectName("actionObject_Tracking")
@@ -380,7 +381,6 @@ class Ui_PlayerWindow(object):
         self.menuPlot_Bitrate.addSeparator()
         self.menuPlot_Bitrate.addAction(self.actionSave_Audio)
         self.menuPlot_Bitrate.addAction(self.actionSave_Video)
-        self.menuUtils.addAction(self.actionZoom_Rectangle)
         self.menuUtils.addAction(self.actionMagnifying_glass)
         self.menuUtils.addAction(self.actionDraw_Pinpoint)
         self.menuUtils.addAction(self.actionDraw_Line)
@@ -425,7 +425,6 @@ class Ui_PlayerWindow(object):
         self.actionInvert_Color.triggered['bool'].connect(PlayerWindow.invertColorFilter)
         self.actionCanny_edge_detection.triggered['bool'].connect(PlayerWindow.edgeFilter)
         self.actionMono_Filter.triggered['bool'].connect(PlayerWindow.monoFilter)
-        self.actionZoom_Rectangle.triggered['bool'].connect(PlayerWindow.zoomRect)
         self.actionDraw_Pinpoint.triggered['bool'].connect(PlayerWindow.pointDrawer)
         self.actionMagnifying_glass.triggered['bool'].connect(PlayerWindow.magnifier)
         self.actionAuto_Contrast_Filter.triggered['bool'].connect(PlayerWindow.autoContrastFilter)
@@ -433,6 +432,7 @@ class Ui_PlayerWindow(object):
         self.btn_GeoReferencing.clicked['bool'].connect(PlayerWindow.createMosaic)
         self.actionDraw_Line.triggered['bool'].connect(PlayerWindow.lineDrawer)
         self.actionObject_Tracking.triggered['bool'].connect(PlayerWindow.ojectTracking)
+        self.actionDraw_Polygon.triggered['bool'].connect(PlayerWindow.polygonDrawer)
         QtCore.QMetaObject.connectSlotsByName(PlayerWindow)
 
     def retranslateUi(self, PlayerWindow):

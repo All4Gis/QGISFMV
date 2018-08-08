@@ -9,7 +9,8 @@ from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Line_lyr,
                                 Polygon_lyr,
                                 frames_g,
-                                Trajectory_lyr)
+                                Trajectory_lyr,
+                                epsg)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QVariant, QSettings
 from qgis.core import (
@@ -71,7 +72,7 @@ def CreateVideoLayers():
              "Corner Latitude Point 3",
              "Corner Longitude Point 4",
              "Corner Latitude Point 4"],
-            'EPSG:4326',
+             epsg,
             Footprint_lyr)
         SetDefaultFootprintStyle(lyr_footprint)
         addLayerNoCrsDialog(lyr_footprint)
@@ -84,7 +85,7 @@ def CreateVideoLayers():
              "altitude",
              "Corner Longitude",
              "Corner Latitude"],
-            'EPSG:4326',
+            epsg,
             Beams_lyr)
         SetDefaultBeamsStyle(lyr_beams)
         addLayerNoCrsDialog(lyr_beams)
@@ -92,33 +93,33 @@ def CreateVideoLayers():
     if qgsu.selectLayerByName(Trajectory_lyr) is None:
         lyr_Trajectory = newLinesLayer(
             None,
-            ["longitude", "latitude", "altitude"], 'EPSG:4326', Trajectory_lyr)
+            ["longitude", "latitude", "altitude"], epsg, Trajectory_lyr)
         SetDefaultTrajectoryStyle(lyr_Trajectory)
         addLayerNoCrsDialog(lyr_Trajectory)
 
     if qgsu.selectLayerByName(Platform_lyr) is None:
         lyr_platform = newPointsLayer(
             None,
-            ["longitude", "latitude", "altitude"], 'EPSG:4326', Platform_lyr)
+            ["longitude", "latitude", "altitude"], epsg, Platform_lyr)
         SetDefaultPlatformStyle(lyr_platform)
         addLayerNoCrsDialog(lyr_platform)
 
     if qgsu.selectLayerByName(Point_lyr) is None:
         lyr_point = newPointsLayer(
-            None, ["longitude", "latitude", "altitude"], 'EPSG:4326', Point_lyr)
+            None, ["longitude", "latitude", "altitude"], epsg, Point_lyr)
         SetDefaultPointStyle(lyr_point)
         addLayerNoCrsDialog(lyr_point)
 
     if qgsu.selectLayerByName(Line_lyr) is None:
         lyr_line = newLinesLayer(
-            None, ["longitude", "latitude", "altitude"], 'EPSG:4326', Line_lyr)
+            None, ["longitude", "latitude", "altitude"], epsg, Line_lyr)
         SetDefaultLineStyle(lyr_line)
         addLayerNoCrsDialog(lyr_line)
 
     if qgsu.selectLayerByName(Polygon_lyr) is None:
         lyr_polygon = newPolygonsLayer(
-            None, ["longitude", "latitude", "altitude"], 'EPSG:4326', Polygon_lyr)
-        SetDefaultFootprintStyle(lyr_polygon)
+            None, ["longitude", "latitude", "altitude"], epsg, Polygon_lyr)
+        SetDefaultPolygonStyle(lyr_polygon)
         addLayerNoCrsDialog(lyr_polygon)
 
     QApplication.processEvents()
@@ -222,10 +223,22 @@ def SetDefaultPointStyle(layer):
 
 def SetDefaultLineStyle(layer):
     ''' Line Symbol '''
-    style = S.getDrawingLine('DEFAULT')
+    style = S.getDrawingLine()
     symbol = layer.renderer().symbol()
     symbol.setColor(style['COLOR'])
     symbol.setWidth(style['WIDTH'])
+    return
+
+
+def SetDefaultPolygonStyle(layer):
+    ''' Polygon Symbol '''
+    style = S.getDrawingPolygon()
+    fill_sym = QgsFillSymbol.createSimple({'color': style['COLOR'],
+                                           'outline_color': style['OUTLINE_COLOR'],
+                                           'outline_style': style['OUTLINE_STYLE'],
+                                           'outline_width': style['OUTLINE_WIDTH']})
+    renderer = QgsSingleSymbolRenderer(fill_sym)
+    layer.setRenderer(renderer)
     return
 
 
@@ -276,30 +289,20 @@ TYPE_MAP = {
     bool: QVariant.Bool
 }
 
-try:
-    GEOM_TYPE_MAP = {
-        QGis.WKBPoint: 'Point',
-        QGis.WKBLineString: 'LineString',
-        QGis.WKBPolygon: 'Polygon',
-        QGis.WKBMultiPoint: 'MultiPoint',
-        QGis.WKBMultiLineString: 'MultiLineString',
-        QGis.WKBMultiPolygon: 'MultiPolygon',
-    }
-except Exception:
-    GEOM_TYPE_MAP = {
-        QgsWkbTypes.Point: 'Point',
-        QgsWkbTypes.LineString: 'LineString',
-        QgsWkbTypes.Polygon: 'Polygon',
-        QgsWkbTypes.MultiPoint: 'MultiPoint',
-        QgsWkbTypes.MultiLineString: 'MultiLineString',
-        QgsWkbTypes.MultiPolygon: 'MultiPolygon',
-    }
-    QGis.WKBPoint = QgsWkbTypes.Point
-    QGis.WKBMultiPoint = QgsWkbTypes.MultiPoint
-    QGis.WKBLine = QgsWkbTypes.LineString
-    QGis.WKBMultiLine = QgsWkbTypes.MultiLineString
-    QGis.WKBPolygon = QgsWkbTypes.Polygon
-    QGis.WKBMultiPolygon = QgsWkbTypes.MultiPolygon
+GEOM_TYPE_MAP = {
+    QgsWkbTypes.Point: 'Point',
+    QgsWkbTypes.LineString: 'LineString',
+    QgsWkbTypes.Polygon: 'Polygon',
+    QgsWkbTypes.MultiPoint: 'MultiPoint',
+    QgsWkbTypes.MultiLineString: 'MultiLineString',
+    QgsWkbTypes.MultiPolygon: 'MultiPolygon',
+}
+QGis.WKBPoint = QgsWkbTypes.Point
+QGis.WKBMultiPoint = QgsWkbTypes.MultiPoint
+QGis.WKBLine = QgsWkbTypes.LineString
+QGis.WKBMultiLine = QgsWkbTypes.MultiLineString
+QGis.WKBPolygon = QgsWkbTypes.Polygon
+QGis.WKBMultiPolygon = QgsWkbTypes.MultiPolygon
 
 
 def _toQgsField(f):

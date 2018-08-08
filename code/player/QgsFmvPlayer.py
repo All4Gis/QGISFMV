@@ -44,7 +44,7 @@ from QGIS_FMV.video.QgsColor import ColorDialog
 from QGIS_FMV.video.QgsVideoProcessor import ExtractFramesProcessor
 #from QGIS_FMV.videoStremaing.TestClient import UDPClient
 from qgis.core import Qgis as QGis
-from qgis.core import QgsRectangle, QgsPoint
+from qgis.core import QgsRectangle
 
 
 try:
@@ -427,13 +427,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetObjectTracking(value)
         self.videoWidget.UpdateSurface()
 
-    def zoomRect(self, value):
-        ''' Zoom Rectangle Utils '''
-        self.UncheckUtils(self.sender(), value)
-        self.videoWidget.SetZoomRect(value)
-        self.videoWidget.UpdateSurface()
-        return
-
     def UncheckUtils(self, sender, value):
         ''' Uncheck Utils Video '''
         QApplication.processEvents()
@@ -444,8 +437,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             True if name == "actionDraw_Pinpoint" else False)
         self.actionDraw_Line.setChecked(
             True if name == "actionDraw_Line" else False)
-        self.actionZoom_Rectangle.setChecked(
-            True if name == "actionZoom_Rectangle" else False)
+        self.actionDraw_Polygon.setChecked(
+            True if name == "actionDraw_Polygon" else False)
         self.actionObject_Tracking.setChecked(
             True if name == "actionObject_Tracking" else False)
 

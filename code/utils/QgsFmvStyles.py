@@ -21,6 +21,9 @@ class FmvLayerStyles(object):
     #drawings Line holder
     DL = {}
 
+    #drawing Polygons holder
+    DPL = {}
+
     #
     # SENSOR STYLES (based on meta attribute "Image Source Sensor")
     #
@@ -33,21 +36,21 @@ class FmvLayerStyles(object):
     S['DEFAULT']['OUTLINE_WIDTH'] = '1'
 
     #IR sensor
-    S['IR'] = {} 
+    S['IR'] = {}
     S['IR']['COLOR'] = '234, 135, 8, 60'
     S['IR']['OUTLINE_COLOR'] = '#ba340f'
     S['IR']['OUTLINE_STYLE'] = 'solid'
     S['IR']['OUTLINE_WIDTH'] = '1'
 
     #EOW sensor
-    S['EOW'] = {} 
+    S['EOW'] = {}
     S['EOW']['COLOR'] = '126, 217, 255, 60'
     S['EOW']['OUTLINE_COLOR'] = '#5392fa'
     S['EOW']['OUTLINE_STYLE'] = 'solid'
     S['EOW']['OUTLINE_WIDTH'] = '1'
 
     #BLEND sensor
-    S['BLEND'] = {} 
+    S['BLEND'] = {}
     S['BLEND']['COLOR'] = '255, 255, 255, 60'
     S['BLEND']['OUTLINE_COLOR'] = '#a7a7a7'
     S['BLEND']['OUTLINE_STYLE'] = 'solid'
@@ -65,7 +68,7 @@ class FmvLayerStyles(object):
     #
 
     #Default
-    P['DEFAULT'] = {} 
+    P['DEFAULT'] = {}
     P['DEFAULT']['NAME'] = ':/imgFMV/images/platforms/platform_default.svg'
     P['DEFAULT']['OUTLINE'] = '255, 255, 255, 60'
     P['DEFAULT']['OUTLINE_WIDTH'] = '1'
@@ -106,6 +109,15 @@ class FmvLayerStyles(object):
     DL['DEFAULT'] = {}
     DL['DEFAULT']['COLOR'] = QColor.fromRgb(245, 255, 15)
     DL['DEFAULT']['WIDTH'] = 1
+
+    #
+    # DRAWINGS POLYGONS STYLES
+    #
+    DPL['DEFAULT'] = {}
+    DPL['DEFAULT']['COLOR'] = '176, 255, 128, 28'
+    DPL['DEFAULT']['OUTLINE_COLOR'] = '#B0FF80'
+    DPL['DEFAULT']['OUTLINE_STYLE'] = 'solid'
+    DPL['DEFAULT']['OUTLINE_WIDTH'] = '1'
 
     @staticmethod
     def getPlatform(name):
@@ -149,10 +161,11 @@ class FmvLayerStyles(object):
         return style
 
     @staticmethod
-    def getDrawingLine(name):
-        style = None
-        try:
-            style = FmvLayerStyles.DL[name]
-        except Exception:
-            style = FmvLayerStyles.DL['DEFAULT']
+    def getDrawingLine():
+        style = FmvLayerStyles.DL['DEFAULT']
+        return style
+
+    @staticmethod
+    def getDrawingPolygon():
+        style = FmvLayerStyles.DPL['DEFAULT']
         return style

@@ -9,6 +9,9 @@ Point_lyr = "Drawings Point"
 Line_lyr = "Drawings Line"
 Polygon_lyr = "Drawings Polygon"
 
+# Layers EPSG
+epsg = 'EPSG:4326'
+
 # Group Name
 frames_g = "FMV Georeferenced Frames"
 

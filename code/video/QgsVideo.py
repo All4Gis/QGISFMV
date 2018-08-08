@@ -9,7 +9,8 @@ from PyQt5.QtGui import (QImage,
                          QRadialGradient,
                          QColor,
                          QPen,
-                         QBrush)
+                         QBrush,
+                         QPolygonF)
 from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QVideoFrame,
                                 QVideoSurfaceFormat,
@@ -30,8 +31,10 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
-from QGIS_FMV.fmvConfig import Point_lyr, Line_lyr
-from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
+from QGIS_FMV.fmvConfig import Point_lyr, Line_lyr, Polygon_lyr
+from qgis.core import QgsFeature, QgsGeometry, QgsPointXY, QgsPoint
+from qgis.gui import QgsRubberBand
+from qgis.utils import iface
 
 try:
     from pydevd import *
@@ -53,7 +56,6 @@ magnifier = False
 pointDrawer = False
 lineDrawer = False
 polygonDrawer = False
-zoomRect = False
 
 HOLD_TIME = 701
 MAX_MAGNIFIER = 229
@@ -176,12 +178,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             if invertColorFilter:
                 self.image.invertPixels()
 
-            if zoomRect and self.zoomedrect is not None:
-                painter.drawImage(self.sourceRect, self.image, self.zoomedrect)
-                painter.setTransform(oldTransform)
-                self.currentFrame.unmap()
-                return
-
             painter.drawImage(self.targetRect, self.image, self.sourceRect)
             painter.setTransform(oldTransform)
             self.currentFrame.unmap()
@@ -198,8 +194,17 @@ class VideoWidget(QVideoWidget):
         self.setUpdatesEnabled(True)
         self.setMouseTracking(True)
         self.origin = QPoint()
-        self.pressed = self.snapped = self.zoomed = self.zoomedRect = self.changeRubberBand = False
+        self.pressed = self.snapped = self.zoomed = self.TrackingRubberBand = False
         self.gt = None
+
+        self.poly_coordinates = []
+        self.poly_RubberBand = QgsRubberBand(iface.mapCanvas(), True) # Polygon type
+        # set rubber band style
+        color = QColor(176, 255, 128)
+        self.poly_RubberBand.setColor(color)
+        color.setAlpha(190)
+        self.poly_RubberBand.setStrokeColor(color)
+        self.poly_RubberBand.setWidth(3)
 
         self.parent = parent.parent()
         self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
@@ -214,6 +219,10 @@ class VideoWidget(QVideoWidget):
                            QSizePolicy.MinimumExpanding)
 
         self.surface = VideoWidgetSurface(self)
+
+        self.pressed = False
+        self.snapped = False
+        self.zoomed = False
 
         self.offset = QPoint()
         self.pressPos = QPoint()
@@ -241,10 +250,43 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
+        if(not self.IsPointOnScreen(event.x(), event.y())):
+            return
+
         if self.gt is not None and lineDrawer:
-            if(not self.IsPointOnScreen(event.x(), event.y())):
-                return
             self.drawLines.append([None, None, None])
+            return
+        if self.gt is not None and polygonDrawer:
+            # TODO : Add values to attributes table
+            self.drawPolygon.append([None, None, None])
+            # Add Polygon
+            polyLyr = qgsu.selectLayerByName(Polygon_lyr)
+            polyLyr.startEditing()
+            feature = QgsFeature()
+            point = QPointF()
+            # create  float polygon --> construcet out of 'point'
+
+            list_polygon = QPolygonF()
+            for x in xrange(0,len(self.poly_coordinates)):
+                if x%2 == 0:
+                    point.setX(self.poly_coordinates[x])
+                    point.setY(self.poly_coordinates[x+1])
+                    list_polygon.append(point)
+            point.setX(self.poly_coordinates[0])
+            point.setY(self.poly_coordinates[1])
+            list_polygon.append(point)
+
+            geomP = QgsGeometry.fromQPolygonF(list_polygon)
+            feature.setAttributes([0.0, 0.0, 0.0])
+            feature.setGeometry(geomP)
+            polyLyr.addFeatures([feature])
+
+            CommonLayer(polyLyr)
+            # Empty RubberBand
+            for _ in range(self.poly_RubberBand.numberOfVertices()):
+                self.poly_RubberBand.removeLastPoint()
+            # Empty List
+            self.poly_coordinates = []
             return
 
         self.setFullScreen(not self.isFullScreen())
@@ -404,8 +446,25 @@ class VideoWidget(QVideoWidget):
                 else:
                     self.drawLinesOnVideo(pt, idx)
 
-        #TODO: Draw clicked Polygons on video adds a mark on the video
-        self.drawPolygonOnVideo(self.drawPolygon)
+        # Draw clicked Polygons on video
+        # TODO : Make better and cleaned method ¿using itertools maybe?
+        if len(self.drawPolygon) > 1:
+            poly = []
+            if any(None == x[1] for x in self.drawPolygon):
+                for pt in self.drawPolygon:
+                    if pt[0] is None:
+                        self.drawPolygonOnVideo(poly)
+                        poly = []
+                        continue
+                    poly.append(pt)
+                last_occurence = len(self.drawPolygon)-self.drawPolygon[::-1].index([None, None, None])
+                poly = []
+                for pt in range(last_occurence, len(self.drawPolygon)):
+                    poly.append(self.drawPolygon[pt])
+                if len(poly) > 1:
+                    self.drawPolygonOnVideo(poly)
+            else:
+                self.drawPolygonOnVideo(self.drawPolygon)
 
         # Magnifier Glass
         if self.zoomed and magnifier:
@@ -483,10 +542,10 @@ class VideoWidget(QVideoWidget):
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
         pen.setDashPattern([1, 4, 5, 4])
-        painter_p = QPainter(self)
-        painter_p.setPen(pen)
-        painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
-        painter_p.drawPoint(center)
+        painter = QPainter(self)
+        painter.setPen(pen)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+        painter.drawPoint(center)
 
         if len(self.drawLines) > 1:
             try:
@@ -495,14 +554,14 @@ class VideoWidget(QVideoWidget):
                     pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
                 scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
                 end = QPoint(scr_x, scr_y)
-                painter_p.drawLine(center, end)
+                painter.drawLine(center, end)
             except Exception:
                 None
 
         return
 
     def drawPointOnVideo(self, pt):
-
+        ''' Draw Points on Video '''
         if hasElevationModel():
             pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
 
@@ -514,26 +573,44 @@ class VideoWidget(QVideoWidget):
         pen = QPen(Qt.red)
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
-        painter_p = QPainter(self)
-        painter_p.setPen(pen)
-        painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
-        painter_p.drawPoint(center)
+        painter = QPainter(self)
+        painter.setPen(pen)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+        painter.drawPoint(center)
         return
 
-    def drawPolygonOnVideo(self, pt):
+    def drawPolygonOnVideo(self, values):
         ''' Draw Polygons on Video '''
-#         scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
-# 
-#         radius = 10
-#         center = QPoint(scr_x, scr_y)
-# 
-#         pen = QPen(Qt.red)
-#         pen.setWidth(radius)
-#         pen.setCapStyle(Qt.RoundCap)
-#         painter_p = QPainter(self)
-#         painter_p.setPen(pen)
-#         painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True)
-#         painter_p.drawPoint(center)
+        poly = []
+        for pt in values:
+            if hasElevationModel():
+                pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+            scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+            center = QPoint(scr_x, scr_y)
+            poly.append(center)
+
+        poly.append(poly[0])
+
+        radius = 3
+        polygon = QPolygonF(poly)
+        pen = QPen()
+        pen.setColor(Qt.green)
+        pen.setWidth(radius)
+        pen.setCapStyle(Qt.RoundCap)
+        pen.setJoinStyle(Qt.RoundJoin)
+
+        brush = QBrush()
+        brush.setColor(QColor(176, 255, 128, 28))
+        brush.setStyle(Qt.SolidPattern)
+
+        path = QPainterPath()
+        path.addPolygon(polygon)
+
+        painter = QPainter(self)
+        painter.setPen(pen)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+        painter.drawPolygon(polygon)
+        painter.fillPath(path, brush)
         return
 
     def resizeEvent(self, event):
@@ -558,22 +635,8 @@ class VideoWidget(QVideoWidget):
 
         # Cursor Coordinates
         if self.gt is not None:
-            transf = self.GetTransf(event)
 
-            targetAlt = GetFrameCenter()[2]
-            Longitude = transf[1]
-            Latitude = transf[0]
-            Altitude = targetAlt
-
-            if hasElevationModel():
-                sensor = GetSensor()
-                target = [transf[0], transf[1], targetAlt]
-                projPt = GetLine3DIntersectionWithDEM(sensor, target)
-
-                if projPt:
-                    Longitude = projPt[1]
-                    Latitude = projPt[0]
-                    Altitude = projPt[2]
+            Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
 
             txt = "<span style='font-size:10pt; font-weight:bold;'>Lon :</span>"
             txt += "<span style='font-size:9pt; font-weight:normal;'>" + ("%.3f" % Longitude) + "</span>" 
@@ -600,13 +663,9 @@ class VideoWidget(QVideoWidget):
         if not event.buttons():
             return
 
-        if self.changeRubberBand:
+        if self.TrackingRubberBand:
             self.rubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
-
-        if self.zoomed is True:
-            self.rubberBand.hide()
-            self.zoomedRect = False
 
         if not self.zoomed:
             if not self.pressed or not self.snapped:
@@ -677,7 +736,9 @@ class VideoWidget(QVideoWidget):
             #polygon drawer
             if self.gt is not None and polygonDrawer:
                 Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
-                return
+                self.poly_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
+                self.poly_coordinates.extend(QgsPointXY(Longitude, Latitude))
+                self.drawPolygon.append([Longitude, Latitude, Altitude])
 
             #line drawer
             if self.gt is not None and lineDrawer:
@@ -713,12 +774,6 @@ class VideoWidget(QVideoWidget):
         #if not called, the paint event is not triggered.
         self.UpdateSurface()
 
-        if zoomRect and event.button() == Qt.LeftButton:
-            self.origin = event.pos()
-            self.rubberBand.setGeometry(QRect(self.origin, QSize()))
-            self.rubberBand.show()
-            self.changeRubberBand = True
-
     def activateMagnifier(self):
         """ Activate Magnifier Glass """
         self.zoomed = True
@@ -745,41 +800,14 @@ class VideoWidget(QVideoWidget):
         global polygonDrawer
         polygonDrawer = value
 
-    def SetZoomRect(self, value):
-        """ Set Zoom Rectangle """
-        global zoomRect
-        zoomRect = value
-
     def mouseReleaseEvent(self, _):
         """
         :type event: QMouseEvent
         :param event:
         :return:
         """
-        self.changeRubberBand = False
-        if self.zoomed is True:
-            return
-        self.zoomed = False
-        if not zoomRect:
-            self.surface.updateVideoRect()
-        else:
-            # todo: remove and make object tracking
-            self.rubberBand.hide()
-            self.zoomedRect = True
-            selRect = self.rubberBand.geometry()
-
-            orig2widgScale = self.surface.widget.contentsRect().width() / \
-                self.surface.image.width()
-
-            X1 = selRect.topLeft().x() / orig2widgScale
-            Y1 = selRect.topLeft().y() / orig2widgScale
-            X2 = selRect.bottomRight().x() / self.surface.widget.contentsRect().bottomRight().x() * \
-                self.surface.image.width()
-            Y2 = selRect.bottomRight().y() / self.surface.widget.contentsRect().bottomRight().y() * \
-                self.surface.image.height()
-
-            wid2origRect = QRect(X1, Y1, X2, Y2)
-            self.UpdateSurface()
+        self.TrackingRubberBand = False
+        self.surface.updateVideoRect()
 
     def leaveEvent(self, _):
         self.parent.lb_cursor_coord.setText("")
