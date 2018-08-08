@@ -32,7 +32,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 from QGIS_FMV.fmvConfig import Point_lyr, Line_lyr, Polygon_lyr
-from qgis.core import QgsFeature, QgsGeometry, QgsPointXY, QgsPoint
+from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
 from qgis.gui import QgsRubberBand
 from qgis.utils import iface
 
@@ -293,9 +293,11 @@ class VideoWidget(QVideoWidget):
         event.accept()
 
     def videoSurface(self):
+        ''' Return video Surface '''
         return self.surface
 
     def UpdateSurface(self):
+        ''' Update Video Surface '''
         self.surface.widget.update()
 
     def sizeHint(self):
