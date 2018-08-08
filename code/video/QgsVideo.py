@@ -241,6 +241,12 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
+        if self.gt is not None and lineDrawer:
+            if(not self.IsPointOnScreen(event.x(), event.y())):
+                return
+            self.drawLines.append([None, None, None])
+            return
+
         self.setFullScreen(not self.isFullScreen())
         event.accept()
 
@@ -372,11 +378,14 @@ class VideoWidget(QVideoWidget):
             self.drawPointOnVideo(pt)
 
         #Draw clicked lines on video
-        for pt in self.drawLines:
-            self.drawLinesOnVideo(pt)
+        if len(self.drawLines) > 1:
+            for idx, pt in enumerate(self.drawLines):
+                if pt[0] == None:
+                    continue
+                else:
+                    self.drawLinesOnVideo(pt, idx)
 
-        #Draw clicked Polygons on video adds a mark on the video
-        # TODO
+        #TODO: Draw clicked Polygons on video adds a mark on the video
         self.drawPolygonOnVideo(self.drawPolygon)
 
         # Magnifier Glass
@@ -441,11 +450,11 @@ class VideoWidget(QVideoWidget):
         scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
         return scr_x, scr_y
 
-    def drawLinesOnVideo(self, pt):
+    def drawLinesOnVideo(self, pt, idx, start=False):
         ''' Draw Lines on Video '''
-        if hasElevationModel():   
+        if hasElevationModel():
             pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
-            
+
         scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
 
         radius = 3
@@ -462,8 +471,10 @@ class VideoWidget(QVideoWidget):
 
         if len(self.drawLines) > 1:
             try:
-                idx = self.drawLines.index(pt)
-                scr_x, scr_y = self.GetInverseMatrix(self.drawLines[idx+1][1], self.drawLines[idx+1][0])
+                pt = self.drawLines[idx+1]
+                if hasElevationModel():
+                    pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+                scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
                 end = QPoint(scr_x, scr_y)
                 painter_p.drawLine(center, end)
             except Exception:
@@ -525,30 +536,6 @@ class VideoWidget(QVideoWidget):
         # check if the point  is on picture (not in black borders)
         if(not self.IsPointOnScreen(event.x(), event.y())):
             return
-
-        # Draw Line on the fly
-        if self.gt is not None and lineDrawer:
-                if len(self.drawLines) > 0:
-                    scr_x, scr_y = self.GetInverseMatrix(self.drawLines[-1][1],self.drawLines[-1][1])
-
-                    radius = 3
-                    center = QPoint(scr_x, scr_y)
-
-                    pen = QPen(Qt.yellow)
-                    pen.setWidth(radius)
-                    pen.setCapStyle(Qt.RoundCap)
-                    pen.setDashPattern([1, 4, 5, 4])
-                    painter_p = QPainter(self)
-                    painter_p.setPen(pen)
-                    painter_p.setRenderHint(QPainter.HighQualityAntialiasing, True) 
-                    try:
-                        transf = self.GetTransf(event)
-                        scr_x, scr_y = self.GetInverseMatrix(float(round(transf[1], 4)) , float(round(transf[0], 4)))
-                        end = QPoint(scr_x, scr_y)
-                        painter_p.drawLine(center, end)
-                        self.UpdateSurface()
-                    except Exception:
-                        None
 
         # Cursor Coordinates
         if self.gt is not None:
@@ -694,9 +681,6 @@ class VideoWidget(QVideoWidget):
 
             #line drawer
             if self.gt is not None and lineDrawer:
-                if(not self.IsPointOnScreen(event.x(), event.y())):
-                    return
-
                 transf = self.GetTransf(event)
                 targetAlt = GetFrameCenter()[2]
 
@@ -718,7 +702,7 @@ class VideoWidget(QVideoWidget):
                 linelyr.startEditing()
                 feature = QgsFeature()
                 f = QgsFeature()
-                if linelyr.featureCount() == 0:
+                if linelyr.featureCount() == 0 or self.drawLines[-1][0] == None:
                     f.setAttributes(
                         [Longitude, Latitude, Altitude])
                     surface = QgsGeometry.fromPolylineXY(
