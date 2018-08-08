@@ -380,7 +380,7 @@ class VideoWidget(QVideoWidget):
         #Draw clicked lines on video
         if len(self.drawLines) > 1:
             for idx, pt in enumerate(self.drawLines):
-                if pt[0] == None:
+                if pt[0] is None:
                     continue
                 else:
                     self.drawLinesOnVideo(pt, idx)
@@ -450,7 +450,7 @@ class VideoWidget(QVideoWidget):
         scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
         return scr_x, scr_y
 
-    def drawLinesOnVideo(self, pt, idx, start=False):
+    def drawLinesOnVideo(self, pt, idx):
         ''' Draw Lines on Video '''
         if hasElevationModel():
             pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
@@ -487,7 +487,7 @@ class VideoWidget(QVideoWidget):
         if hasElevationModel():
             pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
 
-        scr_x, scr_y = self.GetInverseMatrix(pt[1] , pt[0])
+        scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
 
         radius = 10
         center = QPoint(scr_x, scr_y)
@@ -702,7 +702,7 @@ class VideoWidget(QVideoWidget):
                 linelyr.startEditing()
                 feature = QgsFeature()
                 f = QgsFeature()
-                if linelyr.featureCount() == 0 or self.drawLines[-1][0] == None:
+                if linelyr.featureCount() == 0 or self.drawLines[-1][0] is None:
                     f.setAttributes(
                         [Longitude, Latitude, Altitude])
                     surface = QgsGeometry.fromPolylineXY(

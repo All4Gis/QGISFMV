@@ -897,7 +897,7 @@ def UpdateTrajectoryData(packet):
     ''' Update Trajectory Values '''
     global tLastLon
     global tLastLat
-    
+
     lat = packet.GetSensorLatitude()
     lon = packet.GetSensorLongitude()
     alt = packet.GetSensorTrueAltitude()
@@ -908,10 +908,9 @@ def UpdateTrajectoryData(packet):
     else:
         #little check to see if telemetry data are plausible before drawing.
         distance = sphere.distance((tLastLon, tLastLat), (lon, lat))
-        #qgsu.showUserAndLogMessage("QgsFmvUtils", 'distance:' + str(distance), onlyLog=True)
         if distance > 10000:
             return
-    
+
     tLastLon = lon
     tLastLat = lat
     trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
@@ -1029,7 +1028,7 @@ def CornerEstimationWithOffsets(packet):
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
 
-    except:
+    except Exception:
         return False
 
     return True
@@ -1130,7 +1129,7 @@ def CornerEstimationWithoutOffsets(packet):
         bearing = (value2 + 180.0 + value20) % 360.0
         cornerPointLL = list(
             reversed(sphere.destination(destPoint, distance2, bearing)))
-                        
+
         UpdateFootPrintData(packet,
             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
@@ -1147,14 +1146,15 @@ def CornerEstimationWithoutOffsets(packet):
 
     return True
 
+
 def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
     global dtm_data 
     global dtm_transform
     global dtm_colLowerBound
     global dtm_rowLowerBound
-    
+
     pt = []
-        
+
     sensorLat = sensorPt[0]
     sensorLon = sensorPt[1]
     sensorAlt = sensorPt[2]
@@ -1162,14 +1162,14 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
     targetLon = targetPt[1]
     try:
         targetAlt = targetPt[2]
-    except:
+    except Exception:
         targetAlt = GetFrameCenter()[2]
-       
+
     distance = sphere.distance([sensorLat, sensorLon], [targetLat, targetLon])
     distance = sqrt(distance ** 2 + (targetAlt-sensorAlt) ** 2)
-    dLat=(targetLat-sensorLat)/distance
-    dLon=(targetLon-sensorLon)/distance
-    dAlt=(targetAlt-sensorAlt)/distance
+    dLat = (targetLat-sensorLat)/distance
+    dLon = (targetLon-sensorLon)/distance
+    dAlt = (targetAlt-sensorAlt)/distance
 
     xOrigin = dtm_transform[0]
     yOrigin = dtm_transform[3]
@@ -1177,7 +1177,7 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
     pixelHeight = -dtm_transform[5]
 
     pixelWidthMeter = pixelWidth * (pi/180.0)*6378137.0
-    
+
     #start at k = sensor point, then test every pixel a point on the 3D line until we cross the dtm (diffAlt >= 0).
     diffAlt = -1
     for k in range(0, int(dtm_buffer * pixelWidthMeter), int(pixelWidthMeter)):
@@ -1192,14 +1192,14 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
         if diffAlt <= 0:
             pt = [point[1], point[0], point[2]]
             break
-        
+
     if not pt:
         qgsu.showUserAndLogMessage("", "DEM point not found, last computed delta high: "+str(diffAlt), onlyLog=True)
-        
+
     return pt
 
+
 def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
-    pt = []
     sensorLat = sensorPt[0]
     sensorLon = sensorPt[1]
     sensorAlt = sensorPt[2]
@@ -1209,15 +1209,15 @@ def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
 
     distance = sphere.distance([sensorLat, sensorLon], [demPtLat, demPtLon])
     distance = sqrt(distance ** 2 + (demPtAlt-demPtAlt) ** 2)
-    dLat=(demPtLat-sensorLat)/distance
-    dLon=(demPtLon-sensorLon)/distance
-    dAlt=(demPtAlt-sensorAlt)/distance
-    
+    dLat = (demPtLat-sensorLat)/distance
+    dLon = (demPtLon-sensorLon)/distance
+    dAlt = (demPtAlt-sensorAlt)/distance
+
     k = ((demPtAlt-planeHeight)/(sensorAlt-demPtAlt))*distance
-    pt = [sensorLon +(distance+k)*dLon, sensorLat+(distance+k)*dLat, sensorAlt+(distance+k)*dAlt]
-    
+    pt = [sensorLon + (distance+k)*dLon, sensorLat+(distance+k)*dLat, sensorAlt + (distance+k)*dAlt]
+
     return pt
-    
+
 
 def _convert_timestamp(ts):
     '''Translates the values from a regex match for two timestamps of the
