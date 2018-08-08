@@ -771,6 +771,12 @@ class VideoWidget(QVideoWidget):
 
                 self.drawLines.append([Longitude, Latitude, Altitude])
 
+            if objectTracking:
+                self.origin = event.pos()
+                self.rubberBand.setGeometry(QRect(self.origin, QSize()))
+                self.rubberBand.show()
+                self.TrackingRubberBand = True
+
         #if not called, the paint event is not triggered.
         self.UpdateSurface()
 
@@ -807,7 +813,14 @@ class VideoWidget(QVideoWidget):
         :return:
         """
         self.TrackingRubberBand = False
-        self.surface.updateVideoRect()
+        if self.zoomed is True:
+            return
+        self.zoomed = False
+        if not objectTracking:
+            self.surface.updateVideoRect()
+        else:
+            self.rubberBand.hide()
+            self.zoomedRect = True
 
     def leaveEvent(self, _):
         self.parent.lb_cursor_coord.setText("")

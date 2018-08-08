@@ -363,6 +363,7 @@ class Ui_PlayerWindow(object):
         self.actionDraw_Polygon.setCheckable(True)
         self.actionDraw_Polygon.setObjectName("actionDraw_Polygon")
         self.actionObject_Tracking = QtWidgets.QAction(PlayerWindow)
+        self.actionObject_Tracking.setCheckable(True)
         self.actionObject_Tracking.setObjectName("actionObject_Tracking")
         self.menuFile.addAction(self.actionGray)
         self.menuFile.addAction(self.actionInvert_Color)

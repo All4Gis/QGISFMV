@@ -486,7 +486,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="834"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="837"/>
         <source>Object Tracking</source>
         <translation type="unfinished"></translation>
     </message>
@@ -494,22 +494,22 @@
 <context>
     <name>QgsFmvPlayer</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="129"/>
+        <location filename="../player/QgsFmvPlayer.py" line="131"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation>Este video no tiene metadatos!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="136"/>
+        <location filename="../player/QgsFmvPlayer.py" line="138"/>
         <source>Metadata Callback Failed! : </source>
         <translation>¡Falló la devolución  de metadatos! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="150"/>
+        <location filename="../player/QgsFmvPlayer.py" line="152"/>
         <source>This video don&apos;t have Audio ! </source>
         <translation>Este video no tiene audio!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="157"/>
+        <location filename="../player/QgsFmvPlayer.py" line="159"/>
         <source>Audio check Failed! : </source>
         <translation>Error al chequear el audio! :</translation>
     </message>
@@ -526,35 +526,35 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="333"/>
         <source>Color Options</source>
-        <translation>Opciones de color</translation>
+        <translation type="obsolete">Opciones de color</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="338"/>
+        <location filename="../player/QgsFmvPlayer.py" line="340"/>
         <source>Mute/Unmute</source>
         <translation>Silenciar / Activar</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="344"/>
+        <location filename="../player/QgsFmvPlayer.py" line="346"/>
         <source>Extract All Frames</source>
         <translation>Extraer todos los fotogramas</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="349"/>
+        <location filename="../player/QgsFmvPlayer.py" line="351"/>
         <source>Extract Current Frame</source>
         <translation>Extraer fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="356"/>
+        <location filename="../player/QgsFmvPlayer.py" line="358"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadatos</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="712"/>
+        <location filename="../player/QgsFmvPlayer.py" line="714"/>
         <source>Open Video File : </source>
         <translation>Abrir archivo de video:</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="744"/>
+        <location filename="../player/QgsFmvPlayer.py" line="746"/>
         <source>Save file succesfully!</source>
         <translation>¡Guardado exitosamente!</translation>
     </message>
@@ -569,47 +569,47 @@
         <translation type="obsolete">Error al crear el gráfico</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1061"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1063"/>
         <source>Save images</source>
         <translation>Guardar imágenes</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1222"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1224"/>
         <source>HEY...Active background process!</source>
         <translation>HEY ... ¡Proceso activo!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1222"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1224"/>
         <source>Do you really want close?</source>
         <translation>¿De verdad quieres cerrar?</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="685"/>
+        <location filename="../player/QgsFmvPlayer.py" line="687"/>
         <source>Playing : </source>
         <translation>Reproduciendo :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1244"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1246"/>
         <source>Video Information : </source>
         <translation>Información del video : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="173"/>
+        <location filename="../player/QgsFmvPlayer.py" line="175"/>
         <source>Buffer value read but is not ready, increase buffer size. : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="177"/>
+        <location filename="../player/QgsFmvPlayer.py" line="179"/>
         <source>Buffer returned empty metadata, check pass_time. : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="190"/>
+        <location filename="../player/QgsFmvPlayer.py" line="192"/>
         <source>Meta update failed! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="194"/>
+        <location filename="../player/QgsFmvPlayer.py" line="196"/>
         <source>Metadata Buffer Failed! : </source>
         <translation type="unfinished"></translation>
     </message>

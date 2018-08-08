@@ -830,6 +830,9 @@ QProgressBar::chunk
    </property>
   </action>
   <action name="actionObject_Tracking">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Object Tracking</string>
    </property>
