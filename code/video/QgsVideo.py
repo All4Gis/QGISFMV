@@ -198,7 +198,7 @@ class VideoWidget(QVideoWidget):
         self.gt = None
 
         self.poly_coordinates = []
-        self.poly_RubberBand = QgsRubberBand(iface.mapCanvas(), True) # Polygon type
+        self.poly_RubberBand = QgsRubberBand(iface.mapCanvas(), True)# Polygon type
         # set rubber band style
         color = QColor(176, 255, 128)
         self.poly_RubberBand.setColor(color)
@@ -267,8 +267,8 @@ class VideoWidget(QVideoWidget):
             # create  float polygon --> construcet out of 'point'
 
             list_polygon = QPolygonF()
-            for x in xrange(0,len(self.poly_coordinates)):
-                if x%2 == 0:
+            for x in xrange(0, len(self.poly_coordinates)):
+                if x % 2 == 0:
                     point.setX(self.poly_coordinates[x])
                     point.setY(self.poly_coordinates[x+1])
                     list_polygon.append(point)
@@ -348,6 +348,7 @@ class VideoWidget(QVideoWidget):
         invertColorFilter = grayColorFilter = edgeDetectionFilter = monoFilter = contrastFilter = False
 
     def GetXBlackZone(self):
+        ''' Return is X in black screen on video '''
         x = 0.0
         normalizedWidth = self.surface.widget.height(
         ) * (GetImageWidth() / GetImageHeight())
@@ -356,6 +357,7 @@ class VideoWidget(QVideoWidget):
         return x
 
     def GetYBlackZone(self):
+        ''' Return is Y in black screen on video '''
         y = 0.0
         normalizedHeight = self.surface.widget.width(
         ) / (GetImageWidth() / GetImageHeight())
