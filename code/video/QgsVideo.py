@@ -255,9 +255,11 @@ class VideoWidget(QVideoWidget):
 
         if self.gt is not None and lineDrawer:
             self.drawLines.append([None, None, None])
+            self.UpdateSurface()
             return
         if self.gt is not None and polygonDrawer:
-            # TODO : Add values to attributes table
+            # TODO : Add values to attributes table ¿Centroid value maybe?
+            # TODO : Add area value too
             self.drawPolygon.append([None, None, None])
             # Add Polygon
             polyLyr = qgsu.selectLayerByName(Polygon_lyr)
@@ -287,6 +289,7 @@ class VideoWidget(QVideoWidget):
                 self.poly_RubberBand.removeLastPoint()
             # Empty List
             self.poly_coordinates = []
+            self.UpdateSurface()
             return
 
         self.setFullScreen(not self.isFullScreen())
@@ -717,6 +720,7 @@ class VideoWidget(QVideoWidget):
             self.tapTimer.start(HOLD_TIME, self)
 
             if(not self.IsPointOnScreen(event.x(), event.y())):
+                    self.UpdateSurface()
                     return
 
             #point drawer
