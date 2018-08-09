@@ -89,11 +89,11 @@ tLastLon = 0.0
 tLastLat = 0.0
 
 if windows:
-    ffmpeg_path = ffmpeg_path + '\\win\\ffmpeg.exe'
-    ffprobe_path = ffprobe_path + '\\win\\ffprobe.exe'
+    ffmpeg_path = ffmpeg_path + '\\ffmpeg.exe'
+    ffprobe_path = ffprobe_path + '\\ffprobe.exe'
 else:
-    ffmpeg_path = ffmpeg_path + '\\linux\\ffmpeg'
-    ffprobe_path = ffprobe_path + '\\linux\\ffprobe'
+    ffmpeg_path = ffmpeg_path + '\\ffmpeg'
+    ffprobe_path = ffprobe_path + '\\ffprobe'
 
 
 class BufferedMetaReader():

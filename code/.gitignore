@@ -1,7 +1,6 @@
 .project
 .pydevproject
 Compile.bat
-py3-env.bat
 ReleaseI18n.bat
 Hidden.bat
 install_pip_packages.bat
