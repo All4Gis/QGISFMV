@@ -24,6 +24,7 @@ changelog=
     ** General **
     1.2:
     	- Object Tracking
+    	- Remove FFMPEG unnecessary subfolder
     	- Display altitude with OnMouseOver.
 		- Drawn points and lines are "drapped" on DTM on map and video.
 		- Drawn points and lines have altitude attribute.
