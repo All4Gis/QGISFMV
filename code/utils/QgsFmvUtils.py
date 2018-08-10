@@ -21,7 +21,10 @@ from QGIS_FMV.fmvConfig import (Platform_lyr,
 from QGIS_FMV.fmvConfig import ffmpeg as ffmpeg_path
 from QGIS_FMV.fmvConfig import ffprobe as ffprobe_path
 from QGIS_FMV.geo import sphere as sphere
-from QGIS_FMV.utils.QgsFmvLayers import addLayerNoCrsDialog, ExpandLayer, SetDefaultFootprintStyle, SetDefaultPlatformStyle
+from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
+                                         ExpandLayer,
+                                         SetDefaultFootprintStyle,
+                                         SetDefaultPlatformStyle)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QSettings
 from qgis.core import (QgsApplication,
@@ -126,10 +129,10 @@ class BufferedMetaReader():
             if new_key not in self._meta:
                 #qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
                 self._meta[new_key] = callBackMetadataThread(cmds=['-i', self.video_path,
-                                                                                  '-ss', _seconds_to_time_frac(cTime),
-                                                                                  '-to', _seconds_to_time_frac(nTime),
-                                                                                  '-map', 'data-re',
-                                                                                  '-f', 'data', '-'])
+                                                                   '-ss', _seconds_to_time_frac(cTime),
+                                                                   '-to', _seconds_to_time_frac(nTime),
+                                                                   '-map', 'data-re',
+                                                                   '-f', 'data', '-'])
                 self._meta[new_key].start()
 
     # read a value and check the buffer
@@ -151,7 +154,7 @@ class BufferedMetaReader():
             else:
                 date = datetime.strptime(s[0], '%H:%M:%S')
                 new_t = _add_secs_to_time(date, 1) + ".0000"
-        except:
+        except Exception:
             qgsu.showUserAndLogMessage("", "wrong value for time, need . decimal" + t, onlyLog=True)
         try:
             if self._meta[new_t].p.returncode is None:
@@ -163,7 +166,7 @@ class BufferedMetaReader():
                 qgsu.showUserAndLogMessage("", "Meta reader -> get: " + t + " cache: "+ new_t +" values ready but empty.", onlyLog=True)
 
             self._check_buffer(new_t)
-        except:
+        except Exception:
             qgsu.showUserAndLogMessage("", "No value found for: " + t + " rounded: " + new_t, onlyLog=True)
 
         #qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
@@ -228,6 +231,7 @@ def getVideoLocationInfo(videoPath):
                 "QgsFmvUtils", "Video info callback failed! : "), str(e), level=QGis.Info)
 
         return location
+
 
 LAST_PATH = "LAST_PATH"
 BOOL = "bool"
@@ -416,33 +420,26 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
 
 
 def GetSensor():
-    global sensorLatitude
-    global sensorLongitude
-    global sensorTrueAltitude
     return [sensorLatitude, sensorLongitude, sensorTrueAltitude]
 
 
 def GetFrameCenter():
-    global gframeCenterLon
-    global gframeCenterLat
-    global frameCenterElevation
     return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
 
 
 def GetcornerPointUL():
-    global gcornerPointUL
     return gcornerPointUL
 
+
 def GetcornerPointUR():
-    global gcornerPointUR
     return gcornerPointUR
 
+
 def GetcornerPointLR():
-    global gcornerPointLR
     return gcornerPointLR
 
+
 def GetcornerPointLL():
-    global gcornerPointLL
     return gcornerPointLL
 
 
@@ -450,11 +447,13 @@ def GetGCPGeoTransform():
     ''' Return Geotransform '''
     return geotransform
 
+
 def hasElevationModel():
     if len(dtm_data) > 0:
         return True
     else:
         return False
+
 
 def SetImageSize(w, h):
     ''' Set Image Size '''
@@ -466,12 +465,10 @@ def SetImageSize(w, h):
 
 
 def GetImageWidth():
-    global xSize
     return xSize
 
 
 def GetImageHeight():
-    global ySize
     return ySize
 
 
@@ -547,28 +544,29 @@ def deg2rad(degrees):
     radians = pi * degrees / 180
     return radians
 
+
 def ResetData():
     global dtm_data
     global crtSensorSrc
     global crtPltTailNum
     global tLastLon
     global tLastLat
-    
+
     dtm_data = []
     crtSensorSrc = 'DEFAULT'
     crtPltTailNum = 'DEFAULT'
     tLastLon = 0.0
     tLastLat = 0.0
 
+
 def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
     global dtm_data
     global dtm_transform
     global dtm_colLowerBound
     global dtm_rowLowerBound
-    
+
     #Initialize the dtm once, based on a zone arouind the target
     qgsu.showUserAndLogMessage("", "Initializing DTM." , onlyLog=True)
-    driver = gdal.GetDriverByName('GTiff')
     dataset = gdal.Open(dtm_path)
     if dataset is None:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -607,7 +605,7 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     sensorLatitude = packet.GetSensorLatitude()
     sensorLongitude = packet.GetSensorLongitude()
     sensorTrueAltitude = packet.GetSensorTrueAltitude()
-    
+
     UpdatePlatformData(packet)
     UpdateTrajectoryData(packet)
 
@@ -720,7 +718,7 @@ def GeoreferenceFrame(image, output, parent):
 
 
 def CommonLayer(value):
-    ''' Common comands Layers '''
+    ''' Common commands Layers '''
     value.commitChanges()
     value.updateExtents()
     value.triggerRepaint()
@@ -902,14 +900,17 @@ def UpdateTrajectoryData(packet):
     lon = packet.GetSensorLongitude()
     alt = packet.GetSensorTrueAltitude()
 
-    if tLastLon == 0.0 and tLastLat == 0.0:
-        tLastLon = lon
-        tLastLat = lat
-    else:
-        #little check to see if telemetry data are plausible before drawing.
-        distance = sphere.distance((tLastLon, tLastLat), (lon, lat))
-        if distance > 10000:
-            return
+    try:
+        if tLastLon == 0.0 and tLastLat == 0.0:
+            tLastLon = lon
+            tLastLat = lat
+        else:
+            #little check to see if telemetry data are plausible before drawing.
+            distance = sphere.distance((tLastLon, tLastLat), (lon, lat))
+            if distance > 1000: # 1 km is the best value for prevent draw trajectory when start video again
+                return
+    except Exception:
+        None
 
     tLastLon = lon
     tLastLat = lat

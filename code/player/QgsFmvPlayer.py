@@ -70,7 +70,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.parent = parent
         self.iface = iface
         self.fileName = None
-        self.metadataDlg = None
         self.initialPt = initialPt
         self.meta_reader = meta_reader
         self.createingMosaic = False
@@ -80,8 +79,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionObject_Tracking.setVisible(False)
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
-
-        self.resize(730, 350)
 
         self.videoWidget.customContextMenuRequested[QPoint].connect(
             self.contextMenuRequested)
@@ -112,11 +109,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.volumeSlider.setValue(self.player.volume())
         self.volumeSlider.enterEvent = self.showVolumeTip
 
-        if self.metadataDlg is None:
-            self.metadataDlg = QgsFmvMetadata(parent=self, player=self)
-            self.addDockWidget(Qt.RightDockWidgetArea, self.metadataDlg)
-            self.metadataDlg.setMinimumWidth(500)
-            self.metadataDlg.hide()
+        self.metadataDlg = QgsFmvMetadata(parent=self, player=self)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.metadataDlg)
+        self.metadataDlg.setMinimumWidth(500)
+        self.metadataDlg.hide()
 
     def HasMetadata(self, videoPath):
         """ Check if video have Metadata or not """
@@ -183,7 +179,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             for packet in StreamParser(stdout_data):
                 try:
-                    self.addMetadata(packet.MetadataList())
+                    data = packet.MetadataList()
+                    if self.metadataDlg.isVisible(): # Only add metada to table if this QDockWidget is visible (speed plugin)
+                        self.addMetadata(data)
+
                     UpdateLayers(packet, parent=self,
                                  mosaic=self.createingMosaic)
                     self.iface.mapCanvas().refresh()
@@ -1273,7 +1272,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ResetData()
 
         try:
-            self.metadataDlg.close()
+            self.metadataDlg.hide()
         except Exception:
             None
         try:

@@ -148,4 +148,4 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
 
     def closeEvent(self, _):
         """ Close Dock Event """
-        self.parent.metadataDlg = None
+        self.hide()
