@@ -20,13 +20,15 @@ for this reason, I decided to develop this open source project and, this way, of
 
 ## Dependencies
 
-* [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `fmvConfig.py` with the corresponding path.
+* [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `fmvConfig.py` with the corresponding path.For example "D:\\FFMPEG"
 
 * [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python`
 
 * [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib`
 
 * [Klvdata](https://github.com/paretech/klvdata) : customized version of this library.
+
+* [Homography](https://github.com/satellogic/homography) : `python3 -m pip install homography`
 
 The plugin install automatically this requisites,but you can install it using:
 
@@ -62,6 +64,9 @@ For more information about the Unmanned Air System (UAS) metadata from STANAG 46
 ## Installation
 
 The installation can be done from the executable if it is in windows or from the zip
+
+
+## Slides
 
 
 ## Screenshots
