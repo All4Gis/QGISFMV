@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="ca" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="ca">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -132,7 +133,7 @@
     <message>
         <location filename="../player/QgsManager.py" line="49"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Esborrar</translation>
     </message>
 </context>
 <context>
@@ -205,7 +206,7 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="142"/>
         <source>Open MPEG2 File</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -473,7 +474,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="813"/>
         <source>Draw Pinpoint</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="821"/>

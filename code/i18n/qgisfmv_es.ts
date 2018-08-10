@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="es_ES" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="es_ES">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -473,22 +474,22 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="813"/>
         <source>Draw Pinpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Dibujar punto</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="821"/>
         <source>Draw Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Dibujar Línea</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="829"/>
         <source>Draw Polygon</source>
-        <translation type="unfinished"></translation>
+        <translation>Dibujar Poligono</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="837"/>
         <source>Object Tracking</source>
-        <translation type="unfinished"></translation>
+        <translation>Seguimiento de blancos</translation>
     </message>
 </context>
 <context>
