@@ -6,3 +6,5 @@ data/SRTM/SRTM_SE_250m.tif
 data/SRTM/SRTM_W_250m.tif
 data/SRTM/SRTM_W_250m.tif.aux.xml
 code/install_pip_packages.bat
+pull-transifex-translations.bat
+push-transifex-translations.bat
