@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.0">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -118,7 +116,7 @@
     <message>
         <location filename="../player/QgsManager.py" line="34"/>
         <source>&amp;Remove</source>
-        <translation type="obsolete">&amp;Remove</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="49"/>
@@ -171,32 +169,32 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="136"/>
         <source>Open Video</source>
-        <translation type="obsolete">Open Video</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="141"/>
         <source>Metadata</source>
-        <translation type="obsolete">Metadata</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="146"/>
         <source>Converter Video</source>
-        <translation type="obsolete">Converter Video</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="151"/>
         <source>Extract All Frames</source>
-        <translation type="obsolete">Extract All Frames</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="156"/>
         <source>Save Video Info To Json</source>
-        <translation type="obsolete">Save Video Info To Json</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="161"/>
         <source>Show Video Info</source>
-        <translation type="obsolete">Show Video Info</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="137"/>
@@ -206,7 +204,7 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="142"/>
         <source>Open MPEG2 File</source>
-        <translation>Open MPEG2 File</translation>
+        <translation>Open MPEG2 file</translation>
     </message>
 </context>
 <context>
@@ -474,7 +472,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="813"/>
         <source>Draw Pinpoint</source>
-        <translation>Draw Pinpoint</translation>
+        <translation>Draw Point</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="821"/>
@@ -497,7 +495,7 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="131"/>
         <source>This video don&apos;t have Metadata ! </source>
-        <translation>This video don&apos;t have Metadata ! </translation>
+        <translation>This video don&apos;t have Metadata ! :</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="138"/>
@@ -507,7 +505,7 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="152"/>
         <source>This video don&apos;t have Audio ! </source>
-        <translation>This video don&apos;t have Audio ! </translation>
+        <translation>This video don&apos;t have Audio ! :</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="159"/>
@@ -517,17 +515,17 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="245"/>
         <source>Error saving Json</source>
-        <translation type="obsolete">Error saving Json</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="255"/>
         <source>Error Info Show</source>
-        <translation type="obsolete">Error Info Show</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="333"/>
         <source>Color Options</source>
-        <translation type="obsolete">Color Options</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="340"/>
@@ -562,12 +560,12 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="788"/>
         <source>Error converting video </source>
-        <translation type="obsolete">Error converting video </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="996"/>
         <source>Failed creating Plot Bitrate</source>
-        <translation type="obsolete">Failed creating Plot Bitrate</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1063"/>
@@ -587,7 +585,7 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="687"/>
         <source>Playing : </source>
-        <translation>Playing : </translation>
+        <translation>Playing :</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1246"/>
@@ -597,22 +595,26 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="175"/>
         <source>Buffer value read but is not ready, increase buffer size. : </source>
-        <translation type="unfinished"></translation>
+        <translation>Buffer value read but is not ready, increase buffer size. : 
+</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="179"/>
         <source>Buffer returned empty metadata, check pass_time. : </source>
-        <translation type="unfinished"></translation>
+        <translation>Buffer returned empty metadata, check pass_time. : 
+</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="192"/>
         <source>Meta update failed! </source>
-        <translation type="unfinished"></translation>
+        <translation>Meta update failed! 
+</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="196"/>
         <source>Metadata Buffer Failed! : </source>
-        <translation type="unfinished"></translation>
+        <translation>Metadata Buffer Failed! : 
+</translation>
     </message>
 </context>
 <context>
