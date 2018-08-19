@@ -194,7 +194,7 @@ class VideoWidget(QVideoWidget):
         self.setUpdatesEnabled(True)
         self.setMouseTracking(True)
         self.origin = QPoint()
-        self.pressed = self.snapped = self.zoomed = self.TrackingRubberBand = False
+        self.snapped = self.zoomed = self.TrackingRubberBand = False
         self.gt = None
 
         self.poly_coordinates = []
@@ -219,10 +219,6 @@ class VideoWidget(QVideoWidget):
                            QSizePolicy.MinimumExpanding)
 
         self.surface = VideoWidgetSurface(self)
-
-        self.pressed = False
-        self.snapped = False
-        self.zoomed = False
 
         self.offset = QPoint()
         self.pressPos = QPoint()
@@ -675,22 +671,18 @@ class VideoWidget(QVideoWidget):
                 QRect(self.origin, event.pos()).normalized())
 
         if not self.zoomed:
-            if not self.pressed or not self.snapped:
-                delta = event.pos() - self.pressPos
+            delta = event.pos() - self.pressPos
+            if not self.snapped:
                 self.pressPos = event.pos()
                 self.pan(delta)
+                self.tapTimer.stop()
                 return
             else:
                 threshold = 10
-                delta = event.pos() - self.pressPos
-                if self.snapped:
-                    self.snapped &= delta.x() < threshold
-                    self.snapped &= delta.y() < threshold
-                    self.snapped &= delta.x() > -threshold
-                    self.snapped &= delta.y() > -threshold
-
-                if not self.snapped:
-                    self.tapTimer.stop()
+                self.snapped &= delta.x() < threshold
+                self.snapped &= delta.y() < threshold
+                self.snapped &= delta.x() > -threshold
+                self.snapped &= delta.y() > -threshold
 
         else:
             self.dragPos = event.pos()
@@ -714,7 +706,7 @@ class VideoWidget(QVideoWidget):
         :return:
         """
         if event.button() == Qt.LeftButton:
-            self.pressed = self.snapped = True
+            self.snapped = True
             self.pressPos = self.dragPos = event.pos()
             self.tapTimer.stop()
             self.tapTimer.start(HOLD_TIME, self)
@@ -823,7 +815,6 @@ class VideoWidget(QVideoWidget):
         self.TrackingRubberBand = False
         if self.zoomed is True:
             return
-        self.zoomed = False
         if not objectTracking:
             self.surface.updateVideoRect()
         else:
