@@ -106,6 +106,7 @@ Follow these steps:
 	
 And thanks for your code.
 
+![a](images/thanks.gif)
 
 ## Contributing translations
 
