@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="ca" sourcelanguage="">
+<!DOCTYPE TS><TS version="2.0">
 <context>
     <name>ColorDialog</name>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="20"/>
         <source>Color Options</source>
-        <translation>Opcions de color</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="35"/>
         <source>Brightness</source>
-        <translation>Billantor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="55"/>
         <source>Contrast</source>
-        <translation>Contrast</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="62"/>
@@ -25,12 +25,12 @@
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="69"/>
         <source>Saturation</source>
-        <translation>Saturació</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="130"/>
         <source>Reset</source>
-        <translation>Reiniciar</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -38,12 +38,12 @@
     <message>
         <location filename="../QgsFmv.py" line="63"/>
         <source>Show Video Manager</source>
-        <translation>Mostrar Administrador de Vídeo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QgsFmv.py" line="85"/>
         <source>Full Motion Video (FMV)</source>
-        <translation>Full Motion Video (FMV)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../QgsFmv.py" line="73"/>
@@ -61,7 +61,7 @@
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="30"/>
         <source>about:blank</source>
-        <translation>about:blank</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -69,70 +69,65 @@
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="17"/>
         <source>Metadata</source>
-        <translation>Metadades</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="36"/>
         <source>Save</source>
-        <translation>Desar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="106"/>
         <source>Tag</source>
-        <translation>Tag</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="111"/>
         <source>Key</source>
-        <translation>Clau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="116"/>
         <source>Value</source>
-        <translation>Valor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="129"/>
         <source>Save as PDF</source>
-        <translation>Desar com a PDF</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="132"/>
         <source>Ctrl+Shift+P</source>
-        <translation>Ctrl+Shift+P</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="141"/>
         <source>Save as CSV</source>
-        <translation>Desar com a CSV</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="144"/>
         <source>Ctrl+Shift+C</source>
-        <translation>Ctrl+Shift+C</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="34"/>
-        <source>&amp;Remove</source>
-        <translation type="obsolete">&amp;Eliminar</translation>
+        <location filename="../player/QgsManager.py" line="49"/>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="49"/>
         <source>Remove the current selection&apos;s video</source>
-        <translation>Eliminar vídeo seleccionat actual</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="111"/>
         <source>Open video</source>
-        <translation>Obrir vídeo</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsManager.py" line="49"/>
-        <source>Remove</source>
-        <translation>Eliminar</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -140,52 +135,32 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="24"/>
         <source>Video Manager</source>
-        <translation>Administrador de Vídeo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="37"/>
         <source>File</source>
-        <translation>Fitxer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="113"/>
         <source>Id</source>
-        <translation>Id</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="118"/>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="123"/>
         <source>Status</source>
-        <translation>Estat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="128"/>
         <source>Source</source>
-        <translation>Font</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvManager.ui" line="136"/>
-        <source>Open Video</source>
-        <translation type="obsolete">Obrir Vídeo</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvManager.ui" line="141"/>
-        <source>Metadata</source>
-        <translation type="obsolete">Metadades</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvManager.ui" line="146"/>
-        <source>Converter Video</source>
-        <translation type="obsolete">Convertir Vídeo</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvManager.ui" line="151"/>
-        <source>Extract All Frames</source>
-        <translation type="obsolete">Extreure Tots els Frames</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="137"/>
@@ -218,7 +193,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="138"/>
         <source>Ctrl+C</source>
-        <translation>Ctrl+C</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="151"/>
@@ -238,7 +213,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="704"/>
         <source>Ctrl+Shift+M</source>
-        <translation>Ctrl+Shift+M</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="240"/>
@@ -328,7 +303,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="620"/>
         <source>Metadata</source>
-        <translation>Metadades</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="626"/>
@@ -368,12 +343,12 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="693"/>
         <source>Extract All Frames</source>
-        <translation>Extreure Tots els Frames</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="696"/>
         <source>Ctrl+Shift+A</source>
-        <translation>Ctrl+Shift+A</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="701"/>
@@ -383,7 +358,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="709"/>
         <source>Converter Video</source>
-        <translation>Convertir Vídeo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="714"/>
@@ -504,9 +479,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="333"/>
-        <source>Color Options</source>
-        <translation type="obsolete">Opcions de color</translation>
+        <location filename="../player/QgsFmvPlayer.py" line="172"/>
+        <source>Buffer value read but is not ready, increase buffer size. : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="176"/>
+        <source>Buffer returned empty metadata, check pass_time. : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="192"/>
+        <source>Meta update failed! </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="196"/>
+        <source>Metadata Buffer Failed! : </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="340"/>
@@ -516,7 +506,7 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="346"/>
         <source>Extract All Frames</source>
-        <translation>Extreure Tots els Frames</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="351"/>
@@ -526,6 +516,11 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="358"/>
         <source>Show Metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="687"/>
+        <source>Playing : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -554,33 +549,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="687"/>
-        <source>Playing : </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../player/QgsFmvPlayer.py" line="1246"/>
         <source>Video Information : </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="172"/>
-        <source>Buffer value read but is not ready, increase buffer size. : </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="176"/>
-        <source>Buffer returned empty metadata, check pass_time. : </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="192"/>
-        <source>Meta update failed! </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="196"/>
-        <source>Metadata Buffer Failed! : </source>
         <translation type="unfinished"></translation>
     </message>
 </context>

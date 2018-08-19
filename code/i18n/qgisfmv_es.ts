@@ -1,4 +1,5 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS><TS version="2.0" language="es" sourcelanguage="">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -116,7 +117,7 @@
     <message>
         <location filename="../player/QgsManager.py" line="34"/>
         <source>&amp;Remove</source>
-        <translation>&amp;Remove</translation>
+        <translation type="obsolete">&amp;Remove</translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="49"/>
@@ -169,32 +170,32 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="136"/>
         <source>Open Video</source>
-        <translation>Open Video</translation>
+        <translation type="obsolete">Open Video</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="141"/>
         <source>Metadata</source>
-        <translation>Metadata</translation>
+        <translation type="obsolete">Metadata</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="146"/>
         <source>Converter Video</source>
-        <translation>Converter Video</translation>
+        <translation type="obsolete">Converter Video</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="151"/>
         <source>Extract All Frames</source>
-        <translation>Extract All Frames</translation>
+        <translation type="obsolete">Extract All Frames</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="156"/>
         <source>Save Video Info To Json</source>
-        <translation>Save Video Info To Json</translation>
+        <translation type="obsolete">Save Video Info To Json</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="161"/>
         <source>Show Video Info</source>
-        <translation>Show Video Info</translation>
+        <translation type="obsolete">Show Video Info</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="137"/>
@@ -493,39 +494,39 @@
 <context>
     <name>QgsFmvPlayer</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="131"/>
+        <location filename="../player/QgsFmvPlayer.py" line="128"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation>This video don&apos;t have Metadata ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="138"/>
+        <location filename="../player/QgsFmvPlayer.py" line="135"/>
         <source>Metadata Callback Failed! : </source>
         <translation>Metadata Callback Failed! : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="152"/>
+        <location filename="../player/QgsFmvPlayer.py" line="149"/>
         <source>This video don&apos;t have Audio ! </source>
         <translation>This video don&apos;t have Audio ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="159"/>
+        <location filename="../player/QgsFmvPlayer.py" line="156"/>
         <source>Audio check Failed! : </source>
         <translation>Audio check Failed! :</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="245"/>
         <source>Error saving Json</source>
-        <translation>Error saving Json</translation>
+        <translation type="obsolete">Error saving Json</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="255"/>
         <source>Error Info Show</source>
-        <translation>Error Info Show</translation>
+        <translation type="obsolete">Error Info Show</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="333"/>
         <source>Color Options</source>
-        <translation>Color Options</translation>
+        <translation type="obsolete">Color Options</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="340"/>
@@ -560,12 +561,12 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="788"/>
         <source>Error converting video </source>
-        <translation>Error converting video </translation>
+        <translation type="obsolete">Error converting video </translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="996"/>
         <source>Failed creating Plot Bitrate</source>
-        <translation>Failed creating Plot Bitrate</translation>
+        <translation type="obsolete">Failed creating Plot Bitrate</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1063"/>
@@ -593,13 +594,13 @@
         <translation>Video Information : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="175"/>
+        <location filename="../player/QgsFmvPlayer.py" line="172"/>
         <source>Buffer value read but is not ready, increase buffer size. : </source>
         <translation>Buffer value read but is not ready, increase buffer size. : 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="179"/>
+        <location filename="../player/QgsFmvPlayer.py" line="176"/>
         <source>Buffer returned empty metadata, check pass_time. : </source>
         <translation>Buffer returned empty metadata, check pass_time. : 
 </translation>

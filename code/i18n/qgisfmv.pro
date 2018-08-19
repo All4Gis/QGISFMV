@@ -12,4 +12,6 @@ SOURCES = ../QgsFmv.py \
 
 TRANSLATIONS = qgisfmv_en.ts \
 qgisfmv_es.ts \
+qgisfmv_fr.ts \
+qgisfmv_fa.ts \
 qgisfmv_ca.ts

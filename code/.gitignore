@@ -2,7 +2,7 @@
 .pydevproject
 Compile.bat
 ReleaseI18n.bat
-Hidden.bat
+Deploy.bat
 install_pip_packages.bat
 *.pyc
 .settings/
