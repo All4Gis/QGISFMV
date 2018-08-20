@@ -20,6 +20,7 @@ from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
 from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         GetSensor,
+                                        convertQImageToMat,
                                         GetLine3DIntersectionWithDEM,
                                         GetLine3DIntersectionWithPlane,
                                         CommonLayer,
@@ -35,6 +36,7 @@ from QGIS_FMV.fmvConfig import Point_lyr, Line_lyr, Polygon_lyr
 from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
 from qgis.gui import QgsRubberBand
 from qgis.utils import iface
+from qgis.core import Qgis as QGis
 
 try:
     from pydevd import *
@@ -70,7 +72,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         self.widget = widget
         self.imageFormat = QImage.Format_Invalid
         self.image = None
-        self.zoomedrect = None
 
     def supportedPixelFormats(self, handleType=QAbstractVideoBuffer.NoHandle):
         ''' Available Frames Format '''
@@ -178,7 +179,21 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             if invertColorFilter:
                 self.image.invertPixels()
 
+            painter.setRenderHint(QPainter.Antialiasing)
             painter.drawImage(self.targetRect, self.image, self.sourceRect)
+
+            if objectTracking and self.widget._isinit:
+                frame = convertQImageToMat(self.image)
+                # Update tracker
+                ok, bbox = self.widget.tracker.update(frame)
+                # Draw bounding box
+                if ok:
+                    qgsu.showUserAndLogMessage("bbox : ",str(bbox), level=QGis.Warning)
+                    painter.setPen(Qt.blue)
+                    painter.drawRect(QRect(int(bbox[0]),int(bbox[1]),int(bbox[2]),int(bbox[3])));
+                else:
+                    qgsu.showUserAndLogMessage("Tracking failure detected ","", level=QGis.Warning)
+
             painter.setTransform(oldTransform)
             self.currentFrame.unmap()
 
@@ -189,12 +204,13 @@ class VideoWidget(QVideoWidget):
         super(VideoWidget, self).__init__(parent)
         self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
         pal = QPalette()
-        pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.green)))
+        pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
         self.rubberBand.setPalette(pal)
         self.setUpdatesEnabled(True)
         self.setMouseTracking(True)
         self.origin = QPoint()
         self.snapped = self.zoomed = self.TrackingRubberBand = False
+        self._isinit = False
         self.gt = None
 
         self.poly_coordinates = []
@@ -254,7 +270,7 @@ class VideoWidget(QVideoWidget):
             self.UpdateSurface()
             return
         if self.gt is not None and polygonDrawer:
-            # TODO : Add values to attributes table ¿Centroid value maybe?
+            # TODO : Add values to attributes table Â¿Centroid value maybe?
             # TODO : Add area value too
             self.drawPolygon.append([None, None, None])
             # Add Polygon
@@ -315,11 +331,6 @@ class VideoWidget(QVideoWidget):
         ''' Set Object Tracking '''
         global objectTracking
         objectTracking = value
-        if value:
-            self.video_cv2 = self.parent.video_cv2
-            p = self.parent.player.position()
-            self.video_cv2.set(cv2.CAP_PROP_POS_MSEC, p)
-            success, image = self.video_cv2.read()
 
     def SetGray(self, value):
         ''' Set gray scale '''
@@ -450,7 +461,7 @@ class VideoWidget(QVideoWidget):
                     self.drawLinesOnVideo(pt, idx)
 
         # Draw clicked Polygons on video
-        # TODO : Make better and cleaned method ¿using itertools maybe?
+        # TODO : Make better and cleaned method Â¿using itertools maybe?
         if len(self.drawPolygon) > 1:
             poly = []
             if any(None == x[1] for x in self.drawPolygon):
@@ -813,13 +824,18 @@ class VideoWidget(QVideoWidget):
         :return:
         """
         self.TrackingRubberBand = False
-        if self.zoomed is True:
-            return
-        if not objectTracking:
-            self.surface.updateVideoRect()
-        else:
+        if objectTracking:
+            geom = self.rubberBand.geometry()
+            bbox = (geom.x(), geom.y(), geom.width(), geom.height())
+            frame = convertQImageToMat(self.GetCurrentFrame())
             self.rubberBand.hide()
-            self.zoomedRect = True
+            self.tracker = cv2.TrackerBoosting_create()
+            self.tracker.clear()
+            ok = self.tracker.init(frame, bbox)
+            if ok:
+                self._isinit = True
+            else:
+                self._isinit = False
 
     def leaveEvent(self, _):
         self.parent.lb_cursor_coord.setText("")

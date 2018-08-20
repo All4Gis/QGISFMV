@@ -55,7 +55,6 @@ except ImportError:
 try:
     import numpy
     import matplotlib.pyplot as matplot
-    import cv2
 except ImportError:
     None
 
@@ -76,7 +75,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.currentInfo = 0.0
 
         self.btn_Color.hide() # Hide Color Button
-        self.actionObject_Tracking.setVisible(False)
+        #self.actionObject_Tracking.setVisible(False)
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
 
@@ -705,9 +704,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.iface.mapCanvas().refresh()
 
             self.playClicked(True)
-
-            # Read video
-            self.video_cv2 = cv2.VideoCapture(videoPath)
 
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
