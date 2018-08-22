@@ -39,8 +39,8 @@ The plugin install automatically this requisites,but you can install it using:
 
 To see the video you need:
 
-  - Linux: `sudo apt-get install gst123` (install GStreamer dependencies)
-  - Window: install LAV Filters (install <a href="https://github.com/Nevcairiel/LAVFilters/releases" target="_blank">DirectShow Media Decoders</a>) 
+  - **Linux**: `sudo apt-get install gst123` (install GStreamer dependencies)
+  - **Window**: install LAV Filters (install <a href="https://github.com/Nevcairiel/LAVFilters/releases" target="_blank">DirectShow Media Decoders</a>) 
 
 
 ## Usage
