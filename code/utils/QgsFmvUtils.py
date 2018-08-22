@@ -175,7 +175,7 @@ class BufferedMetaReader():
 
 
 class callBackMetadataThread(threading.Thread):
-    '''  Test : CallBack metadata in other thread  '''
+    ''' CallBack metadata in other thread  '''
 
     def __init__(self, cmds, t="ffmpeg"):
         self.stdout = None

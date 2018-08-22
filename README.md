@@ -24,6 +24,8 @@ for this reason, I decided to develop this open source project and, this way, of
 
 * [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python`
 
+* [opencv-contrib-python](https://pypi.org/project/opencv-contrib-python/) : `python3 -m pip install opencv-contrib-python`
+
 * [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib`
 
 * [Klvdata](https://github.com/paretech/klvdata) : customized version of this library.

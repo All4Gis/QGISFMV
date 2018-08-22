@@ -25,6 +25,7 @@ from PyQt5.QtWidgets import (QToolTip,
                              QApplication,
                              QTableWidgetItem)
 from QGIS_FMV.converter.Converter import Converter
+from QGIS_FMV.video.QgsVideoCaptureAsync import VideoCaptureAsync
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.player.QgsFmvMetadata import QgsFmvMetadata
@@ -100,7 +101,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.player.stateChanged.connect(self.setCurrentState)
 
-        self.playerState = QMediaPlayer.StoppedState
+        self.playerState = QMediaPlayer.LoadingMedia
         self.playFile(path)
 
         self.sliderDuration.setRange(0, self.player.duration() / 1000)
@@ -306,7 +307,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.ColorDialog.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         # Fail if not uncheked
         self.actionMagnifying_glass.setChecked(False)
-        self.actionZoom_Rectangle.setChecked(False)
         self.ColorDialog.exec_()
         QApplication.processEvents()
         self.ColorDialog.contrastSlider.setValue(80)
@@ -501,16 +501,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.volumeSlider.setEnabled(False)
         return
 
-    # TODO: stop create black screen
     def stop(self):
         ''' Stop video'''
-        # Prevent Error in a Video Utils.Disable Magnifier and zoom
+        # Prevent Error in a Video Utils.Disable Magnifier
         if self.actionMagnifying_glass.isChecked():
             self.actionMagnifying_glass.trigger()
-        elif self.actionZoom_Rectangle.isChecked():
-            self.actionZoom_Rectangle.trigger()
         # Stop Video
-        self.player.stop()
+        self.fakeStop()
         return
 
     def volume(self):
@@ -649,15 +646,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         else:
             self.videoAvailableChanged(True)
 
-    def resetState(self, state):
-        ''' Reset Video State '''
-        if state == QMediaPlayer.PausedState:
-            self.player.play()
-            self.player.pause()
-        elif state == QMediaPlayer.StoppedState:
-            self.player.play()
-            self.player.stop()
-
     def playFile(self, videoPath):
         ''' Play file from path '''
         try:
@@ -704,6 +692,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.iface.mapCanvas().refresh()
 
             self.playClicked(True)
+            # OpenCV Video Capture in other thread
+            self.capture = VideoCaptureAsync(videoPath)
+            self.capture.start()
 
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -765,6 +756,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         else:
             sender.setFixedHeight(15)
 
+    def fakeStop(self):
+        '''self.player.stop() make a black screen and not reproduce it again '''
+        self.player.pause()
+        self.StartMedia()
+        self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
+
     def playClicked(self, _):
         ''' Stop and Play video '''
         if self.playerState in (QMediaPlayer.StoppedState,
@@ -779,6 +776,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         '''Slider Move'''
         self.player.setPosition(seconds * 1000)
         self.showMoveTip(seconds)
+
+    def GetVideoCapture(self):
+        return self.capture
 
     def convertVideo(self):
         '''Convert Video To Other Format '''
@@ -1260,7 +1260,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             evt.ignore()
             return
 
-        self.player.stop()
         self.parent._PlayerDlg = None
         self.parent.ToggleActiveFromTitle()
         RemoveVideoLayers()
@@ -1277,4 +1276,3 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             None
         # Restore Filters State
         self.videoWidget.RestoreFilters()
-        del self.player
