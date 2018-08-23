@@ -616,8 +616,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             currentTime = _seconds_to_time(currentInfo)
             tStr = currentTime + " / " + totalTime
             currentTimeInfo = _seconds_to_time_frac(currentInfo)
-
-            #Get Metadata from buffer 
+            # Get Metadata from buffer
             self.get_metadata_from_buffer(currentTimeInfo)
 
         else:
@@ -1103,7 +1102,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         QApplication.processEvents()
         return
 
-    def QThreadFinished(self, process, msg="", outjson=None):
+    def QThreadFinished(self, process, _="", outjson=None):
         ''' Finish Threads '''
         if process == "ExtractFramesProcessor":
             self.VPExtractFrames.deleteLater()

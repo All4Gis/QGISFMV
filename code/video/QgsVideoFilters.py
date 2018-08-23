@@ -38,7 +38,7 @@ class VideoFilters():
     @staticmethod
     def EdgeFilter(image):
         ''' Edge Image Filter '''
-        gray = convertQImageToMat(VideoFilters.GrayFilter(image))
+        gray = convertQImageToMat(image)
         canny = Canny(gray, 100, 150)
         return convertMatToQImage(canny)
 

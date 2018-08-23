@@ -347,13 +347,9 @@ def askForFolder(parent, msg=None):
 def convertQImageToMat(img):
     '''  Converts a QImage into an opencv MAT format  '''
     img = img.convertToFormat(4)
-    w = img.width()
-    h = img.height()
-
     ptr = img.bits()
     ptr.setsize(img.byteCount())
-    arr = np.array(ptr).reshape(h, w, 4)  # Copies the data
-    return arr
+    return np.array(ptr).reshape(img.height(), img.width(), 4)
 
 
 def convertMatToQImage(img):
@@ -365,8 +361,7 @@ def convertMatToQImage(img):
         rgb = cvtColor(img, COLOR_GRAY2RGB)
     else:
         raise Exception("Unstatistified image data format!")
-    qimage = QImage(rgb.flatten(), width, height, QImage.Format_RGB888)
-    return qimage
+    return QImage(rgb, width, height, QImage.Format_RGB888)
 
 
 def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat):

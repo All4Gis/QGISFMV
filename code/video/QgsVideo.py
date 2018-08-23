@@ -11,13 +11,16 @@ from PyQt5.QtGui import (QImage,
                          QPen,
                          QBrush,
                          QPolygonF)
+import threading
 from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QVideoFrame,
                                 QVideoSurfaceFormat,
                                 QAbstractVideoSurface)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
+from QGIS_FMV.utils.QgsFmvUtils import convertMatToQImage, convertQImageToMat
 
 from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
+
 from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         GetSensor,
                                         convertQImageToMat,
@@ -72,6 +75,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         self.widget = widget
         self.imageFormat = QImage.Format_Invalid
         self.image = None
+        self.read_lock = threading.Lock()
 
     def supportedPixelFormats(self, handleType=QAbstractVideoBuffer.NoHandle):
         ''' Available Frames Format '''
@@ -104,12 +108,17 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             _format.pixelFormat())
         size = _format.frameSize()
         if (imageFormat != QImage.Format_Invalid and not size.isEmpty()):
-            self.imageFormat = imageFormat
-            self.imageSize = size
             self.sourceRect = _format.viewport()
             QAbstractVideoSurface.start(self, _format)
+            self.imageFormat = imageFormat
+            self.imageSize = size
             self.widget.updateGeometry()
             self.updateVideoRect()
+            try:
+                self.capture = self.widget.capture
+            except:
+                None
+
             return True
         else:
             return False
@@ -151,11 +160,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
     def paint(self, painter):
         ''' Paint Frame'''
         if (self.currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
-            oldTransform = painter.transform()
-
-            if (self.surfaceFormat().scanLineDirection() == QVideoSurfaceFormat.BottomToTop):
-                painter.scale(1, -1)
-                painter.translate(0, -self.widget.height())
+            painter.setRenderHint(QPainter.Antialiasing)
 
             self.image = QImage(self.currentFrame.bits(),
                                 self.currentFrame.width(),
@@ -179,7 +184,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             if invertColorFilter:
                 self.image.invertPixels()
 
-            painter.setRenderHint(QPainter.Antialiasing)
             painter.drawImage(self.targetRect, self.image, self.sourceRect)
 
             if objectTracking and self.widget._isinit:
@@ -194,7 +198,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
                 else:
                     qgsu.showUserAndLogMessage("Tracking failure detected ","", level=QGis.Warning)
 
-            painter.setTransform(oldTransform)
             self.currentFrame.unmap()
 
 
@@ -202,19 +205,19 @@ class VideoWidget(QVideoWidget):
 
     def __init__(self, parent=None):
         super(VideoWidget, self).__init__(parent)
+        self.surface = VideoWidgetSurface(self)
         self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
         pal = QPalette()
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
         self.rubberBand.setPalette(pal)
         self.setUpdatesEnabled(True)
         self.setMouseTracking(True)
-        self.origin = QPoint()
         self.snapped = self.zoomed = self.TrackingRubberBand = False
         self._isinit = False
         self.gt = None
 
-        self.poly_coordinates = []
-        self.poly_RubberBand = QgsRubberBand(iface.mapCanvas(), True)# Polygon type
+        self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawPolygon = [], [], [], []
+        self.poly_RubberBand = QgsRubberBand(iface.mapCanvas(), True) # Polygon type
         # set rubber band style
         color = QColor(176, 255, 128)
         self.poly_RubberBand.setColor(color)
@@ -223,30 +226,25 @@ class VideoWidget(QVideoWidget):
         self.poly_RubberBand.setWidth(3)
 
         self.parent = parent.parent()
+
         self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
 
-        self.setAttribute(Qt.WA_NoSystemBackground, True)
-        self.setAttribute(Qt.WA_PaintOnScreen, True)
-        self.setAttribute(Qt.WA_OpaquePaintEvent, True)
+        self.setAttribute(Qt.WA_NoSystemBackground)
+        self.setAttribute(Qt.WA_PaintOnScreen)
+        self.setAttribute(Qt.WA_OpaquePaintEvent)
+        self.setAttribute(Qt.WA_DeleteOnClose)
         palette = self.palette()
         palette.setColor(QPalette.Background, Qt.black)
         self.setPalette(palette)
         self.setSizePolicy(QSizePolicy.MinimumExpanding,
                            QSizePolicy.MinimumExpanding)
 
-        self.surface = VideoWidgetSurface(self)
-
-        self.offset = QPoint()
-        self.pressPos = QPoint()
-        self.drawPtPos = []
-        self.drawLines = []
-        self.drawPolygon = []
-        self.dragPos = QPoint()
+        self.offset, self.origin, self.pressPos, self.dragPos = QPoint(), QPoint(), QPoint(), QPoint()
         self.tapTimer = QBasicTimer()
-        self.zoomPixmap = QPixmap()
-        self.maskPixmap = QPixmap()
+        self.zoomPixmap, self.maskPixmap = QPixmap(), QPixmap()
 
     def keyPressEvent(self, event):
+        ''' Exit fullscreen '''
         if event.key() == Qt.Key_Escape and self.isFullScreen():
             self.setFullScreen(False)
             event.accept()
@@ -270,7 +268,7 @@ class VideoWidget(QVideoWidget):
             self.UpdateSurface()
             return
         if self.gt is not None and polygonDrawer:
-            # TODO : Add values to attributes table Â¿Centroid value maybe?
+            # TODO : Add values to attributes table ¿Centroid value maybe?
             # TODO : Add area value too
             self.drawPolygon.append([None, None, None])
             # Add Polygon
@@ -341,6 +339,7 @@ class VideoWidget(QVideoWidget):
         ''' Set Canny Edge filter '''
         global edgeDetectionFilter
         edgeDetectionFilter = value
+        self.capture = self.parent.capture
 
     def SetAutoContrastFilter(self, value):
         ''' Set Automatic Contrast filter '''
@@ -461,7 +460,7 @@ class VideoWidget(QVideoWidget):
                     self.drawLinesOnVideo(pt, idx)
 
         # Draw clicked Polygons on video
-        # TODO : Make better and cleaned method Â¿using itertools maybe?
+        # TODO : Make better and cleaned method ¿using itertools maybe?
         if len(self.drawPolygon) > 1:
             poly = []
             if any(None == x[1] for x in self.drawPolygon):
