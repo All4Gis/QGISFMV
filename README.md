@@ -70,6 +70,20 @@ The installation can be done from the executable if it is in windows or from the
 
 [![Watch the video (Spanish)](https://i.imgur.com/vXpMJhS.png)](https://youtu.be/9C973pz5i6k "Como usa QGISFMV en windows")
 
+## Installation on Archlinux
+
+_Archlinux installation :_ 
+```
+pacman -S qgis python-matplotlib opencv ffmpeg 
+pip install homography
+```
+
+_FFmpeg path_
+```
+ffmpeg = "/usr/bin/"
+ffprobe = "/usr/bin/"
+```
+
 ## Slides
 
 
