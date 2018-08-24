@@ -54,7 +54,6 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         try:
             QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
 
-
             font_normal = QFont("Helvetica", 10, QFont.Normal)
             font_bold = QFont("Helvetica", 12, QFont.Bold)
 
@@ -68,7 +67,6 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
             printer.setColorMode(QPrinter.Color)
 
             document = QTextDocument()
-            #document.setPageSize(QSizeF(printer.pageRect().size()))  # This disables printing the page number
             document.setDefaultFont(font_normal)
 
             cursor = QTextCursor(document)
@@ -143,11 +141,6 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
             cursor.insertBlock(centerFormat)
             cursor.insertImage(frame.scaledToWidth(500))
 
-            # Create a QPainter to draw our content
-#             painter = QPainter()
-#             painter.begin( printer )
-#             document.drawContents(painter)
-#             painter.end()
             document.print_(printer)
 
             QApplication.restoreOverrideCursor()
