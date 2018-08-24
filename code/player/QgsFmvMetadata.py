@@ -12,12 +12,11 @@ from PyQt5.QtGui import (QCursor,
                          QBrush,
                          QColor)
 from PyQt5.QtPrintSupport import QPrinter
-from PyQt5.QtWidgets import QDockWidget, QApplication, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QDockWidget, QApplication
 from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGIS_FMV.utils.QgsFmvUtils import askForFiles
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import Qgis as QGis
-
 
 try:
     from pydevd import *
