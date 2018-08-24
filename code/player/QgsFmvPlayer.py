@@ -171,10 +171,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             stdout_data = self.meta_reader.get(currentTime)
 
             if stdout_data == 'NOT_READY':
+                self.metadataDlg.menuSave.setEnabled(False)
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), onlyLog=True)
                 return
             elif stdout_data == b'' or len(stdout_data) == 0:
+                self.metadataDlg.menuSave.setEnabled(False)
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Buffer returned empty metadata, check pass_time. : "), onlyLog=True)
                 return
@@ -184,6 +186,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     data = packet.MetadataList()
                     self.data = data
                     if self.metadataDlg.isVisible(): # Only add metada to table if this QDockWidget is visible (speed plugin)
+                        self.metadataDlg.menuSave.setEnabled(True)
                         self.addMetadata(data)
 
                     UpdateLayers(packet, parent=self,

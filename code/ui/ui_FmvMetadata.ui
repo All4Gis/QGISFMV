@@ -32,6 +32,9 @@
 }</string>
       </property>
       <widget class="QMenu" name="menuSave">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="title">
         <string>Save</string>
        </property>

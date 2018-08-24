@@ -162,6 +162,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
 
     def SaveACSV(self):
         """ Save Table as CSV  """
+        data = self.player.GetPacketData()
         out, _ = askForFiles(self, QCoreApplication.translate(
                                       "QgsFmvMetadata", "Save CSV"),
                                       isSave=True,
@@ -171,22 +172,21 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         try:
             with open(unicode(out), 'w') as stream:
                 headers = list()
+                # 3 Columns always
                 for column in range(self.VManager.columnCount()):
                     headers.append(self.VManager.model(
                     ).headerData(column, Qt.Horizontal))
 
                 writer = csv.DictWriter(stream, fieldnames=headers)
                 writer.writeheader()
-                for row in range(self.VManager.rowCount()):
+
+                for key in sorted(data.keys()):
                     rowdata = {}
-                    for column in range(self.VManager.columnCount()):
-                        item = self.VManager.item(row, column)
-                        name = self.VManager.model().headerData(column, Qt.Horizontal)
-                        if item is not None:
-                            rowdata[name] = unicode(item.text())
-                        else:
-                            rowdata[name] = ''
+                    rowdata[headers[0]] = unicode(str(key))
+                    rowdata[headers[1]] = unicode(str(data[key][0]))
+                    rowdata[headers[2]] = unicode(str(data[key][1]))
                     writer.writerow(rowdata)
+
             QApplication.restoreOverrideCursor()
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvMetadata", "Succesfully creating CSV"))
