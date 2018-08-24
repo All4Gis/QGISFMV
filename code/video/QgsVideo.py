@@ -39,7 +39,7 @@ from QGIS_FMV.fmvConfig import Point_lyr, Line_lyr, Polygon_lyr
 from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
 from qgis.gui import QgsRubberBand
 from qgis.utils import iface
-from qgis.core import Qgis as QGis
+from qgis.core import Qgis as QGis, QgsDistanceArea, QgsCoordinateReferenceSystem, QgsProject
 
 try:
     from pydevd import *
@@ -75,7 +75,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         self.widget = widget
         self.imageFormat = QImage.Format_Invalid
         self.image = None
-        self.read_lock = threading.Lock()
 
     def supportedPixelFormats(self, handleType=QAbstractVideoBuffer.NoHandle):
         ''' Available Frames Format '''
@@ -289,8 +288,19 @@ class VideoWidget(QVideoWidget):
             list_polygon.append(point)
 
             geomP = QgsGeometry.fromQPolygonF(list_polygon)
-            feature.setAttributes([0.0, 0.0, 0.0])
             feature.setGeometry(geomP)
+
+            # Calculate Area WSG84 (Meters)
+            area_wsg84 = QgsDistanceArea()
+            area_wsg84.setSourceCrs(QgsCoordinateReferenceSystem.fromOgcWmsCrs('EPSG:4326'), QgsProject.instance().transformContext())
+            if (area_wsg84.sourceCrs().isGeographic()):
+                area_wsg84.setEllipsoid(area_wsg84.sourceCrs().ellipsoidAcronym())
+
+            # Calculate Centroid
+            centroid = feature.geometry().centroid().asPoint()
+
+            feature.setAttributes([centroid.x() , centroid.y(), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
+
             polyLyr.addFeatures([feature])
 
             CommonLayer(polyLyr)
@@ -460,7 +470,6 @@ class VideoWidget(QVideoWidget):
                     self.drawLinesOnVideo(pt, idx)
 
         # Draw clicked Polygons on video
-        # TODO : Make better and cleaned method ¿using itertools maybe?
         if len(self.drawPolygon) > 1:
             poly = []
             if any(None == x[1] for x in self.drawPolygon):
@@ -762,19 +771,19 @@ class VideoWidget(QVideoWidget):
                 if linelyr.featureCount() == 0 or self.drawLines[-1][0] is None:
                     f.setAttributes(
                         [Longitude, Latitude, Altitude])
-                    surface = QgsGeometry.fromPolylineXY(
+                    geom = QgsGeometry.fromPolylineXY(
                         [QgsPointXY(Longitude, Latitude), QgsPointXY(Longitude, Latitude)])
-                    f.setGeometry(surface)
+                    f.setGeometry(geom)
                     linelyr.addFeatures([f])
 
                 else:
                     f_last = linelyr.getFeature(linelyr.featureCount())
                     f.setAttributes(
                         [Longitude, Latitude, Altitude])
-                    surface = QgsGeometry.fromPolylineXY(
+                    geom = QgsGeometry.fromPolylineXY(
                         [QgsPointXY(Longitude, Latitude),
                          QgsPointXY(f_last.attribute(0), f_last.attribute(1))])
-                    f.setGeometry(surface)
+                    f.setGeometry(geom)
                     linelyr.addFeatures([f])
 
                 CommonLayer(linelyr)

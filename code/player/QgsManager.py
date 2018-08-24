@@ -105,13 +105,11 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             initElevationModel(self.initialPt[str(rowPosition)][0], self.initialPt[str(rowPosition)][1], dtm_path)
             qgsu.showUserAndLogMessage("", "Elevation model initialized.", onlyLog=True)
 
-
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
-        filename, _ = askForFiles(self,
-                                  QCoreApplication.translate(
+        filename, _ = askForFiles(self,QCoreApplication.translate(
                                       "ManagerDock", "Open video"),
-                                  exts='*.mpeg4 *.mp4 *.ts *.avi *.mpg *.H264 *.mov')
+                                  exts=["mpeg4","mp4","ts","avi","mpg","H264","mov"])
         if filename:
             _, name = os.path.split(filename)
             self.AddFileRowToManager(name, filename)

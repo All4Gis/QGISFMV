@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os.path
-import threading
+import threading, queue
 
 from PyQt5.QtCore import (QUrl,
                           QThread,
@@ -37,7 +37,8 @@ from QGIS_FMV.utils.QgsFmvUtils import (ResetData,
                                         _spawn,
                                         UpdateLayers,
                                         _seconds_to_time,
-                                        _seconds_to_time_frac)
+                                        _seconds_to_time_frac,
+                                        askForFiles)
 from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
@@ -74,9 +75,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.meta_reader = meta_reader
         self.createingMosaic = False
         self.currentInfo = 0.0
+        self.data = None
 
         self.btn_Color.hide() # Hide Color Button
-        #self.actionObject_Tracking.setVisible(False)
+        self.actionObject_Tracking.setVisible(False)
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
 
@@ -170,16 +172,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             if stdout_data == 'NOT_READY':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), "", onlyLog=True)
+                "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), onlyLog=True)
                 return
             elif stdout_data == b'' or len(stdout_data) == 0:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Buffer returned empty metadata, check pass_time. : "), "", onlyLog=True)
+                "QgsFmvPlayer", "Buffer returned empty metadata, check pass_time. : "), onlyLog=True)
                 return
 
             for packet in StreamParser(stdout_data):
                 try:
                     data = packet.MetadataList()
+                    self.data = data
                     if self.metadataDlg.isVisible(): # Only add metada to table if this QDockWidget is visible (speed plugin)
                         self.addMetadata(data)
 
@@ -195,6 +198,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         except Exception as inst:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst), level=QGis.Info)
+
+    def GetPacketData(self):
+        ''' Return Current Packet data '''
+        return self.data
 
     def addMetadata(self, packet):
         ''' Add Metadata to List '''
@@ -1083,22 +1090,34 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def ExtractCurrentFrame(self):
         """ Extract Current Frame Thread """
         image = self.videoWidget.GetCurrentFrame()
-        out_image, _ = QFileDialog.getSaveFileName(
-            self, "Save Current Frame", "",
-            "Image File (*.png *.jpg *.bmp *.tiff)")
+        out_image, _ = askForFiles(self, QCoreApplication.translate(
+                                      "QgsFmvPlayer", "Save Current Frame"),
+                                      isSave=True,
+                                      exts=["png","jpg","bmp","tiff"])
 
         if out_image == "":
             return
 
         if out_image:
+            self.out_image_queue = queue.Queue()
             t = threading.Thread(target=self.SaveCapture,
                                  args=(image, out_image,))
             t.start()
+            if self.out_image_queue.get():
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Succesfully frame saved!"))
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Failed saving frame!"), level=QGis.Warning)
         return
 
     def SaveCapture(self, image, output):
-        ''' Save Current Image '''
-        image.save(output)
+        ''' Save Current Frame '''
+        try:
+            image.save(output)
+            self.out_image_queue.put(True)
+        except Exception:
+            self.out_image_queue.put(False)
         QApplication.processEvents()
         return
 

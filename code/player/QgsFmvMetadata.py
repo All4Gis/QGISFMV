@@ -2,10 +2,17 @@
 import csv
 
 from PyQt5.QtCore import Qt, QSizeF, QCoreApplication
-from PyQt5.QtGui import (QCursor, QTextCursor, QTextDocument, QTextCharFormat,
-                         QTextTableFormat, QBrush, QColor)
+from PyQt5.QtGui import (QCursor,
+                         QFont,
+                         QTextCursor,
+                         QTextDocument,
+                         QTextBlockFormat,
+                         QTextCharFormat,
+                         QTextTableFormat,
+                         QBrush,
+                         QColor)
 from PyQt5.QtPrintSupport import QPrinter
-from PyQt5.QtWidgets import QDockWidget, QApplication, QFileDialog
+from PyQt5.QtWidgets import QDockWidget, QApplication, QTableWidget, QTableWidgetItem
 from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGIS_FMV.utils.QgsFmvUtils import askForFiles
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
@@ -30,77 +37,119 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
 
     def SaveAsPDF(self):
         """ Save Table as pdf """
-        fileName, _ = QFileDialog.getSaveFileName(
-            self, "Save File", "", "PDF Files (*.pdf)")
-        if fileName == "":
+        timestamp = str(self.player.player.position()) + " seconds"
+        frame = self.player.videoWidget.GetCurrentFrame()
+        data = self.player.GetPacketData()
+
+        rows = self.VManager.rowCount()
+        columns = self.VManager.columnCount()
+
+        out, _ = askForFiles(self, QCoreApplication.translate(
+                                      "QgsFmvMetadata", "Save PDF"),
+                                      isSave=True,
+                                      exts='pdf')
+        if out == "":
             return
 
         try:
-            videoName = self.player.fileName
-            timestamp = self.player.player.position()
             QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
-            rows = self.VManager.rowCount()
-            columns = self.VManager.columnCount()
+
+
+            font_normal = QFont("Helvetica", 10, QFont.Normal)
+            font_bold = QFont("Helvetica", 12, QFont.Bold)
 
             printer = QPrinter(QPrinter.HighResolution)
-            innerRect = printer.pageRect()
-            sizeF = QSizeF(innerRect.size().width(), innerRect.size().height())
-            header = QTextDocument()
-            header.setPageSize(sizeF)
-            cursor_header = QTextCursor(header)
-            format1 = QTextCharFormat()
-            format1.setFontPointSize(16)
-            cursor_header.insertHtml(
-                "<p style='text-align: left;'><strong>Video</strong>: %s <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;TimeStamp</strong>: %s </p>" % (videoName, timestamp))
-            cursor_header.insertHtml("<br><br><br> ")
-
-            cursor_header.select(QTextCursor.Document)
-            fragment_header = cursor_header.selection()
+            printer.setOrientation(QPrinter.Portrait)
+            printer.setOutputFormat(QPrinter.PdfFormat)
+            printer.setFullPage(True)
+            printer.setPaperSize(QPrinter.A4)
+            printer.setOutputFileName(out)
+            printer.setPageMargins(15, 15, 15, 15, QPrinter.Point)
+            printer.setColorMode(QPrinter.Color)
 
             document = QTextDocument()
+            #document.setPageSize(QSizeF(printer.pageRect().size()))  # This disables printing the page number
+            document.setDefaultFont(font_normal)
+
             cursor = QTextCursor(document)
+            cursor.movePosition(QTextCursor.Start, QTextCursor.MoveAnchor)
+            cursor.insertHtml(
+                """
+                <p style='text-align: center;'>
+                <img style='display: block; margin-left: auto; margin-right: auto;' 
+                src=\':/imgFMV/images/header_logo.png\' width='116' height='56' />
+                </p>
+                <p style='text-align: center;'>
+                <strong>Video :&nbsp;</strong>%s<strong>
+                </p>
+                <p style='text-align: center;'>
+                <strong>TimeStamp :&nbsp;</strong>%s</p><br><br>
+                """
+                % (self.player.fileName, timestamp))
+
             tableFormat = QTextTableFormat()
             tableFormat.setHeaderRowCount(1)
             tableFormat.setBorderBrush(QBrush(Qt.black))
             tableFormat.setAlignment(Qt.AlignHCenter)
-            tableFormat.setCellPadding(5)
-            tableFormat.setCellSpacing(5)
+            tableFormat.setCellPadding(2)
+            tableFormat.setCellSpacing(2)
 
-            cursor.movePosition(QTextCursor.Start, QTextCursor.MoveAnchor)
-            cursor.insertFragment(fragment_header)
+            centerFormat = QTextBlockFormat()
+            centerFormat.setAlignment(Qt.AlignCenter)
+            cursor.insertBlock(centerFormat)
 
             textTable = cursor.insertTable(rows + 1, columns, tableFormat)
 
             tableHeaderFormat = QTextCharFormat()
-            tableHeaderFormat.setBackground(QColor("#DADADA"))
+            tableHeaderFormat.setFont(font_bold)
+            tableHeaderFormat.setBackground(QColor("#67b03a"))
+            tableHeaderFormat.setForeground(Qt.white)
+
+            alternate_background = QTextCharFormat()
+            alternate_background.setBackground(QColor("#DDE9ED"))
 
             for column in range(columns):
                 cell = textTable.cellAt(0, column)
                 cell.setFormat(tableHeaderFormat)
                 cellCursor = cell.firstCursorPosition()
                 cellCursor.insertText(self.VManager.horizontalHeaderItem(
-                    column).data(Qt.DisplayRole))
+                    column).text())
 
-            for row in range(rows):
-                for column in range(columns):
-                    item = self.VManager.item(row, column)
-                    if item is not None:
-                        cell = textTable.cellAt(row + 1, column)
-                        cellCursor = cell.firstCursorPosition()
-                        cellCursor.insertText(
-                            self.VManager.item(row, column).text())
+            row = 0
+            for key in sorted(data.keys()):
+                cell0 = textTable.cellAt(row + 1, 0)
+                cell1 = textTable.cellAt(row + 1, 1)
+                cell2 = textTable.cellAt(row + 1, 2)
+                if (row+1)%2 == 0:
+                    cell0.setFormat(alternate_background)
+                    cell1.setFormat(alternate_background)
+                    cell2.setFormat(alternate_background)
+                cellCursor0 = cell0.firstCursorPosition()
+                cellCursor0.insertText(str(key))
+                cellCursor1 = cell1.firstCursorPosition()
+                cellCursor1.insertText(str(data[key][0]))
+                cellCursor2 = cell2.firstCursorPosition()
+                cellCursor2.insertText(str(data[key][1]))
+                row += 1
 
-            cursor.movePosition(QTextCursor.End)
-            printer.setOrientation(QPrinter.Portrait)
+            cursor.movePosition(QTextCursor.End, QTextCursor.MoveAnchor)
 
-            printer.setPageMargins(
-                30, 100, 10, 40, QPrinter.DevicePixel)
-            printer.setFullPage(True)
-            printer.setPageSize(QPrinter.A4)
-            printer.setOutputFormat(QPrinter.PdfFormat)
-            printer.setOutputFileName(fileName)
+            cursor.insertHtml("""
+            <br><p style='text-align: center;'><strong>Current Frame</strong></p><br>
+            """)
 
+            centerFormat = QTextBlockFormat()
+            centerFormat.setAlignment(Qt.AlignHCenter)
+            cursor.insertBlock(centerFormat)
+            cursor.insertImage(frame.scaledToWidth(500))
+
+            # Create a QPainter to draw our content
+#             painter = QPainter()
+#             painter.begin( printer )
+#             document.drawContents(painter)
+#             painter.end()
             document.print_(printer)
+
             QApplication.restoreOverrideCursor()
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvMetadata", "Succesfully creating PDF"))
@@ -113,12 +162,14 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
 
     def SaveACSV(self):
         """ Save Table as CSV  """
-        fileName, _ = QFileDialog.getSaveFileName(
-            self, "Save File", "", "CSV Files (*.csv)")
-        if fileName == "":
+        out, _ = askForFiles(self, QCoreApplication.translate(
+                                      "QgsFmvMetadata", "Save CSV"),
+                                      isSave=True,
+                                      exts='csv')
+        if out == "":
             return
         try:
-            with open(unicode(fileName), 'w') as stream:
+            with open(unicode(out), 'w') as stream:
                 headers = list()
                 for column in range(self.VManager.columnCount()):
                     headers.append(self.VManager.model(

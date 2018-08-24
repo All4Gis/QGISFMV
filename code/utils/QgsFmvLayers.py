@@ -118,7 +118,7 @@ def CreateVideoLayers():
 
     if qgsu.selectLayerByName(Polygon_lyr) is None:
         lyr_polygon = newPolygonsLayer(
-            None, ["longitude", "latitude", "altitude"], epsg, Polygon_lyr)
+            None, ["Centroid_longitude", "Centroid_latitude", "Centroid_altitude","Area"], epsg, Polygon_lyr)
         SetDefaultPolygonStyle(lyr_polygon)
         addLayerNoCrsDialog(lyr_polygon)
 

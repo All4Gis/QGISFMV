@@ -302,8 +302,7 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
     f = None
     if not isinstance(exts, list):
         exts = [exts]
-    extString = ";; ".join([" %s files (*.%s)" % (e.upper(), e)
-                            if e != "*" else "All files (*.*)" for e in exts])
+    extString = ";; ".join([" %s files (*.%s)" % (e.upper(), e) if e != "*" else "All files (*.*)" for e in exts])
     if allowMultiple:
         ret = QFileDialog.getOpenFileNames(parent, msg, path, '*.' + extString)
         if ret:
@@ -313,12 +312,14 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
     else:
         if isSave:
             ret = QFileDialog.getSaveFileName(
-                parent, msg, path, '*.' + extString) or None
-            if ret is not None and not ret.endswith(exts[0]):
-                ret += "." + exts[0]
+                parent, msg, path, extString) or None
+            if ret[0] != "":
+                name, ext = os.path.splitext(ret[0])
+                if ext == "":
+                    ret[0] += "." + exts[0] #Default extension
         else:
             ret = QFileDialog.getOpenFileName(
-                parent, msg, path, '*.' + extString) or None
+                parent, msg, path, extString) or None
         f = ret
 
     if f is not None:

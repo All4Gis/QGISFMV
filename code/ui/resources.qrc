@@ -32,5 +32,6 @@
         <file>../images/record.gif</file> 
         <file>../images/mosaic.png</file> 
         <file>../images/stream.png</file> 
+        <file>../images/header_logo.png</file> 
     </qresource>
 </RCC>
