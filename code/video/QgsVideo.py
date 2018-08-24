@@ -203,6 +203,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 class VideoWidget(QVideoWidget):
 
     def __init__(self, parent=None):
+        ''' Constructor '''
         super(VideoWidget, self).__init__(parent)
         self.surface = VideoWidgetSurface(self)
         self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
@@ -267,8 +268,6 @@ class VideoWidget(QVideoWidget):
             self.UpdateSurface()
             return
         if self.gt is not None and polygonDrawer:
-            # TODO : Add values to attributes table ¿Centroid value maybe?
-            # TODO : Add area value too
             self.drawPolygon.append([None, None, None])
             # Add Polygon
             polyLyr = qgsu.selectLayerByName(Polygon_lyr)
@@ -299,7 +298,7 @@ class VideoWidget(QVideoWidget):
             # Calculate Centroid
             centroid = feature.geometry().centroid().asPoint()
 
-            feature.setAttributes([centroid.x() , centroid.y(), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
+            feature.setAttributes([centroid.x(), centroid.y(), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
 
             polyLyr.addFeatures([feature])
 
