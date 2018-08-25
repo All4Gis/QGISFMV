@@ -26,6 +26,8 @@ changelog=
 		- Add area and lat,long centroid coords on polygon attributes trable
     	- Better and more rich PDF report
     	- Save reports in other thread
+    	- Fix record function
+    	- optimized code
     	- Minor changes
     1.2:
     	- Better and more complet PDF report

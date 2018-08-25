@@ -714,6 +714,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Record Button Icon Effect '''
         self.btn_Rec.setIcon(QIcon(self.RecGIF.currentPixmap()))
 
+    def StopRecordAnimation(self):
+        '''Stop record gif animation'''
+        self.RecGIF.frameChanged.disconnect(self.ReciconUpdate)
+        self.RecGIF.stop()
+        self.btn_Rec.setIcon(QIcon(":/imgFMV/images/record.png"))
+
     def RecordVideo(self, value):
         ''' Cut Video '''
         currentTime = _seconds_to_time(self.currentInfo)
@@ -725,17 +731,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             out, _ = askForFiles(self, QCoreApplication.translate(
                 "QgsFmvPlayer", "Save video record"),
                 isSave=True,
-                exts=file_extension)
+                exts=file_extension[1:])
 
             if not out:
-                self.RecGIF.frameChanged.disconnect(self.ReciconUpdate)
-                self.RecGIF.stop()
-                self.btn_Rec.setIcon(QIcon(":/imgFMV/images/record.png"))
+                self.StopRecordAnimation()
                 return False
-
-            lfn = out.lower()
-            if not lfn.endswith((file_extension)):
-                out += file_extension
 
             p = _spawn(['-i', self.fileName,
                         '-ss', self.startRecord,
@@ -746,9 +746,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Save file succesfully!"))
 
-            self.RecGIF.frameChanged.disconnect(self.ReciconUpdate)
-            self.RecGIF.stop()
-            self.btn_Rec.setIcon(QIcon(":/imgFMV/images/record.png"))
+            self.StopRecordAnimation()
         else:
             self.startRecord = currentTime
             self.RecGIF.frameChanged.connect(self.ReciconUpdate)
