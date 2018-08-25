@@ -115,11 +115,6 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="34"/>
-        <source>&amp;Remove</source>
-        <translation type="obsolete">&amp;حذف</translation>
-    </message>
-    <message>
         <location filename="../player/QgsManager.py" line="49"/>
         <source>Remove the current selection&apos;s video</source>
         <translation>حذف ویدئوی انتخاب شده</translation>
@@ -166,36 +161,6 @@
         <location filename="../ui/ui_FmvManager.ui" line="128"/>
         <source>Source</source>
         <translation>منبع</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvManager.ui" line="136"/>
-        <source>Open Video</source>
-        <translation type="obsolete">بازنمودن ویدئو</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvManager.ui" line="141"/>
-        <source>Metadata</source>
-        <translation type="obsolete">متادیتا</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvManager.ui" line="146"/>
-        <source>Converter Video</source>
-        <translation type="obsolete">تبدیل گر ویدئو</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvManager.ui" line="151"/>
-        <source>Extract All Frames</source>
-        <translation type="obsolete">استخراج تمام لحظه ها</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvManager.ui" line="156"/>
-        <source>Save Video Info To Json</source>
-        <translation type="obsolete">ذخیره اطلاعات ویدئو به فرمت Json</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvManager.ui" line="161"/>
-        <source>Show Video Info</source>
-        <translation type="obsolete">نمایش اطلاعات ویدئو</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="137"/>
@@ -494,142 +459,132 @@
 <context>
     <name>QgsFmvPlayer</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="130"/>
+        <location filename="../player/QgsFmvPlayer.py" line="131"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation>این ویدئو بدون متادیتا می باشد ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="137"/>
+        <location filename="../player/QgsFmvPlayer.py" line="138"/>
         <source>Metadata Callback Failed! : </source>
         <translation>بازخوانی متادیتا شکست خورد! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="151"/>
+        <location filename="../player/QgsFmvPlayer.py" line="152"/>
         <source>This video don&apos;t have Audio ! </source>
         <translation>این ویدئو بدون صدا می باشد ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="158"/>
+        <location filename="../player/QgsFmvPlayer.py" line="159"/>
         <source>Audio check Failed! : </source>
         <translation>بررسی صدا با شکست مواجه شد! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="245"/>
-        <source>Error saving Json</source>
-        <translation type="obsolete">خطا در ذخیره Json</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="255"/>
-        <source>Error Info Show</source>
-        <translation type="obsolete">خطا در نمایش اطلاعات</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="333"/>
-        <source>Color Options</source>
-        <translation type="obsolete">گزینه های رنگی</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="347"/>
+        <location filename="../player/QgsFmvPlayer.py" line="354"/>
         <source>Mute/Unmute</source>
         <translation>سکوت/صدا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="353"/>
+        <location filename="../player/QgsFmvPlayer.py" line="360"/>
         <source>Extract All Frames</source>
         <translation>استخراج تمام لحظه ها</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="358"/>
+        <location filename="../player/QgsFmvPlayer.py" line="365"/>
         <source>Extract Current Frame</source>
         <translation>استخراج همین لحظه</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="365"/>
+        <location filename="../player/QgsFmvPlayer.py" line="372"/>
         <source>Show Metadata</source>
         <translation>نمایش متادیتا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="708"/>
+        <location filename="../player/QgsFmvPlayer.py" line="711"/>
         <source>Open Video File : </source>
         <translation>بازنمودن بایگانی ویدئوها :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="740"/>
+        <location filename="../player/QgsFmvPlayer.py" line="747"/>
         <source>Save file succesfully!</source>
         <translation>ذخیره فایل با موفقیت انجام شد!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="788"/>
-        <source>Error converting video </source>
-        <translation type="obsolete">خطا در تبدیل ویدئو</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="996"/>
-        <source>Failed creating Plot Bitrate</source>
-        <translation type="obsolete">خطا در ایجاد Plot Bitrate</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1066"/>
-        <source>Save images</source>
-        <translation>ذخیره تصاویر</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1239"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1224"/>
         <source>HEY...Active background process!</source>
         <translation>توجه...در پس زمینه پردازشی در حال انجام است!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1239"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1224"/>
         <source>Do you really want close?</source>
         <translation>آیا واقعا قصد خروج دارید؟</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="681"/>
+        <location filename="../player/QgsFmvPlayer.py" line="687"/>
         <source>Playing : </source>
         <translation>در حال پخش :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1261"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1246"/>
         <source>Video Information : </source>
         <translation>اطلاعات ویدئو :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="174"/>
+        <location filename="../player/QgsFmvPlayer.py" line="176"/>
         <source>Buffer value read but is not ready, increase buffer size. : </source>
         <translation>مقدار حافظه موقت خوانده شده اما آماده نمی باشد، میزان حافظه موقت را افزایش دهید. : 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="178"/>
+        <location filename="../player/QgsFmvPlayer.py" line="181"/>
         <source>Buffer returned empty metadata, check pass_time. : </source>
         <translation>در حافظه موقت متادیتا خالی می باشد، pass_time را بررسی نمائید. : 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="196"/>
+        <location filename="../player/QgsFmvPlayer.py" line="199"/>
         <source>Meta update failed! </source>
         <translation>به روز رسانی متا با شکست مواجه شد! 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="200"/>
+        <location filename="../player/QgsFmvPlayer.py" line="203"/>
         <source>Metadata Buffer Failed! : </source>
         <translation>حافشه میانی متادیتا با شکست مواجه شد! : 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1095"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1080"/>
         <source>Save Current Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1109"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1094"/>
         <source>Succesfully frame saved!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1112"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1097"/>
         <source>Failed saving frame!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="241"/>
+        <source>Save Json</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="732"/>
+        <source>Save video record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="798"/>
+        <source>Save Video as...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="1053"/>
+        <source>Save all Frames</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -14,4 +14,7 @@ TRANSLATIONS = qgisfmv_en.ts \
 qgisfmv_es.ts \
 qgisfmv_fr.ts \
 qgisfmv_fa.ts \
+qgisfmv_gl.ts \
+qgisfmv_it.ts \
+qgisfmv_de.ts \
 qgisfmv_ca.ts
