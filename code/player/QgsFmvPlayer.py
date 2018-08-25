@@ -25,7 +25,6 @@ from PyQt5.QtWidgets import (QToolTip,
                              QApplication,
                              QTableWidgetItem)
 from QGIS_FMV.converter.Converter import Converter
-from QGIS_FMV.video.QgsVideoCaptureAsync import VideoCaptureAsync
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.player.QgsFmvMetadata import QgsFmvMetadata
@@ -38,7 +37,8 @@ from QGIS_FMV.utils.QgsFmvUtils import (ResetData,
                                         UpdateLayers,
                                         _seconds_to_time,
                                         _seconds_to_time_frac,
-                                        askForFiles)
+                                        askForFiles,
+                                        askForFolder)
 from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
@@ -77,7 +77,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.currentInfo = 0.0
         self.data = None
 
-        self.btn_Color.hide() # Hide Color Button
+        # Hide Color Button
+        self.btn_Color.hide()
         self.actionObject_Tracking.setVisible(False)
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
@@ -236,8 +237,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Save video Info to json """
         if not self.KillAllProcessors():
             return
-        out_json, _ = QFileDialog.getSaveFileName(
-            self, "Save File", "", "Json Files (*.json)")
+
+        out_json, _ = askForFiles(self, QCoreApplication.translate(
+            "QgsFmvPlayer", "Save Json"),
+            isSave=True,
+            exts="json")
+
         if out_json == "":
             return
         try:
@@ -660,7 +665,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         try:
             RemoveVideoLayers()
             RemoveGroupByName()
-#             settrace()
 #             if "udp://" in videoPath:
 #                 host, port = videoPath.split("://")[1].split(":")
 #                 receiver = UDPClient(host, int(port), type="udp")
@@ -694,16 +698,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.actionSave_Audio.setEnabled(False)
                 self.HasFileAudio = False
 
-            #recenter map on video initial point
+            # Recenter map on video initial point
             if self.initialPt:
                 rect = QgsRectangle(self.initialPt[1], self.initialPt[0], self.initialPt[1], self.initialPt[0])
                 self.iface.mapCanvas().setExtent(rect)
                 self.iface.mapCanvas().refresh()
 
             self.playClicked(True)
-            # OpenCV Video Capture in other thread
-            self.capture = VideoCaptureAsync(videoPath)
-            self.capture.start()
 
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -720,8 +721,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if value is False:
             self.endRecord = currentTime
             _, file_extension = os.path.splitext(self.fileName)
-            out, _ = QFileDialog.getSaveFileName(
-                self, "Save As", "", file_extension)
+
+            out, _ = askForFiles(self, QCoreApplication.translate(
+                "QgsFmvPlayer", "Save video record"),
+                isSave=True,
+                exts=file_extension)
+
             if not out:
                 self.RecGIF.frameChanged.disconnect(self.ReciconUpdate)
                 self.RecGIF.stop()
@@ -766,7 +771,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             sender.setFixedHeight(15)
 
     def fakeStop(self):
-        '''self.player.stop() make a black screen and not reproduce it again '''
+        '''self.player.stop() make a black screen and not reproduce it again'''
         self.player.pause()
         self.StartMedia()
         self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
@@ -786,35 +791,18 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.setPosition(seconds * 1000)
         self.showMoveTip(seconds)
 
-    def GetVideoCapture(self):
-        return self.capture
-
     def convertVideo(self):
         '''Convert Video To Other Format '''
         if not self.KillAllProcessors():
             return
-        sel = "mp4 Files (*.mp4)"
-        out, _ = QFileDialog.getSaveFileName(
-            self, "Save Video as...", None,
-            "ogg files (*.ogg);;avi Files (*.avi);;mkv Files (*.mkv);;webm Files (*.webm);;flv Files (*.flv);;mov Files (*.mov);;mp4 Files (*.mp4);;mpg Files (*.mpg);;mp3 Files (*.mp3)",
-            sel)
+
+        out, _ = askForFiles(self, QCoreApplication.translate(
+            "QgsFmvPlayer", "Save Video as..."),
+            isSave=True,
+            exts=["mp4","ogg","avi","mkv","webm","flv","mov","mpg","mp3"])
 
         if not out:
             return False
-
-        lfn = out.lower()
-        if not lfn.endswith((
-            '.ogg',
-            '.avi',
-            '.mkv',
-            '.webm',
-            '.flv',
-            '.mov',
-            '.mp4',
-            '.mp3',
-                '.mpg')):
-            # default.
-            out += '.mp4'
 
         try:
             self.VPConverter = Converter()
@@ -1063,12 +1051,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if not self.KillAllProcessors():
             return
 
-        options = QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly
-        directory = QFileDialog.getExistingDirectory(self,
-                                                     QCoreApplication.translate(
-                                                         "QgsFmvPlayer",
-                                                         "Save images"),
-                                                     '', options=options)
+        directory = askForFolder(self, QCoreApplication.translate(
+            "QgsFmvPlayer","Save all Frames"),
+            options=QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly)
 
         if directory:
 
@@ -1094,9 +1079,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Extract Current Frame Thread """
         image = self.videoWidget.GetCurrentFrame()
         out_image, _ = askForFiles(self, QCoreApplication.translate(
-                                      "QgsFmvPlayer", "Save Current Frame"),
-                                      isSave=True,
-                                      exts=["png","jpg","bmp","tiff"])
+            "QgsFmvPlayer", "Save Current Frame"),
+            isSave=True,
+            exts=["png","jpg","bmp","tiff"])
 
         if out_image == "":
             return

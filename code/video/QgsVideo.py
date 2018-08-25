@@ -11,13 +11,11 @@ from PyQt5.QtGui import (QImage,
                          QPen,
                          QBrush,
                          QPolygonF)
-import threading
+
 from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QVideoFrame,
-                                QVideoSurfaceFormat,
                                 QAbstractVideoSurface)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from QGIS_FMV.utils.QgsFmvUtils import convertMatToQImage, convertQImageToMat
 
 from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
 
@@ -36,10 +34,9 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 from QGIS_FMV.fmvConfig import Point_lyr, Line_lyr, Polygon_lyr
-from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
 from qgis.gui import QgsRubberBand
 from qgis.utils import iface
-from qgis.core import Qgis as QGis, QgsDistanceArea, QgsCoordinateReferenceSystem, QgsProject
+from qgis.core import Qgis as QGis, QgsDistanceArea, QgsCoordinateReferenceSystem, QgsProject, QgsFeature, QgsGeometry, QgsPointXY
 
 try:
     from pydevd import *
@@ -113,11 +110,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             self.imageSize = size
             self.widget.updateGeometry()
             self.updateVideoRect()
-            try:
-                self.capture = self.widget.capture
-            except:
-                None
-
             return True
         else:
             return False
@@ -348,7 +340,6 @@ class VideoWidget(QVideoWidget):
         ''' Set Canny Edge filter '''
         global edgeDetectionFilter
         edgeDetectionFilter = value
-        self.capture = self.parent.capture
 
     def SetAutoContrastFilter(self, value):
         ''' Set Automatic Contrast filter '''
@@ -540,6 +531,7 @@ class VideoWidget(QVideoWidget):
             painter.drawPixmap(corner, self.maskPixmap)
             painter.setPen(Qt.gray)
             painter.drawPath(clipPath)
+            painter.end()
         return
 
     def GetInverseMatrix(self, x, y):
@@ -578,7 +570,7 @@ class VideoWidget(QVideoWidget):
                 painter.drawLine(center, end)
             except Exception:
                 None
-
+        painter.end()
         return
 
     def drawPointOnVideo(self, pt):
@@ -594,10 +586,12 @@ class VideoWidget(QVideoWidget):
         pen = QPen(Qt.red)
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
+
         painter = QPainter(self)
         painter.setPen(pen)
         painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
         painter.drawPoint(center)
+        painter.end()
         return
 
     def drawPolygonOnVideo(self, values):
@@ -632,6 +626,7 @@ class VideoWidget(QVideoWidget):
         painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
         painter.drawPolygon(polygon)
         painter.fillPath(path, brush)
+        painter.end()
         return
 
     def resizeEvent(self, event):

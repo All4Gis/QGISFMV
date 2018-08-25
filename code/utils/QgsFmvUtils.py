@@ -333,13 +333,13 @@ def setPluginSetting(name, value, namespace=None):
     settings.setValue(namespace + "/" + name, value)
 
 
-def askForFolder(parent, msg=None):
+def askForFolder(parent, msg=None, options=QFileDialog.ShowDirsOnly):
     msg = msg or 'Select folder'
     caller = _callerName().split(".")
     name = "/".join([LAST_PATH, caller[-1]])
     namespace = caller[0]
     path = pluginSetting(name, namespace)
-    folder = QFileDialog.getExistingDirectory(parent, msg, path)
+    folder = QFileDialog.getExistingDirectory(parent, msg, path, options)
     if folder:
         setPluginSetting(name, folder, namespace)
     return folder
