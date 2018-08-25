@@ -638,8 +638,6 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
                     cornerPointLR, cornerPointLL)
 
-
-
     SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                           cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
 
@@ -1017,7 +1015,7 @@ def CornerEstimationWithOffsets(packet):
                          OffsetLon4 + frameCenterLon)
 
         UpdateFootPrintData(packet,
-            cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
+                            cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
         UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
                         cornerPointLR, cornerPointLL)
@@ -1180,7 +1178,7 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
     for k in range(0, int(dtm_buffer * pixelWidthMeter), int(pixelWidthMeter)):
         point = [sensorLon + k * dLon, sensorLat + k * dLat, sensorAlt + k * dAlt]
         col = int((point[0] - xOrigin) / pixelWidth)
-        row = int((yOrigin - point[1] ) / pixelHeight)
+        row = int((yOrigin - point[1]) / pixelHeight)
         try:
             diffAlt = point[2] - dtm_data[row - dtm_rowLowerBound][col -  dtm_colLowerBound]
         except:
@@ -1197,6 +1195,7 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
 
 
 def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
+    ''' Get Altitude from DEM '''
     sensorLat = sensorPt[0]
     sensorLon = sensorPt[1]
     sensorAlt = sensorPt[2]
@@ -1229,12 +1228,14 @@ def _convert_timestamp(ts):
 
 
 def _add_secs_to_time(timeval, secs_to_add):
+    ''' Seconds to time'''
     secs = timeval.hour * 3600 + timeval.minute * 60 + timeval.second
     secs += secs_to_add
     return _seconds_to_time(secs)
 
 
 def _time_to_seconds(dateStr):
+    '''Time to seconds'''
     timeval = datetime.strptime(dateStr, '%H:%M:%S.%f')
     secs = timeval.hour * 3600 + timeval.minute * 60 + timeval.second + timeval.microsecond/1000000
     return secs
