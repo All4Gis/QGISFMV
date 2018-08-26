@@ -86,7 +86,7 @@ ffprobe = "/usr/bin/"
 
 ## Slides
 
-* [GeoCamp Madrid](https://slides.com/franciscojoseragalopez/qgis-fmv/fullscreen)
+* [GeoCamp 2018 Madrid](https://slides.com/franciscojoseragalopez/qgis-fmv/fullscreen)
 
 ## Screenshots
 
