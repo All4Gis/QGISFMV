@@ -45,8 +45,7 @@ from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
 from QGIS_FMV.video.QgsVideoProcessor import ExtractFramesProcessor
 #from QGIS_FMV.videoStremaing.TestClient import UDPClient
-from qgis.core import Qgis as QGis
-from qgis.core import QgsRectangle, QgsTask, QgsApplication
+from qgis.core import Qgis as QGis, QgsRectangle, QgsTask, QgsApplication
 
 try:
     from pydevd import *
@@ -1084,9 +1083,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                                     on_finished=finished,
                                     flags=QgsTask.CanCancel)
 
+        QCoreApplication.processEvents()
         QgsApplication.taskManager().addTask(task)
         QCoreApplication.processEvents()
-        while task.status() == QgsTask.Running:
+        while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
             QCoreApplication.processEvents()
             pass
         while QgsApplication.taskManager().countActiveTasks() > 0:
