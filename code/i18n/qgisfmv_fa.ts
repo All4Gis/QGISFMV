@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="fa" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fa" sourcelanguage="" version="2.0">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -555,37 +554,37 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1080"/>
         <source>Save Current Frame</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1094"/>
         <source>Succesfully frame saved!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1097"/>
         <source>Failed saving frame!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="241"/>
         <source>Save Json</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="732"/>
         <source>Save video record</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="798"/>
         <source>Save Video as...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1053"/>
         <source>Save all Frames</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

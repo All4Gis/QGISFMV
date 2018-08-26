@@ -46,8 +46,7 @@ from QGIS_FMV.video.QgsColor import ColorDialog
 from QGIS_FMV.video.QgsVideoProcessor import ExtractFramesProcessor
 #from QGIS_FMV.videoStremaing.TestClient import UDPClient
 from qgis.core import Qgis as QGis
-from qgis.core import QgsRectangle
-
+from qgis.core import QgsRectangle, QgsTask, QgsApplication
 
 try:
     from pydevd import *
@@ -995,18 +994,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                                          Q_ARG(str, 'video'))
 
             elif sender == "actionSave_Audio":
-                selfilter = "Portable Network Graphics (*.png)"
-                fileaudio, _ = QFileDialog.getSaveFileName(
-                    self, "Save Audio Bitrate Plot", "",
-                    "EPS Encapsulated Postscript (*.eps);;"
-                    "PGF code for LaTex (*.pgf);;"
-                    "Portable document format(*pdf);;"
-                    "Portable Network Graphics (*.png);;"
-                    "Postscript (*.ps);;"
-                    "Raw RGBA bitmap (*.raw*.rgba);;"
-                    "Scalable vector graphics (*.svg*.svgz)",
-                    selfilter
-                )
+                fileaudio, _ = askForFiles(self, QCoreApplication.translate(
+                    "QgsFmvPlayer", "Save Audio Bitrate Plot"),
+                    isSave=True,
+                    exts=["png","pdf","pgf","eps","ps","raw","rgba","svg","svgz"])
+
                 if fileaudio == "":
                     return
 
@@ -1018,18 +1010,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                                          Q_ARG(str, 'audio'))
 
             elif sender == "actionSave_Video":
-                selfilter = "Portable Network Graphics (*.png)"
-                filevideo, _ = QFileDialog.getSaveFileName(
-                    self, "Save Video Bitrate Plot", "",
-                    "EPS Encapsulated Postscript (*.eps);;"
-                    "PGF code for LaTex (*.pgf);;"
-                    "Portable document format(*pdf);;"
-                    "Portable Network Graphics (*.png);;"
-                    "Postscript (*.ps);;"
-                    "Raw RGBA bitmap (*.raw*.rgba);;"
-                    "Scalable vector graphics (*.svg*.svgz)",
-                    selfilter
-                )
+                filevideo, _ = askForFiles(self, QCoreApplication.translate(
+                    "QgsFmvPlayer", "Save Video Bitrate Plot"),
+                    isSave=True,
+                    exts=["png","pdf","pgf","eps","ps","raw","rgba","svg","svgz"])
+
                 if filevideo == "":
                     return
 
@@ -1076,36 +1061,41 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def ExtractCurrentFrame(self):
         """ Extract Current Frame Thread """
         image = self.videoWidget.GetCurrentFrame()
-        out_image, _ = askForFiles(self, QCoreApplication.translate(
+        output, _ = askForFiles(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save Current Frame"),
             isSave=True,
             exts=["png","jpg","bmp","tiff"])
 
-        if out_image == "":
+        if output == "":
             return
 
-        if out_image:
-            self.out_image_queue = queue.Queue()
-            t = threading.Thread(target=self.SaveCapture,
-                                 args=(image, out_image,))
-            t.start()
-            if self.out_image_queue.get():
+        def finished(e):
+            if e is None:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", "Succesfully frame saved!"))
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Failed saving frame!"), level=QGis.Warning)
+                        "QgsFmvPlayer", "Failed saving frame!"), level=QGis.Warning)
+            return
+
+        task = QgsTask.fromFunction('Save Current Frame Task',
+                                    QgsFmvPlayer.SaveCapture,
+                                    image=image, output=output,
+                                    on_finished=finished,
+                                    flags=QgsTask.CanCancel)
+
+        QgsApplication.taskManager().addTask(task)
+        QCoreApplication.processEvents()
+        while task.status() == QgsTask.Running:
+            QCoreApplication.processEvents()
+            pass
+        while QgsApplication.taskManager().countActiveTasks() > 0:
+            QCoreApplication.processEvents()
         return
 
     def SaveCapture(self, image, output):
         ''' Save Current Frame '''
-        try:
-            image.save(output)
-            self.out_image_queue.put(True)
-        except Exception:
-            self.out_image_queue.put(False)
-        QApplication.processEvents()
-        return
+        image.save(output)
 
     def QThreadFinished(self, process, _="", outjson=None):
         ''' Finish Threads '''

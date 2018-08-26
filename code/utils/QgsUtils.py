@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QCoreApplication
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox
 from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.core import Qgis as QGis
 from qgis.core import QgsProject
 from qgis.utils import iface
-
 
 try:
     from pydevd import *
@@ -79,4 +78,5 @@ class QgsUtils(object):
             log.warning(text)
         elif level == QGis.Critical:
             log.error(text)
+        QCoreApplication.processEvents()
         return
