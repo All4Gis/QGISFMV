@@ -84,8 +84,8 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         return
 
     def CreatePDF(self, out, timestamp, data, frame, rows, columns, fileName, VManager):
+        ''' Create PDF QgsTask '''
         QCoreApplication.processEvents()
-
         QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
 
         font_normal = QFont("Helvetica", 10, QFont.Normal)
@@ -187,33 +187,55 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
                                       exts='csv')
         if out == "":
             return
-        try:
-            with open(unicode(out), 'w') as stream:
-                headers = list()
-                # 3 Columns always
-                for column in range(self.VManager.columnCount()):
-                    headers.append(self.VManager.model(
-                    ).headerData(column, Qt.Horizontal))
 
-                writer = csv.DictWriter(stream, fieldnames=headers)
-                writer.writeheader()
-
-                for key in sorted(data.keys()):
-                    rowdata = {}
-                    rowdata[headers[0]] = unicode(str(key))
-                    rowdata[headers[1]] = unicode(str(data[key][0]))
-                    rowdata[headers[2]] = unicode(str(data[key][1]))
-                    writer.writerow(rowdata)
-
+        def finished(e):
             QApplication.restoreOverrideCursor()
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvMetadata", "Succesfully creating CSV"))
-        except Exception as e:
-            QApplication.restoreOverrideCursor()
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvMetadata", "Failed creating CSV : " + str(e)), level=QGis.Warning)
+            if e is None:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvMetadata", "Succesfully creating CSV"))
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvMetadata", "Failed creating CSV : "), str(e), level=QGis.Warning)
+            return
 
+        task = QgsTask.fromFunction('Save CSV Report Task',
+                                    QgsFmvMetadata.CreateCSV,
+                                    out=out,
+                                    data=data,
+                                    VManager=self.VManager,
+                                    on_finished=finished,
+                                    flags=QgsTask.CanCancel)
+
+        QCoreApplication.processEvents()
+        QgsApplication.taskManager().addTask(task)
+        QCoreApplication.processEvents()
+        while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
+            QCoreApplication.processEvents()
+            pass
+        while QgsApplication.taskManager().countActiveTasks() > 0:
+            QCoreApplication.processEvents()
         return
+
+    def CreateCSV(self, out, data, VManager):
+        ''' Create CSV QgsTask '''
+        QCoreApplication.processEvents()
+        QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+        with open(unicode(out), 'w') as stream:
+            headers = list()
+            # 3 Columns always
+            for column in range(VManager.columnCount()):
+                headers.append(VManager.model(
+                ).headerData(column, Qt.Horizontal))
+
+            writer = csv.DictWriter(stream, fieldnames=headers)
+            writer.writeheader()
+
+            for key in sorted(data.keys()):
+                rowdata = {}
+                rowdata[headers[0]] = unicode(str(key))
+                rowdata[headers[1]] = unicode(str(data[key][0]))
+                rowdata[headers[2]] = unicode(str(data[key][1]))
+                writer.writerow(rowdata)
 
     def closeEvent(self, _):
         """ Close Dock Event """
