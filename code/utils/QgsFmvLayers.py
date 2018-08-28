@@ -22,6 +22,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsVectorFileWriter,
     QgsFillSymbol,
+    QgsLineSymbol,
     QgsSvgMarkerSymbolLayer,
     QgsSingleSymbolRenderer
 )
@@ -43,7 +44,10 @@ def CreateGroupByName(name=frames_g):
     root = QgsProject.instance().layerTreeRoot()
     group = root.findGroup(name)
     if group is None:
-        root.insertGroup(0, name)
+        group = root.insertGroup(0, name)
+        #Unchecked visibility 
+        group.setItemVisibilityCheckedRecursive(False)
+        group.setExpanded(False)
     return
 
 
@@ -191,9 +195,12 @@ def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
 def SetDefaultTrajectoryStyle(layer):
     ''' Trajectory Symbol '''
     style = S.getTrajectory('DEFAULT')
-    symbol = layer.renderer().symbol()
-    symbol.setColor(style['COLOR'])
-    symbol.setWidth(style['WIDTH'])
+    fill_sym = QgsLineSymbol.createSimple({'color': style['COLOR'],
+                                           'width': style['WIDTH'],
+                                           'customdash': style['customdash'],
+                                           'use_custom_dash': style['use_custom_dash']})
+    renderer = QgsSingleSymbolRenderer(fill_sym)
+    layer.setRenderer(renderer)
     return
 
 

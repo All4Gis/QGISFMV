@@ -31,8 +31,10 @@ from qgis.core import (QgsApplication,
                        QgsFeature,
                        QgsGeometry,
                        QgsPointXY,
+                       QgsTask,
                        QgsRasterLayer,
                        Qgis as QGis)
+
 from qgis.gui import *
 try:
     from homography import from_points
@@ -652,18 +654,28 @@ def georeferencingVideo(parent):
     image = parent.videoWidget.GetCurrentFrame()
     root, _ = os.path.splitext(os.path.basename(parent.fileName))
     out = os.path.join(os.path.expanduser("~"), "QGIS_FMV", root)
-    GeoreferenceFrame(image, out, parent)
+    position = str(parent.player.position())
+
+    if position == "0":
+        return
+
+    task = QgsTask.fromFunction('Georeferencing Current Frame Task',
+                            GeoreferenceFrame,
+                            image=image, output=out, p=position,
+                            flags=QgsTask.CanCancel)
+
+    QgsApplication.taskManager().addTask(task)
+    while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
+        QCoreApplication.processEvents()
+        pass
+    while QgsApplication.taskManager().countActiveTasks() > 0:
+        QCoreApplication.processEvents()
     return
 
 
-def GeoreferenceFrame(image, output, parent):
+def GeoreferenceFrame(task, image, output, p):
     ''' Save Current Image '''
-
     # TODO : Create memory raster?
-
-    p = str(parent.player.position())
-    if p == "0":
-        return
 
     ext = ".tiff"
 
@@ -675,13 +687,13 @@ def GeoreferenceFrame(image, output, parent):
     image.save(src_file)
 
     # Opens source dataset
-    src_ds = gdal.Open(src_file)
+    src_ds = gdal.OpenEx(src_file, gdal.OF_UPDATE, open_options = ['NUM_THREADS=ALL_CPUS'])
     driver = gdal.GetDriverByName("GTiff")
 
     # Open destination dataset
     dst_filename = os.path.join(output, name + ext)
     dst_ds = driver.CreateCopy(dst_filename, src_ds, \
-        options = ['BLOCKYSIZE=16', 'COMPRESS=DEFLATE', 'NUM_THREADS=ALL_CPUS'])
+        options = ['TILED=YES', 'BLOCKXSIZE=512', 'BLOCKYSIZE=512', 'COMPRESS=LZMA', 'NUM_THREADS=ALL_CPUS'])
 
     # Get raster projection
     srs = osr.SpatialReference()
@@ -702,7 +714,6 @@ def GeoreferenceFrame(image, output, parent):
     layer = QgsRasterLayer(dst_filename, name)
     addLayerNoCrsDialog(layer, False, frames_g)
     ExpandLayer(layer, False)
-    iface.mapCanvas().refresh()
     try:
         os.remove(src_file)
     except OSError:

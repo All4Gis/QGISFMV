@@ -85,8 +85,11 @@ class FmvLayerStyles(object):
     # TRAJECTORY STYLES
     #
     T['DEFAULT'] = {}
-    T['DEFAULT']['COLOR'] = QColor.fromRgb(0, 0, 255)
-    T['DEFAULT']['WIDTH'] = 1
+    T['DEFAULT']['NAME'] = 'dash blue'
+    T['DEFAULT']['COLOR'] = '#0000ff'
+    T['DEFAULT']['WIDTH'] = '0.5'
+    T['DEFAULT']['customdash'] = '3;2'
+    T['DEFAULT']['use_custom_dash'] = '1'
 
     #
     # BEAM STYLES

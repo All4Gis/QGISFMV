@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os.path
 import threading, queue
+import shutil
 
 from PyQt5.QtCore import (QUrl,
                           QThread,
@@ -1270,3 +1271,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             None
         # Restore Filters State
         self.videoWidget.RestoreFilters()
+
+        # Remove mosaic folder
+        root, _ = os.path.splitext(os.path.basename(self.fileName))
+        out = os.path.join(os.path.expanduser("~"), "QGIS_FMV", root)
+        try:
+            shutil.rmtree(out, ignore_errors=True)
+        except Exception:
+            None
