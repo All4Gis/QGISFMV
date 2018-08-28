@@ -44,6 +44,7 @@ from qgis.utils import iface
 
 
 settings = QSettings()
+tm = QgsApplication.taskManager()
 
 try:
     from cv2 import (COLOR_BGR2RGB,
@@ -664,9 +665,8 @@ def georeferencingVideo(parent):
                             image=image, output=out, p=position,
                             flags=QgsTask.CanCancel)
 
-    QgsApplication.taskManager().addTask(task)
+    tm.addTask(task)
     while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
-        QCoreApplication.processEvents()
         pass
     while QgsApplication.taskManager().countActiveTasks() > 0:
         QCoreApplication.processEvents()

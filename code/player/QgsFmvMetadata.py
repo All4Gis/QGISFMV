@@ -23,6 +23,8 @@ try:
 except ImportError:
     None
 
+tm = QgsApplication.taskManager()
+
 
 class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
     """ Metadata Class Reports """
@@ -74,7 +76,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
                                     flags=QgsTask.CanCancel)
 
         QCoreApplication.processEvents()
-        QgsApplication.taskManager().addTask(task)
+        tm.addTask(task)
         QCoreApplication.processEvents()
         while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
             QCoreApplication.processEvents()
@@ -207,7 +209,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
                                     flags=QgsTask.CanCancel)
 
         QCoreApplication.processEvents()
-        QgsApplication.taskManager().addTask(task)
+        tm.addTask(task)
         QCoreApplication.processEvents()
         while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
             QCoreApplication.processEvents()
