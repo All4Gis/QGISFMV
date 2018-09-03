@@ -49,7 +49,7 @@ class Fmv:
 
         threadcount = QThread.idealThreadCount()
         QgsApplication.setMaxThreads(threadcount)# use all available cores (-1 qgis not work)
-        QSettings().setValue("/qgis/parallel_rendering", True)
+        QSettings().setValue("/qgis/parallel_rendering", True) # not work iface.mapCanvas().setParallelRenderingEnabled(True)
 
         self.plugin_dir = os.path.dirname(__file__)
         locale = QSettings().value("locale//userLocale")[0:2]
