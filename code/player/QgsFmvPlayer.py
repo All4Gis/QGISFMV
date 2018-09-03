@@ -172,13 +172,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             if stdout_data == 'NOT_READY':
                 self.metadataDlg.menuSave.setEnabled(False)
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Buffer value read but is not ready, increase buffer size. : "), onlyLog=True)
+                qgsu.showUserAndLogMessage("","Buffer value read but is not ready, increase buffer size. : ", onlyLog=True)
                 return
             elif stdout_data == b'' or len(stdout_data) == 0:
                 self.metadataDlg.menuSave.setEnabled(False)
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Buffer returned empty metadata, check pass_time. : "), onlyLog=True)
+                qgsu.showUserAndLogMessage("","Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
                 return
 
             for packet in StreamParser(stdout_data):

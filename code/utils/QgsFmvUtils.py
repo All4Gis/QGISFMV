@@ -500,15 +500,13 @@ def install_pip_requirements():
     try:
         import pip
     except ImportError:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Import Pip! : "), "", onlyLog=True)
+        qgsu.showUserAndLogMessage("", "Failed Import Pip! : ", onlyLog=True)
         raise
 
     package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
     requirements_file = os.path.join(package_dir, 'requirements.txt')
     if not os.path.isfile(requirements_file):
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", 'No requirements file found in {}'.format(requirements_file)), "", onlyLog=True)
+        qgsu.showUserAndLogMessage("", 'No requirements file found in {}'.format(requirements_file), "", onlyLog=True)
         raise
     try:
         version_num = pip.__version__[:pip.__version__.find('.')]
