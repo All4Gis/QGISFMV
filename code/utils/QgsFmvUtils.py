@@ -103,7 +103,7 @@ else:
 
 
 class BufferedMetaReader():
-    '''  Test : Non-Blocking metadata reader with buffer  '''
+    ''' Non-Blocking metadata reader with buffer  '''
 
     def __init__(self, video_path, pass_time=100, intervall=200, min_buffer_size=10):
         self.video_path = video_path
@@ -138,8 +138,8 @@ class BufferedMetaReader():
                                                                    '-f', 'data', '-'])
                 self._meta[new_key].start()
 
-    # read a value and check the buffer
     def get(self, t):
+        ''' read a value and check the buffer '''
         value = b''
         #get the closest value for this time from the buffer
         s = t.split(".")
@@ -297,6 +297,7 @@ def _callerName():
 
 
 def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
+    ''' dialog for save or load files '''
     msg = msg or 'Select file'
     caller = _callerName().split(".")
     name = "/".join([LAST_PATH, caller[-1]])
