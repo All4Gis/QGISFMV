@@ -38,7 +38,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         #don't go too low with pass_time or we won't catch any metadata at all.
         self.pass_time = 250
         self.buffer_intervall = 500
-        self.min_buffer_size = 8
+        self.min_buffer_size = 30
 
         self.actionOpen_Stream.setVisible(False)
 
