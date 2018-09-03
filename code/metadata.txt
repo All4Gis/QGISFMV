@@ -23,7 +23,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.3:
-    	- Migrate documentation from ReadTheDocs to GitHub pages 
+    	- render layers in parallel and use all cores
 		- Add area and lat,long centroid coords on polygon attributes trable
     	- Better and more rich PDF report
     	- Save reports in other thread
