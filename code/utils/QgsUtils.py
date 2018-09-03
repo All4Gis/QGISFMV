@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import shutil
 
 from PyQt5.QtCore import Qt, QCoreApplication
 from PyQt5.QtGui import QPixmap
@@ -80,3 +81,12 @@ class QgsUtils(object):
             log.error(text)
         QCoreApplication.processEvents()
         return
+
+    @staticmethod
+    def removeMosaicFolder():
+        ''' Remove mosaic folder '''
+        out = os.path.join(os.path.expanduser("~"), "QGIS_FMV")
+        try:
+            shutil.rmtree(out, ignore_errors=True)
+        except Exception:
+            None
