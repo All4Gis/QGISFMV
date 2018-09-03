@@ -665,7 +665,7 @@ def georeferencingVideo(parent):
 
     tm.addTask(task)
     while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
-        pass
+        QCoreApplication.processEvents()
     while QgsApplication.taskManager().countActiveTasks() > 0:
         QCoreApplication.processEvents()
     return
@@ -674,7 +674,6 @@ def georeferencingVideo(parent):
 def GeoreferenceFrame(task, image, output, p):
     ''' Save Current Image '''
     # TODO : Create memory raster?
-
     ext = ".tiff"
 
     t = "out_" + p + ext
@@ -685,14 +684,13 @@ def GeoreferenceFrame(task, image, output, p):
     image.save(src_file)
 
     # Opens source dataset
-    src_ds = gdal.OpenEx(src_file, gdal.OF_UPDATE, open_options = ['NUM_THREADS=ALL_CPUS'])
-    driver = gdal.GetDriverByName("GTiff")
+    src_ds = gdal.OpenEx(src_file, gdal.OF_RASTER | gdal.OF_READONLY, open_options = ['NUM_THREADS=ALL_CPUS'])
 
     # Open destination dataset
     dst_filename = os.path.join(output, name + ext)
-    dst_ds = driver.CreateCopy(dst_filename, src_ds, \
-        options = ['TILED=YES', 'BLOCKXSIZE=512', 'BLOCKYSIZE=512', 'COMPRESS=LZMA', 'NUM_THREADS=ALL_CPUS'])
-
+    dst_ds = gdal.GetDriverByName("GTiff").CreateCopy(dst_filename, src_ds, 0,\
+        options = ['TILED=NO', 'BIGTIFF=NO','COMPRESS_OVERVIEW=DEFLATE','COMPRESS=LZW', 'NUM_THREADS=ALL_CPUS','predictor=2'])
+    src_ds = None
     # Get raster projection
     srs = osr.SpatialReference()
     srs.ImportFromEPSG(4326)
@@ -703,20 +701,14 @@ def GeoreferenceFrame(task, image, output, p):
     # Set location
     dst_ds.SetGeoTransform(geotransform_affine)
     dst_ds.GetRasterBand(1).SetNoDataValue(0)
-
+    dst_ds.FlushCache()
     # Close files
     dst_ds = None
-    src_ds = None
 
     # Add Layer to canvas
     layer = QgsRasterLayer(dst_filename, name)
     addLayerNoCrsDialog(layer, False, frames_g)
     ExpandLayer(layer, False)
-    try:
-        os.remove(src_file)
-    except OSError:
-        pass
-
     return
 
 

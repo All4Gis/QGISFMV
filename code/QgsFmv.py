@@ -23,7 +23,7 @@
 """
 import os.path
 
-from PyQt5.QtCore import QSettings, QCoreApplication, QTranslator, qVersion
+from PyQt5.QtCore import QSettings, QCoreApplication, QTranslator, qVersion, QThread
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction
 from QGIS_FMV.player.QgsFmvAbout import FmvAbout
@@ -31,6 +31,8 @@ from QGIS_FMV.player.QgsManager import FmvManager
 from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.PyQt.QtCore import Qt
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from qgis.core import QgsApplication
+
 try:
     from pydevd import *
 except ImportError:
@@ -44,6 +46,10 @@ class Fmv:
         """ Contructor """
         self.iface = iface
         log.initLogging()
+
+        threadcount = QThread.idealThreadCount()
+        QgsApplication.setMaxThreads(threadcount)# use all available cores (-1 qgis not work)
+        QSettings().setValue("/qgis/parallel_rendering", True)
 
         self.plugin_dir = os.path.dirname(__file__)
         locale = QSettings().value("locale//userLocale")[0:2]

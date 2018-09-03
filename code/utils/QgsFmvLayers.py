@@ -44,7 +44,7 @@ def CreateGroupByName(name=frames_g):
     root = QgsProject.instance().layerTreeRoot()
     group = root.findGroup(name)
     if group is None:
-        group = root.insertGroup(0, name)
+        group = root.insertGroup(-1, name) # Insert on bottom
         #Unchecked visibility 
         group.setItemVisibilityCheckedRecursive(False)
         group.setExpanded(False)
