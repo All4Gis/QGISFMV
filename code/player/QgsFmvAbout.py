@@ -21,4 +21,4 @@ class FmvAbout(QDialog, Ui_FmvAbout):
         QDialog.__init__(self)
         self.setupUi(self)
         self.webView.setContextMenuPolicy(Qt.NoContextMenu)
-        self.webView.load(QUrl("http://qgisfmv-docs.readthedocs.io/en/latest/"))
+        self.webView.load(QUrl("https://all4gis.github.io/QGISFMV/"))
