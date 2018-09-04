@@ -52,6 +52,8 @@ It only needs a video with metadata, like for example one of these [videos](http
 Then, open the plugin where the "video manager" will be shown, open the video and with a double-click, the "player" will be opened. 
 At this moment, you will see that new shapes have been added and you will see the platform position, metadata, etc.
 
+[Link to Usage Documentation!](https://all4gis.github.io/QGISFMV/Using)
+
 
 ## Recommended readings
 
