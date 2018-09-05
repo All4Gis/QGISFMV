@@ -94,6 +94,15 @@ dtm_rowLowerBound = 0
 tLastLon = 0.0
 tLastLat = 0.0
 
+LAST_PATH = "LAST_PATH"
+BOOL = "bool"
+NUMBER = "number"
+_settings = {}
+try:
+    from qgis.PyQt.QtCore import QPyNullVariant
+except Exception:
+    pass
+
 if windows:
     ffmpeg_path = ffmpeg_path + '\\ffmpeg.exe'
     ffprobe_path = ffprobe_path + '\\ffprobe.exe'
@@ -180,12 +189,14 @@ class BufferedMetaReader():
 class callBackMetadataThread(threading.Thread):
     ''' CallBack metadata in other thread  '''
 
-    def __init__(self, cmds, t="ffmpeg"):
+    def __init__(self, cmds, t="ffmpeg", sleep_interval=1):
         self.stdout = None
         self.stderr = None
         self.cmds = cmds
         self.type = t
         self.p = None
+        self._kill = threading.Event()
+        self._interval = sleep_interval
         threading.Thread.__init__(self)
 
     def run(self):
@@ -234,16 +245,6 @@ def getVideoLocationInfo(videoPath):
                 "QgsFmvUtils", "Video info callback failed! : "), str(e), level=QGis.Info)
 
         return location
-
-
-LAST_PATH = "LAST_PATH"
-BOOL = "bool"
-NUMBER = "number"
-_settings = {}
-try:
-    from qgis.PyQt.QtCore import QPyNullVariant
-except Exception:
-    pass
 
 
 def pluginSetting(name, namespace=None, typ=None):
