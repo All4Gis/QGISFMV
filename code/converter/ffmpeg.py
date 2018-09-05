@@ -4,7 +4,6 @@ import os.path
 import platform
 import re
 
-from QGIS_FMV.utils.QgsFmvLog import log
 from QGIS_FMV.utils.QgsFmvUtils import _spawn
 
 
