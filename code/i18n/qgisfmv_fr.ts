@@ -36,17 +36,17 @@
 <context>
     <name>Fmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="63"/>
+        <location filename="../QgsFmv.py" line="69"/>
         <source>Show Video Manager</source>
         <translation>Montrer le Gestionnaire de Vidéo</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="85"/>
+        <location filename="../QgsFmv.py" line="91"/>
         <source>Full Motion Video (FMV)</source>
         <translation>Full Motion Video (FMV)</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="73"/>
+        <location filename="../QgsFmv.py" line="79"/>
         <source>Show About FMV</source>
         <translation>A propos de FMV</translation>
     </message>
