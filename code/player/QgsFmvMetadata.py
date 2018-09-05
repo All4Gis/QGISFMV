@@ -111,7 +111,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
             """
             <p style='text-align: center;'>
             <img style='display: block; margin-left: auto; margin-right: auto;' 
-            src=\':/imgFMV/images/header_logo.png\' width='116' height='56' />
+            src=\':/imgFMV/images/header_logo.png\' width='200' height='25' />
             </p>
             <p style='text-align: center;'>
             <strong>Video :&nbsp;</strong>%s<strong>
