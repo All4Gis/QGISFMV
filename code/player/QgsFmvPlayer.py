@@ -79,6 +79,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # Hide Color Button
         self.btn_Color.hide()
         self.actionObject_Tracking.setVisible(False)
+        self.actionRuler.setVisible(False)
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
 
@@ -440,6 +441,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetObjectTracking(value)
         self.videoWidget.UpdateSurface()
 
+    def VideoRuler(self, value):
+        ''' Video Ruler '''
+        self.UncheckUtils(self.sender(), value)
+        self.videoWidget.SetRuler(value)
+        self.videoWidget.UpdateSurface()
+
     def UncheckUtils(self, sender, value):
         ''' Uncheck Utils Video '''
         QApplication.processEvents()
@@ -454,6 +461,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             True if name == "actionDraw_Polygon" else False)
         self.actionObject_Tracking.setChecked(
             True if name == "actionObject_Tracking" else False)
+        self.actionRuler.setChecked(
+            True if name == "actionRuler" else False)
 
         self.videoWidget.SetMagnifier(
             True if name == "actionMagnifying_glass" else False)
@@ -465,6 +474,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             True if name == "actionDraw_Polygon" else False)
         self.videoWidget.SetObjectTracking(
             True if name == "actionObject_Tracking" else False)
+        self.videoWidget.SetRuler(
+            True if name == "actionRuler" else False)
 
         sender.setChecked(value)
         return

@@ -33,5 +33,11 @@
         <file>../images/mosaic.png</file> 
         <file>../images/stream.png</file> 
         <file>../images/header_logo.png</file> 
+        <file>../images/draw-polygon.png</file> 
+        <file>../images/draw-polyline.png</file> 
+        <file>../images/magnifier-glass.png</file> 
+        <file>../images/object-tracking.png</file>  
+        <file>../images/ruler.png</file>  
+        <file>../images/draw-point.png</file>
     </qresource>
 </RCC>

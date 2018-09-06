@@ -54,6 +54,7 @@ grayColorFilter = False
 monoFilter = False
 contrastFilter = False
 objectTracking = False
+ruler = False
 magnifier = False
 pointDrawer = False
 lineDrawer = False
@@ -198,13 +199,18 @@ class VideoWidget(QVideoWidget):
         ''' Constructor '''
         super(VideoWidget, self).__init__(parent)
         self.surface = VideoWidgetSurface(self)
-        self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
+        self.Tracking_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
+        self.Ruler_RubberBand = QRubberBand(QRubberBand.Line, self)
+
         pal = QPalette()
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
-        self.rubberBand.setPalette(pal)
+        self.Tracking_RubberBand.setPalette(pal)
+
         self.setUpdatesEnabled(True)
-        self.setMouseTracking(True)
-        self.snapped = self.zoomed = self.TrackingRubberBand = False
+        self.snapped = False
+        self.zoomed = False
+        self.TrackingRubberBand = False
+        self.RulerRubberBand = False
         self._isinit = False
         self.gt = None
 
@@ -330,6 +336,11 @@ class VideoWidget(QVideoWidget):
         ''' Set Object Tracking '''
         global objectTracking
         objectTracking = value
+
+    def SetRuler(self, value):
+        ''' Set Ruler '''
+        global ruler
+        ruler = value
 
     def SetGray(self, value):
         ''' Set gray scale '''
@@ -680,7 +691,11 @@ class VideoWidget(QVideoWidget):
             return
 
         if self.TrackingRubberBand:
-            self.rubberBand.setGeometry(
+            self.Tracking_RubberBand.setGeometry(
+                QRect(self.origin, event.pos()).normalized())
+
+        if self.RulerRubberBand:
+            self.Ruler_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
 
         if not self.zoomed:
@@ -786,9 +801,15 @@ class VideoWidget(QVideoWidget):
 
             if objectTracking:
                 self.origin = event.pos()
-                self.rubberBand.setGeometry(QRect(self.origin, QSize()))
-                self.rubberBand.show()
+                self.Tracking_RubberBand.setGeometry(QRect(self.origin, QSize()))
+                self.Tracking_RubberBand.show()
                 self.TrackingRubberBand = True
+
+            if ruler:
+                self.origin = event.pos()
+                self.Ruler_RubberBand.setGeometry(QRect(self.origin, QSize()))
+                self.Ruler_RubberBand.show()
+                self.RulerRubberBand = True
 
         #if not called, the paint event is not triggered.
         self.UpdateSurface()
@@ -827,10 +848,10 @@ class VideoWidget(QVideoWidget):
         """
         self.TrackingRubberBand = False
         if objectTracking:
-            geom = self.rubberBand.geometry()
+            geom = self.Tracking_RubberBand.geometry()
             bbox = (geom.x(), geom.y(), geom.width(), geom.height())
             frame = convertQImageToMat(self.GetCurrentFrame())
-            self.rubberBand.hide()
+            self.Tracking_RubberBand.hide()
             self.tracker = cv2.TrackerBoosting_create()
             self.tracker.clear()
             ok = self.tracker.init(frame, bbox)
