@@ -1,6 +1,6 @@
 import os
 
-from PyQt5.QtGui import QColor,qRgba
+from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication
 from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,

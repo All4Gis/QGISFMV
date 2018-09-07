@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import os.path
-import threading, queue
-import shutil
 
 from PyQt5.QtCore import (QUrl,
                           QThread,

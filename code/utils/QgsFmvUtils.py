@@ -651,7 +651,6 @@ def UpdateLayers(packet, parent=None, mosaic=False):
 
 def georeferencingVideo(parent):
     """ Extract Current Frame Thread """
-    # only works on custom video surface
     image = parent.videoWidget.GetCurrentFrame()
     root, _ = os.path.splitext(os.path.basename(parent.fileName))
     out = os.path.join(os.path.expanduser("~"), "QGIS_FMV", root)
