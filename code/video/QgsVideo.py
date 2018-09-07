@@ -14,7 +14,8 @@ from PyQt5.QtGui import (QImage,
 
 from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QVideoFrame,
-                                QAbstractVideoSurface)
+                                QAbstractVideoSurface,
+                                QVideoSurfaceFormat)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
@@ -152,43 +153,50 @@ class VideoWidgetSurface(QAbstractVideoSurface):
     def paint(self, painter):
         ''' Paint Frame'''
         if (self.currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
-            self.image = QImage(self.currentFrame.bits(),
-                                self.currentFrame.width(),
-                                self.currentFrame.height(),
-                                self.currentFrame.bytesPerLine(),
-                                self.imageFormat
-                                )
+            oldTransform = painter.transform()
 
-            if grayColorFilter:
-                self.image = filter.GrayFilter(self.image)
+        if (self.surfaceFormat().scanLineDirection() == QVideoSurfaceFormat.BottomToTop):
+            painter.scale(1, -1)
+            painter.translate(0, -self.widget.height())
 
-            if monoFilter:
-                self.image = filter.MonoFilter(self.image)
+        self.image = QImage(self.currentFrame.bits(),
+                            self.currentFrame.width(),
+                            self.currentFrame.height(),
+                            self.currentFrame.bytesPerLine(),
+                            self.imageFormat
+                            )
 
-            if edgeDetectionFilter:
-                self.image = filter.EdgeFilter(self.image)
+        if grayColorFilter:
+            self.image = filter.GrayFilter(self.image)
 
-            if contrastFilter:
-                self.image = filter.AutoContrastFilter(self.image)
+        if monoFilter:
+            self.image = filter.MonoFilter(self.image)
 
-            if invertColorFilter:
-                self.image.invertPixels()
+        if edgeDetectionFilter:
+            self.image = filter.EdgeFilter(self.image)
 
-            painter.drawImage(self.targetRect, self.image, self.sourceRect)
+        if contrastFilter:
+            self.image = filter.AutoContrastFilter(self.image)
 
-            if objectTracking and self.widget._isinit:
-                frame = convertQImageToMat(self.image)
-                # Update tracker
-                ok, bbox = self.widget.tracker.update(frame)
-                # Draw bounding box
-                if ok:
-                    qgsu.showUserAndLogMessage("bbox : ",str(bbox), level=QGis.Warning)
-                    painter.setPen(Qt.blue)
-                    painter.drawRect(QRect(int(bbox[0]),int(bbox[1]),int(bbox[2]),int(bbox[3])));
-                else:
-                    qgsu.showUserAndLogMessage("Tracking failure detected ","", level=QGis.Warning)
+        if invertColorFilter:
+            self.image.invertPixels()
 
-            self.currentFrame.unmap()
+        painter.drawImage(self.targetRect, self.image, self.sourceRect)
+
+        if objectTracking and self.widget._isinit:
+            frame = convertQImageToMat(self.image)
+            # Update tracker
+            ok, bbox = self.widget.tracker.update(frame)
+            # Draw bounding box
+            if ok:
+                qgsu.showUserAndLogMessage("bbox : ",str(bbox), level=QGis.Warning)
+                painter.setPen(Qt.blue)
+                painter.drawRect(QRect(int(bbox[0]),int(bbox[1]),int(bbox[2]),int(bbox[3])));
+            else:
+                qgsu.showUserAndLogMessage("Tracking failure detected ","", level=QGis.Warning)
+
+        painter.setTransform(oldTransform)
+        self.currentFrame.unmap()
 
 
 class VideoWidget(QVideoWidget):
@@ -447,18 +455,17 @@ class VideoWidget(QVideoWidget):
 
             try:
                 self.surface.paint(painter)
-                painter.end()
             except Exception:
                 None
         else:
             painter.fillRect(event.rect(), self.palette().window())
-            painter.end()
         try:
             SetImageSize(self.surface.currentFrame.width(),
                          self.surface.currentFrame.height())
         except Exception:
             None
 
+        painter.end()
         #Draw clicked points on video
         for pt in self.drawPtPos:
             #adds a mark on the video
@@ -541,6 +548,7 @@ class VideoWidget(QVideoWidget):
             painter.setRenderHint(QPainter.HighQualityAntialiasing)
             painter.setClipPath(clipPath)
             painter.drawPixmap(corner, self.zoomPixmap)
+            painter.setClipping(False)
             painter.drawPixmap(corner, self.maskPixmap)
             painter.setPen(Qt.gray)
             painter.drawPath(clipPath)
