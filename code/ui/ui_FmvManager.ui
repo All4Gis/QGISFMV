@@ -138,6 +138,10 @@ color: rgb(56, 95, 107);
    </property>
   </action>
   <action name="actionOpen_MPEG2_File">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/misb-file.png</normaloff>:/imgFMV/images/misb-file.png</iconset>
+   </property>
    <property name="text">
     <string>Open MPEG2 File</string>
    </property>

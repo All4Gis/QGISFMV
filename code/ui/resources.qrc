@@ -46,5 +46,6 @@
         <file>../images/show-metadata.png</file>
         <file>../images/show-bitrate.png</file>
         <file>../images/video-converter.png</file>
+        <file>../images/misb-file.png</file>
     </qresource>
 </RCC>
