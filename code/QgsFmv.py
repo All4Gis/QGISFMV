@@ -71,16 +71,19 @@ class Fmv:
                                  statusTip=QCoreApplication.translate(
                                      "Fmv", "Show Video Manager"),
                                  triggered=self.run)
+
+        self.iface.registerMainWindowAction(self.actionFMV, qgsu.SetShortcutForPluginFMV(u"FMV"))
         self.iface.addToolBarIcon(self.actionFMV)
         self.iface.addPluginToMenu(QCoreApplication.translate(
             "Fmv", "Full Motion Video (FMV)"), self.actionFMV)
 
         ''' About Action '''
-        self.actionAbout = QAction(QIcon(":/imgFMV/images/Information.png"), u"About", self.iface.mainWindow(),
+        self.actionAbout = QAction(QIcon(":/imgFMV/images/Information.png"), 
+                                   u"FMV About", self.iface.mainWindow(),
                                    statusTip=QCoreApplication.translate(
                                        "Fmv", "Show About FMV"),
-                                   triggered=self.About)
-
+                                   triggered=self.run)
+        self.iface.registerMainWindowAction(self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About","Alt+A"))
         self.iface.addPluginToMenu(QCoreApplication.translate(
             "Fmv", "Full Motion Video (FMV)"), self.actionAbout)
 

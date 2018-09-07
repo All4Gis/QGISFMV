@@ -41,12 +41,12 @@
         <translation>Mostrar administrador de videos</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="91"/>
+        <location filename="../QgsFmv.py" line="92"/>
         <source>Full Motion Video (FMV)</source>
         <translation>Full Motion Video (FMV)</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="79"/>
+        <location filename="../QgsFmv.py" line="80"/>
         <source>Show About FMV</source>
         <translation>Mostrar acerca de FMV</translation>
     </message>
@@ -163,12 +163,12 @@
         <translation>Fuente</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="137"/>
+        <location filename="../ui/ui_FmvManager.ui" line="141"/>
         <source>Open Stream</source>
         <translation>Abir Stream</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="146"/>
+        <location filename="../ui/ui_FmvManager.ui" line="150"/>
         <source>Open MPEG2 File</source>
         <translation>Abrir fichero MPEG2</translation>
     </message>
@@ -211,7 +211,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Crear mosaico&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="723"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="729"/>
         <source>Ctrl+Shift+M</source>
         <translation>Ctrl+Shift+M</translation>
     </message>
@@ -221,7 +221,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capturar el fotograma actual&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="703"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="709"/>
         <source>Ctrl+Shift+Q</source>
         <translation>Ctrl+Shift+Q</translation>
     </message>
@@ -271,52 +271,52 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Silenciar/No silenciar&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="488"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="494"/>
         <source>Ctrl+Shift+U</source>
         <translation>Ctrl+Shift+U</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="498"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="504"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Volume&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Volumen&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="519"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="525"/>
         <source>100%</source>
         <translation>100%</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="582"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="588"/>
         <source>Background Progress . . . %p%</source>
         <translation>Progreso en segundo plano. . . %p%</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="606"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="612"/>
         <source>Filters</source>
         <translation>Filtros</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="616"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="622"/>
         <source>Frames</source>
         <translation>Fotogramas</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="623"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="629"/>
         <source>Metadata</source>
         <translation>Metadatos</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="629"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="635"/>
         <source>Converter</source>
         <translation>Conversor</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="635"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="641"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="643"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="649"/>
         <source>Plot Bitrate</source>
         <translation>Representar Bitrate</translation>
     </message>
@@ -326,143 +326,148 @@
         <translation type="obsolete">Utilidades</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="687"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="693"/>
         <source>Gray Scale</source>
         <translation>Escala de grises</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="695"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="701"/>
         <source>Edge Detection</source>
         <translation>Detección de bordes</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="700"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="706"/>
         <source>Capture Current Frame</source>
         <translation>Capturar fotograma actual</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="708"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="714"/>
         <source>Extract All Frames</source>
         <translation>Extraer todos los fotogramas</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="711"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="717"/>
         <source>Ctrl+Shift+A</source>
         <translation>Ctrl+Shift+A</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="720"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="726"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadatos</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="732"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="738"/>
         <source>Converter Video</source>
         <translation>Convertir video</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="741"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="747"/>
         <source>Save Video Info to Json</source>
         <translation>Guardar la información del video en Json</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="750"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="756"/>
         <source>Show Audio</source>
         <translation>Mostrar audio</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="759"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="765"/>
         <source>Show Video</source>
         <translation>Mostrar video</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="764"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="770"/>
         <source>Show All</source>
         <translation>Mostrar todo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="769"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="775"/>
         <source>Save Audio</source>
         <translation>Guardar audio</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="774"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="780"/>
         <source>Save Video</source>
         <translation>Guardar video</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="779"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="785"/>
         <source>Save All</source>
         <translation>Guardar todo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="788"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="794"/>
         <source>Show Video Info</source>
         <translation>Mostrar información de video</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="800"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="806"/>
         <source>Invert Color</source>
         <translation>Inversión de color</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="808"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="814"/>
         <source>Mono Filter</source>
         <translation>Mono filtro</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="816"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="822"/>
         <source>Canny edge detection</source>
         <translation>Detección de bordes</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="827"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="833"/>
         <source>Zoom Rectangle</source>
         <translation>Zoom rectángulo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="839"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="845"/>
         <source>Magnifying glass</source>
         <translation>Lupa</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="851"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="857"/>
         <source>Auto Contrast Filter</source>
         <translation>Filtro de contraste automático</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="860"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="866"/>
         <source>Create Mosaic</source>
         <translation>Crear mosaico</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="872"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="878"/>
         <source>Draw Pinpoint</source>
         <translation>Dibujar punto</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="884"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="890"/>
         <source>Draw Line</source>
         <translation>Dibujar linea</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="902"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="908"/>
         <source>Draw Polygon</source>
         <translation>Dibujar polígono</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="914"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="920"/>
         <source>Object Tracking</source>
         <translation>Seguimiento de objetos</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="926"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="932"/>
         <source>Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="661"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="667"/>
         <source>toolBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="481"/>
+        <source>asasdas</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

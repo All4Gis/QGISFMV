@@ -509,6 +509,8 @@ class Ui_PlayerWindow(object):
         self.btn_next.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>End Of Media</p></body></html>"))
         self.btn_repeat.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Repeat</p></body></html>"))
         self.btn_volume.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Mute/Unmute</p></body></html>"))
+        self.btn_volume.setStatusTip(_translate("PlayerWindow", "asasdas"))
+        self.btn_volume.setWhatsThis(_translate("PlayerWindow", "Ctrl+Shift+U"))
         self.btn_volume.setShortcut(_translate("PlayerWindow", "Ctrl+Shift+U"))
         self.volumeSlider.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Volume</p></body></html>"))
         self.v_label.setText(_translate("PlayerWindow", "100%"))

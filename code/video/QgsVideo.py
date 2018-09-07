@@ -132,7 +132,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             return False
         else:
             self.currentFrame = frame
-            self.widget.update()
+            self.widget.repaint(self.targetRect)
             return True
 
     def videoRect(self):
@@ -147,8 +147,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         ''' Update video rectangle '''
         size = self.surfaceFormat().sizeHint()
         size.scale(self.widget.size().boundedTo(size), Qt.KeepAspectRatio)
-        self.targetRect = QRect(QPoint(0, 0), size)
-        self.targetRect.moveCenter(self.widget.rect().center())
+        self.targetRect = QRect(QPoint(0, 0), size); self.targetRect.moveCenter(self.widget.rect().center())
 
     def paint(self, painter):
         ''' Paint Frame'''

@@ -349,25 +349,25 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         actionMute = menu.addAction(
             QCoreApplication.translate("QgsFmvPlayer", "Mute/Unmute"))
-        actionMute.setShortcut("Ctrl+May+U")
+        actionMute.setShortcut("Ctrl+Shift+U")
         actionMute.triggered.connect(self.setMuted)
 
         menu.addSeparator()
         actionAllFrames = menu.addAction(
             QCoreApplication.translate("QgsFmvPlayer", "Extract All Frames"))
-        actionAllFrames.setShortcut("Ctrl+May+A")
+        actionAllFrames.setShortcut("Ctrl+Shift+A")
         actionAllFrames.triggered.connect(self.ExtractAllFrames)
 
         actionCurrentFrames = menu.addAction(
             QCoreApplication.translate("QgsFmvPlayer",
                                        "Extract Current Frame"))
-        actionCurrentFrames.setShortcut("Ctrl+May+Q")
+        actionCurrentFrames.setShortcut("Ctrl+Shift+Q")
         actionCurrentFrames.triggered.connect(self.ExtractCurrentFrame)
 
         menu.addSeparator()
         actionShowMetadata = menu.addAction(
             QCoreApplication.translate("QgsFmvPlayer", "Show Metadata"))
-        actionShowMetadata.setShortcut("Ctrl+May+M")
+        actionShowMetadata.setShortcut("Ctrl+Shift+M")
         actionShowMetadata.triggered.connect(self.OpenQgsFmvMetadata)
 
         menu.exec_(self.mapToGlobal(point))

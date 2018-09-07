@@ -9,6 +9,7 @@ from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.core import Qgis as QGis
 from qgis.core import QgsProject
 from qgis.utils import iface
+from qgis.PyQt.QtCore import QSettings
 
 try:
     from pydevd import *
@@ -90,3 +91,19 @@ class QgsUtils(object):
             shutil.rmtree(out, ignore_errors=True)
         except Exception:
             None
+
+    @staticmethod
+    def SetShortcutForPluginFMV(text, value="Alt+F"):
+        ''' Set DEFAULT or find user shortcut '''
+        settings = QSettings()
+        settings.beginGroup('shortcuts')
+        # Find all saved shortcuts:
+        keys = [key for key in settings.childKeys() if key==text]
+        if not len(keys):
+            # Nothing found in settings - fallback to default:
+            shortcut = value
+            settings.setValue(text, shortcut)
+        elif len(keys) == 1:
+            # Just one setting found, take that!
+            shortcut = settings.value(keys[0])
+        return shortcut
