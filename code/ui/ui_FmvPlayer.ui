@@ -733,6 +733,10 @@ QProgressBar::chunk
    </property>
   </action>
   <action name="actionSave_Video_Info">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/save-video-indo.png</normaloff>:/imgFMV/images/save-video-indo.png</iconset>
+   </property>
    <property name="text">
     <string>Save Video Info to Json</string>
    </property>
@@ -776,6 +780,10 @@ QProgressBar::chunk
    </property>
   </action>
   <action name="actionShow_Video_Info">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/video-info.png</normaloff>:/imgFMV/images/video-info.png</iconset>
+   </property>
    <property name="text">
     <string>Show Video Info</string>
    </property>

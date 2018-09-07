@@ -361,102 +361,102 @@
         <translation>تبدیل گر ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="737"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="741"/>
         <source>Save Video Info to Json</source>
         <translation>ذخیره اطلاعات ویدئو به فرمت Json</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="746"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="750"/>
         <source>Show Audio</source>
         <translation>نمایش صدا</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="755"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="759"/>
         <source>Show Video</source>
         <translation>نمایش ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="760"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="764"/>
         <source>Show All</source>
         <translation>نمایش همه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="765"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="769"/>
         <source>Save Audio</source>
         <translation>ذخیره صدا</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="770"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="774"/>
         <source>Save Video</source>
         <translation>ذخیره ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="775"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="779"/>
         <source>Save All</source>
         <translation>ذخیره همه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="780"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="788"/>
         <source>Show Video Info</source>
         <translation>نمایش اطلاعات ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="792"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="800"/>
         <source>Invert Color</source>
         <translation>وارونه کردن رنگ</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="800"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="808"/>
         <source>Mono Filter</source>
         <translation>فیلتر Mono </translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="808"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="816"/>
         <source>Canny edge detection</source>
         <translation>تشخیص زیرکانه لبه ها</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="819"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="827"/>
         <source>Zoom Rectangle</source>
         <translation>درشت نمایی چهارگوش</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="831"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="839"/>
         <source>Magnifying glass</source>
         <translation>شیشه ذره بین</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="843"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="851"/>
         <source>Auto Contrast Filter</source>
         <translation>فیلتر تباین خودکار</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="852"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="860"/>
         <source>Create Mosaic</source>
         <translation>ایجاد موزائیک</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="864"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="872"/>
         <source>Draw Pinpoint</source>
         <translation>رسم نقطه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="876"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="884"/>
         <source>Draw Line</source>
         <translation>رسم خط</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="894"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="902"/>
         <source>Draw Polygon</source>
         <translation>رسم چندضلعی</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="906"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="914"/>
         <source>Object Tracking</source>
         <translation>دنبال نمودن هدف</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="918"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="926"/>
         <source>Ruler</source>
         <translation type="unfinished"></translation>
     </message>
