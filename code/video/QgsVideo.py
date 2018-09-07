@@ -465,11 +465,10 @@ class VideoWidget(QVideoWidget):
         except Exception:
             None
 
-        painter.end()
         #Draw clicked points on video
         for pt in self.drawPtPos:
             #adds a mark on the video
-            self.drawPointOnVideo(pt)
+            self.drawPointOnVideo(pt, painter)
 
         #Draw clicked lines on video
         if len(self.drawLines) > 1:
@@ -477,7 +476,7 @@ class VideoWidget(QVideoWidget):
                 if pt[0] is None:
                     continue
                 else:
-                    self.drawLinesOnVideo(pt, idx)
+                    self.drawLinesOnVideo(pt, idx, painter)
 
         # Draw clicked Polygons on video
         if len(self.drawPolygon) > 1:
@@ -485,7 +484,7 @@ class VideoWidget(QVideoWidget):
             if any(None == x[1] for x in self.drawPolygon):
                 for pt in self.drawPolygon:
                     if pt[0] is None:
-                        self.drawPolygonOnVideo(poly)
+                        self.drawPolygonOnVideo(poly, painter)
                         poly = []
                         continue
                     poly.append(pt)
@@ -494,9 +493,9 @@ class VideoWidget(QVideoWidget):
                 for pt in range(last_occurence, len(self.drawPolygon)):
                     poly.append(self.drawPolygon[pt])
                 if len(poly) > 1:
-                    self.drawPolygonOnVideo(poly)
+                    self.drawPolygonOnVideo(poly, painter)
             else:
-                self.drawPolygonOnVideo(self.drawPolygon)
+                self.drawPolygonOnVideo(self.drawPolygon, painter)
 
         # Magnifier Glass
         if self.zoomed and magnifier:
@@ -536,15 +535,14 @@ class VideoWidget(QVideoWidget):
                 self.zoomPixmap.fill(Qt.lightGray)
 
             if True:
-                painter = QPainter(self.zoomPixmap)
-                painter.translate(-xy)
+                painter_p = QPainter(self.zoomPixmap)
+                painter_p.translate(-xy)
                 self.largePixmap = QPixmap.fromImage(self.surface.image)
-                painter.drawPixmap(self.offset, self.largePixmap)
-                painter.end()
+                painter_p.drawPixmap(self.offset, self.largePixmap)
+                painter_p.end()
 
             clipPath = QPainterPath()
             clipPath.addEllipse(QPointF(center), ring, ring)
-            painter = QPainter(self)
             painter.setRenderHint(QPainter.HighQualityAntialiasing)
             painter.setClipPath(clipPath)
             painter.drawPixmap(corner, self.zoomPixmap)
@@ -552,7 +550,8 @@ class VideoWidget(QVideoWidget):
             painter.drawPixmap(corner, self.maskPixmap)
             painter.setPen(Qt.gray)
             painter.drawPath(clipPath)
-            painter.end()
+        
+        painter.end()
         return
 
     def GetInverseMatrix(self, x, y):
@@ -562,7 +561,7 @@ class VideoWidget(QVideoWidget):
         scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
         return scr_x, scr_y
 
-    def drawLinesOnVideo(self, pt, idx):
+    def drawLinesOnVideo(self, pt, idx, painter):
         ''' Draw Lines on Video '''
         if hasElevationModel():
             pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
@@ -576,7 +575,7 @@ class VideoWidget(QVideoWidget):
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
         pen.setDashPattern([1, 4, 5, 4])
-        painter = QPainter(self)
+
         painter.setPen(pen)
         painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.drawPoint(center)
@@ -591,10 +590,9 @@ class VideoWidget(QVideoWidget):
                 painter.drawLine(center, end)
             except Exception:
                 None
-        painter.end()
         return
 
-    def drawPointOnVideo(self, pt):
+    def drawPointOnVideo(self, pt, painter):
         ''' Draw Points on Video '''
         if hasElevationModel():
             pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
@@ -607,15 +605,11 @@ class VideoWidget(QVideoWidget):
         pen = QPen(Qt.red)
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
-
-        painter = QPainter(self)
         painter.setPen(pen)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.drawPoint(center)
-        painter.end()
         return
 
-    def drawPolygonOnVideo(self, values):
+    def drawPolygonOnVideo(self, values, painter):
         ''' Draw Polygons on Video '''
         poly = []
         for pt in values:
@@ -642,12 +636,10 @@ class VideoWidget(QVideoWidget):
         path = QPainterPath()
         path.addPolygon(polygon)
 
-        painter = QPainter(self)
         painter.setPen(pen)
         painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.drawPolygon(polygon)
         painter.fillPath(path, brush)
-        painter.end()
         return
 
     def resizeEvent(self, event):
