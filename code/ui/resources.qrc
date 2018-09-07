@@ -39,5 +39,11 @@
         <file>../images/object-tracking.png</file>  
         <file>../images/ruler.png</file>  
         <file>../images/draw-point.png</file>
+        <file>../images/invert-colors.png</file>
+        <file>../images/automatic-contrast.png</file>
+        <file>../images/grayscale.png</file>
+        <file>../images/show-metadata.png</file>
+        <file>../images/show-bitrate.png</file>
+        <file>../images/video-converter.png</file>
     </qresource>
 </RCC>

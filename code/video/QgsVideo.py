@@ -131,7 +131,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             return False
         else:
             self.currentFrame = frame
-            self.widget.repaint(self.targetRect)
+            self.widget.update()
             return True
 
     def videoRect(self):
@@ -152,8 +152,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
     def paint(self, painter):
         ''' Paint Frame'''
         if (self.currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
-            painter.setRenderHint(QPainter.Antialiasing)
-
             self.image = QImage(self.currentFrame.bits(),
                                 self.currentFrame.width(),
                                 self.currentFrame.height(),
@@ -434,7 +432,9 @@ class VideoWidget(QVideoWidget):
     def paintEvent(self, event):
         ''' Paint Event '''
         self.gt = GetGCPGeoTransform()
+
         painter = QPainter(self)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing)
 
         if (self.surface.isActive()):
             videoRect = self.surface.videoRect()
@@ -447,10 +447,12 @@ class VideoWidget(QVideoWidget):
 
             try:
                 self.surface.paint(painter)
+                painter.end()
             except Exception:
                 None
         else:
             painter.fillRect(event.rect(), self.palette().window())
+            painter.end()
         try:
             SetImageSize(self.surface.currentFrame.width(),
                          self.surface.currentFrame.height())
@@ -508,7 +510,7 @@ class VideoWidget(QVideoWidget):
                 g.setColorAt(1.0, QColor(64, 64, 64, 0))
                 g.setColorAt(0.5, QColor(0, 0, 0, 255))
                 mask = QPainter(self.maskPixmap)
-                mask.setRenderHint(QPainter.Antialiasing)
+                mask.setRenderHint(QPainter.HighQualityAntialiasing)
                 mask.setCompositionMode(QPainter.CompositionMode_Source)
                 mask.setBrush(g)
                 mask.setPen(Qt.NoPen)
@@ -536,7 +538,7 @@ class VideoWidget(QVideoWidget):
             clipPath = QPainterPath()
             clipPath.addEllipse(QPointF(center), ring, ring)
             painter = QPainter(self)
-            painter.setRenderHint(QPainter.Antialiasing)
+            painter.setRenderHint(QPainter.HighQualityAntialiasing)
             painter.setClipPath(clipPath)
             painter.drawPixmap(corner, self.zoomPixmap)
             painter.drawPixmap(corner, self.maskPixmap)
@@ -568,7 +570,7 @@ class VideoWidget(QVideoWidget):
         pen.setDashPattern([1, 4, 5, 4])
         painter = QPainter(self)
         painter.setPen(pen)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.drawPoint(center)
 
         if len(self.drawLines) > 1:
@@ -600,7 +602,7 @@ class VideoWidget(QVideoWidget):
 
         painter = QPainter(self)
         painter.setPen(pen)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.drawPoint(center)
         painter.end()
         return
@@ -634,7 +636,7 @@ class VideoWidget(QVideoWidget):
 
         painter = QPainter(self)
         painter.setPen(pen)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.drawPolygon(polygon)
         painter.fillPath(path, brush)
         painter.end()
