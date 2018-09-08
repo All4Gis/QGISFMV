@@ -223,6 +223,8 @@ class Ui_PlayerWindow(object):
         self.btn_volume = QtWidgets.QPushButton(self.gb_PlayerControls)
         self.btn_volume.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_volume.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
+        self.btn_volume.setStatusTip("")
+        self.btn_volume.setWhatsThis("")
         self.btn_volume.setText("")
         icon12 = QtGui.QIcon()
         icon12.addPixmap(QtGui.QPixmap(":/imgFMV/images/volume_up.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -414,11 +416,18 @@ class Ui_PlayerWindow(object):
         icon26.addPixmap(QtGui.QPixmap(":/imgFMV/images/ruler.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionRuler.setIcon(icon26)
         self.actionRuler.setObjectName("actionRuler")
+        self.actionMirroredH = QtWidgets.QAction(PlayerWindow)
+        self.actionMirroredH.setCheckable(True)
+        icon27 = QtGui.QIcon()
+        icon27.addPixmap(QtGui.QPixmap(":/imgFMV/images/mirrored.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionMirroredH.setIcon(icon27)
+        self.actionMirroredH.setObjectName("actionMirroredH")
         self.menuFile.addAction(self.actionGray)
         self.menuFile.addAction(self.actionInvert_Color)
         self.menuFile.addAction(self.actionMono_Filter)
         self.menuFile.addAction(self.actionCanny_edge_detection)
         self.menuFile.addAction(self.actionAuto_Contrast_Filter)
+        self.menuFile.addAction(self.actionMirroredH)
         self.menuFrames.addAction(self.actionCapture_Current_Frame)
         self.menuFrames.addAction(self.actionExtract_All_Frames)
         self.menuMetadata.addAction(self.actionShow_Metadata)
@@ -486,6 +495,7 @@ class Ui_PlayerWindow(object):
         self.actionObject_Tracking.triggered['bool'].connect(PlayerWindow.ojectTracking)
         self.actionDraw_Polygon.triggered['bool'].connect(PlayerWindow.polygonDrawer)
         self.actionRuler.toggled['bool'].connect(PlayerWindow.VideoRuler)
+        self.actionMirroredH.triggered['bool'].connect(PlayerWindow.MirrorHorizontalFilter)
         QtCore.QMetaObject.connectSlotsByName(PlayerWindow)
 
     def retranslateUi(self, PlayerWindow):
@@ -509,8 +519,6 @@ class Ui_PlayerWindow(object):
         self.btn_next.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>End Of Media</p></body></html>"))
         self.btn_repeat.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Repeat</p></body></html>"))
         self.btn_volume.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Mute/Unmute</p></body></html>"))
-        self.btn_volume.setStatusTip(_translate("PlayerWindow", "asasdas"))
-        self.btn_volume.setWhatsThis(_translate("PlayerWindow", "Ctrl+Shift+U"))
         self.btn_volume.setShortcut(_translate("PlayerWindow", "Ctrl+Shift+U"))
         self.volumeSlider.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Volume</p></body></html>"))
         self.v_label.setText(_translate("PlayerWindow", "100%"))
@@ -553,6 +561,7 @@ class Ui_PlayerWindow(object):
         self.actionDraw_Polygon.setToolTip(_translate("PlayerWindow", "Draw Polygon"))
         self.actionObject_Tracking.setText(_translate("PlayerWindow", "Object Tracking"))
         self.actionRuler.setText(_translate("PlayerWindow", "Ruler"))
+        self.actionMirroredH.setText(_translate("PlayerWindow", "Horizontal Mirrored"))
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc

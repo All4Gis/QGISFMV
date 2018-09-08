@@ -380,6 +380,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.UpdateSurface()
         return
 
+    def MirrorHorizontalFilter(self, value):
+        ''' Mirror Horizontal Video Filter '''
+        self.UncheckFilters(self.sender(), value)
+        self.videoWidget.SetMirrorH(value)
+        self.videoWidget.UpdateSurface()
+        return
+
     def edgeFilter(self, value):
         ''' Edge Detection Video Filter '''
         self.UncheckFilters(self.sender(), value)
@@ -491,8 +498,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             True if name == "actionCanny_edge_detection" else False)
         self.actionAuto_Contrast_Filter.setChecked(
             True if name == "actionAuto_Contrast_Filter" else False)
+        self.actionMirroredH.setChecked(
+            True if name == "actionMirroredH" else False)
 
-        self.videoWidget.SetGray(True if name == "actionGray" else False)
+        self.videoWidget.SetGray(
+            True if name == "actionGray" else False)
+        self.videoWidget.SetMirrorH(
+            True if name == "actionMirroredH" else False)
         self.videoWidget.SetEdgeDetection(
             True if name == "actionCanny_edge_detection" else False)
         self.videoWidget.SetInvertColor(

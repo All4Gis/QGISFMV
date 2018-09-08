@@ -616,6 +616,7 @@ QProgressBar::chunk
     <addaction name="actionMono_Filter"/>
     <addaction name="actionCanny_edge_detection"/>
     <addaction name="actionAuto_Contrast_Filter"/>
+    <addaction name="actionMirroredH"/>
    </widget>
    <widget class="QMenu" name="menuFrames">
     <property name="title">
@@ -930,6 +931,18 @@ QProgressBar::chunk
    </property>
    <property name="text">
     <string>Ruler</string>
+   </property>
+  </action>
+  <action name="actionMirroredH">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/mirrored.png</normaloff>:/imgFMV/images/mirrored.png</iconset>
+   </property>
+   <property name="text">
+    <string>Horizontal Mirrored</string>
    </property>
   </action>
  </widget>
@@ -1568,6 +1581,22 @@ QProgressBar::chunk
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionMirroredH</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>MirrorHorizontalFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleGroup(bool)</slot>
@@ -1605,5 +1634,6 @@ QProgressBar::chunk
   <slot>polygonDrawer(bool)</slot>
   <slot>ojectTracking(bool)</slot>
   <slot>VideoRuler(bool)</slot>
+  <slot>MirrorHorizontalFilter(bool)</slot>
  </slots>
 </ui>

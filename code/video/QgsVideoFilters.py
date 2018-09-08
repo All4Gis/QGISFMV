@@ -31,6 +31,11 @@ class VideoFilters():
         return image.convertToFormat(QImage.Format_Grayscale8)
 
     @staticmethod
+    def MirrredFilter(image):
+        ''' Mirror Horizontal Image Filter '''
+        return image.mirrored(True, False)
+
+    @staticmethod
     def MonoFilter(image):
         ''' Mono Image Filter '''
         return image.convertToFormat(QImage.Format_Mono)

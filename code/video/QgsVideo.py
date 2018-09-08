@@ -52,6 +52,7 @@ except ImportError:
 invertColorFilter = False
 edgeDetectionFilter = False
 grayColorFilter = False
+MirroredHFilter = False
 monoFilter = False
 contrastFilter = False
 objectTracking = False
@@ -167,6 +168,9 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
         if grayColorFilter:
             self.image = filter.GrayFilter(self.image)
+
+        if MirroredHFilter:
+            self.image = filter.MirrredFilter(self.image)
 
         if monoFilter:
             self.image = filter.MonoFilter(self.image)
@@ -352,6 +356,11 @@ class VideoWidget(QVideoWidget):
         global grayColorFilter
         grayColorFilter = value
 
+    def SetMirrorH(self, value):
+        ''' Set Horizontal Mirror '''
+        global MirroredHFilter
+        MirroredHFilter = value
+
     def SetEdgeDetection(self, value):
         ''' Set Canny Edge filter '''
         global edgeDetectionFilter
@@ -369,8 +378,8 @@ class VideoWidget(QVideoWidget):
 
     def RestoreFilters(self):
         ''' Remove and restore all video filters '''
-        global invertColorFilter, grayColorFilter, edgeDetectionFilter, monoFilter, contrastFilter
-        invertColorFilter = grayColorFilter = edgeDetectionFilter = monoFilter = contrastFilter = False
+        global invertColorFilter, grayColorFilter, edgeDetectionFilter, monoFilter, contrastFilter, MirroredHFilter
+        invertColorFilter = grayColorFilter = edgeDetectionFilter = monoFilter = contrastFilter = MirroredHFilter = False
 
     def GetXBlackZone(self):
         ''' Return is X in black screen on video '''
