@@ -218,7 +218,6 @@ class VideoWidget(QVideoWidget):
         self.setUpdatesEnabled(True)
         self.snapped = False
         self.zoomed = False
-        self.TrackingRubberBand = False
         self.RulerRubberBand = False
         self._isinit = False
         self.gt = None
@@ -475,7 +474,6 @@ class VideoWidget(QVideoWidget):
 
         #Draw clicked points on video
         for pt in self.drawPtPos:
-            #adds a mark on the video
             self.drawPointOnVideo(pt, painter)
 
         #Draw clicked lines on video
@@ -558,7 +556,7 @@ class VideoWidget(QVideoWidget):
             painter.drawPixmap(corner, self.maskPixmap)
             painter.setPen(Qt.gray)
             painter.drawPath(clipPath)
-        
+
         painter.end()
         return
 
@@ -700,7 +698,7 @@ class VideoWidget(QVideoWidget):
         if not event.buttons():
             return
 
-        if self.TrackingRubberBand:
+        if not self.Tracking_RubberBand.isHidden():
             self.Tracking_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
 
@@ -813,7 +811,6 @@ class VideoWidget(QVideoWidget):
                 self.origin = event.pos()
                 self.Tracking_RubberBand.setGeometry(QRect(self.origin, QSize()))
                 self.Tracking_RubberBand.show()
-                self.TrackingRubberBand = True
 
             if ruler:
                 self.origin = event.pos()
@@ -856,7 +853,6 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
-        self.TrackingRubberBand = False
         if objectTracking:
             geom = self.Tracking_RubberBand.geometry()
             bbox = (geom.x(), geom.y(), geom.width(), geom.height())

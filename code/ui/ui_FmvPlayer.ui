@@ -602,6 +602,9 @@ QProgressBar::chunk
      <height>21</height>
     </rect>
    </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::CustomContextMenu</enum>
+   </property>
    <property name="styleSheet">
     <string notr="true">QMenuBar {
     background-color: transparent;
@@ -665,7 +668,10 @@ QProgressBar::chunk
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="DrawToolBar">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>Utils ToolBar</string>
+   </property>
+   <property name="toolTip">
+    <string>Utils ToolBar</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>

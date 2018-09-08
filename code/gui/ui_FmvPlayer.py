@@ -283,6 +283,7 @@ class Ui_PlayerWindow(object):
         PlayerWindow.setCentralWidget(self.centralwidget)
         self.menubarwidget = QtWidgets.QMenuBar(PlayerWindow)
         self.menubarwidget.setGeometry(QtCore.QRect(0, 0, 748, 21))
+        self.menubarwidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.menubarwidget.setStyleSheet("QMenuBar {\n"
 "    background-color: transparent;\n"
 "}")
@@ -529,7 +530,8 @@ class Ui_PlayerWindow(object):
         self.menuConverter.setTitle(_translate("PlayerWindow", "Converter"))
         self.menuInfo.setTitle(_translate("PlayerWindow", "Information"))
         self.menuPlot_Bitrate.setTitle(_translate("PlayerWindow", "Plot Bitrate"))
-        self.DrawToolBar.setWindowTitle(_translate("PlayerWindow", "toolBar"))
+        self.DrawToolBar.setWindowTitle(_translate("PlayerWindow", "Utils ToolBar"))
+        self.DrawToolBar.setToolTip(_translate("PlayerWindow", "Utils ToolBar"))
         self.actionGray.setText(_translate("PlayerWindow", "Gray Scale"))
         self.actionEdge_Detection.setText(_translate("PlayerWindow", "Edge Detection"))
         self.actionCapture_Current_Frame.setText(_translate("PlayerWindow", "Capture Current Frame"))

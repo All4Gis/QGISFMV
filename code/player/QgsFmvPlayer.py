@@ -22,7 +22,8 @@ from PyQt5.QtWidgets import (QToolTip,
                              QMessageBox,
                              QMenu,
                              QApplication,
-                             QTableWidgetItem)
+                             QTableWidgetItem,
+                             QToolBar)
 from QGIS_FMV.converter.Converter import Converter
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
 from QGIS_FMV.klvdata.streamparser import StreamParser
@@ -83,6 +84,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.videoWidget.customContextMenuRequested[QPoint].connect(
             self.contextMenuRequested)
+
+        self.menubarwidget.customContextMenuRequested[QPoint].connect(
+            self.contextMenuBarRequested)
 
         self.duration = 0
         self.playerMuted = False
@@ -338,9 +342,29 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         CreateGroupByName()
         return
 
+    def contextMenuBarRequested(self, point):
+        ''' Context Menu Menu Bar '''
+        menu = QMenu('ToolBars')
+        toolbars = self.findChildren(QToolBar)
+        for toolbar in toolbars:
+            action = menu.addAction(toolbar.windowTitle())
+            action.setCheckable(True)
+            action.setChecked(toolbar.isVisible())
+            action.setObjectName(toolbar.windowTitle())
+            action.triggered.connect(lambda _: self.ToggleQToolBar())
+        menu.exec_(self.mapToGlobal(point))
+        return
+
+    def ToggleQToolBar(self):
+        ''' Toggle ToolBar '''
+        toolbars = self.findChildren(QToolBar)
+        for toolbar in toolbars:
+            if self.sender().objectName() == toolbar.windowTitle():
+                toolbar.toggleViewAction().trigger()
+
     def contextMenuRequested(self, point):
         ''' Context Menu Video '''
-        menu = QMenu()
+        menu = QMenu('Video')
 
 #         actionColors = menu.addAction(
 #             QCoreApplication.translate("QgsFmvPlayer", "Color Options"))
