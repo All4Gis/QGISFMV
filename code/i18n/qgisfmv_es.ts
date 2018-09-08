@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="es" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" sourcelanguage="" version="2.0">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -323,7 +322,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="650"/>
         <source>Utils</source>
-        <translation type="obsolete">Utilidades</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="694"/>
@@ -458,17 +457,17 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="933"/>
         <source>Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Regla</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="668"/>
         <source>toolBar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="945"/>
         <source>Horizontal Mirrored</source>
-        <translation type="unfinished"></translation>
+        <translation>Espejo horizontal</translation>
     </message>
 </context>
 <context>
@@ -546,14 +545,12 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="175"/>
         <source>Buffer value read but is not ready, increase buffer size. : </source>
-        <translation type="obsolete">Se ha leído el valor del búfer pero no está listo, aumente el tamaño del búfer. : 
-</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="180"/>
         <source>Buffer returned empty metadata, check pass_time. : </source>
-        <translation type="obsolete">Buffer devolvió metadatos vacíos, comprueba pass_time. : 
-</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="195"/>
