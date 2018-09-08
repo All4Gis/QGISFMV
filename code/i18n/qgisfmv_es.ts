@@ -1,4 +1,5 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" sourcelanguage="" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS><TS version="2.0" language="es" sourcelanguage="">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -210,7 +211,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Crear mosaico&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="730"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="736"/>
         <source>Ctrl+Shift+M</source>
         <translation>Ctrl+Shift+M</translation>
     </message>
@@ -220,7 +221,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capturar el fotograma actual&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="710"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="716"/>
         <source>Ctrl+Shift+Q</source>
         <translation>Ctrl+Shift+Q</translation>
     </message>
@@ -290,322 +291,307 @@
         <translation>Progreso en segundo plano. . . %p%</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="612"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="615"/>
         <source>Filters</source>
         <translation>Filtros</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="623"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="626"/>
         <source>Frames</source>
         <translation>Fotogramas</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="630"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="633"/>
         <source>Metadata</source>
         <translation>Metadatos</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="636"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="639"/>
         <source>Converter</source>
         <translation>Conversor</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="642"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="645"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="650"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="653"/>
         <source>Plot Bitrate</source>
         <translation>Representar Bitrate</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="650"/>
-        <source>Utils</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="694"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="700"/>
         <source>Gray Scale</source>
         <translation>Escala de grises</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="702"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="708"/>
         <source>Edge Detection</source>
         <translation>Detección de bordes</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="707"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="713"/>
         <source>Capture Current Frame</source>
         <translation>Capturar fotograma actual</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="715"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="721"/>
         <source>Extract All Frames</source>
         <translation>Extraer todos los fotogramas</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="718"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="724"/>
         <source>Ctrl+Shift+A</source>
         <translation>Ctrl+Shift+A</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="727"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="733"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadatos</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="739"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="745"/>
         <source>Converter Video</source>
         <translation>Convertir video</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="748"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="754"/>
         <source>Save Video Info to Json</source>
         <translation>Guardar la información del video en Json</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="757"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="763"/>
         <source>Show Audio</source>
         <translation>Mostrar audio</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="766"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="772"/>
         <source>Show Video</source>
         <translation>Mostrar video</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="771"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="777"/>
         <source>Show All</source>
         <translation>Mostrar todo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="776"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="782"/>
         <source>Save Audio</source>
         <translation>Guardar audio</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="781"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="787"/>
         <source>Save Video</source>
         <translation>Guardar video</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="786"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="792"/>
         <source>Save All</source>
         <translation>Guardar todo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="795"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="801"/>
         <source>Show Video Info</source>
         <translation>Mostrar información de video</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="807"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="813"/>
         <source>Invert Color</source>
         <translation>Inversión de color</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="815"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="821"/>
         <source>Mono Filter</source>
         <translation>Mono filtro</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="823"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="829"/>
         <source>Canny edge detection</source>
         <translation>Detección de bordes</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="834"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="840"/>
         <source>Zoom Rectangle</source>
         <translation>Zoom rectángulo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="846"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="852"/>
         <source>Magnifying glass</source>
         <translation>Lupa</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="858"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="864"/>
         <source>Auto Contrast Filter</source>
         <translation>Filtro de contraste automático</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="867"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="873"/>
         <source>Create Mosaic</source>
         <translation>Crear mosaico</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="879"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="885"/>
         <source>Draw Pinpoint</source>
         <translation>Dibujar punto</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="891"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="897"/>
         <source>Draw Line</source>
         <translation>Dibujar linea</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="909"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="915"/>
         <source>Draw Polygon</source>
         <translation>Dibujar polígono</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="921"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="927"/>
         <source>Object Tracking</source>
         <translation>Seguimiento de objetos</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="933"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="939"/>
         <source>Ruler</source>
         <translation>Regla</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="668"/>
-        <source>toolBar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="945"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="951"/>
         <source>Horizontal Mirrored</source>
         <translation>Espejo horizontal</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="674"/>
+        <source>Utils ToolBar</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QgsFmvPlayer</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="129"/>
+        <location filename="../player/QgsFmvPlayer.py" line="132"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation>¡Este video no tiene metadatos! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="136"/>
+        <location filename="../player/QgsFmvPlayer.py" line="139"/>
         <source>Metadata Callback Failed! : </source>
         <translation>¡Falló la devolución de metadatos! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="150"/>
+        <location filename="../player/QgsFmvPlayer.py" line="153"/>
         <source>This video don&apos;t have Audio ! </source>
         <translation>¡Este video no tiene audio! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="157"/>
+        <location filename="../player/QgsFmvPlayer.py" line="160"/>
         <source>Audio check Failed! : </source>
         <translation>La prueba de audio Falló! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="350"/>
+        <location filename="../player/QgsFmvPlayer.py" line="357"/>
         <source>Mute/Unmute</source>
         <translation>Silenciar / No silenciar</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="356"/>
+        <location filename="../player/QgsFmvPlayer.py" line="363"/>
         <source>Extract All Frames</source>
         <translation>Extraer todos los fotogramas</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="361"/>
+        <location filename="../player/QgsFmvPlayer.py" line="368"/>
         <source>Extract Current Frame</source>
         <translation>Extraer fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="368"/>
+        <location filename="../player/QgsFmvPlayer.py" line="375"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadatos</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="729"/>
+        <location filename="../player/QgsFmvPlayer.py" line="736"/>
         <source>Open Video File : </source>
         <translation>Abrir archivo de video:</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="765"/>
+        <location filename="../player/QgsFmvPlayer.py" line="772"/>
         <source>Save file succesfully!</source>
         <translation>¡Archivo guardado exitosamente!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1234"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1241"/>
         <source>HEY...Active background process!</source>
         <translation>HEY ... ¡Proceso en segundo plano activo!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1234"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1241"/>
         <source>Do you really want close?</source>
         <translation>¿De verdad quieres cerrar?</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="705"/>
+        <location filename="../player/QgsFmvPlayer.py" line="712"/>
         <source>Playing : </source>
         <translation>Reproduciendo :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1256"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1263"/>
         <source>Video Information : </source>
         <translation>Información del video:</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="175"/>
-        <source>Buffer value read but is not ready, increase buffer size. : </source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="180"/>
-        <source>Buffer returned empty metadata, check pass_time. : </source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="195"/>
+        <location filename="../player/QgsFmvPlayer.py" line="198"/>
         <source>Meta update failed! </source>
         <translation>Meta update failed! 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="199"/>
+        <location filename="../player/QgsFmvPlayer.py" line="202"/>
         <source>Metadata Buffer Failed! : </source>
         <translation>¡Error en el almacenamiento intermedio de metadatos! : 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1084"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1091"/>
         <source>Save Current Frame</source>
         <translation>Guardar fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1094"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1101"/>
         <source>Succesfully frame saved!</source>
         <translation>¡Fotograma guardado con exito!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1097"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1104"/>
         <source>Failed saving frame!</source>
         <translation>¡Error al guardar el fotograma!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="237"/>
+        <location filename="../player/QgsFmvPlayer.py" line="240"/>
         <source>Save Json</source>
         <translation>Guardar Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="750"/>
+        <location filename="../player/QgsFmvPlayer.py" line="757"/>
         <source>Save video record</source>
         <translation>Guardar grabación</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="816"/>
+        <location filename="../player/QgsFmvPlayer.py" line="823"/>
         <source>Save Video as...</source>
         <translation>Guardar video como ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1057"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1064"/>
         <source>Save all Frames</source>
         <translation>Guardar todos los fotogramas</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1017"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1024"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>Guardar audio Bitrate</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1033"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1040"/>
         <source>Save Video Bitrate Plot</source>
         <translation>Guardar video Bitrate</translation>
     </message>
