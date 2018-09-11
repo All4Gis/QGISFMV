@@ -748,7 +748,7 @@ QProgressBar::chunk
   <action name="actionSave_Video_Info">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/save-video-indo.png</normaloff>:/imgFMV/images/save-video-indo.png</iconset>
+     <normaloff>:/imgFMV/images/save-video-info.png</normaloff>:/imgFMV/images/save-video-info.png</iconset>
    </property>
    <property name="text">
     <string>Save Video Info to Json</string>

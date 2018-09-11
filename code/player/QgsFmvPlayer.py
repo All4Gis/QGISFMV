@@ -1281,7 +1281,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.VideoInfoDialog.setWindowTitle(QCoreApplication.translate(
             "QgsFmvPlayer", "Video Information : ") + self.fileName)
         self.VideoInfoDialog.setWindowIcon(
-            QIcon(":/imgFMV/images/video_information.png"))
+            QIcon(":/imgFMV/images/video-info.png"))
 
         self.verticalLayout = QVBoxLayout(self.VideoInfoDialog)
         self.verticalLayout.addWidget(view)
