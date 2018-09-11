@@ -209,7 +209,6 @@ class VideoWidget(QVideoWidget):
         super(VideoWidget, self).__init__(parent)
         self.surface = VideoWidgetSurface(self)
         self.Tracking_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
-        self.Ruler_RubberBand = QRubberBand(QRubberBand.Line, self)
 
         pal = QPalette()
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
@@ -218,11 +217,10 @@ class VideoWidget(QVideoWidget):
         self.setUpdatesEnabled(True)
         self.snapped = False
         self.zoomed = False
-        self.RulerRubberBand = False
         self._isinit = False
         self.gt = None
 
-        self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawPolygon = [], [], [], []
+        self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawRuler, self.drawPolygon = [], [], [], [], []
         self.poly_RubberBand = QgsRubberBand(iface.mapCanvas(), True) # Polygon type
         # set rubber band style
         color = QColor(176, 255, 128)
@@ -448,8 +446,8 @@ class VideoWidget(QVideoWidget):
         ''' Paint Event '''
         self.gt = GetGCPGeoTransform()
 
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing)
+        self.painter = QPainter(self)
+        self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
 
         if (self.surface.isActive()):
             videoRect = self.surface.videoRect()
@@ -458,14 +456,14 @@ class VideoWidget(QVideoWidget):
                 region.subtracted(QRegion(videoRect))
                 brush = self.palette().window()
                 for rect in region.rects():
-                    painter.fillRect(rect, brush)
+                    self.painter.fillRect(rect, brush)
 
             try:
-                self.surface.paint(painter)
+                self.surface.paint(self.painter)
             except Exception:
                 None
         else:
-            painter.fillRect(event.rect(), self.palette().window())
+            self.painter.fillRect(event.rect(), self.palette().window())
         try:
             SetImageSize(self.surface.currentFrame.width(),
                          self.surface.currentFrame.height())
@@ -474,7 +472,7 @@ class VideoWidget(QVideoWidget):
 
         #Draw clicked points on video
         for pt in self.drawPtPos:
-            self.drawPointOnVideo(pt, painter)
+            self.drawPointOnVideo(pt, self.painter)
 
         #Draw clicked lines on video
         if len(self.drawLines) > 1:
@@ -482,7 +480,7 @@ class VideoWidget(QVideoWidget):
                 if pt[0] is None:
                     continue
                 else:
-                    self.drawLinesOnVideo(pt, idx, painter)
+                    self.drawLinesOnVideo(pt, idx, self.painter)
 
         # Draw clicked Polygons on video
         if len(self.drawPolygon) > 1:
@@ -490,7 +488,7 @@ class VideoWidget(QVideoWidget):
             if any(None == x[1] for x in self.drawPolygon):
                 for pt in self.drawPolygon:
                     if pt[0] is None:
-                        self.drawPolygonOnVideo(poly, painter)
+                        self.drawPolygonOnVideo(poly, self.painter)
                         poly = []
                         continue
                     poly.append(pt)
@@ -499,9 +497,17 @@ class VideoWidget(QVideoWidget):
                 for pt in range(last_occurence, len(self.drawPolygon)):
                     poly.append(self.drawPolygon[pt])
                 if len(poly) > 1:
-                    self.drawPolygonOnVideo(poly, painter)
+                    self.drawPolygonOnVideo(poly, self.painter)
             else:
-                self.drawPolygonOnVideo(self.drawPolygon, painter)
+                self.drawPolygonOnVideo(self.drawPolygon, self.painter)
+
+        #Draw Ruler on video
+        if len(self.drawRuler) > 1:
+            for idx, pt in enumerate(self.drawRuler):
+                if pt[0] is None:
+                    continue
+                else:
+                    self.drawRulerOnVideo(pt, idx, self.painter)
 
         # Magnifier Glass
         if self.zoomed and magnifier:
@@ -549,15 +555,15 @@ class VideoWidget(QVideoWidget):
 
             clipPath = QPainterPath()
             clipPath.addEllipse(QPointF(center), ring, ring)
-            painter.setRenderHint(QPainter.HighQualityAntialiasing)
-            painter.setClipPath(clipPath)
-            painter.drawPixmap(corner, self.zoomPixmap)
-            painter.setClipping(False)
-            painter.drawPixmap(corner, self.maskPixmap)
-            painter.setPen(Qt.gray)
-            painter.drawPath(clipPath)
+            self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
+            self.painter.setClipPath(clipPath)
+            self.painter.drawPixmap(corner, self.zoomPixmap)
+            self.painter.setClipping(False)
+            self.painter.drawPixmap(corner, self.maskPixmap)
+            self.painter.setPen(Qt.gray)
+            self.painter.drawPath(clipPath)
 
-        painter.end()
+        self.painter.end()
         return
 
     def GetInverseMatrix(self, x, y):
@@ -589,6 +595,35 @@ class VideoWidget(QVideoWidget):
         if len(self.drawLines) > 1:
             try:
                 pt = self.drawLines[idx+1]
+                if hasElevationModel():
+                    pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+                scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+                end = QPoint(scr_x, scr_y)
+                painter.drawLine(center, end)
+            except Exception:
+                None
+        return
+
+    def drawRulerOnVideo(self, pt, idx, painter):
+        ''' Draw Lines on Video '''
+        if hasElevationModel():
+            pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+
+        scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+
+        radius = 3
+        center = QPoint(scr_x, scr_y)
+
+        pen = QPen(Qt.red)
+        pen.setWidth(radius)
+        pen.setCapStyle(Qt.RoundCap)
+        painter.setPen(pen)
+        painter.setRenderHint(QPainter.HighQualityAntialiasing)
+        painter.drawPoint(center)
+
+        if len(self.drawRuler) > 1:
+            try:
+                pt = self.drawRuler[idx+1]
                 if hasElevationModel():
                     pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
                 scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
@@ -695,15 +730,28 @@ class VideoWidget(QVideoWidget):
                                                 "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" +
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>")
 
+        #Draw Ruler on video
+        if len(self.drawRuler) >= 1:
+            Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
+            pt = self.drawRuler[-1]
+            scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+            radius = 3
+            center = QPoint(scr_x, scr_y)
+            pen = QPen(Qt.red)
+            pen.setWidth(radius)
+            pen.setCapStyle(Qt.RoundCap)
+            self.painter.setPen(pen)
+            self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
+            self.painter.drawPoint(center)
+            end = QPoint(event.x(), event.y())
+            self.painter.drawLine(center, end)
+            self.UpdateSurface()
+
         if not event.buttons():
             return
 
         if not self.Tracking_RubberBand.isHidden():
             self.Tracking_RubberBand.setGeometry(
-                QRect(self.origin, event.pos()).normalized())
-
-        if self.RulerRubberBand:
-            self.Ruler_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
 
         if not self.zoomed:
@@ -812,11 +860,10 @@ class VideoWidget(QVideoWidget):
                 self.Tracking_RubberBand.setGeometry(QRect(self.origin, QSize()))
                 self.Tracking_RubberBand.show()
 
-            if ruler:
-                self.origin = event.pos()
-                self.Ruler_RubberBand.setGeometry(QRect(self.origin, QSize()))
-                self.Ruler_RubberBand.show()
-                self.RulerRubberBand = True
+            #Ruler drawer
+            if self.gt is not None and ruler:
+                Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
+                self.drawRuler.append([Longitude, Latitude, Altitude])
 
         #if not called, the paint event is not triggered.
         self.UpdateSurface()
