@@ -34,6 +34,11 @@
        <property name="cursor">
         <cursorShape>IBeamCursor</cursorShape>
        </property>
+	   <item>
+        <property name="text">
+         <string>RTP</string>
+        </property>
+       </item>
        <item>
         <property name="text">
          <string>UDP</string>
@@ -49,10 +54,10 @@
      <item>
       <widget class="QLineEdit" name="ln_host">
        <property name="text">
-        <string>127.0.0.1</string>
+        <string>@127.0.0.1</string>
        </property>
        <property name="placeholderText">
-        <string>127.0.0.1</string>
+        <string>@127.0.0.1</string>
        </property>
       </widget>
      </item>
@@ -62,10 +67,10 @@
         <set>Qt::ImhNone</set>
        </property>
        <property name="text">
-        <string>9005</string>
+        <string>5005</string>
        </property>
        <property name="placeholderText">
-        <string>9005</string>
+        <string>5005</string>
        </property>
       </widget>
      </item>

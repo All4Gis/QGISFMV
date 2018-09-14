@@ -105,6 +105,12 @@ class FmvLayerStyles(object):
     DP['DEFAULT']['LINE_COLOR'] = '#FF0000'
     DP['DEFAULT']['LINE_WIDTH'] = '1'
     DP['DEFAULT']['SIZE'] = '4'
+    DP['DEFAULT']['LABEL_FONT'] = 'Arial'
+    DP['DEFAULT']['LABEL_FONT_SIZE'] = 12
+    DP['DEFAULT']['LABEL_FONT_COLOR'] = 'red'
+    DP['DEFAULT']['LABEL_SIZE'] = 12
+    DP['DEFAULT']['LABEL_BUFFER_COLOR'] = 'white'
+    
 
     #
     # DRAWINGS LINE STYLES
