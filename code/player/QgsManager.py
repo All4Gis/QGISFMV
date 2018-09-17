@@ -42,7 +42,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.buffer_intervall = 500
         self.min_buffer_size = 30
 
-        # self.actionOpen_Stream.setVisible(False)
+        self.actionOpen_Stream.setVisible(False)
 
         self.VManager.viewport().installEventFilter(self)
 
