@@ -8,6 +8,7 @@ from PyQt5.QtGui import (QImage,
                          QPainterPath,
                          QRadialGradient,
                          QColor,
+                         QFont,
                          QPen,
                          QBrush,
                          QPolygonF)
@@ -75,6 +76,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         self.widget = widget
         self.imageFormat = QImage.Format_Invalid
         self.image = None
+        
 
     def supportedPixelFormats(self, handleType=QAbstractVideoBuffer.NoHandle):
         ''' Available Frames Format '''
@@ -219,6 +221,7 @@ class VideoWidget(QVideoWidget):
         self.zoomed = False
         self._isinit = False
         self.gt = None
+        self.pointIndex = 1
 
         self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawRuler, self.drawPolygon = [], [], [], [], []
         self.poly_RubberBand = QgsRubberBand(iface.mapCanvas(), True) # Polygon type
@@ -264,6 +267,9 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
+        if GetImageHeight() == 0:
+            return
+        
         if(not self.IsPointOnScreen(event.x(), event.y())):
             return
 
@@ -381,19 +387,23 @@ class VideoWidget(QVideoWidget):
     def GetXBlackZone(self):
         ''' Return is X in black screen on video '''
         x = 0.0
-        normalizedWidth = self.surface.widget.height(
-        ) * (GetImageWidth() / GetImageHeight())
         if (self.surface.widget.width() / self.surface.widget.height()) > (GetImageWidth() / GetImageHeight()):
-            x = (self.surface.widget.width() - (normalizedWidth)) / 2.0
+            x = (self.surface.widget.width() - (self.GetNormalizedWidth())) / 2.0
         return x
 
+    def GetNormalizedHeight(self):
+        return self.surface.widget.width(
+        ) / (GetImageWidth() / GetImageHeight())
+
+    def GetNormalizedWidth(self):
+        return self.surface.widget.height(
+        ) * (GetImageWidth() / GetImageHeight())
+    
     def GetYBlackZone(self):
         ''' Return is Y in black screen on video '''
         y = 0.0
-        normalizedHeight = self.surface.widget.width(
-        ) / (GetImageWidth() / GetImageHeight())
         if (self.surface.widget.width() / self.surface.widget.height()) < (GetImageWidth() / GetImageHeight()):
-            y = (self.surface.widget.height() - (normalizedHeight)) / 2.0
+            y = (self.surface.widget.height() - (self.GetNormalizedHeight())) / 2.0
         return y
 
     def IsPointOnScreen(self, x, y):
@@ -401,13 +411,9 @@ class VideoWidget(QVideoWidget):
             black borders or outside)
          '''
         res = True
-        normalizedWidth = self.surface.widget.height(
-        ) * (GetImageWidth() / GetImageHeight())
-        normalizedHeight = self.surface.widget.width(
-        ) / (GetImageWidth() / GetImageHeight())
-        if x > (normalizedWidth + self.GetXBlackZone()) or x < self.GetXBlackZone():
+        if x > (self.GetNormalizedWidth() + self.GetXBlackZone()) or x < self.GetXBlackZone():
             res = False
-        if y > (normalizedHeight + self.GetYBlackZone()) or y < self.GetYBlackZone():
+        if y > (self.GetNormalizedHeight() + self.GetYBlackZone()) or y < self.GetYBlackZone():
             res = False
         return res
 
@@ -471,8 +477,10 @@ class VideoWidget(QVideoWidget):
             None
 
         #Draw clicked points on video
+        i=1
         for pt in self.drawPtPos:
-            self.drawPointOnVideo(pt, self.painter)
+            self.drawPointOnVideo(i, pt, self.painter)
+            i+=1
 
         #Draw clicked lines on video
         if len(self.drawLines) > 1:
@@ -633,21 +641,38 @@ class VideoWidget(QVideoWidget):
                 None
         return
 
-    def drawPointOnVideo(self, pt, painter):
+    def drawPointOnVideo(self,number, pt, painter):
+
         ''' Draw Points on Video '''
         if hasElevationModel():
             pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
 
         scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
 
+        #don't draw something outside the screen.
+        if scr_x < self.GetXBlackZone():
+            scr_x = self.GetXBlackZone()
+
+        if scr_y < self.GetYBlackZone():
+            scr_y = self.GetYBlackZone()
+        
+        if scr_x > (self.GetXBlackZone()+self.GetNormalizedWidth())*0.9:
+            src_x = (self.GetXBlackZone()+self.GetNormalizedWidth())*0.9
+            
+        if scr_y > (self.GetYBlackZone()+self.GetNormalizedHeight())*0.9:
+            src_y = (self.GetYBlackZone()+self.GetNormalizedHeight())*0.9
+        
         radius = 10
         center = QPoint(scr_x, scr_y)
-
+        
         pen = QPen(Qt.red)
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
         painter.setPen(pen)
         painter.drawPoint(center)
+        
+        font = painter.setFont(QFont("Arial", 12));
+        painter.drawText( center + QPoint(5, -5), str(number));
         return
 
     def drawPolygonOnVideo(self, values, painter):
@@ -699,6 +724,9 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
+        if GetImageHeight() == 0:
+            return
+        
         # check if the point  is on picture (not in black borders)
         if(not self.IsPointOnScreen(event.x(), event.y())):
             return
@@ -789,6 +817,9 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
+        if GetImageHeight() == 0:
+            return
+        
         if event.button() == Qt.LeftButton:
             self.snapped = True
             self.pressPos = self.dragPos = event.pos()
@@ -806,12 +837,13 @@ class VideoWidget(QVideoWidget):
                 pointLyr = qgsu.selectLayerByName(Point_lyr)
                 pointLyr.startEditing()
                 feature = QgsFeature()
-                feature.setAttributes([Longitude, Latitude, Altitude])
+                feature.setAttributes([self.pointIndex, Longitude, Latitude, Altitude])
                 p = QgsPointXY()
                 p.set(Longitude, Latitude)
                 geom = QgsGeometry.fromPointXY(p)
                 feature.setGeometry(geom)
                 pointLyr.addFeatures([feature])
+                self.pointIndex += 1
 
                 CommonLayer(pointLyr)
 

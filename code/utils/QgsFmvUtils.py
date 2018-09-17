@@ -210,7 +210,10 @@ class callBackMetadataThread(threading.Thread):
                        stderr=PIPE, bufsize=0,
                        close_fds=(not windows))
 
+        qgsu.showUserAndLogMessage("", "callBackMetadataThread commands: "+str(self.cmds), onlyLog=True)
+
         self.stdout, self.stderr = self.p.communicate()
+        
 
 
 def getVideoLocationInfo(videoPath): 
@@ -1128,15 +1131,29 @@ def CornerEstimationWithoutOffsets(packet):
         cornerPointLL = list(
             reversed(sphere.destination(destPoint, distance2, bearing)))
 
-        UpdateFootPrintData(packet,
-            cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
+        if hasElevationModel():
+            pCornerPointUL = GetLine3DIntersectionWithDEM(GetSensor(), cornerPointUL)           
+            pCornerPointUR = GetLine3DIntersectionWithDEM(GetSensor(), cornerPointUR)
+            pCornerPointLR = GetLine3DIntersectionWithDEM(GetSensor(), cornerPointLR)
+            pCornerPointLL = GetLine3DIntersectionWithDEM(GetSensor(), cornerPointLL)
+            
+            UpdateFootPrintData(packet,
+                pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL)
 
-        UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
-                        cornerPointLR, cornerPointLL)
+            UpdateBeamsData(packet, pCornerPointUL, pCornerPointUR,
+                            pCornerPointLR, pCornerPointLL)
+
+        else:
+            UpdateFootPrintData(packet,
+                cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
+
+            UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
+                            cornerPointLR, cornerPointLL)
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL,
                               frameCenterLon, frameCenterLat)
+        
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "CornerEstimationWithoutOffsets failed! : "), str(e), level=QGis.Info)

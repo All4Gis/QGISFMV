@@ -32,6 +32,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.parent = parent
         self.iface = iface
         self._PlayerDlg = None
+        self.isStreaming = False
 
         self.meta_reader = {}
         self.initialPt = {}
@@ -40,7 +41,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.buffer_intervall = 500
         self.min_buffer_size = 30
 
-        self.actionOpen_Stream.setVisible(False)
+        #self.actionOpen_Stream.setVisible(False)
 
         self.VManager.viewport().installEventFilter(self)
 
@@ -73,6 +74,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def openStreamDialog(self):
         ''' Open Stream Dialog '''
+        self.isStreaming = True
         self.OpenStream = OpenStream(self.iface, parent=self)
         self.OpenStream.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self.OpenStream.exec_()
@@ -94,19 +96,24 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.horizontalHeader().setStretchLastSection(True)
         self.VManager.setVisible(True)
 
-        #init non-blocking metadata buffered reader
-        self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, pass_time=self.pass_time, intervall=self.buffer_intervall, min_buffer_size=self.min_buffer_size)
-        qgsu.showUserAndLogMessage("", "buffered non-blocking metadata reader initialized.", onlyLog=True)
+        if not self.isStreaming:
+            #init non-blocking metadata buffered reader
+            self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, pass_time=self.pass_time, intervall=self.buffer_intervall, min_buffer_size=self.min_buffer_size)
+            qgsu.showUserAndLogMessage("", "buffered non-blocking metadata reader initialized.", onlyLog=True)
 
-        #init point we can center the video on
-        self.initialPt[str(rowPosition)] = getVideoLocationInfo(filename)
+            #init point we can center the video on
+            self.initialPt[str(rowPosition)] = getVideoLocationInfo(filename)
 
-        if self.initialPt[str(rowPosition)] and dtm_path != '':
-            initElevationModel(self.initialPt[str(rowPosition)][0], self.initialPt[str(rowPosition)][1], dtm_path)
-            qgsu.showUserAndLogMessage("", "Elevation model initialized.", onlyLog=True)
+            if self.initialPt[str(rowPosition)] and dtm_path != '':
+                initElevationModel(self.initialPt[str(rowPosition)][0], self.initialPt[str(rowPosition)][1], dtm_path)
+                qgsu.showUserAndLogMessage("", "Elevation model initialized.", onlyLog=True)
+        else:
+            self.meta_reader[str(rowPosition)] = None
+            self.initialPt[str(rowPosition)] = None
 
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
+        self.isStreaming = False
         filename, _ = askForFiles(self,QCoreApplication.translate(
                                       "ManagerDock", "Open video"),
                                   exts=["mpeg4","mp4","ts","avi","mpg","H264","mov"])
@@ -130,7 +137,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def CreatePlayer(self, path, row):
         ''' Create Player '''
-        self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(row)], pass_time=self.pass_time, initialPt=self.initialPt[str(row)])
+        self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(row)], pass_time=self.pass_time, initialPt=self.initialPt[str(row)], isStreaming=self.isStreaming)
         self._PlayerDlg.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()

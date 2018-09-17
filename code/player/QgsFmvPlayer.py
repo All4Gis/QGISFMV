@@ -32,7 +32,8 @@ from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          RemoveVideoLayers,
                                          CreateGroupByName,
                                          RemoveGroupByName)
-from QGIS_FMV.utils.QgsFmvUtils import (ResetData,
+from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
+                                        ResetData,
                                         _spawn,
                                         UpdateLayers,
                                         _seconds_to_time,
@@ -62,7 +63,7 @@ except ImportError:
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     """ Video Player Class """
 
-    def __init__(self, iface, path=None, parent=None, meta_reader=None, pass_time=None, initialPt=None):
+    def __init__(self, iface, path=None, parent=None, meta_reader=None, pass_time=None, initialPt=None, isStreaming=False):
         """ Constructor """
         super(QgsFmvPlayer, self).__init__(parent)
         self.setupUi(self)
@@ -71,6 +72,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.fileName = None
         self.initialPt = initialPt
         self.meta_reader = meta_reader
+        self.isStreaming = isStreaming
         self.createingMosaic = False
         self.currentInfo = 0.0
         self.data = None
@@ -203,6 +205,47 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         except Exception as inst:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst), level=QGis.Info)
+
+    def callBackMetadata(self, currentTime, nextTime):
+        """ Metadata CallBack """
+        try:
+            # TODO : Speed this function
+            #             stdout_data = _check_output(['-i', self.fileName,
+            #                         '-ss', currentTime,
+            #                         '-to', nextTime,
+            #                         '-f', 'data', '-'])
+            
+            port = int(self.fileName.split(':')[2])
+            t = callBackMetadataThread(cmds=['-i', self.fileName.replace(str(port), str(port+1)),
+                                             '-ss', currentTime,
+                                             '-to', nextTime,
+                                             '-map', 'data-re',
+                                             '-f', 'data', '-'])
+            t.start()
+            t.join(1)
+            if t.is_alive():
+                t.p.terminate()
+                t.join()
+                
+            qgsu.showUserAndLogMessage("", "callBackMetadataThread self.stdout: "+str(t.stdout), onlyLog=True)
+            
+            if t.stdout == b'':
+                return
+
+            for packet in StreamParser(t.stdout):
+                try:
+                    self.addMetadata(packet.MetadataList())
+                    UpdateLayers(packet, parent=self,
+                                 mosaic=self.createingMosaic)
+                    self.iface.mapCanvas().refresh()
+                    QApplication.processEvents()
+                    return
+                except Exception as e:
+                    None
+        except Exception as e:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e), level=QGis.Info)
+        
 
     def GetPacketData(self):
         ''' Return Current Packet data '''
@@ -675,8 +718,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             tStr = currentTime + " / " + totalTime
             currentTimeInfo = _seconds_to_time_frac(currentInfo)
             # Get Metadata from buffer
-            self.get_metadata_from_buffer(currentTimeInfo)
-
+            if not self.isStreaming:
+                self.get_metadata_from_buffer(currentTimeInfo)
+            else:
+                qgsu.showUserAndLogMessage("", "Streaming on ", onlyLog=True)
+                nextTime = currentInfo + self.pass_time / 1000
+                nextTimeInfo = _seconds_to_time_frac(nextTime)
+                self.callBackMetadata(currentTimeInfo, nextTimeInfo)
+                
         else:
             tStr = ""
 
@@ -722,7 +771,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 #                 return
             self.fileName = videoPath
             self.playlist = QMediaPlaylist()
-            url = QUrl.fromLocalFile(videoPath)
+            if self.isStreaming:
+                url = QUrl(videoPath)
+            else:
+                url = QUrl.fromLocalFile(videoPath)
+            qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
             self.playlist.addMedia(QMediaContent(url))
             self.player.setPlaylist(self.playlist)
 
@@ -1300,6 +1353,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             evt.ignore()
             return
 
+        self.stop()
         self.parent._PlayerDlg = None
         self.parent.ToggleActiveFromTitle()
         RemoveVideoLayers()

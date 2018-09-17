@@ -1,6 +1,6 @@
 import os
 
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QFont
 from PyQt5.QtWidgets import QApplication
 from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
@@ -14,6 +14,10 @@ from QGIS_FMV.fmvConfig import (Platform_lyr,
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QVariant, QSettings
 from qgis.core import (
+    QgsPalLayerSettings,
+    QgsTextFormat,
+    QgsTextBufferSettings,
+    QgsVectorLayerSimpleLabeling,
     QgsMarkerSymbol,
     QgsLayerTreeLayer,
     QgsField,
@@ -110,7 +114,7 @@ def CreateVideoLayers():
 
     if qgsu.selectLayerByName(Point_lyr) is None:
         lyr_point = newPointsLayer(
-            None, ["longitude", "latitude", "altitude"], epsg, Point_lyr)
+            None, ["number", "longitude", "latitude", "altitude"], epsg, Point_lyr)
         SetDefaultPointStyle(lyr_point)
         addLayerNoCrsDialog(lyr_point)
 
@@ -225,6 +229,32 @@ def SetDefaultPointStyle(layer):
     symbol = QgsMarkerSymbol.createSimple({'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size':style["SIZE"]})
     renderer = QgsSingleSymbolRenderer(symbol)
     layer.setRenderer(renderer)
+
+    layer_settings  = QgsPalLayerSettings()
+    text_format = QgsTextFormat()
+
+    text_format.setFont(QFont(style["LABEL_FONT"], style["LABEL_FONT_SIZE"]))
+    text_format.setColor(QColor(style["LABEL_FONT_COLOR"]))
+    text_format.setSize(style["LABEL_SIZE"])
+
+    buffer_settings = QgsTextBufferSettings()
+    buffer_settings.setEnabled(True)
+    buffer_settings.setSize(1)
+    buffer_settings.setColor(QColor(style["LABEL_BUFFER_COLOR"]))
+
+    text_format.setBuffer(buffer_settings)
+    layer_settings.setFormat(text_format)
+
+    layer_settings.fieldName = "number"
+    layer_settings.placement = 2
+    
+    layer_settings.enabled = True
+
+    layer_settings = QgsVectorLayerSimpleLabeling(layer_settings)
+    layer.setLabelsEnabled(True)
+    layer.setLabeling(layer_settings)
+    #my_layer.triggerRepaint()
+    
     return
 
 
