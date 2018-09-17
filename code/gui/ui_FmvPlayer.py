@@ -332,7 +332,7 @@ class Ui_PlayerWindow(object):
         self.actionConverter_Video.setObjectName("actionConverter_Video")
         self.actionSave_Video_Info = QtWidgets.QAction(PlayerWindow)
         icon16 = QtGui.QIcon()
-        icon16.addPixmap(QtGui.QPixmap(":/imgFMV/images/save-video-indo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon16.addPixmap(QtGui.QPixmap(":/imgFMV/images/save-video-info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionSave_Video_Info.setIcon(icon16)
         self.actionSave_Video_Info.setObjectName("actionSave_Video_Info")
         self.actionAudio = QtWidgets.QAction(PlayerWindow)

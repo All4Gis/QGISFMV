@@ -127,6 +127,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             p = _spawn(['-i', videoPath,
                         '-map', 'data-re',
                         '-codec', 'copy',
+                        '-preset', 'ultrafast',
                         '-f', 'data', '-'])
 
             stdout_data, _ = p.communicate()
@@ -147,7 +148,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Check if video have Metadata or not """
         try:
             p = _spawn(['-i', videoPath,
-                        '-show_streams', '-select_streams', 'a',
+                        '-show_streams', '-select_streams', 'a','-preset', 'ultrafast',
                         '-loglevel', 'error'], t="probe")
 
             stdout_data, _ = p.communicate()
@@ -835,6 +836,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             p = _spawn(['-i', self.fileName,
                         '-ss', self.startRecord,
                         '-to', self.endRecord,
+                        '-preset', 'ultrafast',
                         '-c', 'copy',
                         out])
             p.communicate()
@@ -1332,7 +1334,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.VideoInfoDialog.setWindowTitle(QCoreApplication.translate(
             "QgsFmvPlayer", "Video Information : ") + self.fileName)
         self.VideoInfoDialog.setWindowIcon(
-            QIcon(":/imgFMV/images/video_information.png"))
+            QIcon(":/imgFMV/images/video-info.png"))
 
         self.verticalLayout = QVBoxLayout(self.VideoInfoDialog)
         self.verticalLayout.addWidget(view)
