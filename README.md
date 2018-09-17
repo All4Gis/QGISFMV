@@ -124,7 +124,7 @@ Follow these steps:
 	Commit your changes to the new branch.
 	Send a pull request.
 	
-See before [FMV Coding Standards!](https://all4gis.github.io/QGISFMV/codingstandards)
+See before [FMV Coding Standards!](https://all4gis.github.io/QGISFMV/CodingStandards)
 	
 And thanks for your code.
 

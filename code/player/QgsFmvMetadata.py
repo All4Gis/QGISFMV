@@ -46,9 +46,9 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         fileName = self.player.fileName
 
         out, _ = askForFiles(self, QCoreApplication.translate(
-                                      "QgsFmvMetadata", "Save PDF"),
-                                      isSave=True,
-                                      exts='pdf')
+            "QgsFmvMetadata", "Save PDF"),
+            isSave=True,
+            exts='pdf')
         if out == "":
             return
 
@@ -154,7 +154,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
             cell0 = textTable.cellAt(row + 1, 0)
             cell1 = textTable.cellAt(row + 1, 1)
             cell2 = textTable.cellAt(row + 1, 2)
-            if (row+1)%2 == 0:
+            if (row + 1) % 2 == 0:
                 cell0.setFormat(alternate_background)
                 cell1.setFormat(alternate_background)
                 cell2.setFormat(alternate_background)
@@ -184,9 +184,9 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         """ Save Table as CSV  """
         data = self.player.GetPacketData()
         out, _ = askForFiles(self, QCoreApplication.translate(
-                                      "QgsFmvMetadata", "Save CSV"),
-                                      isSave=True,
-                                      exts='csv')
+            "QgsFmvMetadata", "Save CSV"),
+            isSave=True,
+            exts='csv')
         if out == "":
             return
 

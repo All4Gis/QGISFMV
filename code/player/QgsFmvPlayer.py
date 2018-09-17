@@ -148,7 +148,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Check if video have Metadata or not """
         try:
             p = _spawn(['-i', videoPath,
-                        '-show_streams', '-select_streams', 'a','-preset', 'ultrafast',
+                        '-show_streams', '-select_streams', 'a', '-preset', 'ultrafast',
                         '-loglevel', 'error'], t="probe")
 
             stdout_data, _ = p.communicate()
@@ -169,27 +169,30 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Metadata CallBack """
         try:
 
-            #There is no way to spawn a thread and call after join() without blocking the video UI thread.
-            #callBackMetadata can be as fast as possible, it will always create a small video lag every time meta are read.
-            #To get rid of this, we fill a buffer (BufferedMetaReader) in the QManager with some Metadata in advance,
-            #and hope they'll be ready to read here in a totaly non-blocking way (increase the buffer size if needed in QManager).
+            # There is no way to spawn a thread and call after join() without blocking the video UI thread.
+            # callBackMetadata can be as fast as possible, it will always create a small video lag every time meta are read.
+            # To get rid of this, we fill a buffer (BufferedMetaReader) in the QManager with some Metadata in advance,
+            # and hope they'll be ready to read here in a totaly non-blocking
+            # way (increase the buffer size if needed in QManager).
 
             stdout_data = self.meta_reader.get(currentTime)
 
             if stdout_data == 'NOT_READY':
                 self.metadataDlg.menuSave.setEnabled(False)
-                qgsu.showUserAndLogMessage("","Buffer value read but is not ready, increase buffer size. : ", onlyLog=True)
+                qgsu.showUserAndLogMessage(
+                    "", "Buffer value read but is not ready, increase buffer size. : ", onlyLog=True)
                 return
             elif stdout_data == b'' or len(stdout_data) == 0:
                 self.metadataDlg.menuSave.setEnabled(False)
-                qgsu.showUserAndLogMessage("","Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
+                qgsu.showUserAndLogMessage(
+                    "", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
                 return
 
             for packet in StreamParser(stdout_data):
                 try:
                     data = packet.MetadataList()
                     self.data = data
-                    if self.metadataDlg.isVisible(): # Only add metada to table if this QDockWidget is visible (speed plugin)
+                    if self.metadataDlg.isVisible():  # Only add metada to table if this QDockWidget is visible (speed plugin)
                         self.metadataDlg.menuSave.setEnabled(True)
                         self.addMetadata(data)
 
@@ -214,9 +217,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             #                         '-ss', currentTime,
             #                         '-to', nextTime,
             #                         '-f', 'data', '-'])
-            
+
             port = int(self.fileName.split(':')[2])
-            t = callBackMetadataThread(cmds=['-i', self.fileName.replace(str(port), str(port+1)),
+            t = callBackMetadataThread(cmds=['-i', self.fileName.replace(str(port), str(port + 1)),
                                              '-ss', currentTime,
                                              '-to', nextTime,
                                              '-map', 'data-re',
@@ -226,9 +229,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             if t.is_alive():
                 t.p.terminate()
                 t.join()
-                
-            qgsu.showUserAndLogMessage("", "callBackMetadataThread self.stdout: "+str(t.stdout), onlyLog=True)
-            
+
+            qgsu.showUserAndLogMessage(
+                "", "callBackMetadataThread self.stdout: " + str(t.stdout), onlyLog=True)
+
             if t.stdout == b'':
                 return
 
@@ -245,7 +249,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e), level=QGis.Info)
-        
 
     def GetPacketData(self):
         ''' Return Current Packet data '''
@@ -725,7 +728,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 nextTime = currentInfo + self.pass_time / 1000
                 nextTimeInfo = _seconds_to_time_frac(nextTime)
                 self.callBackMetadata(currentTimeInfo, nextTimeInfo)
-                
+
         else:
             tStr = ""
 
@@ -796,7 +799,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             # Recenter map on video initial point
             if self.initialPt:
-                rect = QgsRectangle(self.initialPt[1], self.initialPt[0], self.initialPt[1], self.initialPt[0])
+                rect = QgsRectangle(
+                    self.initialPt[1], self.initialPt[0], self.initialPt[1], self.initialPt[0])
                 self.iface.mapCanvas().setExtent(rect)
                 self.iface.mapCanvas().refresh()
 
@@ -894,7 +898,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         out, _ = askForFiles(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save Video as..."),
             isSave=True,
-            exts=["mp4","ogg","avi","mkv","webm","flv","mov","mpg","mp3"])
+            exts=["mp4", "ogg", "avi", "mkv", "webm", "flv", "mov", "mpg", "mp3"])
 
         if not out:
             return False
@@ -1095,7 +1099,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 fileaudio, _ = askForFiles(self, QCoreApplication.translate(
                     "QgsFmvPlayer", "Save Audio Bitrate Plot"),
                     isSave=True,
-                    exts=["png","pdf","pgf","eps","ps","raw","rgba","svg","svgz"])
+                    exts=["png", "pdf", "pgf", "eps", "ps", "raw", "rgba", "svg", "svgz"])
 
                 if fileaudio == "":
                     return
@@ -1111,7 +1115,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 filevideo, _ = askForFiles(self, QCoreApplication.translate(
                     "QgsFmvPlayer", "Save Video Bitrate Plot"),
                     isSave=True,
-                    exts=["png","pdf","pgf","eps","ps","raw","rgba","svg","svgz"])
+                    exts=["png", "pdf", "pgf", "eps", "ps", "raw", "rgba", "svg", "svgz"])
 
                 if filevideo == "":
                     return
@@ -1133,7 +1137,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             return
 
         directory = askForFolder(self, QCoreApplication.translate(
-            "QgsFmvPlayer","Save all Frames"),
+            "QgsFmvPlayer", "Save all Frames"),
             options=QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly)
 
         if directory:
@@ -1162,7 +1166,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         output, _ = askForFiles(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save Current Frame"),
             isSave=True,
-            exts=["png","jpg","bmp","tiff"])
+            exts=["png", "jpg", "bmp", "tiff"])
 
         if output == "":
             return
@@ -1173,7 +1177,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     "QgsFmvPlayer", "Succesfully frame saved!"))
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", "Failed saving frame!"), level=QGis.Warning)
+                    "QgsFmvPlayer", "Failed saving frame!"), level=QGis.Warning)
             return
 
         task = QgsTask.fromFunction('Save Current Frame Task',

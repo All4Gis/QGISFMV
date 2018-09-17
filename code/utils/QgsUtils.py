@@ -98,7 +98,7 @@ class QgsUtils(object):
         settings = QSettings()
         settings.beginGroup('shortcuts')
         # Find all saved shortcuts:
-        keys = [key for key in settings.childKeys() if key==text]
+        keys = [key for key in settings.childKeys() if key == text]
         if not len(keys):
             # Nothing found in settings - fallback to default:
             shortcut = value

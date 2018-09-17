@@ -48,8 +48,8 @@ def CreateGroupByName(name=frames_g):
     root = QgsProject.instance().layerTreeRoot()
     group = root.findGroup(name)
     if group is None:
-        group = root.insertGroup(-1, name) # Insert on bottom
-        #Unchecked visibility 
+        group = root.insertGroup(-1, name)  # Insert on bottom
+        # Unchecked visibility
         group.setItemVisibilityCheckedRecursive(False)
         group.setExpanded(False)
     return
@@ -80,7 +80,7 @@ def CreateVideoLayers():
              "Corner Latitude Point 3",
              "Corner Longitude Point 4",
              "Corner Latitude Point 4"],
-             epsg,
+            epsg,
             Footprint_lyr)
         SetDefaultFootprintStyle(lyr_footprint)
         addLayerNoCrsDialog(lyr_footprint)
@@ -126,7 +126,7 @@ def CreateVideoLayers():
 
     if qgsu.selectLayerByName(Polygon_lyr) is None:
         lyr_polygon = newPolygonsLayer(
-            None, ["Centroid_longitude", "Centroid_latitude", "Centroid_altitude","Area"], epsg, Polygon_lyr)
+            None, ["Centroid_longitude", "Centroid_latitude", "Centroid_altitude", "Area"], epsg, Polygon_lyr)
         SetDefaultPolygonStyle(lyr_polygon)
         addLayerNoCrsDialog(lyr_polygon)
 
@@ -226,11 +226,12 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
 def SetDefaultPointStyle(layer):
     ''' Point Symbol '''
     style = S.getDrawingPoint()
-    symbol = QgsMarkerSymbol.createSimple({'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size':style["SIZE"]})
+    symbol = QgsMarkerSymbol.createSimple(
+        {'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size': style["SIZE"]})
     renderer = QgsSingleSymbolRenderer(symbol)
     layer.setRenderer(renderer)
 
-    layer_settings  = QgsPalLayerSettings()
+    layer_settings = QgsPalLayerSettings()
     text_format = QgsTextFormat()
 
     text_format.setFont(QFont(style["LABEL_FONT"], style["LABEL_FONT_SIZE"]))
@@ -247,14 +248,14 @@ def SetDefaultPointStyle(layer):
 
     layer_settings.fieldName = "number"
     layer_settings.placement = 2
-    
+
     layer_settings.enabled = True
 
     layer_settings = QgsVectorLayerSimpleLabeling(layer_settings)
     layer.setLabelsEnabled(True)
     layer.setLabeling(layer_settings)
-    #my_layer.triggerRepaint()
-    
+    # my_layer.triggerRepaint()
+
     return
 
 

@@ -76,7 +76,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         self.widget = widget
         self.imageFormat = QImage.Format_Invalid
         self.image = None
-        
 
     def supportedPixelFormats(self, handleType=QAbstractVideoBuffer.NoHandle):
         ''' Available Frames Format '''
@@ -150,7 +149,8 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         ''' Update video rectangle '''
         size = self.surfaceFormat().sizeHint()
         size.scale(self.widget.size().boundedTo(size), Qt.KeepAspectRatio)
-        self.targetRect = QRect(QPoint(0, 0), size); self.targetRect.moveCenter(self.widget.rect().center())
+        self.targetRect = QRect(QPoint(0, 0), size)
+        self.targetRect.moveCenter(self.widget.rect().center())
 
     def paint(self, painter):
         ''' Paint Frame'''
@@ -194,11 +194,14 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             ok, bbox = self.widget.tracker.update(frame)
             # Draw bounding box
             if ok:
-                qgsu.showUserAndLogMessage("bbox : ",str(bbox), level=QGis.Warning)
+                qgsu.showUserAndLogMessage(
+                    "bbox : ", str(bbox), level=QGis.Warning)
                 painter.setPen(Qt.blue)
-                painter.drawRect(QRect(int(bbox[0]),int(bbox[1]),int(bbox[2]),int(bbox[3])));
+                painter.drawRect(QRect(int(bbox[0]), int(
+                    bbox[1]), int(bbox[2]), int(bbox[3])))
             else:
-                qgsu.showUserAndLogMessage("Tracking failure detected ","", level=QGis.Warning)
+                qgsu.showUserAndLogMessage(
+                    "Tracking failure detected ", "", level=QGis.Warning)
 
         painter.setTransform(oldTransform)
         self.currentFrame.unmap()
@@ -224,7 +227,8 @@ class VideoWidget(QVideoWidget):
         self.pointIndex = 1
 
         self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawRuler, self.drawPolygon = [], [], [], [], []
-        self.poly_RubberBand = QgsRubberBand(iface.mapCanvas(), True) # Polygon type
+        self.poly_RubberBand = QgsRubberBand(
+            iface.mapCanvas(), True)  # Polygon type
         # set rubber band style
         color = QColor(176, 255, 128)
         self.poly_RubberBand.setColor(color)
@@ -246,7 +250,8 @@ class VideoWidget(QVideoWidget):
         self.setSizePolicy(QSizePolicy.MinimumExpanding,
                            QSizePolicy.MinimumExpanding)
 
-        self.offset, self.origin, self.pressPos, self.dragPos = QPoint(), QPoint(), QPoint(), QPoint()
+        self.offset, self.origin, self.pressPos, self.dragPos = QPoint(
+        ), QPoint(), QPoint(), QPoint()
         self.tapTimer = QBasicTimer()
         self.zoomPixmap, self.maskPixmap = QPixmap(), QPixmap()
 
@@ -269,7 +274,7 @@ class VideoWidget(QVideoWidget):
         """
         if GetImageHeight() == 0:
             return
-        
+
         if(not self.IsPointOnScreen(event.x(), event.y())):
             return
 
@@ -290,7 +295,7 @@ class VideoWidget(QVideoWidget):
             for x in xrange(0, len(self.poly_coordinates)):
                 if x % 2 == 0:
                     point.setX(self.poly_coordinates[x])
-                    point.setY(self.poly_coordinates[x+1])
+                    point.setY(self.poly_coordinates[x + 1])
                     list_polygon.append(point)
             point.setX(self.poly_coordinates[0])
             point.setY(self.poly_coordinates[1])
@@ -301,14 +306,17 @@ class VideoWidget(QVideoWidget):
 
             # Calculate Area WSG84 (Meters)
             area_wsg84 = QgsDistanceArea()
-            area_wsg84.setSourceCrs(QgsCoordinateReferenceSystem.fromOgcWmsCrs('EPSG:4326'), QgsProject.instance().transformContext())
+            area_wsg84.setSourceCrs(QgsCoordinateReferenceSystem.fromOgcWmsCrs(
+                'EPSG:4326'), QgsProject.instance().transformContext())
             if (area_wsg84.sourceCrs().isGeographic()):
-                area_wsg84.setEllipsoid(area_wsg84.sourceCrs().ellipsoidAcronym())
+                area_wsg84.setEllipsoid(
+                    area_wsg84.sourceCrs().ellipsoidAcronym())
 
             # Calculate Centroid
             centroid = feature.geometry().centroid().asPoint()
 
-            feature.setAttributes([centroid.x(), centroid.y(), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
+            feature.setAttributes([centroid.x(), centroid.y(
+            ), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
 
             polyLyr.addFeatures([feature])
 
@@ -388,7 +396,8 @@ class VideoWidget(QVideoWidget):
         ''' Return is X in black screen on video '''
         x = 0.0
         if (self.surface.widget.width() / self.surface.widget.height()) > (GetImageWidth() / GetImageHeight()):
-            x = (self.surface.widget.width() - (self.GetNormalizedWidth())) / 2.0
+            x = (self.surface.widget.width() -
+                 (self.GetNormalizedWidth())) / 2.0
         return x
 
     def GetNormalizedHeight(self):
@@ -398,12 +407,13 @@ class VideoWidget(QVideoWidget):
     def GetNormalizedWidth(self):
         return self.surface.widget.height(
         ) * (GetImageWidth() / GetImageHeight())
-    
+
     def GetYBlackZone(self):
         ''' Return is Y in black screen on video '''
         y = 0.0
         if (self.surface.widget.width() / self.surface.widget.height()) < (GetImageWidth() / GetImageHeight()):
-            y = (self.surface.widget.height() - (self.GetNormalizedHeight())) / 2.0
+            y = (self.surface.widget.height() -
+                 (self.GetNormalizedHeight())) / 2.0
         return y
 
     def IsPointOnScreen(self, x, y):
@@ -427,7 +437,7 @@ class VideoWidget(QVideoWidget):
 
     def GetTransf(self, event):
         ''' Return video coordinates to map coordinates '''
-        return self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])    
+        return self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])
 
     def GetPointCommonCoords(self, event):
         ''' Common functon for get coordinates on mousepressed '''
@@ -476,13 +486,13 @@ class VideoWidget(QVideoWidget):
         except Exception:
             None
 
-        #Draw clicked points on video
-        i=1
+        # Draw clicked points on video
+        i = 1
         for pt in self.drawPtPos:
             self.drawPointOnVideo(i, pt, self.painter)
-            i+=1
+            i += 1
 
-        #Draw clicked lines on video
+        # Draw clicked lines on video
         if len(self.drawLines) > 1:
             for idx, pt in enumerate(self.drawLines):
                 if pt[0] is None:
@@ -500,7 +510,8 @@ class VideoWidget(QVideoWidget):
                         poly = []
                         continue
                     poly.append(pt)
-                last_occurence = len(self.drawPolygon)-self.drawPolygon[::-1].index([None, None, None])
+                last_occurence = len(
+                    self.drawPolygon) - self.drawPolygon[::-1].index([None, None, None])
                 poly = []
                 for pt in range(last_occurence, len(self.drawPolygon)):
                     poly.append(self.drawPolygon[pt])
@@ -509,7 +520,7 @@ class VideoWidget(QVideoWidget):
             else:
                 self.drawPolygonOnVideo(self.drawPolygon, self.painter)
 
-        #Draw Ruler on video
+        # Draw Ruler on video
         if len(self.drawRuler) > 1:
             for idx, pt in enumerate(self.drawRuler):
                 if pt[0] is None:
@@ -584,7 +595,8 @@ class VideoWidget(QVideoWidget):
     def drawLinesOnVideo(self, pt, idx, painter):
         ''' Draw Lines on Video '''
         if hasElevationModel():
-            pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+            pt = GetLine3DIntersectionWithPlane(
+                GetSensor(), pt, GetFrameCenter()[2])
 
         scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
 
@@ -602,9 +614,10 @@ class VideoWidget(QVideoWidget):
 
         if len(self.drawLines) > 1:
             try:
-                pt = self.drawLines[idx+1]
+                pt = self.drawLines[idx + 1]
                 if hasElevationModel():
-                    pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+                    pt = GetLine3DIntersectionWithPlane(
+                        GetSensor(), pt, GetFrameCenter()[2])
                 scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
                 end = QPoint(scr_x, scr_y)
                 painter.drawLine(center, end)
@@ -615,7 +628,8 @@ class VideoWidget(QVideoWidget):
     def drawRulerOnVideo(self, pt, idx, painter):
         ''' Draw Lines on Video '''
         if hasElevationModel():
-            pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+            pt = GetLine3DIntersectionWithPlane(
+                GetSensor(), pt, GetFrameCenter()[2])
 
         scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
 
@@ -631,9 +645,10 @@ class VideoWidget(QVideoWidget):
 
         if len(self.drawRuler) > 1:
             try:
-                pt = self.drawRuler[idx+1]
+                pt = self.drawRuler[idx + 1]
                 if hasElevationModel():
-                    pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+                    pt = GetLine3DIntersectionWithPlane(
+                        GetSensor(), pt, GetFrameCenter()[2])
                 scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
                 end = QPoint(scr_x, scr_y)
                 painter.drawLine(center, end)
@@ -641,38 +656,38 @@ class VideoWidget(QVideoWidget):
                 None
         return
 
-    def drawPointOnVideo(self,number, pt, painter):
-
+    def drawPointOnVideo(self, number, pt, painter):
         ''' Draw Points on Video '''
         if hasElevationModel():
-            pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+            pt = GetLine3DIntersectionWithPlane(
+                GetSensor(), pt, GetFrameCenter()[2])
 
         scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
 
-        #don't draw something outside the screen.
+        # don't draw something outside the screen.
         if scr_x < self.GetXBlackZone():
             scr_x = self.GetXBlackZone()
 
         if scr_y < self.GetYBlackZone():
             scr_y = self.GetYBlackZone()
-        
-        if scr_x > (self.GetXBlackZone()+self.GetNormalizedWidth())*0.9:
-            src_x = (self.GetXBlackZone()+self.GetNormalizedWidth())*0.9
-            
-        if scr_y > (self.GetYBlackZone()+self.GetNormalizedHeight())*0.9:
-            src_y = (self.GetYBlackZone()+self.GetNormalizedHeight())*0.9
-        
+
+        if scr_x > (self.GetXBlackZone() + self.GetNormalizedWidth()) * 0.9:
+            src_x = (self.GetXBlackZone() + self.GetNormalizedWidth()) * 0.9
+
+        if scr_y > (self.GetYBlackZone() + self.GetNormalizedHeight()) * 0.9:
+            src_y = (self.GetYBlackZone() + self.GetNormalizedHeight()) * 0.9
+
         radius = 10
         center = QPoint(scr_x, scr_y)
-        
+
         pen = QPen(Qt.red)
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
         painter.setPen(pen)
         painter.drawPoint(center)
-        
-        font = painter.setFont(QFont("Arial", 12));
-        painter.drawText( center + QPoint(5, -5), str(number));
+
+        painter.setFont(QFont("Arial", 12))
+        painter.drawText(center + QPoint(5, -5), str(number))
         return
 
     def drawPolygonOnVideo(self, values, painter):
@@ -680,7 +695,8 @@ class VideoWidget(QVideoWidget):
         poly = []
         for pt in values:
             if hasElevationModel():
-                pt = GetLine3DIntersectionWithPlane(GetSensor(), pt, GetFrameCenter()[2])
+                pt = GetLine3DIntersectionWithPlane(
+                    GetSensor(), pt, GetFrameCenter()[2])
             scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
             center = QPoint(scr_x, scr_y)
             poly.append(center)
@@ -726,7 +742,7 @@ class VideoWidget(QVideoWidget):
         """
         if GetImageHeight() == 0:
             return
-        
+
         # check if the point  is on picture (not in black borders)
         if(not self.IsPointOnScreen(event.x(), event.y())):
             return
@@ -737,13 +753,16 @@ class VideoWidget(QVideoWidget):
             Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
 
             txt = "<span style='font-size:10pt; font-weight:bold;'>Lon :</span>"
-            txt += "<span style='font-size:9pt; font-weight:normal;'>" + ("%.3f" % Longitude) + "</span>" 
-            txt += "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" 
-            txt += "<span style='font-size:9pt; font-weight:normal;'>" + ("%.3f" % Latitude) + "</span>"
+            txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
+                ("%.3f" % Longitude) + "</span>"
+            txt += "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>"
+            txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
+                ("%.3f" % Latitude) + "</span>"
 
             if hasElevationModel():
                 txt += "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>"
-                txt += "<span style='font-size:9pt; font-weight:normal;'>" + ("%.0f" % Altitude) + "</span>"
+                txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
+                    ("%.0f" % Altitude) + "</span>"
             else:
                 txt += "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>"
                 txt += "<span style='font-size:9pt; font-weight:normal;'>-</span>"
@@ -754,11 +773,11 @@ class VideoWidget(QVideoWidget):
             self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" +
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
                                                 "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" +
-                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>"+
+                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
                                                 "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" +
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>")
 
-        #Draw Ruler on video
+        # Draw Ruler on video
         if len(self.drawRuler) >= 1:
             Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
             pt = self.drawRuler[-1]
@@ -819,7 +838,7 @@ class VideoWidget(QVideoWidget):
         """
         if GetImageHeight() == 0:
             return
-        
+
         if event.button() == Qt.LeftButton:
             self.snapped = True
             self.pressPos = self.dragPos = event.pos()
@@ -827,17 +846,19 @@ class VideoWidget(QVideoWidget):
             self.tapTimer.start(HOLD_TIME, self)
 
             if(not self.IsPointOnScreen(event.x(), event.y())):
-                    self.UpdateSurface()
-                    return
+                self.UpdateSurface()
+                return
 
-            #point drawer
+            # point drawer
             if self.gt is not None and pointDrawer:
-                Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
-                #add pin point on the map
+                Longitude, Latitude, Altitude = self.GetPointCommonCoords(
+                    event)
+                # add pin point on the map
                 pointLyr = qgsu.selectLayerByName(Point_lyr)
                 pointLyr.startEditing()
                 feature = QgsFeature()
-                feature.setAttributes([self.pointIndex, Longitude, Latitude, Altitude])
+                feature.setAttributes(
+                    [self.pointIndex, Longitude, Latitude, Altitude])
                 p = QgsPointXY()
                 p.set(Longitude, Latitude)
                 geom = QgsGeometry.fromPointXY(p)
@@ -849,18 +870,20 @@ class VideoWidget(QVideoWidget):
 
                 self.drawPtPos.append([Longitude, Latitude, Altitude])
 
-            #polygon drawer
+            # polygon drawer
             if self.gt is not None and polygonDrawer:
-                Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
+                Longitude, Latitude, Altitude = self.GetPointCommonCoords(
+                    event)
                 self.poly_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
                 self.poly_coordinates.extend(QgsPointXY(Longitude, Latitude))
                 self.drawPolygon.append([Longitude, Latitude, Altitude])
 
-            #line drawer
+            # line drawer
             if self.gt is not None and lineDrawer:
-                Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
+                Longitude, Latitude, Altitude = self.GetPointCommonCoords(
+                    event)
 
-                #add pin on the map
+                # add pin on the map
                 linelyr = qgsu.selectLayerByName(Line_lyr)
                 linelyr.startEditing()
                 feature = QgsFeature()
@@ -889,15 +912,17 @@ class VideoWidget(QVideoWidget):
 
             if objectTracking:
                 self.origin = event.pos()
-                self.Tracking_RubberBand.setGeometry(QRect(self.origin, QSize()))
+                self.Tracking_RubberBand.setGeometry(
+                    QRect(self.origin, QSize()))
                 self.Tracking_RubberBand.show()
 
-            #Ruler drawer
+            # Ruler drawer
             if self.gt is not None and ruler:
-                Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
+                Longitude, Latitude, Altitude = self.GetPointCommonCoords(
+                    event)
                 self.drawRuler.append([Longitude, Latitude, Altitude])
 
-        #if not called, the paint event is not triggered.
+        # if not called, the paint event is not triggered.
         self.UpdateSurface()
 
     def activateMagnifier(self):

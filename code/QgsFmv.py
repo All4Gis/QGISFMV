@@ -48,8 +48,10 @@ class Fmv:
         log.initLogging()
 
         threadcount = QThread.idealThreadCount()
-        QgsApplication.setMaxThreads(threadcount)# use all available cores (-1 qgis not work)
-        QSettings().setValue("/qgis/parallel_rendering", True) # not work iface.mapCanvas().setParallelRenderingEnabled(True)
+        # use all available cores (-1 qgis not work)
+        QgsApplication.setMaxThreads(threadcount)
+        # not work iface.mapCanvas().setParallelRenderingEnabled(True)
+        QSettings().setValue("/qgis/parallel_rendering", True)
 
         self.plugin_dir = os.path.dirname(__file__)
         locale = QSettings().value("locale//userLocale")[0:2]
@@ -72,18 +74,20 @@ class Fmv:
                                      "Fmv", "Show Video Manager"),
                                  triggered=self.run)
 
-        self.iface.registerMainWindowAction(self.actionFMV, qgsu.SetShortcutForPluginFMV(u"FMV"))
+        self.iface.registerMainWindowAction(
+            self.actionFMV, qgsu.SetShortcutForPluginFMV(u"FMV"))
         self.iface.addToolBarIcon(self.actionFMV)
         self.iface.addPluginToMenu(QCoreApplication.translate(
             "Fmv", "Full Motion Video (FMV)"), self.actionFMV)
 
         ''' About Action '''
-        self.actionAbout = QAction(QIcon(":/imgFMV/images/Information.png"), 
+        self.actionAbout = QAction(QIcon(":/imgFMV/images/Information.png"),
                                    u"FMV About", self.iface.mainWindow(),
                                    statusTip=QCoreApplication.translate(
                                        "Fmv", "Show About FMV"),
                                    triggered=self.run)
-        self.iface.registerMainWindowAction(self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About","Alt+A"))
+        self.iface.registerMainWindowAction(
+            self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About", "Alt+A"))
         self.iface.addPluginToMenu(QCoreApplication.translate(
             "Fmv", "Full Motion Video (FMV)"), self.actionAbout)
 
