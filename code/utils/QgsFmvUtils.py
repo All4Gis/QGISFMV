@@ -9,7 +9,7 @@ from datetime import datetime
 from subprocess import Popen, PIPE, check_output
 import threading
 
-from PyQt5.QtCore import QCoreApplication,QUrl,QEventLoop
+from PyQt5.QtCore import QCoreApplication, QUrl, QEventLoop
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QFileDialog
 from QGIS_FMV.klvdata.streamparser import StreamParser

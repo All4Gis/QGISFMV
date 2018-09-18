@@ -102,47 +102,53 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         rowPosition = self.VManager.rowCount()
 
         self.VManager.insertRow(rowPosition)
-        self.VManager.setItem(rowPosition, 0, QTableWidgetItem(str(rowPosition)))
+        self.VManager.setItem(
+            rowPosition, 0, QTableWidgetItem(str(rowPosition)))
         self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
         self.VManager.setItem(rowPosition, 2, QTableWidgetItem("Loading"))
         self.VManager.setItem(rowPosition, 3, QTableWidgetItem(filename))
         self.VManager.setItem(rowPosition, 4, QTableWidgetItem("-"))
-        self.VManager.setCellWidget(rowPosition, 5, w);
-                        
+        self.VManager.setCellWidget(rowPosition, 5, w)
+
         self.VManager.setVisible(False)
         self.VManager.horizontalHeader().setStretchLastSection(True)
-        
+
         pbar.setGeometry(0, 0, 300, 30)
         pbar.setValue(30)
         pbar.setMaximumHeight(30)
-        self.pBars[str(rowPosition)] = pbar        
+        self.pBars[str(rowPosition)] = pbar
         self.VManager.setVisible(True)
 
         if not self.isStreaming:
-            #init non-blocking metadata buffered reader
-            self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, pass_time=self.pass_time, intervall=self.buffer_intervall, min_buffer_size=self.min_buffer_size)
-            qgsu.showUserAndLogMessage("", "buffered non-blocking metadata reader initialized.", onlyLog=True)
+            # init non-blocking metadata buffered reader
+            self.meta_reader[str(rowPosition)] = BufferedMetaReader(
+                filename, pass_time=self.pass_time, intervall=self.buffer_intervall, min_buffer_size=self.min_buffer_size)
+            qgsu.showUserAndLogMessage(
+                "", "buffered non-blocking metadata reader initialized.", onlyLog=True)
 
             pbar.setValue(60)
-            
-            #init point we can center the video on
+
+            # init point we can center the video on
             self.initialPt[str(rowPosition)] = getVideoLocationInfo(filename)
-            self.VManager.setItem(rowPosition, 4, QTableWidgetItem(self.initialPt[str(rowPosition)][2]))
-            #self.VManager.resizeColumnsToContents()
-            
+            self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
+                self.initialPt[str(rowPosition)][2]))
+            # self.VManager.resizeColumnsToContents()
+
             pbar.setValue(90)
-            
+
             if self.initialPt[str(rowPosition)] and dtm_path != '':
-                initElevationModel(self.initialPt[str(rowPosition)][0], self.initialPt[str(rowPosition)][1], dtm_path)
-                qgsu.showUserAndLogMessage("", "Elevation model initialized.", onlyLog=True)
+                initElevationModel(self.initialPt[str(
+                    rowPosition)][0], self.initialPt[str(rowPosition)][1], dtm_path)
+                qgsu.showUserAndLogMessage(
+                    "", "Elevation model initialized.", onlyLog=True)
         else:
             self.meta_reader[str(rowPosition)] = None
             self.initialPt[str(rowPosition)] = None
 
-        #self.VManager.resizeColumnsToContents()
+        # self.VManager.resizeColumnsToContents()
         pbar.setValue(100)
         self.ToggleActiveRow(rowPosition, value="Ready")
-        #self.VManager.resizeColumnsToContents()
+        # self.VManager.resizeColumnsToContents()
 
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
