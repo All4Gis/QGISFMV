@@ -15,6 +15,9 @@ class FmvLayerStyles(object):
     #beam holder
     B = {}
 
+    #frame center holder
+    F = {}
+
     #drawings Point holder
     DP = {}
 
@@ -81,6 +84,15 @@ class FmvLayerStyles(object):
     P['Super Puma TH06']['OUTLINE_WIDTH'] = '1'
     P['Super Puma TH06']['SIZE'] = '18'
 
+    #
+    # FRAMECENTER POINT STYLES
+    #
+    F['DEFAULT'] = {}
+    F['DEFAULT']['NAME'] = 'cross2'
+    F['DEFAULT']['LINE_COLOR'] = '#000000'
+    F['DEFAULT']['LINE_WIDTH'] = '0'
+    F['DEFAULT']['SIZE'] = '3'
+    
     #
     # TRAJECTORY STYLES
     #
@@ -167,6 +179,11 @@ class FmvLayerStyles(object):
     @staticmethod
     def getDrawingPoint():
         style = FmvLayerStyles.DP['DEFAULT']
+        return style
+
+    @staticmethod
+    def getFrameCenterPoint():
+        style = FmvLayerStyles.F['DEFAULT']
         return style
 
     @staticmethod

@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QApplication
 from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
                                 Footprint_lyr,
+                                FrameCenter_lyr,
                                 Point_lyr,
                                 Line_lyr,
                                 Polygon_lyr,
@@ -118,6 +119,12 @@ def CreateVideoLayers():
         SetDefaultPointStyle(lyr_point)
         addLayerNoCrsDialog(lyr_point)
 
+    if qgsu.selectLayerByName(FrameCenter_lyr) is None:
+        lyr_framecenter = newPointsLayer(
+            None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr)
+        SetDefaultFrameCenterStyle(lyr_framecenter)
+        addLayerNoCrsDialog(lyr_framecenter)
+
     if qgsu.selectLayerByName(Line_lyr) is None:
         lyr_line = newLinesLayer(
             None, ["longitude", "latitude", "altitude"], epsg, Line_lyr)
@@ -162,6 +169,11 @@ def RemoveVideoLayers():
     try:
         QgsProject.instance().removeMapLayer(
             qgsu.selectLayerByName(Trajectory_lyr).id())
+    except Exception:
+        None
+    try:
+        QgsProject.instance().removeMapLayer(
+            qgsu.selectLayerByName(FrameCenter_lyr).id())
     except Exception:
         None
     try:
@@ -222,6 +234,13 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
     layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
     return
 
+def SetDefaultFrameCenterStyle(layer):
+    ''' Point Symbol '''
+    style = S.getFrameCenterPoint()
+    symbol = QgsMarkerSymbol.createSimple({'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size':style["SIZE"]})
+    renderer = QgsSingleSymbolRenderer(symbol)
+    layer.setRenderer(renderer)  
+    return
 
 def SetDefaultPointStyle(layer):
     ''' Point Symbol '''
@@ -252,9 +271,7 @@ def SetDefaultPointStyle(layer):
 
     layer_settings = QgsVectorLayerSimpleLabeling(layer_settings)
     layer.setLabelsEnabled(True)
-    layer.setLabeling(layer_settings)
-    #my_layer.triggerRepaint()
-    
+    layer.setLabeling(layer_settings)    
     return
 
 

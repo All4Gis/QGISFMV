@@ -63,13 +63,13 @@ except ImportError:
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     """ Video Player Class """
 
-    def __init__(self, iface, path=None, parent=None, meta_reader=None, pass_time=None, initialPt=None, isStreaming=False):
+    def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, initialPt=None, isStreaming=False):
         """ Constructor """
         super(QgsFmvPlayer, self).__init__(parent)
         self.setupUi(self)
         self.parent = parent
         self.iface = iface
-        self.fileName = None
+        self.fileName = path
         self.initialPt = initialPt
         self.meta_reader = meta_reader
         self.isStreaming = isStreaming
@@ -154,7 +154,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             if stdout_data == b'':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "This video don't have Audio ! "),
+                    "QgsFmvPlayer", "This video doesn't have Audio ! "),
                     level=QGis.Info)
                 return False
 
