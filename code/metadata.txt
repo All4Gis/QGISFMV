@@ -22,6 +22,12 @@ email=franka1986@gmail.com
 
 changelog=
     ** General **
+    1.4:
+    	-Video manager shows now a progress bar while meta buffer loading
+		-Video manager has "Start Location" row that show the city where video is filmed 
+		 (reverse geocoding nominatim, config key: Reverse_geocoding_url)
+		-Video manager status row shows "Loading", "Ready", "Playing" as video states
+		-There is a "Exts" config key where video format are listed (the first is the default)
     1.3:
     	- Fixed meta reader running after closing
     	- Draw Point -> added numbers to points
