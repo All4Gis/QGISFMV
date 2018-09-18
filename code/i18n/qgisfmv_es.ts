@@ -115,17 +115,17 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="51"/>
+        <location filename="../player/QgsManager.py" line="54"/>
         <source>Remove the current selection&apos;s video</source>
         <translation>Eliminar el video seleccionado</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="122"/>
+        <location filename="../player/QgsManager.py" line="163"/>
         <source>Open video</source>
         <translation>Abrir video</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="51"/>
+        <location filename="../player/QgsManager.py" line="54"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
@@ -163,14 +163,29 @@
         <translation>Fuente</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="141"/>
+        <location filename="../ui/ui_FmvManager.ui" line="151"/>
         <source>Open Stream</source>
         <translation>Abir Stream</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="150"/>
         <source>Open MPEG2 File</source>
-        <translation>Abrir fichero MPEG2</translation>
+        <translation type="obsolete">Abrir fichero MPEG2</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvManager.ui" line="133"/>
+        <source>Start Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvManager.ui" line="138"/>
+        <source>Progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvManager.ui" line="160"/>
+        <source>Open Video File</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -480,8 +495,8 @@
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="157"/>
-        <source>This video don&apos;t have Audio ! </source>
-        <translation>¡Este video no tiene audio! :</translation>
+        <source>This video doesn&apos;t have Audio ! </source>
+        <translation type="unfinished">¡Este video no tiene audio! :</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="164"/>

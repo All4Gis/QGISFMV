@@ -11,7 +11,7 @@ Line_lyr = "Drawings Line"
 Polygon_lyr = "Drawings Polygon"
 
 # File extensions (first is default)
-Exts=["mpeg4","mp4","avi","ts","mpg","H264","mov"]
+Exts = ["mpeg4", "mp4", "avi", "ts", "mpg", "H264", "mov"]
 
 # Layers EPSG
 epsg = 'EPSG:4326'
@@ -25,8 +25,8 @@ DTM_file = "D:\\GitHub\\QGISFMV\\data\\SRTM\\SRTM_W_250m.tif"
 # Raster square size in pixel that will be loaded from DTM
 DTM_buffer_size = 80
 
-#Reverse geocoding service that transforms point to address
-Reverse_geocoding_url="https://nominatim.openstreetmap.org/reverse.php?format=json&lat={}&lon={}"
+# Reverse geocoding service that transforms point to address
+Reverse_geocoding_url = "https://nominatim.openstreetmap.org/reverse.php?format=json&lat={}&lon={}"
 
 # FFmpeg path
 ffmpeg = "D:\\FFMPEG"

@@ -4,30 +4,38 @@ from math import atan, tan, sqrt, radians, pi
 import os
 import platform
 import shutil
+import json
 from datetime import datetime
 from subprocess import Popen, PIPE, check_output
 import threading
 
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QCoreApplication,QUrl,QEventLoop
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QFileDialog
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
                                 Footprint_lyr,
+                                FrameCenter_lyr,
                                 Trajectory_lyr,
                                 frames_g,
                                 DTM_buffer_size as dtm_buffer)
 from QGIS_FMV.fmvConfig import ffmpeg as ffmpeg_path
 from QGIS_FMV.fmvConfig import ffprobe as ffprobe_path
+from QGIS_FMV.fmvConfig import Reverse_geocoding_url
 from QGIS_FMV.geo import sphere as sphere
 from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          ExpandLayer,
                                          SetDefaultFootprintStyle,
                                          SetDefaultPlatformStyle)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from qgis.PyQt.QtCore import QSettings
+from qgis.PyQt.QtNetwork import (QNetworkRequest,
+                                 QNetworkReply)
+from qgis.PyQt.QtCore import (QSettings,
+                              QUrl,
+                              QEventLoop)
 from qgis.core import (QgsApplication,
+                       QgsNetworkAccessManager,
                        QgsFeature,
                        QgsGeometry,
                        QgsPointXY,
@@ -141,6 +149,10 @@ class BufferedMetaReader():
             if new_key not in self._meta:
                 #qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
                 self._meta[new_key] = callBackMetadataThread(cmds=['-i', self.video_path,
+
+
+
+
                                                                    '-ss', _seconds_to_time_frac(
                                                                        cTime),
                                                                    '-to', _seconds_to_time_frac(
@@ -216,8 +228,7 @@ class callBackMetadataThread(threading.Thread):
                        stderr=PIPE, bufsize=0,
                        close_fds=(not windows))
 
-        qgsu.showUserAndLogMessage(
-            "", "callBackMetadataThread commands: " + str(self.cmds), onlyLog=True)
+        #qgsu.showUserAndLogMessage("", "callBackMetadataThread commands: "+str(self.cmds), onlyLog=True)
 
         self.stdout, self.stderr = self.p.communicate()
 
@@ -231,23 +242,55 @@ def getVideoLocationInfo(videoPath):
                     '-ss', '00:00:00',
                     '-to', '00:00:01',
                     '-map', 'data-re',
-                    '-preset', 'ultrafast',
+
                     '-f', 'data', '-'])
 
         stdout_data, _ = p.communicate()
 
         if stdout_data == b'':
+
             return
 
         for packet in StreamParser(stdout_data):
             packet.MetadataList()
             frameCenterLat = packet.GetFrameCenterLatitude()
             frameCenterLon = packet.GetFrameCenterLongitude()
-            location = [frameCenterLat, frameCenterLon]
-            qgsu.showUserAndLogMessage("", "Got Location: lon: " + str(
-                frameCenterLon) + " lat: " + str(frameCenterLat), onlyLog=True)
+            loc = "-"
+            if Reverse_geocoding_url != "":
+                try:
+                    url = QUrl(Reverse_geocoding_url.format(
+                        str(frameCenterLat), str(frameCenterLon)))
+                    request = QNetworkRequest(url)
+                    reply = QgsNetworkAccessManager.instance().get(request)
+                    loop = QEventLoop()
+                    reply.finished.connect(loop.quit)
+                    loop.exec_()
+                    reply.finished.disconnect(loop.quit)
+                    loop = None
+                    result = reply.readAll()
+                    data = json.loads(result.data())
+
+                    if "village" in data["address"] and "state" in data["address"]:
+                        loc = data["address"]["village"] + \
+                            ", " + data["address"]["state"]
+                    elif "town" in data["address"] and "state" in data["address"]:
+                        loc = data["address"]["town"] + \
+                            ", " + data["address"]["state"]
+                    else:
+                        loc = data["display_name"]
+
+                except Exception:
+                    qgsu.showUserAndLogMessage(
+                        "", "getVideoLocationInfo: failed to get address from reverse geocoding service.", onlyLog=True)
+
+            location = [frameCenterLat, frameCenterLon, loc]
+
+            qgsu.showUserAndLogMessage("", "Got Location: lon: " + str(frameCenterLon) +
+                                       " lat: " + str(frameCenterLat) + " location: " + str(loc), onlyLog=True)
+
             break
         else:
+
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvUtils", "This video doesn't have Metadata ! : "), level=QGis.Info)
 
@@ -320,6 +363,7 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
         exts = [exts]
     extString = ";; ".join([" %s files (*.%s)" % (e.upper(), e)
                             if e != "*" else "All files (*.*)" for e in exts])
+
     if allowMultiple:
         ret = QFileDialog.getOpenFileNames(parent, msg, path, '*.' + extString)
         if ret:
@@ -505,6 +549,7 @@ def _spawn(cmds, t="ffmpeg"):
     else:
         cmds.insert(0, ffprobe_path)
 
+    #qgsu.showUserAndLogMessage("", "commands:" + str(cmds), onlyLog=True)
     return Popen(cmds, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE,
                  bufsize=0,
                  close_fds=(not windows))
@@ -600,6 +645,7 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
             "QgsFmvUtils", "There is no DTM for theses bounds. Check/increase DTM_buffer_size in fmvConfig.py"), level=QGis.Warning)
     else:
         #qgsu.showUserAndLogMessage("UpdateLayers: ", " dtm_colLowerBound:"+str(dtm_colLowerBound)+" dtm_rowLowerBound:"+str(dtm_rowLowerBound)+" dtm_buffer:"+str(dtm_buffer), onlyLog=True)
+
         dtm_data = band.ReadAsArray(
             dtm_colLowerBound, dtm_rowLowerBound, 2 * dtm_buffer, 2 * dtm_buffer)
         if dtm_data is not None:
@@ -623,6 +669,8 @@ def UpdateLayers(packet, parent=None, mosaic=False):
 
     UpdatePlatformData(packet)
     UpdateTrajectoryData(packet)
+
+    UpdateFrameCenterData(packet)
 
     OffsetLat1 = packet.GetOffsetCornerLatitudePoint1()
     LatitudePoint1Full = packet.GetCornerLatitudePoint1Full()
@@ -746,7 +794,7 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
     beamsLyr = qgsu.selectLayerByName(Beams_lyr)
 
     try:
-        if beamsLyr is not None:
+        if all(v is not None for v in [beamsLyr, lat, lon, alt, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]) and all(v >= 2 for v in [len(cornerPointUL), len(cornerPointUR), len(cornerPointLR), len(cornerPointLL)]):
             beamsLyr.startEditing()
             if beamsLyr.featureCount() == 0:
 
@@ -843,8 +891,8 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
     footprintLyr = qgsu.selectLayerByName(Footprint_lyr)
 
     try:
-        if footprintLyr is not None:
 
+        if all(v is not None for v in [footprintLyr, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]) and all(v >= 2 for v in [len(cornerPointUL), len(cornerPointUR), len(cornerPointLR), len(cornerPointLL)]):
             if(imgSS != crtSensorSrc):
                 SetDefaultFootprintStyle(footprintLyr, imgSS)
                 crtSensorSrc = imgSS
@@ -920,6 +968,7 @@ def UpdateTrajectoryData(packet):
         else:
             # little check to see if telemetry data are plausible before
             # drawing.
+
             distance = sphere.distance((tLastLon, tLastLat), (lon, lat))
             if distance > 1000:  # 1 km is the best value for prevent draw trajectory when start video again
                 return
@@ -931,7 +980,8 @@ def UpdateTrajectoryData(packet):
     trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
 
     try:
-        if trajectoryLyr is not None:
+
+        if all(v is not None for v in [trajectoryLyr, lat, lon, alt]):
             trajectoryLyr.startEditing()
             f = QgsFeature()
             if trajectoryLyr.featureCount() == 0:
@@ -957,6 +1007,49 @@ def UpdateTrajectoryData(packet):
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
+    return
+
+
+def UpdateFrameCenterData(packet):
+    ''' Update FrameCenter Values '''
+    lat = packet.GetFrameCenterLatitude()
+    lon = packet.GetFrameCenterLongitude()
+    alt = packet.GetFrameCenterElevation()
+    PlatformHeading = packet.GetPlatformHeadingAngle()
+    frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr)
+
+    try:
+        if all(v is not None for v in [frameCenterLyr, lat, lon, alt, PlatformHeading]):
+            frameCenterLyr.startEditing()
+            frameCenterLyr.renderer().symbol().setAngle(float(PlatformHeading))
+
+            if frameCenterLyr.featureCount() == 0:
+                feature = QgsFeature()
+                feature.setAttributes([lon, lat, alt])
+                p = QgsPointXY()
+                p.set(lon, lat)
+                geom = QgsGeometry.fromPointXY(p)
+                feature.setGeometry(geom)
+                frameCenterLyr.addFeatures([feature])
+
+            else:
+                frameCenterLyr.beginEditCommand(
+                    "ChangeGeometry + ChangeAttribute")
+                fetId = 1
+                attrib = {0: lon, 1: lat, 2: alt}
+                frameCenterLyr.dataProvider().changeAttributeValues(
+                    {fetId: attrib})
+
+                frameCenterLyr.dataProvider().changeGeometryValues(
+                    {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
+                frameCenterLyr.endEditCommand()
+
+            CommonLayer(frameCenterLyr)
+
+    except Exception as e:
+        qgsu.showUserAndLogMessage(QCoreApplication.translate(
+            "QgsFmvUtils", "Failed Update Frame Center Layer! : "), str(e))
+
     return
 
 
@@ -1213,18 +1306,22 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
 
     # start at k = sensor point, then test every pixel a point on the 3D line
     # until we cross the dtm (diffAlt >= 0).
+
     diffAlt = -1
     for k in range(0, int(dtm_buffer * pixelWidthMeter), int(pixelWidthMeter)):
         point = [sensorLon + k * dLon, sensorLat +
                  k * dLat, sensorAlt + k * dAlt]
+
         col = int((point[0] - xOrigin) / pixelWidth)
         row = int((yOrigin - point[1]) / pixelHeight)
         try:
             diffAlt = point[2] - dtm_data[row -
                                           dtm_rowLowerBound][col - dtm_colLowerBound]
+
         except:
             qgsu.showUserAndLogMessage(
                 "", "DEM point not found after all iterations.", onlyLog=True)
+
             break
         if diffAlt <= 0:
             pt = [point[1], point[0], point[2]]
@@ -1283,6 +1380,7 @@ def _time_to_seconds(dateStr):
     timeval = datetime.strptime(dateStr, '%H:%M:%S.%f')
     secs = timeval.hour * 3600 + timeval.minute * 60 + \
         timeval.second + timeval.microsecond / 1000000
+
     return secs
 
 

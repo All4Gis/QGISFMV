@@ -128,6 +128,16 @@ color: rgb(56, 95, 107);
         <string>Source</string>
        </property>
       </column>
+	  <column>
+       <property name="text">
+        <string>Start Location</string>
+       </property>
+      </column>
+	  <column>
+       <property name="text">
+        <string>Progress</string>
+       </property>
+      </column>
      </widget>
     </item>
    </layout>
@@ -147,7 +157,7 @@ color: rgb(56, 95, 107);
      <normaloff>:/imgFMV/images/misb-file.png</normaloff>:/imgFMV/images/misb-file.png</iconset>
    </property>
    <property name="text">
-    <string>Open MPEG2 File</string>
+    <string>Open Video File</string>
    </property>
   </action>
  </widget>
