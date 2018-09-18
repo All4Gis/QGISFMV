@@ -15,9 +15,11 @@ class FmvLayerStyles(object):
     # beam holder
     B = {}
 
+
     # frame center holder
     F = {}
     # drawings Point holder
+
     DP = {}
 
     # drawings Line holder
@@ -92,6 +94,7 @@ class FmvLayerStyles(object):
     F['DEFAULT']['LINE_WIDTH'] = '0'
     F['DEFAULT']['SIZE'] = '3'
 
+    #
     # TRAJECTORY STYLES
     #
     T['DEFAULT'] = {}
