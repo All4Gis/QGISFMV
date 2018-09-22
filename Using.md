@@ -4,6 +4,7 @@ For the use of the QGIS FMV plugin you must have the [requirements](../index.md#
 
 Once you have them, click on the icon that will appear in QGIS, to open the manager.
 
+# Table of Contents
 <!-- MarkdownTOC -->
 
 - [Video Manager](#video-manager)

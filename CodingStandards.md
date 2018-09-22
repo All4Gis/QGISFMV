@@ -4,6 +4,7 @@ quality of your python code
 
 So, let's get started.
 
+# Table of Contents
 <!-- MarkdownTOC -->
 
 - [Symbols](#symbols)

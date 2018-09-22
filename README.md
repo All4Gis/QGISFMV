@@ -10,9 +10,10 @@ Standards supported:
 
   - "UAS Datalink Local Set", [ST0601.11](http://www.gwg.nga.mil/misb/docs/standards/ST0601.11.pdf)
 
+# Table of Contents
 <!-- MarkdownTOC -->
 
-- [Motivation](#,otivation)
+- [Motivation](#motivation)
 - [Dependencies](#dependencies)
 - [For show video](#for-show-video)
 - [Usage](#usage)
