@@ -4,6 +4,13 @@ For the use of the QGIS FMV plugin you must have the [requirements](../index.md#
 
 Once you have them, click on the icon that will appear in QGIS, to open the manager.
 
+<!-- MarkdownTOC -->
+
+- [Video Manager](#video-manager)
+- [Video Player](#video-player)
+
+<!-- /MarkdownTOC -->
+
 ### Video Manager
 
 From the manager, you can open and manage your play list.

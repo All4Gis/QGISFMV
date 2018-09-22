@@ -10,7 +10,28 @@ Standards supported:
 
   - "UAS Datalink Local Set", [ST0601.11](http://www.gwg.nga.mil/misb/docs/standards/ST0601.11.pdf)
 
-  
+<!-- MarkdownTOC -->
+
+- [Motivation](#,otivation)
+- [Dependencies](#dependencies)
+- [For show video](#for-show-video)
+- [Usage](#usage)
+- [Recommended readings](#recommended-readings)
+- [Installation](#installation)
+    - [Installation on Windows](#installation-on-windows)
+    - [Installation on Archlinux](#installation-on-archlinux)
+- [Slides](#slides)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Contributing](#contributing)
+    - [Contributing Code](#contributing-code)
+    - [Contributing translations](#contributing-translations)
+	- [Contributors List](#contributors-list)
+- [License](#license)
+- [Donations](#donations)
+
+<!-- /MarkdownTOC -->
+	
 ## Motivation
 
 This development arises after observing that there was no free solution for the metadata extraction and video analysis in real time. All solutions are APIs or private tools such as
@@ -110,9 +131,11 @@ ffprobe = "/usr/bin/"
 - Apply sobel filters, edge detection ...
 
 
-## Contributing Code
+## Contributing
 
 Contributions are welcome!
+
+### Contributing Code
 
 Want to work on the project? Any kind of contribution is welcome!
 
@@ -130,11 +153,16 @@ And thanks for your code.
 
 ![a](images/thanks.gif)
 
-## Contributing translations
+### Contributing translations
 
 Contributions are welcome!
 
 [transifex](https://www.transifex.com/all4gis/QGISFMV/)
+
+### Contributors List  
+
+* <a href="https://github.com/ltbam" target="_blank">ltbam</a>
+* <a href="https://all4gis.github.io//" target="_blank">Fran Raga</a>
 
 
 ## License
@@ -142,12 +170,6 @@ Contributions are welcome!
 GNU Public License (GPL) Version 3
 
 **Free Software, Hell Yeah!**
-
-
-## Contributors List  
-
-* <a href="https://github.com/ltbam" target="_blank">ltbam</a>
-* <a href="https://all4gis.github.io//" target="_blank">Fran Raga</a>
 
 
 ## Donations
