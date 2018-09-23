@@ -290,6 +290,8 @@ class VideoWidget(QVideoWidget):
             self.drawPolygon.append([None, None, None])
             # Add Polygon
             polyLyr = qgsu.selectLayerByName(Polygon_lyr)
+            if polyLyr is None:
+                return
             polyLyr.startEditing()
             feature = QgsFeature()
             point = QPointF()
@@ -662,7 +664,6 @@ class VideoWidget(QVideoWidget):
                 distance = round(sphere.distance((center_pt[0], center_pt[1]), (end_pt[0], end_pt[1])), 2)
 
                 text = str(distance) + " m"
-                painter.drawText(end + QPoint(5, -5), text)
 
 #                 #Halo draft
 #                 font14 = QFont("Arial", 13, weight=QFont.Bold)
@@ -678,6 +679,8 @@ class VideoWidget(QVideoWidget):
                 painter.setRenderHint(QPainter.HighQualityAntialiasing)
                 painter.drawPoint(center)
                 painter.drawPoint(end)
+
+                painter.drawText(end + QPoint(5, -5), text)
 
             except Exception:
                 None
@@ -707,21 +710,21 @@ class VideoWidget(QVideoWidget):
         radius = 10
         center = QPoint(scr_x, scr_y)
 
-        # TODO: Find methos for make text halo
-        # Text Halo
-        font14 = QFont("Arial", 12, weight=QFont.Bold)
-        pen = QPen(Qt.white)
-        painter.setPen(pen)
-        painter.setFont(font14)
-        painter.drawText(center + QPoint(5, -5), str(number))
-        # End Halo
+#         # TODO: Find methos for make text halo
+#         # Text Halo
+#         font14 = QFont("Arial", 14, weight=QFont.Bold)
+#         pen = QPen(Qt.white)
+#         painter.setPen(pen)
+#         painter.setFont(font14)
+#         painter.drawText(center + QPoint(3, -4), str(number))
+#         # End Halo
 
         pen = QPen(Qt.red)
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
         painter.setPen(pen)
         painter.drawPoint(center)
-        font12 = QFont("Arial", 12)
+        font12 = QFont("Arial", 12, weight=QFont.Bold)
         painter.setFont(font12)
 #         # Text Halo
 #         textPath = QPainterPath()
@@ -889,6 +892,8 @@ class VideoWidget(QVideoWidget):
                     event)
                 # add pin point on the map
                 pointLyr = qgsu.selectLayerByName(Point_lyr)
+                if pointLyr is None:
+                    return
                 pointLyr.startEditing()
                 feature = QgsFeature()
                 feature.setAttributes(
@@ -919,6 +924,8 @@ class VideoWidget(QVideoWidget):
 
                 # add pin on the map
                 linelyr = qgsu.selectLayerByName(Line_lyr)
+                if linelyr is None:
+                    return
                 linelyr.startEditing()
                 feature = QgsFeature()
                 f = QgsFeature()
