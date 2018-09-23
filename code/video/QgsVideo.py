@@ -18,7 +18,7 @@ from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QAbstractVideoSurface,
                                 QVideoSurfaceFormat)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-
+from QGIS_FMV.geo import sphere as sphere
 from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
 
 from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
@@ -218,6 +218,7 @@ class VideoWidget(QVideoWidget):
         pal = QPalette()
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
         self.Tracking_RubberBand.setPalette(pal)
+        self.var_currentMouseMoveEvent=None
 
         self.setUpdatesEnabled(True)
         self.snapped = False
@@ -254,6 +255,9 @@ class VideoWidget(QVideoWidget):
         ), QPoint(), QPoint(), QPoint()
         self.tapTimer = QBasicTimer()
         self.zoomPixmap, self.maskPixmap = QPixmap(), QPixmap()
+
+    def currentMouseMoveEvent(self, event):
+        self.var_currentMouseMoveEvent = event
 
     def keyPressEvent(self, event):
         ''' Exit fullscreen '''
@@ -633,25 +637,48 @@ class VideoWidget(QVideoWidget):
 
         scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
 
-        radius = 3
-        center = QPoint(scr_x, scr_y)
+        center_pt = pt
 
-        pen = QPen(Qt.red)
-        pen.setWidth(radius)
-        pen.setCapStyle(Qt.RoundCap)
-        painter.setPen(pen)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing)
-        painter.drawPoint(center)
+        radius_pt = 5
+        center = QPoint(scr_x, scr_y)
 
         if len(self.drawRuler) > 1:
             try:
-                pt = self.drawRuler[idx + 1]
+                pen = QPen(Qt.red)
+                pen.setWidth(3)
+                painter.setPen(pen)
+
+                end_pt = self.drawRuler[idx + 1]
                 if hasElevationModel():
-                    pt = GetLine3DIntersectionWithPlane(
-                        GetSensor(), pt, GetFrameCenter()[2])
-                scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+                    end_pt = GetLine3DIntersectionWithPlane(
+                        GetSensor(), end_pt, GetFrameCenter()[2])
+                scr_x, scr_y = self.GetInverseMatrix(end_pt[1], end_pt[0])
                 end = QPoint(scr_x, scr_y)
                 painter.drawLine(center, end)
+
+                font12 = QFont("Arial", 12, weight=QFont.Bold)
+                painter.setFont(font12)
+
+                distance = round(sphere.distance((center_pt[0], center_pt[1]), (end_pt[0], end_pt[1])), 2)
+
+                text = str(distance) + " m"
+                painter.drawText(end + QPoint(5, -5), text)
+
+#                 #Halo draft
+#                 font14 = QFont("Arial", 13, weight=QFont.Bold)
+#                 textPath = QPainterPath()
+#                 textPath.addText(QPointF(end + QPoint(5, -5)), font14, text)
+#                 painter.strokePath(textPath, QColor(255, 255, 255))
+
+                #Draw Start/End Points
+                pen = QPen(Qt.white)
+                pen.setWidth(radius_pt)
+                pen.setCapStyle(Qt.RoundCap)
+                painter.setPen(pen)
+                painter.setRenderHint(QPainter.HighQualityAntialiasing)
+                painter.drawPoint(center)
+                painter.drawPoint(end)
+
             except Exception:
                 None
         return
@@ -680,14 +707,28 @@ class VideoWidget(QVideoWidget):
         radius = 10
         center = QPoint(scr_x, scr_y)
 
+        # TODO: Find methos for make text halo
+        # Text Halo
+        font14 = QFont("Arial", 12, weight=QFont.Bold)
+        pen = QPen(Qt.white)
+        painter.setPen(pen)
+        painter.setFont(font14)
+        painter.drawText(center + QPoint(5, -5), str(number))
+        # End Halo
+
         pen = QPen(Qt.red)
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
         painter.setPen(pen)
         painter.drawPoint(center)
-
-        painter.setFont(QFont("Arial", 12))
+        font12 = QFont("Arial", 12)
+        painter.setFont(font12)
+#         # Text Halo
+#         textPath = QPainterPath()
+#         textPath.addText(QPointF(center + QPoint(5, -5)), font14, str(number))
+#         painter.strokePath(textPath, QColor(255, 255, 255))
         painter.drawText(center + QPoint(5, -5), str(number))
+
         return
 
     def drawPolygonOnVideo(self, values, painter):
@@ -740,6 +781,11 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
+#         try:
+#             self.currentMouseMoveEvent(None)
+#         except Exception:
+#             None
+
         if GetImageHeight() == 0:
             return
 
@@ -776,23 +822,11 @@ class VideoWidget(QVideoWidget):
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
                                                 "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" +
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>")
-
-        # Draw Ruler on video
-        if len(self.drawRuler) >= 1:
-            Longitude, Latitude, Altitude = self.GetPointCommonCoords(event)
-            pt = self.drawRuler[-1]
-            scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
-            radius = 3
-            center = QPoint(scr_x, scr_y)
-            pen = QPen(Qt.red)
-            pen.setWidth(radius)
-            pen.setCapStyle(Qt.RoundCap)
-            self.painter.setPen(pen)
-            self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
-            self.painter.drawPoint(center)
-            end = QPoint(event.x(), event.y())
-            self.painter.drawLine(center, end)
-            self.UpdateSurface()
+# 
+#         # Draw Ruler on video
+#         if len(self.drawRuler) >= 1:
+#             self.currentMouseMoveEvent(event)
+#             self.UpdateSurface()
 
         if not event.buttons():
             return

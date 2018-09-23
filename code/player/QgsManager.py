@@ -13,7 +13,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         initElevationModel,
                                         getVideoLocationInfo)
 import qgis.utils
-
+from qgis.core import Qgis as QGis
 
 try:
     from pydevd import *
@@ -128,11 +128,19 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
             pbar.setValue(60)
 
-            # init point we can center the video on
-            self.initialPt[str(rowPosition)] = getVideoLocationInfo(filename)
-            self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
-                self.initialPt[str(rowPosition)][2]))
-            # self.VManager.resizeColumnsToContents()
+            try:
+                # init point we can center the video on
+                self.initialPt[str(rowPosition)] = getVideoLocationInfo(filename)
+                self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
+                    self.initialPt[str(rowPosition)][2]))
+                # self.VManager.resizeColumnsToContents()
+            except Exception:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "ManagerDock", "This video don't have Metadata ! "),
+                    level=QGis.Info)
+                pbar.setValue(0)
+                self.ToggleActiveRow(rowPosition, value="Ready")
+                return
 
             pbar.setValue(90)
 
