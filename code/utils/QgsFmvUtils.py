@@ -285,24 +285,7 @@ def getVideoLocationInfo(videoPath):
 
             qgsu.showUserAndLogMessage("", "Got Location: lon: " + str(frameCenterLon) +
                                        " lat: " + str(frameCenterLat) + " location: " + str(loc), onlyLog=True)
-
-=======
-                    
-                    if "village" in data["address"] and "state" in data["address"]:
-                        loc = data["address"]["village"] + ", " + data["address"]["state"]
-                    elif "town" in data["address"] and "state" in data["address"]:
-                        loc = data["address"]["town"] + ", " + data["address"]["state"]
-                    else:
-                        loc = data["display_name"]
-                        
-                except Exception:
-                    qgsu.showUserAndLogMessage("", "getVideoLocationInfo: failed to get address from reverse geocoding service.", onlyLog=True)
             
-            location = [frameCenterLat, frameCenterLon, loc]
-            
-            #qgsu.showUserAndLogMessage("", "Got Location: lon: "+str(frameCenterLon) + " lat: "+str(frameCenterLat)+ " location: "+str(loc), onlyLog=True)
-            
->>>>>>> manager changes
             break
         else:
 
