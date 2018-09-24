@@ -124,6 +124,7 @@ def CreateVideoLayers():
             None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr)
         SetDefaultFrameCenterStyle(lyr_framecenter)
         addLayerNoCrsDialog(lyr_framecenter)
+
     if qgsu.selectLayerByName(Line_lyr) is None:
         lyr_line = newLinesLayer(
             None, ["longitude", "latitude", "altitude"], epsg, Line_lyr)
@@ -233,6 +234,13 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
     layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
     return
 
+def SetDefaultFrameCenterStyle(layer):
+    ''' Point Symbol '''
+    style = S.getFrameCenterPoint()
+    symbol = QgsMarkerSymbol.createSimple({'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size':style["SIZE"]})
+    renderer = QgsSingleSymbolRenderer(symbol)
+    layer.setRenderer(renderer)  
+    return
 
 def SetDefaultFrameCenterStyle(layer):
     ''' Point Symbol '''
@@ -275,7 +283,6 @@ def SetDefaultPointStyle(layer):
     layer_settings = QgsVectorLayerSimpleLabeling(layer_settings)
     layer.setLabelsEnabled(True)
     layer.setLabeling(layer_settings)
-    # my_layer.triggerRepaint()
 
     return
 

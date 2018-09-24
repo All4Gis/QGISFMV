@@ -9,7 +9,7 @@ from datetime import datetime
 from subprocess import Popen, PIPE, check_output
 import threading
 
-from PyQt5.QtCore import QCoreApplication, QUrl, QEventLoop
+from PyQt5.QtCore import QCoreApplication,QUrl,QEventLoop
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QFileDialog
 from QGIS_FMV.klvdata.streamparser import StreamParser
@@ -228,8 +228,6 @@ class callBackMetadataThread(threading.Thread):
                        stderr=PIPE, bufsize=0,
                        close_fds=(not windows))
 
-        #qgsu.showUserAndLogMessage("", "callBackMetadataThread commands: "+str(self.cmds), onlyLog=True)
-
         self.stdout, self.stderr = self.p.communicate()
 
 
@@ -287,13 +285,13 @@ def getVideoLocationInfo(videoPath):
 
             qgsu.showUserAndLogMessage("", "Got Location: lon: " + str(frameCenterLon) +
                                        " lat: " + str(frameCenterLat) + " location: " + str(loc), onlyLog=True)
-
+            
             break
         else:
 
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvUtils", "This video doesn't have Metadata ! : "), level=QGis.Info)
-
+            
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Video info callback failed! : "), str(e), level=QGis.Info)
@@ -379,8 +377,7 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
                 if ext == "":
                     ret[0] += "." + exts[0]  # Default extension
         else:
-            ret = QFileDialog.getOpenFileName(
-                parent, msg, path, extString) or None
+            ret = QFileDialog.getOpenFileName(parent, msg, path, extString) or None
         f = ret
 
     if f is not None:
@@ -446,6 +443,7 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     global geotransform_affine
 
     Height = GetFrameCenter()[2]
+        
     gcp = gdal.GCP(cornerPointUL[1], cornerPointUL[0],
                    Height, 0, 0, "Corner Upper Left", "1")
     gcps.append(gcp)
@@ -550,6 +548,7 @@ def _spawn(cmds, t="ffmpeg"):
         cmds.insert(0, ffprobe_path)
 
     #qgsu.showUserAndLogMessage("", "commands:" + str(cmds), onlyLog=True)
+    
     return Popen(cmds, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE,
                  bufsize=0,
                  close_fds=(not windows))
@@ -669,9 +668,8 @@ def UpdateLayers(packet, parent=None, mosaic=False):
 
     UpdatePlatformData(packet)
     UpdateTrajectoryData(packet)
-
     UpdateFrameCenterData(packet)
-
+    
     OffsetLat1 = packet.GetOffsetCornerLatitudePoint1()
     LatitudePoint1Full = packet.GetCornerLatitudePoint1Full()
 
@@ -786,7 +784,7 @@ def CommonLayer(value):
 
 
 def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
-    ''' Update Beams Values '''
+    ''' Update Beams Values '''   
     lat = packet.GetSensorLatitude()
     lon = packet.GetSensorLongitude()
     alt = packet.GetSensorTrueAltitude()
@@ -891,7 +889,6 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
     footprintLyr = qgsu.selectLayerByName(Footprint_lyr)
 
     try:
-
         if all(v is not None for v in [footprintLyr, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]) and all(v >= 2 for v in [len(cornerPointUL), len(cornerPointUR), len(cornerPointLR), len(cornerPointLL)]):
             if(imgSS != crtSensorSrc):
                 SetDefaultFootprintStyle(footprintLyr, imgSS)
@@ -980,7 +977,6 @@ def UpdateTrajectoryData(packet):
     trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
 
     try:
-
         if all(v is not None for v in [trajectoryLyr, lat, lon, alt]):
             trajectoryLyr.startEditing()
             f = QgsFeature()
@@ -1009,6 +1005,47 @@ def UpdateTrajectoryData(packet):
             "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
     return
 
+def UpdateFrameCenterData(packet):
+    ''' Update FrameCenter Values '''
+    lat = packet.GetFrameCenterLatitude()
+    lon = packet.GetFrameCenterLongitude()
+    alt = packet.GetFrameCenterElevation()
+    PlatformHeading = packet.GetPlatformHeadingAngle()
+    frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr)
+
+    try:
+        if all(v is not None for v in [frameCenterLyr, lat, lon, alt, PlatformHeading]):
+            frameCenterLyr.startEditing()
+            frameCenterLyr.renderer().symbol().setAngle(float(PlatformHeading))
+
+            if frameCenterLyr.featureCount() == 0:
+                feature = QgsFeature()
+                feature.setAttributes([lon, lat, alt])
+                p = QgsPointXY()
+                p.set(lon, lat)
+                geom = QgsGeometry.fromPointXY(p)
+                feature.setGeometry(geom)
+                frameCenterLyr.addFeatures([feature])
+
+            else:
+                frameCenterLyr.beginEditCommand(
+                    "ChangeGeometry + ChangeAttribute")
+                fetId = 1
+                attrib = {0: lon, 1: lat, 2: alt}
+                frameCenterLyr.dataProvider().changeAttributeValues(
+                    {fetId: attrib})
+
+                frameCenterLyr.dataProvider().changeGeometryValues(
+                    {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
+                frameCenterLyr.endEditCommand()
+
+            CommonLayer(frameCenterLyr)
+
+    except Exception as e:
+        qgsu.showUserAndLogMessage(QCoreApplication.translate(
+            "QgsFmvUtils", "Failed Update Frame Center Layer! : "), str(e))
+
+    return
 
 def UpdateFrameCenterData(packet):
     ''' Update FrameCenter Values '''
@@ -1127,10 +1164,27 @@ def CornerEstimationWithOffsets(packet):
         cornerPointLL = (OffsetLat4 + frameCenterLat,
                          OffsetLon4 + frameCenterLon)
 
-        UpdateFootPrintData(packet,
+        if hasElevationModel():
+            pCornerPointUL = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointUL)
+            pCornerPointUR = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointUR)
+            pCornerPointLR = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointLR)
+            pCornerPointLL = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointLL)
+
+            UpdateFootPrintData(packet,
+                                pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL)
+
+            UpdateBeamsData(packet, pCornerPointUL, pCornerPointUR,
+                            pCornerPointLR, pCornerPointLL)
+        else:
+
+            UpdateFootPrintData(packet,
                             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
-        UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
+            UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
                         cornerPointLR, cornerPointLL)
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
@@ -1145,7 +1199,6 @@ def CornerEstimationWithOffsets(packet):
 def CornerEstimationWithoutOffsets(packet):
     ''' Corner estimation without Offsets '''
     global defaultTargetWidth
-
     try:
         sensorLatitude = packet.GetSensorLatitude()
         sensorLongitude = packet.GetSensorLongitude()

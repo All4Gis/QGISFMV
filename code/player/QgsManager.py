@@ -33,7 +33,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.iface = iface
         self._PlayerDlg = None
         self.isStreaming = False
-
         self.meta_reader = {}
         self.initialPt = {}
         self.pBars = {}
@@ -45,7 +44,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # 8 x 500 = 4000ms buffer time
         self.min_buffer_size = 8
 
-        self.actionOpen_Stream.setVisible(False)
+        #self.actionOpen_Stream.setVisible(False)
 
         self.VManager.viewport().installEventFilter(self)
 
@@ -102,8 +101,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         rowPosition = self.VManager.rowCount()
 
         self.VManager.insertRow(rowPosition)
-        self.VManager.setItem(
-            rowPosition, 0, QTableWidgetItem(str(rowPosition)))
+        self.VManager.setItem(rowPosition, 0, QTableWidgetItem(str(rowPosition)))
         self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
         self.VManager.setItem(rowPosition, 2, QTableWidgetItem("Loading"))
         self.VManager.setItem(rowPosition, 3, QTableWidgetItem(filename))
@@ -152,7 +150,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         else:
             self.meta_reader[str(rowPosition)] = None
             self.initialPt[str(rowPosition)] = None
-
+        
         # self.VManager.resizeColumnsToContents()
         pbar.setValue(100)
         self.ToggleActiveRow(rowPosition, value="Ready")
@@ -164,12 +162,13 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         filename, _ = askForFiles(self, QCoreApplication.translate(
             "ManagerDock", "Open video"),
             exts=Exts)
+
         if filename:
             _, name = os.path.split(filename)
             self.AddFileRowToManager(name, filename)
 
         return
-
+    
     # mgr row double clicked
     def PlayVideoFromManager(self, model):
         ''' Play video from manager dock '''
@@ -186,7 +185,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             if path != self._PlayerDlg.fileName:
                 self.ToggleActiveFromTitle()
                 self._PlayerDlg.playFile(path)
-
                 return
 
     def CreatePlayer(self, path, row):
@@ -204,7 +202,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         for row in range(self.VManager.rowCount()):
             if self.VManager.item(row, column) is not None:
                 v = self.VManager.item(row, column).text()
-
                 if v == "Playing":
                     self.ToggleActiveRow(row, value="Ready")
                     return

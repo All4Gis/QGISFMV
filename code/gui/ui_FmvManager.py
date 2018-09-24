@@ -75,7 +75,7 @@ class Ui_ManagerWindow(object):
             QtWidgets.QAbstractItemView.SelectRows)
         self.VManager.setGridStyle(QtCore.Qt.SolidLine)
         self.VManager.setObjectName("VManager")
-        self.VManager.setColumnCount(6)
+        self.VManager.setColumnCount(7)
         self.VManager.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.VManager.setHorizontalHeaderItem(0, item)
@@ -89,6 +89,8 @@ class Ui_ManagerWindow(object):
         self.VManager.setHorizontalHeaderItem(4, item)
         item = QtWidgets.QTableWidgetItem()
         self.VManager.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.VManager.setHorizontalHeaderItem(6, item)
         self.VManager.horizontalHeader().setStretchLastSection(True)
         self.VManager.verticalHeader().setVisible(False)
         self.verticalLayout.addWidget(self.VManager)
@@ -135,10 +137,10 @@ class Ui_ManagerWindow(object):
         item.setText(_translate("ManagerWindow", "Start Location"))
         item = self.VManager.horizontalHeaderItem(5)
         item.setText(_translate("ManagerWindow", "Progress"))
-        self.actionOpen_Stream.setText(
-            _translate("ManagerWindow", "Open Stream"))
-        self.actionOpen_MPEG2_File.setText(
-            _translate("ManagerWindow", "Open Video File"))
+        item = self.VManager.horizontalHeaderItem(6)
+        item.setText(_translate("ManagerWindow", ""))
+        self.actionOpen_Stream.setText(_translate("ManagerWindow", "Open Stream"))
+        self.actionOpen_MPEG2_File.setText(_translate("ManagerWindow", "Open Video File"))
 
 
 from QGIS_FMV.gui import resources_rc
