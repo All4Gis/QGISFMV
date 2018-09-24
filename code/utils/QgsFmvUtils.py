@@ -460,6 +460,7 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     global geotransform_affine
 
     Height = GetFrameCenter()[2]
+        
     gcp = gdal.GCP(cornerPointUL[1], cornerPointUL[0],
                    Height, 0, 0, "Corner Upper Left", "1")
     gcps.append(gcp)
@@ -1180,10 +1181,27 @@ def CornerEstimationWithOffsets(packet):
         cornerPointLL = (OffsetLat4 + frameCenterLat,
                          OffsetLon4 + frameCenterLon)
 
-        UpdateFootPrintData(packet,
+        if hasElevationModel():
+            pCornerPointUL = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointUL)
+            pCornerPointUR = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointUR)
+            pCornerPointLR = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointLR)
+            pCornerPointLL = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointLL)
+
+            UpdateFootPrintData(packet,
+                                pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL)
+
+            UpdateBeamsData(packet, pCornerPointUL, pCornerPointUR,
+                            pCornerPointLR, pCornerPointLL)
+        else:
+
+            UpdateFootPrintData(packet,
                             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
-        UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
+            UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
                         cornerPointLR, cornerPointLL)
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
@@ -1198,7 +1216,6 @@ def CornerEstimationWithOffsets(packet):
 def CornerEstimationWithoutOffsets(packet):
     ''' Corner estimation without Offsets '''
     global defaultTargetWidth
-
     try:
         sensorLatitude = packet.GetSensorLatitude()
         sensorLongitude = packet.GetSensorLongitude()

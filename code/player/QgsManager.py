@@ -44,7 +44,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # 8 x 500 = 4000ms buffer time
         self.min_buffer_size = 8
 
-        self.actionOpen_Stream.setVisible(False)
+        #self.actionOpen_Stream.setVisible(False)
 
         self.VManager.viewport().installEventFilter(self)
 
