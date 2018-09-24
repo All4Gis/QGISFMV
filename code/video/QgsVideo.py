@@ -256,6 +256,9 @@ class VideoWidget(QVideoWidget):
         self.tapTimer = QBasicTimer()
         self.zoomPixmap, self.maskPixmap = QPixmap(), QPixmap()
 
+    def ResetDrawRuler(self):
+        self.drawRuler = []
+
     def currentMouseMoveEvent(self, event):
         self.var_currentMouseMoveEvent = event
 
@@ -527,6 +530,7 @@ class VideoWidget(QVideoWidget):
                 self.drawPolygonOnVideo(self.drawPolygon, self.painter)
 
         # Draw Ruler on video
+        # the measures do not persist in the video
         if len(self.drawRuler) > 1:
             for idx, pt in enumerate(self.drawRuler):
                 if pt[0] is None:
@@ -819,11 +823,6 @@ class VideoWidget(QVideoWidget):
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
                                                 "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" +
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>")
-# 
-#         # Draw Ruler on video
-#         if len(self.drawRuler) >= 1:
-#             self.currentMouseMoveEvent(event)
-#             self.UpdateSurface()
 
         if not event.buttons():
             return

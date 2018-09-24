@@ -521,6 +521,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Video Ruler '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetRuler(value)
+        if value:
+            self.player.pause()
+            self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
+        else:
+            self.videoWidget.ResetDrawRuler()
+            self.player.play()
+            self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
+
         self.videoWidget.UpdateSurface()
 
     def UncheckUtils(self, sender, value):
@@ -880,6 +888,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if self.playerState in (QMediaPlayer.StoppedState,
                                 QMediaPlayer.PausedState):
             self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
+            # Uncheck Ruler
+            # TODO : Inspect
+            self.videoWidget.ResetDrawRuler()
+            self.actionRuler.setChecked(False)
+            self.videoWidget.SetRuler(False)
+            # Play Video
             self.player.play()
         elif self.playerState == QMediaPlayer.PlayingState:
             self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))

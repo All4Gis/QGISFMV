@@ -1573,7 +1573,7 @@ QProgressBar::chunk
   </connection>
   <connection>
    <sender>actionRuler</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered(bool)</signal>
    <receiver>PlayerWindow</receiver>
    <slot>VideoRuler(bool)</slot>
    <hints>

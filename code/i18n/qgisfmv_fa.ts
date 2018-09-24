@@ -115,19 +115,24 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="54"/>
+        <location filename="../player/QgsManager.py" line="53"/>
         <source>Remove the current selection&apos;s video</source>
         <translation>حذف ویدئوی انتخاب شده</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="163"/>
+        <location filename="../player/QgsManager.py" line="162"/>
         <source>Open video</source>
         <translation>بازنمودن ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="54"/>
+        <location filename="../player/QgsManager.py" line="53"/>
         <source>Remove</source>
         <translation>حذف</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsManager.py" line="136"/>
+        <source>This video don&apos;t have Metadata ! </source>
+        <translation type="unfinished">این ویدئو بدون متادیتا می باشد ! :</translation>
     </message>
 </context>
 <context>
@@ -529,32 +534,32 @@
         <translation>نمایش متادیتا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="811"/>
+        <location filename="../player/QgsFmvPlayer.py" line="820"/>
         <source>Open Video File : </source>
         <translation>بازنمودن بایگانی ویدئوها :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="848"/>
+        <location filename="../player/QgsFmvPlayer.py" line="857"/>
         <source>Save file succesfully!</source>
         <translation>ذخیره فایل با موفقیت انجام شد!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1317"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1330"/>
         <source>HEY...Active background process!</source>
         <translation>توجه...در پس زمینه پردازشی در حال انجام است!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1317"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1330"/>
         <source>Do you really want close?</source>
         <translation>آیا واقعا قصد خروج دارید؟</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="786"/>
+        <location filename="../player/QgsFmvPlayer.py" line="795"/>
         <source>Playing : </source>
         <translation>در حال پخش :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1339"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1352"/>
         <source>Video Information : </source>
         <translation>اطلاعات ویدئو :</translation>
     </message>
@@ -583,17 +588,17 @@
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1167"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1180"/>
         <source>Save Current Frame</source>
         <translation>ذخیره لحظه حاضر</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1177"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1190"/>
         <source>Succesfully frame saved!</source>
         <translation>این لحظه با موفقیت ذخیره شد!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1180"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1193"/>
         <source>Failed saving frame!</source>
         <translation>ذخیره این لحظه با شکست مواجه شد!</translation>
     </message>
@@ -603,27 +608,27 @@
         <translation>ذخیره Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="832"/>
+        <location filename="../player/QgsFmvPlayer.py" line="841"/>
         <source>Save video record</source>
         <translation>ذخیره رکورد ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="899"/>
+        <location filename="../player/QgsFmvPlayer.py" line="912"/>
         <source>Save Video as...</source>
         <translation>ذخیره ویدئو به عنوان ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1140"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1153"/>
         <source>Save all Frames</source>
         <translation>ذخیره همه لحظه ها</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1100"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1113"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>ذخیره جزئیات صدا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1116"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1129"/>
         <source>Save Video Bitrate Plot</source>
         <translation>ذخیره جزئیات ویدئو</translation>
     </message>
