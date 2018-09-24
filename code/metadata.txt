@@ -23,6 +23,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.4:
+    	-Ruler on video
     	-Video manager shows now a progress bar while meta buffer loading
 		-Video manager has "Start Location" row that show the city where video is filmed 
 		 (reverse geocoding nominatim, config key: Reverse_geocoding_url)
