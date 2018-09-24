@@ -58,9 +58,8 @@ class Ui_FmvOpenStream(object):
         self.cmb_protocol.setItemText(0, _translate("FmvOpenStream", "RTP"))
         self.cmb_protocol.setItemText(1, _translate("FmvOpenStream", "UDP"))
         self.cmb_protocol.setItemText(2, _translate("FmvOpenStream", "TCP"))
-        self.ln_host.setText(_translate("FmvOpenStream", "@127.0.0.1"))
-        self.ln_host.setPlaceholderText(
-            _translate("FmvOpenStream", "@127.0.0.1"))
+        self.ln_host.setText(_translate("FmvOpenStream", "127.0.0.1"))
+        self.ln_host.setPlaceholderText(_translate("FmvOpenStream", "127.0.0.1"))
         self.ln_port.setText(_translate("FmvOpenStream", "5005"))
         self.ln_port.setPlaceholderText(_translate("FmvOpenStream", "5005"))
         self.btn_Open.setText(_translate("FmvOpenStream", "Ok"))

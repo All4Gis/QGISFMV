@@ -444,8 +444,8 @@ class VideoWidget(QVideoWidget):
         transf = self.GetTransf(event)
         targetAlt = GetFrameCenter()[2]
 
-        Longitude = float(round(transf[1], 4))
-        Latitude = float(round(transf[0], 4))
+        Longitude = float(round(transf[1], 5))
+        Latitude = float(round(transf[0], 5))
         Altitude = float(round(targetAlt, 0))
 
         if hasElevationModel():
@@ -453,8 +453,8 @@ class VideoWidget(QVideoWidget):
             target = [transf[0], transf[1], targetAlt]
             projPt = GetLine3DIntersectionWithDEM(sensor, target)
             if projPt:
-                Longitude = float(round(projPt[1], 4))
-                Latitude = float(round(projPt[0], 4))
+                Longitude = float(round(projPt[1], 5))
+                Latitude = float(round(projPt[0], 5))
                 Altitude = float(round(projPt[2], 0))
         return Longitude, Latitude, Altitude
 
@@ -665,17 +665,11 @@ class VideoWidget(QVideoWidget):
         scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
 
         # don't draw something outside the screen.
-        if scr_x < self.GetXBlackZone():
-            scr_x = self.GetXBlackZone()
+        if scr_x < self.GetXBlackZone() or scr_y < self.GetYBlackZone():
+            return
 
-        if scr_y < self.GetYBlackZone():
-            scr_y = self.GetYBlackZone()
-
-        if scr_x > (self.GetXBlackZone() + self.GetNormalizedWidth()) * 0.9:
-            src_x = (self.GetXBlackZone() + self.GetNormalizedWidth()) * 0.9
-
-        if scr_y > (self.GetYBlackZone() + self.GetNormalizedHeight()) * 0.9:
-            src_y = (self.GetYBlackZone() + self.GetNormalizedHeight()) * 0.9
+        if scr_x > self.GetXBlackZone() + self.GetNormalizedWidth() or scr_y > self.GetYBlackZone() + self.GetNormalizedHeight():
+            return
 
         radius = 10
         center = QPoint(scr_x, scr_y)
@@ -853,6 +847,7 @@ class VideoWidget(QVideoWidget):
             if self.gt is not None and pointDrawer:
                 Longitude, Latitude, Altitude = self.GetPointCommonCoords(
                     event)
+                                
                 # add pin point on the map
                 pointLyr = qgsu.selectLayerByName(Point_lyr)
                 pointLyr.startEditing()
