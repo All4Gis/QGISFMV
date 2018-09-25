@@ -290,6 +290,10 @@ class VideoWidget(QVideoWidget):
             self.drawLines.append([None, None, None])
             self.UpdateSurface()
             return
+        if self.gt is not None and ruler:
+            self.drawRuler.append([None, None, None])
+            self.UpdateSurface()
+            return
         if self.gt is not None and polygonDrawer:
             self.drawPolygon.append([None, None, None])
             # Add Polygon
@@ -537,6 +541,7 @@ class VideoWidget(QVideoWidget):
             RulerTotalMeasure = 0.0
             for idx, pt in enumerate(self.drawRuler):
                 if pt[0] is None:
+                    RulerTotalMeasure = 0.0
                     continue
                 else:
                     self.drawRulerOnVideo(pt, idx, self.painter)
@@ -658,6 +663,7 @@ class VideoWidget(QVideoWidget):
                 painter.setPen(pen)
 
                 end_pt = self.drawRuler[idx + 1]
+
                 if hasElevationModel():
                     end_pt = GetLine3DIntersectionWithPlane(
                         GetSensor(), end_pt, GetFrameCenter()[2])
