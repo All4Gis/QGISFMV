@@ -62,6 +62,7 @@ magnifier = False
 pointDrawer = False
 lineDrawer = False
 polygonDrawer = False
+RulerTotalMeasure = 0.0
 
 HOLD_TIME = 100
 MAX_MAGNIFIER = 229
@@ -532,6 +533,8 @@ class VideoWidget(QVideoWidget):
         # Draw Ruler on video
         # the measures do not persist in the video
         if len(self.drawRuler) > 1:
+            global RulerTotalMeasure
+            RulerTotalMeasure = 0.0
             for idx, pt in enumerate(self.drawRuler):
                 if pt[0] is None:
                     continue
@@ -668,12 +671,8 @@ class VideoWidget(QVideoWidget):
                 distance = round(sphere.distance((center_pt[0], center_pt[1]), (end_pt[0], end_pt[1])), 2)
 
                 text = str(distance) + " m"
-
-#                 #Halo draft
-#                 font14 = QFont("Arial", 13, weight=QFont.Bold)
-#                 textPath = QPainterPath()
-#                 textPath.addText(QPointF(end + QPoint(5, -5)), font14, text)
-#                 painter.strokePath(textPath, QColor(255, 255, 255))
+                global RulerTotalMeasure
+                RulerTotalMeasure += distance
 
                 #Draw Start/End Points
                 pen = QPen(Qt.white)
@@ -685,6 +684,10 @@ class VideoWidget(QVideoWidget):
                 painter.drawPoint(end)
 
                 painter.drawText(end + QPoint(5, -5), text)
+
+                pen = QPen(QColor(255, 51, 153))
+                painter.setPen(pen)
+                painter.drawText(end + QPoint(5, 10), str(round(RulerTotalMeasure,2)) + " m")
 
             except Exception:
                 None
@@ -708,15 +711,6 @@ class VideoWidget(QVideoWidget):
         radius = 10
         center = QPoint(scr_x, scr_y)
 
-#         # TODO: Find methos for make text halo
-#         # Text Halo
-#         font14 = QFont("Arial", 14, weight=QFont.Bold)
-#         pen = QPen(Qt.white)
-#         painter.setPen(pen)
-#         painter.setFont(font14)
-#         painter.drawText(center + QPoint(3, -4), str(number))
-#         # End Halo
-
         pen = QPen(Qt.red)
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
@@ -724,10 +718,6 @@ class VideoWidget(QVideoWidget):
         painter.drawPoint(center)
         font12 = QFont("Arial", 12, weight=QFont.Bold)
         painter.setFont(font12)
-#         # Text Halo
-#         textPath = QPainterPath()
-#         textPath.addText(QPointF(center + QPoint(5, -5)), font14, str(number))
-#         painter.strokePath(textPath, QColor(255, 255, 255))
         painter.drawText(center + QPoint(5, -5), str(number))
 
         return
@@ -883,7 +873,7 @@ class VideoWidget(QVideoWidget):
             if self.gt is not None and pointDrawer:
                 Longitude, Latitude, Altitude = self.GetPointCommonCoords(
                     event)
-                                
+
                 # add pin point on the map
                 pointLyr = qgsu.selectLayerByName(Point_lyr)
                 if pointLyr is None:
