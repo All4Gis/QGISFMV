@@ -234,13 +234,16 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
     layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
     return
 
+
 def SetDefaultFrameCenterStyle(layer):
     ''' Point Symbol '''
     style = S.getFrameCenterPoint()
-    symbol = QgsMarkerSymbol.createSimple({'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size':style["SIZE"]})
+    symbol = QgsMarkerSymbol.createSimple(
+        {'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size': style["SIZE"]})
     renderer = QgsSingleSymbolRenderer(symbol)
-    layer.setRenderer(renderer)  
+    layer.setRenderer(renderer)
     return
+
 
 def SetDefaultFrameCenterStyle(layer):
     ''' Point Symbol '''

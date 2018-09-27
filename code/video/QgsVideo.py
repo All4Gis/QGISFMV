@@ -11,7 +11,8 @@ from PyQt5.QtGui import (QImage,
                          QFont,
                          QPen,
                          QBrush,
-                         QPolygonF)
+                         QPolygonF,
+                         QCursor)
 
 from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QVideoFrame,
@@ -19,7 +20,7 @@ from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QVideoSurfaceFormat)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from QGIS_FMV.geo import sphere as sphere
-from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
+from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand, QApplication
 
 from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         GetSensor,
@@ -35,6 +36,8 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
+from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
+from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.fmvConfig import Point_lyr, Line_lyr, Polygon_lyr
 from qgis.gui import QgsRubberBand
 from qgis.utils import iface
@@ -195,8 +198,8 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             ok, bbox = self.widget.tracker.update(frame)
             # Draw bounding box
             if ok:
-                qgsu.showUserAndLogMessage(
-                    "bbox : ", str(bbox), level=QGis.Warning)
+                #                 qgsu.showUserAndLogMessage(
+                #                     "bbox : ", str(bbox), level=QGis.Warning)
                 painter.setPen(Qt.blue)
                 painter.drawRect(QRect(int(bbox[0]), int(
                     bbox[1]), int(bbox[2]), int(bbox[3])))
@@ -219,7 +222,7 @@ class VideoWidget(QVideoWidget):
         pal = QPalette()
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
         self.Tracking_RubberBand.setPalette(pal)
-        self.var_currentMouseMoveEvent=None
+        self.var_currentMouseMoveEvent = None
 
         self.setUpdatesEnabled(True)
         self.snapped = False
@@ -406,52 +409,20 @@ class VideoWidget(QVideoWidget):
         global invertColorFilter, grayColorFilter, edgeDetectionFilter, monoFilter, contrastFilter, MirroredHFilter
         invertColorFilter = grayColorFilter = edgeDetectionFilter = monoFilter = contrastFilter = MirroredHFilter = False
 
-    def GetXBlackZone(self):
-        ''' Return is X in black screen on video '''
-        x = 0.0
-        if (self.surface.widget.width() / self.surface.widget.height()) > (GetImageWidth() / GetImageHeight()):
-            x = (self.surface.widget.width() -
-                 (self.GetNormalizedWidth())) / 2.0
-        return x
-
-    def GetNormalizedHeight(self):
-        return self.surface.widget.width(
-        ) / (GetImageWidth() / GetImageHeight())
-
-    def GetNormalizedWidth(self):
-        return self.surface.widget.height(
-        ) * (GetImageWidth() / GetImageHeight())
-
-    def GetYBlackZone(self):
-        ''' Return is Y in black screen on video '''
-        y = 0.0
-        if (self.surface.widget.width() / self.surface.widget.height()) < (GetImageWidth() / GetImageHeight()):
-            y = (self.surface.widget.height() -
-                 (self.GetNormalizedHeight())) / 2.0
-        return y
-
     def IsPointOnScreen(self, x, y):
         ''' determines if a clicked point lands on the image (False if lands on the
             black borders or outside)
          '''
         res = True
-        if x > (self.GetNormalizedWidth() + self.GetXBlackZone()) or x < self.GetXBlackZone():
+        if x > (vut.GetNormalizedWidth(self.surface) + vut.GetXBlackZone(self.surface)) or x < vut.GetXBlackZone(self.surface):
             res = False
-        if y > (self.GetNormalizedHeight() + self.GetYBlackZone()) or y < self.GetYBlackZone():
+        if y > (vut.GetNormalizedHeight(self.surface) + vut.GetYBlackZone(self.surface)) or y < vut.GetYBlackZone(self.surface):
             res = False
         return res
 
-    def GetXRatio(self):
-        ''' ratio between event.x() and real image width on screen. '''
-        return GetImageWidth() / (self.surface.widget.width() - (2 * self.GetXBlackZone()))
-
-    def GetYRatio(self):
-        ''' ratio between event.y() and real image height on screen. '''
-        return GetImageHeight() / (self.surface.widget.height() - (2 * self.GetYBlackZone()))
-
     def GetTransf(self, event):
         ''' Return video coordinates to map coordinates '''
-        return self.gt([(event.x() - self.GetXBlackZone()) * self.GetXRatio(), (event.y() - self.GetYBlackZone()) * self.GetYRatio()])
+        return self.gt([(event.x() - vut.GetXBlackZone(self.surface)) * vut.GetXRatio(self.surface), (event.y() - vut.GetYBlackZone(self.surface)) * vut.GetYRatio(self.surface)])
 
     def GetPointCommonCoords(self, event):
         ''' Common functon for get coordinates on mousepressed '''
@@ -603,20 +574,14 @@ class VideoWidget(QVideoWidget):
         self.painter.end()
         return
 
-    def GetInverseMatrix(self, x, y):
-        ''' inverse matrix transformation (lon-lat to video units x,y) '''
-        transf = (~self.gt)([x, y])
-        scr_x = (transf[0] / self.GetXRatio()) + self.GetXBlackZone()
-        scr_y = (transf[1] / self.GetYRatio()) + self.GetYBlackZone()
-        return scr_x, scr_y
-
     def drawLinesOnVideo(self, pt, idx, painter):
         ''' Draw Lines on Video '''
         if hasElevationModel():
             pt = GetLine3DIntersectionWithPlane(
                 GetSensor(), pt, GetFrameCenter()[2])
 
-        scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+        scr_x, scr_y = vut.GetInverseMatrix(
+            pt[1], pt[0], self.gt, self.surface)
 
         radius = 3
         center = QPoint(scr_x, scr_y)
@@ -636,7 +601,8 @@ class VideoWidget(QVideoWidget):
                 if hasElevationModel():
                     pt = GetLine3DIntersectionWithPlane(
                         GetSensor(), pt, GetFrameCenter()[2])
-                scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+                scr_x, scr_y = vut.GetInverseMatrix(
+                    pt[1], pt[0], self.gt, self.surface)
                 end = QPoint(scr_x, scr_y)
                 painter.drawLine(center, end)
             except Exception:
@@ -649,7 +615,8 @@ class VideoWidget(QVideoWidget):
             pt = GetLine3DIntersectionWithPlane(
                 GetSensor(), pt, GetFrameCenter()[2])
 
-        scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+        scr_x, scr_y = vut.GetInverseMatrix(
+            pt[1], pt[0], self.gt, self.surface)
 
         center_pt = pt
 
@@ -667,20 +634,22 @@ class VideoWidget(QVideoWidget):
                 if hasElevationModel():
                     end_pt = GetLine3DIntersectionWithPlane(
                         GetSensor(), end_pt, GetFrameCenter()[2])
-                scr_x, scr_y = self.GetInverseMatrix(end_pt[1], end_pt[0])
+                scr_x, scr_y = vut.GetInverseMatrix(
+                    end_pt[1], end_pt[0], self.gt, self.surface)
                 end = QPoint(scr_x, scr_y)
                 painter.drawLine(center, end)
 
                 font12 = QFont("Arial", 12, weight=QFont.Bold)
                 painter.setFont(font12)
 
-                distance = round(sphere.distance((center_pt[0], center_pt[1]), (end_pt[0], end_pt[1])), 2)
+                distance = round(sphere.distance(
+                    (center_pt[0], center_pt[1]), (end_pt[0], end_pt[1])), 2)
 
                 text = str(distance) + " m"
                 global RulerTotalMeasure
                 RulerTotalMeasure += distance
 
-                #Draw Start/End Points
+                # Draw Start/End Points
                 pen = QPen(Qt.white)
                 pen.setWidth(radius_pt)
                 pen.setCapStyle(Qt.RoundCap)
@@ -693,7 +662,8 @@ class VideoWidget(QVideoWidget):
 
                 pen = QPen(QColor(255, 51, 153))
                 painter.setPen(pen)
-                painter.drawText(end + QPoint(5, 10), str(round(RulerTotalMeasure,2)) + " m")
+                painter.drawText(end + QPoint(5, 10),
+                                 str(round(RulerTotalMeasure, 2)) + " m")
 
             except Exception:
                 None
@@ -705,13 +675,14 @@ class VideoWidget(QVideoWidget):
             pt = GetLine3DIntersectionWithPlane(
                 GetSensor(), pt, GetFrameCenter()[2])
 
-        scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+        scr_x, scr_y = vut.GetInverseMatrix(
+            pt[1], pt[0], self.gt, self.surface)
 
         # don't draw something outside the screen.
-        if scr_x < self.GetXBlackZone() or scr_y < self.GetYBlackZone():
+        if scr_x < vut.GetXBlackZone(self.surface) or scr_y < vut.GetYBlackZone(self.surface):
             return
 
-        if scr_x > self.GetXBlackZone() + self.GetNormalizedWidth() or scr_y > self.GetYBlackZone() + self.GetNormalizedHeight():
+        if scr_x > vut.GetXBlackZone(self.surface) + vut.GetNormalizedWidth(self.surface) or scr_y > vut.GetYBlackZone(self.surface) + vut.GetNormalizedHeight(self.surface):
             return
 
         radius = 10
@@ -735,7 +706,8 @@ class VideoWidget(QVideoWidget):
             if hasElevationModel():
                 pt = GetLine3DIntersectionWithPlane(
                     GetSensor(), pt, GetFrameCenter()[2])
-            scr_x, scr_y = self.GetInverseMatrix(pt[1], pt[0])
+            scr_x, scr_y = vut.GetInverseMatrix(
+                pt[1], pt[0], self.gt, self.surface)
             center = QPoint(scr_x, scr_y)
             poly.append(center)
 
@@ -778,17 +750,15 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
-#         try:
-#             self.currentMouseMoveEvent(None)
-#         except Exception:
-#             None
-
         if GetImageHeight() == 0:
             return
 
         # check if the point  is on picture (not in black borders)
         if(not self.IsPointOnScreen(event.x(), event.y())):
             return
+
+        if pointDrawer or polygonDrawer or lineDrawer or ruler:
+            self.setCursor(QCursor(Qt.CrossCursor))
 
         # Cursor Coordinates
         if self.gt is not None:
@@ -1003,3 +973,4 @@ class VideoWidget(QVideoWidget):
 
     def leaveEvent(self, _):
         self.parent.lb_cursor_coord.setText("")
+        self.setCursor(QCursor(Qt.ArrowCursor))

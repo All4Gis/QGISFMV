@@ -101,7 +101,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         rowPosition = self.VManager.rowCount()
 
         self.VManager.insertRow(rowPosition)
-        self.VManager.setItem(rowPosition, 0, QTableWidgetItem(str(rowPosition)))
+        self.VManager.setItem(
+            rowPosition, 0, QTableWidgetItem(str(rowPosition)))
         self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
         self.VManager.setItem(rowPosition, 2, QTableWidgetItem("Loading"))
         self.VManager.setItem(rowPosition, 3, QTableWidgetItem(filename))
@@ -128,7 +129,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
             try:
                 # init point we can center the video on
-                self.initialPt[str(rowPosition)] = getVideoLocationInfo(filename)
+                self.initialPt[str(rowPosition)
+                               ] = getVideoLocationInfo(filename)
                 self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                     self.initialPt[str(rowPosition)][2]))
                 # self.VManager.resizeColumnsToContents()
@@ -150,7 +152,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         else:
             self.meta_reader[str(rowPosition)] = None
             self.initialPt[str(rowPosition)] = None
-        
+
         # self.VManager.resizeColumnsToContents()
         pbar.setValue(100)
         self.ToggleActiveRow(rowPosition, value="Ready")
@@ -168,7 +170,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self.AddFileRowToManager(name, filename)
 
         return
-    
+
     # mgr row double clicked
     def PlayVideoFromManager(self, model):
         ''' Play video from manager dock '''

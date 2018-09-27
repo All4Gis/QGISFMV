@@ -9,7 +9,7 @@ from datetime import datetime
 from subprocess import Popen, PIPE, check_output
 import threading
 
-from PyQt5.QtCore import QCoreApplication,QUrl,QEventLoop
+from PyQt5.QtCore import QCoreApplication, QUrl, QEventLoop
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QFileDialog
 from QGIS_FMV.klvdata.streamparser import StreamParser
@@ -285,13 +285,13 @@ def getVideoLocationInfo(videoPath):
 
             qgsu.showUserAndLogMessage("", "Got Location: lon: " + str(frameCenterLon) +
                                        " lat: " + str(frameCenterLat) + " location: " + str(loc), onlyLog=True)
-            
+
             break
         else:
 
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvUtils", "This video doesn't have Metadata ! : "), level=QGis.Info)
-            
+
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Video info callback failed! : "), str(e), level=QGis.Info)
@@ -377,7 +377,8 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
                 if ext == "":
                     ret[0] += "." + exts[0]  # Default extension
         else:
-            ret = QFileDialog.getOpenFileName(parent, msg, path, extString) or None
+            ret = QFileDialog.getOpenFileName(
+                parent, msg, path, extString) or None
         f = ret
 
     if f is not None:
@@ -443,7 +444,7 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     global geotransform_affine
 
     Height = GetFrameCenter()[2]
-        
+
     gcp = gdal.GCP(cornerPointUL[1], cornerPointUL[0],
                    Height, 0, 0, "Corner Upper Left", "1")
     gcps.append(gcp)
@@ -548,7 +549,7 @@ def _spawn(cmds, t="ffmpeg"):
         cmds.insert(0, ffprobe_path)
 
     #qgsu.showUserAndLogMessage("", "commands:" + str(cmds), onlyLog=True)
-    
+
     return Popen(cmds, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE,
                  bufsize=0,
                  close_fds=(not windows))
@@ -669,7 +670,7 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     UpdatePlatformData(packet)
     UpdateTrajectoryData(packet)
     UpdateFrameCenterData(packet)
-    
+
     OffsetLat1 = packet.GetOffsetCornerLatitudePoint1()
     LatitudePoint1Full = packet.GetCornerLatitudePoint1Full()
 
@@ -784,7 +785,7 @@ def CommonLayer(value):
 
 
 def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
-    ''' Update Beams Values '''   
+    ''' Update Beams Values '''
     lat = packet.GetSensorLatitude()
     lon = packet.GetSensorLongitude()
     alt = packet.GetSensorTrueAltitude()
@@ -1005,6 +1006,7 @@ def UpdateTrajectoryData(packet):
             "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
     return
 
+
 def UpdateFrameCenterData(packet):
     ''' Update FrameCenter Values '''
     lat = packet.GetFrameCenterLatitude()
@@ -1046,6 +1048,7 @@ def UpdateFrameCenterData(packet):
             "QgsFmvUtils", "Failed Update Frame Center Layer! : "), str(e))
 
     return
+
 
 def UpdateFrameCenterData(packet):
     ''' Update FrameCenter Values '''
@@ -1182,10 +1185,10 @@ def CornerEstimationWithOffsets(packet):
         else:
 
             UpdateFootPrintData(packet,
-                            cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
+                                cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
             UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
-                        cornerPointLR, cornerPointLL)
+                            cornerPointLR, cornerPointLL)
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
