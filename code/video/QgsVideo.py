@@ -30,7 +30,6 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         GetFrameCenter,
                                         GetGCPGeoTransform,
                                         hasElevationModel,
-                                        GetImageWidth,
                                         GetImageHeight)
 
 from QGIS_FMV.utils.QgsFmvLayers import CommonLayer
@@ -42,7 +41,13 @@ from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.fmvConfig import Point_lyr, Line_lyr, Polygon_lyr
 from qgis.gui import QgsRubberBand
 from qgis.utils import iface
-from qgis.core import Qgis as QGis, QgsDistanceArea, QgsCoordinateReferenceSystem, QgsProject, QgsFeature, QgsGeometry, QgsPointXY
+from qgis.core import Qgis as QGis
+from qgis.core import (QgsDistanceArea,
+                       QgsCoordinateReferenceSystem,
+                       QgsProject,
+                       QgsFeature,
+                       QgsGeometry,
+                       QgsPointXY)
 
 try:
     from pydevd import *

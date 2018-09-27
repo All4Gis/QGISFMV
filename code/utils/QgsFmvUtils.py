@@ -13,11 +13,7 @@ from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QFileDialog
 from QGIS_FMV.klvdata.streamparser import StreamParser
-from QGIS_FMV.fmvConfig import (Platform_lyr,
-                                Beams_lyr,
-                                FrameCenter_lyr,
-                                Trajectory_lyr,
-                                frames_g,
+from QGIS_FMV.fmvConfig import (frames_g,
                                 DTM_buffer_size as dtm_buffer)
 from QGIS_FMV.fmvConfig import ffmpeg as ffmpeg_path
 from QGIS_FMV.fmvConfig import ffprobe as ffprobe_path
@@ -25,8 +21,6 @@ from QGIS_FMV.fmvConfig import Reverse_geocoding_url
 from QGIS_FMV.geo import sphere as sphere
 from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          ExpandLayer,
-                                         SetDefaultFootprintStyle,
-                                         SetDefaultPlatformStyle,
                                          UpdateFootPrintData,
                                          UpdateTrajectoryData,
                                          UpdateBeamsData,
@@ -39,9 +33,6 @@ from qgis.PyQt.QtCore import (QSettings,
                               QEventLoop)
 from qgis.core import (QgsApplication,
                        QgsNetworkAccessManager,
-                       QgsFeature,
-                       QgsGeometry,
-                       QgsPointXY,
                        QgsTask,
                        QgsRasterLayer,
                        Qgis as QGis)
@@ -51,8 +42,6 @@ try:
     from homography import from_points
 except ImportError:
     None
-from qgis.utils import iface
-
 
 settings = QSettings()
 tm = QgsApplication.taskManager()
