@@ -9,13 +9,12 @@ from datetime import datetime
 from subprocess import Popen, PIPE, check_output
 import threading
 
-from PyQt5.QtCore import QCoreApplication, QUrl, QEventLoop
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QFileDialog
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
-                                Footprint_lyr,
                                 FrameCenter_lyr,
                                 Trajectory_lyr,
                                 frames_g,
@@ -27,10 +26,14 @@ from QGIS_FMV.geo import sphere as sphere
 from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          ExpandLayer,
                                          SetDefaultFootprintStyle,
-                                         SetDefaultPlatformStyle)
+                                         SetDefaultPlatformStyle,
+                                         UpdateFootPrintData,
+                                         UpdateTrajectoryData,
+                                         UpdateBeamsData,
+                                         UpdatePlatformData,
+                                         UpdateFrameCenterData)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from qgis.PyQt.QtNetwork import (QNetworkRequest,
-                                 QNetworkReply)
+from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.PyQt.QtCore import (QSettings,
                               QUrl,
                               QEventLoop)
@@ -91,8 +94,8 @@ sensorLatitude = None
 sensorLongitude = None
 sensorTrueAltitude = None
 
-crtSensorSrc = 'DEFAULT'
-crtPltTailNum = 'DEFAULT'
+# crtSensorSrc = 'DEFAULT'
+# crtPltTailNum = 'DEFAULT'
 
 dtm_data = []
 dtm_transform = None
@@ -605,14 +608,14 @@ def deg2rad(degrees):
 
 def ResetData():
     global dtm_data
-    global crtSensorSrc
-    global crtPltTailNum
+#     global crtSensorSrc
+#     global crtPltTailNum
     global tLastLon
     global tLastLat
 
     dtm_data = []
-    crtSensorSrc = 'DEFAULT'
-    crtPltTailNum = 'DEFAULT'
+#     crtSensorSrc = 'DEFAULT'
+#     crtPltTailNum = 'DEFAULT'
     tLastLon = 0.0
     tLastLat = 0.0
 
@@ -774,371 +777,6 @@ def GeoreferenceFrame(task, image, output, p):
     layer = QgsRasterLayer(dst_filename, name)
     addLayerNoCrsDialog(layer, False, frames_g)
     ExpandLayer(layer, False)
-    return
-
-
-def CommonLayer(value):
-    ''' Common commands Layers '''
-    value.commitChanges()
-    value.updateExtents()
-    value.triggerRepaint()
-
-
-def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
-    ''' Update Beams Values '''
-    lat = packet.GetSensorLatitude()
-    lon = packet.GetSensorLongitude()
-    alt = packet.GetSensorTrueAltitude()
-
-    beamsLyr = qgsu.selectLayerByName(Beams_lyr)
-
-    try:
-        if all(v is not None for v in [beamsLyr, lat, lon, alt, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]) and all(v >= 2 for v in [len(cornerPointUL), len(cornerPointUR), len(cornerPointLR), len(cornerPointLL)]):
-            beamsLyr.startEditing()
-            if beamsLyr.featureCount() == 0:
-
-                # UL
-                featureUL = QgsFeature()
-                featureUL.setAttributes(
-                    [lon, lat, alt, cornerPointUL[1], cornerPointUL[0]])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(cornerPointUL[1], cornerPointUL[0])])
-                featureUL.setGeometry(surface)
-                beamsLyr.addFeatures([featureUL])
-                # UR
-                featureUR = QgsFeature()
-                featureUR.setAttributes(
-                    [lon, lat, alt, cornerPointUR[1], cornerPointUR[0]])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(cornerPointUR[1], cornerPointUR[0])])
-                featureUR.setGeometry(surface)
-                beamsLyr.addFeatures([featureUR])
-                # LR
-                featureLR = QgsFeature()
-                featureLR.setAttributes(
-                    [lon, lat, alt, cornerPointLR[1], cornerPointLR[0]])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(cornerPointLR[1], cornerPointLR[0])])
-                featureLR.setGeometry(surface)
-                beamsLyr.addFeatures([featureLR])
-                # LL
-                featureLL = QgsFeature()
-                featureLL.setAttributes(
-                    [lon, lat, alt, cornerPointLL[1], cornerPointLL[0]])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(cornerPointLL[1], cornerPointLL[0])])
-                featureLL.setGeometry(surface)
-                beamsLyr.addFeatures([featureLL])
-
-            else:
-                beamsLyr.beginEditCommand(
-                    "ChangeGeometry + ChangeAttribute")
-                # UL
-                fetId = 1
-                attrib = {0: lon, 1: lat, 2: alt,
-                          3: cornerPointUL[1], 4: cornerPointUL[0]}
-                beamsLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
-                beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(cornerPointUL[1], cornerPointUL[0])])})
-                # UR
-                fetId = 2
-                attrib = {0: lon, 1: lat, 2: alt,
-                          3: cornerPointUR[1], 4: cornerPointUR[0]}
-                beamsLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
-                beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([
-                        QgsPointXY(lon, lat),
-                        QgsPointXY(cornerPointUR[1], cornerPointUR[0])])})
-                # LR
-                fetId = 3
-                attrib = {0: lon, 1: lat, 2: alt,
-                          3: cornerPointLR[1], 4: cornerPointLR[0]}
-                beamsLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
-                beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([
-                        QgsPointXY(lon, lat),
-                        QgsPointXY(cornerPointLR[1], cornerPointLR[0])])})
-                # LL
-                fetId = 4
-                attrib = {0: lon, 1: lat, 2: alt,
-                          3: cornerPointLL[1], 4: cornerPointLL[0]}
-                beamsLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
-                beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([
-                        QgsPointXY(lon, lat),
-                        QgsPointXY(cornerPointLL[1],
-                                   cornerPointLL[0])])})
-
-                beamsLyr.endEditCommand()
-
-            CommonLayer(beamsLyr)
-
-    except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Beams Layer! : "), str(e))
-    return
-
-
-def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
-    ''' Update Footprint Values '''
-    global crtSensorSrc
-    imgSS = packet.GetImageSourceSensor()
-    footprintLyr = qgsu.selectLayerByName(Footprint_lyr)
-
-    try:
-        if all(v is not None for v in [footprintLyr, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]) and all(v >= 2 for v in [len(cornerPointUL), len(cornerPointUR), len(cornerPointLR), len(cornerPointLL)]):
-            if(imgSS != crtSensorSrc):
-                SetDefaultFootprintStyle(footprintLyr, imgSS)
-                crtSensorSrc = imgSS
-
-            footprintLyr.startEditing()
-            if footprintLyr.featureCount() == 0:
-                feature = QgsFeature()
-                feature.setAttributes([cornerPointUL[1], cornerPointUL[0],
-                                       cornerPointUR[1], cornerPointUR[0],
-                                       cornerPointLR[1], cornerPointLR[0],
-                                       cornerPointLL[1], cornerPointLL[0]])
-                surface = QgsGeometry.fromPolygonXY([[
-                    QgsPointXY(cornerPointUL[1],
-                               cornerPointUL[0]),
-                    QgsPointXY(
-                        cornerPointUR[1], cornerPointUR[0]),
-                    QgsPointXY(
-                        cornerPointLR[1], cornerPointLR[0]),
-                    QgsPointXY(
-                        cornerPointLL[1], cornerPointLL[0]),
-                    QgsPointXY(cornerPointUL[1], cornerPointUL[0])]])
-                feature.setGeometry(surface)
-                footprintLyr.addFeatures([feature])
-            else:
-                footprintLyr.beginEditCommand(
-                    "ChangeGeometry + ChangeAttribute")
-                fetId = 1
-                attrib = {0: cornerPointUL[1],
-                          1: cornerPointUL[0],
-                          2: cornerPointUR[1],
-                          3: cornerPointUR[0],
-                          4: cornerPointLR[1],
-                          5: cornerPointLR[0],
-                          6: cornerPointLL[1],
-                          7: cornerPointLL[0]}
-
-                footprintLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
-
-                footprintLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolygonXY([[QgsPointXY(cornerPointUL[1],
-                                                                   cornerPointUL[0]),
-                                                        QgsPointXY(
-                        cornerPointUR[1], cornerPointUR[0]),
-                        QgsPointXY(
-                        cornerPointLR[1], cornerPointLR[0]),
-                        QgsPointXY(
-                        cornerPointLL[1], cornerPointLL[0]),
-                        QgsPointXY(cornerPointUL[1], cornerPointUL[0])]])})
-            footprintLyr.endEditCommand()
-
-            CommonLayer(footprintLyr)
-
-    except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update FootPrint Layer! : "), str(e))
-    return
-
-
-def UpdateTrajectoryData(packet):
-    ''' Update Trajectory Values '''
-    global tLastLon
-    global tLastLat
-
-    lat = packet.GetSensorLatitude()
-    lon = packet.GetSensorLongitude()
-    alt = packet.GetSensorTrueAltitude()
-
-    try:
-        if tLastLon == 0.0 and tLastLat == 0.0:
-            tLastLon = lon
-            tLastLat = lat
-        else:
-            # little check to see if telemetry data are plausible before
-            # drawing.
-
-            distance = sphere.distance((tLastLon, tLastLat), (lon, lat))
-            if distance > 1000:  # 1 km is the best value for prevent draw trajectory when start video again
-                return
-    except Exception:
-        None
-
-    tLastLon = lon
-    tLastLat = lat
-    trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
-
-    try:
-        if all(v is not None for v in [trajectoryLyr, lat, lon, alt]):
-            trajectoryLyr.startEditing()
-            f = QgsFeature()
-            if trajectoryLyr.featureCount() == 0:
-                f.setAttributes(
-                    [lon, lat, alt])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(lon, lat)])
-                f.setGeometry(surface)
-                trajectoryLyr.addFeatures([f])
-
-            else:
-                f_last = trajectoryLyr.getFeature(trajectoryLyr.featureCount())
-                f.setAttributes(
-                    [lon, lat, alt])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat),
-                     QgsPointXY(f_last.attribute(0), f_last.attribute(1))])
-                f.setGeometry(surface)
-                trajectoryLyr.addFeatures([f])
-
-            CommonLayer(trajectoryLyr)
-
-    except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
-    return
-
-
-def UpdateFrameCenterData(packet):
-    ''' Update FrameCenter Values '''
-    lat = packet.GetFrameCenterLatitude()
-    lon = packet.GetFrameCenterLongitude()
-    alt = packet.GetFrameCenterElevation()
-    PlatformHeading = packet.GetPlatformHeadingAngle()
-    frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr)
-
-    try:
-        if all(v is not None for v in [frameCenterLyr, lat, lon, alt, PlatformHeading]):
-            frameCenterLyr.startEditing()
-            frameCenterLyr.renderer().symbol().setAngle(float(PlatformHeading))
-
-            if frameCenterLyr.featureCount() == 0:
-                feature = QgsFeature()
-                feature.setAttributes([lon, lat, alt])
-                p = QgsPointXY()
-                p.set(lon, lat)
-                geom = QgsGeometry.fromPointXY(p)
-                feature.setGeometry(geom)
-                frameCenterLyr.addFeatures([feature])
-
-            else:
-                frameCenterLyr.beginEditCommand(
-                    "ChangeGeometry + ChangeAttribute")
-                fetId = 1
-                attrib = {0: lon, 1: lat, 2: alt}
-                frameCenterLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
-
-                frameCenterLyr.dataProvider().changeGeometryValues(
-                    {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
-                frameCenterLyr.endEditCommand()
-
-            CommonLayer(frameCenterLyr)
-
-    except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Frame Center Layer! : "), str(e))
-
-    return
-
-
-def UpdateFrameCenterData(packet):
-    ''' Update FrameCenter Values '''
-    lat = packet.GetFrameCenterLatitude()
-    lon = packet.GetFrameCenterLongitude()
-    alt = packet.GetFrameCenterElevation()
-    PlatformHeading = packet.GetPlatformHeadingAngle()
-    frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr)
-
-    try:
-        if all(v is not None for v in [frameCenterLyr, lat, lon, alt, PlatformHeading]):
-            frameCenterLyr.startEditing()
-            frameCenterLyr.renderer().symbol().setAngle(float(PlatformHeading))
-
-            if frameCenterLyr.featureCount() == 0:
-                feature = QgsFeature()
-                feature.setAttributes([lon, lat, alt])
-                p = QgsPointXY()
-                p.set(lon, lat)
-                geom = QgsGeometry.fromPointXY(p)
-                feature.setGeometry(geom)
-                frameCenterLyr.addFeatures([feature])
-
-            else:
-                frameCenterLyr.beginEditCommand(
-                    "ChangeGeometry + ChangeAttribute")
-                fetId = 1
-                attrib = {0: lon, 1: lat, 2: alt}
-                frameCenterLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
-
-                frameCenterLyr.dataProvider().changeGeometryValues(
-                    {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
-                frameCenterLyr.endEditCommand()
-
-            CommonLayer(frameCenterLyr)
-
-    except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Frame Center Layer! : "), str(e))
-
-    return
-
-
-def UpdatePlatformData(packet):
-    ''' Update PlatForm Values '''
-    global crtPltTailNum
-    lat = packet.GetSensorLatitude()
-    lon = packet.GetSensorLongitude()
-    alt = packet.GetSensorTrueAltitude()
-    PlatformHeading = packet.GetPlatformHeadingAngle()
-    platformTailNumber = packet.GetPlatformTailNumber()
-    platformLyr = qgsu.selectLayerByName(Platform_lyr)
-
-    try:
-        if all(v is not None for v in [platformLyr, lat, lon, alt, PlatformHeading]):
-            if platformTailNumber != crtPltTailNum:
-                SetDefaultPlatformStyle(platformLyr, platformTailNumber)
-                crtPltTailNum = platformTailNumber
-
-            platformLyr.startEditing()
-            platformLyr.renderer().symbol().setAngle(float(PlatformHeading))
-
-            if platformLyr.featureCount() == 0:
-                feature = QgsFeature()
-                feature.setAttributes([lon, lat, alt])
-                p = QgsPointXY()
-                p.set(lon, lat)
-                geom = QgsGeometry.fromPointXY(p)
-                feature.setGeometry(geom)
-                platformLyr.addFeatures([feature])
-
-            else:
-                platformLyr.beginEditCommand(
-                    "ChangeGeometry + ChangeAttribute")
-                fetId = 1
-                attrib = {0: lon, 1: lat, 2: alt}
-                platformLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
-
-                platformLyr.dataProvider().changeGeometryValues(
-                    {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
-                platformLyr.endEditCommand()
-
-            CommonLayer(platformLyr)
-
-    except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Platform Layer! : "), str(e))
-
     return
 
 

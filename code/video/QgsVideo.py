@@ -27,12 +27,13 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         convertQImageToMat,
                                         GetLine3DIntersectionWithDEM,
                                         GetLine3DIntersectionWithPlane,
-                                        CommonLayer,
                                         GetFrameCenter,
                                         GetGCPGeoTransform,
                                         hasElevationModel,
                                         GetImageWidth,
                                         GetImageHeight)
+
+from QGIS_FMV.utils.QgsFmvLayers import CommonLayer
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
@@ -286,7 +287,7 @@ class VideoWidget(QVideoWidget):
         if GetImageHeight() == 0:
             return
 
-        if(not self.IsPointOnScreen(event.x(), event.y())):
+        if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
             return
 
         if self.gt is not None and lineDrawer:
@@ -408,17 +409,6 @@ class VideoWidget(QVideoWidget):
         ''' Remove and restore all video filters '''
         global invertColorFilter, grayColorFilter, edgeDetectionFilter, monoFilter, contrastFilter, MirroredHFilter
         invertColorFilter = grayColorFilter = edgeDetectionFilter = monoFilter = contrastFilter = MirroredHFilter = False
-
-    def IsPointOnScreen(self, x, y):
-        ''' determines if a clicked point lands on the image (False if lands on the
-            black borders or outside)
-         '''
-        res = True
-        if x > (vut.GetNormalizedWidth(self.surface) + vut.GetXBlackZone(self.surface)) or x < vut.GetXBlackZone(self.surface):
-            res = False
-        if y > (vut.GetNormalizedHeight(self.surface) + vut.GetYBlackZone(self.surface)) or y < vut.GetYBlackZone(self.surface):
-            res = False
-        return res
 
     def GetTransf(self, event):
         ''' Return video coordinates to map coordinates '''
@@ -754,7 +744,7 @@ class VideoWidget(QVideoWidget):
             return
 
         # check if the point  is on picture (not in black borders)
-        if(not self.IsPointOnScreen(event.x(), event.y())):
+        if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
             return
 
         if pointDrawer or polygonDrawer or lineDrawer or ruler:
@@ -841,7 +831,7 @@ class VideoWidget(QVideoWidget):
             self.tapTimer.stop()
             self.tapTimer.start(HOLD_TIME, self)
 
-            if(not self.IsPointOnScreen(event.x(), event.y())):
+            if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
                 self.UpdateSurface()
                 return
 

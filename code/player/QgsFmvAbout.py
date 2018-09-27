@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-import os.path
-
 from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtWidgets import QDialog
 from QGIS_FMV.gui.ui_FmvAbout import Ui_FmvAbout
-from qgis.core import QgsApplication
-
 
 try:
     from pydevd import *

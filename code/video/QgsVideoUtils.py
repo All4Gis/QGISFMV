@@ -51,3 +51,15 @@ class VideoUtils(object):
             y = (surface.widget.height() -
                  (VideoUtils.GetNormalizedHeight(surface))) / 2.0
         return y
+
+    @staticmethod
+    def IsPointOnScreen(x, y, surface):
+        ''' determines if a clicked point lands on the image (False if lands on the
+            black borders or outside)
+         '''
+        res = True
+        if x > (VideoUtils.GetNormalizedWidth(surface) + VideoUtils.GetXBlackZone(surface)) or x < VideoUtils.GetXBlackZone(surface):
+            res = False
+        if y > (VideoUtils.GetNormalizedHeight(surface) + VideoUtils.GetYBlackZone(surface)) or y < VideoUtils.GetYBlackZone(surface):
+            res = False
+        return res

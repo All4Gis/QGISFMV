@@ -4,7 +4,6 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         convertQImageToMat,
                                         GetLine3DIntersectionWithDEM,
                                         GetLine3DIntersectionWithPlane,
-                                        CommonLayer,
                                         GetFrameCenter,
                                         GetGCPGeoTransform,
                                         hasElevationModel)
