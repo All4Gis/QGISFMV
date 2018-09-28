@@ -20,7 +20,7 @@ from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QVideoSurfaceFormat)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from QGIS_FMV.geo import sphere as sphere
-from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand, QApplication
+from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
 
 from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         GetSensor,
