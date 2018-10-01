@@ -481,7 +481,7 @@ def RemoveGroupByName(name=frames_g):
     ''' Remove Group if not exist '''
     root = QgsProject.instance().layerTreeRoot()
     group = root.findGroup(name)
-    if not group is None:
+    if group is not None:
         for child in group.children():
             dump = child.name()
             QgsProject.instance().removeMapLayer(dump.split("=")[-1].strip())
