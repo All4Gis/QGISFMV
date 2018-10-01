@@ -532,33 +532,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def UncheckUtils(self, sender, value):
         ''' Uncheck Utils Video '''
-        QApplication.processEvents()
-        name = sender.objectName()
-        self.actionMagnifying_glass.setChecked(
-            True if name == "actionMagnifying_glass" else False)
-        self.actionDraw_Pinpoint.setChecked(
-            True if name == "actionDraw_Pinpoint" else False)
-        self.actionDraw_Line.setChecked(
-            True if name == "actionDraw_Line" else False)
-        self.actionDraw_Polygon.setChecked(
-            True if name == "actionDraw_Polygon" else False)
-        self.actionObject_Tracking.setChecked(
-            True if name == "actionObject_Tracking" else False)
-        self.actionRuler.setChecked(
-            True if name == "actionRuler" else False)
+        self.actionMagnifying_glass.setChecked(False)
+        self.actionDraw_Pinpoint.setChecked(False)
+        self.actionDraw_Line.setChecked(False)
+        self.actionDraw_Polygon.setChecked(False)
+        self.actionObject_Tracking.setChecked(False)
+        self.actionRuler.setChecked(False)
 
-        self.videoWidget.SetMagnifier(
-            True if name == "actionMagnifying_glass" else False)
-        self.videoWidget.SetPointDrawer(
-            True if name == "actionDraw_Pinpoint" else False)
-        self.videoWidget.SetLineDrawer(
-            True if name == "actionDraw_Line" else False)
-        self.videoWidget.SetPolygonDrawer(
-            True if name == "actionDraw_Polygon" else False)
-        self.videoWidget.SetObjectTracking(
-            True if name == "actionObject_Tracking" else False)
-        self.videoWidget.SetRuler(
-            True if name == "actionRuler" else False)
+        self.videoWidget.RestoreDrawer()
 
         sender.setChecked(value)
         return
