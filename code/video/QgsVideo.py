@@ -42,20 +42,33 @@ try:
 except ImportError:
     None
 
-invertColorFilter = False
-edgeDetectionFilter = False
-grayColorFilter = False
-MirroredHFilter = False
-monoFilter = False
-contrastFilter = False
-objectTracking = False
-ruler = False
-magnifier = False
-pointDrawer = False
-lineDrawer = False
-polygonDrawer = False
 
-HOLD_TIME = 100
+class InteractionState(object):
+    """ Interaction Video Player Class """
+    def __init__(self):
+        self.pointDrawer = False
+        self.ruler = False
+        self.lineDrawer = False
+        self.polygonDrawer = False
+        self.magnifier = False
+        self.objectTracking = False
+
+    def clear(self):
+        self.__init__()
+
+
+class FilterState(object):
+    """ Filters State Video Player Class """
+    def __init__(self):
+        self.contrastFilter = False
+        self.monoFilter = False
+        self.MirroredHFilter = False
+        self.edgeDetectionFilter = False
+        self.grayColorFilter = False
+        self.invertColorFilter = False
+
+    def clear(self):
+        self.__init__()
 
 
 class VideoWidgetSurface(QAbstractVideoSurface):
@@ -159,27 +172,27 @@ class VideoWidgetSurface(QAbstractVideoSurface):
                             self.imageFormat
                             )
 
-        if grayColorFilter:
+        if self.widget._filterSatate.grayColorFilter:
             self.image = filter.GrayFilter(self.image)
 
-        if MirroredHFilter:
+        if self.widget._filterSatate.MirroredHFilter:
             self.image = filter.MirrredFilter(self.image)
 
-        if monoFilter:
+        if self.widget._filterSatate.monoFilter:
             self.image = filter.MonoFilter(self.image)
 
-        if edgeDetectionFilter:
+        if self.widget._filterSatate.edgeDetectionFilter:
             self.image = filter.EdgeFilter(self.image)
 
-        if contrastFilter:
+        if self.widget._filterSatate.contrastFilter:
             self.image = filter.AutoContrastFilter(self.image)
 
-        if invertColorFilter:
+        if self.widget._filterSatate.invertColorFilter:
             self.image.invertPixels()
 
         painter.drawImage(self.targetRect, self.image, self.sourceRect)
 
-        if objectTracking and self.widget._isinit:
+        if self._interaction.objectTracking and self.widget._isinit:
             frame = convertQImageToMat(self.image)
             # Update tracker
             ok, bbox = self.widget.tracker.update(frame)
@@ -210,6 +223,9 @@ class VideoWidget(QVideoWidget):
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
         self.Tracking_RubberBand.setPalette(pal)
         self.var_currentMouseMoveEvent = None
+
+        self._interaction = InteractionState()
+        self._filterSatate = FilterState()
 
         self.setUpdatesEnabled(True)
         self.snapped = False
@@ -248,6 +264,7 @@ class VideoWidget(QVideoWidget):
         self.zoomPixmap, self.maskPixmap = QPixmap(), QPixmap()
 
     def ResetDrawRuler(self):
+        ''' Resets DrawRuler Points List '''
         self.drawRuler = []
 
     def currentMouseMoveEvent(self, event):
@@ -276,15 +293,15 @@ class VideoWidget(QVideoWidget):
         if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
             return
 
-        if self.gt is not None and lineDrawer:
+        if self.gt is not None and self._interaction.lineDrawer:
             self.drawLines.append([None, None, None])
             self.UpdateSurface()
             return
-        if self.gt is not None and ruler:
+        if self.gt is not None and self._interaction.ruler:
             self.drawRuler.append([None, None, None])
             self.UpdateSurface()
             return
-        if self.gt is not None and polygonDrawer:
+        if self.gt is not None and self._interaction.polygonDrawer:
             self.drawPolygon.append([None, None, None])
 
             AddDrawPolygonOnMap(self.poly_coordinates)
@@ -309,6 +326,7 @@ class VideoWidget(QVideoWidget):
         self.surface.widget.update()
 
     def sizeHint(self):
+        ''' This property holds the recommended size for the widget '''
         return self.surface.surfaceFormat().sizeHint()
 
     def GetCurrentFrame(self):
@@ -317,48 +335,43 @@ class VideoWidget(QVideoWidget):
 
     def SetInvertColor(self, value):
         ''' Set Invert color filter '''
-        global invertColorFilter
-        invertColorFilter = value
+        self._filterSatate.invertColorFilter = value
 
     def SetObjectTracking(self, value):
         ''' Set Object Tracking '''
-        global objectTracking
-        objectTracking = value
+        self._interaction.objectTracking = value
 
     def SetRuler(self, value):
         ''' Set Ruler '''
-        global ruler
-        ruler = value
+        self._interaction.ruler = value
 
     def SetGray(self, value):
         ''' Set gray scale '''
-        global grayColorFilter
-        grayColorFilter = value
+        self._filterSatate.grayColorFilter = value
 
     def SetMirrorH(self, value):
         ''' Set Horizontal Mirror '''
-        global MirroredHFilter
-        MirroredHFilter = value
+        self._filterSatate.MirroredHFilter = value
 
     def SetEdgeDetection(self, value):
         ''' Set Canny Edge filter '''
-        global edgeDetectionFilter
-        edgeDetectionFilter = value
+        self._filterSatate.edgeDetectionFilter = value
 
     def SetAutoContrastFilter(self, value):
         ''' Set Automatic Contrast filter '''
-        global contrastFilter
-        contrastFilter = value
+        self._filterSatate.contrastFilter = value
 
     def SetMonoFilter(self, value):
         ''' Set mono filter '''
-        global monoFilter
-        monoFilter = value
+        self._filterSatate.monoFilter = value
 
     def RestoreFilters(self):
         ''' Remove and restore all video filters '''
-        global invertColorFilter, grayColorFilter, edgeDetectionFilter, monoFilter, contrastFilter, MirroredHFilter
-        invertColorFilter = grayColorFilter = edgeDetectionFilter = monoFilter = contrastFilter = MirroredHFilter = False
+        self._filterSatate.clear()
+
+    def RestoreDrawer(self):
+        ''' Remove and restore all Drawer Options '''
+        self._interaction.clear()
 
     def paintEvent(self, event):
         ''' Paint Event '''
@@ -439,9 +452,10 @@ class VideoWidget(QVideoWidget):
                         pt, idx, self.painter, self.surface, self.gt, self.drawRuler)
 
         # Magnifier Glass
-        if self.zoomed and magnifier:
+        if self.zoomed and self._interaction.magnifier:
             draw.drawMagnifierOnVideo(self.width(), self.height(
             ), self.maskPixmap, self.dragPos, self.zoomPixmap, self.surface, self.painter, self.offset)
+
         self.painter.end()
         return
 
@@ -468,7 +482,7 @@ class VideoWidget(QVideoWidget):
         if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
             return
 
-        if pointDrawer or polygonDrawer or lineDrawer or ruler:
+        if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.ruler:
             self.setCursor(QCursor(Qt.CrossCursor))
 
         # Cursor Coordinates
@@ -551,14 +565,14 @@ class VideoWidget(QVideoWidget):
             self.snapped = True
             self.pressPos = self.dragPos = event.pos()
             self.tapTimer.stop()
-            self.tapTimer.start(HOLD_TIME, self)
+            self.tapTimer.start(100, self)
 
             if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
                 self.UpdateSurface()
                 return
 
             # point drawer
-            if self.gt is not None and pointDrawer:
+            if self.gt is not None and self._interaction.pointDrawer:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
 
@@ -569,7 +583,7 @@ class VideoWidget(QVideoWidget):
                 self.drawPtPos.append([Longitude, Latitude, Altitude])
 
             # polygon drawer
-            if self.gt is not None and polygonDrawer:
+            if self.gt is not None and self._interaction.polygonDrawer:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
                 self.poly_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
@@ -577,7 +591,7 @@ class VideoWidget(QVideoWidget):
                 self.drawPolygon.append([Longitude, Latitude, Altitude])
 
             # line drawer
-            if self.gt is not None and lineDrawer:
+            if self.gt is not None and self._interaction.lineDrawer:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
 
@@ -585,14 +599,14 @@ class VideoWidget(QVideoWidget):
 
                 self.drawLines.append([Longitude, Latitude, Altitude])
 
-            if objectTracking:
+            if self._interaction.objectTracking:
                 self.origin = event.pos()
                 self.Tracking_RubberBand.setGeometry(
                     QRect(self.origin, QSize()))
                 self.Tracking_RubberBand.show()
 
             # Ruler drawer
-            if self.gt is not None and ruler:
+            if self.gt is not None and self._interaction.ruler:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
                 self.drawRuler.append([Longitude, Latitude, Altitude])
@@ -608,23 +622,19 @@ class VideoWidget(QVideoWidget):
 
     def SetMagnifier(self, value):
         """ Set Magnifier Glass """
-        global magnifier
-        magnifier = value
+        self._interaction.magnifier = value
 
     def SetPointDrawer(self, value):
         """ Set Point Drawer """
-        global pointDrawer
-        pointDrawer = value
+        self._interaction.pointDrawer = value
 
     def SetLineDrawer(self, value):
         """ Set Line Drawer """
-        global lineDrawer
-        lineDrawer = value
+        self._interaction.lineDrawer = value
 
     def SetPolygonDrawer(self, value):
         """ Set Polygon Drawer """
-        global polygonDrawer
-        polygonDrawer = value
+        self._interaction.polygonDrawer = value
 
     def mouseReleaseEvent(self, _):
         """
@@ -632,7 +642,7 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
-        if objectTracking:
+        if self._interaction.objectTracking:
             geom = self.Tracking_RubberBand.geometry()
             bbox = (geom.x(), geom.y(), geom.width(), geom.height())
             frame = convertQImageToMat(self.GetCurrentFrame())

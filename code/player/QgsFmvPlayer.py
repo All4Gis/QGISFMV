@@ -565,32 +565,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def UncheckFilters(self, sender, value):
         ''' Uncheck Filters Video '''
-        name = sender.objectName()
+        self.actionGray.setChecked(False)
+        self.actionInvert_Color.setChecked(False)
+        self.actionMono_Filter.setChecked(False)
+        self.actionCanny_edge_detection.setChecked(False)
+        self.actionAuto_Contrast_Filter.setChecked(False)
+        self.actionMirroredH.setChecked(False)
 
-        self.actionGray.setChecked(True if name == "actionGray" else False)
-        self.actionInvert_Color.setChecked(
-            True if name == "actionInvert_Color" else False)
-        self.actionMono_Filter.setChecked(
-            True if name == "actionMono_Filter" else False)
-        self.actionCanny_edge_detection.setChecked(
-            True if name == "actionCanny_edge_detection" else False)
-        self.actionAuto_Contrast_Filter.setChecked(
-            True if name == "actionAuto_Contrast_Filter" else False)
-        self.actionMirroredH.setChecked(
-            True if name == "actionMirroredH" else False)
-
-        self.videoWidget.SetGray(
-            True if name == "actionGray" else False)
-        self.videoWidget.SetMirrorH(
-            True if name == "actionMirroredH" else False)
-        self.videoWidget.SetEdgeDetection(
-            True if name == "actionCanny_edge_detection" else False)
-        self.videoWidget.SetInvertColor(
-            True if name == "actionInvert_Color" else False)
-        self.videoWidget.SetMonoFilter(
-            True if name == "actionMono_Filter" else False)
-        self.videoWidget.SetAutoContrastFilter(
-            True if name == "actionAuto_Contrast_Filter" else False)
+        self.videoWidget.RestoreFilters()
 
         sender.setChecked(value)
         return
@@ -888,7 +870,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                                 QMediaPlayer.PausedState):
             self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
             # Uncheck Ruler
-            # TODO : Inspect
             self.videoWidget.ResetDrawRuler()
             self.actionRuler.setChecked(False)
             self.videoWidget.SetRuler(False)

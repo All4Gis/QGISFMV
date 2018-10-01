@@ -8,7 +8,7 @@ about= Plugin for QGIS which allows to analyze, visualize and process videos ins
 	   to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more. 
 	   It also offers the possibility to create reports with video metadata.
 	   
-	   <a href="https://goo.gl/RMmUX5" target="_blank">Documentation</a>
+	   <a href="https://all4gis.github.io/QGISFMV/" target="_blank">Documentation</a>
 
 	   <p>Want to buy me a beer (or gadget)? Please use Paypal button.</p>
 	   <a href="https://goo.gl/jFCeCW" target="_blank">
