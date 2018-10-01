@@ -15,7 +15,6 @@ class FmvLayerStyles(object):
     # beam holder
     B = {}
 
-
     # frame center holder
     F = {}
     # drawings Point holder

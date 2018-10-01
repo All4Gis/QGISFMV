@@ -23,7 +23,11 @@
 """
 import os.path
 
-from PyQt5.QtCore import QSettings, QCoreApplication, QTranslator, qVersion, QThread
+from PyQt5.QtCore import (QSettings,
+                          QCoreApplication,
+                          QTranslator,
+                          qVersion,
+                          QThread)
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction
 from QGIS_FMV.player.QgsFmvAbout import FmvAbout
@@ -52,6 +56,8 @@ class Fmv:
         QgsApplication.setMaxThreads(threadcount)
         # not work iface.mapCanvas().setParallelRenderingEnabled(True)
         QSettings().setValue("/qgis/parallel_rendering", True)
+        # OpenCL acceleration
+        QSettings().setValue("/core/OpenClEnabled", True)
 
         self.plugin_dir = os.path.dirname(__file__)
         locale = QSettings().value("locale//userLocale")[0:2]
@@ -85,7 +91,7 @@ class Fmv:
                                    u"FMV About", self.iface.mainWindow(),
                                    statusTip=QCoreApplication.translate(
                                        "Fmv", "Show About FMV"),
-                                   triggered=self.run)
+                                   triggered=self.About)
         self.iface.registerMainWindowAction(
             self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About", "Alt+A"))
         self.iface.addPluginToMenu(QCoreApplication.translate(

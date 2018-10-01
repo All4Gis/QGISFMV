@@ -80,7 +80,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # Hide Color Button
         self.btn_Color.hide()
         self.actionObject_Tracking.setVisible(False)
-        #self.actionRuler.setVisible(False)
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
 
