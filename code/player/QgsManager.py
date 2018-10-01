@@ -44,7 +44,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # 8 x 500 = 4000ms buffer time
         self.min_buffer_size = 8
 
-        self.actionOpen_Stream.setVisible(False)
+        #self.actionOpen_Stream.setVisible(False)
 
         self.VManager.viewport().installEventFilter(self)
 
@@ -153,10 +153,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self.meta_reader[str(rowPosition)] = None
             self.initialPt[str(rowPosition)] = None
 
-        # self.VManager.resizeColumnsToContents()
         pbar.setValue(100)
         self.ToggleActiveRow(rowPosition, value="Ready")
-        # self.VManager.resizeColumnsToContents()
 
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
