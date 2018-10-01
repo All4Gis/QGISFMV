@@ -1,6 +1,16 @@
 from QGIS_FMV.utils.QgsFmvUtils import (GetImageWidth,
                                         GetImageHeight)
 
+from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
+                                        GetLine3DIntersectionWithDEM,
+                                        GetFrameCenter,
+                                        hasElevationModel,
+                                        GetGCPGeoTransform)
+try:
+    from pydevd import *
+except ImportError:
+    None
+
 
 class VideoUtils(object):
 
@@ -63,3 +73,29 @@ class VideoUtils(object):
         if y > (VideoUtils.GetNormalizedHeight(surface) + VideoUtils.GetYBlackZone(surface)) or y < VideoUtils.GetYBlackZone(surface):
             res = False
         return res
+
+    @staticmethod
+    def GetTransf(event, surface):
+        ''' Return video coordinates to map coordinates '''
+        gt = GetGCPGeoTransform()
+        return gt([(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)])
+
+    @staticmethod
+    def GetPointCommonCoords(event, surface):
+        ''' Common functon for get coordinates on mousepressed '''
+        transf = VideoUtils.GetTransf(event, surface)
+        targetAlt = GetFrameCenter()[2]
+
+        Longitude = float(round(transf[1], 5))
+        Latitude = float(round(transf[0], 5))
+        Altitude = float(round(targetAlt, 0))
+
+        if hasElevationModel():
+            sensor = GetSensor()
+            target = [transf[0], transf[1], targetAlt]
+            projPt = GetLine3DIntersectionWithDEM(sensor, target)
+            if projPt:
+                Longitude = float(round(projPt[1], 5))
+                Latitude = float(round(projPt[0], 5))
+                Altitude = float(round(projPt[2], 0))
+        return Longitude, Latitude, Altitude
