@@ -1,8 +1,8 @@
 import os
 
-from PyQt5.QtGui import QColor, QFont
+from PyQt5.QtGui import QColor, QFont, QPolygonF
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QCoreApplication, QPointF
 from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
                                 Footprint_lyr,
@@ -24,17 +24,22 @@ from qgis.core import (
     QgsLayerTreeLayer,
     QgsField,
     QgsFields,
-    QgsCoordinateReferenceSystem,
     QgsVectorLayer,
     QgsVectorFileWriter,
     QgsFillSymbol,
     QgsLineSymbol,
     QgsSvgMarkerSymbolLayer,
-    QgsSingleSymbolRenderer
+    QgsSingleSymbolRenderer,
+    QgsDistanceArea,
+    QgsCoordinateReferenceSystem,
+    QgsProject,
+    QgsFeature,
+    QgsGeometry,
+    QgsPointXY,
+    QgsWkbTypes
 )
 from QGIS_FMV.geo import sphere as sphere
-from qgis.core import Qgis as QGis, QgsWkbTypes, QgsFeature, QgsPointXY, QgsGeometry
-from qgis.core import QgsProject
+from qgis.core import Qgis as QGis
 from qgis.utils import iface
 from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
 
@@ -46,6 +51,96 @@ except ImportError:
 _layerreg = QgsProject.instance()
 crtSensorSrc = 'DEFAULT'
 crtPltTailNum = 'DEFAULT'
+
+
+def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
+    # add pin point on the map
+    pointLyr = qgsu.selectLayerByName(Point_lyr)
+    if pointLyr is None:
+        return
+    pointLyr.startEditing()
+    feature = QgsFeature()
+    feature.setAttributes(
+        [pointIndex, Longitude, Latitude, Altitude])
+    p = QgsPointXY()
+    p.set(Longitude, Latitude)
+    geom = QgsGeometry.fromPointXY(p)
+    feature.setGeometry(geom)
+    pointLyr.addFeatures([feature])
+    CommonLayer(pointLyr)
+    return
+
+
+def AddDrawLineOnMap(Longitude, Latitude, Altitude, drawLines):
+    # add Line on the map
+    linelyr = qgsu.selectLayerByName(Line_lyr)
+    if linelyr is None:
+        return
+    linelyr.startEditing()
+    f = QgsFeature()
+    if linelyr.featureCount() == 0 or drawLines[-1][0] is None:
+        f.setAttributes(
+            [Longitude, Latitude, Altitude])
+        geom = QgsGeometry.fromPolylineXY(
+            [QgsPointXY(Longitude, Latitude), QgsPointXY(Longitude, Latitude)])
+        f.setGeometry(geom)
+        linelyr.addFeatures([f])
+
+    else:
+        f_last = linelyr.getFeature(linelyr.featureCount())
+        f.setAttributes(
+            [Longitude, Latitude, Altitude])
+        geom = QgsGeometry.fromPolylineXY(
+            [QgsPointXY(Longitude, Latitude),
+             QgsPointXY(f_last.attribute(0), f_last.attribute(1))])
+        f.setGeometry(geom)
+        linelyr.addFeatures([f])
+
+    CommonLayer(linelyr)
+    return
+
+
+def AddDrawPolygonOnMap(poly_coordinates):
+    # Add Polygon
+    polyLyr = qgsu.selectLayerByName(Polygon_lyr)
+    if polyLyr is None:
+        return
+    polyLyr.startEditing()
+    feature = QgsFeature()
+    point = QPointF()
+    # create  float polygon --> construcet out of 'point'
+
+    list_polygon = QPolygonF()
+    for x in xrange(0, len(poly_coordinates)):
+        if x % 2 == 0:
+            point.setX(poly_coordinates[x])
+            point.setY(poly_coordinates[x + 1])
+            list_polygon.append(point)
+    point.setX(poly_coordinates[0])
+    point.setY(poly_coordinates[1])
+    list_polygon.append(point)
+
+    geomP = QgsGeometry.fromQPolygonF(list_polygon)
+    feature.setGeometry(geomP)
+
+    # Calculate Area WSG84 (Meters)
+    area_wsg84 = QgsDistanceArea()
+    area_wsg84.setSourceCrs(QgsCoordinateReferenceSystem.fromOgcWmsCrs(
+        'EPSG:4326'), QgsProject.instance().transformContext())
+    if (area_wsg84.sourceCrs().isGeographic()):
+        area_wsg84.setEllipsoid(
+            area_wsg84.sourceCrs().ellipsoidAcronym())
+
+    # Calculate Centroid
+    centroid = feature.geometry().centroid().asPoint()
+
+    feature.setAttributes([centroid.x(), centroid.y(
+    ), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
+
+    polyLyr.addFeatures([feature])
+
+    CommonLayer(polyLyr)
+    return
 
 
 def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
@@ -558,16 +653,6 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
 
     symbol_layer = QgsSvgMarkerSymbolLayer.create(svgStyle)
     layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
-    return
-
-
-def SetDefaultFrameCenterStyle(layer):
-    ''' Point Symbol '''
-    style = S.getFrameCenterPoint()
-    symbol = QgsMarkerSymbol.createSimple(
-        {'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size': style["SIZE"]})
-    renderer = QgsSingleSymbolRenderer(symbol)
-    layer.setRenderer(renderer)
     return
 
 

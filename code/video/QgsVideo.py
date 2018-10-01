@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize, QPointF
+from PyQt5.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize
 from PyQt5.QtGui import (QImage,
                          QPalette,
                          QPixmap,
@@ -7,7 +7,6 @@ from PyQt5.QtGui import (QImage,
                          QRegion,
                          QColor,
                          QBrush,
-                         QPolygonF,
                          QCursor)
 
 from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
@@ -23,22 +22,15 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         hasElevationModel,
                                         GetImageHeight)
 
-from QGIS_FMV.utils.QgsFmvLayers import CommonLayer
+from QGIS_FMV.utils.QgsFmvLayers import AddDrawPointOnMap, AddDrawLineOnMap, AddDrawPolygonOnMap
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
-from QGIS_FMV.fmvConfig import Point_lyr, Line_lyr, Polygon_lyr
 from qgis.gui import QgsRubberBand
 from qgis.utils import iface
-from qgis.core import Qgis as QGis
-from qgis.core import (QgsDistanceArea,
-                       QgsCoordinateReferenceSystem,
-                       QgsProject,
-                       QgsFeature,
-                       QgsGeometry,
-                       QgsPointXY)
+from qgis.core import Qgis as QGis, QgsPointXY
 
 try:
     from pydevd import *
@@ -294,45 +286,9 @@ class VideoWidget(QVideoWidget):
             return
         if self.gt is not None and polygonDrawer:
             self.drawPolygon.append([None, None, None])
-            # Add Polygon
-            polyLyr = qgsu.selectLayerByName(Polygon_lyr)
-            if polyLyr is None:
-                return
-            polyLyr.startEditing()
-            feature = QgsFeature()
-            point = QPointF()
-            # create  float polygon --> construcet out of 'point'
 
-            list_polygon = QPolygonF()
-            for x in xrange(0, len(self.poly_coordinates)):
-                if x % 2 == 0:
-                    point.setX(self.poly_coordinates[x])
-                    point.setY(self.poly_coordinates[x + 1])
-                    list_polygon.append(point)
-            point.setX(self.poly_coordinates[0])
-            point.setY(self.poly_coordinates[1])
-            list_polygon.append(point)
+            AddDrawPolygonOnMap(self.poly_coordinates)
 
-            geomP = QgsGeometry.fromQPolygonF(list_polygon)
-            feature.setGeometry(geomP)
-
-            # Calculate Area WSG84 (Meters)
-            area_wsg84 = QgsDistanceArea()
-            area_wsg84.setSourceCrs(QgsCoordinateReferenceSystem.fromOgcWmsCrs(
-                'EPSG:4326'), QgsProject.instance().transformContext())
-            if (area_wsg84.sourceCrs().isGeographic()):
-                area_wsg84.setEllipsoid(
-                    area_wsg84.sourceCrs().ellipsoidAcronym())
-
-            # Calculate Centroid
-            centroid = feature.geometry().centroid().asPoint()
-
-            feature.setAttributes([centroid.x(), centroid.y(
-            ), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
-
-            polyLyr.addFeatures([feature])
-
-            CommonLayer(polyLyr)
             # Empty RubberBand
             for _ in range(self.poly_RubberBand.numberOfVertices()):
                 self.poly_RubberBand.removeLastPoint()
@@ -572,12 +528,12 @@ class VideoWidget(QVideoWidget):
             self.surface.updateVideoRect()
 
     def pan(self, delta):
-        """ Pan Action """
+        """ Pan Action (Magnifier method)"""
         self.offset += delta
         self.surface.updateVideoRect()
 
     def timerEvent(self, _):
-        """ Time Event """
+        """ Time Event (Magnifier method)"""
         if not self.zoomed:
             self.activateMagnifier()
         self.surface.updateVideoRect()
@@ -606,22 +562,9 @@ class VideoWidget(QVideoWidget):
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
 
-                # add pin point on the map
-                pointLyr = qgsu.selectLayerByName(Point_lyr)
-                if pointLyr is None:
-                    return
-                pointLyr.startEditing()
-                feature = QgsFeature()
-                feature.setAttributes(
-                    [self.pointIndex, Longitude, Latitude, Altitude])
-                p = QgsPointXY()
-                p.set(Longitude, Latitude)
-                geom = QgsGeometry.fromPointXY(p)
-                feature.setGeometry(geom)
-                pointLyr.addFeatures([feature])
+                AddDrawPointOnMap(self.pointIndex, Longitude,
+                                  Latitude, Altitude)
                 self.pointIndex += 1
-
-                CommonLayer(pointLyr)
 
                 self.drawPtPos.append([Longitude, Latitude, Altitude])
 
@@ -638,32 +581,7 @@ class VideoWidget(QVideoWidget):
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
 
-                # add pin on the map
-                linelyr = qgsu.selectLayerByName(Line_lyr)
-                if linelyr is None:
-                    return
-                linelyr.startEditing()
-                feature = QgsFeature()
-                f = QgsFeature()
-                if linelyr.featureCount() == 0 or self.drawLines[-1][0] is None:
-                    f.setAttributes(
-                        [Longitude, Latitude, Altitude])
-                    geom = QgsGeometry.fromPolylineXY(
-                        [QgsPointXY(Longitude, Latitude), QgsPointXY(Longitude, Latitude)])
-                    f.setGeometry(geom)
-                    linelyr.addFeatures([f])
-
-                else:
-                    f_last = linelyr.getFeature(linelyr.featureCount())
-                    f.setAttributes(
-                        [Longitude, Latitude, Altitude])
-                    geom = QgsGeometry.fromPolylineXY(
-                        [QgsPointXY(Longitude, Latitude),
-                         QgsPointXY(f_last.attribute(0), f_last.attribute(1))])
-                    f.setGeometry(geom)
-                    linelyr.addFeatures([f])
-
-                CommonLayer(linelyr)
+                AddDrawLineOnMap(Longitude, Latitude, Altitude, self.drawLines)
 
                 self.drawLines.append([Longitude, Latitude, Altitude])
 
