@@ -104,7 +104,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.setItem(
             rowPosition, 0, QTableWidgetItem(str(rowPosition)))
         self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
-        self.VManager.setItem(rowPosition, 2, QTableWidgetItem("Loading"))
+        self.VManager.setItem(rowPosition, 2, QTableWidgetItem(QCoreApplication.translate(
+                    "ManagerDock", "Loading")))
         self.VManager.setItem(rowPosition, 3, QTableWidgetItem(filename))
         self.VManager.setItem(rowPosition, 4, QTableWidgetItem("-"))
         self.VManager.setCellWidget(rowPosition, 5, w)
@@ -208,7 +209,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def ToggleActiveRow(self, row, value="Playing"):
         ''' Toggle Active row manager video status '''
-        self.VManager.setItem(row, 2, QTableWidgetItem(value))
+        self.VManager.setItem(row, 2, QTableWidgetItem(QCoreApplication.translate(
+                    "ManagerDock", value)))
         return
 
     def closeEvent(self, _):

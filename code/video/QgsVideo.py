@@ -209,6 +209,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
         painter.setTransform(oldTransform)
         self.currentFrame.unmap()
+        return self.painter
 
 
 class VideoWidget(QVideoWidget):
@@ -390,7 +391,7 @@ class VideoWidget(QVideoWidget):
                     self.painter.fillRect(rect, brush)
 
             try:
-                self.surface.paint(self.painter)
+                self.painter = self.surface.paint(self.painter)
             except Exception:
                 None
         else:
