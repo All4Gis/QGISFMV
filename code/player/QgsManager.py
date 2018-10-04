@@ -44,7 +44,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # 8 x 500 = 4000ms buffer time
         self.min_buffer_size = 8
 
-        #self.actionOpen_Stream.setVisible(False)
+        # self.actionOpen_Stream.setVisible(False)
 
         self.VManager.viewport().installEventFilter(self)
 
@@ -105,7 +105,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             rowPosition, 0, QTableWidgetItem(str(rowPosition)))
         self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
         self.VManager.setItem(rowPosition, 2, QTableWidgetItem(QCoreApplication.translate(
-                    "ManagerDock", "Loading")))
+            "ManagerDock", "Loading")))
         self.VManager.setItem(rowPosition, 3, QTableWidgetItem(filename))
         self.VManager.setItem(rowPosition, 4, QTableWidgetItem("-"))
         self.VManager.setCellWidget(rowPosition, 5, w)
@@ -210,7 +210,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
     def ToggleActiveRow(self, row, value="Playing"):
         ''' Toggle Active row manager video status '''
         self.VManager.setItem(row, 2, QTableWidgetItem(QCoreApplication.translate(
-                    "ManagerDock", value)))
+            "ManagerDock", value)))
         return
 
     def closeEvent(self, _):

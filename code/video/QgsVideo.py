@@ -45,6 +45,7 @@ except ImportError:
 
 class InteractionState(object):
     """ Interaction Video Player Class """
+
     def __init__(self):
         self.pointDrawer = False
         self.ruler = False
@@ -59,6 +60,7 @@ class InteractionState(object):
 
 class FilterState(object):
     """ Filters State Video Player Class """
+
     def __init__(self):
         self.contrastFilter = False
         self.monoFilter = False
@@ -402,55 +404,9 @@ class VideoWidget(QVideoWidget):
         except Exception:
             None
 
-        # Draw clicked points on video
-        i = 1
-        for pt in self.drawPtPos:
-            draw.drawPointOnVideo(i, pt, self.painter, self.surface, self.gt)
-            i += 1
-
-        # Draw clicked lines on video
-        if len(self.drawLines) > 1:
-            for idx, pt in enumerate(self.drawLines):
-                if pt[0] is None:
-                    continue
-                else:
-                    draw.drawLinesOnVideo(
-                        pt, idx, self.painter, self.surface, self.gt, self.drawLines)
-
-        # Draw clicked Polygons on video
-        if len(self.drawPolygon) > 1:
-            poly = []
-            if any(None == x[1] for x in self.drawPolygon):
-                for pt in self.drawPolygon:
-                    if pt[0] is None:
-                        draw.drawPolygonOnVideo(
-                            poly, self.painter, self.surface, self.gt)
-                        poly = []
-                        continue
-                    poly.append(pt)
-                last_occurence = len(
-                    self.drawPolygon) - self.drawPolygon[::-1].index([None, None, None])
-                poly = []
-                for pt in range(last_occurence, len(self.drawPolygon)):
-                    poly.append(self.drawPolygon[pt])
-                if len(poly) > 1:
-                    draw.drawPolygonOnVideo(
-                        poly, self.painter, self.surface, self.gt)
-            else:
-                draw.drawPolygonOnVideo(
-                    self.drawPolygon, self.painter, self.surface, self.gt)
-
-        # Draw Ruler on video
-        # the measures do not persist in the video
-        if len(self.drawRuler) > 1:
-            draw.resetRulerDistance()
-            for idx, pt in enumerate(self.drawRuler):
-                if pt[0] is None:
-                    draw.resetRulerDistance()
-                    continue
-                else:
-                    draw.drawRulerOnVideo(
-                        pt, idx, self.painter, self.surface, self.gt, self.drawRuler)
+        # Draw On Video
+        draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
+                         self.drawRuler, self.painter, self.surface, self.gt)
 
         # Magnifier Glass
         if self.zoomed and self._interaction.magnifier:

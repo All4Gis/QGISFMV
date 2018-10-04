@@ -28,6 +28,59 @@ RulerTotalMeasure = 0.0
 class DrawToolBar(object):
 
     @staticmethod
+    def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawRuler, painter, surface, gt):
+        # Draw clicked points on video
+        i = 1
+        for pt in drawPtPos:
+            DrawToolBar.drawPointOnVideo(i, pt, painter, surface, gt)
+            i += 1
+
+        # Draw clicked lines on video
+        if len(drawLines) > 1:
+            for idx, pt in enumerate(drawLines):
+                if pt[0] is None:
+                    continue
+                else:
+                    DrawToolBar.drawLinesOnVideo(
+                        pt, idx, painter, surface, gt, drawLines)
+
+        # Draw clicked Polygons on video
+        if len(drawPolygon) > 1:
+            poly = []
+            if any(None == x[1] for x in drawPolygon):
+                for pt in drawPolygon:
+                    if pt[0] is None:
+                        DrawToolBar.drawPolygonOnVideo(
+                            poly, painter, surface, gt)
+                        poly = []
+                        continue
+                    poly.append(pt)
+                last_occurence = len(
+                    drawPolygon) - drawPolygon[::-1].index([None, None, None])
+                poly = []
+                for pt in range(last_occurence, len(drawPolygon)):
+                    poly.append(drawPolygon[pt])
+                if len(poly) > 1:
+                    DrawToolBar.drawPolygonOnVideo(
+                        poly, painter, surface, gt)
+            else:
+                DrawToolBar.drawPolygonOnVideo(
+                    drawPolygon, painter, surface, gt)
+
+        # Draw Ruler on video
+        # the measures do not persist in the video
+        if len(drawRuler) > 1:
+            DrawToolBar.resetRulerDistance()
+            for idx, pt in enumerate(drawRuler):
+                if pt[0] is None:
+                    DrawToolBar.resetRulerDistance()
+                    continue
+                else:
+                    DrawToolBar.drawRulerOnVideo(
+                        pt, idx, painter, surface, gt, drawRuler)
+        return
+
+    @staticmethod
     def drawPointOnVideo(number, pt, painter, surface, gt):
         ''' Draw Points on Video '''
         if hasElevationModel():
