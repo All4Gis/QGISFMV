@@ -120,7 +120,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.setVisible(True)
 
         if not self.isStreaming:
-            settrace()
             # init non-blocking metadata buffered reader
             self.meta_reader[str(rowPosition)] = BufferedMetaReader(
                 filename, pass_time=self.pass_time, intervall=self.buffer_intervall, min_buffer_size=self.min_buffer_size)
