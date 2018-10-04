@@ -120,6 +120,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.setVisible(True)
 
         if not self.isStreaming:
+            settrace()
             # init non-blocking metadata buffered reader
             self.meta_reader[str(rowPosition)] = BufferedMetaReader(
                 filename, pass_time=self.pass_time, intervall=self.buffer_intervall, min_buffer_size=self.min_buffer_size)
@@ -132,15 +133,19 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 # init point we can center the video on
                 self.initialPt[str(rowPosition)
                                ] = getVideoLocationInfo(filename)
-                self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
-                    self.initialPt[str(rowPosition)][2]))
-                # self.VManager.resizeColumnsToContents()
+                if not self.initialPt[str(rowPosition)]:
+                    self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
+                        QCoreApplication.translate(
+                            "ManagerDock", "Start location not available!")))
+                else:
+                    self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
+                        self.initialPt[str(rowPosition)][2]))
             except Exception:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "ManagerDock", "This video don't have Metadata ! "),
                     level=QGis.Info)
                 pbar.setValue(0)
-                self.ToggleActiveRow(rowPosition, value="Ready")
+                self.ToggleActiveRow(rowPosition, value="Not MISB")
                 return
 
             pbar.setValue(90)
@@ -174,8 +179,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
     def PlayVideoFromManager(self, model):
         ''' Play video from manager dock '''
 
-        if self.pBars[str(model.row())].value() < 100:
-            return
+        # Play if not have metadata
+#         if self.pBars[str(model.row())].value() < 100:
+#             return
 
         path = self.VManager.item(model.row(), 3).text()
         self.ToggleActiveRow(model.row())
