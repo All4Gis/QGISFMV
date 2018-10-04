@@ -136,6 +136,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                         QCoreApplication.translate(
                             "ManagerDock", "Start location not available!")))
+                    self.ToggleActiveRow(rowPosition, value="Not MISB")
+                    pbar.setValue(0)
+                    return
                 else:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                         self.initialPt[str(rowPosition)][2]))
@@ -178,9 +181,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
     def PlayVideoFromManager(self, model):
         ''' Play video from manager dock '''
 
-        # Play if not have metadata
-#         if self.pBars[str(model.row())].value() < 100:
-#             return
+        # Not Play if not have metadata
+        if self.pBars[str(model.row())].value() < 100:
+            return
 
         path = self.VManager.item(model.row(), 3).text()
         self.ToggleActiveRow(model.row())

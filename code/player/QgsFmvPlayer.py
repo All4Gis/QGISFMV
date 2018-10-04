@@ -120,29 +120,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.metadataDlg.setMinimumWidth(500)
         self.metadataDlg.hide()
 
-    def HasMetadata(self, videoPath):
-        """ Check if video have Metadata or not """
-        try:
-            p = _spawn(['-i', videoPath,
-                        '-map', 'data-re',
-                        '-codec', 'copy',
-                        '-preset', 'ultrafast',
-                        '-f', 'data', '-'])
-
-            stdout_data, _ = p.communicate()
-
-            if stdout_data == b'':
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "This video don't have Metadata ! "),
-                    level=QGis.Info)
-                return False
-
-            return True
-        except Exception as e:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e),
-                level=QGis.Info)
-
     def HasAudio(self, videoPath):
         """ Check if video have Metadata or not """
         try:
@@ -755,11 +732,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(os.path.normpath(videoPath)))
 
-            if self.HasMetadata(videoPath):
-                CreateVideoLayers()
-                self.clearMetadata()
-            else:
-                self.btn_GeoReferencing.setEnabled(False)
+            CreateVideoLayers()
+            self.clearMetadata()
 
             self.HasFileAudio = True
             if not self.HasAudio(videoPath):
