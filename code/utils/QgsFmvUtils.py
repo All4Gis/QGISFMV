@@ -498,6 +498,8 @@ def GetGCPGeoTransform():
 
 
 def hasElevationModel():
+    if dtm_data is None:
+        return False
     if len(dtm_data) > 0:
         return True
     else:
