@@ -27,7 +27,10 @@ from abc import ABCMeta
 from abc import abstractmethod
 
 from QGIS_FMV.klvdata.common import ber_encode
-
+try:
+    from pydevd import *
+except ImportError:
+    None
 
 # Proposed alternate names, "BaseElement" of modules "bases".
 class Element(metaclass=ABCMeta):

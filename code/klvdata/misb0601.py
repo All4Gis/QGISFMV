@@ -31,7 +31,10 @@ from QGIS_FMV.klvdata.elementparser import (BytesElementParser,
                                             StringElementParser)
 from QGIS_FMV.klvdata.setparser import SetParser
 from QGIS_FMV.klvdata.streamparser import StreamParser
-
+try:
+    from pydevd import *
+except ImportError:
+    None
 
 class UnknownElement(UnknownElement):
     pass

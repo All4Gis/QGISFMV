@@ -27,7 +27,10 @@ from io import BytesIO
 from io import IOBase
 
 from QGIS_FMV.klvdata.common import bytes_to_int
-
+try:
+    from pydevd import *
+except ImportError:
+    None
 
 class KLVParser(object):
     """Return key, value pairs parsed from an SMPTE ST 336 source."""

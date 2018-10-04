@@ -232,7 +232,7 @@ def getVideoLocationInfo(videoPath):
                     '-ss', '00:00:00',
                     '-to', '00:00:01',
                     '-map', 'data-re',
-
+                    '-preset', 'ultrafast',
                     '-f', 'data', '-'])
 
         stdout_data, _ = p.communicate()

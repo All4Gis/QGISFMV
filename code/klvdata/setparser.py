@@ -29,7 +29,6 @@ from collections import OrderedDict
 from pprint import pformat
 
 from QGIS_FMV.klvdata.element import Element
-from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.klvparser import KLVParser
 
 
@@ -41,7 +40,6 @@ except ImportError:
 
 class SetParser(Element, metaclass=ABCMeta):
     """Parsable Element. Not intended to be used directly. Always as super class."""
-    _unknown_element = UnknownElement
 
     def __init__(self, value, key_length=1):
         """All parser needs is the value, no other information"""
@@ -98,8 +96,8 @@ class SetParser(Element, metaclass=ABCMeta):
         for key, value in KLVParser(self.value, self.key_length):
             try:
                 self.items[key] = self.parsers[key](value)
-            except KeyError:
-                self.items[key] = self._unknown_element(key, value)
+            except Exception:
+                None
 
     @classmethod
     def add_parser(cls, obj):
@@ -167,6 +165,12 @@ class SetParser(Element, metaclass=ABCMeta):
                         self.SetSlantRange(item.value.value)
                     elif item.TAG == 22:
                         self.SettargetWidth(item.value.value)
+                    elif item.TAG == 23:
+                        self.SetFrameCenterLatitude(item.value.value)
+                    elif item.TAG == 24:
+                        self.SetFrameCenterLongitude(item.value.value)
+                    elif item.TAG == 25:
+                        self.SetFrameCenterElevation(item.value.value)
                     elif item.TAG == 26:
                         self.SetOffsetCornerLatitudePoint1(item.value.value)
                     elif item.TAG == 27:
@@ -183,12 +187,6 @@ class SetParser(Element, metaclass=ABCMeta):
                         self.SetOffsetCornerLatitudePoint4(item.value.value)
                     elif item.TAG == 33:
                         self.SetOffsetCornerLongitudePoint4(item.value.value)
-                    elif item.TAG == 23:
-                        self.SetFrameCenterLatitude(item.value.value)
-                    elif item.TAG == 24:
-                        self.SetFrameCenterLongitude(item.value.value)
-                    elif item.TAG == 25:
-                        self.SetFrameCenterElevation(item.value.value)
                     elif item.TAG == 82:
                         self.SetCornerLatitudePoint1Full(item.value.value)
                     elif item.TAG == 83:
@@ -267,23 +265,17 @@ class SetParser(Element, metaclass=ABCMeta):
     def SetSensorRelativeAzimuthAngle(self, value):
         self._SensorRelativeAzimuthAngle = float(value)
 
+    def GetSlantRange(self):
+        return self._slantRange
+
+    def SetSlantRange(self, value):
+        self._slantRange = float(value)
+
     def GettargetWidth(self):
         return self._targetWidth
 
-    def GetSlantRange(self):
-        return self._slantRange
-
-    def SetSlantRange(self, value):
-        self._slantRange = float(value)
-
     def SettargetWidth(self, value):
         self._targetWidth = float(value)
-
-    def GetSlantRange(self):
-        return self._slantRange
-
-    def SetSlantRange(self, value):
-        self._slantRange = float(value)
 
     def GetOffsetCornerLatitudePoint1(self):
         return self._OffsetCornerLatitudePoint1

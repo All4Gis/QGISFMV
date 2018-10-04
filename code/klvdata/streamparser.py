@@ -25,7 +25,10 @@
 
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.klvparser import KLVParser
-
+try:
+    from pydevd import *
+except ImportError:
+    None
 
 class StreamParser:
     parsers = {}
@@ -41,7 +44,6 @@ class StreamParser:
 
     def __next__(self):
         key, value = next(self.iter_stream)
-
         if key in self.parsers:
             return self.parsers[key](value)
         else:
