@@ -141,15 +141,12 @@ class BufferedMetaReader():
             if new_key not in self._meta:
                 #qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
                 self._meta[new_key] = callBackMetadataThread(cmds=['-i', self.video_path,
-
-
-
-
                                                                    '-ss', _seconds_to_time_frac(
                                                                        cTime),
                                                                    '-to', _seconds_to_time_frac(
                                                                        nTime),
                                                                    '-map', 'data-re',
+                                                                    '-preset', 'ultrafast',
                                                                    '-f', 'data', '-'])
                 self._meta[new_key].start()
 
@@ -683,14 +680,26 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     cornerPointUL = [packet.GetCornerLatitudePoint1Full(
     ), packet.GetCornerLongitudePoint1Full()]
 
+    if None in cornerPointUL:
+        return
+
     cornerPointUR = [packet.GetCornerLatitudePoint2Full(
     ), packet.GetCornerLongitudePoint2Full()]
+
+    if None in cornerPointUR:
+        return
 
     cornerPointLR = [packet.GetCornerLatitudePoint3Full(
     ), packet.GetCornerLongitudePoint3Full()]
 
+    if None in cornerPointLR:
+        return
+
     cornerPointLL = [packet.GetCornerLatitudePoint4Full(
     ), packet.GetCornerLongitudePoint4Full()]
+
+    if None in cornerPointLL:
+        return
 
     UpdateFootPrintData(
         packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
@@ -867,7 +876,14 @@ def CornerEstimationWithoutOffsets(packet):
         if sensorLatitude == 0:
             return False
 
+        if sensorLongitude is None or sensorLatitude is None:
+            return False
+
         initialPoint = (sensorLongitude, sensorLatitude)
+
+        if frameCenterLon is None or frameCenterLat is None:
+            return False
+
         destPoint = (frameCenterLon, frameCenterLat)
 
         distance = sphere.distance(initialPoint, destPoint)

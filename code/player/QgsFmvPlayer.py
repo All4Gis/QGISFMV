@@ -188,17 +188,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def callBackMetadata(self, currentTime, nextTime):
         """ Metadata CallBack """
         try:
-            # TODO : Speed this function
-            #             stdout_data = _check_output(['-i', self.fileName,
-            #                         '-ss', currentTime,
-            #                         '-to', nextTime,
-            #                         '-f', 'data', '-'])
-
             port = int(self.fileName.split(':')[2])
             t = callBackMetadataThread(cmds=['-i', self.fileName.replace(str(port), str(port + 1)),
                                              '-ss', currentTime,
                                              '-to', nextTime,
                                              '-map', 'data-re',
+                                             '-preset', 'ultrafast',
                                              '-f', 'data', '-'])
             t.start()
             t.join(1)
