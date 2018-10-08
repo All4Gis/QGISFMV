@@ -81,7 +81,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
         self.DrawToolBar.addWidget(self.toolBtn_Cesure)
 
-        # Draw Polygon QToolButton (TODO : MAKE EXCLUSIVE ACTIONS)
+        # Draw Polygon QToolButton
         self.toolBtn_DPolygon.setDefaultAction(self.actionDraw_Polygon)
         self.DrawToolBar.addWidget(self.toolBtn_DPolygon)
 

@@ -288,9 +288,10 @@ class VideoWidget(QVideoWidget):
 
     def removeAllPolygon(self):
         self.drawPolygon = []
-        RemoveLastDrawPolygonOnMap()
         # Clear all Layer
+        RemoveAllDrawPolygonOnMap()
 
+    # TODO: MAKE THIS FUNCTION FOR POLYGON
     def removeLastPolygon(self):
         if len(self.drawPolygon) > 0:
             del self.drawPolygon[-1]

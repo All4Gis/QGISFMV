@@ -54,7 +54,7 @@ crtPltTailNum = 'DEFAULT'
 
 
 def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
-    # add pin point on the map
+    '''  add pin point on the map '''
     pointLyr = qgsu.selectLayerByName(Point_lyr)
     if pointLyr is None:
         return
@@ -72,7 +72,7 @@ def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
 
 
 def AddDrawLineOnMap(Longitude, Latitude, Altitude, drawLines):
-    # add Line on the map
+    '''  add Line on the map ''' 
     linelyr = qgsu.selectLayerByName(Line_lyr)
     if linelyr is None:
         return
@@ -99,16 +99,20 @@ def AddDrawLineOnMap(Longitude, Latitude, Altitude, drawLines):
     CommonLayer(linelyr)
     return
 
-# TODO: MAKE FUNCTION
+
 def RemoveLastDrawPolygonOnMap():
+    '''  Remove Last Feature on Polygon Layer ''' 
     polyLyr = qgsu.selectLayerByName(Polygon_lyr)
     if polyLyr is None:
         return
     polyLyr.startEditing()
+    polyLyr.deleteFeatures([polyLyr.featureCount () - 1])
     CommonLayer(polyLyr)
     return
 
+
 def RemoveAllDrawPolygonOnMap():
+    ''' Remove all features on Polygon Layer ''' 
     polyLyr = qgsu.selectLayerByName(Polygon_lyr)
     if polyLyr is None:
         return
@@ -117,8 +121,9 @@ def RemoveAllDrawPolygonOnMap():
     CommonLayer(polyLyr)
     return
 
+
 def AddDrawPolygonOnMap(poly_coordinates):
-    # Add Polygon
+    ''' Add Polygon Layer '''
     polyLyr = qgsu.selectLayerByName(Polygon_lyr)
     if polyLyr is None:
         return

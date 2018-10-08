@@ -251,7 +251,7 @@ class DrawToolBar(object):
                 None
         return
 
-    # TODO: Make This (Not work,tranformation error maybe)
+    # TODO: Make This (Not work, tranformation error maybe)
     @staticmethod
     def drawCensuredOnVideo(painter, drawCesure):
         ''' Draw Censure on Video '''
