@@ -77,6 +77,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.currentInfo = 0.0
         self.data = None
 
+        # Censure QToolButton
+        self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
+        self.DrawToolBar.addWidget(self.toolBtn_Cesure)
+
+        # Draw Polygon QToolButton (TODO : MAKE EXCLUSIVE ACTIONS)
+        self.toolBtn_DPolygon.setDefaultAction(self.actionDraw_Polygon)
+        self.DrawToolBar.addWidget(self.toolBtn_DPolygon)
+
         # Hide Color Button
         self.btn_Color.hide()
         self.actionObject_Tracking.setVisible(False)
@@ -373,6 +381,22 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         menu.exec_(self.mapToGlobal(point))
         return
 
+    def removeLastCensured(self):
+        self.videoWidget.removeLastCensured()
+        return
+
+    def removeAllCensure(self):
+        self.videoWidget.removeAllCensure()
+        return
+
+    def removeLastPolygon(self):
+        self.videoWidget.removeLastPolygon()
+        return
+
+    def removeAllPolygon(self):
+        self.videoWidget.removeAllPolygon()
+        return
+
     def ToggleQToolBar(self):
         ''' Toggle ToolBar '''
         toolbars = self.findChildren(QToolBar)
@@ -502,6 +526,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.videoWidget.UpdateSurface()
 
+    def VideoCensure(self, value):
+        ''' Censure Video Parts'''
+        self.UncheckUtils(self.sender(), value)
+        self.videoWidget.SetCensure(value)
+        self.videoWidget.UpdateSurface()
+        return
+
     def UncheckUtils(self, sender, value):
         ''' Uncheck Utils Video '''
         self.actionMagnifying_glass.setChecked(False)
@@ -510,6 +541,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionDraw_Polygon.setChecked(False)
         self.actionObject_Tracking.setChecked(False)
         self.actionRuler.setChecked(False)
+        self.actionCensure.setChecked(False)
 
         self.videoWidget.RestoreDrawer()
 

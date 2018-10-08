@@ -33,4 +33,4 @@ ffmpeg = "D:\\FFMPEG"
 ffprobe = "D:\\FFMPEG"
 
 # Buffer Metadata Reader Size (IMPORTANT : IF THIS VALUE IS VERY HIGH THE PLUGIN WILL FAIL)
-min_buffer_size = 100
+min_buffer_size = 8

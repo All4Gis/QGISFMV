@@ -28,7 +28,7 @@ RulerTotalMeasure = 0.0
 class DrawToolBar(object):
 
     @staticmethod
-    def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawRuler, painter, surface, gt):
+    def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawRuler, drawCesure, painter, surface, gt):
         # Draw clicked points on video
         i = 1
         for pt in drawPtPos:
@@ -78,6 +78,12 @@ class DrawToolBar(object):
                 else:
                     DrawToolBar.drawRulerOnVideo(
                         pt, idx, painter, surface, gt, drawRuler)
+
+        # Draw Censure
+        if len(drawCesure) > 0:
+            DrawToolBar.drawCensuredOnVideo(painter, drawCesure)
+            return
+
         return
 
     @staticmethod
@@ -129,7 +135,6 @@ class DrawToolBar(object):
         pen.setDashPattern([1, 4, 5, 4])
 
         painter.setPen(pen)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.drawPoint(center)
 
         if len(drawLines) > 1:
@@ -177,7 +182,6 @@ class DrawToolBar(object):
         path.addPolygon(polygon)
 
         painter.setPen(pen)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.drawPolygon(polygon)
         painter.fillPath(path, brush)
         return
@@ -189,7 +193,7 @@ class DrawToolBar(object):
 
     @staticmethod
     def drawRulerOnVideo(pt, idx, painter, surface, gt, drawRuler):
-        ''' Draw Lines on Video '''
+        ''' Draw Ruler on Video '''
         if hasElevationModel():
             pt = GetLine3DIntersectionWithPlane(
                 GetSensor(), pt, GetFrameCenter()[2])
@@ -233,7 +237,6 @@ class DrawToolBar(object):
                 pen.setWidth(radius_pt)
                 pen.setCapStyle(Qt.RoundCap)
                 painter.setPen(pen)
-                painter.setRenderHint(QPainter.HighQualityAntialiasing)
                 painter.drawPoint(center)
                 painter.drawPoint(end)
 
@@ -248,8 +251,27 @@ class DrawToolBar(object):
                 None
         return
 
+    # TODO: Make This (Not work,tranformation error maybe)
+    @staticmethod
+    def drawCensuredOnVideo(painter, drawCesure):
+        ''' Draw Censure on Video '''
+        try:
+            for geom in drawCesure:
+                pen = QPen(Qt.black)
+                pen.setWidth(3)
+                brush = QBrush()
+                brush.setColor(QColor(0,0,0))
+                brush.setStyle(Qt.SolidPattern)
+                painter.setBrush(brush)
+                painter.setPen(pen)
+                painter.drawRect(geom[0].x(), geom[0].y(), geom[0].width(), geom[0].height())
+        except Exception:
+            None
+        return
+
     @staticmethod
     def drawMagnifierOnVideo(width, height, maskPixmap, dragPos, zoomPixmap, surface, painter, offset):
+        ''' Draw Magnifier on Video '''
         dim = min(width, height)
         MAX_MAGNIFIER = 229
         magnifierSize = min(MAX_MAGNIFIER, dim * 2 / 3)
@@ -295,7 +317,6 @@ class DrawToolBar(object):
 
         clipPath = QPainterPath()
         clipPath.addEllipse(QPointF(center), ring, ring)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing)
         painter.setClipPath(clipPath)
         painter.drawPixmap(corner, zoomPixmap)
         painter.setClipping(False)

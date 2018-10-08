@@ -23,6 +23,8 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.4:
+    	-Refactor code for easy contributions
+    	-Censure video part and context enu for remove all or last area
     	-Ruler on video
     	-Video manager shows now a progress bar while meta buffer loading
 		-Video manager has "Start Location" row that show the city where video is filmed 

@@ -99,6 +99,23 @@ def AddDrawLineOnMap(Longitude, Latitude, Altitude, drawLines):
     CommonLayer(linelyr)
     return
 
+# TODO: MAKE FUNCTION
+def RemoveLastDrawPolygonOnMap():
+    polyLyr = qgsu.selectLayerByName(Polygon_lyr)
+    if polyLyr is None:
+        return
+    polyLyr.startEditing()
+    CommonLayer(polyLyr)
+    return
+
+def RemoveAllDrawPolygonOnMap():
+    polyLyr = qgsu.selectLayerByName(Polygon_lyr)
+    if polyLyr is None:
+        return
+    polyLyr.startEditing()
+    polyLyr.dataProvider().truncate()
+    CommonLayer(polyLyr)
+    return
 
 def AddDrawPolygonOnMap(poly_coordinates):
     # Add Polygon

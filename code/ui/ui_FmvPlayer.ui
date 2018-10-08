@@ -41,6 +41,55 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
+       <widget class="QToolButton" name="toolBtn_DPolygon">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::MenuButtonPopup</enum>
+        </property>
+        <property name="autoRaise">
+         <bool>true</bool>
+        </property>
+        <addaction name="actionDraw_Polygon"/>
+        <addaction name="actionDraw_Polygon_remove_last"/>
+        <addaction name="actionDraw_Polygon_remove_all"/>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolBtn_Cesure">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::MenuButtonPopup</enum>
+        </property>
+        <addaction name="actionCensure"/>
+        <addaction name="actionRemove_Last_censured"/>
+        <addaction name="actionRemove_All_censured"/>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
      <widget class="Line" name="line">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -681,12 +730,13 @@ QProgressBar::chunk
    </attribute>
    <addaction name="actionMagnifying_glass"/>
    <addaction name="separator"/>
-   <addaction name="actionDraw_Polygon"/>
    <addaction name="actionDraw_Line"/>
    <addaction name="actionDraw_Pinpoint"/>
    <addaction name="actionRuler"/>
    <addaction name="separator"/>
    <addaction name="actionObject_Tracking"/>
+   <addaction name="separator"/>
+   <addaction name="separator"/>
   </widget>
   <action name="actionGray">
    <property name="checkable">
@@ -949,6 +999,75 @@ QProgressBar::chunk
    </property>
    <property name="text">
     <string>Horizontal Mirrored</string>
+   </property>
+  </action>
+  <action name="actionCensure">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/censure-pencil.png</normaloff>:/imgFMV/images/censure-pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Censure</string>
+   </property>
+   <property name="toolTip">
+    <string>Censure</string>
+   </property>
+  </action>
+  <action name="actionRemove_Last_censured">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/censure-pencil-remove-last.png</normaloff>:/imgFMV/images/censure-pencil-remove-last.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Last</string>
+   </property>
+  </action>
+  <action name="actionRemove_All_censured">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/censure-pencil-remove-all.png</normaloff>:/imgFMV/images/censure-pencil-remove-all.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove All</string>
+   </property>
+  </action>
+  <action name="actionDraw_Polygon_remove_last">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/draw-polygon-remove-last.png</normaloff>:/imgFMV/images/draw-polygon-remove-last.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Last Polygon</string>
+   </property>
+   <property name="iconText">
+    <string>Draw Polygon</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Last Polygon</string>
+   </property>
+  </action>
+  <action name="actionDraw_Polygon_remove_all">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/draw-polygon-remove-all.png</normaloff>:/imgFMV/images/draw-polygon-remove-all.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove All Polygon</string>
+   </property>
+   <property name="iconText">
+    <string>Draw Polygon</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove All Polygon</string>
    </property>
   </action>
  </widget>
@@ -1603,6 +1722,86 @@ QProgressBar::chunk
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionCensure</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>VideoCensure(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRemove_All_censured</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeAllCensure()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRemove_Last_censured</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeLastCensured()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDraw_Polygon_remove_last</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeLastPolygon()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDraw_Polygon_remove_all</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeAllPolygon()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleGroup(bool)</slot>
@@ -1641,5 +1840,10 @@ QProgressBar::chunk
   <slot>ojectTracking(bool)</slot>
   <slot>VideoRuler(bool)</slot>
   <slot>MirrorHorizontalFilter(bool)</slot>
+  <slot>VideoCensure(bool)</slot>
+  <slot>removeLastCensured()</slot>
+  <slot>removeAllCensure()</slot>
+  <slot>removeLastPolygon()</slot>
+  <slot>removeAllPolygon()</slot>
  </slots>
 </ui>

@@ -22,7 +22,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         hasElevationModel,
                                         GetImageHeight)
 
-from QGIS_FMV.utils.QgsFmvLayers import AddDrawPointOnMap, AddDrawLineOnMap, AddDrawPolygonOnMap
+from QGIS_FMV.utils.QgsFmvLayers import AddDrawPointOnMap, AddDrawLineOnMap, AddDrawPolygonOnMap, RemoveLastDrawPolygonOnMap, RemoveAllDrawPolygonOnMap
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
@@ -53,6 +53,7 @@ class InteractionState(object):
         self.polygonDrawer = False
         self.magnifier = False
         self.objectTracking = False
+        self.censure = False
 
     def clear(self):
         self.__init__()
@@ -221,10 +222,17 @@ class VideoWidget(QVideoWidget):
         super(VideoWidget, self).__init__(parent)
         self.surface = VideoWidgetSurface(self)
         self.Tracking_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
+        
+        self.Censure_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
 
         pal = QPalette()
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
         self.Tracking_RubberBand.setPalette(pal)
+        
+        pal = QPalette()
+        pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.black)))
+        self.Censure_RubberBand.setPalette(pal)
+        
         self.var_currentMouseMoveEvent = None
 
         self._interaction = InteractionState()
@@ -237,6 +245,7 @@ class VideoWidget(QVideoWidget):
         self.gt = None
         self.pointIndex = 1
 
+        self.drawCesure = []
         self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawRuler, self.drawPolygon = [], [], [], [], []
         self.poly_RubberBand = QgsRubberBand(
             iface.mapCanvas(), True)  # Polygon type
@@ -269,6 +278,24 @@ class VideoWidget(QVideoWidget):
     def ResetDrawRuler(self):
         ''' Resets DrawRuler Points List '''
         self.drawRuler = []
+
+    def removeAllCensure(self):
+        self.drawCesure = []
+
+    def removeLastCensured(self):
+        if len(self.drawCesure) > 0:
+            del self.drawCesure[-1]
+
+    def removeAllPolygon(self):
+        self.drawPolygon = []
+        RemoveLastDrawPolygonOnMap()
+        # Clear all Layer
+
+    def removeLastPolygon(self):
+        if len(self.drawPolygon) > 0:
+            del self.drawPolygon[-1]
+            #remove last index layer
+            RemoveLastDrawPolygonOnMap()
 
     def currentMouseMoveEvent(self, event):
         self.var_currentMouseMoveEvent = event
@@ -348,6 +375,10 @@ class VideoWidget(QVideoWidget):
         ''' Set Ruler '''
         self._interaction.ruler = value
 
+    def SetCensure(self, value):
+        ''' Set Censure Video Parts '''
+        self._interaction.censure = value
+
     def SetGray(self, value):
         ''' Set gray scale '''
         self._filterSatate.grayColorFilter = value
@@ -406,7 +437,7 @@ class VideoWidget(QVideoWidget):
 
         # Draw On Video
         draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
-                         self.drawRuler, self.painter, self.surface, self.gt)
+                         self.drawRuler, self.drawCesure, self.painter, self.surface, self.gt)
 
         # Magnifier Glass
         if self.zoomed and self._interaction.magnifier:
@@ -479,6 +510,11 @@ class VideoWidget(QVideoWidget):
         if not self.Tracking_RubberBand.isHidden():
             self.Tracking_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
+
+        if not self.Censure_RubberBand.isHidden():
+            self.Censure_RubberBand.setGeometry(
+                QRect(self.origin, event.pos()).normalized())
+
 
         if not self.zoomed:
             delta = event.pos() - self.pressPos
@@ -562,6 +598,12 @@ class VideoWidget(QVideoWidget):
                     QRect(self.origin, QSize()))
                 self.Tracking_RubberBand.show()
 
+            if self._interaction.censure:
+                self.origin = event.pos()
+                self.Censure_RubberBand.setGeometry(
+                    QRect(self.origin, QSize()))
+                self.Censure_RubberBand.show()
+
             # Ruler drawer
             if self.gt is not None and self._interaction.ruler:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
@@ -599,6 +641,11 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
+        if self._interaction.censure:
+            geom = self.Tracking_RubberBand.geometry()
+            self.Censure_RubberBand.hide()
+            self.drawCesure.append([geom])
+
         if self._interaction.objectTracking:
             geom = self.Tracking_RubberBand.geometry()
             bbox = (geom.x(), geom.y(), geom.width(), geom.height())

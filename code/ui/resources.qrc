@@ -35,6 +35,8 @@
         <file>../images/stream.png</file> 
         <file>../images/header_logo.png</file> 
         <file>../images/draw-polygon.png</file> 
+        <file>../images/draw-polygon-remove-last.png</file> 
+        <file>../images/draw-polygon-remove-all.png</file> 
         <file>../images/draw-polyline.png</file> 
         <file>../images/magnifier-glass.png</file> 
         <file>../images/object-tracking.png</file>  
@@ -48,5 +50,9 @@
         <file>../images/video-converter.png</file>
         <file>../images/misb-file.png</file>
         <file>../images/mirrored.png</file>
+        <file>../images/censure-pencil.png</file>
+        <file>../images/censure-pencil-remove-last.png</file>
+        <file>../images/censure-pencil-remove-all.png</file>
+        <file>../images/draw-text.png</file>
     </qresource>
 </RCC>
