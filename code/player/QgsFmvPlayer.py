@@ -382,18 +382,22 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def removeLastCensured(self):
+        ''' Remove Last Censure Objects '''
         self.videoWidget.removeLastCensured()
         return
 
     def removeAllCensure(self):
+        ''' Remove All Censure Objects '''
         self.videoWidget.removeAllCensure()
         return
 
     def removeLastPolygon(self):
+        ''' Remove Last Polygon Draw Layer '''
         self.videoWidget.removeLastPolygon()
         return
 
     def removeAllPolygon(self):
+        ''' Remove All Polygon Draw Layer '''
         self.videoWidget.removeAllPolygon()
         return
 
