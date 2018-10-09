@@ -260,11 +260,12 @@ class DrawToolBar(object):
                 pen = QPen(Qt.black)
                 pen.setWidth(3)
                 brush = QBrush()
-                brush.setColor(QColor(0,0,0))
+                brush.setColor(QColor(0, 0, 0))
                 brush.setStyle(Qt.SolidPattern)
                 painter.setBrush(brush)
                 painter.setPen(pen)
-                painter.drawRect(geom[0].x(), geom[0].y(), geom[0].width(), geom[0].height())
+                painter.drawRect(geom[0].x(), geom[0].y(),
+                                 geom[0].width(), geom[0].height())
         except Exception:
             None
         return

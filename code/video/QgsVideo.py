@@ -228,17 +228,17 @@ class VideoWidget(QVideoWidget):
         super(VideoWidget, self).__init__(parent)
         self.surface = VideoWidgetSurface(self)
         self.Tracking_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
-        
+
         self.Censure_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
 
         pal = QPalette()
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
         self.Tracking_RubberBand.setPalette(pal)
-        
+
         pal = QPalette()
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.black)))
         self.Censure_RubberBand.setPalette(pal)
-        
+
         self.var_currentMouseMoveEvent = None
 
         self._interaction = InteractionState()
@@ -298,7 +298,7 @@ class VideoWidget(QVideoWidget):
         ''' Remove All Point Drawer Objects '''
         if len(self.drawPtPos) > 0:
             del self.drawPtPos[-1]
-            # TODO: NOT WORK DELETE LAYER FEATURE (CKECH NUMBER COLUMN)
+            # TODO: NOT WORK DELETE LAYER FEATURE (CKECH NUMBER COLUMN INSERT)
             RemoveLastDrawPointOnMap()
         return
 
@@ -320,15 +320,15 @@ class VideoWidget(QVideoWidget):
     def removeLastPolygon(self):
         ''' Remove Last Polygon Drawer Objects '''
         if len(self.drawPolygon) > 0:
-            for pt in range(len(self.drawPolygon)-1,-1,-1):
+            for pt in range(len(self.drawPolygon) - 1, -1, -1):
                 del self.drawPolygon[pt]
                 try:
-                    if self.drawPolygon[pt-1][0] is None:
+                    if self.drawPolygon[pt - 1][0] is None:
                         break
                 except Exception:
                     None
             self.UpdateSurface()
-            #remove last index layer
+            # remove last index layer
             RemoveLastDrawPolygonOnMap()
 
     def currentMouseMoveEvent(self, event):
@@ -548,7 +548,6 @@ class VideoWidget(QVideoWidget):
         if not self.Censure_RubberBand.isHidden():
             self.Censure_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
-
 
         if not self.zoomed:
             delta = event.pos() - self.pressPos

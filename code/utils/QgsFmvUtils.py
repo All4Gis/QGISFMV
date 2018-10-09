@@ -146,7 +146,7 @@ class BufferedMetaReader():
                                                                    '-to', _seconds_to_time_frac(
                                                                        nTime),
                                                                    '-map', 'data-re',
-                                                                    '-preset', 'ultrafast',
+                                                                   '-preset', 'ultrafast',
                                                                    '-f', 'data', '-'])
                 self._meta[new_key].start()
 

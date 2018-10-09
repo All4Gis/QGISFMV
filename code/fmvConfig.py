@@ -32,5 +32,6 @@ Reverse_geocoding_url = "https://nominatim.openstreetmap.org/reverse.php?format=
 ffmpeg = "D:\\FFMPEG"
 ffprobe = "D:\\FFMPEG"
 
-# Buffer Metadata Reader Size (IMPORTANT : IF THIS VALUE IS VERY HIGH THE PLUGIN WILL FAIL)
+# Buffer Metadata Reader Size (IMPORTANT : IF THIS VALUE IS VERY HIGH THE
+# PLUGIN WILL FAIL)
 min_buffer_size = 8

@@ -30,6 +30,7 @@ try:
 except ImportError:
     None
 
+
 class StreamParser:
     parsers = {}
 

@@ -32,6 +32,7 @@ try:
 except ImportError:
     None
 
+
 class KLVParser(object):
     """Return key, value pairs parsed from an SMPTE ST 336 source."""
 

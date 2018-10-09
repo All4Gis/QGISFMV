@@ -72,7 +72,7 @@ def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
 
 
 def AddDrawLineOnMap(Longitude, Latitude, Altitude, drawLines):
-    '''  add Line on the map ''' 
+    '''  add Line on the map '''
     linelyr = qgsu.selectLayerByName(Line_lyr)
     if linelyr is None:
         return
@@ -101,18 +101,18 @@ def AddDrawLineOnMap(Longitude, Latitude, Altitude, drawLines):
 
 
 def RemoveLastDrawPolygonOnMap():
-    '''  Remove Last Feature on Polygon Layer ''' 
+    '''  Remove Last Feature on Polygon Layer '''
     polyLyr = qgsu.selectLayerByName(Polygon_lyr)
     if polyLyr is None:
         return
     polyLyr.startEditing()
-    polyLyr.deleteFeatures([polyLyr.featureCount ()])
+    polyLyr.deleteFeatures([polyLyr.featureCount()])
     CommonLayer(polyLyr)
     return
 
 
 def RemoveLastDrawPointOnMap():
-    ''' Remove Last features on Point Layer ''' 
+    ''' Remove Last features on Point Layer '''
     pointLyr = qgsu.selectLayerByName(Point_lyr)
     if pointLyr is None:
         return
@@ -123,7 +123,7 @@ def RemoveLastDrawPointOnMap():
 
 
 def RemoveAllDrawPointOnMap():
-    ''' Remove all features on Point Layer ''' 
+    ''' Remove all features on Point Layer '''
     pointLyr = qgsu.selectLayerByName(Point_lyr)
     if pointLyr is None:
         return
@@ -134,7 +134,7 @@ def RemoveAllDrawPointOnMap():
 
 
 def RemoveAllDrawPolygonOnMap():
-    ''' Remove all features on Polygon Layer ''' 
+    ''' Remove all features on Polygon Layer '''
     polyLyr = qgsu.selectLayerByName(Polygon_lyr)
     if polyLyr is None:
         return
