@@ -298,6 +298,7 @@ class VideoWidget(QVideoWidget):
         ''' Remove All Point Drawer Objects '''
         if len(self.drawPtPos) > 0:
             del self.drawPtPos[-1]
+            # TODO: NOT WORK DELETE LAYER FEATURE (CKECH NUMBER COLUMN)
             RemoveLastDrawPointOnMap()
         return
 
