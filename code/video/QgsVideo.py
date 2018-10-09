@@ -280,18 +280,22 @@ class VideoWidget(QVideoWidget):
         self.drawRuler = []
 
     def removeAllCensure(self):
+        ''' Remove All Censure Objects '''
         self.drawCesure = []
 
     def removeLastCensured(self):
+        ''' Remove Last Censure Objects '''
         if len(self.drawCesure) > 0:
             del self.drawCesure[-1]
 
     def removeAllPolygon(self):
+        ''' Remove All Polyfon Drawer Objects '''
         self.drawPolygon = []
         # Clear all Layer
         RemoveAllDrawPolygonOnMap()
 
     def removeLastPolygon(self):
+        ''' Remove Last Polyfon Drawer Objects '''
         if len(self.drawPolygon) > 0:
             for pt in range(len(self.drawPolygon)-1,-1,-1):
                 del self.drawPolygon[pt]
@@ -300,6 +304,7 @@ class VideoWidget(QVideoWidget):
                         break
                 except Exception:
                     None
+            self.UpdateSurface()
             #remove last index layer
             RemoveLastDrawPolygonOnMap()
 

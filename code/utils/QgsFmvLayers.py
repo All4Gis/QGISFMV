@@ -106,10 +106,7 @@ def RemoveLastDrawPolygonOnMap():
     if polyLyr is None:
         return
     polyLyr.startEditing()
-    if polyLyr.featureCount () > 1:
-        polyLyr.deleteFeatures([polyLyr.featureCount () - 1])
-    else:
-        polyLyr.deleteFeatures([polyLyr.featureCount ()])
+    polyLyr.deleteFeatures([polyLyr.featureCount ()])
     CommonLayer(polyLyr)
     return
 
