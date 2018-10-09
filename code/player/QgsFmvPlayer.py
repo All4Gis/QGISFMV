@@ -85,6 +85,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.toolBtn_DPolygon.setDefaultAction(self.actionDraw_Polygon)
         self.DrawToolBar.addWidget(self.toolBtn_DPolygon)
 
+        # Draw Polygon QToolButton
+        self.toolBtn_DPoint.setDefaultAction(self.actionDraw_Pinpoint)
+        self.DrawToolBar.addWidget(self.toolBtn_DPoint)
+
         # Hide Color Button
         self.btn_Color.hide()
         self.actionObject_Tracking.setVisible(False)
@@ -399,6 +403,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def removeAllPolygon(self):
         ''' Remove All Polygon Draw Layer '''
         self.videoWidget.removeAllPolygon()
+        return
+
+    def removeLastPoint(self):
+        ''' Remove Last Point Draw Layer '''
+        self.videoWidget.removeLastPoint()
+        return
+
+    def removeAllPoint(self):
+        ''' Remove All Point Draw Layer '''
+        self.videoWidget.removeAllPoint()
         return
 
     def ToggleQToolBar(self):

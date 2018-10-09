@@ -43,6 +43,25 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
+       <widget class="QToolButton" name="toolBtn_DPoint">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="autoExclusive">
+         <bool>false</bool>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::MenuButtonPopup</enum>
+        </property>
+        <property name="autoRaise">
+         <bool>false</bool>
+        </property>
+        <addaction name="actionDraw_Pinpoint"/>
+        <addaction name="actionRemove_Last_Pinpoint"/>
+        <addaction name="actionRemove_All_Pinpoint"/>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="toolBtn_DPolygon">
         <property name="text">
          <string/>
@@ -731,7 +750,6 @@ QProgressBar::chunk
    <addaction name="actionMagnifying_glass"/>
    <addaction name="separator"/>
    <addaction name="actionDraw_Line"/>
-   <addaction name="actionDraw_Pinpoint"/>
    <addaction name="actionRuler"/>
    <addaction name="separator"/>
    <addaction name="actionObject_Tracking"/>
@@ -1068,6 +1086,36 @@ QProgressBar::chunk
    </property>
    <property name="toolTip">
     <string>Remove All Polygon</string>
+   </property>
+  </action>
+  <action name="actionRemove_Last_Pinpoint">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/draw-point-remove-last.png</normaloff>:/imgFMV/images/draw-point-remove-last.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Last Pinpoint</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Last Pinpoint</string>
+   </property>
+  </action>
+  <action name="actionRemove_All_Pinpoint">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/draw-point-remove-all.png</normaloff>:/imgFMV/images/draw-point-remove-all.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove All Pinpoint</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove All Pinpoint</string>
    </property>
   </action>
  </widget>
@@ -1802,6 +1850,38 @@ QProgressBar::chunk
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionRemove_Last_Pinpoint</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeLastPoint()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRemove_All_Pinpoint</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeAllPoint()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleGroup(bool)</slot>
@@ -1845,5 +1925,7 @@ QProgressBar::chunk
   <slot>removeAllCensure()</slot>
   <slot>removeLastPolygon()</slot>
   <slot>removeAllPolygon()</slot>
+  <slot>removeLastPoint()</slot>
+  <slot>removeAllPoint()</slot>
  </slots>
 </ui>

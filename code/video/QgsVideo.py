@@ -22,7 +22,13 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         hasElevationModel,
                                         GetImageHeight)
 
-from QGIS_FMV.utils.QgsFmvLayers import AddDrawPointOnMap, AddDrawLineOnMap, AddDrawPolygonOnMap, RemoveLastDrawPolygonOnMap, RemoveAllDrawPolygonOnMap
+from QGIS_FMV.utils.QgsFmvLayers import (AddDrawPointOnMap,
+                                         AddDrawLineOnMap,
+                                         AddDrawPolygonOnMap,
+                                         RemoveLastDrawPolygonOnMap,
+                                         RemoveAllDrawPolygonOnMap,
+                                         RemoveLastDrawPointOnMap,
+                                         RemoveAllDrawPointOnMap)
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
@@ -288,14 +294,30 @@ class VideoWidget(QVideoWidget):
         if len(self.drawCesure) > 0:
             del self.drawCesure[-1]
 
+    def removeLastPoint(self):
+        ''' Remove All Point Drawer Objects '''
+        if len(self.drawPtPos) > 0:
+            del self.drawPtPos[-1]
+            RemoveLastDrawPointOnMap()
+        return
+
+    def removeAllPoint(self):
+        ''' Remove All Point Drawer Objects '''
+        self.drawPtPos = []
+        self.UpdateSurface()
+        # Clear all Layer
+        RemoveAllDrawPointOnMap()
+        return
+
     def removeAllPolygon(self):
-        ''' Remove All Polyfon Drawer Objects '''
+        ''' Remove All Polygon Drawer Objects '''
         self.drawPolygon = []
+        self.UpdateSurface()
         # Clear all Layer
         RemoveAllDrawPolygonOnMap()
 
     def removeLastPolygon(self):
-        ''' Remove Last Polyfon Drawer Objects '''
+        ''' Remove Last Polygon Drawer Objects '''
         if len(self.drawPolygon) > 0:
             for pt in range(len(self.drawPolygon)-1,-1,-1):
                 del self.drawPolygon[pt]

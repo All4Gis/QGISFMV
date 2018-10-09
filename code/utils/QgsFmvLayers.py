@@ -111,6 +111,28 @@ def RemoveLastDrawPolygonOnMap():
     return
 
 
+def RemoveLastDrawPointOnMap():
+    ''' Remove Last features on Point Layer ''' 
+    pointLyr = qgsu.selectLayerByName(Point_lyr)
+    if pointLyr is None:
+        return
+    pointLyr.startEditing()
+    pointLyr.deleteFeatures([pointLyr.featureCount()])
+    CommonLayer(pointLyr)
+    return
+
+
+def RemoveAllDrawPointOnMap():
+    ''' Remove all features on Point Layer ''' 
+    pointLyr = qgsu.selectLayerByName(Point_lyr)
+    if pointLyr is None:
+        return
+    pointLyr.startEditing()
+    pointLyr.dataProvider().truncate()
+    CommonLayer(pointLyr)
+    return
+
+
 def RemoveAllDrawPolygonOnMap():
     ''' Remove all features on Polygon Layer ''' 
     polyLyr = qgsu.selectLayerByName(Polygon_lyr)
