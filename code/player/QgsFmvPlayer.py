@@ -77,10 +77,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.currentInfo = 0.0
         self.data = None
 
-        # Censure QToolButton
-        self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
-        self.DrawToolBar.addWidget(self.toolBtn_Cesure)
+        # Create Draw Toolbar
+        self.DrawToolBar.addAction(self.actionMagnifying_glass)
+        self.DrawToolBar.addSeparator()
 
+        self.DrawToolBar.addAction(self.actionDraw_Line)
         # Draw Polygon QToolButton
         self.toolBtn_DPolygon.setDefaultAction(self.actionDraw_Polygon)
         self.DrawToolBar.addWidget(self.toolBtn_DPolygon)
@@ -89,9 +90,20 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.toolBtn_DPoint.setDefaultAction(self.actionDraw_Pinpoint)
         self.DrawToolBar.addWidget(self.toolBtn_DPoint)
 
+        self.DrawToolBar.addAction(self.actionRuler)
+        self.DrawToolBar.addSeparator()
+
+        # Censure QToolButton
+        self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
+        self.DrawToolBar.addWidget(self.toolBtn_Cesure)
+        self.DrawToolBar.addSeparator()
+
+        self.DrawToolBar.addAction(self.actionObject_Tracking)
+
+
         # Hide Color Button
         self.btn_Color.hide()
-        self.actionObject_Tracking.setVisible(False)
+        #self.actionObject_Tracking.setVisible(False)
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
 

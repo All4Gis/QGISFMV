@@ -36,17 +36,17 @@
 <context>
     <name>Fmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="77"/>
+        <location filename="../QgsFmv.py" line="81"/>
         <source>Show Video Manager</source>
         <translation>نمایش مدیر ویدئو</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="104"/>
+        <location filename="../QgsFmv.py" line="108"/>
         <source>Full Motion Video (FMV)</source>
         <translation>ویدیو حرکت کامل (FMV)</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="90"/>
+        <location filename="../QgsFmv.py" line="94"/>
         <source>Show About FMV</source>
         <translation>نمایش درباره اِف اِم وی</translation>
     </message>
@@ -241,7 +241,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ایجاد موزائیک&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="804"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="796"/>
         <source>Ctrl+Shift+M</source>
         <translation>Ctrl+Shift+M</translation>
     </message>
@@ -251,7 +251,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ذخیره این لحظه&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="784"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="776"/>
         <source>Ctrl+Shift+Q</source>
         <translation>Ctrl+Shift+Q</translation>
     </message>
@@ -356,142 +356,142 @@
         <translation type="obsolete">Utils</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="768"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="760"/>
         <source>Gray Scale</source>
         <translation>مقیاس خاکستری</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="776"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="768"/>
         <source>Edge Detection</source>
         <translation>تشخیص لبه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="781"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="773"/>
         <source>Capture Current Frame</source>
         <translation>ثبت این لحظه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="789"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="781"/>
         <source>Extract All Frames</source>
         <translation>استخراج تمام لحظه ها</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="792"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="784"/>
         <source>Ctrl+Shift+A</source>
         <translation>Ctrl+Shift+A</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="801"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="793"/>
         <source>Show Metadata</source>
         <translation>نمایش متادیتا</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="813"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="805"/>
         <source>Converter Video</source>
         <translation>تبدیل گر ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="822"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="814"/>
         <source>Save Video Info to Json</source>
         <translation>ذخیره اطلاعات ویدئو به فرمت Json</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="831"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="823"/>
         <source>Show Audio</source>
         <translation>نمایش صدا</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="840"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="832"/>
         <source>Show Video</source>
         <translation>نمایش ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="845"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="837"/>
         <source>Show All</source>
         <translation>نمایش همه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="850"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="842"/>
         <source>Save Audio</source>
         <translation>ذخیره صدا</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="855"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="847"/>
         <source>Save Video</source>
         <translation>ذخیره ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="860"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="852"/>
         <source>Save All</source>
         <translation>ذخیره همه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="869"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="861"/>
         <source>Show Video Info</source>
         <translation>نمایش اطلاعات ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="881"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="873"/>
         <source>Invert Color</source>
         <translation>وارونه کردن رنگ</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="889"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="881"/>
         <source>Mono Filter</source>
         <translation>فیلتر Mono </translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="897"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="889"/>
         <source>Canny edge detection</source>
         <translation>تشخیص زیرکانه لبه ها</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="908"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="900"/>
         <source>Zoom Rectangle</source>
         <translation>درشت نمایی چهارگوش</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="920"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="912"/>
         <source>Magnifying glass</source>
         <translation>شیشه ذره بین</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="932"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="924"/>
         <source>Auto Contrast Filter</source>
         <translation>فیلتر تباین خودکار</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="941"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="933"/>
         <source>Create Mosaic</source>
         <translation>ایجاد موزائیک</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="953"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="945"/>
         <source>Draw Pinpoint</source>
         <translation>رسم نقطه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="965"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="957"/>
         <source>Draw Line</source>
         <translation>رسم خط</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1085"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1077"/>
         <source>Draw Polygon</source>
         <translation>رسم چندضلعی</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="995"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="987"/>
         <source>Object Tracking</source>
         <translation>دنبال نمودن هدف</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1007"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="999"/>
         <source>Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1019"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1011"/>
         <source>Horizontal Mirrored</source>
         <translation type="unfinished"></translation>
     </message>
@@ -501,37 +501,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1034"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1026"/>
         <source>Censure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1043"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1035"/>
         <source>Remove Last</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1052"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1044"/>
         <source>Remove All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1070"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1062"/>
         <source>Remove Last Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1088"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1080"/>
         <source>Remove All Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1103"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1095"/>
         <source>Remove Last Pinpoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1118"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1110"/>
         <source>Remove All Pinpoint</source>
         <translation type="unfinished"></translation>
     </message>
@@ -544,67 +544,67 @@
         <translation type="obsolete">این ویدئو بدون متادیتا می باشد ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="233"/>
+        <location filename="../player/QgsFmvPlayer.py" line="246"/>
         <source>Metadata Callback Failed! : </source>
         <translation>بازخوانی متادیتا شکست خورد! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="145"/>
+        <location filename="../player/QgsFmvPlayer.py" line="158"/>
         <source>This video doesn&apos;t have Audio ! </source>
         <translation type="unfinished">این ویدئو بدون صدا می باشد ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="152"/>
+        <location filename="../player/QgsFmvPlayer.py" line="165"/>
         <source>Audio check Failed! : </source>
         <translation>بررسی صدا با شکست مواجه شد! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="434"/>
+        <location filename="../player/QgsFmvPlayer.py" line="447"/>
         <source>Mute/Unmute</source>
         <translation>سکوت/صدا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="440"/>
+        <location filename="../player/QgsFmvPlayer.py" line="453"/>
         <source>Extract All Frames</source>
         <translation>استخراج تمام لحظه ها</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="445"/>
+        <location filename="../player/QgsFmvPlayer.py" line="458"/>
         <source>Extract Current Frame</source>
         <translation>استخراج همین لحظه</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="452"/>
+        <location filename="../player/QgsFmvPlayer.py" line="465"/>
         <source>Show Metadata</source>
         <translation>نمایش متادیتا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="800"/>
+        <location filename="../player/QgsFmvPlayer.py" line="813"/>
         <source>Open Video File : </source>
         <translation>بازنمودن بایگانی ویدئوها :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="837"/>
+        <location filename="../player/QgsFmvPlayer.py" line="850"/>
         <source>Save file succesfully!</source>
         <translation>ذخیره فایل با موفقیت انجام شد!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1311"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1324"/>
         <source>HEY...Active background process!</source>
         <translation>توجه...در پس زمینه پردازشی در حال انجام است!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1311"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1324"/>
         <source>Do you really want close?</source>
         <translation>آیا واقعا قصد خروج دارید؟</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="778"/>
+        <location filename="../player/QgsFmvPlayer.py" line="791"/>
         <source>Playing : </source>
         <translation>در حال پخش :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1333"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1346"/>
         <source>Video Information : </source>
         <translation>اطلاعات ویدئو :</translation>
     </message>
@@ -621,59 +621,59 @@
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="193"/>
+        <location filename="../player/QgsFmvPlayer.py" line="206"/>
         <source>Meta update failed! </source>
         <translation>به روز رسانی متا با شکست مواجه شد! 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="197"/>
+        <location filename="../player/QgsFmvPlayer.py" line="210"/>
         <source>Metadata Buffer Failed! : </source>
         <translation>حافشه میانی متادیتا با شکست مواجه شد! : 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1161"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1174"/>
         <source>Save Current Frame</source>
         <translation>ذخیره لحظه حاضر</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1171"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1184"/>
         <source>Succesfully frame saved!</source>
         <translation>این لحظه با موفقیت ذخیره شد!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1174"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1187"/>
         <source>Failed saving frame!</source>
         <translation>ذخیره این لحظه با شکست مواجه شد!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="271"/>
+        <location filename="../player/QgsFmvPlayer.py" line="284"/>
         <source>Save Json</source>
         <translation>ذخیره Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="821"/>
+        <location filename="../player/QgsFmvPlayer.py" line="834"/>
         <source>Save video record</source>
         <translation>ذخیره رکورد ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="893"/>
+        <location filename="../player/QgsFmvPlayer.py" line="906"/>
         <source>Save Video as...</source>
         <translation>ذخیره ویدئو به عنوان ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1134"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1147"/>
         <source>Save all Frames</source>
         <translation>ذخیره همه لحظه ها</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1094"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1107"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>ذخیره جزئیات صدا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1110"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1123"/>
         <source>Save Video Bitrate Plot</source>
         <translation>ذخیره جزئیات ویدئو</translation>
     </message>

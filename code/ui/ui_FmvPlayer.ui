@@ -747,14 +747,6 @@ QProgressBar::chunk
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionMagnifying_glass"/>
-   <addaction name="separator"/>
-   <addaction name="actionDraw_Line"/>
-   <addaction name="actionRuler"/>
-   <addaction name="separator"/>
-   <addaction name="actionObject_Tracking"/>
-   <addaction name="separator"/>
-   <addaction name="separator"/>
   </widget>
   <action name="actionGray">
    <property name="checkable">
