@@ -23,7 +23,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.4:
-    	-New Remove Draw Menu
+    	-New Remove Draw Menu las or all drawings
     	-Refactor code for easy contributions
     	-Censure video part and context enu for remove all or last area
     	-Ruler on video
