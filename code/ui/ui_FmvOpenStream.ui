@@ -34,7 +34,7 @@
        <property name="cursor">
         <cursorShape>IBeamCursor</cursorShape>
        </property>
-	   <item>
+       <item>
         <property name="text">
          <string>RTP</string>
         </property>
@@ -54,7 +54,7 @@
      <item>
       <widget class="QLineEdit" name="ln_host">
        <property name="text">
-        <string>127.0.0.1</string>
+        <string/>
        </property>
        <property name="placeholderText">
         <string>127.0.0.1</string>
@@ -67,7 +67,7 @@
         <set>Qt::ImhNone</set>
        </property>
        <property name="text">
-        <string>5005</string>
+        <string/>
        </property>
        <property name="placeholderText">
         <string>5005</string>

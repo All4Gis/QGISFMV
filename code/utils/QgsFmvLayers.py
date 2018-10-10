@@ -106,7 +106,8 @@ def RemoveLastDrawPolygonOnMap():
     if polyLyr is None:
         return
     polyLyr.startEditing()
-    polyLyr.deleteFeatures([polyLyr.featureCount()])
+    listOfIds = [feat.id() for feat in polyLyr.getFeatures()]
+    polyLyr.deleteFeature(listOfIds[-1])
     CommonLayer(polyLyr)
     return
 
@@ -117,7 +118,8 @@ def RemoveLastDrawPointOnMap():
     if pointLyr is None:
         return
     pointLyr.startEditing()
-    pointLyr.deleteFeatures([pointLyr.featureCount()])
+    listOfIds = [feat.id() for feat in pointLyr.getFeatures()]
+    pointLyr.deleteFeature(listOfIds[-1])
     CommonLayer(pointLyr)
     return
 

@@ -1,6 +1,6 @@
 [general]
 name= QGIS Full Motion Video
-qgisMinimumVersion=3.3
+qgisMinimumVersion=2.99
 qgisMaximumVersion=3.99
 description=<p>QGIS Full Motion Video.</p>
 about= Plugin for QGIS which allows to analyze, visualize and process videos inside the QGIS environment. 

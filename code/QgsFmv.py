@@ -56,8 +56,12 @@ class Fmv:
         QgsApplication.setMaxThreads(threadcount)
         # not work iface.mapCanvas().setParallelRenderingEnabled(True)
         QSettings().setValue("/qgis/parallel_rendering", True)
-        # OpenCL acceleration
-        QSettings().setValue("/core/OpenClEnabled", True)
+
+        try:
+            # OpenCL acceleration
+            QSettings().setValue("/core/OpenClEnabled", True)
+        except Exception:
+            None
 
         self.plugin_dir = os.path.dirname(__file__)
         locale = QSettings().value("locale//userLocale")[0:2]

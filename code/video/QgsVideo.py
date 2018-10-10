@@ -249,7 +249,6 @@ class VideoWidget(QVideoWidget):
         self.zoomed = False
         self._isinit = False
         self.gt = None
-        self.pointIndex = 1
 
         self.drawCesure = []
         self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawRuler, self.drawPolygon = [], [], [], [], []
@@ -298,7 +297,7 @@ class VideoWidget(QVideoWidget):
         ''' Remove All Point Drawer Objects '''
         if len(self.drawPtPos) > 0:
             del self.drawPtPos[-1]
-            # TODO: NOT WORK DELETE LAYER FEATURE (CKECH NUMBER COLUMN INSERT)
+            self.UpdateSurface()
             RemoveLastDrawPointOnMap()
         return
 
@@ -602,9 +601,9 @@ class VideoWidget(QVideoWidget):
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
 
-                AddDrawPointOnMap(self.pointIndex, Longitude,
+                pointIndex = len(self.drawPtPos)+1
+                AddDrawPointOnMap(pointIndex, Longitude,
                                   Latitude, Altitude)
-                self.pointIndex += 1
 
                 self.drawPtPos.append([Longitude, Latitude, Altitude])
 
