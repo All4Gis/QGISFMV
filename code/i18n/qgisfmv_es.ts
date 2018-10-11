@@ -564,52 +564,52 @@
         <translation>La prueba de audio Falló! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="458"/>
+        <location filename="../player/QgsFmvPlayer.py" line="419"/>
         <source>Mute/Unmute</source>
         <translation>Silenciar / No silenciar</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="464"/>
+        <location filename="../player/QgsFmvPlayer.py" line="425"/>
         <source>Extract All Frames</source>
         <translation>Extraer todos los fotogramas</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="469"/>
+        <location filename="../player/QgsFmvPlayer.py" line="430"/>
         <source>Extract Current Frame</source>
         <translation>Extraer fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="476"/>
+        <location filename="../player/QgsFmvPlayer.py" line="437"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadatos</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="824"/>
+        <location filename="../player/QgsFmvPlayer.py" line="785"/>
         <source>Open Video File : </source>
         <translation>Abrir archivo de video:</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="861"/>
+        <location filename="../player/QgsFmvPlayer.py" line="822"/>
         <source>Save file succesfully!</source>
         <translation>¡Archivo guardado exitosamente!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1335"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1296"/>
         <source>HEY...Active background process!</source>
         <translation>HEY ... ¡Proceso en segundo plano activo!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1335"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1296"/>
         <source>Do you really want close?</source>
         <translation>¿De verdad quieres cerrar?</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="802"/>
+        <location filename="../player/QgsFmvPlayer.py" line="763"/>
         <source>Playing : </source>
         <translation>Reproduciendo :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1357"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1318"/>
         <source>Video Information : </source>
         <translation>Información del video:</translation>
     </message>
@@ -626,17 +626,17 @@
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1185"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1146"/>
         <source>Save Current Frame</source>
         <translation>Guardar fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1195"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1156"/>
         <source>Succesfully frame saved!</source>
         <translation>¡Fotograma guardado con exito!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1198"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1159"/>
         <source>Failed saving frame!</source>
         <translation>¡Error al guardar el fotograma!</translation>
     </message>
@@ -646,27 +646,27 @@
         <translation>Guardar Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="845"/>
+        <location filename="../player/QgsFmvPlayer.py" line="806"/>
         <source>Save video record</source>
         <translation>Guardar grabación</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="917"/>
+        <location filename="../player/QgsFmvPlayer.py" line="878"/>
         <source>Save Video as...</source>
         <translation>Guardar video como ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1158"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1119"/>
         <source>Save all Frames</source>
         <translation>Guardar todos los fotogramas</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1118"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1079"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>Guardar audio Bitrate</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1134"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1095"/>
         <source>Save Video Bitrate Plot</source>
         <translation>Guardar video Bitrate</translation>
     </message>

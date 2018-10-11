@@ -400,45 +400,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         menu.exec_(self.mapToGlobal(point))
         return
 
-    def removeLastLine(self):
-        return
-
-    def removeLastSegmentLine(self):
-        return
-
-    def removeAllLines(self):
-        return
-
-    def removeLastCensured(self):
-        ''' Remove Last Censure Objects '''
-        self.videoWidget.removeLastCensured()
-        return
-
-    def removeAllCensure(self):
-        ''' Remove All Censure Objects '''
-        self.videoWidget.removeAllCensure()
-        return
-
-    def removeLastPolygon(self):
-        ''' Remove Last Polygon Draw Layer '''
-        self.videoWidget.removeLastPolygon()
-        return
-
-    def removeAllPolygon(self):
-        ''' Remove All Polygon Draw Layer '''
-        self.videoWidget.removeAllPolygon()
-        return
-
-    def removeLastPoint(self):
-        ''' Remove Last Point Draw Layer '''
-        self.videoWidget.removeLastPoint()
-        return
-
-    def removeAllPoint(self):
-        ''' Remove All Point Draw Layer '''
-        self.videoWidget.removeAllPoint()
-        return
-
     def ToggleQToolBar(self):
         ''' Toggle ToolBar '''
         toolbars = self.findChildren(QToolBar)

@@ -113,7 +113,7 @@
         <property name="popupMode">
          <enum>QToolButton::MenuButtonPopup</enum>
         </property>
-		<addaction name="actionDraw_Line"/>
+        <addaction name="actionDraw_Line"/>
         <addaction name="actionLast_Segment_Line"/>
         <addaction name="actionRemove_Last_Line"/>
         <addaction name="actionRemove_All_Line"/>
@@ -1187,6 +1187,17 @@ QProgressBar::chunk
    <class>VideoWidget</class>
    <extends>QWidget</extends>
    <header>QGIS_FMV.video.QgsVideo</header>
+   <slots>
+    <slot>removeLastLine()</slot>
+    <slot>removeLastSegmentLine()</slot>
+    <slot>removeAllLines()</slot>
+    <slot>removeLastCensured()</slot>
+    <slot>removeAllCensure()</slot>
+    <slot>removeLastPolygon()</slot>
+    <slot>removeAllPolygon()</slot>
+    <slot>removeLastPoint()</slot>
+    <slot>removeAllPoint()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources>
@@ -1852,7 +1863,7 @@ QProgressBar::chunk
   <connection>
    <sender>actionRemove_All_censured</sender>
    <signal>triggered()</signal>
-   <receiver>PlayerWindow</receiver>
+   <receiver>videoWidget</receiver>
    <slot>removeAllCensure()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1861,14 +1872,14 @@ QProgressBar::chunk
     </hint>
     <hint type="destinationlabel">
      <x>373</x>
-     <y>339</y>
+     <y>276</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>actionRemove_Last_censured</sender>
    <signal>triggered()</signal>
-   <receiver>PlayerWindow</receiver>
+   <receiver>videoWidget</receiver>
    <slot>removeLastCensured()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1877,14 +1888,14 @@ QProgressBar::chunk
     </hint>
     <hint type="destinationlabel">
      <x>373</x>
-     <y>339</y>
+     <y>276</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>actionDraw_Polygon_remove_last</sender>
    <signal>triggered()</signal>
-   <receiver>PlayerWindow</receiver>
+   <receiver>videoWidget</receiver>
    <slot>removeLastPolygon()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1893,14 +1904,14 @@ QProgressBar::chunk
     </hint>
     <hint type="destinationlabel">
      <x>373</x>
-     <y>339</y>
+     <y>276</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>actionDraw_Polygon_remove_all</sender>
    <signal>triggered()</signal>
-   <receiver>PlayerWindow</receiver>
+   <receiver>videoWidget</receiver>
    <slot>removeAllPolygon()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1909,14 +1920,14 @@ QProgressBar::chunk
     </hint>
     <hint type="destinationlabel">
      <x>373</x>
-     <y>339</y>
+     <y>276</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>actionRemove_Last_Pinpoint</sender>
    <signal>triggered()</signal>
-   <receiver>PlayerWindow</receiver>
+   <receiver>videoWidget</receiver>
    <slot>removeLastPoint()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1925,14 +1936,14 @@ QProgressBar::chunk
     </hint>
     <hint type="destinationlabel">
      <x>373</x>
-     <y>339</y>
+     <y>276</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>actionRemove_All_Pinpoint</sender>
    <signal>triggered()</signal>
-   <receiver>PlayerWindow</receiver>
+   <receiver>videoWidget</receiver>
    <slot>removeAllPoint()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1941,14 +1952,14 @@ QProgressBar::chunk
     </hint>
     <hint type="destinationlabel">
      <x>373</x>
-     <y>339</y>
+     <y>276</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>actionRemove_All_Line</sender>
    <signal>triggered()</signal>
-   <receiver>PlayerWindow</receiver>
+   <receiver>videoWidget</receiver>
    <slot>removeAllLines()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1957,14 +1968,14 @@ QProgressBar::chunk
     </hint>
     <hint type="destinationlabel">
      <x>373</x>
-     <y>339</y>
+     <y>276</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>actionRemove_Last_Line</sender>
    <signal>triggered()</signal>
-   <receiver>PlayerWindow</receiver>
+   <receiver>videoWidget</receiver>
    <slot>removeLastLine()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1973,14 +1984,14 @@ QProgressBar::chunk
     </hint>
     <hint type="destinationlabel">
      <x>373</x>
-     <y>339</y>
+     <y>276</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>actionLast_Segment_Line</sender>
    <signal>triggered()</signal>
-   <receiver>PlayerWindow</receiver>
+   <receiver>videoWidget</receiver>
    <slot>removeLastSegmentLine()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1989,7 +2000,7 @@ QProgressBar::chunk
     </hint>
     <hint type="destinationlabel">
      <x>373</x>
-     <y>339</y>
+     <y>276</y>
     </hint>
    </hints>
   </connection>

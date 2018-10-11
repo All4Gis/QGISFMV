@@ -280,8 +280,20 @@ class VideoWidget(QVideoWidget):
         self.tapTimer = QBasicTimer()
         self.zoomPixmap, self.maskPixmap = QPixmap(), QPixmap()
 
+    def removeLastLine(self):
+        ''' Remove Last Line Objects '''
+        return
+
+    def removeLastSegmentLine(self):
+        ''' Remove Last Segment Line Objects '''
+        return
+
+    def removeAllLines(self):
+        ''' Resets Line List '''
+        self.drawLines = []
+
     def ResetDrawRuler(self):
-        ''' Resets DrawRuler Points List '''
+        ''' Resets Ruler List '''
         self.drawRuler = []
 
     def removeAllCensure(self):
