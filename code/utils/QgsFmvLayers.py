@@ -104,9 +104,15 @@ def RemoveLastDrawLineOnMap():
     '''  Remove Last Feature on Line Layer '''
     return
 
-# TODO
+
 def RemoveAllDrawLineOnMap():
     ''' Remove all features on Line Layer '''
+    lineLyr = qgsu.selectLayerByName(Line_lyr)
+    if lineLyr is None:
+        return
+    lineLyr.startEditing()
+    lineLyr.dataProvider().truncate()
+    CommonLayer(lineLyr)
     return
 
 # TODO
