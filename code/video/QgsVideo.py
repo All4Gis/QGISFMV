@@ -299,7 +299,8 @@ class VideoWidget(QVideoWidget):
         ''' Resets Line List '''
         self.drawLines = []
         self.UpdateSurface()
-        RemoveAllDrawLineOnMap
+        # Clear all Layer
+        RemoveAllDrawLineOnMap()
 
     def ResetDrawRuler(self):
         ''' Resets Ruler List '''
