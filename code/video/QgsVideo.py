@@ -28,7 +28,10 @@ from QGIS_FMV.utils.QgsFmvLayers import (AddDrawPointOnMap,
                                          RemoveLastDrawPolygonOnMap,
                                          RemoveAllDrawPolygonOnMap,
                                          RemoveLastDrawPointOnMap,
-                                         RemoveAllDrawPointOnMap)
+                                         RemoveAllDrawPointOnMap,
+                                         RemoveLastDrawLineOnMap,
+                                         RemoveAllDrawLineOnMap,
+                                         RemoveLastSegmentDrawLineOnMap)
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
@@ -280,17 +283,23 @@ class VideoWidget(QVideoWidget):
         self.tapTimer = QBasicTimer()
         self.zoomPixmap, self.maskPixmap = QPixmap(), QPixmap()
 
+    # TODO
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
+        RemoveLastDrawLineOnMap
         return
 
+    # TODO
     def removeLastSegmentLine(self):
         ''' Remove Last Segment Line Objects '''
+        RemoveLastSegmentDrawLineOnMap
         return
 
     def removeAllLines(self):
         ''' Resets Line List '''
         self.drawLines = []
+        self.UpdateSurface()
+        RemoveAllDrawLineOnMap
 
     def ResetDrawRuler(self):
         ''' Resets Ruler List '''

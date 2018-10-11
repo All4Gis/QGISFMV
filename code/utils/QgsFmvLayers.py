@@ -99,6 +99,21 @@ def AddDrawLineOnMap(Longitude, Latitude, Altitude, drawLines):
     CommonLayer(linelyr)
     return
 
+# TODO
+def RemoveLastDrawLineOnMap():
+    '''  Remove Last Feature on Line Layer '''
+    return
+
+# TODO
+def RemoveAllDrawLineOnMap():
+    ''' Remove all features on Line Layer '''
+    return
+
+# TODO
+def RemoveLastSegmentDrawLineOnMap():
+    '''  Remove Last Segment Feature on Line Layer '''
+    return
+
 
 def RemoveLastDrawPolygonOnMap():
     '''  Remove Last Feature on Polygon Layer '''
