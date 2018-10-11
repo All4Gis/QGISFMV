@@ -38,6 +38,9 @@
         <file>../images/draw-polygon-remove-last.png</file> 
         <file>../images/draw-polygon-remove-all.png</file> 
         <file>../images/draw-polyline.png</file> 
+        <file>../images/draw-polyline-remove-all.png</file> 
+        <file>../images/draw-polyline-remove-last.png</file> 
+        <file>../images/draw-polyline-remove-last-segment.png</file> 
         <file>../images/magnifier-glass.png</file> 
         <file>../images/object-tracking.png</file>  
         <file>../images/ruler.png</file>  

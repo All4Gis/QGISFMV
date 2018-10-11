@@ -81,14 +81,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.DrawToolBar.addAction(self.actionMagnifying_glass)
         self.DrawToolBar.addSeparator()
 
-        self.DrawToolBar.addAction(self.actionDraw_Line)
         # Draw Polygon QToolButton
         self.toolBtn_DPolygon.setDefaultAction(self.actionDraw_Polygon)
         self.DrawToolBar.addWidget(self.toolBtn_DPolygon)
 
-        # Draw Polygon QToolButton
+        # Draw Point QToolButton
         self.toolBtn_DPoint.setDefaultAction(self.actionDraw_Pinpoint)
         self.DrawToolBar.addWidget(self.toolBtn_DPoint)
+
+        # Draw Point QToolButton
+        self.toolBtn_DLine.setDefaultAction(self.actionDraw_Line)
+        self.DrawToolBar.addWidget(self.toolBtn_DLine)
 
         self.DrawToolBar.addAction(self.actionRuler)
         self.DrawToolBar.addSeparator()
@@ -98,12 +101,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.DrawToolBar.addWidget(self.toolBtn_Cesure)
         self.DrawToolBar.addSeparator()
 
+        # Object Tracking
         self.DrawToolBar.addAction(self.actionObject_Tracking)
-
+        #self.actionObject_Tracking.setVisible(False)
 
         # Hide Color Button
         self.btn_Color.hide()
-        #self.actionObject_Tracking.setVisible(False)
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
 
@@ -395,6 +398,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             action.setObjectName(toolbar.windowTitle())
             action.triggered.connect(lambda _: self.ToggleQToolBar())
         menu.exec_(self.mapToGlobal(point))
+        return
+
+    def removeLastLine(self):
+        return
+
+    def removeLastSegmentLine(self):
+        return
+
+    def removeAllLines(self):
         return
 
     def removeLastCensured(self):

@@ -44,6 +44,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
        <widget class="QToolButton" name="toolBtn_DPoint">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -63,6 +66,9 @@
       </item>
       <item>
        <widget class="QToolButton" name="toolBtn_DPolygon">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -82,6 +88,9 @@
       </item>
       <item>
        <widget class="QToolButton" name="toolBtn_Cesure">
+        <property name="cursor">
+         <cursorShape>OpenHandCursor</cursorShape>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -91,6 +100,23 @@
         <addaction name="actionCensure"/>
         <addaction name="actionRemove_Last_censured"/>
         <addaction name="actionRemove_All_censured"/>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolBtn_DLine">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::MenuButtonPopup</enum>
+        </property>
+		<addaction name="actionDraw_Line"/>
+        <addaction name="actionLast_Segment_Line"/>
+        <addaction name="actionRemove_Last_Line"/>
+        <addaction name="actionRemove_All_Line"/>
        </widget>
       </item>
       <item>
@@ -1110,6 +1136,51 @@ QProgressBar::chunk
     <string>Remove All Pinpoint</string>
    </property>
   </action>
+  <action name="actionRemove_All_Line">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/draw-polyline-remove-all.png</normaloff>:/imgFMV/images/draw-polyline-remove-all.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove All</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove All</string>
+   </property>
+  </action>
+  <action name="actionLast_Segment_Line">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/draw-polyline-remove-last-segment.png</normaloff>:/imgFMV/images/draw-polyline-remove-last-segment.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Last Segment</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Last Segment</string>
+   </property>
+  </action>
+  <action name="actionRemove_Last_Line">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/draw-polyline-remove-last.png</normaloff>:/imgFMV/images/draw-polyline-remove-last.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Last Line</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Last Line</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1874,6 +1945,54 @@ QProgressBar::chunk
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionRemove_All_Line</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeAllLines()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRemove_Last_Line</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeLastLine()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLast_Segment_Line</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeLastSegmentLine()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleGroup(bool)</slot>
@@ -1919,5 +2038,8 @@ QProgressBar::chunk
   <slot>removeAllPolygon()</slot>
   <slot>removeLastPoint()</slot>
   <slot>removeAllPoint()</slot>
+  <slot>removeLastLine()</slot>
+  <slot>removeLastSegmentLine()</slot>
+  <slot>removeAllLines()</slot>
  </slots>
 </ui>
