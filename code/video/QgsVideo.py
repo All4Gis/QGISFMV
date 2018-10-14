@@ -29,9 +29,7 @@ from QGIS_FMV.utils.QgsFmvLayers import (AddDrawPointOnMap,
                                          RemoveAllDrawPolygonOnMap,
                                          RemoveLastDrawPointOnMap,
                                          RemoveAllDrawPointOnMap,
-                                         RemoveLastDrawLineOnMap,
-                                         RemoveAllDrawLineOnMap,
-                                         RemoveLastSegmentDrawLineOnMap)
+                                         RemoveAllDrawLineOnMap)
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
@@ -283,16 +281,27 @@ class VideoWidget(QVideoWidget):
         self.tapTimer = QBasicTimer()
         self.zoomPixmap, self.maskPixmap = QPixmap(), QPixmap()
 
-    # TODO
+
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
-        RemoveLastDrawLineOnMap
+        if len(self.drawLines) > 0:
+            for pt in range(len(self.drawLines) - 1, -1, -1):
+                del self.drawLines[pt]
+                try:
+                    if self.drawLines[pt - 1][0] is None:
+                        break
+                except Exception:
+                    None
+            self.UpdateSurface()
+            AddDrawLineOnMap(self.drawLines)
         return
 
-    # TODO
     def removeLastSegmentLine(self):
         ''' Remove Last Segment Line Objects '''
-        RemoveLastSegmentDrawLineOnMap
+        if len(self.drawLines) > 0:
+            del self.drawLines[-1]
+            self.UpdateSurface()
+            AddDrawLineOnMap(self.drawLines)
         return
 
     def removeAllLines(self):
@@ -642,9 +651,9 @@ class VideoWidget(QVideoWidget):
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
 
-                AddDrawLineOnMap(Longitude, Latitude, Altitude, self.drawLines)
-
                 self.drawLines.append([Longitude, Latitude, Altitude])
+
+                AddDrawLineOnMap(self.drawLines)
 
             if self._interaction.objectTracking:
                 self.origin = event.pos()

@@ -127,16 +127,16 @@ class DrawToolBar(object):
             pt[1], pt[0], gt, surface)
 
         radius = 3
+        radius_pt = 5
         center = QPoint(scr_x, scr_y)
 
         pen = QPen(Qt.yellow)
         pen.setWidth(radius)
         pen.setCapStyle(Qt.RoundCap)
-        pen.setDashPattern([1, 4, 5, 4])
+        # pen.setDashPattern([1, 4, 5, 4])
 
         painter.setPen(pen)
-        painter.drawPoint(center)
-
+ 
         if len(drawLines) > 1:
             try:
                 pt = drawLines[idx + 1]
@@ -147,6 +147,15 @@ class DrawToolBar(object):
                     pt[1], pt[0], gt, surface)
                 end = QPoint(scr_x, scr_y)
                 painter.drawLine(center, end)
+
+                # Draw Start/End Points
+                pen = QPen(Qt.white)
+                pen.setWidth(radius_pt)
+                pen.setCapStyle(Qt.RoundCap)
+                painter.setPen(pen)
+                painter.drawPoint(center)
+                painter.drawPoint(end)
+
             except Exception:
                 None
         return

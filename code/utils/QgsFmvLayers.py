@@ -42,6 +42,7 @@ from QGIS_FMV.geo import sphere as sphere
 from qgis.core import Qgis as QGis
 from qgis.utils import iface
 from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
+from itertools import groupby
 
 try:
     from pydevd import *
@@ -71,37 +72,30 @@ def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
     return
 
 
-def AddDrawLineOnMap(Longitude, Latitude, Altitude, drawLines):
+# TODO : Add only ID Attributes?
+def AddDrawLineOnMap(drawLines):
     '''  add Line on the map '''
+
+    RemoveAllDrawLineOnMap()
     linelyr = qgsu.selectLayerByName(Line_lyr)
     if linelyr is None:
         return
-    linelyr.startEditing()
-    f = QgsFeature()
-    if linelyr.featureCount() == 0 or drawLines[-1][0] is None:
-        f.setAttributes(
-            [Longitude, Latitude, Altitude])
-        geom = QgsGeometry.fromPolylineXY(
-            [QgsPointXY(Longitude, Latitude), QgsPointXY(Longitude, Latitude)])
-        f.setGeometry(geom)
-        linelyr.addFeatures([f])
 
-    else:
-        f_last = linelyr.getFeature(linelyr.featureCount())
-        f.setAttributes(
-            [Longitude, Latitude, Altitude])
-        geom = QgsGeometry.fromPolylineXY(
-            [QgsPointXY(Longitude, Latitude),
-             QgsPointXY(f_last.attribute(0), f_last.attribute(1))])
-        f.setGeometry(geom)
-        linelyr.addFeatures([f])
+    linelyr.startEditing()
+    for k, v in groupby(drawLines,key=lambda x: x == [None, None, None]):
+        points = []
+        if k is False:
+            list1 = list(v)
+            for i in range(0, len(list1)):
+                pt = QgsPointXY(list1[i][0], list1[i][1])
+                points.append(pt)
+            polyline = QgsGeometry.fromPolylineXY(points)
+            f = QgsFeature()
+            # f.setAttributes([0, 0, 0])
+            f.setGeometry(polyline)
+            linelyr.addFeatures([f])
 
     CommonLayer(linelyr)
-    return
-
-# TODO
-def RemoveLastDrawLineOnMap():
-    '''  Remove Last Feature on Line Layer '''
     return
 
 
@@ -113,11 +107,6 @@ def RemoveAllDrawLineOnMap():
     lineLyr.startEditing()
     lineLyr.dataProvider().truncate()
     CommonLayer(lineLyr)
-    return
-
-# TODO
-def RemoveLastSegmentDrawLineOnMap():
-    '''  Remove Last Segment Feature on Line Layer '''
     return
 
 
@@ -614,8 +603,9 @@ def CreateVideoLayers():
         addLayerNoCrsDialog(lyr_framecenter)
 
     if qgsu.selectLayerByName(Line_lyr) is None:
-        lyr_line = newLinesLayer(
-            None, ["longitude", "latitude", "altitude"], epsg, Line_lyr)
+#         lyr_line = newLinesLayer(
+#             None, ["longitude", "latitude", "altitude"], epsg, Line_lyr)
+        lyr_line = newLinesLayer(None, [], epsg, Line_lyr)
         SetDefaultLineStyle(lyr_line)
         addLayerNoCrsDialog(lyr_line)
 
