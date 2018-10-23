@@ -77,37 +77,37 @@
         <translation>ذخیره</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="109"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="112"/>
         <source>Tag</source>
         <translation>برچسب زدن</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="114"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="117"/>
         <source>Key</source>
         <translation>کلید</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="119"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="122"/>
         <source>Value</source>
         <translation>مقدار</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="132"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="135"/>
         <source>Save as PDF</source>
         <translation>ذخیره به عنوان پی دی اِف PDF</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="135"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="138"/>
         <source>Ctrl+Shift+P</source>
         <translation>Ctrl+Shift+P</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="144"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="147"/>
         <source>Save as CSV</source>
         <translation>ذخیره به عنوان سی اِس وی CSV</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="147"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="150"/>
         <source>Ctrl+Shift+C</source>
         <translation>Ctrl+Shift+C</translation>
     </message>
@@ -120,7 +120,7 @@
         <translation>حذف ویدئوی انتخاب شده</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="174"/>
+        <location filename="../player/QgsManager.py" line="173"/>
         <source>Open video</source>
         <translation>بازنمودن ویدئو</translation>
     </message>

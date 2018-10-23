@@ -77,37 +77,37 @@
         <translation>Desar</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="109"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="112"/>
         <source>Tag</source>
         <translation>Tag</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="114"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="117"/>
         <source>Key</source>
         <translation>Clau</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="119"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="122"/>
         <source>Value</source>
         <translation>Valor</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="132"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="135"/>
         <source>Save as PDF</source>
         <translation>Desar com a PDF</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="135"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="138"/>
         <source>Ctrl+Shift+P</source>
         <translation>Ctrl+Shift+P</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="144"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="147"/>
         <source>Save as CSV</source>
         <translation>Desar com a CSV</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="147"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="150"/>
         <source>Ctrl+Shift+C</source>
         <translation>Ctrl+Shift+C</translation>
     </message>
@@ -120,7 +120,7 @@
         <translation>Eliminar vídeo seleccionat actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="174"/>
+        <location filename="../player/QgsManager.py" line="173"/>
         <source>Open video</source>
         <translation>Obrir vídeo</translation>
     </message>

@@ -33,6 +33,7 @@ class Ui_FmvMetadata(object):
         self.line.setObjectName("line")
         self.verticalLayout.addWidget(self.line)
         self.VManager = QtWidgets.QTableWidget(self.dockWidgetContents)
+        self.VManager.setFocusPolicy(QtCore.Qt.NoFocus)
         self.VManager.setStyleSheet("QHeaderView::section\n"
 "{\n"
 "spacing: 10px;\n"

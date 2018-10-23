@@ -53,6 +53,9 @@
     </item>
     <item>
      <widget class="QTableWidget" name="VManager">
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
       <property name="styleSheet">
        <string notr="true">QHeaderView::section
 {

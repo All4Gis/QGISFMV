@@ -77,37 +77,37 @@
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="109"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="112"/>
         <source>Tag</source>
         <translation>Tag</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="114"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="117"/>
         <source>Key</source>
         <translation>Clé</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="119"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="122"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="132"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="135"/>
         <source>Save as PDF</source>
         <translation>Enregistrer en PDF</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="135"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="138"/>
         <source>Ctrl+Shift+P</source>
         <translation>Ctrl+Shift+P</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="144"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="147"/>
         <source>Save as CSV</source>
         <translation>Enregistrer en CSV</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="147"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="150"/>
         <source>Ctrl+Shift+C</source>
         <translation>Ctrl+Shift+C</translation>
     </message>
@@ -120,7 +120,7 @@
         <translation>Supprimer la vidéo sélectionnée</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="174"/>
+        <location filename="../player/QgsManager.py" line="173"/>
         <source>Open video</source>
         <translation>Ouvrir vidéo</translation>
     </message>
