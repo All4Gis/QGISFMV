@@ -281,7 +281,6 @@ class VideoWidget(QVideoWidget):
         self.tapTimer = QBasicTimer()
         self.zoomPixmap, self.maskPixmap = QPixmap(), QPixmap()
 
-
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
         if len(self.drawLines) > 0:
@@ -632,7 +631,7 @@ class VideoWidget(QVideoWidget):
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
 
-                pointIndex = len(self.drawPtPos)+1
+                pointIndex = len(self.drawPtPos) + 1
                 AddDrawPointOnMap(pointIndex, Longitude,
                                   Latitude, Altitude)
 

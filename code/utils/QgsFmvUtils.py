@@ -279,11 +279,11 @@ def getVideoLocationInfo(videoPath):
         else:
 
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvUtils", "This video doesn't have Metadata ! : "), level=QGis.Info)
+                "QgsFmvUtils", "This video doesn't have Metadata ! : "))
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Video info callback failed! : "), str(e), level=QGis.Info)
+            "QgsFmvUtils", "Video info callback failed! : "), str(e))
 
     return location
 
@@ -863,14 +863,14 @@ def CornerEstimationWithoutOffsets(packet):
             # default target width to not leave footprint as a point.
             targetWidth = defaultTargetWidth
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvUtils", "Target width unknown, defaults to: " + str(targetWidth) + "m."), level=QGis.Info)
+                "QgsFmvUtils", "Target width unknown, defaults to: " + str(targetWidth) + "m."))
 
         # compute distance to ground
         if frameCenterElevation != 0:
             sensorGroundAltitude = sensorTrueAltitude - frameCenterElevation
         else:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvUtils", "Sensor ground elevation narrowed to true altitude: " + str(sensorTrueAltitude) + "m."), level=QGis.Info)
+                "QgsFmvUtils", "Sensor ground elevation narrowed to true altitude: " + str(sensorTrueAltitude) + "m."))
             sensorGroundAltitude = sensorTrueAltitude
 
         if sensorLatitude == 0:
@@ -968,7 +968,7 @@ def CornerEstimationWithoutOffsets(packet):
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "CornerEstimationWithoutOffsets failed! : "), str(e), level=QGis.Info)
+            "QgsFmvUtils", "CornerEstimationWithoutOffsets failed! : "), str(e))
         return False
 
     return True

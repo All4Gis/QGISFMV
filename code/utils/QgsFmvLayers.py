@@ -82,7 +82,7 @@ def AddDrawLineOnMap(drawLines):
         return
 
     linelyr.startEditing()
-    for k, v in groupby(drawLines,key=lambda x: x == [None, None, None]):
+    for k, v in groupby(drawLines, key=lambda x: x == [None, None, None]):
         points = []
         if k is False:
             list1 = list(v)
@@ -603,8 +603,8 @@ def CreateVideoLayers():
         addLayerNoCrsDialog(lyr_framecenter)
 
     if qgsu.selectLayerByName(Line_lyr) is None:
-#         lyr_line = newLinesLayer(
-#             None, ["longitude", "latitude", "altitude"], epsg, Line_lyr)
+        #         lyr_line = newLinesLayer(
+        # None, ["longitude", "latitude", "altitude"], epsg, Line_lyr)
         lyr_line = newLinesLayer(None, [], epsg, Line_lyr)
         SetDefaultLineStyle(lyr_line)
         addLayerNoCrsDialog(lyr_line)

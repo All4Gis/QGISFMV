@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui\ui_FmvMetadata.ui'
 #
-# Created by: PyQt5 UI code generator 5.9
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,7 +17,6 @@ class Ui_FmvMetadata(object):
         self.dockWidgetContents.setMinimumSize(QtCore.QSize(300, 0))
         self.dockWidgetContents.setObjectName("dockWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.dockWidgetContents)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.menubarwidget = QtWidgets.QMenuBar(self.dockWidgetContents)
         self.menubarwidget.setStyleSheet("QMenuBar {\n"

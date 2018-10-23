@@ -38,8 +38,9 @@ except ImportError:
     None
 
 
-class SetParser(Element, metaclass=ABCMeta):
+class SetParser(Element):
     """Parsable Element. Not intended to be used directly. Always as super class."""
+    __metaclass__ = ABCMeta
 
     def __init__(self, value, key_length=1):
         """All parser needs is the value, no other information"""

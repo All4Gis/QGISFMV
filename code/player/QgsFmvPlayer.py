@@ -100,7 +100,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 #         self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
 #         self.DrawToolBar.addWidget(self.toolBtn_Cesure)
 #         self.DrawToolBar.addSeparator()
-# 
+#
 #         # Object Tracking
 #         self.DrawToolBar.addAction(self.actionObject_Tracking)
         self.toolBtn_Cesure.setVisible(False)
@@ -157,15 +157,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             if stdout_data == b'':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "This video doesn't have Audio ! "),
-                    level=QGis.Info)
+                    "QgsFmvPlayer", "This video doesn't have Audio ! "))
                 return False
 
             return True
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Audio check Failed! : "), str(e),
-                level=QGis.Info)
+                "QgsFmvPlayer", "Audio check Failed! : "), str(e))
 
     def get_metadata_from_buffer(self, currentTime):
         """ Metadata CallBack """
@@ -209,7 +207,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         except Exception as inst:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst), level=QGis.Info)
+                "QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst))
 
     def callBackMetadata(self, currentTime, nextTime):
         """ Metadata CallBack """
@@ -245,7 +243,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     None
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e), level=QGis.Info)
+                "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e))
 
     def GetPacketData(self):
         ''' Return Current Packet data '''

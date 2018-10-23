@@ -43,7 +43,7 @@ except ImportError:
     None
 
 
-class ElementParser(Element, metaclass=ABCMeta):
+class ElementParser(Element):
     """Construct a Element Parser base class.
 
     Element Parsers are used to enforce the convention that all Element Parsers
@@ -55,6 +55,7 @@ class ElementParser(Element, metaclass=ABCMeta):
     their definitions (subclasses of Element Parser) do not need to call init
     on super with class key and instance value.
     """
+    __metaclass__ = ABCMeta
 
     def __init__(self, value):
         super().__init__(self.key, value)
@@ -70,7 +71,9 @@ class ElementParser(Element, metaclass=ABCMeta):
         return '{}({})'.format(self.name, bytes(self.value))
 
 
-class BaseValue(metaclass=ABCMeta):
+class BaseValue():
+    __metaclass__ = ABCMeta
+
     """Abstract base class (superclass) used to insure internal interfaces are maintained."""
     @abstractmethod
     def __bytes__(self):
@@ -83,7 +86,9 @@ class BaseValue(metaclass=ABCMeta):
         pass
 
 
-class BytesElementParser(ElementParser, metaclass=ABCMeta):
+class BytesElementParser(ElementParser):
+    __metaclass__ = ABCMeta
+
     def __init__(self, value):
         super().__init__(BytesValue(value))
 
@@ -102,7 +107,9 @@ class BytesValue(BaseValue):
         return bytes_to_hexstr(self.value, start='0x', sep='')
 
 
-class DateTimeElementParser(ElementParser, metaclass=ABCMeta):
+class DateTimeElementParser(ElementParser):
+    __metaclass__ = ABCMeta
+
     def __init__(self, value):
         super().__init__(DateTimeValue(value))
 
@@ -118,7 +125,9 @@ class DateTimeValue(BaseValue):
         return self.value.isoformat(sep=' ')
 
 
-class StringElementParser(ElementParser, metaclass=ABCMeta):
+class StringElementParser(ElementParser):
+    __metaclass__ = ABCMeta
+
     def __init__(self, value):
         super().__init__(StringValue(value))
 
@@ -137,7 +146,9 @@ class StringValue(BaseValue):
         return str(self.value)
 
 
-class MappedElementParser(ElementParser, metaclass=ABCMeta):
+class MappedElementParser(ElementParser):
+    __metaclass__ = ABCMeta
+
     def __init__(self, value):
         super().__init__(MappedValue(value, self._domain, self._range))
 

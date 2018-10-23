@@ -14,7 +14,10 @@ try:
     import xml.etree.cElementTree as etree
     from homography import from_points
 except ImportError:
-    install_pip_requirements()
+    try:
+        install_pip_requirements()
+    except ImportError:
+        None
 finally:
     try:
         import cv2

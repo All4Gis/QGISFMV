@@ -549,67 +549,67 @@
         <translation type="obsolete">La vidéo ne contient pas de Métadonnées</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="248"/>
+        <location filename="../player/QgsFmvPlayer.py" line="245"/>
         <source>Metadata Callback Failed! : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="160"/>
+        <location filename="../player/QgsFmvPlayer.py" line="159"/>
         <source>This video doesn&apos;t have Audio ! </source>
         <translation type="unfinished">La vidéo n&apos;a pas de piste Audio ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="167"/>
+        <location filename="../player/QgsFmvPlayer.py" line="165"/>
         <source>Audio check Failed! : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="419"/>
+        <location filename="../player/QgsFmvPlayer.py" line="416"/>
         <source>Mute/Unmute</source>
         <translation>Sourdine On/Off</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="425"/>
+        <location filename="../player/QgsFmvPlayer.py" line="422"/>
         <source>Extract All Frames</source>
         <translation>Extraire toutes les images</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="430"/>
+        <location filename="../player/QgsFmvPlayer.py" line="427"/>
         <source>Extract Current Frame</source>
         <translation>Extraire l&apos;image courante </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="437"/>
+        <location filename="../player/QgsFmvPlayer.py" line="434"/>
         <source>Show Metadata</source>
         <translation>Voir les Métadonnées</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="785"/>
+        <location filename="../player/QgsFmvPlayer.py" line="782"/>
         <source>Open Video File : </source>
         <translation>Ouvrir la Vidéo :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="822"/>
+        <location filename="../player/QgsFmvPlayer.py" line="819"/>
         <source>Save file succesfully!</source>
         <translation>Fichier enregistré avec succès !</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1296"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1293"/>
         <source>HEY...Active background process!</source>
         <translation>Hey ... Un traitement est déjà en cours en arrière plan !</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1296"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1293"/>
         <source>Do you really want close?</source>
         <translation>Voulez-vous vraiment fermer ?</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="763"/>
+        <location filename="../player/QgsFmvPlayer.py" line="760"/>
         <source>Playing : </source>
         <translation>Lecture en cours :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1318"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1315"/>
         <source>Video Information : </source>
         <translation>Information Vidéo :</translation>
     </message>
@@ -619,57 +619,57 @@
         <translation type="obsolete">Buffer lu mais pas prêt, augmentez la taille. : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="208"/>
+        <location filename="../player/QgsFmvPlayer.py" line="205"/>
         <source>Meta update failed! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="212"/>
+        <location filename="../player/QgsFmvPlayer.py" line="209"/>
         <source>Metadata Buffer Failed! : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1146"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1143"/>
         <source>Save Current Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1156"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1153"/>
         <source>Succesfully frame saved!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1159"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1156"/>
         <source>Failed saving frame!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="286"/>
+        <location filename="../player/QgsFmvPlayer.py" line="283"/>
         <source>Save Json</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="806"/>
+        <location filename="../player/QgsFmvPlayer.py" line="803"/>
         <source>Save video record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="878"/>
+        <location filename="../player/QgsFmvPlayer.py" line="875"/>
         <source>Save Video as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1119"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1116"/>
         <source>Save all Frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1079"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1076"/>
         <source>Save Audio Bitrate Plot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1095"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1092"/>
         <source>Save Video Bitrate Plot</source>
         <translation type="unfinished"></translation>
     </message>

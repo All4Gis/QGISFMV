@@ -4,7 +4,9 @@
 import traceback
 
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
-from QGIS_FMV.converter.avcodecs import video_codec_list, audio_codec_list, subtitle_codec_list
+from QGIS_FMV.converter.avcodecs import (video_codec_list,
+                                         audio_codec_list,
+                                         subtitle_codec_list)
 from QGIS_FMV.converter.ffmpeg import FFMpeg
 from QGIS_FMV.converter.formats import format_list
 from QGIS_FMV.utils.QgsFmvLog import log
@@ -187,5 +189,5 @@ class Converter(QObject):
             self.ffmpeg = FFMpeg()
             info = self.ffmpeg.probe(fname, posters_as_video)
             return info
-        except Exception as e:
+        except Exception:
             return None

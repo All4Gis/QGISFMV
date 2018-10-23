@@ -136,7 +136,7 @@ class DrawToolBar(object):
         # pen.setDashPattern([1, 4, 5, 4])
 
         painter.setPen(pen)
- 
+
         if len(drawLines) > 1:
             try:
                 pt = drawLines[idx + 1]

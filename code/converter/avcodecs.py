@@ -15,7 +15,7 @@ class BaseCodec(object):
     def _codec_specific_parse_options(self, safe):
         return safe
 
-    def _codec_specific_produce_ffmpeg_list(self, safe):
+    def _codec_specific_produce_ffmpeg_list(self, _):
         return []
 
     def safe_options(self, opts):
@@ -28,7 +28,7 @@ class BaseCodec(object):
                 typ = self.encoder_options[k]
                 try:
                     safe[k] = typ(v)
-                except:
+                except Exception:
                     pass
 
         return safe
@@ -92,7 +92,8 @@ class SubtitleCodec(BaseCodec):
     """
     Base subtitle codec class handles general subtitle options. Possible
     parameters are:
-      * codec (string) - subtitle codec name (mov_text, subrib, ssa only supported currently)
+      * codec (string) - subtitle codec name (mov_text,
+        subrib, ssa only supported currently)
       * language (string) - language of subtitle stream (3 char code)
       * forced (int) - force subtitles (1 true, 0 false)
       * default (int) - default subtitles (1 true, 0 false)
@@ -315,7 +316,7 @@ class AudioNullCodec(BaseCodec):
     """
     codec_name = None
 
-    def parse_options(self, opt):
+    def parse_options(self, _):
         return ['-an']
 
 
@@ -323,10 +324,9 @@ class VideoNullCodec(BaseCodec):
     """
     Null video codec (no video).
     """
-
     codec_name = None
 
-    def parse_options(self, opt):
+    def parse_options(self, _):
         return ['-vn']
 
 
@@ -337,7 +337,7 @@ class SubtitleNullCodec(BaseCodec):
 
     codec_name = None
 
-    def parse_options(self, opt):
+    def parse_options(self, _):
         return ['-sn']
 
 
@@ -347,7 +347,7 @@ class AudioCopyCodec(BaseCodec):
     """
     codec_name = 'copy'
 
-    def parse_options(self, opt):
+    def parse_options(self, _):
         return ['-acodec', 'copy']
 
 
@@ -357,7 +357,7 @@ class VideoCopyCodec(BaseCodec):
     """
     codec_name = 'copy'
 
-    def parse_options(self, opt):
+    def parse_options(self, _):
         return ['-vcodec', 'copy']
 
 
@@ -367,12 +367,11 @@ class SubtitleCopyCodec(BaseCodec):
     """
     codec_name = 'copy'
 
-    def parse_options(self, opt):
+    def parse_options(self, _):
         return ['-scodec', 'copy']
 
+
 # Audio Codecs
-
-
 class VorbisCodec(AudioCodec):
     """
     Vorbis audio codec.
@@ -401,7 +400,7 @@ class AacCodec(AudioCodec):
     ffmpeg_codec_name = 'aac'
     aac_experimental_enable = ['-strict', 'experimental']
 
-    def _codec_specific_produce_ffmpeg_list(self, safe):
+    def _codec_specific_produce_ffmpeg_list(self, _):
         return self.aac_experimental_enable
 
 

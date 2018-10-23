@@ -35,7 +35,7 @@ except ImportError:
 # Proposed alternate names, "BaseElement" of modules "bases".
 
 
-class Element(metaclass=ABCMeta):
+class Element():
     """Construct a key, length, value tuplet.
 
     Elements provide the basic mechanisms to constitute the basic encoding
@@ -51,6 +51,7 @@ class Element(metaclass=ABCMeta):
         name: If name is set return name, else return class name.
         length: Length is calculated based off value.
     """
+    __metaclass__ = ABCMeta
 
     def __init__(self, key, value):
         self.key = key

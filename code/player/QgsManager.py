@@ -148,8 +148,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                         self.initialPt[str(rowPosition)][2]))
             except Exception:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "ManagerDock", "This video don't have Metadata ! "),
-                    level=QGis.Info)
+                    "ManagerDock", "This video don't have Metadata ! "))
                 pbar.setValue(0)
                 self.ToggleActiveRow(rowPosition, value="Not MISB")
                 return
