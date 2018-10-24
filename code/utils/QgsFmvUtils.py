@@ -548,12 +548,6 @@ def _spawn(cmds, t="ffmpeg"):
 
 def install_pip_requirements():
     ''' Install Requeriments from pip '''
-    try:
-        import pip
-    except ImportError:
-        qgsu.showUserAndLogMessage("", "Failed Import Pip! : ", onlyLog=True)
-        raise
-
     package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
     requirements_file = os.path.join(package_dir, 'requirements.txt')
     if not os.path.isfile(requirements_file):
@@ -561,12 +555,8 @@ def install_pip_requirements():
             requirements_file), "", onlyLog=True)
         raise
     try:
-        version_num = pip.__version__[:pip.__version__.find('.')]
-        if int(version_num) <= 10:
-            pip.main(['install', '-r', requirements_file])
-        else:
-            from pip._internal import main
-            main(['install', '-r', requirements_file])
+        from pip._internal import main
+        main(['install', '-r', requirements_file])
     except Exception:
         raise
     return
