@@ -167,7 +167,7 @@ def AddDrawPolygonOnMap(poly_coordinates):
     # create  float polygon --> construcet out of 'point'
 
     list_polygon = QPolygonF()
-    for x in xrange(0, len(poly_coordinates)):
+    for x in range(0, len(poly_coordinates)):
         if x % 2 == 0:
             point.setX(poly_coordinates[x])
             point.setY(poly_coordinates[x + 1])

@@ -561,6 +561,7 @@ def install_pip_requirements():
         raise
     return
 
+
 def rad2deg(radians):
     ''' Radians to Degrees '''
     degrees = 180 * radians / pi
