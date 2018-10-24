@@ -952,9 +952,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def ShowPlot(self, bitrate_data, frame_count, output=None):
         ''' Show plot,because show not work using threading '''
         matplot.figure().canvas.set_window_title(self.fileName)
-        matplot.title("Stream Bitrate vs Time")
-        matplot.xlabel("Time (sec)")
-        matplot.ylabel("Frame Bitrate (kbit/s)")
+        matplot.title(QCoreApplication.translate("QgsFmvPlayer", "Stream Bitrate vs Time"))
+        matplot.xlabel(QCoreApplication.translate("QgsFmvPlayer", "Time (sec)"))
+        matplot.ylabel(QCoreApplication.translate("QgsFmvPlayer", "Frame Bitrate (kbit/s)"))
         matplot.grid(True)
         # map frame type to color
         frame_type_color = {

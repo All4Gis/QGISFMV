@@ -36,17 +36,17 @@
 <context>
     <name>Fmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="81"/>
+        <location filename="../QgsFmv.py" line="77"/>
         <source>Show Video Manager</source>
         <translation>Mostrar Administrador de Vídeo</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="108"/>
+        <location filename="../QgsFmv.py" line="104"/>
         <source>Full Motion Video (FMV)</source>
         <translation>Full Motion Video (FMV)</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="94"/>
+        <location filename="../QgsFmv.py" line="90"/>
         <source>Show About FMV</source>
         <translation>Mostra sobre FMV</translation>
     </message>
@@ -668,6 +668,21 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1092"/>
         <source>Save Video Bitrate Plot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="956"/>
+        <source>Stream Bitrate vs Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="957"/>
+        <source>Time (sec)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="958"/>
+        <source>Frame Bitrate (kbit/s)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
