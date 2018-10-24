@@ -52,9 +52,8 @@ class Fmv:
         log.initLogging()
 
         threadcount = QThread.idealThreadCount()
-        # use all available cores (-1 qgis not work)
+        # use all available cores and parallel rendering
         QgsApplication.setMaxThreads(threadcount)
-        # not work iface.mapCanvas().setParallelRenderingEnabled(True)
         QSettings().setValue("/qgis/parallel_rendering", True)
         # OpenCL acceleration
         QSettings().setValue("/core/OpenClEnabled", True)
