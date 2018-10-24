@@ -1162,14 +1162,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                                     on_finished=finished,
                                     flags=QgsTask.CanCancel)
 
-        QCoreApplication.processEvents()
+#         QCoreApplication.processEvents()
         QgsApplication.taskManager().addTask(task)
-        QCoreApplication.processEvents()
-        while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
-            QCoreApplication.processEvents()
-            pass
-        while QgsApplication.taskManager().countActiveTasks() > 0:
-            QCoreApplication.processEvents()
+#         QCoreApplication.processEvents()
+#         while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
+#             QCoreApplication.processEvents()
+#             pass
+#         while QgsApplication.taskManager().countActiveTasks() > 0:
+#             QCoreApplication.processEvents()
         return
 
     def SaveCapture(self, image, output):
