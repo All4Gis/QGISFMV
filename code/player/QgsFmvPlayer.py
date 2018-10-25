@@ -1185,11 +1185,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def QThreadFinished(self, process, _="", outjson=None):
         ''' Finish Threads '''
-        if process == "ExtractFramesProcessor":
-            self.VPExtractFrames.deleteLater()
-            self.VPTExtractAllFrames.terminate()
-            self.VPTExtractAllFrames.deleteLater()
-        elif process == "CreatePlotsBitrate":
+        if process == "CreatePlotsBitrate":
             self.VPBitratePlot.deleteLater()
             self.VPTBitratePlot.terminate()
             self.VPTBitratePlot.deleteLater()
@@ -1234,22 +1230,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def KillAllProcessors(self):
         """ Kill All Processors """
-        """ Extract all frames Processors """
-        try:
-            if self.VPTExtractAllFrames.isRunning():
-                ret = qgsu.CustomMessage(
-                    QCoreApplication.translate("QgsFmvPlayer",
-                                               "HEY...Active background process!"),
-                    QCoreApplication.translate("QgsFmvPlayer",
-                                               "Do you really want close?"))
-                if ret == QMessageBox.Yes:
-                    self.QThreadFinished(
-                        "ExtractFramesProcessor", "Closing Extract Frames Processor")
-                else:
-                    return False
-        except Exception:
-            None
-
         """ Bitrates Processors"""
         try:
             if self.VPTBitratePlot.isRunning():
