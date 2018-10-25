@@ -44,7 +44,6 @@ from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
-from QGIS_FMV.video.QgsVideoProcessor import ExtractFramesProcessor
 #from QGIS_FMV.videoStremaing.TestClient import UDPClient
 from qgis.core import Qgis as QGis, QgsRectangle, QgsTask, QgsApplication
 
@@ -52,6 +51,12 @@ try:
     from pydevd import *
 except ImportError:
     None
+
+try:
+    import cv2
+except Exception as e:
+    qgsu.showUserAndLogMessage(QCoreApplication.translate(
+        "VideoProcessor", "Error: Missing OpenCV packages"))
 
 try:
     import numpy
@@ -1109,32 +1114,41 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def ExtractAllFrames(self):
         """ Extract All Video Frames Thread """
-        if not self.KillAllProcessors():
-            return
-
         directory = askForFolder(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save all Frames"),
             options=QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly)
 
+        def finishedAllFrames(e):
+            if e is None:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Succesfully frames saved!"))
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Failed saving frames!"), level=QGis.Warning)
+            return
+
         if directory:
+            taskExtractAllFrames = QgsTask.fromFunction('Save All Frames Task',
+                                        self.SaveAllFrames,
+                                        fileName=self.fileName, directory=directory,
+                                        on_finished=finishedAllFrames,
+                                        flags=QgsTask.CanCancel)
 
-            self.VPExtractFrames = ExtractFramesProcessor()
-            self.VPTExtractAllFrames = QThread()
-
-            self.VPExtractFrames.moveToThread(
-                self.VPTExtractAllFrames)
-            self.VPExtractFrames.finished.connect(
-                self.QThreadFinished)
-            self.VPExtractFrames.error.connect(self.QThreadError)
-            self.VPExtractFrames.progress.connect(
-                self.progressBarProcessor.setValue)
-            self.VPTExtractAllFrames.start(QThread.LowPriority)
-
-            QMetaObject.invokeMethod(self.VPExtractFrames, 'ExtractFrames',
-                                     Qt.QueuedConnection, Q_ARG(
-                                         str, directory),
-                                     Q_ARG(str, self.fileName))
+            QgsApplication.taskManager().addTask(taskExtractAllFrames)
         return
+
+    def SaveAllFrames(self, task, fileName, directory):
+        vidcap = cv2.VideoCapture(fileName)
+        length = int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT))
+        count = 0
+        while not task.isCanceled():
+            _, image = vidcap.read()
+            cv2.imwrite(directory + "\\frame_%d.jpg" %
+                        count, image)  # save frame as JPEG file
+            task.setProgress(count * 100 / length)
+            count += 1
+        vidcap.release()
+        cv2.destroyAllWindows()
 
     def ExtractCurrentFrame(self):
         """ Extract Current Frame Thread """
@@ -1147,7 +1161,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if output == "":
             return
 
-        def finished(e):
+        def finishedCurrentFrame(e):
             if e is None:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", "Succesfully frame saved!"))
@@ -1156,23 +1170,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     "QgsFmvPlayer", "Failed saving frame!"), level=QGis.Warning)
             return
 
-        task = QgsTask.fromFunction('Save Current Frame Task',
-                                    QgsFmvPlayer.SaveCapture,
+        taskCurrentFrame = QgsTask.fromFunction('Save Current Frame Task',
+                                    self.SaveCapture,
                                     image=image, output=output,
-                                    on_finished=finished,
+                                    on_finished=finishedCurrentFrame,
                                     flags=QgsTask.CanCancel)
 
-#         QCoreApplication.processEvents()
-        QgsApplication.taskManager().addTask(task)
-#         QCoreApplication.processEvents()
-#         while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
-#             QCoreApplication.processEvents()
-#             pass
-#         while QgsApplication.taskManager().countActiveTasks() > 0:
-#             QCoreApplication.processEvents()
+        QgsApplication.taskManager().addTask(taskCurrentFrame)
         return
 
-    def SaveCapture(self, image, output):
+    def SaveCapture(self, task, image, output):
         ''' Save Current Frame '''
         image.save(output)
 
