@@ -1277,21 +1277,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     return False
         except Exception:
             None
-        """ probeShow Processors """
-        try:
-            if self.showInfoT.isRunning():
-                ret = qgsu.CustomMessage(
-                    QCoreApplication.translate("QgsFmvPlayer",
-                                               "HEY...Active background process!"),
-                    QCoreApplication.translate("QgsFmvPlayer",
-                                               "Do you really want close?"))
-                if ret == QMessageBox.Yes:
-                    self.QThreadFinished(
-                        "probeShow", "Closing Show Video Info")
-                else:
-                    return False
-        except Exception:
-            None
         return True
 
     def showVideoInfoDialog(self, outjson):
