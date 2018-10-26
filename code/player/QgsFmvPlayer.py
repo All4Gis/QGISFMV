@@ -1263,20 +1263,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     return False
         except Exception:
             None
-        """ probeToJson Processors """
-        try:
-            if self.infoJsonT.isRunning():
-                ret = qgsu.CustomMessage(
-                    QCoreApplication.translate("QgsFmvPlayer",
-                                               "HEY...Active background process!"),
-                    QCoreApplication.translate("QgsFmvPlayer",
-                                               "Do you really want close?"))
-                if ret == QMessageBox.Yes:
-                    self.QThreadFinished("probeToJson", "Closing Info to Json")
-                else:
-                    return False
-        except Exception:
-            None
         return True
 
     def showVideoInfoDialog(self, outjson):
