@@ -163,12 +163,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             if stdout_data == b'':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", "This video doesn't have Audio ! "))
+                self.actionAudio.setEnabled(False)
+                self.actionSave_Audio.setEnabled(False)
                 return False
 
             return True
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Audio check Failed! : "), str(e))
+            self.actionAudio.setEnabled(False)
+            self.actionSave_Audio.setEnabled(False)
 
     def get_metadata_from_buffer(self, currentTime):
         """ Metadata CallBack """
