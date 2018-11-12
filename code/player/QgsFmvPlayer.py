@@ -288,15 +288,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def saveInfoToJson(self):
         """ Save video Info to json """
-        if not self.KillAllProcessors():
-            return
-
         out_json, _ = askForFiles(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save Json"),
             isSave=True,
             exts="json")
 
-        if out_json == "":
+        if not out_json:
             return
 
         def finishedSaveInfoToJson(e):
@@ -799,7 +796,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             if not out:
                 self.StopRecordAnimation()
-                return False
+                return
 
             p = _spawn(['-i', self.fileName,
                         '-ss', self.startRecord,
@@ -861,16 +858,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def convertVideo(self):
         '''Convert Video To Other Format '''
-        if not self.KillAllProcessors():
-            return
-
         out, _ = askForFiles(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save Video as..."),
             isSave=True,
             exts=["mp4", "ogg", "avi", "mkv", "webm", "flv", "mov", "mpg", "mp3"])
 
         if not out:
-            return False
+            return
 
         try:
             self.VPConverter = Converter()
@@ -1024,8 +1018,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def CreateBitratePlot(self):
         ''' Create video Plot Bitrate Thread '''
-        if not self.KillAllProcessors():
-            return
         try:
             self.VPBitratePlot = CreatePlotsBitrate()
             self.VPTBitratePlot = QThread()
@@ -1070,7 +1062,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     isSave=True,
                     exts=["png", "pdf", "pgf", "eps", "ps", "raw", "rgba", "svg", "svgz"])
 
-                if fileaudio == "":
+                if not fileaudio:
                     return
 
                 QMetaObject.invokeMethod(self.VPBitratePlot, 'CreatePlot',
@@ -1086,7 +1078,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     isSave=True,
                     exts=["png", "pdf", "pgf", "eps", "ps", "raw", "rgba", "svg", "svgz"])
 
-                if filevideo == "":
+                if not filevideo:
                     return
 
                 QMetaObject.invokeMethod(self.VPBitratePlot, 'CreatePlot',
@@ -1146,7 +1138,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             isSave=True,
             exts=["png", "jpg", "bmp", "tiff"])
 
-        if output == "":
+        if not output:
             return
 
         def finishedCurrentFrame(e):
@@ -1208,39 +1200,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.metadataDlg.show()
         return
 
-    def KillAllProcessors(self):
-        """ Kill All Processors """
-        """ Bitrates Processors"""
-        try:
-            if self.VPTBitratePlot.isRunning():
-                ret = qgsu.CustomMessage(
-                    QCoreApplication.translate("QgsFmvPlayer",
-                                               "HEY...Active background process!"),
-                    QCoreApplication.translate("QgsFmvPlayer",
-                                               "Do you really want close?"))
-                if ret == QMessageBox.Yes:
-                    self.QThreadFinished(
-                        "CreatePlotsBitrate", "Closing Plot Bitrate")
-                else:
-                    return False
-        except Exception:
-            None
-        """ Converter Processors """
-        try:
-            if self.VPTConverter.isRunning():
-                ret = qgsu.CustomMessage(
-                    QCoreApplication.translate("QgsFmvPlayer",
-                                               "HEY...Active background process!"),
-                    QCoreApplication.translate("QgsFmvPlayer",
-                                               "Do you really want close?"))
-                if ret == QMessageBox.Yes:
-                    self.QThreadFinished("convert", "Closing convert")
-                else:
-                    return False
-        except Exception:
-            None
-        return True
-
     def showVideoInfoDialog(self, outjson):
         """ Show Video Information Dialog """
         view = QTreeView()
@@ -1265,12 +1224,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.VideoInfoDialog.resize(500, 400)
         self.VideoInfoDialog.show()
 
-    def closeEvent(self, evt):
+    def closeEvent(self, _):
         """ Close Event """
-        if self.KillAllProcessors() is False:
-            evt.ignore()
-            return
-
         self.stop()
         self.parent._PlayerDlg = None
         self.parent.ToggleActiveFromTitle()
