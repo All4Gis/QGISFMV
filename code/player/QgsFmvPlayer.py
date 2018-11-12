@@ -866,75 +866,61 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if not out:
             return
 
-        try:
-            self.VPConverter = Converter()
-            self.VPTConverter = QThread()
-
-            self.VPConverter.moveToThread(
-                self.VPTConverter)
-
-            self.VPConverter.finished.connect(
-                self.QThreadFinished)
-
-            self.VPConverter.error.connect(self.QThreadError)
-
-            self.VPConverter.progress.connect(
-                self.progressBarProcessor.setValue)
-
-            self.VPTConverter.start(QThread.LowPriority)
-
-            # TODO : Make Correct format Conversion and embebed metadata
-            info = self.VPConverter.probeInfo(self.fileName)
-            if info is not None:
-                if self.HasFileAudio:
-                    audio_codec = info.audio.codec
-                    audio_samplerate = info.audio.audio_samplerate
-                    audio_channels = info.audio.audio_channels
-
-                video_codec = info.video.codec
-                video_width = info.video.video_width
-                video_height = info.video.video_height
-                video_fps = info.video.video_fps
-
-            _, out_ext = os.path.splitext(out)
-
+        # TODO : Make Correct format Conversion and embebed metadata
+        info = self.converter.probeInfo(self.fileName)
+        if info is not None:
             if self.HasFileAudio:
-                options = {
-                    'format': out_ext[1:],
-                    'audio': {
-                        'codec': audio_codec,
-                        'samplerate': audio_samplerate,
-                        'channels': audio_channels
-                    },
-                    'video': {
-                        'codec': video_codec,
-                        'width': video_width,
-                        'height': video_height,
-                        'fps': video_fps
-                    }}
-            else:
-                options = {
-                    'format': out_ext[1:],
-                    'video': {
-                        'codec': video_codec,
-                        'width': video_width,
-                        'height': video_height,
-                        'fps': video_fps
-                    }}
-            QMetaObject.invokeMethod(self.VPConverter, 'convert',
-                                     Qt.QueuedConnection, Q_ARG(
-                                         str, self.fileName),
-                                     Q_ARG(
-                                         str, out),
-                                     Q_ARG(
-                                         dict, options),
-                                     Q_ARG(
-                                         bool, False))
+                audio_codec = info.audio.codec
+                audio_samplerate = info.audio.audio_samplerate
+                audio_channels = info.audio.audio_channels
 
-        except Exception as e:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Error converting video : " + str(e)))
-            self.QThreadFinished("convert", "Closing convert")
+            video_codec = info.video.codec
+            video_width = info.video.video_width
+            video_height = info.video.video_height
+            video_fps = info.video.video_fps
+
+        _, out_ext = os.path.splitext(out)
+
+        if self.HasFileAudio:
+            options = {
+                'format': out_ext[1:],
+                'audio': {
+                    'codec': audio_codec,
+                    'samplerate': audio_samplerate,
+                    'channels': audio_channels
+                },
+                'video': {
+                    'codec': video_codec,
+                    'width': video_width,
+                    'height': video_height,
+                    'fps': video_fps
+                }}
+        else:
+            options = {
+                'format': out_ext[1:],
+                'video': {
+                    'codec': video_codec,
+                    'width': video_width,
+                    'height': video_height,
+                    'fps': video_fps
+                }}
+
+        def finishedConvertVideo(e):
+            if e is None:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Succesfully converting video!"))
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Failed converting video!"), level=QGis.Warning)
+            return
+
+        taskConvertVideo = QgsTask.fromFunction('Converting Video Task',
+                                    self.converter.convert,
+                                    infile=self.fileName, outfile=out, options=options ,twopass= False,
+                                    on_finished=finishedConvertVideo,
+                                    flags=QgsTask.CanCancel)
+
+        QgsApplication.taskManager().addTask(taskConvertVideo)
 
     def ShowPlot(self, bitrate_data, frame_count, output=None):
         ''' Show plot,because show not work using threading '''
@@ -1081,8 +1067,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             QgsApplication.taskManager().addTask(taskactionSave_Video)
 
-
-
     def ExtractAllFrames(self):
         """ Extract All Video Frames Thread """
         directory = askForFolder(self, QCoreApplication.translate(
@@ -1153,29 +1137,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def SaveCapture(self, _, image, output):
         ''' Save Current Frame '''
         image.save(output)
-
-    # TODO: Migrate to QgsTask
-    def QThreadFinished(self, process, _="", outjson=None):
-        ''' Finish Threads '''
-        if process == "convert":
-            self.VPConverter.deleteLater()
-            self.VPTConverter.terminate()
-            self.VPTConverter.deleteLater()
-
-        QApplication.processEvents()
-        self.progressBarProcessor.setValue(0)
-        return
-
-    def QThreadError(self, processor, e, exception_string):
-        """ Threads Errors"""
-        qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer",
-                                                              processor),
-                                   'Failed! ' + str(e) + ' \n'.format(
-            exception_string), level=QGis.Warning)
-
-        self.QThreadFinished(processor, "Closing Processor")
-
-        return
 
     def OpenQgsFmvMetadata(self):
         """ Open Metadata Dock """

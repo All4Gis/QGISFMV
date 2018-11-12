@@ -1,9 +1,7 @@
 # Original Code : https://github.com/senko/python-video-converter
 # Modificated for work in QGIS FMV Plugin
 
-import traceback
-
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QObject
 from QGIS_FMV.converter.avcodecs import (video_codec_list,
                                          audio_codec_list,
                                          subtitle_codec_list)
@@ -19,11 +17,6 @@ except ImportError:
 
 
 class Converter(QObject):
-
-    finished = pyqtSignal(str, str)
-    finishedJson = pyqtSignal(str, str, bytes)
-    error = pyqtSignal(str, Exception, basestring)
-    progress = pyqtSignal(float)
 
     video_codecs = {}
     audio_codecs = {}
@@ -114,20 +107,21 @@ class Converter(QObject):
 
         return optlist
 
-    @pyqtSlot(str, str, dict, bool)
-    def convert(self, infile, outfile, options, twopass):
+    def convert(self, task, infile, outfile, options, twopass):
         try:
             timeout = 10
 
             self.ffmpeg = FFMpeg()
             info = self.ffmpeg.probe(infile)
             if info is None:
-                self.error.emit(
-                    "convert", "", "Can't get information about source file")
+#                 self.error.emit(
+#                     "convert", "", "Can't get information about source file")
+                task.cancel()
 
             if not info.video and not info.audio:
-                self.error.emit(
-                    "convert", "", 'Source file has no audio or video streams')
+#                 self.error.emit(
+#                     "convert", "", 'Source file has no audio or video streams')
+                task.cancel()
 
             if info.video and 'video' in options:
                 options = options.copy()
@@ -136,30 +130,30 @@ class Converter(QObject):
                 v['src_height'] = info.video.video_height
 
             if info.format.duration < 0.01:
-                self.error.emit("convert", "", 'Zero-length media')
+                #self.error.emit("convert", "", 'Zero-length media')
+                task.cancel()
 
             if twopass:
                 optlist1 = self.parse_options(options, 1)
                 for timecode in self.ffmpeg.convert(infile, outfile, optlist1,
                                                     timeout=timeout):
-                    self.progress.emit(
-                        int((50.0 * timecode) / info.format.duration))
+                    task.setProgress(int((50.0 * timecode) / info.format.duration))
 
                 optlist2 = self.parse_options(options, 2)
                 for timecode in self.ffmpeg.convert(infile, outfile, optlist2,
                                                     timeout=timeout):
-                    self.progress.emit(
-                        int(50.0 + (50.0 * timecode) / info.format.duration))
+                    task.setProgress(int(50.0 + (50.0 * timecode) / info.format.duration))
             else:
                 optlist = self.parse_options(options, twopass)
                 for timecode in self.ffmpeg.convert(infile, outfile, optlist,
                                                     timeout=timeout):
-                    self.progress.emit(
+                    task.setProgress(
                         int((100.0 * timecode) / info.format.duration))
-            self.progress.emit(100)
-            self.finished.emit("convert", "convert correct Finished!")
-        except Exception as e:
-            self.error.emit("convert", e, traceback.format_exc())
+            task.setProgress(100)
+#             self.finished.emit("convert", "convert correct Finished!")
+        except Exception:
+            task.cancel()
+#             self.error.emit("convert", e, traceback.format_exc())
             return
 
     def probeToJson(self, task, fname, output):
