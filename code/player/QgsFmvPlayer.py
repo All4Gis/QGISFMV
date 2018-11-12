@@ -1183,10 +1183,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         QgsApplication.taskManager().addTask(taskCurrentFrame)
         return
 
-    def SaveCapture(self, task, image, output):
+    def SaveCapture(self, _, image, output):
         ''' Save Current Frame '''
         image.save(output)
 
+    # TODO: Migrate to QgsTask
     def QThreadFinished(self, process, _="", outjson=None):
         ''' Finish Threads '''
         if process == "CreatePlotsBitrate":
