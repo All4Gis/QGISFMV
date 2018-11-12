@@ -151,6 +151,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.metadataDlg.setMinimumWidth(500)
         self.metadataDlg.hide()
 
+        self.converter = Converter()
+
     def HasAudio(self, videoPath):
         """ Check if video have Metadata or not """
         try:
@@ -296,33 +298,24 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         if out_json == "":
             return
-        try:
-            self.infoJson = Converter()
-            self.infoJsonT = QThread()
 
-            self.infoJson.moveToThread(
-                self.infoJsonT)
+        def finishedSaveInfoToJson(e):
+            if e is None:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Succesfully Json saved!"))
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Failed saving Json!"), level=QGis.Warning)
+            return
 
-            self.infoJson.finished.connect(
-                self.QThreadFinished)
+        taskSaveInfoToJson = QgsTask.fromFunction('Save Current Frame Task',
+                                self.converter.probeToJson,
+                                fname=self.fileName, output=out_json,
+                                on_finished=finishedSaveInfoToJson,
+                                flags=QgsTask.CanCancel)
 
-            self.infoJson.error.connect(self.QThreadError)
-
-            self.infoJson.progress.connect(
-                self.progressBarProcessor.setValue)
-
-            self.infoJsonT.start(QThread.LowPriority)
-
-            QMetaObject.invokeMethod(self.infoJson, 'probeToJson',
-                                     Qt.QueuedConnection, Q_ARG(
-                                         str, self.fileName),
-                                     Q_ARG(
-                                         str, out_json))
-
-        except Exception as e:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Error saving Json : " + str(e)))
-            self.QThreadFinished("probeToJson", "Closing ProbeToJson")
+        QgsApplication.taskManager().addTask(taskSaveInfoToJson)
+        return
 
     def showVideoInfo(self):
         ''' Show default probe info '''
@@ -1198,10 +1191,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.VPConverter.deleteLater()
             self.VPTConverter.terminate()
             self.VPTConverter.deleteLater()
-        elif process == "probeToJson":
-            self.infoJson.deleteLater()
-            self.infoJsonT.terminate()
-            self.infoJsonT.deleteLater()
         elif process == "probeShow":
             self.showInfo.deleteLater()
             self.showInfoT.terminate()

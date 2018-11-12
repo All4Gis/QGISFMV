@@ -162,15 +162,11 @@ class Converter(QObject):
             self.error.emit("convert", e, traceback.format_exc())
             return
 
-    @pyqtSlot(str, str)
-    def probeToJson(self, fname, output=None):
+    def probeToJson(self, task, fname, output):
         try:
             self.ffmpeg = FFMpeg()
             self.ffmpeg.probeToJson(fname, output)
-            self.finished.emit(
-                "probeToJson", "Extract Information To Json succesfully!")
-        except Exception as e:
-            self.error.emit("probeToJson", e, traceback.format_exc())
+        except Exception:
             return
 
     @pyqtSlot(str)
