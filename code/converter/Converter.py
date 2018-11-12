@@ -108,20 +108,18 @@ class Converter(QObject):
         return optlist
 
     def convert(self, task, infile, outfile, options, twopass):
-        try:
+        while not task.isCanceled():
             timeout = 10
 
             self.ffmpeg = FFMpeg()
             info = self.ffmpeg.probe(infile)
             if info is None:
-                #                 self.error.emit(
-                #                     "convert", "", "Can't get information about source file")
                 task.cancel()
+                return "Can't get information about source file"
 
             if not info.video and not info.audio:
-                #                 self.error.emit(
-                #                     "convert", "", 'Source file has no audio or video streams')
                 task.cancel()
+                return 'Source file has no audio or video streams'
 
             if info.video and 'video' in options:
                 options = options.copy()
@@ -130,8 +128,8 @@ class Converter(QObject):
                 v['src_height'] = info.video.video_height
 
             if info.format.duration < 0.01:
-                #self.error.emit("convert", "", 'Zero-length media')
                 task.cancel()
+                return 'Zero-length media'
 
             if twopass:
                 optlist1 = self.parse_options(options, 1)
@@ -152,11 +150,7 @@ class Converter(QObject):
                     task.setProgress(
                         int((100.0 * timecode) / info.format.duration))
             task.setProgress(100)
-#             self.finished.emit("convert", "convert correct Finished!")
-        except Exception:
-            task.cancel()
-#             self.error.emit("convert", e, traceback.format_exc())
-            return
+        return
 
     def probeToJson(self, task, fname, output):
         try:

@@ -905,7 +905,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     'fps': video_fps
                 }}
 
-        def finishedConvertVideo(e):
+        def finishedConvertVideo(e,value):
             if e is None:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", "Succesfully converting video!"))
