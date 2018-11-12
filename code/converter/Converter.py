@@ -169,15 +169,11 @@ class Converter(QObject):
         except Exception:
             return
 
-    @pyqtSlot(str)
-    def probeShow(self, fname):
+    def probeShow(self, task, fname):
         try:
             self.ffmpeg = FFMpeg()
-            bytes_value = self.ffmpeg.probeGetJson(fname)
-            self.finishedJson.emit(
-                "probeShow", "Extract Information succesfully!", bytes_value)
-        except Exception as e:
-            self.error.emit("probeShow", e, traceback.format_exc())
+            self.bytes_value = self.ffmpeg.probeGetJson(fname)
+        except Exception:
             return
 
     def probeInfo(self, fname, posters_as_video=True):

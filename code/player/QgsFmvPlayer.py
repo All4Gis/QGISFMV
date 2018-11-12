@@ -319,32 +319,23 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def showVideoInfo(self):
         ''' Show default probe info '''
-        try:
+        def finishedShowVideoInfo(e):
+            if e is None:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Succesfully Info Show!"))
+                self.showVideoInfoDialog(self.converter.bytes_value)
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Failed Info Show!"), level=QGis.Warning)
+            return
 
-            self.showInfo = Converter()
-            self.showInfoT = QThread()
+        taskSaveInfoToJson = QgsTask.fromFunction('Save Current Frame Task',
+                                self.converter.probeShow,
+                                fname=self.fileName,
+                                on_finished=finishedShowVideoInfo,
+                                flags=QgsTask.CanCancel)
 
-            self.showInfo.moveToThread(
-                self.showInfoT)
-
-            self.showInfo.finishedJson.connect(
-                self.QThreadFinished)
-
-            self.showInfo.error.connect(self.QThreadError)
-
-            self.showInfo.progress.connect(
-                self.progressBarProcessor.setValue)
-
-            self.showInfoT.start(QThread.LowPriority)
-
-            QMetaObject.invokeMethod(self.showInfo, 'probeShow',
-                                     Qt.QueuedConnection, Q_ARG(
-                                         str, self.fileName))
-
-        except Exception as e:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Error Info Show : " + str(e)))
-            self.QThreadFinished("probeShow", "Closing Probe")
+        QgsApplication.taskManager().addTask(taskSaveInfoToJson)
         return
 
     def state(self):
@@ -1191,11 +1182,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.VPConverter.deleteLater()
             self.VPTConverter.terminate()
             self.VPTConverter.deleteLater()
-        elif process == "probeShow":
-            self.showInfo.deleteLater()
-            self.showInfoT.terminate()
-            self.showInfoT.deleteLater()
-            self.showVideoInfoDialog(outjson)
 
         QApplication.processEvents()
         self.progressBarProcessor.setValue(0)
