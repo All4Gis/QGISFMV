@@ -1,9 +1,7 @@
 # Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
 
-import traceback
-
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QObject
 from QGIS_FMV.utils.QgsFmvUtils import _spawn
 
 
@@ -19,17 +17,17 @@ except ImportError:
 
 
 class CreatePlotsBitrate(QObject):
-    """ Create Plot Bitrate """
-    finished = pyqtSignal(str, str)
-    error = pyqtSignal(str, Exception, basestring)
-    progress = pyqtSignal(float)
-    return_fig = pyqtSignal(dict, int, str)
+    """ Create Plot Bitrate """
+    def __init__(self, parent=None):
+        """ Constructor """
+        self.bitrate_data = None
+        self.frame_count = None
+        self.output = None
 
-    @pyqtSlot(str, str, str)
-    def CreatePlot(self, file, output, t):
+    def CreatePlot(self ,task, fileName, output, t):
         """ Create Plot Bitrate Slot"""
         try:
-            self.progress.emit(10)
+            task.setProgress(10)
 
             bitrate_data = {}
             frame_count = 0
@@ -42,22 +40,20 @@ class CreatePlotsBitrate(QObject):
             elif t == 'video':
                 stream_spec = 'V'
             else:
-                self.error.emit(
-                    "CreatePlotsBitrate", "Invalid stream type",
-                    traceback.format_exc())
+                task.cancel()
                 return
 
             # get frame data for the selected stream
             cmds = ["-show_entries", "frame",
                     "-select_streams", stream_spec,
                     "-print_format", "xml", "-preset", "ultrafast",
-                    file]
+                    fileName]
             try:
                 with _spawn(cmds, t="probe") as proc_frame:
-                    self.progress.emit(22)
+                    task.setProgress(22)
                     # process xml elements as they close
                     for event in etree.iterparse(proc_frame.stdout):
-                        self.progress.emit(40)
+                        task.setProgress(40)
                         # skip non-frame elements
                         node = event[1]
                         if node.tag != 'frame':
@@ -84,7 +80,7 @@ class CreatePlotsBitrate(QObject):
                                 cmds = ["-show_entries", "stream",
                                         "-select_streams", "V",
                                         "-print_format", "xml", "-preset", "ultrafast",
-                                        file
+                                        fileName
                                         ]
                                 with _spawn(cmds, t="probe") as proc_stream:
 
@@ -104,10 +100,10 @@ class CreatePlotsBitrate(QObject):
                         try:
                             frame_time = float(
                                 node.get('best_effort_timestamp_time'))
-                        except:
+                        except Exception:
                             try:
                                 frame_time = float(node.get('pkt_pts_time'))
-                            except:
+                            except Exception:
                                 if frame_count > 1:
                                     frame_time += float(node.get('pkt_duration_time'))
 
@@ -122,29 +118,22 @@ class CreatePlotsBitrate(QObject):
                         # append frame to list by type
                         bitrate_data[frame_type].append(frame)
 
-                        self.progress.emit(45)
+                        task.setProgress(45)
 
                     # check if ffprobe was successful
                     if frame_count == 0:
-                        self.error.emit(
-                            "CreatePlotsBitrate",
-                            "Error: No frame data, failed to execute ffprobe",
-                            traceback.format_exc())
+                        task.cancel()
                         return
-            except:
-                self.error.emit(
-                    "CreatePlotsBitrate",
-                    "Error: No frame data, failed to execute ffprobe",
-                    traceback.format_exc())
+            except Exception:
+                task.cancel()
                 return
             # end frame subprocess
-            self.progress.emit(80)
-            self.return_fig.emit(bitrate_data, frame_count, output)
-            self.finished.emit(
-                "CreatePlotsBitrate",
-                "Bitrate correct Finished!")
+            task.setProgress(80)
+            self.bitrate_data = bitrate_data
+            self.frame_count = frame_count
+            self.output = output
             return
 
-        except Exception as e:
-            self.error.emit("CreatePlotsBitrate", e, traceback.format_exc())
+        except Exception:
+            task.cancel()
             return

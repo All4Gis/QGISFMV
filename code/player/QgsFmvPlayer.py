@@ -305,7 +305,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     "QgsFmvPlayer", "Failed saving Json!"), level=QGis.Warning)
             return
 
-        taskSaveInfoToJson = QgsTask.fromFunction('Save Current Frame Task',
+        taskSaveInfoToJson = QgsTask.fromFunction('Save Video Info to Json Task',
                                 self.converter.probeToJson,
                                 fname=self.fileName, output=out_json,
                                 on_finished=finishedSaveInfoToJson,
@@ -326,7 +326,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     "QgsFmvPlayer", "Failed Info Show!"), level=QGis.Warning)
             return
 
-        taskSaveInfoToJson = QgsTask.fromFunction('Save Current Frame Task',
+        taskSaveInfoToJson = QgsTask.fromFunction('Save Video Info Task',
                                 self.converter.probeShow,
                                 fname=self.fileName,
                                 on_finished=finishedShowVideoInfo,
@@ -983,7 +983,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 color=frame_type_color[frame_type],
                 label="{} Frames".format(frame_type))
 
-        self.progressBarProcessor.setValue(90)
         # calculate peak line position (left 15%, above line)
         peak_text_x = matplot.xlim()[1] * 0.15
         peak_text_y = global_peak_bitrate + \
@@ -1008,89 +1007,81 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                      color='black')
 
         matplot.legend()
-        if output != "":
+        if output is not None:
             matplot.savefig(output)
         else:
             matplot.show()
-
         self.matplot = matplot
-        self.progressBarProcessor.setValue(100)
 
     def CreateBitratePlot(self):
         ''' Create video Plot Bitrate Thread '''
-        try:
-            self.VPBitratePlot = CreatePlotsBitrate()
-            self.VPTBitratePlot = QThread()
 
-            self.VPBitratePlot.moveToThread(
-                self.VPTBitratePlot)
+        self.BitratePlot = CreatePlotsBitrate()
+        sender = self.sender().objectName()
 
-            self.VPBitratePlot.finished.connect(
-                self.QThreadFinished)
+        def finishedBitratePlot(e):
+            if e is None:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Succesfully creating Plot Bitrate!"))
+                self.ShowPlot(self.BitratePlot.bitrate_data, self.BitratePlot.frame_count, self.BitratePlot.output)
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Failed creating Plot Bitrate : " + str(e)), level=QGis.Warning)
+            return
 
-            self.VPBitratePlot.return_fig.connect(
-                self.ShowPlot)
+        if sender == "actionAudio":
+            taskactionAudio = QgsTask.fromFunction('Show Audio Bitrate',
+                                self.BitratePlot.CreatePlot,
+                                fileName=self.fileName,output=None, t='audio',
+                                on_finished=finishedBitratePlot,
+                                flags=QgsTask.CanCancel)
 
-            self.VPBitratePlot.error.connect(self.QThreadError)
+            QgsApplication.taskManager().addTask(taskactionAudio)
 
-            self.VPBitratePlot.progress.connect(
-                self.progressBarProcessor.setValue)
+        elif sender == "actionVideo":
+            taskactionVideo = QgsTask.fromFunction('Show Video Bitrate',
+                                self.BitratePlot.CreatePlot,
+                                fileName=self.fileName, output=None, t='video',
+                                on_finished=finishedBitratePlot,
+                                flags=QgsTask.CanCancel)
 
-            self.VPTBitratePlot.start(QThread.LowPriority)
+            QgsApplication.taskManager().addTask(taskactionVideo)
 
-            sender = self.sender().objectName()
+        elif sender == "actionSave_Audio":
+            fileaudio, _ = askForFiles(self, QCoreApplication.translate(
+                "QgsFmvPlayer", "Save Audio Bitrate Plot"),
+                isSave=True,
+                exts=["png", "pdf", "pgf", "eps", "ps", "raw", "rgba", "svg", "svgz"])
 
-            if sender == "actionAudio":
-                QMetaObject.invokeMethod(self.VPBitratePlot, 'CreatePlot',
-                                         Qt.QueuedConnection, Q_ARG(
-                                             str, self.fileName),
-                                         Q_ARG(
-                                             str, None),
-                                         Q_ARG(str, 'audio'))
+            if not fileaudio:
+                return
 
-            elif sender == "actionVideo":
-                QMetaObject.invokeMethod(self.VPBitratePlot, 'CreatePlot',
-                                         Qt.QueuedConnection, Q_ARG(
-                                             str, self.fileName),
-                                         Q_ARG(
-                                             str, None),
-                                         Q_ARG(str, 'video'))
+            taskactionSave_Audio = QgsTask.fromFunction('Save Action Audio Bitrate',
+                                self.BitratePlot.CreatePlot,
+                                fileName=self.fileName, output=fileaudio, t='audio',
+                                on_finished=finishedBitratePlot,
+                                flags=QgsTask.CanCancel)
 
-            elif sender == "actionSave_Audio":
-                fileaudio, _ = askForFiles(self, QCoreApplication.translate(
-                    "QgsFmvPlayer", "Save Audio Bitrate Plot"),
-                    isSave=True,
-                    exts=["png", "pdf", "pgf", "eps", "ps", "raw", "rgba", "svg", "svgz"])
+            QgsApplication.taskManager().addTask(taskactionSave_Audio)
 
-                if not fileaudio:
-                    return
+        elif sender == "actionSave_Video":
+            filevideo, _ = askForFiles(self, QCoreApplication.translate(
+                "QgsFmvPlayer", "Save Video Bitrate Plot"),
+                isSave=True,
+                exts=["png", "pdf", "pgf", "eps", "ps", "raw", "rgba", "svg", "svgz"])
 
-                QMetaObject.invokeMethod(self.VPBitratePlot, 'CreatePlot',
-                                         Qt.QueuedConnection, Q_ARG(
-                                             str, self.fileName),
-                                         Q_ARG(
-                                             str, fileaudio),
-                                         Q_ARG(str, 'audio'))
+            if not filevideo:
+                return
 
-            elif sender == "actionSave_Video":
-                filevideo, _ = askForFiles(self, QCoreApplication.translate(
-                    "QgsFmvPlayer", "Save Video Bitrate Plot"),
-                    isSave=True,
-                    exts=["png", "pdf", "pgf", "eps", "ps", "raw", "rgba", "svg", "svgz"])
+            taskactionSave_Video = QgsTask.fromFunction('Save Action Video Bitrate',
+                                self.BitratePlot.CreatePlot,
+                                fileName=self.fileName, output=filevideo, t='video',
+                                on_finished=finishedBitratePlot,
+                                flags=QgsTask.CanCancel)
 
-                if not filevideo:
-                    return
+            QgsApplication.taskManager().addTask(taskactionSave_Video)
 
-                QMetaObject.invokeMethod(self.VPBitratePlot, 'CreatePlot',
-                                         Qt.QueuedConnection, Q_ARG(
-                                             str, self.fileName),
-                                         Q_ARG(
-                                             str, filevideo),
-                                         Q_ARG(str, 'video'))
 
-        except Exception as e:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Failed creating Plot Bitrate : " + str(e)))
 
     def ExtractAllFrames(self):
         """ Extract All Video Frames Thread """
@@ -1166,11 +1157,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     # TODO: Migrate to QgsTask
     def QThreadFinished(self, process, _="", outjson=None):
         ''' Finish Threads '''
-        if process == "CreatePlotsBitrate":
-            self.VPBitratePlot.deleteLater()
-            self.VPTBitratePlot.terminate()
-            self.VPTBitratePlot.deleteLater()
-        elif process == "convert":
+        if process == "convert":
             self.VPConverter.deleteLater()
             self.VPTConverter.terminate()
             self.VPTConverter.deleteLater()
