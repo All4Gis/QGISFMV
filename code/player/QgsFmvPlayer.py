@@ -306,10 +306,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             return
 
         taskSaveInfoToJson = QgsTask.fromFunction('Save Video Info to Json Task',
-                                self.converter.probeToJson,
-                                fname=self.fileName, output=out_json,
-                                on_finished=finishedSaveInfoToJson,
-                                flags=QgsTask.CanCancel)
+                                                  self.converter.probeToJson,
+                                                  fname=self.fileName, output=out_json,
+                                                  on_finished=finishedSaveInfoToJson,
+                                                  flags=QgsTask.CanCancel)
 
         QgsApplication.taskManager().addTask(taskSaveInfoToJson)
         return
@@ -327,10 +327,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             return
 
         taskSaveInfoToJson = QgsTask.fromFunction('Save Video Info Task',
-                                self.converter.probeShow,
-                                fname=self.fileName,
-                                on_finished=finishedShowVideoInfo,
-                                flags=QgsTask.CanCancel)
+                                                  self.converter.probeShow,
+                                                  fname=self.fileName,
+                                                  on_finished=finishedShowVideoInfo,
+                                                  flags=QgsTask.CanCancel)
 
         QgsApplication.taskManager().addTask(taskSaveInfoToJson)
         return
@@ -915,19 +915,22 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             return
 
         taskConvertVideo = QgsTask.fromFunction('Converting Video Task',
-                                    self.converter.convert,
-                                    infile=self.fileName, outfile=out, options=options ,twopass= False,
-                                    on_finished=finishedConvertVideo,
-                                    flags=QgsTask.CanCancel)
+                                                self.converter.convert,
+                                                infile=self.fileName, outfile=out, options=options, twopass=False,
+                                                on_finished=finishedConvertVideo,
+                                                flags=QgsTask.CanCancel)
 
         QgsApplication.taskManager().addTask(taskConvertVideo)
 
     def ShowPlot(self, bitrate_data, frame_count, output=None):
         ''' Show plot,because show not work using threading '''
         matplot.figure().canvas.set_window_title(self.fileName)
-        matplot.title(QCoreApplication.translate("QgsFmvPlayer", "Stream Bitrate vs Time"))
-        matplot.xlabel(QCoreApplication.translate("QgsFmvPlayer", "Time (sec)"))
-        matplot.ylabel(QCoreApplication.translate("QgsFmvPlayer", "Frame Bitrate (kbit/s)"))
+        matplot.title(QCoreApplication.translate(
+            "QgsFmvPlayer", "Stream Bitrate vs Time"))
+        matplot.xlabel(QCoreApplication.translate(
+            "QgsFmvPlayer", "Time (sec)"))
+        matplot.ylabel(QCoreApplication.translate(
+            "QgsFmvPlayer", "Frame Bitrate (kbit/s)"))
         matplot.grid(True)
         # map frame type to color
         frame_type_color = {
@@ -1009,7 +1012,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             if e is None:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", "Succesfully creating Plot Bitrate!"))
-                self.ShowPlot(self.BitratePlot.bitrate_data, self.BitratePlot.frame_count, self.BitratePlot.output)
+                self.ShowPlot(self.BitratePlot.bitrate_data,
+                              self.BitratePlot.frame_count, self.BitratePlot.output)
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", "Failed creating Plot Bitrate : " + str(e)), level=QGis.Warning)
@@ -1017,19 +1021,19 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         if sender == "actionAudio":
             taskactionAudio = QgsTask.fromFunction('Show Audio Bitrate',
-                                self.BitratePlot.CreatePlot,
-                                fileName=self.fileName,output=None, t='audio',
-                                on_finished=finishedBitratePlot,
-                                flags=QgsTask.CanCancel)
+                                                   self.BitratePlot.CreatePlot,
+                                                   fileName=self.fileName, output=None, t='audio',
+                                                   on_finished=finishedBitratePlot,
+                                                   flags=QgsTask.CanCancel)
 
             QgsApplication.taskManager().addTask(taskactionAudio)
 
         elif sender == "actionVideo":
             taskactionVideo = QgsTask.fromFunction('Show Video Bitrate',
-                                self.BitratePlot.CreatePlot,
-                                fileName=self.fileName, output=None, t='video',
-                                on_finished=finishedBitratePlot,
-                                flags=QgsTask.CanCancel)
+                                                   self.BitratePlot.CreatePlot,
+                                                   fileName=self.fileName, output=None, t='video',
+                                                   on_finished=finishedBitratePlot,
+                                                   flags=QgsTask.CanCancel)
 
             QgsApplication.taskManager().addTask(taskactionVideo)
 
@@ -1043,10 +1047,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 return
 
             taskactionSave_Audio = QgsTask.fromFunction('Save Action Audio Bitrate',
-                                self.BitratePlot.CreatePlot,
-                                fileName=self.fileName, output=fileaudio, t='audio',
-                                on_finished=finishedBitratePlot,
-                                flags=QgsTask.CanCancel)
+                                                        self.BitratePlot.CreatePlot,
+                                                        fileName=self.fileName, output=fileaudio, t='audio',
+                                                        on_finished=finishedBitratePlot,
+                                                        flags=QgsTask.CanCancel)
 
             QgsApplication.taskManager().addTask(taskactionSave_Audio)
 
@@ -1060,10 +1064,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 return
 
             taskactionSave_Video = QgsTask.fromFunction('Save Action Video Bitrate',
-                                self.BitratePlot.CreatePlot,
-                                fileName=self.fileName, output=filevideo, t='video',
-                                on_finished=finishedBitratePlot,
-                                flags=QgsTask.CanCancel)
+                                                        self.BitratePlot.CreatePlot,
+                                                        fileName=self.fileName, output=filevideo, t='video',
+                                                        on_finished=finishedBitratePlot,
+                                                        flags=QgsTask.CanCancel)
 
             QgsApplication.taskManager().addTask(taskactionSave_Video)
 
@@ -1084,10 +1088,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         if directory:
             taskExtractAllFrames = QgsTask.fromFunction('Save All Frames Task',
-                                        self.SaveAllFrames,
-                                        fileName=self.fileName, directory=directory,
-                                        on_finished=finishedAllFrames,
-                                        flags=QgsTask.CanCancel)
+                                                        self.SaveAllFrames,
+                                                        fileName=self.fileName, directory=directory,
+                                                        on_finished=finishedAllFrames,
+                                                        flags=QgsTask.CanCancel)
 
             QgsApplication.taskManager().addTask(taskExtractAllFrames)
         return
@@ -1126,10 +1130,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             return
 
         taskCurrentFrame = QgsTask.fromFunction('Save Current Frame Task',
-                                    self.SaveCapture,
-                                    image=image, output=output,
-                                    on_finished=finishedCurrentFrame,
-                                    flags=QgsTask.CanCancel)
+                                                self.SaveCapture,
+                                                image=image, output=output,
+                                                on_finished=finishedCurrentFrame,
+                                                flags=QgsTask.CanCancel)
 
         QgsApplication.taskManager().addTask(taskCurrentFrame)
         return

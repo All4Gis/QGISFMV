@@ -114,13 +114,13 @@ class Converter(QObject):
             self.ffmpeg = FFMpeg()
             info = self.ffmpeg.probe(infile)
             if info is None:
-#                 self.error.emit(
-#                     "convert", "", "Can't get information about source file")
+                #                 self.error.emit(
+                #                     "convert", "", "Can't get information about source file")
                 task.cancel()
 
             if not info.video and not info.audio:
-#                 self.error.emit(
-#                     "convert", "", 'Source file has no audio or video streams')
+                #                 self.error.emit(
+                #                     "convert", "", 'Source file has no audio or video streams')
                 task.cancel()
 
             if info.video and 'video' in options:
@@ -137,12 +137,14 @@ class Converter(QObject):
                 optlist1 = self.parse_options(options, 1)
                 for timecode in self.ffmpeg.convert(infile, outfile, optlist1,
                                                     timeout=timeout):
-                    task.setProgress(int((50.0 * timecode) / info.format.duration))
+                    task.setProgress(
+                        int((50.0 * timecode) / info.format.duration))
 
                 optlist2 = self.parse_options(options, 2)
                 for timecode in self.ffmpeg.convert(infile, outfile, optlist2,
                                                     timeout=timeout):
-                    task.setProgress(int(50.0 + (50.0 * timecode) / info.format.duration))
+                    task.setProgress(
+                        int(50.0 + (50.0 * timecode) / info.format.duration))
             else:
                 optlist = self.parse_options(options, twopass)
                 for timecode in self.ffmpeg.convert(infile, outfile, optlist,

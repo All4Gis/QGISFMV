@@ -17,14 +17,15 @@ except ImportError:
 
 
 class CreatePlotsBitrate(QObject):
-    """ Create Plot Bitrate """
+    """ Create Plot Bitrate """
+
     def __init__(self, parent=None):
         """ Constructor """
         self.bitrate_data = None
         self.frame_count = None
         self.output = None
 
-    def CreatePlot(self ,task, fileName, output, t):
+    def CreatePlot(self, task, fileName, output, t):
         """ Create Plot Bitrate Slot"""
         try:
             task.setProgress(10)

@@ -8,15 +8,18 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_FmvOpenStream(object):
     def setupUi(self, FmvOpenStream):
         FmvOpenStream.setObjectName("FmvOpenStream")
         FmvOpenStream.resize(355, 71)
         FmvOpenStream.setMinimumSize(QtCore.QSize(0, 0))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/stream.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/stream.png"),
+                       QtGui.QIcon.Normal, QtGui.QIcon.Off)
         FmvOpenStream.setWindowIcon(icon)
-        FmvOpenStream.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
+        FmvOpenStream.setLocale(QtCore.QLocale(
+            QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.verticalLayout = QtWidgets.QVBoxLayout(FmvOpenStream)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -52,12 +55,15 @@ class Ui_FmvOpenStream(object):
 
     def retranslateUi(self, FmvOpenStream):
         _translate = QtCore.QCoreApplication.translate
-        FmvOpenStream.setWindowTitle(_translate("FmvOpenStream", "Open Stream"))
+        FmvOpenStream.setWindowTitle(
+            _translate("FmvOpenStream", "Open Stream"))
         self.cmb_protocol.setItemText(0, _translate("FmvOpenStream", "RTP"))
         self.cmb_protocol.setItemText(1, _translate("FmvOpenStream", "UDP"))
         self.cmb_protocol.setItemText(2, _translate("FmvOpenStream", "TCP"))
-        self.ln_host.setPlaceholderText(_translate("FmvOpenStream", "127.0.0.1"))
+        self.ln_host.setPlaceholderText(
+            _translate("FmvOpenStream", "127.0.0.1"))
         self.ln_port.setPlaceholderText(_translate("FmvOpenStream", "5005"))
         self.btn_Open.setText(_translate("FmvOpenStream", "Ok"))
+
 
 from QGIS_FMV.gui import resources_rc
