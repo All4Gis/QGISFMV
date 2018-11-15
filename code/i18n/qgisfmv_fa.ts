@@ -614,7 +614,7 @@
         <translation>در حال پخش :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1164"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1175"/>
         <source>Video Information : </source>
         <translation>اطلاعات ویدئو :</translation>
     </message>
@@ -643,17 +643,17 @@
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1116"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1122"/>
         <source>Save Current Frame</source>
         <translation>ذخیره لحظه حاضر</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1126"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1133"/>
         <source>Succesfully frame saved!</source>
         <translation>این لحظه با موفقیت ذخیره شد!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1129"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1136"/>
         <source>Failed saving frame!</source>
         <translation>ذخیره این لحظه با شکست مواجه شد!</translation>
     </message>
@@ -673,7 +673,7 @@
         <translation>ذخیره ویدئو به عنوان ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1077"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1078"/>
         <source>Save all Frames</source>
         <translation>ذخیره همه لحظه ها</translation>
     </message>
@@ -738,12 +738,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1083"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1085"/>
         <source>Succesfully frames saved!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1086"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1088"/>
         <source>Failed saving frames!</source>
         <translation type="unfinished"></translation>
     </message>

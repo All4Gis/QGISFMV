@@ -609,27 +609,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1077"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1078"/>
         <source>Save all Frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1116"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1122"/>
         <source>Save Current Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1126"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1133"/>
         <source>Succesfully frame saved!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1129"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1136"/>
         <source>Failed saving frame!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1164"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1175"/>
         <source>Video Information : </source>
         <translation type="unfinished"></translation>
     </message>
@@ -694,12 +694,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1083"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1085"/>
         <source>Succesfully frames saved!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1086"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1088"/>
         <source>Failed saving frames!</source>
         <translation type="unfinished"></translation>
     </message>

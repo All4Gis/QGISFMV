@@ -4,7 +4,7 @@ from QGIS_FMV.utils.QgsFmvUtils import install_pip_requirements
 
 try:
     sys.path.append(
-        "D:\eclipse\plugins\org.python.pydev.core_6.5.0.201809011628\pysrc")
+        "D:\eclipse\plugins\org.python.pydev.core_7.0.3.201811082356\pysrc")
     from pydevd import *
 except ImportError:
     None

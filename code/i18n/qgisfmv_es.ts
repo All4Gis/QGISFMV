@@ -609,7 +609,7 @@
         <translation>Reproduciendo :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1164"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1175"/>
         <source>Video Information : </source>
         <translation>Información del video:</translation>
     </message>
@@ -626,17 +626,17 @@
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1116"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1122"/>
         <source>Save Current Frame</source>
         <translation>Guardar fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1126"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1133"/>
         <source>Succesfully frame saved!</source>
         <translation>¡Fotograma guardado con exito!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1129"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1136"/>
         <source>Failed saving frame!</source>
         <translation>¡Error al guardar el fotograma!</translation>
     </message>
@@ -656,7 +656,7 @@
         <translation>Guardar video como ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1077"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1078"/>
         <source>Save all Frames</source>
         <translation>Guardar todos los fotogramas</translation>
     </message>
@@ -721,12 +721,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1083"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1085"/>
         <source>Succesfully frames saved!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1086"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1088"/>
         <source>Failed saving frames!</source>
         <translation type="unfinished"></translation>
     </message>

@@ -107,6 +107,7 @@ class Converter(QObject):
 
         return optlist
 
+    # TODO: Make cancelable this QgsTask
     def convert(self, task, infile, outfile, options, twopass):
         while not task.isCanceled():
             timeout = 10

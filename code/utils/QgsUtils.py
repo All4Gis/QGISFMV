@@ -80,7 +80,7 @@ class QgsUtils(object):
             log.warning(text)
         elif level == QGis.Critical:
             log.error(text)
-        QCoreApplication.processEvents()
+        #QCoreApplication.processEvents()
         return
 
     @staticmethod
