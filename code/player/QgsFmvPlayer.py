@@ -1071,31 +1071,31 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             QgsApplication.taskManager().addTask(taskactionSave_Video)
 
+    def finishedTask(self, e, result=None):
+        if e is None:
+            if result is None:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", 'Completed with no exception and no result '\
+                    '(probably manually canceled by the user)'),level=QGis.Warning)
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Succesfully "+result['task']+ "!"))
+        else:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvPlayer", "Failed "+result['task']+ "!"), level=QGis.Warning)
+            raise e
+
     def ExtractAllFrames(self):
         """ Extract All Video Frames Thread """
         directory = askForFolder(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save all Frames"),
             options=QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly)
 
-        def finishedAllFrames(e, result=None):
-            if e is None:
-                if result is None:
-                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", 'Completed with no exception and no result '\
-                        '(probably manually canceled by the user)'),level=QGis.Warning)
-                else:
-                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", "Succesfully frames saved!"))
-            else:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Failed saving frames!"), level=QGis.Warning)
-                raise e
-
         if directory:
             taskExtractAllFrames = QgsTask.fromFunction('Save All Frames Task',
                                                         self.SaveAllFrames,
                                                         fileName=self.fileName, directory=directory,
-                                                        on_finished=finishedAllFrames,
+                                                        on_finished=self.finishedTask,
                                                         flags=QgsTask.CanCancel)
 
             QgsApplication.taskManager().addTask(taskExtractAllFrames)
@@ -1128,24 +1128,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if not output:
             return
 
-        def finishedCurrentFrame(e, result=None):
-            if e is None:
-                if result is None:
-                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", 'Completed with no exception and no result '\
-                        '(probably manually canceled by the user)'),level=QGis.Warning)
-                else:
-                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", "Succesfully frame saved!"))
-            else:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Failed saving frame!"), level=QGis.Warning)
-                raise e
-
         taskCurrentFrame = QgsTask.fromFunction('Save Current Frame Task',
                                                 self.SaveCapture,
                                                 image=image, output=output,
-                                                on_finished=finishedCurrentFrame,
+                                                on_finished=self.finishedTask,
                                                 flags=QgsTask.CanCancel)
 
         QgsApplication.taskManager().addTask(taskCurrentFrame)
