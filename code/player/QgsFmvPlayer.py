@@ -1072,6 +1072,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             QgsApplication.taskManager().addTask(taskactionSave_Video)
 
     def finishedTask(self, e, result=None):
+        """ Common finish task function """
         if e is None:
             if result is None:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -1086,7 +1087,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             raise e
 
     def ExtractAllFrames(self):
-        """ Extract All Video Frames Thread """
+        """ Extract All Video Frames Task """
         directory = askForFolder(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save all Frames"),
             options=QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly)
@@ -1118,7 +1119,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return {'task': task.description()}
 
     def ExtractCurrentFrame(self):
-        """ Extract Current Frame Thread """
+        """ Extract Current Frame Task """
         image = self.videoWidget.GetCurrentFrame()
         output, _ = askForFiles(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save Current Frame"),
