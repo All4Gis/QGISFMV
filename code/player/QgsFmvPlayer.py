@@ -37,7 +37,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
                                         askForFiles,
                                         askForFolder)
 from QGIS_FMV.utils.QgsJsonModel import QJsonModel
-from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate
+from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
 from qgis.core import Qgis as QGis, QgsRectangle, QgsTask, QgsApplication
@@ -52,12 +52,6 @@ try:
 except Exception as e:
     qgsu.showUserAndLogMessage(QCoreApplication.translate(
         "VideoProcessor", "Error: Missing OpenCV packages"))
-
-try:
-    import numpy
-    import matplotlib.pyplot as matplot
-except ImportError:
-    None
 
 
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
@@ -304,26 +298,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def showVideoInfo(self):
         ''' Show default probe info '''
 
-        def finishedShowVideoInfo(e, result=None):
-            """ Common finish task function """
-            if e is None:
-                if result is None:
-                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", 'Completed with no exception and no result '\
-                        '(probably manually canceled by the user)'), level=QGis.Warning)
-                else:
-                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", "Succesfully " + result['task'] + "!"))
-                    self.showVideoInfoDialog(self.converter.bytes_value)
-            else:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Failed " + result['task'] + "!"), level=QGis.Warning)
-                raise e
-
         taskSaveInfoToJson = QgsTask.fromFunction('Show Video Info Task',
                                                   self.converter.probeShow,
                                                   fname=self.fileName,
-                                                  on_finished=finishedShowVideoInfo,
+                                                  on_finished=self.finishedTask,
                                                   flags=QgsTask.CanCancel)
 
         QgsApplication.taskManager().addTask(taskSaveInfoToJson)
@@ -908,113 +886,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         QgsApplication.taskManager().addTask(taskConvertVideo)
 
-    # TODO: Remove from this class (QgsFmvUtils)
-    def ShowPlot(self, bitrate_data, frame_count, output=None):
-        ''' Show plot,because show not work using threading '''
-        matplot.figure().canvas.set_window_title(self.fileName)
-        matplot.title(QCoreApplication.translate(
-            "QgsFmvPlayer", "Stream Bitrate vs Time"))
-        matplot.xlabel(QCoreApplication.translate(
-            "QgsFmvPlayer", "Time (sec)"))
-        matplot.ylabel(QCoreApplication.translate(
-            "QgsFmvPlayer", "Frame Bitrate (kbit/s)"))
-        matplot.grid(True)
-        # map frame type to color
-        frame_type_color = {
-            # audio
-            'A': 'yellow',
-            # video
-            'I': 'red',
-            'P': 'green',
-            'B': 'blue'
-        }
-
-        global_peak_bitrate = 0.0
-        global_mean_bitrate = 0.0
-
-        # render charts in order of expected decreasing size
-        for frame_type in ['I', 'P', 'B', 'A']:
-
-            # skip frame type if missing
-            if frame_type not in bitrate_data:
-                continue
-
-            # convert list of tuples to numpy 2d array
-            frame_list = bitrate_data[frame_type]
-            frame_array = numpy.array(frame_list)
-
-            # update global peak bitrate
-            peak_bitrate = frame_array.max(0)[1]
-            if peak_bitrate > global_peak_bitrate:
-                global_peak_bitrate = peak_bitrate
-
-            # update global mean bitrate (using piecewise mean)
-            mean_bitrate = frame_array.mean(0)[1]
-            global_mean_bitrate += mean_bitrate * \
-                (len(frame_list) / frame_count)
-
-            # plot chart using gnuplot-like impulses
-            matplot.vlines(
-                frame_array[:, 0], [0], frame_array[:, 1],
-                color=frame_type_color[frame_type],
-                label="{} Frames".format(frame_type))
-
-        # calculate peak line position (left 15%, above line)
-        peak_text_x = matplot.xlim()[1] * 0.15
-        peak_text_y = global_peak_bitrate + \
-            ((matplot.ylim()[1] - matplot.ylim()[0]) * 0.015)
-        peak_text = "peak ({:.0f})".format(global_peak_bitrate)
-
-        # draw peak as think black line w/ text
-        matplot.axhline(global_peak_bitrate, linewidth=2, color='black')
-        matplot.text(peak_text_x, peak_text_y, peak_text,
-                     horizontalalignment='center', fontweight='bold', color='black')
-
-        # calculate mean line position (right 85%, above line)
-        mean_text_x = matplot.xlim()[1] * 0.85
-        mean_text_y = global_mean_bitrate + \
-            ((matplot.ylim()[1] - matplot.ylim()[0]) * 0.015)
-        mean_text = "mean ({:.0f})".format(global_mean_bitrate)
-
-        # draw mean as think black line w/ text
-        matplot.axhline(global_mean_bitrate, linewidth=2, color='black')
-        matplot.text(mean_text_x, mean_text_y, mean_text,
-                     horizontalalignment='center', fontweight='bold',
-                     color='black')
-
-        matplot.legend()
-        if output is not None:
-            matplot.savefig(output)
-        else:
-            matplot.show()
-        self.matplot = matplot
-
     def CreateBitratePlot(self):
         ''' Create video Plot Bitrate Thread '''
         sender = self.sender().objectName()
-
-        def finishedBitratePlot(e, result=None):
-            """ Common finish task function """
-            if e is None:
-                if result is None:
-                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", 'Completed with no exception and no result '\
-                        '(probably manually canceled by the user)'), level=QGis.Warning)
-                else:
-                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", "Succesfully " + result['task'] + "!"))
-                    self.ShowPlot(self.BitratePlot.bitrate_data,
-                              self.BitratePlot.frame_count, self.BitratePlot.output)
-            else:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Failed " + result['task'] + "!"), level=QGis.Warning)
-                raise e
-
+ 
         if sender == "actionAudio":
             taskactionAudio = QgsTask.fromFunction('Show Audio Bitrate',
                                                    self.BitratePlot.CreatePlot,
                                                    fileName=self.fileName, output=None, t='audio',
-                                                   on_finished=finishedBitratePlot,
+                                                   on_finished=self.finishedTask,
                                                    flags=QgsTask.CanCancel)
 
             QgsApplication.taskManager().addTask(taskactionAudio)
@@ -1023,7 +903,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             taskactionVideo = QgsTask.fromFunction('Show Video Bitrate',
                                                    self.BitratePlot.CreatePlot,
                                                    fileName=self.fileName, output=None, t='video',
-                                                   on_finished=finishedBitratePlot,
+                                                   on_finished=self.finishedTask,
                                                    flags=QgsTask.CanCancel)
 
             QgsApplication.taskManager().addTask(taskactionVideo)
@@ -1040,7 +920,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             taskactionSave_Audio = QgsTask.fromFunction('Save Action Audio Bitrate',
                                                         self.BitratePlot.CreatePlot,
                                                         fileName=self.fileName, output=fileaudio, t='audio',
-                                                        on_finished=finishedBitratePlot,
+                                                        on_finished=self.finishedTask,
                                                         flags=QgsTask.CanCancel)
 
             QgsApplication.taskManager().addTask(taskactionSave_Audio)
@@ -1057,7 +937,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             taskactionSave_Video = QgsTask.fromFunction('Save Action Video Bitrate',
                                                         self.BitratePlot.CreatePlot,
                                                         fileName=self.fileName, output=filevideo, t='video',
-                                                        on_finished=finishedBitratePlot,
+                                                        on_finished=self.finishedTask,
                                                         flags=QgsTask.CanCancel)
 
             QgsApplication.taskManager().addTask(taskactionSave_Video)
@@ -1072,6 +952,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", "Succesfully " + result['task'] + "!"))
+                if "Bitrate" in result['task']: 
+                    self.matplot = ShowPlot(self.BitratePlot.bitrate_data, self.BitratePlot.frame_count,self.fileName, self.BitratePlot.output)
+                if result['task'] == 'Show Video Info Task':
+                    self.showVideoInfoDialog(self.converter.bytes_value)
         else:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Failed " + result['task'] + "!"), level=QGis.Warning)

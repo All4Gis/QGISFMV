@@ -695,22 +695,6 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     return
 
 
-def finishedTask(e, result=None):
-    """ Common finish task function """
-    if e is None:
-        if result is None:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvUtils", 'Completed with no exception and no result '\
-                '(probably manually canceled by the user)'), level=QGis.Warning)
-        else:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvUtils", "Succesfully " + result['task'] + "!"))
-    else:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed " + result['task'] + "!"), level=QGis.Warning)
-        raise e
-
-
 def georeferencingVideo(parent):
     """ Extract Current Frame Thread """
     image = parent.videoWidget.GetCurrentFrame()
@@ -724,7 +708,7 @@ def georeferencingVideo(parent):
     taskGeoreferencingVideo = QgsTask.fromFunction('Georeferencing Current Frame Task',
                                 GeoreferenceFrame,
                                 image=image, output=out, p=position,
-                                on_finished=finishedTask,
+                                on_finished=parent.finishedTask,
                                 flags=QgsTask.CanCancel)
 
     QgsApplication.taskManager().addTask(taskGeoreferencingVideo)

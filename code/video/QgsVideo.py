@@ -190,10 +190,10 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
         if self.widget._filterSatate.monoFilter:
             self.image = filter.MonoFilter(self.image)
-
+        # TODO : Probar en un thread distinto
         if self.widget._filterSatate.edgeDetectionFilter:
             self.image = filter.EdgeFilter(self.image)
-
+        # TODO : Probar en un thread distinto
         if self.widget._filterSatate.contrastFilter:
             self.image = filter.AutoContrastFilter(self.image)
 

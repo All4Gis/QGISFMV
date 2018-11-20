@@ -1,7 +1,7 @@
 # Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
 
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QObject, QCoreApplication
 from QGIS_FMV.utils.QgsFmvUtils import _spawn
 
 try:
@@ -14,23 +14,107 @@ try:
 except ImportError:
     import xml.etree.ElementTree as etree
 
+try:
+    import numpy
+    import matplotlib.pyplot as matplot
+except ImportError:
+    None
+
+
+def ShowPlot(bitrate_data, frame_count, fileName, output=None):
+    ''' Show plot,because show not work using threading '''
+    matplot.figure().canvas.set_window_title(fileName)
+    matplot.title(QCoreApplication.translate(
+        "QgsFmvPlayer", "Stream Bitrate vs Time"))
+    matplot.xlabel(QCoreApplication.translate(
+        "QgsFmvPlayer", "Time (sec)"))
+    matplot.ylabel(QCoreApplication.translate(
+        "QgsFmvPlayer", "Frame Bitrate (kbit/s)"))
+    matplot.grid(True)
+    # map frame type to color
+    frame_type_color = {
+        # audio
+        'A': 'yellow',
+        # video
+        'I': 'red',
+        'P': 'green',
+        'B': 'blue'
+    }
+
+    global_peak_bitrate = 0.0
+    global_mean_bitrate = 0.0
+
+    # render charts in order of expected decreasing size
+    for frame_type in ['I', 'P', 'B', 'A']:
+
+        # skip frame type if missing
+        if frame_type not in bitrate_data:
+            continue
+
+        # convert list of tuples to numpy 2d array
+        frame_list = bitrate_data[frame_type]
+        frame_array = numpy.array(frame_list)
+
+        # update global peak bitrate
+        peak_bitrate = frame_array.max(0)[1]
+        if peak_bitrate > global_peak_bitrate:
+            global_peak_bitrate = peak_bitrate
+
+        # update global mean bitrate (using piecewise mean)
+        mean_bitrate = frame_array.mean(0)[1]
+        global_mean_bitrate += mean_bitrate * \
+            (len(frame_list) / frame_count)
+
+        # plot chart using gnuplot-like impulses
+        matplot.vlines(
+            frame_array[:, 0], [0], frame_array[:, 1],
+            color=frame_type_color[frame_type],
+            label="{} Frames".format(frame_type))
+
+    # calculate peak line position (left 15%, above line)
+    peak_text_x = matplot.xlim()[1] * 0.15
+    peak_text_y = global_peak_bitrate + \
+        ((matplot.ylim()[1] - matplot.ylim()[0]) * 0.015)
+    peak_text = "peak ({:.0f})".format(global_peak_bitrate)
+
+    # draw peak as think black line w/ text
+    matplot.axhline(global_peak_bitrate, linewidth=2, color='black')
+    matplot.text(peak_text_x, peak_text_y, peak_text,
+                 horizontalalignment='center', fontweight='bold', color='black')
+
+    # calculate mean line position (right 85%, above line)
+    mean_text_x = matplot.xlim()[1] * 0.85
+    mean_text_y = global_mean_bitrate + \
+        ((matplot.ylim()[1] - matplot.ylim()[0]) * 0.015)
+    mean_text = "mean ({:.0f})".format(global_mean_bitrate)
+
+    # draw mean as think black line w/ text
+    matplot.axhline(global_mean_bitrate, linewidth=2, color='black')
+    matplot.text(mean_text_x, mean_text_y, mean_text,
+                 horizontalalignment='center', fontweight='bold',
+                 color='black')
+
+    matplot.legend()
+    if output is not None:
+        matplot.savefig(output)
+    else:
+        matplot.show()
+    return matplot
+
 
 class CreatePlotsBitrate(QObject):
     """ Create Plot Bitrate """
 
     def __init__(self):
         """ Constructor """
-        self.bitrate_data = None
-        self.frame_count = None
+        self.bitrate_data = {}
+        self.frame_count = 0
         self.output = None
 
     def CreatePlot(self, task, fileName, output, t):
         """ Create Plot Bitrate Slot"""
         try:
             task.setProgress(10)
-
-            bitrate_data = {}
-            frame_count = 0
             frame_rate = None
             frame_time = 0.0
 
@@ -50,17 +134,15 @@ class CreatePlotsBitrate(QObject):
                     fileName]
             try:
                 with _spawn(cmds, t="probe") as proc_frame:
-                    task.setProgress(22)
                     # process xml elements as they close
                     for event in etree.iterparse(proc_frame.stdout):
-                        task.setProgress(40)
                         # skip non-frame elements
                         node = event[1]
                         if node.tag != 'frame':
                             continue
 
                         # count number of frames
-                        frame_count += 1
+                        self.frame_count += 1
 
                         # get type of frame
                         if t == 'audio':
@@ -104,7 +186,7 @@ class CreatePlotsBitrate(QObject):
                             try:
                                 frame_time = float(node.get('pkt_pts_time'))
                             except Exception:
-                                if frame_count > 1:
+                                if self.frame_count > 1:
                                     frame_time += float(node.get('pkt_duration_time'))
 
                         frame_bitrate = (float(node.get('pkt_size'))
@@ -112,16 +194,16 @@ class CreatePlotsBitrate(QObject):
                         frame = (frame_time, frame_bitrate)
 
                         # create new frame list if new type
-                        if frame_type not in bitrate_data:
-                            bitrate_data[frame_type] = []
+                        if frame_type not in self.bitrate_data:
+                            self.bitrate_data[frame_type] = []
 
                         # append frame to list by type
-                        bitrate_data[frame_type].append(frame)
+                        self.bitrate_data[frame_type].append(frame)
 
                         task.setProgress(45)
 
                     # check if ffprobe was successful
-                    if frame_count == 0:
+                    if self.frame_count == 0:
                         task.cancel()
                         return None
             except Exception:
@@ -129,8 +211,6 @@ class CreatePlotsBitrate(QObject):
                 return None
             # end frame subprocess
             task.setProgress(80)
-            self.bitrate_data = bitrate_data
-            self.frame_count = frame_count
             self.output = output
             if task.isCanceled():
                 return None
