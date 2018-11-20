@@ -106,6 +106,7 @@ class Converter(QObject):
 
         return optlist
 
+    # TODO : No puede cancelarse?arreglar
     def convert(self, task, infile, outfile, options, twopass):
         while not task.isCanceled():
             timeout = 10
