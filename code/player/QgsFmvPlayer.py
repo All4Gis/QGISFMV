@@ -908,7 +908,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         QgsApplication.taskManager().addTask(taskConvertVideo)
 
-    # TODO: Remove from this class
+    # TODO: Remove from this class (QgsFmvUtils)
     def ShowPlot(self, bitrate_data, frame_count, output=None):
         ''' Show plot,because show not work using threading '''
         matplot.figure().canvas.set_window_title(self.fileName)

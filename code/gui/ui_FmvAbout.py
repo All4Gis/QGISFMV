@@ -8,7 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_FmvAbout(object):
+
     def setupUi(self, FmvAbout):
         FmvAbout.setObjectName("FmvAbout")
         FmvAbout.resize(643, 559)
@@ -27,5 +29,6 @@ class Ui_FmvAbout(object):
     def retranslateUi(self, FmvAbout):
         _translate = QtCore.QCoreApplication.translate
         FmvAbout.setWindowTitle(_translate("FmvAbout", "Dialog"))
+
 
 from PyQt5 import QtWebKitWidgets
