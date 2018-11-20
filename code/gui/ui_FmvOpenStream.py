@@ -8,9 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_FmvOpenStream(object):
-
     def setupUi(self, FmvOpenStream):
         FmvOpenStream.setObjectName("FmvOpenStream")
         FmvOpenStream.resize(355, 71)
@@ -61,6 +59,5 @@ class Ui_FmvOpenStream(object):
         self.ln_host.setPlaceholderText(_translate("FmvOpenStream", "127.0.0.1"))
         self.ln_port.setPlaceholderText(_translate("FmvOpenStream", "5005"))
         self.btn_Open.setText(_translate("FmvOpenStream", "Ok"))
-
 
 from QGIS_FMV.gui import resources_rc

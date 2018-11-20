@@ -48,9 +48,9 @@ class Fmv:
 
     def __init__(self, iface):
         """ Contructor """
+
         self.iface = iface
         log.initLogging()
-
         threadcount = QThread.idealThreadCount()
         # use all available cores and parallel rendering
         QgsApplication.setMaxThreads(threadcount)

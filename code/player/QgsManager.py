@@ -51,7 +51,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # min_buffer_size x buffer_intervall = Miliseconds buffer time
         self.min_buffer_size = min_buffer_size
 
-        # self.actionOpen_Stream.setVisible(False)
+        self.actionOpen_Stream.setVisible(False)
 
         self.VManager.viewport().installEventFilter(self)
 
