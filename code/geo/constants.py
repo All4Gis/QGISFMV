@@ -1,7 +1,6 @@
 from collections import namedtuple
 from math import pi
 
-
 # https://en.wikipedia.org/wiki/Earth_radius#Mean_radius
 EARTH_MEAN_RADIUS = 6371008.8
 EARTH_MEAN_DIAMETER = 2 * EARTH_MEAN_RADIUS

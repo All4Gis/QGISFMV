@@ -2,7 +2,6 @@
 from PyQt5.QtGui import QImage
 from QGIS_FMV.utils.QgsFmvUtils import convertMatToQImage, convertQImageToMat
 
-
 try:
     from cv2 import (cvtColor,
                      Canny,
@@ -68,7 +67,6 @@ class VideoFilters():
 #         gray= convertQImageToMat(VideoFilters.GrayFilter(image))
 #         ret,th = threshold(gray,127,255,THRESH_BINARY)
 #         return convertMatToQImage(th)
-
 
 #     @staticmethod
 #     def EqualizeContrastFilter(image):

@@ -9,7 +9,6 @@ from QGIS_FMV.converter.ffmpeg import FFMpeg
 from QGIS_FMV.converter.formats import format_list
 from QGIS_FMV.utils.QgsFmvLog import log
 
-
 try:
     from pydevd import *
 except ImportError:
@@ -107,7 +106,6 @@ class Converter(QObject):
 
         return optlist
 
-    # TODO: Make cancelable this QgsTask
     def convert(self, task, infile, outfile, options, twopass):
         while not task.isCanceled():
             timeout = 10
@@ -151,21 +149,29 @@ class Converter(QObject):
                     task.setProgress(
                         int((100.0 * timecode) / info.format.duration))
             task.setProgress(100)
-        return
+        return {'task': task.description()}
+        if task.isCanceled():
+            return None
 
     def probeToJson(self, task, fname, output):
         try:
             self.ffmpeg = FFMpeg()
             self.ffmpeg.probeToJson(fname, output)
+            if task.isCanceled():
+                return None
+            return {'task': task.description()}
         except Exception:
-            return
+            return None
 
     def probeShow(self, task, fname):
         try:
             self.ffmpeg = FFMpeg()
             self.bytes_value = self.ffmpeg.probeGetJson(fname)
+            if task.isCanceled():
+                return None
+            return {'task': task.description()}
         except Exception:
-            return
+            return None
 
     def probeInfo(self, fname, posters_as_video=True):
         try:

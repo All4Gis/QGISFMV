@@ -659,7 +659,6 @@ class GenericFlagData01(MappedElementParser):
     _domain = (0, 2 ** 8 - 1)
     _range = (0, 2 ** 8 - 1)
 
-
 # @UASLocalMetadataSet.add_parser
 # class SecurityLocalMetadataSet(MappedElementParser):
 #     key = b'\x30'
@@ -1216,7 +1215,6 @@ class PlatformSideslipAngleFull(MappedElementParser):
     _range = (-90, 90)
     units = 'degrees'
 
-
 # @UASLocalMetadataSet.add_parser
 # class MIISCoreIdentifier(StringElementParser):
 #     key = b'\x5E'
@@ -1225,7 +1223,6 @@ class PlatformSideslipAngleFull(MappedElementParser):
 #     LDSName = "MIIS Core Identifier"
 #     ESDName = ""
 #     UDSName = "Motion Imagery Identification System Core"
-
 
 # @UASLocalMetadataSet.add_parser
 # class SARMotionImageryLocalSet(StringElementParser):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import csv
 
-from PyQt5.QtCore import Qt, QSizeF, QCoreApplication
+from PyQt5.QtCore import Qt, QCoreApplication
 from PyQt5.QtGui import (QCursor,
                          QFont,
                          QTextCursor,

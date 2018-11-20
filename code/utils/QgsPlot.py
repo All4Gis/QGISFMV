@@ -4,7 +4,6 @@
 from PyQt5.QtCore import QObject
 from QGIS_FMV.utils.QgsFmvUtils import _spawn
 
-
 try:
     from pydevd import *
 except ImportError:
@@ -19,7 +18,7 @@ except ImportError:
 class CreatePlotsBitrate(QObject):
     """ Create Plot Bitrate """
 
-    def __init__(self, parent=None):
+    def __init__(self):
         """ Constructor """
         self.bitrate_data = None
         self.frame_count = None
@@ -42,7 +41,7 @@ class CreatePlotsBitrate(QObject):
                 stream_spec = 'V'
             else:
                 task.cancel()
-                return
+                return None
 
             # get frame data for the selected stream
             cmds = ["-show_entries", "frame",
@@ -124,17 +123,19 @@ class CreatePlotsBitrate(QObject):
                     # check if ffprobe was successful
                     if frame_count == 0:
                         task.cancel()
-                        return
+                        return None
             except Exception:
                 task.cancel()
-                return
+                return None
             # end frame subprocess
             task.setProgress(80)
             self.bitrate_data = bitrate_data
             self.frame_count = frame_count
             self.output = output
-            return
+            if task.isCanceled():
+                return None
+            return {'task': task.description()}
 
         except Exception:
             task.cancel()
-            return
+            return None

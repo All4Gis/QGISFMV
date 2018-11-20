@@ -2,7 +2,6 @@
 from PyQt5.QtWidgets import QDialog, QApplication
 from QGIS_FMV.gui.ui_ColorDialog import Ui_ColorDialog
 
-
 try:
     from pydevd import *
 except ImportError:

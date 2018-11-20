@@ -7,7 +7,6 @@ import traceback
 
 from qgis.core import QgsApplication
 
-
 try:
     d = os.path.dirname(QgsApplication.qgisSettingsDirPath() + 'log/')
     if not os.path.exists(d):

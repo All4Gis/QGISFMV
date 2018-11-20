@@ -31,7 +31,6 @@ from pprint import pformat
 from QGIS_FMV.klvdata.element import Element
 from QGIS_FMV.klvdata.klvparser import KLVParser
 
-
 try:
     from pydevd import *
 except ImportError:
@@ -208,6 +207,7 @@ class SetParser(Element):
                     None
                 if hasattr(item, 'items'):
                     repeat(item.items.values(), indent + 1)
+
         repeat(self.items.values())
         return OrderedDict(metadata)
 

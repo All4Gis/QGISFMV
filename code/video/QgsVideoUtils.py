@@ -44,7 +44,7 @@ class VideoUtils(object):
         ''' Return is X in black screen on video '''
         x = 0.0
         if (surface.widget.width() / surface.widget.height()) > (GetImageWidth() / GetImageHeight()):
-            x = (surface.widget.width() -
+            x = (surface.widget.width() - 
                  (VideoUtils.GetNormalizedWidth(surface))) / 2.0
         return x
 
@@ -58,7 +58,7 @@ class VideoUtils(object):
         ''' Return is Y in black screen on video '''
         y = 0.0
         if (surface.widget.width() / surface.widget.height()) < (GetImageWidth() / GetImageHeight()):
-            y = (surface.widget.height() -
+            y = (surface.widget.height() - 
                  (VideoUtils.GetNormalizedHeight(surface))) / 2.0
         return y
 

@@ -2,7 +2,13 @@
 import os
 
 from PyQt5.QtCore import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
-from PyQt5.QtWidgets import QDockWidget, QTableWidgetItem, QAction, QMenu, QProgressBar, QLabel, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import (QDockWidget,
+                             QTableWidgetItem,
+                             QAction,
+                             QMenu,
+                             QProgressBar,
+                             QVBoxLayout,
+                             QWidget)
 from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
 from QGIS_FMV.player.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
@@ -13,7 +19,6 @@ from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         initElevationModel,
                                         getVideoLocationInfo)
 import qgis.utils
-from qgis.core import Qgis as QGis
 from QGIS_FMV.converter.ffmpeg import FFMpeg
 
 try:

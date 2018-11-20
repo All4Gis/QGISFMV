@@ -18,6 +18,7 @@ except ImportError:
 
 
 class UDPClient(QDialog):
+
     def __init__(self, host=None, port=None, type=None, parent=None):
         super(UDPClient, self).__init__(parent)
 

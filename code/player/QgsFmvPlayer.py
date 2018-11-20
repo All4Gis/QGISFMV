@@ -2,12 +2,9 @@
 import os.path
 
 from PyQt5.QtCore import (QUrl,
-                          QThread,
                           QPoint,
                           QCoreApplication,
-                          Qt,
-                          QMetaObject,
-                          Q_ARG)
+                          Qt)
 from PyQt5.QtGui import QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
 from PyQt5.QtWidgets import (QToolTip,
@@ -19,7 +16,6 @@ from PyQt5.QtWidgets import (QToolTip,
                              QDialog,
                              QMainWindow,
                              QFileDialog,
-                             QMessageBox,
                              QMenu,
                              QApplication,
                              QTableWidgetItem,
@@ -44,7 +40,6 @@ from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
-#from QGIS_FMV.videoStremaing.TestClient import UDPClient
 from qgis.core import Qgis as QGis, QgsRectangle, QgsTask, QgsApplication
 
 try:
@@ -151,7 +146,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.metadataDlg.setMinimumWidth(500)
         self.metadataDlg.hide()
 
-        self.converter = Converter()
+        self.converter = Converter() 
+        self.BitratePlot = CreatePlotsBitrate()
 
     def HasAudio(self, videoPath):
         """ Check if video have Metadata or not """
@@ -296,19 +292,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if not out_json:
             return
 
-        def finishedSaveInfoToJson(e):
-            if e is None:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Succesfully Json saved!"))
-            else:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Failed saving Json!"), level=QGis.Warning)
-            return
-
         taskSaveInfoToJson = QgsTask.fromFunction('Save Video Info to Json Task',
                                                   self.converter.probeToJson,
                                                   fname=self.fileName, output=out_json,
-                                                  on_finished=finishedSaveInfoToJson,
+                                                  on_finished=self.finishedTask,
                                                   flags=QgsTask.CanCancel)
 
         QgsApplication.taskManager().addTask(taskSaveInfoToJson)
@@ -316,17 +303,24 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def showVideoInfo(self):
         ''' Show default probe info '''
-        def finishedShowVideoInfo(e):
+
+        def finishedShowVideoInfo(e, result=None):
+            """ Common finish task function """
             if e is None:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Succesfully Info Show!"))
-                self.showVideoInfoDialog(self.converter.bytes_value)
+                if result is None:
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                        "QgsFmvPlayer", 'Completed with no exception and no result '\
+                        '(probably manually canceled by the user)'), level=QGis.Warning)
+                else:
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                        "QgsFmvPlayer", "Succesfully " + result['task'] + "!"))
+                    self.showVideoInfoDialog(self.converter.bytes_value)
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Failed Info Show!"), level=QGis.Warning)
-            return
+                    "QgsFmvPlayer", "Failed " + result['task'] + "!"), level=QGis.Warning)
+                raise e
 
-        taskSaveInfoToJson = QgsTask.fromFunction('Save Video Info Task',
+        taskSaveInfoToJson = QgsTask.fromFunction('Show Video Info Task',
                                                   self.converter.probeShow,
                                                   fname=self.fileName,
                                                   on_finished=finishedShowVideoInfo,
@@ -781,6 +775,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.RecGIF.stop()
         self.btn_Rec.setIcon(QIcon(":/imgFMV/images/record.png"))
 
+    # TODO: Make in other thread
     def RecordVideo(self, value):
         ''' Cut Video '''
         currentTime = _seconds_to_time(self.currentInfo)
@@ -905,23 +900,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     'fps': video_fps
                 }}
 
-        def finishedConvertVideo(e,value):
-            if e is None:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Succesfully converting video!"))
-            else:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Failed converting video!"), level=QGis.Warning)
-            return
-
         taskConvertVideo = QgsTask.fromFunction('Converting Video Task',
                                                 self.converter.convert,
                                                 infile=self.fileName, outfile=out, options=options, twopass=False,
-                                                on_finished=finishedConvertVideo,
+                                                on_finished=self.finishedTask,
                                                 flags=QgsTask.CanCancel)
 
         QgsApplication.taskManager().addTask(taskConvertVideo)
 
+    # TODO: Remove from this class
     def ShowPlot(self, bitrate_data, frame_count, output=None):
         ''' Show plot,because show not work using threading '''
         matplot.figure().canvas.set_window_title(self.fileName)
@@ -1004,20 +991,24 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def CreateBitratePlot(self):
         ''' Create video Plot Bitrate Thread '''
-
-        self.BitratePlot = CreatePlotsBitrate()
         sender = self.sender().objectName()
 
-        def finishedBitratePlot(e):
+        def finishedBitratePlot(e, result=None):
+            """ Common finish task function """
             if e is None:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Succesfully creating Plot Bitrate!"))
-                self.ShowPlot(self.BitratePlot.bitrate_data,
+                if result is None:
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                        "QgsFmvPlayer", 'Completed with no exception and no result '\
+                        '(probably manually canceled by the user)'), level=QGis.Warning)
+                else:
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                        "QgsFmvPlayer", "Succesfully " + result['task'] + "!"))
+                    self.ShowPlot(self.BitratePlot.bitrate_data,
                               self.BitratePlot.frame_count, self.BitratePlot.output)
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Failed creating Plot Bitrate : " + str(e)), level=QGis.Warning)
-            return
+                    "QgsFmvPlayer", "Failed " + result['task'] + "!"), level=QGis.Warning)
+                raise e
 
         if sender == "actionAudio":
             taskactionAudio = QgsTask.fromFunction('Show Audio Bitrate',
@@ -1077,13 +1068,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             if result is None:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", 'Completed with no exception and no result '\
-                    '(probably manually canceled by the user)'),level=QGis.Warning)
+                    '(probably manually canceled by the user)'), level=QGis.Warning)
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Succesfully "+result['task']+ "!"))
+                    "QgsFmvPlayer", "Succesfully " + result['task'] + "!"))
         else:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Failed "+result['task']+ "!"), level=QGis.Warning)
+                "QgsFmvPlayer", "Failed " + result['task'] + "!"), level=QGis.Warning)
             raise e
 
     def ExtractAllFrames(self):
@@ -1108,7 +1099,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         count = 0
         while not task.isCanceled():
             _, image = vidcap.read()
-            cv2.imwrite(directory + "\\frame_%d.jpg" %
+            cv2.imwrite(directory + "\\frame_%d.jpg" % 
                         count, image)  # save frame as JPEG file
             task.setProgress(count * 100 / length)
             count += 1

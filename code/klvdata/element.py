@@ -83,6 +83,7 @@ class Element():
 
 
 class UnknownElement(Element):
+
     def __repr__(self):
         """Return as-code string used to re-create the object."""
         args = ', '.join(map(repr, (bytes(self.key), bytes(self.value))))

@@ -6,7 +6,6 @@ import re
 
 from QGIS_FMV.utils.QgsFmvUtils import _spawn
 
-
 console_encoding = locale.getdefaultlocale()[1] or 'UTF-8'
 windows = platform.system() == 'Windows'
 
@@ -21,6 +20,7 @@ class FFMpegError(Exception):
 
 
 class FFMpegConvertError(Exception):
+
     def __init__(self, message, cmd, output, details=None, pid=0):
         """
         @param    message: Error message.
@@ -44,7 +44,7 @@ class FFMpegConvertError(Exception):
 
     def __repr__(self):
         error = self.details if self.details else self.message
-        return ('<FFMpegConvertError error="%s", pid=%s, cmd="%s">' %
+        return ('<FFMpegConvertError error="%s", pid=%s, cmd="%s">' % 
                 (error, self.pid, self.cmd))
 
     def __str__(self):
@@ -322,6 +322,7 @@ class FFMpeg(object):
         Initialize a new FFMpeg wrapper object. Optional parameters specify
         the paths to ffmpeg and ffprobe utilities.
         """
+
         def which(name):
             path = os.environ.get('PATH', os.defpath)
             for d in path.split(':'):

@@ -6,7 +6,6 @@ from math import (
 
 from QGIS_FMV.geo.constants import WGS84, QUARTER_PI, HALF_PI
 
-
 CONVERGENCE_THRESHOLD = 1e-12
 MAX_ITERATIONS = 15
 
@@ -33,7 +32,7 @@ def _py_distance(point1, point2, ellipsoid=WGS84):
         sinLambda = sin(Lambda)
         cosLambda = cos(Lambda)
         sinSigma = sqrt(
-            (cosU2 * sinLambda) ** 2 +
+            (cosU2 * sinLambda) ** 2 + 
             (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda) ** 2)
         # coincident points
         if sinSigma == 0:
@@ -68,13 +67,13 @@ def _py_distance(point1, point2, ellipsoid=WGS84):
         # failure to converge
         return None
 
-    uSq = cosSqAlpha * (ellipsoid.a ** 2 - ellipsoid.b **
+    uSq = cosSqAlpha * (ellipsoid.a ** 2 - ellipsoid.b ** 
                         2) / (ellipsoid.b ** 2)
     A = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)))
     B = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)))
-    deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma *
+    deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma * 
                                                        (-1 + 2 * cos2SigmaM ** 2)
-                                                       - B / 6 * cos2SigmaM *
+                                                       -B / 6 * cos2SigmaM * 
                                                        (-3 + 4 * sinSigma ** 2)
                                                        * (-3 + 4 * cos2SigmaM
                                                           ** 2)))

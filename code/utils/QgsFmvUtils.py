@@ -3,7 +3,6 @@ import inspect
 from math import atan, tan, sqrt, radians, pi
 import os
 import platform
-import shutil
 import json
 from datetime import datetime
 from subprocess import Popen, PIPE, check_output
@@ -139,7 +138,7 @@ class BufferedMetaReader():
             nTime = (k + self.pass_time) / 1000.0
             new_key = _seconds_to_time_frac(cTime)
             if new_key not in self._meta:
-                #qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
+                # qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
                 self._meta[new_key] = callBackMetadataThread(cmds=['-i', self.video_path,
                                                                    '-ss', _seconds_to_time_frac(
                                                                        cTime),
@@ -188,7 +187,7 @@ class BufferedMetaReader():
             qgsu.showUserAndLogMessage(
                 "", "No value found for: " + t + " rounded: " + new_t, onlyLog=True)
 
-        #qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
+        # qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
 
         return value
 
@@ -272,7 +271,7 @@ def getVideoLocationInfo(videoPath):
 
             location = [frameCenterLat, frameCenterLon, loc]
 
-            qgsu.showUserAndLogMessage("", "Got Location: lon: " + str(frameCenterLon) +
+            qgsu.showUserAndLogMessage("", "Got Location: lon: " + str(frameCenterLon) + 
                                        " lat: " + str(frameCenterLat) + " location: " + str(loc), onlyLog=True)
 
             break
@@ -289,6 +288,7 @@ def getVideoLocationInfo(videoPath):
 
 
 def pluginSetting(name, namespace=None, typ=None):
+
     def _find_in_cache(name, key):
         try:
             for setting in _settings[namespace]:
@@ -539,7 +539,7 @@ def _spawn(cmds, t="ffmpeg"):
     else:
         cmds.insert(0, ffprobe_path)
 
-    #qgsu.showUserAndLogMessage("", "commands:" + str(cmds), onlyLog=True)
+    # qgsu.showUserAndLogMessage("", "commands:" + str(cmds), onlyLog=True)
 
     return Popen(cmds, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE,
                  bufsize=0,
@@ -615,7 +615,7 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "There is no DTM for theses bounds. Check/increase DTM_buffer_size in fmvConfig.py"), level=QGis.Warning)
     else:
-        #qgsu.showUserAndLogMessage("UpdateLayers: ", " dtm_colLowerBound:"+str(dtm_colLowerBound)+" dtm_rowLowerBound:"+str(dtm_rowLowerBound)+" dtm_buffer:"+str(dtm_buffer), onlyLog=True)
+        # qgsu.showUserAndLogMessage("UpdateLayers: ", " dtm_colLowerBound:"+str(dtm_colLowerBound)+" dtm_rowLowerBound:"+str(dtm_rowLowerBound)+" dtm_buffer:"+str(dtm_buffer), onlyLog=True)
 
         dtm_data = band.ReadAsArray(
             dtm_colLowerBound, dtm_rowLowerBound, 2 * dtm_buffer, 2 * dtm_buffer)
@@ -695,6 +695,22 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     return
 
 
+def finishedTask(e, result=None):
+    """ Common finish task function """
+    if e is None:
+        if result is None:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvUtils", 'Completed with no exception and no result '\
+                '(probably manually canceled by the user)'), level=QGis.Warning)
+        else:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvUtils", "Succesfully " + result['task'] + "!"))
+    else:
+        qgsu.showUserAndLogMessage(QCoreApplication.translate(
+            "QgsFmvUtils", "Failed " + result['task'] + "!"), level=QGis.Warning)
+        raise e
+
+
 def georeferencingVideo(parent):
     """ Extract Current Frame Thread """
     image = parent.videoWidget.GetCurrentFrame()
@@ -705,16 +721,13 @@ def georeferencingVideo(parent):
     if position == "0":
         return
 
-    task = QgsTask.fromFunction('Georeferencing Current Frame Task',
+    taskGeoreferencingVideo = QgsTask.fromFunction('Georeferencing Current Frame Task',
                                 GeoreferenceFrame,
                                 image=image, output=out, p=position,
+                                on_finished=finishedTask,
                                 flags=QgsTask.CanCancel)
 
-    tm.addTask(task)
-    while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
-        QCoreApplication.processEvents()
-    while QgsApplication.taskManager().countActiveTasks() > 0:
-        QCoreApplication.processEvents()
+    QgsApplication.taskManager().addTask(taskGeoreferencingVideo)
     return
 
 
@@ -731,7 +744,7 @@ def GeoreferenceFrame(task, image, output, p):
     image.save(src_file)
 
     # Opens source dataset
-    src_ds = gdal.OpenEx(src_file, gdal.OF_RASTER |
+    src_ds = gdal.OpenEx(src_file, gdal.OF_RASTER | 
                          gdal.OF_READONLY, open_options=['NUM_THREADS=ALL_CPUS'])
 
     # Open destination dataset
@@ -757,7 +770,9 @@ def GeoreferenceFrame(task, image, output, p):
     layer = QgsRasterLayer(dst_filename, name)
     addLayerNoCrsDialog(layer, False, frames_g)
     ExpandLayer(layer, False)
-    return
+    if task.isCanceled():
+        return None
+    return {'task': task.description()}
 
 
 def CornerEstimationWithOffsets(packet):
@@ -990,16 +1005,16 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
 
     diffAlt = -1
     for k in range(0, int(dtm_buffer * pixelWidthMeter), int(pixelWidthMeter)):
-        point = [sensorLon + k * dLon, sensorLat +
+        point = [sensorLon + k * dLon, sensorLat + 
                  k * dLat, sensorAlt + k * dAlt]
 
         col = int((point[0] - xOrigin) / pixelWidth)
         row = int((yOrigin - point[1]) / pixelHeight)
         try:
-            diffAlt = point[2] - dtm_data[row -
+            diffAlt = point[2] - dtm_data[row - 
                                           dtm_rowLowerBound][col - dtm_colLowerBound]
 
-        except:
+        except Exception:
             qgsu.showUserAndLogMessage(
                 "", "DEM point not found after all iterations.", onlyLog=True)
 
@@ -1031,7 +1046,7 @@ def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
     dAlt = (demPtAlt - sensorAlt) / distance
 
     k = ((demPtAlt - planeHeight) / (sensorAlt - demPtAlt)) * distance
-    pt = [sensorLon + (distance + k) * dLon, sensorLat +
+    pt = [sensorLon + (distance + k) * dLon, sensorLat + 
           (distance + k) * dLat, sensorAlt + (distance + k) * dAlt]
 
     return pt

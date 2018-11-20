@@ -560,11 +560,11 @@ class VideoWidget(QVideoWidget):
             self.parent.lb_cursor_coord.setText(txt)
 
         else:
-            self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" +
-                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
-                                                "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" +
-                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
-                                                "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" +
+            self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" + 
+                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" + 
+                                                "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" + 
+                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" + 
+                                                "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" + 
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>")
 
         if not event.buttons():

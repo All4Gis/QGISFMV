@@ -2,7 +2,7 @@
 import os
 import shutil
 
-from PyQt5.QtCore import Qt, QCoreApplication
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox
 from QGIS_FMV.utils.QgsFmvLog import log
@@ -80,7 +80,7 @@ class QgsUtils(object):
             log.warning(text)
         elif level == QGis.Critical:
             log.error(text)
-        #QCoreApplication.processEvents()
+        # QCoreApplication.processEvents()
         return
 
     @staticmethod

@@ -36,7 +36,6 @@ from QGIS_FMV.klvdata.common import (bytes_to_datetime,
                                      str_to_bytes)
 from QGIS_FMV.klvdata.element import Element
 
-
 try:
     from pydevd import *
 except ImportError:
@@ -75,6 +74,7 @@ class BaseValue():
     __metaclass__ = ABCMeta
 
     """Abstract base class (superclass) used to insure internal interfaces are maintained."""
+
     @abstractmethod
     def __bytes__(self):
         """Required by element.Element"""
@@ -94,6 +94,7 @@ class BytesElementParser(ElementParser):
 
 
 class BytesValue(BaseValue):
+
     def __init__(self, value):
         try:
             self.value = bytes_to_int(value)
@@ -115,6 +116,7 @@ class DateTimeElementParser(ElementParser):
 
 
 class DateTimeValue(BaseValue):
+
     def __init__(self, value):
         self.value = bytes_to_datetime(value)
 
@@ -133,6 +135,7 @@ class StringElementParser(ElementParser):
 
 
 class StringValue(BaseValue):
+
     def __init__(self, value):
         try:
             self.value = bytes_to_str(value)
@@ -166,6 +169,7 @@ class MappedElementParser(ElementParser):
 
 
 class MappedValue(BaseValue):
+
     def __init__(self, value, _domain, _range):
         self._domain = _domain
         self._range = _range

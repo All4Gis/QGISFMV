@@ -1,9 +1,14 @@
 # 2017 by Gregor Engberding , MIT License
 # Modificated for work in QGIS FMV Plugin
 
-from PyQt5.QtCore import QFile, QJsonDocument, QAbstractItemModel, QModelIndex, Qt, \
-    QByteArray, QVariant, QJsonParseError
-
+from PyQt5.QtCore import (QFile,
+                          QJsonDocument,
+                          QAbstractItemModel,
+                          QModelIndex,
+                          Qt,
+                          QByteArray,
+                          QVariant,
+                          QJsonParseError)
 
 try:
     from pydevd import *
@@ -109,6 +114,7 @@ class QJsonTreeItem(object):
 
 
 class QJsonModel(QAbstractItemModel):
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.mRootItem = QJsonTreeItem()

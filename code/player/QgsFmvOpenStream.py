@@ -4,7 +4,6 @@ from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.QtWidgets import QDialog
 from QGIS_FMV.gui.ui_FmvOpenStream import Ui_FmvOpenStream
 
-
 try:
     from pydevd import *
 except ImportError:
