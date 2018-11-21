@@ -844,6 +844,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/mono.png</normaloff>:/imgFMV/images/mono.png</iconset>
+   </property>
    <property name="text">
     <string>Mono Filter</string>
    </property>
@@ -851,6 +855,10 @@
   <action name="actionCanny_edge_detection">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/canny.png</normaloff>:/imgFMV/images/canny.png</iconset>
    </property>
    <property name="text">
     <string>Canny edge detection</string>

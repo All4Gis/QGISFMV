@@ -48,6 +48,8 @@
         <file>../images/draw-point-remove-last.png</file> 
         <file>../images/draw-point-remove-all.png</file> 
         <file>../images/invert-colors.png</file>
+        <file>../images/mono.png</file>
+        <file>../images/canny.png</file>
         <file>../images/automatic-contrast.png</file>
         <file>../images/grayscale.png</file>
         <file>../images/show-metadata.png</file>

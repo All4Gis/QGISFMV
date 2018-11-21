@@ -517,7 +517,7 @@ def UpdatePlatformData(packet):
 def CommonLayer(value):
     ''' Common commands Layers '''
     value.commitChanges()
-    value.updateExtents()
+    #value.updateExtents()
     value.triggerRepaint()
 
 

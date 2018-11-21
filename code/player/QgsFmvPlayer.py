@@ -950,6 +950,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     "QgsFmvPlayer", 'Completed with no exception and no result '\
                     '(probably manually canceled by the user)'), level=QGis.Warning)
             else:
+                if "Georeferencing" in result['task']:
+                    return
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", "Succesfully " + result['task'] + "!"))
                 if "Bitrate" in result['task']: 

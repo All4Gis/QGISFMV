@@ -50,7 +50,7 @@ class VideoFilters():
     def AutoContrastFilter(image):
         ''' Auto Contrast Image Filter '''
         img = convertQImageToMat(image)
-        clahe = createCLAHE(clipLimit=4., tileGridSize=(20, 20))
+        clahe = createCLAHE(clipLimit=4., tileGridSize=(40, 40))
         # convert from BGR to LAB color space
         lab = cvtColor(img, COLOR_BGR2LAB)
         l, a, b = split(lab)  # split on 3 different channels
@@ -59,7 +59,6 @@ class VideoFilters():
 
         lab = merge((l2, a, b))  # merge channels
         invert = cvtColor(lab, COLOR_LAB2BGR)  # convert from LAB to BGR
-        image=convertMatToQImage(invert)
         return convertMatToQImage(invert)
 
 #     @staticmethod
