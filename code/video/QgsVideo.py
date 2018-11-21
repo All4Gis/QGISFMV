@@ -8,7 +8,6 @@ from PyQt5.QtGui import (QImage,
                          QColor,
                          QBrush,
                          QCursor)
-
 from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QVideoFrame,
                                 QAbstractVideoSurface,

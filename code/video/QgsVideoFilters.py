@@ -59,6 +59,7 @@ class VideoFilters():
 
         lab = merge((l2, a, b))  # merge channels
         invert = cvtColor(lab, COLOR_LAB2BGR)  # convert from LAB to BGR
+        image=convertMatToQImage(invert)
         return convertMatToQImage(invert)
 
 #     @staticmethod

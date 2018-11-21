@@ -717,9 +717,7 @@ def georeferencingVideo(parent):
 
 def GeoreferenceFrame(task, image, output, p):
     ''' Save Current Image '''
-    # TODO : Create memory raster?
     ext = ".tiff"
-
     t = "out_" + p + ext
     name = "g_" + p
 
