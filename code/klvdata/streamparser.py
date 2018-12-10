@@ -25,6 +25,8 @@
 
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.klvparser import KLVParser
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+
 try:
     from pydevd import *
 except ImportError:
@@ -45,6 +47,8 @@ class StreamParser:
 
     def __next__(self):
         key, value = next(self.iter_stream)
+        #qgsu.showUserAndLogMessage(
+        #    "", "Streamparser key: " + str(key) + " value: " + str(value), onlyLog=True)
         if key in self.parsers:
             return self.parsers[key](value)
         else:

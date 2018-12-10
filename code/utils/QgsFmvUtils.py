@@ -12,6 +12,7 @@ from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QFileDialog
 from QGIS_FMV.klvdata.streamparser import StreamParser
+from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.fmvConfig import (frames_g,
                                 DTM_buffer_size as dtm_buffer)
 from QGIS_FMV.fmvConfig import ffmpeg as ffmpeg_path
@@ -172,7 +173,13 @@ class BufferedMetaReader():
             qgsu.showUserAndLogMessage(
                 "", "wrong value for time, need . decimal" + t, onlyLog=True)
         try:
-            if self._meta[new_t].p.returncode is None:
+            #after skip, buffer may not have been initialized 
+            if new_t not in self._meta:
+                qgsu.showUserAndLogMessage(
+                    "", "Meta reader -> get: " + t + " cache: " + new_t + " values have not been init yet.", onlyLog=True)
+                self._check_buffer(new_t)
+                value = 'BUFFERING'
+            elif self._meta[new_t].p.returncode is None:
                 value = 'NOT_READY'
                 qgsu.showUserAndLogMessage(
                     "", "Meta reader -> get: " + t + " cache: " + new_t + " values not ready yet.", onlyLog=True)
@@ -183,11 +190,13 @@ class BufferedMetaReader():
                     "", "Meta reader -> get: " + t + " cache: " + new_t + " values ready but empty.", onlyLog=True)
 
             self._check_buffer(new_t)
-        except Exception:
+        except Exception as e:
             qgsu.showUserAndLogMessage(
-                "", "No value found for: " + t + " rounded: " + new_t, onlyLog=True)
+                "", "No value found for: " + t + " rounded: " + new_t + " e:" + str(e), onlyLog=True)
 
-        # qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
+        
+        #qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " return code: "+ str(self._meta[new_t].p.returncode), onlyLog=True)
+        #qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
 
         return value
 
@@ -238,6 +247,10 @@ def getVideoLocationInfo(videoPath):
             return
 
         for packet in StreamParser(stdout_data):
+            if isinstance(packet, UnknownElement):
+                qgsu.showUserAndLogMessage(
+                    "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)
+                continue
             packet.MetadataList()
             frameCenterLat = packet.GetFrameCenterLatitude()
             frameCenterLon = packet.GetFrameCenterLongitude()
