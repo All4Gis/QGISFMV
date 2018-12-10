@@ -204,7 +204,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 try:
                     if isinstance(packet, UnknownElement):
                         qgsu.showUserAndLogMessage(
-                        "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)
+                        "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning, onlyLog=True)
                         continue
                     data = packet.MetadataList()
                     self.data = data
@@ -252,7 +252,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 try:
                     if isinstance(packet, UnknownElement):
                         qgsu.showUserAndLogMessage(
-                        "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)
+                        "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning, onlyLog=True)
                         continue
                     self.addMetadata(packet.MetadataList())
                     UpdateLayers(packet, parent=self,
