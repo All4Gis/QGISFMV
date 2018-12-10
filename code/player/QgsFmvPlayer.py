@@ -4,7 +4,8 @@ import os.path
 from PyQt5.QtCore import (QUrl,
                           QPoint,
                           QCoreApplication,
-                          Qt)
+                          Qt,
+                          QTimer)
 from PyQt5.QtGui import QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
 from PyQt5.QtWidgets import (QToolTip,
@@ -23,6 +24,7 @@ from PyQt5.QtWidgets import (QToolTip,
 from QGIS_FMV.converter.Converter import Converter
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
 from QGIS_FMV.klvdata.streamparser import StreamParser
+from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.player.QgsFmvMetadata import QgsFmvMetadata
 from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          RemoveVideoLayers,
@@ -124,7 +126,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.durationChanged.connect(self.durationChanged)
         self.player.positionChanged.connect(self.positionChanged)
         self.player.mediaStatusChanged.connect(self.statusChanged)
-
+        
         self.player.stateChanged.connect(self.setCurrentState)
 
         self.playerState = QMediaPlayer.LoadingMedia
@@ -183,6 +185,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 qgsu.showUserAndLogMessage(
                     "", "Buffer value read but is not ready, increase buffer size. : ", onlyLog=True)
                 return
+
+            #Values need to be read, pause the video a short while
+            elif stdout_data == 'BUFFERING':
+                qgsu.showUserAndLogMessage(
+                    "Buffering metadata...", "", duration=4, level=QGis.Info)
+                self.player.pause()
+                QTimer.singleShot(2500, lambda : self.player.play()) 
+                return
+                
             elif stdout_data == b'' or len(stdout_data) == 0:
                 self.metadataDlg.menuSave.setEnabled(False)
                 qgsu.showUserAndLogMessage(
@@ -191,6 +202,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             for packet in StreamParser(stdout_data):
                 try:
+                    if isinstance(packet, UnknownElement):
+                        qgsu.showUserAndLogMessage(
+                        "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)
+                        continue
                     data = packet.MetadataList()
                     self.data = data
                     if self.metadataDlg.isVisible():  # Only add metada to table if this QDockWidget is visible (speed plugin)
@@ -234,6 +249,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             for packet in StreamParser(t.stdout):
                 try:
+                    if isinstance(packet, UnknownElement):
+                        qgsu.showUserAndLogMessage(
+                        "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)
+                        continue
                     self.addMetadata(packet.MetadataList())
                     UpdateLayers(packet, parent=self,
                                  mosaic=self.createingMosaic)
@@ -635,14 +654,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Duration video change signal '''
         duration /= 1000
         self.duration = duration
-        self.sliderDuration.setMaximum(duration)
+        self.sliderDuration.setMaximum(duration)        
 
     def positionChanged(self, progress):
         ''' Current Video position change '''
         progress /= 1000
 
         if not self.sliderDuration.isSliderDown():
-            self.sliderDuration.setValue(progress)
+            self.sliderDuration.setValue(progress)        
+
 
         self.updateDurationInfo(progress)
 
