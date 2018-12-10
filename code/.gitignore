@@ -1,6 +1,7 @@
 .project
 .pydevproject
 Compile.bat
+watcherUI.ps1
 ReleaseI18n.bat
 Deploy.bat
 install_pip_packages.bat
