@@ -51,7 +51,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # min_buffer_size x buffer_intervall = Miliseconds buffer time
         self.min_buffer_size = min_buffer_size
 
-        self.actionOpen_Stream.setVisible(False)
+        self.actionOpen_Stream.setVisible(True)
 
         self.VManager.viewport().installEventFilter(self)
 
@@ -192,7 +192,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # Not Play if not have metadata
         if self.pBars[str(model.row())].value() < 100:
             return
-
+        
         path = self.VManager.item(model.row(), 3).text()
         self.ToggleActiveRow(model.row())
 
