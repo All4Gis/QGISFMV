@@ -218,8 +218,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     QApplication.processEvents()
                     return
                 except Exception as inst:
-                    qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                        "QgsFmvPlayer", "Meta update failed! "), " Packet:" + str(packet) + ", error:" + str(inst), level=QGis.Warning)
+                    None
+#                     qgsu.showUserAndLogMessage(QCoreApplication.translate(
+#                         "QgsFmvPlayer", "Meta update failed! "), " Packet:" + str(packet) + ", error:" + str(inst), level=QGis.Warning)
 
         except Exception as inst:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
