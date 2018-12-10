@@ -17,4 +17,4 @@ install:
   - pip install coveralls
 
 script:
-  - python tests/test.py
+  - python code/tests/test.py
