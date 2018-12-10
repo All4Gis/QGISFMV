@@ -193,7 +193,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.player.pause()
                 QTimer.singleShot(2500, lambda : self.player.play()) 
                 return
-                
+
             elif stdout_data == b'' or len(stdout_data) == 0:
                 self.metadataDlg.menuSave.setEnabled(False)
                 qgsu.showUserAndLogMessage(
