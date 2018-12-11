@@ -846,6 +846,9 @@ def CornerEstimationWithoutOffsets(packet):
 
         # If target width = 0 (occurs on some platforms), compute it with the slate range.
         # Otherwise it leaves the footprint as a point.
+        # In some case targetWidth don't have value then equal to 0
+        if targetWidth is None:
+            targetWidth = 0
         if targetWidth == 0 and slantRange != 0:
             targetWidth = 2.0 * slantRange * \
                 tan(radians(sensorHorizontalFOV / 2.0))

@@ -11,7 +11,7 @@ Line_lyr = "Drawings Line"
 Polygon_lyr = "Drawings Polygon"
 
 # File extensions (first is default)
-Exts = ["mpeg4", "mp4", "avi", "ts", "mpg", "H264", "mov", "mpeg"]
+Exts = ["ts", "mpeg4", "mp4", "avi", "mpg", "H264", "mov", "mpeg"]
 
 # Layers EPSG
 epsg = 'EPSG:4326'
