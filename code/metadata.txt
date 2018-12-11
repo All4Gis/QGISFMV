@@ -25,6 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.5:
+    	- Add new sensor styles and platform icons
     	- Fix Klv lib parsers in some videos
     	- Fix calculate footprint
     	- Buffer size crash #44
