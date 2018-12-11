@@ -24,6 +24,10 @@ email=franka1986@gmail.com
 
 changelog=
     ** General **
+    1.5:
+    	- Fix Klv lib parsers in some videos
+    	- Fix calculate footprint
+    	- Buffer size crash #44
     1.4:
     	- Move all thread to QgsTask
     	- New Remove Draw Menu last or all drawings
