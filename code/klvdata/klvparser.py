@@ -49,8 +49,14 @@ class KLVParser(object):
 
     def __next__(self):
         key = self.__read(self.key_length)
-
-        byte_length = bytes_to_int(self.__read(1))
+        # TODO : HOTFIX for some videos, make better
+        # in some videos the header not follow the correct pattern
+        # Sample key: b'\xdc\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01'
+        if (key.find(b'\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01') == 1):
+            key = b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00'
+            byte_length = bytes_to_int(self.__read(4))
+        else:
+            byte_length = bytes_to_int(self.__read(1))
 
         if byte_length < 128:
             # BER Short Form
