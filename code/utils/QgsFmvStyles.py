@@ -66,6 +66,19 @@ class FmvLayerStyles(object):
     S['EON_SWIR']['OUTLINE_STYLE'] = 'solid'
     S['EON_SWIR']['OUTLINE_WIDTH'] = '1'
 
+    # FLIR SS380-HD HDIR sensor
+    S['FLIR SS380-HD HDIR'] = {}
+    S['FLIR SS380-HD HDIR']['COLOR'] = '234, 135, 8, 60'
+    S['FLIR SS380-HD HDIR']['OUTLINE_COLOR'] = '#ba340f'
+    S['FLIR SS380-HD HDIR']['OUTLINE_STYLE'] = 'solid'
+    S['FLIR SS380-HD HDIR']['OUTLINE_WIDTH'] = '1'
+
+    # SP sensor
+    S['SP'] = {}
+    S['SP']['COLOR'] = '219, 204, 0, 60'
+    S['SP']['OUTLINE_COLOR'] = '#9E9300'
+    S['SP']['OUTLINE_STYLE'] = 'solid'
+    S['SP']['OUTLINE_WIDTH'] = '1'
     #
     # PLATFORM STYLES (based on meta attribute platform)
     #

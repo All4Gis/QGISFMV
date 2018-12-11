@@ -193,17 +193,21 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
         return
 
-    # mgr row double clicked
+    # Manager row double clicked
     def PlayVideoFromManager(self, model):
         ''' Play video from manager dock '''
 
         # Not Play if not have metadata
         if self.pBars[str(model.row())].value() < 100:
             return
-        
+
         path = self.VManager.item(model.row(), 3).text()
         self.ToggleActiveRow(model.row())
-
+        # temp Fix metadata update
+        try:
+            self._PlayerDlg.close()
+        except Exception:
+            None
         if self._PlayerDlg is None:
             self.CreatePlayer(path, model.row())
         else:
@@ -214,7 +218,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def CreatePlayer(self, path, row):
         ''' Create Player '''
-
         self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(
             row)], pass_time=self.pass_time, initialPt=self.initialPt[str(row)], isStreaming=self.isStreaming)
         self._PlayerDlg.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)

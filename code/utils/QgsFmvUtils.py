@@ -37,7 +37,6 @@ from qgis.core import (QgsApplication,
                        QgsRasterLayer,
                        Qgis as QGis)
 
-from qgis.gui import *
 try:
     from homography import from_points
 except ImportError:
@@ -589,14 +588,10 @@ def deg2rad(degrees):
 
 def ResetData():
     global dtm_data
-#     global crtSensorSrc
-#     global crtPltTailNum
     global tLastLon
     global tLastLat
 
     dtm_data = []
-#     crtSensorSrc = 'DEFAULT'
-#     crtPltTailNum = 'DEFAULT'
     tLastLon = 0.0
     tLastLat = 0.0
 

@@ -207,6 +207,8 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
 
     try:
         if all(v is not None for v in [footprintLyr, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]) and all(v >= 2 for v in [len(cornerPointUL), len(cornerPointUR), len(cornerPointLR), len(cornerPointLL)]):
+#             qgsu.showUserAndLogMessage(
+#                 "", "imgSS : " + str(imgSS) + " crtSensorSrc : " + str(crtSensorSrc), onlyLog=True)
             if(imgSS != crtSensorSrc):
                 SetDefaultFootprintStyle(footprintLyr, imgSS)
                 crtSensorSrc = imgSS
