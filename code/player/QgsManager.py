@@ -161,10 +161,18 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             pbar.setValue(90)
 
             if self.initialPt[str(rowPosition)] and dtm_path != '':
-                initElevationModel(self.initialPt[str(
-                    rowPosition)][0], self.initialPt[str(rowPosition)][1], dtm_path)
-                qgsu.showUserAndLogMessage(
-                    "", "Elevation model initialized.", onlyLog=True)
+                try:
+                    initElevationModel(self.initialPt[str(
+                        rowPosition)][0], self.initialPt[str(rowPosition)][1], dtm_path)
+                    qgsu.showUserAndLogMessage(
+                        "", "Elevation model initialized.", onlyLog=True)
+                except Exception:
+                    self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
+                        QCoreApplication.translate(
+                            "ManagerDock", "Start location not available!")))
+                    pbar.setValue(0)
+                    self.ToggleActiveRow(rowPosition, value="Not MISB")
+                    return
         else:
             self.meta_reader[str(rowPosition)] = None
             self.initialPt[str(rowPosition)] = None
