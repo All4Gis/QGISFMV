@@ -200,31 +200,34 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     "", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
                 return
 
-            for packet in StreamParser(stdout_data):
-                try:
-                    if isinstance(packet, UnknownElement):
-                        qgsu.showUserAndLogMessage(
-                        "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning, onlyLog=True)
-                        continue
-                    data = packet.MetadataList()
-                    self.data = data
-                    if self.metadataDlg.isVisible():  # Only add metada to table if this QDockWidget is visible (speed plugin)
-                        self.metadataDlg.menuSave.setEnabled(True)
-                        self.addMetadata(data)
-
-                    UpdateLayers(packet, parent=self,
-                                 mosaic=self.createingMosaic)
-                    self.iface.mapCanvas().refresh()
-                    QApplication.processEvents()
-                    return
-                except Exception as inst:
-                    None
-#                     qgsu.showUserAndLogMessage(QCoreApplication.translate(
-#                         "QgsFmvPlayer", "Meta update failed! "), " Packet:" + str(packet) + ", error:" + str(inst), level=QGis.Warning)
+            self.packetStreamParser(stdout_data)
 
         except Exception as inst:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst))
+
+    def packetStreamParser(self, stdout_data):
+        ''' Common packet process'''
+        for packet in StreamParser(stdout_data):
+            try:
+                if isinstance(packet, UnknownElement):
+                    qgsu.showUserAndLogMessage(
+                    "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning, onlyLog=True)
+                    continue
+                data = packet.MetadataList()
+                self.data = data
+                if self.metadataDlg.isVisible():  # Only add metada to table if this QDockWidget is visible (speed plugin)
+                    self.metadataDlg.menuSave.setEnabled(True)
+                    self.addMetadata(data)
+
+                UpdateLayers(packet, parent=self,
+                             mosaic=self.createingMosaic)
+                QApplication.processEvents()
+                return
+            except Exception:
+                None
+#                     qgsu.showUserAndLogMessage(QCoreApplication.translate(
+#                         "QgsFmvPlayer", "Meta update failed! "), " Packet:" + str(packet) + ", error:" + str(inst), level=QGis.Warning)
 
     def callBackMetadata(self, currentTime, nextTime):
         """ Metadata CallBack """
@@ -248,20 +251,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             if t.stdout == b'':
                 return
 
-            for packet in StreamParser(t.stdout):
-                try:
-                    if isinstance(packet, UnknownElement):
-                        qgsu.showUserAndLogMessage(
-                        "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning, onlyLog=True)
-                        continue
-                    self.addMetadata(packet.MetadataList())
-                    UpdateLayers(packet, parent=self,
-                                 mosaic=self.createingMosaic)
-                    self.iface.mapCanvas().refresh()
-                    QApplication.processEvents()
-                    return
-                except Exception as e:
-                    None
+            self.packetStreamParser(t.stdout)
+
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e))

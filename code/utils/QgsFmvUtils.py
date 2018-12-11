@@ -25,7 +25,9 @@ from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          UpdateTrajectoryData,
                                          UpdateBeamsData,
                                          UpdatePlatformData,
-                                         UpdateFrameCenterData)
+                                         UpdateFrameCenterData,
+                                         SetcrtSensorSrc,
+                                         SetcrtPltTailNum)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.PyQt.QtCore import (QSettings,
@@ -81,9 +83,6 @@ frameCenterElevation = None
 sensorLatitude = None
 sensorLongitude = None
 sensorTrueAltitude = None
-
-# crtSensorSrc = 'DEFAULT'
-# crtPltTailNum = 'DEFAULT'
 
 dtm_data = []
 dtm_transform = None
@@ -590,6 +589,9 @@ def ResetData():
     global dtm_data
     global tLastLon
     global tLastLat
+
+    SetcrtSensorSrc()
+    SetcrtPltTailNum()
 
     dtm_data = []
     tLastLon = 0.0
