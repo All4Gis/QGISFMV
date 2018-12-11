@@ -97,6 +97,20 @@ class FmvLayerStyles(object):
     P['Super Puma TH06']['OUTLINE_WIDTH'] = '1'
     P['Super Puma TH06']['SIZE'] = '18'
 
+    # N97826 Platform
+    P['N97826'] = {}
+    P['N97826']['NAME'] = ':/imgFMV/images/platforms/plat_N97826.svg'
+    P['N97826']['OUTLINE'] = '255, 255, 255, 60'
+    P['N97826']['OUTLINE_WIDTH'] = '1'
+    P['N97826']['SIZE'] = '18'
+
+    # VH-ZXX Platform
+    P['VH-ZXX'] = {}
+    P['VH-ZXX']['NAME'] = ':/imgFMV/images/platforms/plat_VH-ZXX.svg'
+    P['VH-ZXX']['OUTLINE'] = '255, 255, 255, 60'
+    P['VH-ZXX']['OUTLINE_WIDTH'] = '1'
+    P['VH-ZXX']['SIZE'] = '18'
+
     #
     # FRAMECENTER POINT STYLES
     #
