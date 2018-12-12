@@ -66,6 +66,13 @@ class FmvLayerStyles(object):
     S['EON_SWIR']['OUTLINE_STYLE'] = 'solid'
     S['EON_SWIR']['OUTLINE_WIDTH'] = '1'
 
+    # EON sensor
+    S['EON'] = {}
+    S['EON']['COLOR'] = '249, 167, 62, 60'
+    S['EON']['OUTLINE_COLOR'] = '#ba340f'
+    S['EON']['OUTLINE_STYLE'] = 'solid'
+    S['EON']['OUTLINE_WIDTH'] = '1'
+
     # FLIR SS380-HD HDIR sensor
     S['FLIR SS380-HD HDIR'] = {}
     S['FLIR SS380-HD HDIR']['COLOR'] = '234, 135, 8, 60'
