@@ -179,7 +179,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             # way (increase the buffer size if needed in QManager).
 
             stdout_data = self.meta_reader.get(currentTime)
-
+            # qgsu.showUserAndLogMessage(
+            #    "", "stdout_data: " + str(stdout_data) + " currentTime: " + str(currentTime), onlyLog=True)
             if stdout_data == 'NOT_READY':
                 self.metadataDlg.menuSave.setEnabled(False)
                 qgsu.showUserAndLogMessage(
