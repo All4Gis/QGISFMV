@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>678</width>
-    <height>180</height>
+    <width>761</width>
+    <height>281</height>
    </rect>
   </property>
   <property name="windowIcon">
@@ -39,7 +39,16 @@
        <addaction name="actionOpen_Stream"/>
        <addaction name="actionOpen_MPEG2_File"/>
       </widget>
+      <widget class="QMenu" name="menuMap">
+       <property name="title">
+        <string>Map</string>
+       </property>
+       <addaction name="actionCenter_on_Platform"/>
+       <addaction name="actionCenter_on_Footprint"/>
+       <addaction name="actionCenter_Target"/>
+      </widget>
       <addaction name="menuFile"/>
+      <addaction name="menuMap"/>
      </widget>
     </item>
     <item>
@@ -128,14 +137,19 @@ color: rgb(56, 95, 107);
         <string>Source</string>
        </property>
       </column>
-	  <column>
+      <column>
        <property name="text">
         <string>Start Location</string>
        </property>
       </column>
-	  <column>
+      <column>
        <property name="text">
         <string>Progress</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string/>
        </property>
       </column>
      </widget>
@@ -158,6 +172,36 @@ color: rgb(56, 95, 107);
    </property>
    <property name="text">
     <string>Open Video File</string>
+   </property>
+  </action>
+  <action name="actionCenter_on_Platform">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Center on Platform</string>
+   </property>
+  </action>
+  <action name="actionCenter_on_Footprint">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Center on Footprint</string>
+   </property>
+  </action>
+  <action name="actionCenter_Target">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Center on Target</string>
    </property>
   </action>
  </widget>
@@ -213,10 +257,61 @@ color: rgb(56, 95, 107);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionCenter_Target</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>ManagerWindow</receiver>
+   <slot>centerMapTarget()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>380</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCenter_on_Footprint</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>ManagerWindow</receiver>
+   <slot>centerMapFootprint()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>380</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCenter_on_Platform</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>ManagerWindow</receiver>
+   <slot>centerMapPlatform()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>380</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openVideoFileDialog()</slot>
   <slot>PlayVideoFromManager()</slot>
   <slot>openStreamDialog()</slot>
+  <slot>centerMapPlatform()</slot>
+  <slot>centerMapFootprint()</slot>
+  <slot>centerMapTarget()</slot>
  </slots>
 </ui>

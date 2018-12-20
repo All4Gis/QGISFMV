@@ -26,6 +26,7 @@ from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          UpdateBeamsData,
                                          UpdatePlatformData,
                                          UpdateFrameCenterData,
+                                         UpdateFrameAxisData,
                                          SetcrtSensorSrc,
                                          SetcrtPltTailNum)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
@@ -37,6 +38,7 @@ from qgis.core import (QgsApplication,
                        QgsNetworkAccessManager,
                        QgsTask,
                        QgsRasterLayer,
+                       QgsRectangle,
                        Qgis as QGis)
 
 try:
@@ -83,6 +85,11 @@ frameCenterElevation = None
 sensorLatitude = None
 sensorLongitude = None
 sensorTrueAltitude = None
+fWidthEstimate = None
+fHeightEstimate = None
+
+centerMode = 0
+iface = None
 
 dtm_data = []
 dtm_transform = None
@@ -137,7 +144,7 @@ class BufferedMetaReader():
             nTime = (k + self.pass_time) / 1000.0
             new_key = _seconds_to_time_frac(cTime)
             if new_key not in self._meta:
-                # qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
+                #qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
                 self._meta[new_key] = callBackMetadataThread(cmds=['-i', self.video_path,
                                                                    '-ss', _seconds_to_time_frac(
                                                                        cTime),
@@ -177,6 +184,10 @@ class BufferedMetaReader():
                     "", "Meta reader -> get: " + t + " cache: " + new_t + " values have not been init yet.", onlyLog=True)
                 self._check_buffer(new_t)
                 value = 'BUFFERING'
+            elif self._meta[new_t].p is None:
+                value = 'NOT_READY'
+                qgsu.showUserAndLogMessage(
+                    "", "Meta reader -> get: " + t + " cache: " + new_t + " values not ready yet.", onlyLog=True)
             elif self._meta[new_t].p.returncode is None:
                 value = 'NOT_READY'
                 qgsu.showUserAndLogMessage(
@@ -217,6 +228,7 @@ class callBackMetadataThread(threading.Thread):
             self.cmds.insert(0, ffmpeg_path)
         else:
             self.cmds.insert(0, ffprobe_path)
+        #qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
         self.p = Popen(self.cmds,
                        shell=True,
                        stdout=PIPE,
@@ -225,6 +237,11 @@ class callBackMetadataThread(threading.Thread):
 
         self.stdout, self.stderr = self.p.communicate()
 
+def setCenterMode(mode, interface):
+    global centerMode
+    global iface
+    centerMode = mode
+    iface = interface
 
 def getVideoLocationInfo(videoPath):
     """ Get basic location info about the video """
@@ -241,7 +258,6 @@ def getVideoLocationInfo(videoPath):
         stdout_data, _ = p.communicate()
 
         if stdout_data == b'':
-
             return
 
         for packet in StreamParser(stdout_data):
@@ -589,6 +605,8 @@ def ResetData():
     global dtm_data
     global tLastLon
     global tLastLat
+    global fWidthEstimate
+    global fHeightEstimate
 
     SetcrtSensorSrc()
     SetcrtPltTailNum()
@@ -596,6 +614,8 @@ def ResetData():
     dtm_data = []
     tLastLon = 0.0
     tLastLat = 0.0
+    fWidthEstimate = None
+    fHeightEstimate = None
 
 
 def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
@@ -640,17 +660,24 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     global sensorLatitude
     global sensorLongitude
     global sensorTrueAltitude
-
+    global centerMode
+    global iface
+    global gcornerPointLL
+    global gcornerPointUR
+    global fWidthEstimate
+    global fHeightEstimate
+    
     frameCenterLat = packet.GetFrameCenterLatitude()
     frameCenterLon = packet.GetFrameCenterLongitude()
     frameCenterElevation = packet.GetFrameCenterElevation()
     sensorLatitude = packet.GetSensorLatitude()
     sensorLongitude = packet.GetSensorLongitude()
     sensorTrueAltitude = packet.GetSensorTrueAltitude()
-
+    
     UpdatePlatformData(packet)
     UpdateTrajectoryData(packet)
     UpdateFrameCenterData(packet)
+    UpdateFrameAxisData(packet)
 
     OffsetLat1 = packet.GetOffsetCornerLatitudePoint1()
     LatitudePoint1Full = packet.GetCornerLatitudePoint1Full()
@@ -659,49 +686,77 @@ def UpdateLayers(packet, parent=None, mosaic=False):
         CornerEstimationWithOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
-        return
+      #  return
 
-    if OffsetLat1 is None and LatitudePoint1Full is None:
+    elif OffsetLat1 is None and LatitudePoint1Full is None:
         CornerEstimationWithoutOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
-        return
+       # return
 
-    cornerPointUL = [packet.GetCornerLatitudePoint1Full(
-    ), packet.GetCornerLongitudePoint1Full()]
+    else:
+        cornerPointUL = [packet.GetCornerLatitudePoint1Full(
+        ), packet.GetCornerLongitudePoint1Full()]
 
-    if None in cornerPointUL:
-        return
+        if None in cornerPointUL:
+            return
 
-    cornerPointUR = [packet.GetCornerLatitudePoint2Full(
-    ), packet.GetCornerLongitudePoint2Full()]
+        cornerPointUR = [packet.GetCornerLatitudePoint2Full(
+        ), packet.GetCornerLongitudePoint2Full()]
 
-    if None in cornerPointUR:
-        return
+        if None in cornerPointUR:
+            return
 
-    cornerPointLR = [packet.GetCornerLatitudePoint3Full(
-    ), packet.GetCornerLongitudePoint3Full()]
+        cornerPointLR = [packet.GetCornerLatitudePoint3Full(
+        ), packet.GetCornerLongitudePoint3Full()]
 
-    if None in cornerPointLR:
-        return
+        if None in cornerPointLR:
+            return
 
-    cornerPointLL = [packet.GetCornerLatitudePoint4Full(
-    ), packet.GetCornerLongitudePoint4Full()]
+        cornerPointLL = [packet.GetCornerLatitudePoint4Full(
+        ), packet.GetCornerLongitudePoint4Full()]
 
-    if None in cornerPointLL:
-        return
+        if None in cornerPointLL:
+            return
+        
+        UpdateFootPrintData(
+            packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
-    UpdateFootPrintData(
-        packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
+        UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
+                        cornerPointLR, cornerPointLL)
 
-    UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
-                    cornerPointLR, cornerPointLL)
+        SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
+                              cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
 
-    SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
-                          cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
+        if mosaic:
+            georeferencingVideo(parent)
 
-    if mosaic:
-        georeferencingVideo(parent)
+    if fWidthEstimate == None:
+        fWidthEstimate = gcornerPointUR[1] - gcornerPointLL[1]
+    if fHeightEstimate == None:
+        fHeightEstimate = gcornerPointUR[0] - gcornerPointLL[0] 
+
+    #qgsu.showUserAndLogMessage("", "fWidthEstimate: " + str(fWidthEstimate) + "  fHeightEstimate" + str(fHeightEstimate), onlyLog=True)
+    
+    #recenter map on platform
+    if centerMode == 1:
+        rect = QgsRectangle(sensorLongitude-fWidthEstimate, sensorLatitude-fHeightEstimate, sensorLongitude+fWidthEstimate, sensorLatitude+fHeightEstimate)
+        iface.mapCanvas().setExtent(rect)
+        iface.mapCanvas().refresh()
+    #recenter map on footprint
+    elif centerMode == 2:
+        rect = QgsRectangle(gcornerPointLL[1], gcornerPointLL[0], gcornerPointUR[1], gcornerPointUR[0])
+        iface.mapCanvas().setExtent(rect)
+        iface.mapCanvas().refresh()
+    #recenter map on target
+    elif centerMode == 3:
+        rect = QgsRectangle(frameCenterLon-fWidthEstimate, frameCenterLat-fHeightEstimate, frameCenterLon+fWidthEstimate, frameCenterLat+fHeightEstimate)
+        iface.mapCanvas().setExtent(rect)
+        iface.mapCanvas().refresh()
+
+    fHeightEstimate = 0
+    fHeightEstimate = 0
+    
     return
 
 

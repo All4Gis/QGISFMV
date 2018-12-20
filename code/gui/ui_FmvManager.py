@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui\ui_FmvManager.ui'
+# Form implementation generated from reading ui file 'C:\Git\QGISFMV\code\ui\ui_FmvManager.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ManagerWindow(object):
     def setupUi(self, ManagerWindow):
         ManagerWindow.setObjectName("ManagerWindow")
-        ManagerWindow.resize(678, 180)
+        ManagerWindow.resize(761, 281)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/manager.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         ManagerWindow.setWindowIcon(icon)
@@ -28,6 +28,8 @@ class Ui_ManagerWindow(object):
         self.menubarwidget.setObjectName("menubarwidget")
         self.menuFile = QtWidgets.QMenu(self.menubarwidget)
         self.menuFile.setObjectName("menuFile")
+        self.menuMap = QtWidgets.QMenu(self.menubarwidget)
+        self.menuMap.setObjectName("menuMap")
         self.verticalLayout.addWidget(self.menubarwidget)
         self.VManager = QtWidgets.QTableWidget(self.dockWidgetContents)
         font = QtGui.QFont()
@@ -67,7 +69,7 @@ class Ui_ManagerWindow(object):
         self.VManager.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.VManager.setGridStyle(QtCore.Qt.SolidLine)
         self.VManager.setObjectName("VManager")
-        self.VManager.setColumnCount(6)
+        self.VManager.setColumnCount(7)
         self.VManager.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.VManager.setHorizontalHeaderItem(0, item)
@@ -81,6 +83,8 @@ class Ui_ManagerWindow(object):
         self.VManager.setHorizontalHeaderItem(4, item)
         item = QtWidgets.QTableWidgetItem()
         self.VManager.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.VManager.setHorizontalHeaderItem(6, item)
         self.VManager.horizontalHeader().setStretchLastSection(True)
         self.VManager.verticalHeader().setVisible(False)
         self.verticalLayout.addWidget(self.VManager)
@@ -95,20 +99,39 @@ class Ui_ManagerWindow(object):
         icon2.addPixmap(QtGui.QPixmap(":/imgFMV/images/misb-file.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionOpen_MPEG2_File.setIcon(icon2)
         self.actionOpen_MPEG2_File.setObjectName("actionOpen_MPEG2_File")
+        self.actionCenter_on_Platform = QtWidgets.QAction(ManagerWindow)
+        self.actionCenter_on_Platform.setCheckable(True)
+        self.actionCenter_on_Platform.setObjectName("actionCenter_on_Platform")
+        self.actionCenter_on_Footprint = QtWidgets.QAction(ManagerWindow)
+        self.actionCenter_on_Footprint.setCheckable(True)
+        self.actionCenter_on_Footprint.setChecked(False)
+        self.actionCenter_on_Footprint.setObjectName("actionCenter_on_Footprint")
+        self.actionCenter_Target = QtWidgets.QAction(ManagerWindow)
+        self.actionCenter_Target.setCheckable(True)
+        self.actionCenter_Target.setChecked(True)
+        self.actionCenter_Target.setObjectName("actionCenter_Target")
         self.menuFile.addAction(self.actionOpen_Stream)
         self.menuFile.addAction(self.actionOpen_MPEG2_File)
+        self.menuMap.addAction(self.actionCenter_on_Platform)
+        self.menuMap.addAction(self.actionCenter_on_Footprint)
+        self.menuMap.addAction(self.actionCenter_Target)
         self.menubarwidget.addAction(self.menuFile.menuAction())
+        self.menubarwidget.addAction(self.menuMap.menuAction())
 
         self.retranslateUi(ManagerWindow)
         self.actionOpen_Stream.triggered.connect(ManagerWindow.openStreamDialog)
         self.VManager.doubleClicked['QModelIndex'].connect(ManagerWindow.PlayVideoFromManager)
         self.actionOpen_MPEG2_File.triggered.connect(ManagerWindow.openVideoFileDialog)
+        self.actionCenter_Target.triggered['bool'].connect(ManagerWindow.centerMapTarget)
+        self.actionCenter_on_Footprint.triggered['bool'].connect(ManagerWindow.centerMapFootprint)
+        self.actionCenter_on_Platform.triggered['bool'].connect(ManagerWindow.centerMapPlatform)
         QtCore.QMetaObject.connectSlotsByName(ManagerWindow)
 
     def retranslateUi(self, ManagerWindow):
         _translate = QtCore.QCoreApplication.translate
         ManagerWindow.setWindowTitle(_translate("ManagerWindow", "Video Manager"))
         self.menuFile.setTitle(_translate("ManagerWindow", "File"))
+        self.menuMap.setTitle(_translate("ManagerWindow", "Map"))
         item = self.VManager.horizontalHeaderItem(0)
         item.setText(_translate("ManagerWindow", "Id"))
         item = self.VManager.horizontalHeaderItem(1)
@@ -123,5 +146,7 @@ class Ui_ManagerWindow(object):
         item.setText(_translate("ManagerWindow", "Progress"))
         self.actionOpen_Stream.setText(_translate("ManagerWindow", "Open Stream"))
         self.actionOpen_MPEG2_File.setText(_translate("ManagerWindow", "Open Video File"))
+        self.actionCenter_on_Platform.setText(_translate("ManagerWindow", "Center on Platform"))
+        self.actionCenter_on_Footprint.setText(_translate("ManagerWindow", "Center on Footprint"))
+        self.actionCenter_Target.setText(_translate("ManagerWindow", "Center on Target"))
 
-from QGIS_FMV.gui import resources_rc

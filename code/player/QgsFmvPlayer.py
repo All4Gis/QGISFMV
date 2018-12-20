@@ -59,14 +59,13 @@ except Exception as e:
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     """ Video Player Class """
 
-    def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, initialPt=None, isStreaming=False):
+    def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, isStreaming=False):
         """ Constructor """
         super(QgsFmvPlayer, self).__init__(parent)
         self.setupUi(self)
         self.parent = parent
         self.iface = iface
         self.fileName = path
-        self.initialPt = initialPt
         self.meta_reader = meta_reader
         self.isStreaming = isStreaming
         self.createingMosaic = False
@@ -217,7 +216,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     continue
                 data = packet.MetadataList()
                 self.data = data
-                if self.metadataDlg.isVisible():  # Only add metada to table if this QDockWidget is visible (speed plugin)
+                if self.metadataDlg.isVisible():  # Only add metadata to table if this QDockWidget is visible (speed plugin)
                     self.metadataDlg.menuSave.setEnabled(True)
                     self.addMetadata(data)
 
@@ -728,7 +727,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             else:
                 url = QUrl.fromLocalFile(videoPath)
             qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
-            self.playlist.addMedia(QMediaContent(url))
+            
+            self.playlist.addMedia(QMediaContent(url))            
             self.player.setPlaylist(self.playlist)
 
             self.setWindowTitle(QCoreApplication.translate(
@@ -742,13 +742,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.actionAudio.setEnabled(False)
                 self.actionSave_Audio.setEnabled(False)
                 self.HasFileAudio = False
-
-            # Recenter map on video initial point
-            if self.initialPt:
-                rect = QgsRectangle(
-                    self.initialPt[1], self.initialPt[0], self.initialPt[1], self.initialPt[0])
-                self.iface.mapCanvas().setExtent(rect)
-                self.iface.mapCanvas().refresh()
 
             self.playClicked(True)
 
@@ -1043,6 +1036,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.metadataDlg.show()
         else:
             self.metadataDlg.show()
+
+        self.addMetadata(self.data)
+        
         return
 
     def showVideoInfoDialog(self, outjson):

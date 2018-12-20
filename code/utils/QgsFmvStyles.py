@@ -17,8 +17,11 @@ class FmvLayerStyles(object):
 
     # frame center holder
     F = {}
-    # drawings Point holder
 
+    # frame axis holder
+    FA = {}
+    
+    # drawings Point holder
     DP = {}
 
     # drawings Line holder
@@ -122,10 +125,17 @@ class FmvLayerStyles(object):
     # FRAMECENTER POINT STYLES
     #
     F['DEFAULT'] = {}
-    F['DEFAULT']['NAME'] = 'cross2'
+    F['DEFAULT']['NAME'] = 'cross'
     F['DEFAULT']['LINE_COLOR'] = '#000000'
     F['DEFAULT']['LINE_WIDTH'] = '0'
     F['DEFAULT']['SIZE'] = '3'
+
+    #
+    # FRAME AXIS STYLES
+    #
+    FA['DEFAULT'] = {}
+    FA['DEFAULT']['OUTLINE_STYLE'] = 'dash'
+    
 
     #
     # TRAJECTORY STYLES
@@ -217,6 +227,11 @@ class FmvLayerStyles(object):
     @staticmethod
     def getFrameCenterPoint():
         style = FmvLayerStyles.F['DEFAULT']
+        return style
+
+    @staticmethod
+    def getFrameAxis():
+        style = FmvLayerStyles.FA['DEFAULT']
         return style
 
     @staticmethod
