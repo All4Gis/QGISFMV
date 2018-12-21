@@ -17,7 +17,8 @@ from QGIS_FMV.fmvConfig import DTM_file as dtm_path, Exts, min_buffer_size
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         BufferedMetaReader,
                                         initElevationModel,
-                                        getVideoLocationInfo)
+                                        getVideoLocationInfo,
+                                        setCenterMode)
 import qgis.utils
 from QGIS_FMV.converter.ffmpeg import FFMpeg
 
@@ -70,6 +71,14 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.setColumnWidth(5, 150)
         self.VManager.verticalHeader().setDefaultAlignment(Qt.AlignHCenter)
 
+        if self.actionCenter_on_Platform.isChecked():
+            setCenterMode(1, self.iface)
+        elif self.actionCenter_on_Footprint.isChecked():
+            setCenterMode(2, self.iface)
+        elif self.actionCenter_Target.isChecked():
+            setCenterMode(3, self.iface)
+        
+
     def eventFilter(self, source, event):
         ''' Event Filter '''
         if (event.type() == QEvent.MouseButtonPress and source is self.VManager.viewport() and self.VManager.itemAt(event.pos()) is None):
@@ -97,6 +106,30 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.OpenStream.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self.OpenStream.exec_()
         return
+
+    def centerMapPlatform(self, checked):
+        if checked:
+            self.actionCenter_on_Footprint.setChecked(False)
+            self.actionCenter_Target.setChecked(False)
+            setCenterMode(1, self.iface)
+        else:
+            setCenterMode(0, self.iface)
+
+    def centerMapFootprint(self, checked):
+        if checked:
+            self.actionCenter_on_Platform.setChecked(False)
+            self.actionCenter_Target.setChecked(False)
+            setCenterMode(2, self.iface)
+        else:
+            setCenterMode(0, self.iface)
+
+    def centerMapTarget(self, checked):
+        if checked:
+            self.actionCenter_on_Platform.setChecked(False)
+            self.actionCenter_on_Footprint.setChecked(False)
+            setCenterMode(3, self.iface)
+        else:
+            setCenterMode(0, self.iface)
 
     def AddFileRowToManager(self, name, filename):
         ''' Add file Video to new Row '''
@@ -144,9 +177,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 if not self.initialPt[str(rowPosition)]:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                         QCoreApplication.translate(
-                            "ManagerDock", "Start location not available!")))
+                            "ManagerDock", "Start location not available.")))
                     self.ToggleActiveRow(rowPosition, value="Not MISB")
-                    pbar.setValue(0)
+                    pbar.setValue(100)
                     return
                 else:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
@@ -154,7 +187,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             except Exception:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "ManagerDock", "This video don't have Metadata ! "))
-                pbar.setValue(0)
+                pbar.setValue(100)
                 self.ToggleActiveRow(rowPosition, value="Not MISB")
                 return
 
@@ -169,8 +202,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 except Exception:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                         QCoreApplication.translate(
-                            "ManagerDock", "Start location not available!")))
-                    pbar.setValue(0)
+                            "ManagerDock", "Start location not available.")))
+                    pbar.setValue(100)
                     self.ToggleActiveRow(rowPosition, value="Not MISB")
                     return
         else:
@@ -197,11 +230,12 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
     def PlayVideoFromManager(self, model):
         ''' Play video from manager dock '''
 
-        # Not Play if not have metadata
+        # don't enable Play if video doesn't have metadata
         if self.pBars[str(model.row())].value() < 100:
             return
 
         path = self.VManager.item(model.row(), 3).text()
+        
         self.ToggleActiveRow(model.row())
         # temp Fix metadata update
         try:
@@ -219,7 +253,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
     def CreatePlayer(self, path, row):
         ''' Create Player '''
         self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(
-            row)], pass_time=self.pass_time, initialPt=self.initialPt[str(row)], isStreaming=self.isStreaming)
+            row)], pass_time=self.pass_time, isStreaming=self.isStreaming)
         self._PlayerDlg.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()
