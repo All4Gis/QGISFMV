@@ -216,7 +216,7 @@ def SetcrtPltTailNum():
 def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
     ''' Update Footprint Values '''
     global crtSensorSrc
-    imgSS = packet.GetImageSourceSensor()
+    imgSS = packet.ImageSourceSensor
     footprintLyr = qgsu.selectLayerByName(Footprint_lyr)
 
     try:
@@ -282,9 +282,9 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
 
 def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
     ''' Update Beams Values '''
-    lat = packet.GetSensorLatitude()
-    lon = packet.GetSensorLongitude()
-    alt = packet.GetSensorTrueAltitude()
+    lat = packet.SensorLatitude
+    lon = packet.SensorLongitude
+    alt = packet.SensorTrueAltitude
 
     beamsLyr = qgsu.selectLayerByName(Beams_lyr)
 
@@ -381,11 +381,10 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
 
 def UpdateTrajectoryData(packet):
     ''' Update Trajectory Values '''
+    lat = packet.SensorLatitude
+    lon = packet.SensorLongitude
+    alt = packet.SensorTrueAltitude
 
-    lat = packet.GetSensorLatitude()
-    lon = packet.GetSensorLongitude()
-    alt = packet.GetSensorTrueAltitude()
-    
     trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
 
     try:
@@ -417,18 +416,19 @@ def UpdateTrajectoryData(packet):
             "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
     return
 
+
 def UpdateFrameAxisData(packet):
     ''' Update Frame Axis Values '''
     global crtSensorSrc2
-    
-    imgSS = packet.GetImageSourceSensor()
-    lat = packet.GetSensorLatitude()
-    lon = packet.GetSensorLongitude()
-    alt = packet.GetSensorTrueAltitude()
-    fc_lat = packet.GetFrameCenterLatitude()
-    fc_lon = packet.GetFrameCenterLongitude()
-    fc_alt = packet.GetFrameCenterElevation()
-    
+
+    imgSS = packet.ImageSourceSensor
+    lat = packet.SensorLatitude
+    lon = packet.SensorLongitude
+    alt = packet.SensorTrueAltitude
+    fc_lat = packet.FrameCenterLatitude
+    fc_lon = packet.FrameCenterLongitude
+    #fc_alt = packet.FrameCenterElevation
+
     frameaxisLyr = qgsu.selectLayerByName(FrameAxis_lyr)
 
     try:
@@ -456,7 +456,6 @@ def UpdateFrameAxisData(packet):
                 frameaxisLyr.dataProvider().changeGeometryValues(
                     {fetId: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(fc_lon, fc_lat)])})
                 frameaxisLyr.endEditCommand()
-                
 
             CommonLayer(frameaxisLyr)
 
@@ -468,9 +467,9 @@ def UpdateFrameAxisData(packet):
 
 def UpdateFrameCenterData(packet):
     ''' Update FrameCenter Values '''
-    lat = packet.GetFrameCenterLatitude()
-    lon = packet.GetFrameCenterLongitude()
-    alt = packet.GetFrameCenterElevation()
+    lat = packet.FrameCenterLatitude
+    lon = packet.FrameCenterLongitude
+    alt = packet.FrameCenterElevation
     frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr)
 
     try:
@@ -510,11 +509,12 @@ def UpdateFrameCenterData(packet):
 def UpdatePlatformData(packet):
     ''' Update PlatForm Values '''
     global crtPltTailNum
-    lat = packet.GetSensorLatitude()
-    lon = packet.GetSensorLongitude()
-    alt = packet.GetSensorTrueAltitude()
-    PlatformHeading = packet.GetPlatformHeadingAngle()
-    platformTailNumber = packet.GetPlatformTailNumber()
+
+    lat = packet.SensorLatitude
+    lon = packet.SensorLongitude
+    alt = packet.SensorTrueAltitude
+    PlatformHeading = packet.PlatformHeadingAngle
+    platformTailNumber = packet.PlatformTailNumber
     platformLyr = qgsu.selectLayerByName(Platform_lyr)
 
     try:
@@ -936,7 +936,7 @@ def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding="utf
     :param crs: The crs of the layer to create. Accepts a QgsCoordinateSystem object or a string with the CRS authId.
     :param encoding: The layer encoding
     '''
-    if isinstance(crs, basestring):
+    if isinstance(crs, str):
         crs = QgsCoordinateReferenceSystem(crs)
     if filename is None:
         uri = GEOM_TYPE_MAP[geometryType]

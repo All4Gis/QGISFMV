@@ -25,6 +25,10 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.5:
+    	- Fixed unplayable Non-MISB Video. These video can now be played, there is just no draws in map
+    	- Fixed Metadata view that was empty when you load it
+    	- Center Map on Footprint / Target / Sensor
+    	- Display View Axis on Map
     	- Add new sensor styles and platform icons
     	- Fix Klv lib parsers in some videos
     	- Fix calculate footprint
@@ -73,7 +77,7 @@ changelog=
 		- PR #2, #3, #4 ,#5, #10 and #6 thanks to ltbam.
 		- Minor changes
 	1.0:
-		-Start of plugin.
+		- Start of plugin.
 
 homepage=https://github.com/All4Gis/QGISFMV
 tracker=https://github.com/All4Gis/QGISFMV/issues

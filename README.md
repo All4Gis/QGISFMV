@@ -70,7 +70,7 @@ To see the video you need:
 ## Usage
 
 The use of this application is simple.
-It only needs a video with metadata, like for example one of these [videos](http://samples.ffmpeg.org/MPEG2/mpegts-klv/) or [these (ESRI copyright)](https://drive.google.com/open?id=1-B2uaW7_cfYZohZYFozrgBhIaztI1MSP)
+It only needs a video with metadata, like for example one of these [(ESRI copyright)](https://drive.google.com/open?id=1-B2uaW7_cfYZohZYFozrgBhIaztI1MSP)
 Then, open the plugin where the "video manager" will be shown, open the video and with a double-click, the "player" will be opened. 
 At this moment, you will see that new shapes have been added and you will see the platform position, metadata, etc.
 

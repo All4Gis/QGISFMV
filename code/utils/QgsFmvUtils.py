@@ -266,8 +266,8 @@ def getVideoLocationInfo(videoPath):
                     "Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)
                 continue
             packet.MetadataList()
-            frameCenterLat = packet.GetFrameCenterLatitude()
-            frameCenterLon = packet.GetFrameCenterLongitude()
+            frameCenterLat = packet.FrameCenterLatitude
+            frameCenterLon = packet.FrameCenterLongitude
             loc = "-"
             if Reverse_geocoding_url != "":
                 try:
@@ -666,59 +666,57 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     global gcornerPointUR
     global fWidthEstimate
     global fHeightEstimate
-    
-    frameCenterLat = packet.GetFrameCenterLatitude()
-    frameCenterLon = packet.GetFrameCenterLongitude()
-    frameCenterElevation = packet.GetFrameCenterElevation()
-    sensorLatitude = packet.GetSensorLatitude()
-    sensorLongitude = packet.GetSensorLongitude()
-    sensorTrueAltitude = packet.GetSensorTrueAltitude()
-    
+
+    frameCenterLat = packet.FrameCenterLatitude
+    frameCenterLon = packet.FrameCenterLongitude
+    frameCenterElevation = packet.FrameCenterElevation
+    sensorLatitude = packet.SensorLatitude
+    sensorLongitude = packet.SensorLongitude
+    sensorTrueAltitude = packet.SensorTrueAltitude
+
     UpdatePlatformData(packet)
     UpdateTrajectoryData(packet)
     UpdateFrameCenterData(packet)
     UpdateFrameAxisData(packet)
 
-    OffsetLat1 = packet.GetOffsetCornerLatitudePoint1()
-    LatitudePoint1Full = packet.GetCornerLatitudePoint1Full()
+    OffsetLat1 = packet.OffsetCornerLatitudePoint1
+    LatitudePoint1Full = packet.CornerLatitudePoint1Full
 
     if OffsetLat1 is not None and LatitudePoint1Full is None:
         CornerEstimationWithOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
-      #  return
 
     elif OffsetLat1 is None and LatitudePoint1Full is None:
         CornerEstimationWithoutOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
-       # return
 
     else:
-        cornerPointUL = [packet.GetCornerLatitudePoint1Full(
-        ), packet.GetCornerLongitudePoint1Full()]
+        cornerPointUL = [packet.CornerLatitudePoint1Full,
+                         packet.CornerLongitudePoint1Full]
 
         if None in cornerPointUL:
             return
 
-        cornerPointUR = [packet.GetCornerLatitudePoint2Full(
-        ), packet.GetCornerLongitudePoint2Full()]
+        cornerPointUR = [packet.CornerLatitudePoint2Full,
+                         packet.CornerLongitudePoint2Full]
 
         if None in cornerPointUR:
             return
 
-        cornerPointLR = [packet.GetCornerLatitudePoint3Full(
-        ), packet.GetCornerLongitudePoint3Full()]
+        cornerPointLR = [packet.CornerLatitudePoint3Full,
+                         packet.CornerLongitudePoint3Full]
 
         if None in cornerPointLR:
             return
 
-        cornerPointLL = [packet.GetCornerLatitudePoint4Full(
-        ), packet.GetCornerLongitudePoint4Full()]
+        cornerPointLL = [packet.CornerLatitudePoint4Full,
+                         packet.CornerLongitudePoint4Full]
 
         if None in cornerPointLL:
             return
-        
+
         UpdateFootPrintData(
             packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 
@@ -737,7 +735,7 @@ def UpdateLayers(packet, parent=None, mosaic=False):
         fHeightEstimate = gcornerPointUR[0] - gcornerPointLL[0] 
 
     #qgsu.showUserAndLogMessage("", "fWidthEstimate: " + str(fWidthEstimate) + "  fHeightEstimate" + str(fHeightEstimate), onlyLog=True)
-    
+
     #recenter map on platform
     if centerMode == 1:
         rect = QgsRectangle(sensorLongitude-fWidthEstimate, sensorLatitude-fHeightEstimate, sensorLongitude+fWidthEstimate, sensorLatitude+fHeightEstimate)
@@ -756,7 +754,7 @@ def UpdateLayers(packet, parent=None, mosaic=False):
 
     fHeightEstimate = 0
     fHeightEstimate = 0
-    
+
     return
 
 
@@ -826,16 +824,16 @@ def CornerEstimationWithOffsets(packet):
     ''' Corner estimation using Offsets '''
     try:
 
-        OffsetLat1 = packet.GetOffsetCornerLatitudePoint1()
-        OffsetLon1 = packet.GetOffsetCornerLongitudePoint1()
-        OffsetLat2 = packet.GetOffsetCornerLatitudePoint2()
-        OffsetLon2 = packet.GetOffsetCornerLongitudePoint2()
-        OffsetLat3 = packet.GetOffsetCornerLatitudePoint3()
-        OffsetLon3 = packet.GetOffsetCornerLongitudePoint3()
-        OffsetLat4 = packet.GetOffsetCornerLatitudePoint4()
-        OffsetLon4 = packet.GetOffsetCornerLongitudePoint4()
-        frameCenterLat = packet.GetFrameCenterLatitude()
-        frameCenterLon = packet.GetFrameCenterLongitude()
+        OffsetLat1 = packet.OffsetCornerLatitudePoint1
+        OffsetLon1 = packet.OffsetCornerLongitudePoint1
+        OffsetLat2 = packet.OffsetCornerLatitudePoint2
+        OffsetLon2 = packet.OffsetCornerLongitudePoint2
+        OffsetLat3 = packet.OffsetCornerLatitudePoint3
+        OffsetLon3 = packet.OffsetCornerLongitudePoint3
+        OffsetLat4 = packet.OffsetCornerLatitudePoint4
+        OffsetLon4 = packet.OffsetCornerLongitudePoint4
+        frameCenterLat = packet.FrameCenterLatitude
+        frameCenterLon = packet.FrameCenterLongitude
 
         # Lat,Lon
         cornerPointUL = (OffsetLat1 + frameCenterLat,
@@ -883,18 +881,18 @@ def CornerEstimationWithoutOffsets(packet):
     ''' Corner estimation without Offsets '''
     global defaultTargetWidth
     try:
-        sensorLatitude = packet.GetSensorLatitude()
-        sensorLongitude = packet.GetSensorLongitude()
-        sensorTrueAltitude = packet.GetSensorTrueAltitude()
-        frameCenterLat = packet.GetFrameCenterLatitude()
-        frameCenterLon = packet.GetFrameCenterLongitude()
-        frameCenterElevation = packet.GetFrameCenterElevation()
-        sensorVerticalFOV = packet.GetSensorVerticalFieldOfView()
-        sensorHorizontalFOV = packet.GetSensorHorizontalFieldOfView()
-        headingAngle = packet.GetPlatformHeadingAngle()
-        sensorRelativeAzimut = packet.GetSensorRelativeAzimuthAngle()
-        targetWidth = packet.GettargetWidth()
-        slantRange = packet.GetSlantRange()
+        sensorLatitude = packet.SensorLatitude
+        sensorLongitude = packet.SensorLongitude
+        sensorTrueAltitude = packet.SensorTrueAltitude
+        frameCenterLat = packet.FrameCenterLatitude
+        frameCenterLon = packet.FrameCenterLongitude
+        frameCenterElevation = packet.FrameCenterElevation
+        sensorVerticalFOV = packet.SensorVerticalFieldOfView
+        sensorHorizontalFOV = packet.SensorHorizontalFieldOfView
+        headingAngle = packet.PlatformHeadingAngle
+        sensorRelativeAzimut = packet.SensorRelativeAzimuthAngle
+        targetWidth = packet.targetWidth
+        slantRange = packet.SlantRange
 
         # If target width = 0 (occurs on some platforms), compute it with the slate range.
         # Otherwise it leaves the footprint as a point.
