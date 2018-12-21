@@ -7,6 +7,7 @@ from QGIS_FMV.fmvConfig import (Platform_lyr,
                                 Beams_lyr,
                                 Footprint_lyr,
                                 FrameCenter_lyr,
+                                FrameAxis_lyr,
                                 Point_lyr,
                                 Line_lyr,
                                 Polygon_lyr,
@@ -51,6 +52,7 @@ except ImportError:
 
 _layerreg = QgsProject.instance()
 crtSensorSrc = 'DEFAULT'
+crtSensorSrc2 = 'DEFAULT'
 crtPltTailNum = 'DEFAULT'
 
 
@@ -201,7 +203,9 @@ def AddDrawPolygonOnMap(poly_coordinates):
 
 def SetcrtSensorSrc():
     global crtSensorSrc
+    global crtSensorSrc2
     crtSensorSrc = 'DEFAULT'
+    crtSensorSrc2 = 'DEFAULT'
 
 
 def SetcrtPltTailNum():
@@ -377,29 +381,11 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
 
 def UpdateTrajectoryData(packet):
     ''' Update Trajectory Values '''
-    global tLastLon
-    global tLastLat
 
     lat = packet.GetSensorLatitude()
     lon = packet.GetSensorLongitude()
     alt = packet.GetSensorTrueAltitude()
-
-    try:
-        if tLastLon == 0.0 and tLastLat == 0.0:
-            tLastLon = lon
-            tLastLat = lat
-        else:
-            # little check to see if telemetry data are plausible before
-            # drawing.
-
-            distance = sphere.distance((tLastLon, tLastLat), (lon, lat))
-            if distance > 1000:  # 1 km is the best value for prevent draw trajectory when start video again
-                return
-    except Exception:
-        None
-
-    tLastLon = lon
-    tLastLat = lat
+    
     trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr)
 
     try:
@@ -431,19 +417,65 @@ def UpdateTrajectoryData(packet):
             "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
     return
 
+def UpdateFrameAxisData(packet):
+    ''' Update Frame Axis Values '''
+    global crtSensorSrc2
+    
+    imgSS = packet.GetImageSourceSensor()
+    lat = packet.GetSensorLatitude()
+    lon = packet.GetSensorLongitude()
+    alt = packet.GetSensorTrueAltitude()
+    fc_lat = packet.GetFrameCenterLatitude()
+    fc_lon = packet.GetFrameCenterLongitude()
+    fc_alt = packet.GetFrameCenterElevation()
+    
+    frameaxisLyr = qgsu.selectLayerByName(FrameAxis_lyr)
+
+    try:
+        if all(v is not None for v in [frameaxisLyr, lat, lon, alt]):
+            if(imgSS != crtSensorSrc2):
+                SetDefaultFrameAxisStyle(frameaxisLyr, imgSS)
+                crtSensorSrc2 = imgSS
+            frameaxisLyr.startEditing()
+            if frameaxisLyr.featureCount() == 0:
+                f = QgsFeature()
+                f.setAttributes(
+                    [lon, lat, alt, fc_lon, fc_lat])
+                surface = QgsGeometry.fromPolylineXY(
+                    [QgsPointXY(lon, lat), QgsPointXY(fc_lon, fc_lat)])
+                f.setGeometry(surface)
+                frameaxisLyr.addFeatures([f])
+            else:
+                frameaxisLyr.beginEditCommand(
+                    "ChangeGeometry + ChangeAttribute")
+                fetId = 1
+                attrib = {0: lon, 1: lat, 2: alt,
+                          3: fc_lon, 4: fc_lat}
+                frameaxisLyr.dataProvider().changeAttributeValues(
+                    {fetId: attrib})
+                frameaxisLyr.dataProvider().changeGeometryValues(
+                    {fetId: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(fc_lon, fc_lat)])})
+                frameaxisLyr.endEditCommand()
+                
+
+            CommonLayer(frameaxisLyr)
+
+    except Exception as e:
+        qgsu.showUserAndLogMessage(QCoreApplication.translate(
+            "QgsFmvUtils", "Failed Update Frameaxis Layer! : "), str(e))
+    return
+
 
 def UpdateFrameCenterData(packet):
     ''' Update FrameCenter Values '''
     lat = packet.GetFrameCenterLatitude()
     lon = packet.GetFrameCenterLongitude()
     alt = packet.GetFrameCenterElevation()
-    PlatformHeading = packet.GetPlatformHeadingAngle()
     frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr)
 
     try:
-        if all(v is not None for v in [frameCenterLyr, lat, lon, alt, PlatformHeading]):
+        if all(v is not None for v in [frameCenterLyr, lat, lon, alt]):
             frameCenterLyr.startEditing()
-            frameCenterLyr.renderer().symbol().setAngle(float(PlatformHeading))
 
             if frameCenterLyr.featureCount() == 0:
                 feature = QgsFeature()
@@ -593,6 +625,12 @@ def CreateVideoLayers():
         SetDefaultTrajectoryStyle(lyr_Trajectory)
         addLayerNoCrsDialog(lyr_Trajectory)
 
+    if qgsu.selectLayerByName(FrameAxis_lyr) is None:
+        lyr_frameaxis = newLinesLayer(
+            None, ["longitude", "latitude", "altitude", "Corner Longitude", "Corner Latitude"], epsg, FrameAxis_lyr)
+        SetDefaultFrameAxisStyle(lyr_frameaxis)
+        addLayerNoCrsDialog(lyr_frameaxis)
+
     if qgsu.selectLayerByName(Platform_lyr) is None:
         lyr_platform = newPointsLayer(
             None,
@@ -610,7 +648,7 @@ def CreateVideoLayers():
         lyr_framecenter = newPointsLayer(
             None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr)
         SetDefaultFrameCenterStyle(lyr_framecenter)
-        addLayerNoCrsDialog(lyr_framecenter)
+        addLayerNoCrsDialog(lyr_framecenter)  
 
     if qgsu.selectLayerByName(Line_lyr) is None:
         #         lyr_line = newLinesLayer(
@@ -662,6 +700,11 @@ def RemoveVideoLayers():
     try:
         QgsProject.instance().removeMapLayer(
             qgsu.selectLayerByName(FrameCenter_lyr).id())
+    except Exception:
+        None
+    try:
+        QgsProject.instance().removeMapLayer(
+            qgsu.selectLayerByName(FrameAxis_lyr).id())
     except Exception:
         None
     try:
@@ -732,6 +775,16 @@ def SetDefaultFrameCenterStyle(layer):
     layer.setRenderer(renderer)
     return
 
+def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
+    ''' Line Symbol '''
+    sensor_style = S.getSensor(sensor)
+    style = S.getFrameAxis()
+    fill_sym = QgsLineSymbol.createSimple({'color': sensor_style['OUTLINE_COLOR'],
+                                           'width': sensor_style['OUTLINE_WIDTH'],
+                                           'outline_style': style['OUTLINE_STYLE']})
+    renderer = QgsSingleSymbolRenderer(fill_sym)
+    layer.setRenderer(renderer)
+    return
 
 def SetDefaultPointStyle(layer):
     ''' Point Symbol '''
