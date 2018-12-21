@@ -144,66 +144,66 @@ class SetParser(Element):
                 try:
                     metadata[item.TAG] = (item.LDSName, str(item.value.value))
                     if item.TAG == 4:
-                        self.SetPlatformTailNumber(item.value.value)
+                        self.PlatformTailNumber = item.value.value
                     elif item.TAG == 5:
-                        self.SetPlatformHeadingAngle(item.value.value)
+                        self.PlatformHeadingAngle = item.value.value
                     elif item.TAG == 11:
-                        self.SetImageSourceSensor(item.value.value)
+                        self.ImageSourceSensor = item.value.value
                     elif item.TAG == 13:
-                        self.SetSensorLatitude(item.value.value)
+                        self.SensorLatitude = item.value.value
                     elif item.TAG == 14:
-                        self.SetSensorLongitude(item.value.value)
+                        self.SensorLongitude = item.value.value
                     elif item.TAG == 15:
-                        self.SetSensorTrueAltitude(item.value.value)
+                        self.SensorTrueAltitude = item.value.value
                     elif item.TAG == 16:
-                        self.SetSensorHorizontalFieldOfView(item.value.value)
+                        self.SensorHorizontalFieldOfView = item.value.value
                     elif item.TAG == 17:
-                        self.SetSensorVerticalFieldOfView(item.value.value)
+                        self.SensorVerticalFieldOfView = item.value.value
                     elif item.TAG == 18:
-                        self.SetSensorRelativeAzimuthAngle(item.value.value)
+                        self.SensorRelativeAzimuthAngle = item.value.value
                     elif item.TAG == 21:
-                        self.SetSlantRange(item.value.value)
+                        self.SlantRange = item.value.value
                     elif item.TAG == 22:
-                        self.SettargetWidth(item.value.value)
+                        self.targetWidth = item.value.value
                     elif item.TAG == 23:
-                        self.SetFrameCenterLatitude(item.value.value)
+                        self.FrameCenterLatitude = item.value.value
                     elif item.TAG == 24:
-                        self.SetFrameCenterLongitude(item.value.value)
+                        self.FrameCenterLongitude = item.value.value
                     elif item.TAG == 25:
-                        self.SetFrameCenterElevation(item.value.value)
+                        self.FrameCenterElevation = item.value.value
                     elif item.TAG == 26:
-                        self.SetOffsetCornerLatitudePoint1(item.value.value)
+                        self.OffsetCornerLatitudePoint1 = item.value.value
                     elif item.TAG == 27:
-                        self.SetOffsetCornerLongitudePoint1(item.value.value)
+                        self.OffsetCornerLongitudePoint1 = item.value.value
                     elif item.TAG == 28:
-                        self.SetOffsetCornerLatitudePoint2(item.value.value)
+                        self.OffsetCornerLatitudePoint2 = item.value.value
                     elif item.TAG == 29:
-                        self.SetOffsetCornerLongitudePoint2(item.value.value)
+                        self.OffsetCornerLongitudePoint2 = item.value.value
                     elif item.TAG == 30:
-                        self.SetOffsetCornerLatitudePoint3(item.value.value)
+                        self.OffsetCornerLatitudePoint3 = item.value.value
                     elif item.TAG == 31:
-                        self.SetOffsetCornerLongitudePoint3(item.value.value)
+                        self.OffsetCornerLongitudePoint3 = item.value.value
                     elif item.TAG == 32:
-                        self.SetOffsetCornerLatitudePoint4(item.value.value)
+                        self.OffsetCornerLatitudePoint4 = item.value.value
                     elif item.TAG == 33:
-                        self.SetOffsetCornerLongitudePoint4(item.value.value)
+                        self.OffsetCornerLongitudePoint4 = item.value.value
                     elif item.TAG == 82:
-                        self.SetCornerLatitudePoint1Full(item.value.value)
+                        self.CornerLatitudePoint1Full = item.value.value
                     elif item.TAG == 83:
-                        self.SetCornerLongitudePoint1Full(item.value.value)
+                        self.CornerLongitudePoint1Full = item.value.value
                     elif item.TAG == 84:
-                        self.SetCornerLatitudePoint2Full(item.value.value)
+                        self.CornerLatitudePoint2Full = item.value.value
                     elif item.TAG == 85:
-                        self.SetCornerLongitudePoint2Full(item.value.value)
+                        self.CornerLongitudePoint2Full = item.value.value
                     elif item.TAG == 86:
-                        self.SetCornerLatitudePoint3Full(item.value.value)
+                        self.CornerLatitudePoint3Full = item.value.value
                     elif item.TAG == 87:
-                        self.SetCornerLongitudePoint3Full(item.value.value)
+                        self.CornerLongitudePoint3Full = item.value.value
                     elif item.TAG == 88:
-                        self.SetCornerLatitudePoint4Full(item.value.value)
+                        self.CornerLatitudePoint4Full = item.value.value
                     elif item.TAG == 89:
-                        self.SetCornerLongitudePoint4Full(item.value.value)
-                except:
+                        self.CornerLongitudePoint4Full = item.value.value
+                except Exception:
                     None
                 if hasattr(item, 'items'):
                     repeat(item.items.values(), indent + 1)
@@ -212,184 +212,244 @@ class SetParser(Element):
         return OrderedDict(metadata)
 
     # ------------ START Setters/Getters ------------
-    def GetPlatformTailNumber(self):
+    @property
+    def PlatformTailNumber(self):
         return self._PlatformTailNumber
 
-    def SetPlatformTailNumber(self, value):
+    @PlatformTailNumber.setter
+    def PlatformTailNumber(self, value):
         self._PlatformTailNumber = value
 
-    def GetPlatformHeadingAngle(self):
+    @property
+    def PlatformHeadingAngle(self):
         return self._PlatformHeadingAngle
 
-    def SetPlatformHeadingAngle(self, value):
+    @PlatformHeadingAngle.setter
+    def PlatformHeadingAngle(self, value):
         self._PlatformHeadingAngle = float(value)
 
-    def GetImageSourceSensor(self):
+    @property
+    def ImageSourceSensor(self):
         return self._ImageSourceSensor
 
-    def SetImageSourceSensor(self, value):
+    @ImageSourceSensor.setter
+    def ImageSourceSensor(self, value):
         self._ImageSourceSensor = value
 
-    def GetSensorLatitude(self):
+    @property
+    def SensorLatitude(self):
         return self._SensorLatitude
 
-    def SetSensorLatitude(self, value):
+    @SensorLatitude.setter
+    def SensorLatitude(self, value):
         self._SensorLatitude = float(value)
 
-    def GetSensorLongitude(self):
+    @property
+    def SensorLongitude(self):
         return self._SensorLongitude
 
-    def SetSensorLongitude(self, value):
+    @SensorLongitude.setter
+    def SensorLongitude(self, value):
         self._SensorLongitude = float(value)
 
-    def GetSensorTrueAltitude(self):
+    @property
+    def SensorTrueAltitude(self):
         return self._SensorTrueAltitude
 
-    def SetSensorTrueAltitude(self, value):
+    @SensorTrueAltitude.setter
+    def SensorTrueAltitude(self, value):
         self._SensorTrueAltitude = float(value)
 
-    def GetSensorHorizontalFieldOfView(self):
+    @property
+    def SensorHorizontalFieldOfView(self):
         return self._SensorHorizontalFieldOfView
 
-    def SetSensorHorizontalFieldOfView(self, value):
+    @SensorHorizontalFieldOfView.setter
+    def SensorHorizontalFieldOfView(self, value):
         self._SensorHorizontalFieldOfView = float(value)
 
-    def GetSensorVerticalFieldOfView(self):
+    @property
+    def SensorVerticalFieldOfView(self):
         return self._SensorVerticalFieldOfView
 
-    def SetSensorVerticalFieldOfView(self, value):
+    @SensorVerticalFieldOfView.setter
+    def SensorVerticalFieldOfView(self, value):
         self._SensorVerticalFieldOfView = float(value)
 
-    def GetSensorRelativeAzimuthAngle(self):
+    @property
+    def SensorRelativeAzimuthAngle(self):
         return self._SensorRelativeAzimuthAngle
 
-    def SetSensorRelativeAzimuthAngle(self, value):
+    @SensorRelativeAzimuthAngle.setter
+    def SensorRelativeAzimuthAngle(self, value):
         self._SensorRelativeAzimuthAngle = float(value)
 
-    def GetSlantRange(self):
+    @property
+    def SlantRange(self):
         return self._slantRange
 
-    def SetSlantRange(self, value):
+    @SlantRange.setter
+    def SlantRange(self, value):
         self._slantRange = float(value)
 
-    def GettargetWidth(self):
+    @property
+    def targetWidth(self):
         return self._targetWidth
 
-    def SettargetWidth(self, value):
+    @targetWidth.setter
+    def targetWidth(self, value):
         self._targetWidth = float(value)
 
-    def GetOffsetCornerLatitudePoint1(self):
+    @property
+    def OffsetCornerLatitudePoint1(self):
         return self._OffsetCornerLatitudePoint1
 
-    def SetOffsetCornerLatitudePoint1(self, value):
+    @OffsetCornerLatitudePoint1.setter
+    def OffsetCornerLatitudePoint1(self, value):
         self._OffsetCornerLatitudePoint1 = float(value)
 
-    def GetOffsetCornerLongitudePoint1(self):
+    @property
+    def OffsetCornerLongitudePoint1(self):
         return self._OffsetCornerLongitudePoint1
 
-    def SetOffsetCornerLongitudePoint1(self, value):
+    @OffsetCornerLongitudePoint1.setter
+    def OffsetCornerLongitudePoint1(self, value):
         self._OffsetCornerLongitudePoint1 = float(value)
 
-    def GetOffsetCornerLatitudePoint2(self):
+    @property
+    def OffsetCornerLatitudePoint2(self):
         return self._OffsetCornerLatitudePoint2
 
-    def SetOffsetCornerLatitudePoint2(self, value):
+    @OffsetCornerLatitudePoint2.setter
+    def OffsetCornerLatitudePoint2(self, value):
         self._OffsetCornerLatitudePoint2 = float(value)
 
-    def GetOffsetCornerLongitudePoint2(self):
+    @property
+    def OffsetCornerLongitudePoint2(self):
         return self._OffsetCornerLongitudePoint2
 
-    def SetOffsetCornerLongitudePoint2(self, value):
+    @OffsetCornerLongitudePoint2.setter
+    def OffsetCornerLongitudePoint2(self, value):
         self._OffsetCornerLongitudePoint2 = float(value)
 
-    def GetOffsetCornerLatitudePoint3(self):
+    @property
+    def OffsetCornerLatitudePoint3(self):
         return self._OffsetCornerLatitudePoint3
 
-    def SetOffsetCornerLatitudePoint3(self, value):
+    @OffsetCornerLatitudePoint3.setter
+    def OffsetCornerLatitudePoint3(self, value):
         self._OffsetCornerLatitudePoint3 = float(value)
 
-    def GetOffsetCornerLongitudePoint3(self):
+    @property
+    def OffsetCornerLongitudePoint3(self):
         return self._OffsetCornerLongitudePoint3
 
-    def SetOffsetCornerLongitudePoint3(self, value):
+    @OffsetCornerLongitudePoint3.setter
+    def OffsetCornerLongitudePoint3(self, value):
         self._OffsetCornerLongitudePoint3 = float(value)
 
-    def GetOffsetCornerLatitudePoint4(self):
+    @property
+    def OffsetCornerLatitudePoint4(self):
         return self._OffsetCornerLatitudePoint4
 
-    def SetOffsetCornerLatitudePoint4(self, value):
+    @OffsetCornerLatitudePoint4.setter
+    def OffsetCornerLatitudePoint4(self, value):
         self._OffsetCornerLatitudePoint4 = float(value)
 
-    def GetOffsetCornerLongitudePoint4(self):
+    @property
+    def OffsetCornerLongitudePoint4(self):
         return self._OffsetCornerLongitudePoint4
 
-    def SetOffsetCornerLongitudePoint4(self, value):
+    @OffsetCornerLongitudePoint4.setter
+    def OffsetCornerLongitudePoint4(self, value):
         self._OffsetCornerLongitudePoint4 = float(value)
 
-    def GetFrameCenterLatitude(self):
+    @property
+    def FrameCenterLatitude(self):
         return self._FrameCenterLatitude
 
-    def SetFrameCenterLatitude(self, value):
+    @FrameCenterLatitude.setter
+    def FrameCenterLatitude(self, value):
         self._FrameCenterLatitude = float(value)
 
-    def GetFrameCenterLongitude(self):
+    @property
+    def FrameCenterLongitude(self):
         return self._FrameCenterLongitude
 
-    def SetFrameCenterLongitude(self, value):
+    @FrameCenterLongitude.setter
+    def FrameCenterLongitude(self, value):
         self._FrameCenterLongitude = float(value)
 
-    def GetFrameCenterElevation(self):
+    @property
+    def FrameCenterElevation(self):
         return self._FrameCenterElevation
 
-    def SetFrameCenterElevation(self, value):
+    @FrameCenterElevation.setter
+    def FrameCenterElevation(self, value):
         self._FrameCenterElevation = float(value)
 
-    def GetCornerLatitudePoint1Full(self):
+    @property
+    def CornerLatitudePoint1Full(self):
         return self._CornerLatitudePoint1Full
 
-    def SetCornerLatitudePoint1Full(self, value):
+    @CornerLatitudePoint1Full.setter
+    def CornerLatitudePoint1Full(self, value):
         self._CornerLatitudePoint1Full = float(value)
 
-    def GetCornerLongitudePoint1Full(self):
+    @property
+    def CornerLongitudePoint1Full(self):
         return self._CornerLongitudePoint1Full
 
-    def SetCornerLongitudePoint1Full(self, value):
+    @CornerLongitudePoint1Full.setter
+    def CornerLongitudePoint1Full(self, value):
         self._CornerLongitudePoint1Full = float(value)
 
-    def GetCornerLatitudePoint2Full(self):
+    @property
+    def CornerLatitudePoint2Full(self):
         return self._CornerLatitudePoint2Full
 
-    def SetCornerLatitudePoint2Full(self, value):
+    @CornerLatitudePoint2Full.setter
+    def CornerLatitudePoint2Full(self, value):
         self._CornerLatitudePoint2Full = float(value)
 
-    def GetCornerLongitudePoint2Full(self):
+    @property
+    def CornerLongitudePoint2Full(self):
         return self._CornerLongitudePoint2Full
 
-    def SetCornerLongitudePoint2Full(self, value):
+    @CornerLongitudePoint2Full.setter
+    def CornerLongitudePoint2Full(self, value):
         self._CornerLongitudePoint2Full = float(value)
 
-    def GetCornerLatitudePoint3Full(self):
+    @property
+    def CornerLatitudePoint3Full(self):
         return self._CornerLatitudePoint3Full
 
-    def SetCornerLatitudePoint3Full(self, value):
+    @CornerLatitudePoint3Full.setter
+    def CornerLatitudePoint3Full(self, value):
         self._CornerLatitudePoint3Full = float(value)
 
-    def GetCornerLongitudePoint3Full(self):
+    @property
+    def CornerLongitudePoint3Full(self):
         return self._CornerLongitudePoint3Full
 
-    def SetCornerLongitudePoint3Full(self, value):
+    @CornerLongitudePoint3Full.setter
+    def CornerLongitudePoint3Full(self, value):
         self._CornerLongitudePoint3Full = float(value)
 
-    def GetCornerLatitudePoint4Full(self):
+    @property
+    def CornerLatitudePoint4Full(self):
         return self._CornerLatitudePoint4Full
 
-    def SetCornerLatitudePoint4Full(self, value):
+    @CornerLatitudePoint4Full.setter
+    def CornerLatitudePoint4Full(self, value):
         self._CornerLatitudePoint4Full = float(value)
 
-    def GetCornerLongitudePoint4Full(self):
+    @property
+    def CornerLongitudePoint4Full(self):
         return self._CornerLongitudePoint4Full
 
-    def SetCornerLongitudePoint4Full(self, value):
+    @CornerLongitudePoint4Full.setter
+    def CornerLongitudePoint4Full(self, value):
         self._CornerLongitudePoint4Full = float(value)
 
     # ------------ END Setters/Getters ------------
