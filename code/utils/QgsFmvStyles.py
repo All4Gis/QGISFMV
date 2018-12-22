@@ -20,7 +20,7 @@ class FmvLayerStyles(object):
 
     # frame axis holder
     FA = {}
-    
+
     # drawings Point holder
     DP = {}
 
@@ -120,6 +120,13 @@ class FmvLayerStyles(object):
     P['VH-ZXX']['OUTLINE'] = '255, 255, 255, 60'
     P['VH-ZXX']['OUTLINE_WIDTH'] = '1'
     P['VH-ZXX']['SIZE'] = '18'
+
+    # ADS15 Platform
+    P['ADS15'] = {}
+    P['ADS15']['NAME'] = ':/imgFMV/images/platforms/plat_ADS15.svg'
+    P['ADS15']['OUTLINE'] = '255, 255, 255, 60'
+    P['ADS15']['OUTLINE_WIDTH'] = '1'
+    P['ADS15']['SIZE'] = '18'
 
     #
     # FRAMECENTER POINT STYLES
