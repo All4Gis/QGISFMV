@@ -37,12 +37,13 @@ from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
                                         _seconds_to_time,
                                         _seconds_to_time_frac,
                                         askForFiles,
-                                        askForFolder)
+                                        askForFolder,
+                                        setCenterMode)
 from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
-from qgis.core import Qgis as QGis, QgsRectangle, QgsTask, QgsApplication
+from qgis.core import Qgis as QGis, QgsTask, QgsApplication
 
 try:
     from pydevd import *
@@ -125,7 +126,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.durationChanged.connect(self.durationChanged)
         self.player.positionChanged.connect(self.positionChanged)
         self.player.mediaStatusChanged.connect(self.statusChanged)
-        
+
         self.player.stateChanged.connect(self.setCurrentState)
 
         self.playerState = QMediaPlayer.LoadingMedia
@@ -141,8 +142,42 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.metadataDlg.setMinimumWidth(500)
         self.metadataDlg.hide()
 
-        self.converter = Converter() 
+        self.converter = Converter()
         self.BitratePlot = CreatePlotsBitrate()
+
+        if self.actionCenter_on_Platform.isChecked():
+            setCenterMode(1, self.iface)
+        elif self.actionCenter_on_Footprint.isChecked():
+            setCenterMode(2, self.iface)
+        elif self.actionCenter_Target.isChecked():
+            setCenterMode(3, self.iface)
+
+    def centerMapPlatform(self, checked):
+        ''' Center map on Platform '''
+        if checked:
+            self.actionCenter_on_Footprint.setChecked(False)
+            self.actionCenter_Target.setChecked(False)
+            setCenterMode(1, self.iface)
+        else:
+            setCenterMode(0, self.iface)
+
+    def centerMapFootprint(self, checked):
+        ''' Center Map on Footprint '''
+        if checked:
+            self.actionCenter_on_Platform.setChecked(False)
+            self.actionCenter_Target.setChecked(False)
+            setCenterMode(2, self.iface)
+        else:
+            setCenterMode(0, self.iface)
+
+    def centerMapTarget(self, checked):
+        ''' Center Map on Target '''
+        if checked:
+            self.actionCenter_on_Platform.setChecked(False)
+            self.actionCenter_on_Footprint.setChecked(False)
+            setCenterMode(3, self.iface)
+        else:
+            setCenterMode(0, self.iface)
 
     def HasAudio(self, videoPath):
         """ Check if video have Metadata or not """

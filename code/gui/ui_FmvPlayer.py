@@ -8,9 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_PlayerWindow(object):
-
     def setupUi(self, PlayerWindow):
         PlayerWindow.setObjectName("PlayerWindow")
         PlayerWindow.resize(748, 652)
@@ -300,6 +298,8 @@ class Ui_PlayerWindow(object):
         self.menuInfo.setObjectName("menuInfo")
         self.menuPlot_Bitrate = QtWidgets.QMenu(self.menubarwidget)
         self.menuPlot_Bitrate.setObjectName("menuPlot_Bitrate")
+        self.menuMap = QtWidgets.QMenu(self.menubarwidget)
+        self.menuMap.setObjectName("menuMap")
         PlayerWindow.setMenuBar(self.menubarwidget)
         self.statusbar = QtWidgets.QStatusBar(PlayerWindow)
         self.statusbar.setObjectName("statusbar")
@@ -487,6 +487,16 @@ class Ui_PlayerWindow(object):
         icon39.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-polyline-remove-last.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionRemove_Last_Line.setIcon(icon39)
         self.actionRemove_Last_Line.setObjectName("actionRemove_Last_Line")
+        self.actionCenter_on_Platform = QtWidgets.QAction(PlayerWindow)
+        self.actionCenter_on_Platform.setCheckable(True)
+        self.actionCenter_on_Platform.setObjectName("actionCenter_on_Platform")
+        self.actionCenter_on_Footprint = QtWidgets.QAction(PlayerWindow)
+        self.actionCenter_on_Footprint.setCheckable(True)
+        self.actionCenter_on_Footprint.setObjectName("actionCenter_on_Footprint")
+        self.actionCenter_Target = QtWidgets.QAction(PlayerWindow)
+        self.actionCenter_Target.setCheckable(True)
+        self.actionCenter_Target.setChecked(True)
+        self.actionCenter_Target.setObjectName("actionCenter_Target")
         self.toolBtn_DPoint.addAction(self.actionDraw_Pinpoint)
         self.toolBtn_DPoint.addAction(self.actionRemove_Last_Pinpoint)
         self.toolBtn_DPoint.addAction(self.actionRemove_All_Pinpoint)
@@ -518,12 +528,16 @@ class Ui_PlayerWindow(object):
         self.menuPlot_Bitrate.addSeparator()
         self.menuPlot_Bitrate.addAction(self.actionSave_Audio)
         self.menuPlot_Bitrate.addAction(self.actionSave_Video)
+        self.menuMap.addAction(self.actionCenter_on_Platform)
+        self.menuMap.addAction(self.actionCenter_on_Footprint)
+        self.menuMap.addAction(self.actionCenter_Target)
         self.menubarwidget.addAction(self.menuFile.menuAction())
         self.menubarwidget.addAction(self.menuFrames.menuAction())
         self.menubarwidget.addAction(self.menuMetadata.menuAction())
         self.menubarwidget.addAction(self.menuConverter.menuAction())
         self.menubarwidget.addAction(self.menuInfo.menuAction())
         self.menubarwidget.addAction(self.menuPlot_Bitrate.menuAction())
+        self.menubarwidget.addAction(self.menuMap.menuAction())
 
         self.retranslateUi(PlayerWindow)
         self.gb_PlayerControls.toggled['bool'].connect(PlayerWindow.toggleGroup)
@@ -576,6 +590,9 @@ class Ui_PlayerWindow(object):
         self.actionRemove_All_Line.triggered.connect(self.videoWidget.removeAllLines)
         self.actionRemove_Last_Line.triggered.connect(self.videoWidget.removeLastLine)
         self.actionLast_Segment_Line.triggered.connect(self.videoWidget.removeLastSegmentLine)
+        self.actionCenter_on_Footprint.toggled['bool'].connect(PlayerWindow.centerMapFootprint)
+        self.actionCenter_on_Platform.toggled['bool'].connect(PlayerWindow.centerMapPlatform)
+        self.actionCenter_Target.toggled['bool'].connect(PlayerWindow.centerMapTarget)
         QtCore.QMetaObject.connectSlotsByName(PlayerWindow)
 
     def retranslateUi(self, PlayerWindow):
@@ -608,6 +625,7 @@ class Ui_PlayerWindow(object):
         self.menuConverter.setTitle(_translate("PlayerWindow", "Converter"))
         self.menuInfo.setTitle(_translate("PlayerWindow", "Information"))
         self.menuPlot_Bitrate.setTitle(_translate("PlayerWindow", "Plot Bitrate"))
+        self.menuMap.setTitle(_translate("PlayerWindow", "Map"))
         self.DrawToolBar.setWindowTitle(_translate("PlayerWindow", "Utils ToolBar"))
         self.DrawToolBar.setToolTip(_translate("PlayerWindow", "Utils ToolBar"))
         self.actionGray.setText(_translate("PlayerWindow", "Gray Scale"))
@@ -662,7 +680,9 @@ class Ui_PlayerWindow(object):
         self.actionLast_Segment_Line.setToolTip(_translate("PlayerWindow", "Remove Last Segment"))
         self.actionRemove_Last_Line.setText(_translate("PlayerWindow", "Remove Last Line"))
         self.actionRemove_Last_Line.setToolTip(_translate("PlayerWindow", "Remove Last Line"))
-
+        self.actionCenter_on_Platform.setText(_translate("PlayerWindow", "Center on Platform"))
+        self.actionCenter_on_Footprint.setText(_translate("PlayerWindow", "Center on Footprint"))
+        self.actionCenter_Target.setText(_translate("PlayerWindow", "Center on Target"))
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc
