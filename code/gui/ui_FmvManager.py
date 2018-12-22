@@ -8,7 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_ManagerWindow(object):
+
     def setupUi(self, ManagerWindow):
         ManagerWindow.setObjectName("ManagerWindow")
         ManagerWindow.resize(761, 281)
@@ -149,5 +151,6 @@ class Ui_ManagerWindow(object):
         self.actionCenter_on_Platform.setText(_translate("ManagerWindow", "Center on Platform"))
         self.actionCenter_on_Footprint.setText(_translate("ManagerWindow", "Center on Footprint"))
         self.actionCenter_Target.setText(_translate("ManagerWindow", "Center on Target"))
+
 
 from QGIS_FMV.gui import resources_rc

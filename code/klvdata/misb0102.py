@@ -47,7 +47,6 @@ _classifying_country_coding = {
     b'\x10': 'GENC Mixed',
 }
 
-
 _object_country_coding = {
     b'\x01': 'ISO-3166 Two Letter',
     b'\x02': 'ISO-3166 Three Letter',

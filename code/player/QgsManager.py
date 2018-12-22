@@ -77,7 +77,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             setCenterMode(2, self.iface)
         elif self.actionCenter_Target.isChecked():
             setCenterMode(3, self.iface)
-        
 
     def eventFilter(self, source, event):
         ''' Event Filter '''

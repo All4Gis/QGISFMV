@@ -8,7 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_PlayerWindow(object):
+
     def setupUi(self, PlayerWindow):
         PlayerWindow.setObjectName("PlayerWindow")
         PlayerWindow.resize(748, 652)
@@ -660,6 +662,7 @@ class Ui_PlayerWindow(object):
         self.actionLast_Segment_Line.setToolTip(_translate("PlayerWindow", "Remove Last Segment"))
         self.actionRemove_Last_Line.setText(_translate("PlayerWindow", "Remove Last Line"))
         self.actionRemove_Last_Line.setToolTip(_translate("PlayerWindow", "Remove Last Line"))
+
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc

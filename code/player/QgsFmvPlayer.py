@@ -186,7 +186,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     "", "Buffer value read but is not ready, increase buffer size. : ", onlyLog=True)
                 return
 
-            #Values need to be read, pause the video a short while
+            # Values need to be read, pause the video a short while
             elif stdout_data == 'BUFFERING':
                 qgsu.showUserAndLogMessage(
                     "Buffering metadata...", "", duration=4, level=QGis.Info)
@@ -657,7 +657,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if not self.sliderDuration.isSliderDown():
             self.sliderDuration.setValue(progress)        
 
-
         self.updateDurationInfo(progress)
 
     def updateDurationInfo(self, currentInfo):
@@ -963,7 +962,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", "Succesfully " + result['task'] + "!"))
                 if "Bitrate" in result['task']: 
-                    self.matplot = ShowPlot(self.BitratePlot.bitrate_data, self.BitratePlot.frame_count,self.fileName, self.BitratePlot.output)
+                    self.matplot = ShowPlot(self.BitratePlot.bitrate_data, self.BitratePlot.frame_count, self.fileName, self.BitratePlot.output)
                 if result['task'] == 'Show Video Info Task':
                     self.showVideoInfoDialog(self.converter.bytes_value)
         else:
