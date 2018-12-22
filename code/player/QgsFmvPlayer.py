@@ -183,7 +183,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Check if video have Metadata or not """
         try:
             p = _spawn(['-i', videoPath,
-                        '-show_streams', '-select_streams', 'a', '-preset', 'ultrafast',
+                        '-show_streams', '-select_streams', 'a',
                         '-loglevel', 'error'], t="probe")
 
             stdout_data, _ = p.communicate()
@@ -765,8 +765,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             else:
                 url = QUrl.fromLocalFile(videoPath)
             qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
-            
-            self.playlist.addMedia(QMediaContent(url))            
+
+            self.playlist.addMedia(QMediaContent(url))
             self.player.setPlaylist(self.playlist)
 
             self.setWindowTitle(QCoreApplication.translate(
@@ -797,7 +797,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.RecGIF.stop()
         self.btn_Rec.setIcon(QIcon(":/imgFMV/images/record.png"))
 
-    # TODO: Make in other thread QgsTask
     def RecordVideo(self, value):
         ''' Cut Video '''
         currentTime = _seconds_to_time(self.currentInfo)
@@ -815,22 +814,35 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.StopRecordAnimation()
                 return
 
-            p = _spawn(['-i', self.fileName,
-                        '-ss', self.startRecord,
-                        '-to', self.endRecord,
-                        '-preset', 'ultrafast',
-                        '-c', 'copy',
-                        out])
-            p.communicate()
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Save file succesfully!"))
+            taskRecordVideo = QgsTask.fromFunction('Record Video Task',
+                                                self.RecordVideoTask,
+                                                infile=self.fileName,
+                                                startRecord=self.startRecord,
+                                                endRecord=self.endRecord,
+                                                out=out,
+                                                on_finished=self.finishedTask,
+                                                flags=QgsTask.CanCancel)
 
-            self.StopRecordAnimation()
+            QgsApplication.taskManager().addTask(taskRecordVideo)
+
         else:
             self.startRecord = currentTime
             self.RecGIF.frameChanged.connect(self.ReciconUpdate)
             self.RecGIF.start()
         return
+
+    def RecordVideoTask(self, task, infile, startRecord, endRecord, out):
+        ''' Record Video Task '''
+        p = _spawn(['-i', infile,
+                    '-ss', startRecord,
+                    '-to', endRecord,
+                    '-c', 'copy',
+                    out])
+        p.communicate()
+        self.StopRecordAnimation()
+        if task.isCanceled():
+            return None
+        return {'task': task.description()}
 
     def videoAvailableChanged(self, available):
         ''' Buttons for video available '''

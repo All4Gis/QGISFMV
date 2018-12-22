@@ -239,7 +239,6 @@ def getVideoLocationInfo(videoPath):
                     '-ss', '00:00:00',
                     '-to', '00:00:01',
                     '-map', 'data-re',
-                    '-preset', 'ultrafast',
                     '-f', 'data', '-'])
 
         stdout_data, _ = p.communicate()
@@ -553,7 +552,8 @@ def _spawn(cmds, t="ffmpeg"):
     else:
         cmds.insert(0, ffprobe_path)
 
-    # qgsu.showUserAndLogMessage("", "commands:" + str(cmds), onlyLog=True)
+    cmds.insert(3, '-preset')
+    cmds.insert(4, 'ultrafast')
 
     return Popen(cmds, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE,
                  bufsize=0,
