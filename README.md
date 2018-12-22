@@ -113,6 +113,7 @@ ffprobe = "/usr/bin/"
 ## Slides
 
 * [Official presentation](https://slides.com/franraga/qgis-fmv/fullscreen)
+* [Beyond imagery and Video](https://docs.google.com/presentation/d/e/2PACX-1vTKcb4AV71yapX2hrOCIUCCvdP0FIOUqO1OvfEG4cHKvo0wvVM9pmIA0vMuzLXVANmhySRlFOgTAHGf/pub?start=true&loop=false&delayms=10000&slide=id.p1)
 
 ## Screenshots
 

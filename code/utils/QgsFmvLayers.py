@@ -427,7 +427,7 @@ def UpdateFrameAxisData(packet):
     alt = packet.SensorTrueAltitude
     fc_lat = packet.FrameCenterLatitude
     fc_lon = packet.FrameCenterLongitude
-    #fc_alt = packet.FrameCenterElevation
+    # fc_alt = packet.FrameCenterElevation
 
     frameaxisLyr = qgsu.selectLayerByName(FrameAxis_lyr)
 
@@ -775,6 +775,7 @@ def SetDefaultFrameCenterStyle(layer):
     layer.setRenderer(renderer)
     return
 
+
 def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
     ''' Line Symbol '''
     sensor_style = S.getSensor(sensor)
@@ -785,6 +786,7 @@ def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
     return
+
 
 def SetDefaultPointStyle(layer):
     ''' Point Symbol '''

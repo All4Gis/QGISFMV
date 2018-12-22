@@ -142,7 +142,6 @@ class FmvLayerStyles(object):
     #
     FA['DEFAULT'] = {}
     FA['DEFAULT']['OUTLINE_STYLE'] = 'dash'
-    
 
     #
     # TRAJECTORY STYLES

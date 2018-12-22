@@ -693,12 +693,21 @@
     <addaction name="actionSave_Audio"/>
     <addaction name="actionSave_Video"/>
    </widget>
+   <widget class="QMenu" name="menuMap">
+    <property name="title">
+     <string>Map</string>
+    </property>
+    <addaction name="actionCenter_on_Platform"/>
+    <addaction name="actionCenter_on_Footprint"/>
+    <addaction name="actionCenter_Target"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuFrames"/>
    <addaction name="menuMetadata"/>
    <addaction name="menuConverter"/>
    <addaction name="menuInfo"/>
    <addaction name="menuPlot_Bitrate"/>
+   <addaction name="menuMap"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="DrawToolBar">
@@ -1130,6 +1139,33 @@
     <string>Remove Last Line</string>
    </property>
   </action>
+  <action name="actionCenter_on_Platform">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Center on Platform</string>
+   </property>
+  </action>
+  <action name="actionCenter_on_Footprint">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Center on Footprint</string>
+   </property>
+  </action>
+  <action name="actionCenter_Target">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Center on Target</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1160,8 +1196,8 @@
    <slot>toggleGroup(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>128</x>
-     <y>628</y>
+     <x>137</x>
+     <y>622</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1177,7 +1213,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>147</x>
-     <y>618</y>
+     <y>612</y>
     </hint>
     <hint type="destinationlabel">
      <x>11</x>
@@ -1192,8 +1228,8 @@
    <slot>seek(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>50</x>
-     <y>501</y>
+     <x>60</x>
+     <y>495</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -1208,8 +1244,8 @@
    <slot>setVolume(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>687</x>
-     <y>616</y>
+     <x>693</x>
+     <y>610</y>
     </hint>
     <hint type="destinationlabel">
      <x>509</x>
@@ -1240,8 +1276,8 @@
    <slot>ExtractCurrentFrame()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>722</x>
-     <y>555</y>
+     <x>728</x>
+     <y>549</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -1257,7 +1293,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>46</x>
-     <y>555</y>
+     <y>549</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -1272,8 +1308,8 @@
    <slot>setMuted()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>504</x>
-     <y>618</y>
+     <x>507</x>
+     <y>612</y>
     </hint>
     <hint type="destinationlabel">
      <x>349</x>
@@ -1289,7 +1325,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>113</x>
-     <y>618</y>
+     <y>612</y>
     </hint>
     <hint type="destinationlabel">
      <x>112</x>
@@ -1305,7 +1341,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>45</x>
-     <y>618</y>
+     <y>612</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1321,7 +1357,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>215</x>
-     <y>618</y>
+     <y>612</y>
     </hint>
     <hint type="destinationlabel">
      <x>212</x>
@@ -1337,7 +1373,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>249</x>
-     <y>618</y>
+     <y>612</y>
     </hint>
     <hint type="destinationlabel">
      <x>511</x>
@@ -1545,7 +1581,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>79</x>
-     <y>618</y>
+     <y>612</y>
     </hint>
     <hint type="destinationlabel">
      <x>26</x>
@@ -1561,7 +1597,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>181</x>
-     <y>618</y>
+     <y>612</y>
     </hint>
     <hint type="destinationlabel">
      <x>179</x>
@@ -1577,7 +1613,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>80</x>
-     <y>555</y>
+     <y>549</y>
     </hint>
     <hint type="destinationlabel">
      <x>44</x>
@@ -1705,7 +1741,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>114</x>
-     <y>555</y>
+     <y>549</y>
     </hint>
     <hint type="destinationlabel">
      <x>110</x>
@@ -1953,6 +1989,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionCenter_on_Footprint</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>centerMapFootprint(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>325</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCenter_on_Platform</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>centerMapPlatform(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>325</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCenter_Target</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>centerMapTarget(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>325</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleGroup(bool)</slot>
@@ -2001,5 +2085,8 @@
   <slot>removeLastLine()</slot>
   <slot>removeLastSegmentLine()</slot>
   <slot>removeAllLines()</slot>
+  <slot>centerMapPlatform(bool)</slot>
+  <slot>centerMapFootprint(bool)</slot>
+  <slot>centerMapTarget(bool)</slot>
  </slots>
 </ui>

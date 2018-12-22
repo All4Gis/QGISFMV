@@ -144,7 +144,7 @@ class BufferedMetaReader():
             nTime = (k + self.pass_time) / 1000.0
             new_key = _seconds_to_time_frac(cTime)
             if new_key not in self._meta:
-                #qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
+                # qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
                 self._meta[new_key] = callBackMetadataThread(cmds=['-i', self.video_path,
                                                                    '-ss', _seconds_to_time_frac(
                                                                        cTime),
@@ -178,7 +178,7 @@ class BufferedMetaReader():
             qgsu.showUserAndLogMessage(
                 "", "wrong value for time, need . decimal" + t, onlyLog=True)
         try:
-            #after skip, buffer may not have been initialized 
+            # after skip, buffer may not have been initialized 
             if new_t not in self._meta:
                 qgsu.showUserAndLogMessage(
                     "", "Meta reader -> get: " + t + " cache: " + new_t + " values have not been init yet.", onlyLog=True)
@@ -202,10 +202,9 @@ class BufferedMetaReader():
         except Exception as e:
             qgsu.showUserAndLogMessage(
                 "", "No value found for: " + t + " rounded: " + new_t + " e:" + str(e), onlyLog=True)
-
         
-        #qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " return code: "+ str(self._meta[new_t].p.returncode), onlyLog=True)
-        #qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
+        # qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " return code: "+ str(self._meta[new_t].p.returncode), onlyLog=True)
+        # qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
 
         return value
 
@@ -228,7 +227,7 @@ class callBackMetadataThread(threading.Thread):
             self.cmds.insert(0, ffmpeg_path)
         else:
             self.cmds.insert(0, ffprobe_path)
-        #qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
+        # qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
         self.p = Popen(self.cmds,
                        shell=True,
                        stdout=PIPE,
@@ -237,11 +236,13 @@ class callBackMetadataThread(threading.Thread):
 
         self.stdout, self.stderr = self.p.communicate()
 
+
 def setCenterMode(mode, interface):
     global centerMode
     global iface
     centerMode = mode
     iface = interface
+
 
 def getVideoLocationInfo(videoPath):
     """ Get basic location info about the video """
@@ -734,21 +735,21 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     if fHeightEstimate == None:
         fHeightEstimate = gcornerPointUR[0] - gcornerPointLL[0] 
 
-    #qgsu.showUserAndLogMessage("", "fWidthEstimate: " + str(fWidthEstimate) + "  fHeightEstimate" + str(fHeightEstimate), onlyLog=True)
+    # qgsu.showUserAndLogMessage("", "fWidthEstimate: " + str(fWidthEstimate) + "  fHeightEstimate" + str(fHeightEstimate), onlyLog=True)
 
-    #recenter map on platform
+    # recenter map on platform
     if centerMode == 1:
-        rect = QgsRectangle(sensorLongitude-fWidthEstimate, sensorLatitude-fHeightEstimate, sensorLongitude+fWidthEstimate, sensorLatitude+fHeightEstimate)
+        rect = QgsRectangle(sensorLongitude - fWidthEstimate, sensorLatitude - fHeightEstimate, sensorLongitude + fWidthEstimate, sensorLatitude + fHeightEstimate)
         iface.mapCanvas().setExtent(rect)
         iface.mapCanvas().refresh()
-    #recenter map on footprint
+    # recenter map on footprint
     elif centerMode == 2:
         rect = QgsRectangle(gcornerPointLL[1], gcornerPointLL[0], gcornerPointUR[1], gcornerPointUR[0])
         iface.mapCanvas().setExtent(rect)
         iface.mapCanvas().refresh()
-    #recenter map on target
+    # recenter map on target
     elif centerMode == 3:
-        rect = QgsRectangle(frameCenterLon-fWidthEstimate, frameCenterLat-fHeightEstimate, frameCenterLon+fWidthEstimate, frameCenterLat+fHeightEstimate)
+        rect = QgsRectangle(frameCenterLon - fWidthEstimate, frameCenterLat - fHeightEstimate, frameCenterLon + fWidthEstimate, frameCenterLat + fHeightEstimate)
         iface.mapCanvas().setExtent(rect)
         iface.mapCanvas().refresh()
 

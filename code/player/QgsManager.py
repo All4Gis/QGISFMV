@@ -17,8 +17,7 @@ from QGIS_FMV.fmvConfig import DTM_file as dtm_path, Exts, min_buffer_size
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         BufferedMetaReader,
                                         initElevationModel,
-                                        getVideoLocationInfo,
-                                        setCenterMode)
+                                        getVideoLocationInfo)
 import qgis.utils
 from QGIS_FMV.converter.ffmpeg import FFMpeg
 
@@ -71,14 +70,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.setColumnWidth(5, 150)
         self.VManager.verticalHeader().setDefaultAlignment(Qt.AlignHCenter)
 
-        if self.actionCenter_on_Platform.isChecked():
-            setCenterMode(1, self.iface)
-        elif self.actionCenter_on_Footprint.isChecked():
-            setCenterMode(2, self.iface)
-        elif self.actionCenter_Target.isChecked():
-            setCenterMode(3, self.iface)
-        
-
     def eventFilter(self, source, event):
         ''' Event Filter '''
         if (event.type() == QEvent.MouseButtonPress and source is self.VManager.viewport() and self.VManager.itemAt(event.pos()) is None):
@@ -106,30 +97,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.OpenStream.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self.OpenStream.exec_()
         return
-
-    def centerMapPlatform(self, checked):
-        if checked:
-            self.actionCenter_on_Footprint.setChecked(False)
-            self.actionCenter_Target.setChecked(False)
-            setCenterMode(1, self.iface)
-        else:
-            setCenterMode(0, self.iface)
-
-    def centerMapFootprint(self, checked):
-        if checked:
-            self.actionCenter_on_Platform.setChecked(False)
-            self.actionCenter_Target.setChecked(False)
-            setCenterMode(2, self.iface)
-        else:
-            setCenterMode(0, self.iface)
-
-    def centerMapTarget(self, checked):
-        if checked:
-            self.actionCenter_on_Platform.setChecked(False)
-            self.actionCenter_on_Footprint.setChecked(False)
-            setCenterMode(3, self.iface)
-        else:
-            setCenterMode(0, self.iface)
 
     def AddFileRowToManager(self, name, filename):
         ''' Add file Video to new Row '''
