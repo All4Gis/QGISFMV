@@ -432,7 +432,7 @@ def UpdateFrameAxisData(packet):
     frameaxisLyr = qgsu.selectLayerByName(FrameAxis_lyr)
 
     try:
-        if all(v is not None for v in [frameaxisLyr, lat, lon, alt]):
+        if all(v is not None for v in [frameaxisLyr, lat, lon, alt, fc_lat, fc_lon]):
             if(imgSS != crtSensorSrc2):
                 SetDefaultFrameAxisStyle(frameaxisLyr, imgSS)
                 crtSensorSrc2 = imgSS

@@ -265,6 +265,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Add Metadata to List '''
         self.clearMetadata()
         row = 0
+        if packet is None:
+            return
         for key in sorted(packet.keys()):
             self.metadataDlg.VManager.insertRow(row)
             self.metadataDlg.VManager.setItem(
