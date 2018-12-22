@@ -111,15 +111,30 @@ color: rgb(56, 95, 107);
        <property name="text">
         <string>Tag</string>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
       </column>
       <column>
        <property name="text">
         <string>Key</string>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
       </column>
       <column>
        <property name="text">
         <string>Value</string>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
       </column>
      </widget>

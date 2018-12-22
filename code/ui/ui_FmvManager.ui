@@ -112,30 +112,60 @@ color: rgb(56, 95, 107);
        <property name="text">
         <string>Id</string>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
       </column>
       <column>
        <property name="text">
         <string>Name</string>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
       </column>
       <column>
        <property name="text">
         <string>Status</string>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
       </column>
       <column>
        <property name="text">
         <string>Source</string>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
       </column>
       <column>
        <property name="text">
         <string>Start Location</string>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
       </column>
       <column>
        <property name="text">
         <string>Progress</string>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
       </column>
       <column>
