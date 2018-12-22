@@ -208,7 +208,7 @@ class BufferedMetaReader():
 
         return value
 
-# TODO : Migrate to QgsTask
+# TODO : Migrate to Qgstask
 class callBackMetadataThread(threading.Thread):
     ''' CallBack metadata in other thread  '''
 

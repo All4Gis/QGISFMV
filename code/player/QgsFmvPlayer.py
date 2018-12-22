@@ -226,7 +226,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 qgsu.showUserAndLogMessage(
                     "Buffering metadata...", "", duration=4, level=QGis.Info)
                 self.player.pause()
-                QTimer.singleShot(2500, lambda : self.player.play()) 
+                QTimer.singleShot(2500, lambda: self.player.play()) 
                 return
 
             elif stdout_data == b'' or len(stdout_data) == 0:

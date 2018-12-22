@@ -8,7 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_PlayerWindow(object):
+
     def setupUi(self, PlayerWindow):
         PlayerWindow.setObjectName("PlayerWindow")
         PlayerWindow.resize(748, 652)
@@ -683,6 +685,7 @@ class Ui_PlayerWindow(object):
         self.actionCenter_on_Platform.setText(_translate("PlayerWindow", "Center on Platform"))
         self.actionCenter_on_Footprint.setText(_translate("PlayerWindow", "Center on Footprint"))
         self.actionCenter_Target.setText(_translate("PlayerWindow", "Center on Target"))
+
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc
