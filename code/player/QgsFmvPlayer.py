@@ -183,7 +183,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Check if video have Metadata or not """
         try:
             p = _spawn(['-i', videoPath,
-                        '-show_streams', '-select_streams', 'a', '-preset', 'ultrafast',
+                        '-show_streams', '-select_streams', 'a',
                         '-loglevel', 'error'], t="probe")
 
             stdout_data, _ = p.communicate()
@@ -834,11 +834,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def RecordVideoTask(self, task, infile, startRecord, endRecord, out):
         ''' Record Video Task '''
         p = _spawn(['-i', infile,
-            '-ss', startRecord,
-            '-to', endRecord,
-            '-preset', 'ultrafast',
-            '-c', 'copy',
-            out])
+                    '-ss', startRecord,
+                    '-to', endRecord,
+                    '-c', 'copy',
+                    out])
         p.communicate()
         self.StopRecordAnimation()
         if task.isCanceled():

@@ -336,7 +336,6 @@ class FFMpeg(object):
         p = _spawn(['-v', 'quiet',
                     '-print_format', 'json',
                     '-show_format',
-                    '-preset', 'ultrafast',
                     '-show_streams',
                     fname,
                     '>', Output], t="probe")
@@ -348,7 +347,6 @@ class FFMpeg(object):
         p = _spawn(['-v', 'quiet',
                     '-print_format', 'json',
                     '-show_format',
-                    '-preset', 'ultrafast',
                     '-show_streams',
                     fname], t="probe")
 
@@ -387,7 +385,7 @@ class FFMpeg(object):
 
         info = MediaInfo(posters_as_video)
 
-        p = _spawn(['-preset', 'ultrafast', '-show_format',
+        p = _spawn(['-show_format',
                     '-show_streams', fname], t="probe")
         stdout_data, _ = p.communicate()
         stdout_data = stdout_data.decode(console_encoding)
