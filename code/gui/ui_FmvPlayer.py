@@ -8,9 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_PlayerWindow(object):
-
     def setupUi(self, PlayerWindow):
         PlayerWindow.setObjectName("PlayerWindow")
         PlayerWindow.resize(748, 652)
@@ -65,11 +63,6 @@ class Ui_PlayerWindow(object):
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout_5)
-        self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line.setObjectName("line")
-        self.verticalLayout.addWidget(self.line)
         self.videoWidget = VideoWidget(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(3)
@@ -685,7 +678,6 @@ class Ui_PlayerWindow(object):
         self.actionCenter_on_Platform.setText(_translate("PlayerWindow", "Center on Platform"))
         self.actionCenter_on_Footprint.setText(_translate("PlayerWindow", "Center on Footprint"))
         self.actionCenter_Target.setText(_translate("PlayerWindow", "Center on Target"))
-
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc
