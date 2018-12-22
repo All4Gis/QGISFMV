@@ -8,7 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_FmvMetadata(object):
+
     def setupUi(self, FmvMetadata):
         FmvMetadata.setObjectName("FmvMetadata")
         FmvMetadata.resize(780, 491)
@@ -63,10 +65,19 @@ class Ui_FmvMetadata(object):
         self.VManager.setColumnCount(3)
         self.VManager.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        item.setFont(font)
         self.VManager.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        item.setFont(font)
         self.VManager.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        item.setFont(font)
         self.VManager.setHorizontalHeaderItem(2, item)
         self.VManager.horizontalHeader().setVisible(True)
         self.VManager.horizontalHeader().setStretchLastSection(True)
@@ -107,5 +118,6 @@ class Ui_FmvMetadata(object):
         self.actionSave_as_PDF.setShortcut(_translate("FmvMetadata", "Ctrl+Shift+P"))
         self.actionSave_as_CSV.setText(_translate("FmvMetadata", "Save as CSV"))
         self.actionSave_as_CSV.setShortcut(_translate("FmvMetadata", "Ctrl+Shift+C"))
+
 
 from QGIS_FMV.gui import resources_rc

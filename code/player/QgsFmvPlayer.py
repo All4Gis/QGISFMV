@@ -226,7 +226,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 qgsu.showUserAndLogMessage(
                     "Buffering metadata...", "", duration=4, level=QGis.Info)
                 self.player.pause()
-                QTimer.singleShot(2500, lambda : self.player.play()) 
+                QTimer.singleShot(2500, lambda: self.player.play()) 
                 return
 
             elif stdout_data == b'' or len(stdout_data) == 0:
@@ -243,6 +243,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def packetStreamParser(self, stdout_data):
         ''' Common packet process'''
+
         for packet in StreamParser(stdout_data):
             try:
                 if isinstance(packet, UnknownElement):
@@ -267,6 +268,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def callBackMetadata(self, currentTime, nextTime):
         """ Metadata CallBack """
         try:
+
             port = int(self.fileName.split(':')[2])
             t = callBackMetadataThread(cmds=['-i', self.fileName.replace(str(port), str(port + 1)),
                                              '-ss', currentTime,
@@ -795,7 +797,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.RecGIF.stop()
         self.btn_Rec.setIcon(QIcon(":/imgFMV/images/record.png"))
 
-    # TODO: Make in other thread
+    # TODO: Make in other thread QgsTask
     def RecordVideo(self, value):
         ''' Cut Video '''
         currentTime = _seconds_to_time(self.currentInfo)
@@ -996,7 +998,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     return
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvPlayer", "Succesfully " + result['task'] + "!"))
-                if "Bitrate" in result['task']: 
+                if "Bitrate" in result['task']:
                     self.matplot = ShowPlot(self.BitratePlot.bitrate_data, self.BitratePlot.frame_count, self.fileName, self.BitratePlot.output)
                 if result['task'] == 'Show Video Info Task':
                     self.showVideoInfoDialog(self.converter.bytes_value)

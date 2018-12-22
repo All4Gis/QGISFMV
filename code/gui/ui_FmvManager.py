@@ -8,7 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_ManagerWindow(object):
+
     def setupUi(self, ManagerWindow):
         ManagerWindow.setObjectName("ManagerWindow")
         ManagerWindow.resize(761, 281)
@@ -70,16 +72,34 @@ class Ui_ManagerWindow(object):
         self.VManager.setColumnCount(7)
         self.VManager.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        item.setFont(font)
         self.VManager.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        item.setFont(font)
         self.VManager.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        item.setFont(font)
         self.VManager.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        item.setFont(font)
         self.VManager.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        item.setFont(font)
         self.VManager.setHorizontalHeaderItem(4, item)
         item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        item.setFont(font)
         self.VManager.setHorizontalHeaderItem(5, item)
         item = QtWidgets.QTableWidgetItem()
         self.VManager.setHorizontalHeaderItem(6, item)
@@ -125,5 +145,6 @@ class Ui_ManagerWindow(object):
         item.setText(_translate("ManagerWindow", "Progress"))
         self.actionOpen_Stream.setText(_translate("ManagerWindow", "Open Stream"))
         self.actionOpen_MPEG2_File.setText(_translate("ManagerWindow", "Open Video File"))
+
 
 from QGIS_FMV.gui import resources_rc

@@ -139,6 +139,7 @@ class BufferedMetaReader():
     def bufferParalell(self, start, size):
         start_sec = _time_to_seconds(start)
         start_milisec = int(start_sec * 1000)
+
         for k in range(start_milisec, start_milisec + (size * self.intervall), self.intervall):
             cTime = k / 1000.0
             nTime = (k + self.pass_time) / 1000.0
@@ -146,8 +147,7 @@ class BufferedMetaReader():
             if new_key not in self._meta:
                 # qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
                 self._meta[new_key] = callBackMetadataThread(cmds=['-i', self.video_path,
-                                                                   '-ss', _seconds_to_time_frac(
-                                                                       cTime),
+                                                                   '-ss', new_key,
                                                                    '-to', _seconds_to_time_frac(
                                                                        nTime),
                                                                    '-map', 'data-re',
@@ -178,7 +178,7 @@ class BufferedMetaReader():
             qgsu.showUserAndLogMessage(
                 "", "wrong value for time, need . decimal" + t, onlyLog=True)
         try:
-            # after skip, buffer may not have been initialized 
+            # after skip, buffer may not have been initialized
             if new_t not in self._meta:
                 qgsu.showUserAndLogMessage(
                     "", "Meta reader -> get: " + t + " cache: " + new_t + " values have not been init yet.", onlyLog=True)
@@ -202,38 +202,24 @@ class BufferedMetaReader():
         except Exception as e:
             qgsu.showUserAndLogMessage(
                 "", "No value found for: " + t + " rounded: " + new_t + " e:" + str(e), onlyLog=True)
-        
+
         # qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " return code: "+ str(self._meta[new_t].p.returncode), onlyLog=True)
         # qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
 
         return value
 
-
+# TODO : Migrate to Qgstask
 class callBackMetadataThread(threading.Thread):
     ''' CallBack metadata in other thread  '''
 
-    def __init__(self, cmds, t="ffmpeg", sleep_interval=1):
-        self.stdout = None
-        self.stderr = None
+    def __init__(self, cmds):
         self.cmds = cmds
-        self.type = t
         self.p = None
-        self._kill = threading.Event()
-        self._interval = sleep_interval
         threading.Thread.__init__(self)
 
     def run(self):
-        if self.type is "ffmpeg":
-            self.cmds.insert(0, ffmpeg_path)
-        else:
-            self.cmds.insert(0, ffprobe_path)
         # qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
-        self.p = Popen(self.cmds,
-                       shell=True,
-                       stdout=PIPE,
-                       stderr=PIPE, bufsize=0,
-                       close_fds=(not windows))
-
+        self.p = _spawn(self.cmds)
         self.stdout, self.stderr = self.p.communicate()
 
 
