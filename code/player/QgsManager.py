@@ -13,7 +13,7 @@ from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
 from QGIS_FMV.player.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from QGIS_FMV.fmvConfig import DTM_file as dtm_path, Exts, min_buffer_size
+from QGIS_FMV.fmvConfig import DTM_file as dtm_path, Exts
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         BufferedMetaReader,
                                         initElevationModel,
@@ -42,15 +42,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.meta_reader = {}
         self.initialPt = {}
         self.pBars = {}
-        # don't go too low with pass_time or we won't catch any metadata at
-        # all.
-
         self.pass_time = 250
-        self.buffer_intervall = 500
-        # 8 x 500 = 4000ms buffer time
-        # min_buffer_size x buffer_intervall = Miliseconds buffer time
-        self.min_buffer_size = min_buffer_size
-
         self.actionOpen_Stream.setVisible(False)
 
         self.VManager.viewport().installEventFilter(self)
@@ -130,8 +122,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             info = FFMpeg().probe(filename)
             info.format.duration
             # init non-blocking metadata buffered reader
-            self.meta_reader[str(rowPosition)] = BufferedMetaReader(
-                filename, pass_time=self.pass_time, intervall=self.buffer_intervall, min_buffer_size=self.min_buffer_size)
+            self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, pass_time = self.pass_time)
             qgsu.showUserAndLogMessage(
                 "", "buffered non-blocking metadata reader initialized.", onlyLog=True)
 

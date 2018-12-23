@@ -18,6 +18,7 @@ from QGIS_FMV.fmvConfig import (frames_g,
 from QGIS_FMV.fmvConfig import ffmpeg as ffmpeg_path
 from QGIS_FMV.fmvConfig import ffprobe as ffprobe_path
 from QGIS_FMV.fmvConfig import Reverse_geocoding_url
+from QGIS_FMV.fmvConfig import min_buffer_size, Platform_lyr, Footprint_lyr, FrameCenter_lyr
 from QGIS_FMV.geo import sphere as sphere
 from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          ExpandLayer,
@@ -38,7 +39,6 @@ from qgis.core import (QgsApplication,
                        QgsNetworkAccessManager,
                        QgsTask,
                        QgsRasterLayer,
-                       QgsRectangle,
                        Qgis as QGis)
 
 try:
@@ -85,8 +85,6 @@ frameCenterElevation = None
 sensorLatitude = None
 sensorLongitude = None
 sensorTrueAltitude = None
-fWidthEstimate = None
-fHeightEstimate = None
 
 centerMode = 0
 iface = None
@@ -119,7 +117,11 @@ else:
 class BufferedMetaReader():
     ''' Non-Blocking metadata reader with buffer  '''
 
-    def __init__(self, video_path, pass_time=100, intervall=200, min_buffer_size=10):
+    def __init__(self, video_path, pass_time=250, intervall=500):
+        # don't go too low with pass_time or we won't catch any metadata at
+        # all.
+        # 8 x 500 = 4000ms buffer time
+        # min_buffer_size x buffer_intervall = Miliseconds buffer time
         self.video_path = video_path
         self.pass_time = pass_time
         self.intervall = intervall
@@ -220,7 +222,7 @@ class callBackMetadataThread(threading.Thread):
     def run(self):
         # qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
         self.p = _spawn(self.cmds)
-        self.stdout, self.stderr = self.p.communicate()
+        self.stdout, _ = self.p.communicate()
 
 
 def setCenterMode(mode, interface):
@@ -592,8 +594,6 @@ def ResetData():
     global dtm_data
     global tLastLon
     global tLastLat
-    global fWidthEstimate
-    global fHeightEstimate
 
     SetcrtSensorSrc()
     SetcrtPltTailNum()
@@ -601,8 +601,6 @@ def ResetData():
     dtm_data = []
     tLastLon = 0.0
     tLastLat = 0.0
-    fWidthEstimate = None
-    fHeightEstimate = None
 
 
 def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
@@ -649,10 +647,6 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     global sensorTrueAltitude
     global centerMode
     global iface
-    global gcornerPointLL
-    global gcornerPointUR
-    global fWidthEstimate
-    global fHeightEstimate
 
     frameCenterLat = packet.FrameCenterLatitude
     frameCenterLon = packet.FrameCenterLongitude
@@ -716,31 +710,18 @@ def UpdateLayers(packet, parent=None, mosaic=False):
         if mosaic:
             georeferencingVideo(parent)
 
-    if fWidthEstimate == None:
-        fWidthEstimate = gcornerPointUR[1] - gcornerPointLL[1]
-    if fHeightEstimate == None:
-        fHeightEstimate = gcornerPointUR[0] - gcornerPointLL[0] 
-
-    # qgsu.showUserAndLogMessage("", "fWidthEstimate: " + str(fWidthEstimate) + "  fHeightEstimate" + str(fHeightEstimate), onlyLog=True)
-
     # recenter map on platform
     if centerMode == 1:
-        rect = QgsRectangle(sensorLongitude - fWidthEstimate, sensorLatitude - fHeightEstimate, sensorLongitude + fWidthEstimate, sensorLatitude + fHeightEstimate)
-        iface.mapCanvas().setExtent(rect)
-        iface.mapCanvas().refresh()
+        lyr = qgsu.selectLayerByName(Platform_lyr)
+        iface.mapCanvas().setExtent(lyr.extent())
     # recenter map on footprint
     elif centerMode == 2:
-        rect = QgsRectangle(gcornerPointLL[1], gcornerPointLL[0], gcornerPointUR[1], gcornerPointUR[0])
-        iface.mapCanvas().setExtent(rect)
-        iface.mapCanvas().refresh()
+        lyr = qgsu.selectLayerByName(Footprint_lyr)
+        iface.mapCanvas().setExtent(lyr.extent())
     # recenter map on target
     elif centerMode == 3:
-        rect = QgsRectangle(frameCenterLon - fWidthEstimate, frameCenterLat - fHeightEstimate, frameCenterLon + fWidthEstimate, frameCenterLat + fHeightEstimate)
-        iface.mapCanvas().setExtent(rect)
-        iface.mapCanvas().refresh()
-
-    fHeightEstimate = 0
-    fHeightEstimate = 0
+        lyr = qgsu.selectLayerByName(FrameCenter_lyr)
+        iface.mapCanvas().setExtent(lyr.extent())
 
     return
 
@@ -756,10 +737,10 @@ def georeferencingVideo(parent):
         return
 
     taskGeoreferencingVideo = QgsTask.fromFunction('Georeferencing Current Frame Task',
-                                GeoreferenceFrame,
-                                image=image, output=out, p=position,
-                                on_finished=parent.finishedTask,
-                                flags=QgsTask.CanCancel)
+                                                   GeoreferenceFrame,
+                                                   image=image, output=out, p=position,
+                                                   on_finished=parent.finishedTask,
+                                                   flags=QgsTask.CanCancel)
 
     QgsApplication.taskManager().addTask(taskGeoreferencingVideo)
     return
@@ -1081,7 +1062,7 @@ def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
     dAlt = (demPtAlt - sensorAlt) / distance
 
     k = ((demPtAlt - planeHeight) / (sensorAlt - demPtAlt)) * distance
-    pt = [sensorLon + (distance + k) * dLon, sensorLat + 
+    pt = [sensorLon + (distance + k) * dLon, sensorLat +
           (distance + k) * dLat, sensorAlt + (distance + k) * dAlt]
 
     return pt

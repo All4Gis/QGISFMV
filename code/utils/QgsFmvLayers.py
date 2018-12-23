@@ -39,7 +39,7 @@ from qgis.core import (
     QgsPointXY,
     QgsWkbTypes
 )
-from QGIS_FMV.geo import sphere as sphere
+
 from qgis.core import Qgis as QGis
 from qgis.utils import iface
 from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
@@ -559,6 +559,7 @@ def UpdatePlatformData(packet):
 def CommonLayer(value):
     ''' Common commands Layers '''
     value.commitChanges()
+    value.updateExtents()
     value.triggerRepaint()
     iface.layerTreeView().refreshLayerSymbology(value.id())
 
