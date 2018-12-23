@@ -130,7 +130,7 @@ class CreatePlotsBitrate(QObject):
             # get frame data for the selected stream
             cmds = ["-show_entries", "frame",
                     "-select_streams", stream_spec,
-                    "-print_format", "xml", "-preset", "ultrafast",
+                    "-print_format", "xml",
                     fileName]
             try:
                 with _spawn(cmds, t="probe") as proc_frame:
@@ -161,7 +161,7 @@ class CreatePlotsBitrate(QObject):
                             else:
                                 cmds = ["-show_entries", "stream",
                                         "-select_streams", "V",
-                                        "-print_format", "xml", "-preset", "ultrafast",
+                                        "-print_format", "xml",
                                         fileName
                                         ]
                                 with _spawn(cmds, t="probe") as proc_stream:

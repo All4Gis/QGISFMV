@@ -738,6 +738,10 @@
    </property>
   </action>
   <action name="actionCapture_Current_Frame">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/screenshot.png</normaloff>:/imgFMV/images/screenshot.png</iconset>
+   </property>
    <property name="text">
     <string>Capture Current Frame</string>
    </property>
@@ -746,6 +750,10 @@
    </property>
   </action>
   <action name="actionExtract_All_Frames">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/capture_all_frames.png</normaloff>:/imgFMV/images/capture_all_frames.png</iconset>
+   </property>
    <property name="text">
     <string>Extract All Frames</string>
    </property>

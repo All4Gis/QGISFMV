@@ -222,7 +222,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         ''' Create CSV QgsTask '''
         QCoreApplication.processEvents()
         QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
-        with open(unicode(out), 'w') as stream:
+        with open(out, 'w') as stream:
             headers = list()
             # 3 Columns always
             for column in range(VManager.columnCount()):
@@ -234,9 +234,9 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
 
             for key in sorted(data.keys()):
                 rowdata = {}
-                rowdata[headers[0]] = unicode(str(key))
-                rowdata[headers[1]] = unicode(str(data[key][0]))
-                rowdata[headers[2]] = unicode(str(data[key][1]))
+                rowdata[headers[0]] = str(key)
+                rowdata[headers[1]] = str(data[key][0])
+                rowdata[headers[2]] = str(data[key][1])
                 writer.writerow(rowdata)
 
     def closeEvent(self, _):

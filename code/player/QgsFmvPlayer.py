@@ -425,25 +425,26 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 #         actionColors.setShortcut("Ctrl+May+C")
 #         actionColors.triggered.connect(self.showColorDialog)
 
-        actionMute = menu.addAction(
+        actionMute = menu.addAction(QIcon(":/imgFMV/images/volume_up.png"),
             QCoreApplication.translate("QgsFmvPlayer", "Mute/Unmute"))
         actionMute.setShortcut("Ctrl+Shift+U")
         actionMute.triggered.connect(self.setMuted)
 
         menu.addSeparator()
-        actionAllFrames = menu.addAction(
+        actionAllFrames = menu.addAction(QIcon(":/imgFMV/images/capture_all_frames.png"),
             QCoreApplication.translate("QgsFmvPlayer", "Extract All Frames"))
+
         actionAllFrames.setShortcut("Ctrl+Shift+A")
         actionAllFrames.triggered.connect(self.ExtractAllFrames)
 
-        actionCurrentFrames = menu.addAction(
+        actionCurrentFrames = menu.addAction(QIcon(":/imgFMV/images/screenshot.png"),
             QCoreApplication.translate("QgsFmvPlayer",
                                        "Extract Current Frame"))
         actionCurrentFrames.setShortcut("Ctrl+Shift+Q")
         actionCurrentFrames.triggered.connect(self.ExtractCurrentFrame)
 
         menu.addSeparator()
-        actionShowMetadata = menu.addAction(
+        actionShowMetadata = menu.addAction(QIcon(":/imgFMV/images/show-metadata.png"),
             QCoreApplication.translate("QgsFmvPlayer", "Show Metadata"))
         actionShowMetadata.setShortcut("Ctrl+Shift+M")
         actionShowMetadata.triggered.connect(self.OpenQgsFmvMetadata)
