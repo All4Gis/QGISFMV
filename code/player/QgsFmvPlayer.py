@@ -89,6 +89,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.toolBtn_DLine.setDefaultAction(self.actionDraw_Line)
         self.DrawToolBar.addWidget(self.toolBtn_DLine)
 
+#         self.DrawToolBar.addSeparator()
+#         self.DrawToolBar.addAction(self.actionHandDraw)
+        self.DrawToolBar.addSeparator()
+
         self.DrawToolBar.addAction(self.actionRuler)
         self.DrawToolBar.addSeparator()
 
@@ -529,15 +533,25 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Video Ruler '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetRuler(value)
+        if not value:
+            self.videoWidget.ResetDrawRuler()
+
+        self.CommonPauseTool(value)
+        self.videoWidget.UpdateSurface()
+
+    # TODO : Make draw hand tool
+    def VideoHandDraw(self, value):
+        self.videoWidget.SetHandDraw(value)
+        self.CommonPauseTool(value)
+        self.videoWidget.UpdateSurface()
+
+    def CommonPauseTool(self, value):
         if value:
             self.player.pause()
             self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
         else:
-            self.videoWidget.ResetDrawRuler()
             self.player.play()
             self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
-
-        self.videoWidget.UpdateSurface()
 
     def VideoCensure(self, value):
         ''' Censure Video Parts'''

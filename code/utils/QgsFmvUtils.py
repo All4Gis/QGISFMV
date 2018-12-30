@@ -645,8 +645,6 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     global sensorLatitude
     global sensorLongitude
     global sensorTrueAltitude
-    global centerMode
-    global iface
 
     frameCenterLat = packet.FrameCenterLatitude
     frameCenterLon = packet.FrameCenterLongitude
@@ -732,9 +730,6 @@ def georeferencingVideo(parent):
     root, _ = os.path.splitext(os.path.basename(parent.fileName))
     out = os.path.join(os.path.expanduser("~"), "QGIS_FMV", root)
     position = str(parent.player.position())
-
-    if position == "0":
-        return
 
     taskGeoreferencingVideo = QgsTask.fromFunction('Georeferencing Current Frame Task',
                                                    GeoreferenceFrame,
@@ -847,7 +842,6 @@ def CornerEstimationWithOffsets(packet):
 
 def CornerEstimationWithoutOffsets(packet):
     ''' Corner estimation without Offsets '''
-    global defaultTargetWidth
     try:
         sensorLatitude = packet.SensorLatitude
         sensorLongitude = packet.SensorLongitude
@@ -986,11 +980,6 @@ def CornerEstimationWithoutOffsets(packet):
 
 
 def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
-    global dtm_data
-    global dtm_transform
-    global dtm_colLowerBound
-    global dtm_rowLowerBound
-
     pt = []
 
     sensorLat = sensorPt[0]

@@ -984,6 +984,18 @@
     <string>Ruler</string>
    </property>
   </action>
+  <action name="actionHandDraw">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/HandDraw.png</normaloff>:/imgFMV/images/HandDraw.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hand Draw</string>
+   </property>
+  </action>
   <action name="actionMirroredH">
    <property name="checkable">
     <bool>true</bool>
@@ -1144,6 +1156,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/center_platform.png</normaloff>:/imgFMV/images/center_platform.png</iconset>
+   </property>
    <property name="text">
     <string>Center on Platform</string>
    </property>
@@ -1151,6 +1167,10 @@
   <action name="actionCenter_on_Footprint">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/center_footprint.png</normaloff>:/imgFMV/images/center_footprint.png</iconset>
    </property>
    <property name="text">
     <string>Center on Footprint</string>
@@ -1162,6 +1182,10 @@
    </property>
    <property name="checked">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/center_target.png</normaloff>:/imgFMV/images/center_target.png</iconset>
    </property>
    <property name="text">
     <string>Center on Target</string>
@@ -1803,6 +1827,22 @@
    <signal>triggered(bool)</signal>
    <receiver>PlayerWindow</receiver>
    <slot>VideoRuler(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>370</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHandDraw</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>VideoHandDraw(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
