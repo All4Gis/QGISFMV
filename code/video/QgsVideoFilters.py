@@ -8,7 +8,6 @@ try:
                      Canny,
                      COLOR_BGR2LAB,
                      COLOR_LAB2BGR,
-                     COLOR_GRAY2RGB,
                      cvtColor,
                      createCLAHE,
                      merge,
@@ -42,10 +41,13 @@ class VideoFilters():
         return image.convertToFormat(QImage.Format_Mono)
 
     @staticmethod
-    def EdgeFilter(image):
+    def EdgeFilter(image, sigma=0.33):
         ''' Edge Image Filter '''
         gray = convertQImageToMat(image)
-        canny = Canny(gray, 100, 150)
+        v = np.median(gray)
+        lower = int(max(0, (1.0 - sigma) * v))
+        upper = int(min(255, (1.0 + sigma) * v))
+        canny = Canny(gray, lower, upper)
         return convertMatToQImage(canny)
 
     @staticmethod
@@ -55,7 +57,7 @@ class VideoFilters():
         lowerLimit = 5
 
         #First, make containers
-        oldHeight, oldWidth = original[:,:,0].shape; 
+        oldHeight, oldWidth = original[:,:,0].shape
         ndviImage = np.zeros((oldHeight, oldWidth, 3), np.uint8) #make a blank RGB image
 
         red = (original[:,:,2]).astype('float')
@@ -63,14 +65,14 @@ class VideoFilters():
 
         #Perform NDVI calculation
         summ = red+blue
-        summ[summ<lowerLimit] = lowerLimit #do some saturation to prevent low intensity noise
+        summ[summ < lowerLimit] = lowerLimit #do some saturation to prevent low intensity noise
 
         ndvi = (((red-blue)/(summ)+1)*127).astype('uint8')  #the index
 
-        redSat = (ndvi-128)*2  #red channel
-        bluSat = ((255-ndvi)-128)*2 #blue channel
-        redSat[ndvi<128] = 0; #if the NDVI is negative, no red info
-        bluSat[ndvi>=128] = 0; #if the NDVI is positive, no blue info
+        redSat = (ndvi - 128)*2  #red channel
+        bluSat = ((255 - ndvi) - 128)*2 #blue channel
+        redSat[ndvi < 128] = 0 #if the NDVI is negative, no red info
+        bluSat[ndvi >= 128] = 0 #if the NDVI is positive, no blue info
 
         #Red Channel
         ndviImage[:,:,2] = redSat
@@ -95,22 +97,3 @@ class VideoFilters():
         lab = merge((l2, a, b))  # merge channels
         invert = cvtColor(lab, COLOR_LAB2BGR)  # convert from LAB to BGR
         return convertMatToQImage(invert)
-
-#     @staticmethod
-#     def ThresholdingFilter(image):
-#         from cv2  import threshold,THRESH_BINARY
-#         gray= convertQImageToMat(VideoFilters.GrayFilter(image))
-#         ret,th = threshold(gray,127,255,THRESH_BINARY)
-#         return convertMatToQImage(th)
-
-#     @staticmethod
-#     def EqualizeContrastFilter(image):
-#         from cv2  import adaptiveThreshold,ADAPTIVE_THRESH_MEAN_C,THRESH_BINARY,getStructuringElement,MORPH_ELLIPSE,MORPH_CLOSE,morphologyEx,NORM_MINMAX,normalize
-#         import numpy as np
-#
-#         gray= convertQImageToMat(VideoFilters.GrayFilter(image))
-#         kernel1 = getStructuringElement(MORPH_ELLIPSE,(20,20))
-#         close = morphologyEx(gray,MORPH_CLOSE,kernel1)
-#         div = np.float32(gray)/(close)
-#         res = np.uint8(normalize(div,div,0,255,NORM_MINMAX))
-#         return convertMatToQImage(res)

@@ -411,10 +411,10 @@ def askForFolder(parent, msg=None, options=QFileDialog.ShowDirsOnly):
 
 def convertQImageToMat(img):
     '''  Converts a QImage into an opencv MAT format  '''
-    img = img.convertToFormat(4)
+    img = img.convertToFormat(QImage.Format_RGB888)
     ptr = img.bits()
     ptr.setsize(img.byteCount())
-    return np.array(ptr).reshape(img.height(), img.width(), 4)
+    return np.array(ptr).reshape(img.height(), img.width(), 3)
 
 
 def convertMatToQImage(img):

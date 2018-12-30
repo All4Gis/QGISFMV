@@ -191,6 +191,10 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
         if self.widget._filterSatate.monoFilter:
             self.image = filter.MonoFilter(self.image)
+
+        if self.widget._filterSatate.invertColorFilter:
+            self.image.invertPixels()
+
         # TODO : Test in other thread
         if self.widget._filterSatate.edgeDetectionFilter:
             try:
@@ -212,9 +216,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             except Exception as e:
                 None
 
-        if self.widget._filterSatate.invertColorFilter:
-            self.image.invertPixels()
-
         painter.drawImage(self.targetRect, self.image, self.sourceRect)
 
         if self._interaction.objectTracking and self.widget._isinit:
@@ -234,6 +235,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
         painter.setTransform(oldTransform)
         self.currentFrame.unmap()
+        self.widget.updateVideo()
         return self.painter
 
 
