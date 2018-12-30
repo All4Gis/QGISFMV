@@ -60,6 +60,7 @@ class InteractionState(object):
         self.magnifier = False
         self.objectTracking = False
         self.censure = False
+        self.HandDraw = False
 
     def clear(self):
         self.__init__()
@@ -441,6 +442,10 @@ class VideoWidget(QVideoWidget):
     def SetRuler(self, value):
         ''' Set Ruler '''
         self._interaction.ruler = value
+
+    def SetHandDraw(self, value):
+        ''' Set Hand Draw '''
+        self._interaction.HandDraw = value
 
     def SetCensure(self, value):
         ''' Set Censure Video Parts '''

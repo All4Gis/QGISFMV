@@ -65,5 +65,9 @@
         <file>../images/censure-pencil-remove-last.png</file>
         <file>../images/censure-pencil-remove-all.png</file>
         <file>../images/draw-text.png</file>
+        <file>../images/HandDraw.png</file>
+        <file>../images/center_platform.png</file>
+        <file>../images/center_footprint.png</file>
+        <file>../images/center_target.png</file>
     </qresource>
 </RCC>
