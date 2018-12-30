@@ -25,6 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.5:
+    	- Add new icons
     	- Fixed unplayable Non-MISB Video. These video can now be played, there is just no draws in map
     	- Fixed Metadata view that was empty when you load it
     	- Center Map on Footprint / Target / Sensor
@@ -84,7 +85,7 @@ tracker=https://github.com/All4Gis/QGISFMV/issues
 repository=https://github.com/All4Gis/QGISFMV
 
 # tags are comma separated with spaces allowed
-tags=fmv, uav, python, dron, telemetry
+tags=fmv, uav, python, drone, telemetry, MISB, 
 
 icon=images/icon.png
 experimental=False

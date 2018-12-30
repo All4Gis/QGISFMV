@@ -210,6 +210,7 @@ class BufferedMetaReader():
 
         return value
 
+
 # TODO : Migrate to Qgstask
 class callBackMetadataThread(threading.Thread):
     ''' CallBack metadata in other thread  '''
@@ -1051,7 +1052,7 @@ def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
     dAlt = (demPtAlt - sensorAlt) / distance
 
     k = ((demPtAlt - planeHeight) / (sensorAlt - demPtAlt)) * distance
-    pt = [sensorLon + (distance + k) * dLon, sensorLat +
+    pt = [sensorLon + (distance + k) * dLon, sensorLat + 
           (distance + k) * dLat, sensorAlt + (distance + k) * dAlt]
 
     return pt

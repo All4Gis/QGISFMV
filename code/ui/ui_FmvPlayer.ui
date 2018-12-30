@@ -648,6 +648,7 @@
     <addaction name="actionCanny_edge_detection"/>
     <addaction name="actionAuto_Contrast_Filter"/>
     <addaction name="actionMirroredH"/>
+    <addaction name="actionNDVI"/>
    </widget>
    <widget class="QMenu" name="menuFrames">
     <property name="title">
@@ -1189,6 +1190,18 @@
    </property>
    <property name="text">
     <string>Center on Target</string>
+   </property>
+  </action>
+  <action name="actionNDVI">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/ndvi.png</normaloff>:/imgFMV/images/ndvi.png</iconset>
+   </property>
+   <property name="text">
+    <string>NDVI</string>
    </property>
   </action>
  </widget>
@@ -2078,6 +2091,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionNDVI</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>NDVIFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>325</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleGroup(bool)</slot>
@@ -2129,5 +2158,6 @@
   <slot>centerMapPlatform(bool)</slot>
   <slot>centerMapFootprint(bool)</slot>
   <slot>centerMapTarget(bool)</slot>
+  <slot>NDVIFilter(bool)</slot>
  </slots>
 </ui>

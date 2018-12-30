@@ -511,6 +511,12 @@ class Ui_PlayerWindow(object):
         icon44.addPixmap(QtGui.QPixmap(":/imgFMV/images/center_target.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionCenter_Target.setIcon(icon44)
         self.actionCenter_Target.setObjectName("actionCenter_Target")
+        self.actionNDVI = QtWidgets.QAction(PlayerWindow)
+        self.actionNDVI.setCheckable(True)
+        icon45 = QtGui.QIcon()
+        icon45.addPixmap(QtGui.QPixmap(":/imgFMV/images/ndvi.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionNDVI.setIcon(icon45)
+        self.actionNDVI.setObjectName("actionNDVI")
         self.toolBtn_DPoint.addAction(self.actionDraw_Pinpoint)
         self.toolBtn_DPoint.addAction(self.actionRemove_Last_Pinpoint)
         self.toolBtn_DPoint.addAction(self.actionRemove_All_Pinpoint)
@@ -530,6 +536,7 @@ class Ui_PlayerWindow(object):
         self.menuFile.addAction(self.actionCanny_edge_detection)
         self.menuFile.addAction(self.actionAuto_Contrast_Filter)
         self.menuFile.addAction(self.actionMirroredH)
+        self.menuFile.addAction(self.actionNDVI)
         self.menuFrames.addAction(self.actionCapture_Current_Frame)
         self.menuFrames.addAction(self.actionExtract_All_Frames)
         self.menuMetadata.addAction(self.actionShow_Metadata)
@@ -608,6 +615,7 @@ class Ui_PlayerWindow(object):
         self.actionCenter_on_Footprint.toggled['bool'].connect(PlayerWindow.centerMapFootprint)
         self.actionCenter_on_Platform.toggled['bool'].connect(PlayerWindow.centerMapPlatform)
         self.actionCenter_Target.toggled['bool'].connect(PlayerWindow.centerMapTarget)
+        self.actionNDVI.triggered['bool'].connect(PlayerWindow.NDVIFilter)
         QtCore.QMetaObject.connectSlotsByName(PlayerWindow)
 
     def retranslateUi(self, PlayerWindow):
@@ -699,6 +707,7 @@ class Ui_PlayerWindow(object):
         self.actionCenter_on_Platform.setText(_translate("PlayerWindow", "Center on Platform"))
         self.actionCenter_on_Footprint.setText(_translate("PlayerWindow", "Center on Footprint"))
         self.actionCenter_Target.setText(_translate("PlayerWindow", "Center on Target"))
+        self.actionNDVI.setText(_translate("PlayerWindow", "NDVI"))
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc

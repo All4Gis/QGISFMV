@@ -122,7 +122,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             info = FFMpeg().probe(filename)
             info.format.duration
             # init non-blocking metadata buffered reader
-            self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, pass_time = self.pass_time)
+            self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, pass_time=self.pass_time)
             qgsu.showUserAndLogMessage(
                 "", "buffered non-blocking metadata reader initialized.", onlyLog=True)
 

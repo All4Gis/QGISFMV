@@ -470,6 +470,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.UpdateSurface()
         return
 
+    def NDVIFilter(self, value):
+        ''' NDVI Video Filter '''
+        self.UncheckFilters(self.sender(), value)
+        self.videoWidget.SetNDVI(value)
+        self.videoWidget.UpdateSurface()
+        return
+
     def edgeFilter(self, value):
         ''' Edge Detection Video Filter '''
         self.UncheckFilters(self.sender(), value)
@@ -583,6 +590,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionCanny_edge_detection.setChecked(False)
         self.actionAuto_Contrast_Filter.setChecked(False)
         self.actionMirroredH.setChecked(False)
+        self.actionNDVI.setChecked(False)
 
         self.videoWidget.RestoreFilters()
 

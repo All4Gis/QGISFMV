@@ -236,7 +236,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ایجاد موزائیک&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="773"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="774"/>
         <source>Ctrl+Shift+M</source>
         <translation>Ctrl+Shift+M</translation>
     </message>
@@ -246,7 +246,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ذخیره این لحظه&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="749"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="750"/>
         <source>Ctrl+Shift+Q</source>
         <translation>Ctrl+Shift+Q</translation>
     </message>
@@ -316,243 +316,248 @@
         <translation>فیلترها</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="654"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="655"/>
         <source>Frames</source>
         <translation>لحظه ها</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="661"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="662"/>
         <source>Metadata</source>
         <translation>متادیتا</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="667"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="668"/>
         <source>Converter</source>
         <translation>تبدیل گر</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="673"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="674"/>
         <source>Information</source>
         <translation>اطلاعات</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="681"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="682"/>
         <source>Plot Bitrate</source>
         <translation>سرعت لحظه ای ترسیم</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="729"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="730"/>
         <source>Gray Scale</source>
         <translation>مقیاس خاکستری</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="737"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="738"/>
         <source>Edge Detection</source>
         <translation>تشخیص لبه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="746"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="747"/>
         <source>Capture Current Frame</source>
         <translation>ثبت این لحظه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="758"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="759"/>
         <source>Extract All Frames</source>
         <translation>استخراج تمام لحظه ها</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="761"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="762"/>
         <source>Ctrl+Shift+A</source>
         <translation>Ctrl+Shift+A</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="770"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="771"/>
         <source>Show Metadata</source>
         <translation>نمایش متادیتا</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="782"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="783"/>
         <source>Converter Video</source>
         <translation>تبدیل گر ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="791"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="792"/>
         <source>Save Video Info to Json</source>
         <translation>ذخیره اطلاعات ویدئو به فرمت Json</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="800"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="801"/>
         <source>Show Audio</source>
         <translation>نمایش صدا</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="809"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="810"/>
         <source>Show Video</source>
         <translation>نمایش ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="814"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="815"/>
         <source>Show All</source>
         <translation>نمایش همه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="819"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="820"/>
         <source>Save Audio</source>
         <translation>ذخیره صدا</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="824"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="825"/>
         <source>Save Video</source>
         <translation>ذخیره ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="829"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="830"/>
         <source>Save All</source>
         <translation>ذخیره همه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="838"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="839"/>
         <source>Show Video Info</source>
         <translation>نمایش اطلاعات ویدئو</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="850"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="851"/>
         <source>Invert Color</source>
         <translation>وارونه کردن رنگ</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="862"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="863"/>
         <source>Mono Filter</source>
         <translation>فیلتر Mono </translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="874"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="875"/>
         <source>Canny edge detection</source>
         <translation>تشخیص زیرکانه لبه ها</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="885"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="886"/>
         <source>Zoom Rectangle</source>
         <translation>درشت نمایی چهارگوش</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="897"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="898"/>
         <source>Magnifying glass</source>
         <translation>شیشه ذره بین</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="909"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="910"/>
         <source>Auto Contrast Filter</source>
         <translation>فیلتر تباین خودکار</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="918"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="919"/>
         <source>Create Mosaic</source>
         <translation>ایجاد موزائیک</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="930"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="931"/>
         <source>Draw Pinpoint</source>
         <translation>رسم نقطه</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="942"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="943"/>
         <source>Draw Line</source>
         <translation>رسم خط</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1074"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1075"/>
         <source>Draw Polygon</source>
         <translation>رسم چندضلعی</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="972"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="973"/>
         <source>Object Tracking</source>
         <translation>دنبال نمودن هدف</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="984"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="985"/>
         <source>Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1008"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1009"/>
         <source>Horizontal Mirrored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="711"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="712"/>
         <source>Utils ToolBar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1023"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1024"/>
         <source>Censure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1032"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1033"/>
         <source>Remove Last</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1122"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1123"/>
         <source>Remove All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1059"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1060"/>
         <source>Remove Last Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1077"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1078"/>
         <source>Remove All Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1092"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1093"/>
         <source>Remove Last Pinpoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1107"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1108"/>
         <source>Remove All Pinpoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1137"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1138"/>
         <source>Remove Last Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1152"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1153"/>
         <source>Remove Last Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="691"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="692"/>
         <source>Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1164"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1165"/>
         <source>Center on Platform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1176"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1177"/>
         <source>Center on Footprint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1191"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1192"/>
         <source>Center on Target</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="996"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="997"/>
         <source>Hand Draw</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1204"/>
+        <source>NDVI</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -594,7 +599,7 @@
         <translation>نمایش متادیتا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="803"/>
+        <location filename="../player/QgsFmvPlayer.py" line="811"/>
         <source>Open Video File : </source>
         <translation>بازنمودن بایگانی ویدئوها :</translation>
     </message>
@@ -604,12 +609,12 @@
         <translation type="obsolete">ذخیره فایل با موفقیت انجام شد!</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="788"/>
+        <location filename="../player/QgsFmvPlayer.py" line="796"/>
         <source>Playing : </source>
         <translation>در حال پخش :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1118"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1126"/>
         <source>Video Information : </source>
         <translation>اطلاعات ویدئو :</translation>
     </message>
@@ -620,7 +625,7 @@
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1073"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1081"/>
         <source>Save Current Frame</source>
         <translation>ذخیره لحظه حاضر</translation>
     </message>
@@ -630,32 +635,32 @@
         <translation>ذخیره Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="824"/>
+        <location filename="../player/QgsFmvPlayer.py" line="832"/>
         <source>Save video record</source>
         <translation>ذخیره رکورد ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="906"/>
+        <location filename="../player/QgsFmvPlayer.py" line="914"/>
         <source>Save Video as...</source>
         <translation>ذخیره ویدئو به عنوان ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1040"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1048"/>
         <source>Save all Frames</source>
         <translation>ذخیره همه لحظه ها</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="984"/>
+        <location filename="../player/QgsFmvPlayer.py" line="992"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>ذخیره جزئیات صدا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1001"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1009"/>
         <source>Save Video Bitrate Plot</source>
         <translation>ذخیره جزئیات ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1021"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1029"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
         <translation type="unfinished"></translation>
     </message>

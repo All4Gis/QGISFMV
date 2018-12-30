@@ -76,6 +76,7 @@ class FilterState(object):
         self.edgeDetectionFilter = False
         self.grayColorFilter = False
         self.invertColorFilter = False
+        self.NDVI = False
 
     def clear(self):
         self.__init__()
@@ -190,18 +191,27 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
         if self.widget._filterSatate.monoFilter:
             self.image = filter.MonoFilter(self.image)
-        # TODO : Probar en un thread distinto
+        # TODO : Test in other thread
         if self.widget._filterSatate.edgeDetectionFilter:
             try:
                 self.image = filter.EdgeFilter(self.image)
-            except Exception:
+            except Exception as e:
                 None
-        # TODO : Probar en un thread distinto
+
+        # TODO : Test in other thread
         if self.widget._filterSatate.contrastFilter:
             try:
                 self.image = filter.AutoContrastFilter(self.image)
-            except Exception:
+            except Exception as e:
                 None
+
+        # TODO : Test in other thread
+        if self.widget._filterSatate.NDVI:
+            try:
+                self.image = filter.NDVIFilter(self.image)
+            except Exception as e:
+                None
+
         if self.widget._filterSatate.invertColorFilter:
             self.image.invertPixels()
 
@@ -458,6 +468,10 @@ class VideoWidget(QVideoWidget):
     def SetMirrorH(self, value):
         ''' Set Horizontal Mirror '''
         self._filterSatate.MirroredHFilter = value
+
+    def SetNDVI(self, value):
+        ''' Set NDVI '''
+        self._filterSatate.NDVI = value
 
     def SetEdgeDetection(self, value):
         ''' Set Canny Edge filter '''

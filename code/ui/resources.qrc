@@ -69,5 +69,6 @@
         <file>../images/center_platform.png</file>
         <file>../images/center_footprint.png</file>
         <file>../images/center_target.png</file>
+        <file>../images/ndvi.png</file>   
     </qresource>
 </RCC>
