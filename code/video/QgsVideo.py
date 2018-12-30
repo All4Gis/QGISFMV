@@ -255,12 +255,9 @@ class VideoWidget(QVideoWidget):
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.black)))
         self.Censure_RubberBand.setPalette(pal)
 
-        self.var_currentMouseMoveEvent = None
-
         self._interaction = InteractionState()
         self._filterSatate = FilterState()
 
-        self.setUpdatesEnabled(True)
         self.snapped = False
         self.zoomed = False
         self._isinit = False
@@ -279,17 +276,9 @@ class VideoWidget(QVideoWidget):
 
         self.parent = parent.parent()
 
-        self.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
-
-        self.setAttribute(Qt.WA_NoSystemBackground)
-        self.setAttribute(Qt.WA_PaintOnScreen)
-        self.setAttribute(Qt.WA_OpaquePaintEvent)
-        self.setAttribute(Qt.WA_DeleteOnClose)
         palette = self.palette()
         palette.setColor(QPalette.Background, Qt.black)
         self.setPalette(palette)
-        self.setSizePolicy(QSizePolicy.MinimumExpanding,
-                           QSizePolicy.MinimumExpanding)
 
         self.offset, self.origin, self.pressPos, self.dragPos = QPoint(
         ), QPoint(), QPoint(), QPoint()
@@ -374,9 +363,6 @@ class VideoWidget(QVideoWidget):
             self.UpdateSurface()
             # remove last index layer
             RemoveLastDrawPolygonOnMap()
-
-    def currentMouseMoveEvent(self, event):
-        self.var_currentMouseMoveEvent = event
 
     def keyPressEvent(self, event):
         ''' Exit fullscreen '''
@@ -549,11 +535,9 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
-        if GetImageHeight() == 0:
-            return
-
         # check if the point  is on picture (not in black borders)
         if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
+            self.setCursor(QCursor(Qt.ArrowCursor))
             return
 
         if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.ruler:
