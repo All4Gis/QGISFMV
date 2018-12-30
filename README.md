@@ -10,8 +10,7 @@ Standards supported:
 
   - "UAS Datalink Local Set", [ST0601.11](http://www.gwg.nga.mil/misb/docs/standards/ST0601.11.pdf)
 
-# Table of Contents
-<!-- MarkdownTOC -->
+## Table of Contents
 
 - [Motivation](#motivation)
 - [Dependencies](#dependencies)
@@ -30,8 +29,6 @@ Standards supported:
 	- [Contributors List](#contributors-list)
 - [License](#license)
 - [Donations](#donations)
-
-<!-- /MarkdownTOC -->
 	
 ## Motivation
 
@@ -39,6 +36,7 @@ This development arises after observing that there was no free solution for the 
 [Esri](http://www.esri.com/products/arcgis-capabilities/imagery/full-motion-video),
 for this reason, I decided to develop this open source project and, this way, offer this open source alternative to the QGIS community.
 
+&uparrow; [Back to top](#table-of-contents)
 
 ## Dependencies
 
@@ -58,6 +56,7 @@ The plugin install automatically this requisites,but you can install it using:
 
 `python3 -m pip install -r requirements.txt`
 
+&uparrow; [Back to top](#table-of-contents)
 
 ## For show video
 
@@ -66,6 +65,7 @@ To see the video you need:
   - **Linux**: `sudo apt-get install gst123` (install GStreamer dependencies)
   - **Window**: install LAV Filters (install <a href="https://github.com/Nevcairiel/LAVFilters/releases" target="_blank">DirectShow Media Decoders</a>) 
 
+&uparrow; [Back to top](#table-of-contents)
 
 ## Usage
 
@@ -76,6 +76,7 @@ At this moment, you will see that new shapes have been added and you will see th
 
 [Link to Usage Documentation!](https://all4gis.github.io/QGISFMV/Using)
 
+&uparrow; [Back to top](#table-of-contents)
 
 ## Recommended readings
 
@@ -88,9 +89,13 @@ For more information about the Unmanned Air System (UAS) metadata from STANAG 46
 * <a href="http://www.gwg.nga.mil/misb/docs/standards/ST0601.13.pdf" target="_blank">ST0601.13</a>
 * <a href="http://www.gwg.nga.mil/misb/docs/standards/ST0902.1.pdf" target="_blank">ST0902.1</a>
 
+&uparrow; [Back to top](#table-of-contents)
+
 ## Installation
 
 The installation can be done from the executable if it is in windows or from the zip
+
+&uparrow; [Back to top](#table-of-contents)
 
 ## Installation on Windows
 
@@ -115,27 +120,32 @@ ffprobe = "/usr/bin/"
 * [Official presentation](https://slides.com/franraga/qgis-fmv/fullscreen)
 * [Beyond imagery and Video](https://docs.google.com/presentation/d/e/2PACX-1vTKcb4AV71yapX2hrOCIUCCvdP0FIOUqO1OvfEG4cHKvo0wvVM9pmIA0vMuzLXVANmhySRlFOgTAHGf/pub?start=true&loop=false&delayms=10000&slide=id.p1)
 
+&uparrow; [Back to top](#table-of-contents)
+
 ## Screenshots
 
 ![a](images/Screenshot0.png)
 
+&uparrow; [Back to top](#table-of-contents)
 
 ## Features
 
 - Convert videos to other format
 - Extract metadata from video file
-- Show Platform,trajectory and beams position in a QGIS
+- Show Platform,Trajectory,Footprint and beams position in a QGIS
 - Possibility of extracting parts of the video
-- Change of color, contrast, etc. of the video
 - Capture of the current frame
 - Extraction of all frames of the video
-- Extrac lon/lat cursor coordinates
+- Extract lon/lat/alt cursor coordinates
 - Apply sobel filters, edge detection ...
 
+&uparrow; [Back to top](#table-of-contents)
 
 ## Contributing
 
 Contributions are welcome!
+
+&uparrow; [Back to top](#table-of-contents)
 
 ### Contributing Code
 
@@ -182,8 +192,6 @@ Want to buy me a beer (or gadget)? Please use Paypal button on the project page,
  
 If this plugin is useful for you, consider to donate to the author.
 
+&uparrow; [Back to top](#table-of-contents)
 
 [© All4gis 2018]
-
-
-
