@@ -655,6 +655,7 @@
      <string>Frames</string>
     </property>
     <addaction name="actionCapture_Current_Frame"/>
+    <addaction name="actionCapture_Georeferenced_Frame"/>
     <addaction name="actionExtract_All_Frames"/>
    </widget>
    <widget class="QMenu" name="menuMetadata">
@@ -1202,6 +1203,11 @@
    </property>
    <property name="text">
     <string>NDVI</string>
+   </property>
+  </action>
+  <action name="actionCapture_Georeferenced_Frame">
+   <property name="text">
+    <string>Capture Georeferenced Frame</string>
    </property>
   </action>
  </widget>
@@ -2107,6 +2113,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionCapture_Georeferenced_Frame</sender>
+   <signal>triggered()</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>ExtractCurrentGeoFrame()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>373</x>
+     <y>325</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleGroup(bool)</slot>
@@ -2159,5 +2181,6 @@
   <slot>centerMapFootprint(bool)</slot>
   <slot>centerMapTarget(bool)</slot>
   <slot>NDVIFilter(bool)</slot>
+  <slot>ExtractCurrentGeoFrame()</slot>
  </slots>
 </ui>

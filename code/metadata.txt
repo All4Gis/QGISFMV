@@ -25,6 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.5:
+    	- Save current Georeferenced Frame
     	- Add new icons
     	- Fixed unplayable Non-MISB Video. These video can now be played, there is just no draws in map
     	- Fixed Metadata view that was empty when you load it

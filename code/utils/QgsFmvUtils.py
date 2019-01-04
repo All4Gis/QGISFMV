@@ -784,6 +784,10 @@ def GeoreferenceFrame(task, image, output, p):
     return {'task': task.description()}
 
 
+def GetGeotransform_affine():
+    return geotransform_affine
+
+
 def CornerEstimationWithOffsets(packet):
     ''' Corner estimation using Offsets '''
     try:

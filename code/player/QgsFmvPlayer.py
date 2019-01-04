@@ -42,6 +42,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
 from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.utils.QgsFmvUtils import GetGeotransform_affine
 from QGIS_FMV.video.QgsColor import ColorDialog
 from qgis.core import Qgis as QGis, QgsTask, QgsApplication
 
@@ -49,7 +50,10 @@ try:
     from pydevd import *
 except ImportError:
     None
-
+try:
+    from osgeo import gdal, osr
+except ImportError:
+    import gdal
 try:
     import cv2
 except Exception as e:
@@ -1037,6 +1041,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     self.matplot = ShowPlot(self.BitratePlot.bitrate_data, self.BitratePlot.frame_count, self.fileName, self.BitratePlot.output)
                 if result['task'] == 'Show Video Info Task':
                     self.showVideoInfoDialog(self.converter.bytes_value)
+                if result['task'] == 'Save Current Georeferenced Frame Task':
+                    file = result['file']
+                    return
         else:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Failed " + result['task'] + "!"), level=QGis.Warning)
@@ -1101,6 +1108,64 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             return None
         return {'task': task.description()}
 
+    def ExtractCurrentGeoFrame(self):
+        """ Extract Current GeoReferenced Frame Task """
+        image = self.videoWidget.GetCurrentFrame()
+        geotransform = GetGeotransform_affine()
+        position = str(self.player.position())
+        directory = askForFolder(self, QCoreApplication.translate(
+            "QgsFmvPlayer", "Save Current Georeferenced Frame"),
+            options=QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly)
+
+        if not directory:
+            return
+
+        taskCurrentGeoFrame = QgsTask.fromFunction('Save Current Georeferenced Frame Task',
+                                                self.SaveGeoCapture,
+                                                image=image, output=directory, p=position,geotransform = geotransform,
+                                                on_finished=self.finishedTask,
+                                                flags=QgsTask.CanCancel)
+ 
+        QgsApplication.taskManager().addTask(taskCurrentGeoFrame)
+        return
+
+    def SaveGeoCapture(self, task, image, output, p, geotransform):
+        ''' Save Current GeoReferenced Frame '''
+        ext = ".tiff"
+        t = "out_" + p + ext
+        name = "g_" + p
+        src_file = os.path.join(output, t)
+
+        image.save(src_file)
+
+        # Opens source dataset
+        src_ds = gdal.OpenEx(src_file, gdal.OF_RASTER | 
+                             gdal.OF_READONLY, open_options=['NUM_THREADS=ALL_CPUS'])
+
+        # Open destination dataset
+        dst_filename = os.path.join(output, name + ext)
+        dst_ds = gdal.GetDriverByName("GTiff").CreateCopy(dst_filename, src_ds, 0,
+                                                          options=['TILED=NO', 'BIGTIFF=NO', 'COMPRESS_OVERVIEW=DEFLATE', 'COMPRESS=LZW', 'NUM_THREADS=ALL_CPUS', 'predictor=2'])
+        src_ds = None
+        # Get raster projection
+        srs = osr.SpatialReference()
+        srs.ImportFromEPSG(4326)
+
+        # Set projection
+        dst_ds.SetProjection(srs.ExportToWkt())
+
+        # Set location
+        dst_ds.SetGeoTransform(geotransform)
+        dst_ds.GetRasterBand(1).SetNoDataValue(0)
+        dst_ds.FlushCache()
+        # Close files
+        dst_ds = None
+        os.remove(src_file)
+        if task.isCanceled():
+            return None
+        return {'task': task.description(),
+                'file': dst_filename}
+
     def OpenQgsFmvMetadata(self):
         """ Open Metadata Dock """
         if self.metadataDlg is None:
@@ -1111,7 +1176,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.metadataDlg.show()
 
         self.addMetadata(self.data)
-        
         return
 
     def showVideoInfoDialog(self, outjson):

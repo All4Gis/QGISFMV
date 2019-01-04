@@ -517,6 +517,8 @@ class Ui_PlayerWindow(object):
         icon45.addPixmap(QtGui.QPixmap(":/imgFMV/images/ndvi.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionNDVI.setIcon(icon45)
         self.actionNDVI.setObjectName("actionNDVI")
+        self.actionCapture_Georeferenced_Frame = QtWidgets.QAction(PlayerWindow)
+        self.actionCapture_Georeferenced_Frame.setObjectName("actionCapture_Georeferenced_Frame")
         self.toolBtn_DPoint.addAction(self.actionDraw_Pinpoint)
         self.toolBtn_DPoint.addAction(self.actionRemove_Last_Pinpoint)
         self.toolBtn_DPoint.addAction(self.actionRemove_All_Pinpoint)
@@ -538,6 +540,7 @@ class Ui_PlayerWindow(object):
         self.menuFile.addAction(self.actionMirroredH)
         self.menuFile.addAction(self.actionNDVI)
         self.menuFrames.addAction(self.actionCapture_Current_Frame)
+        self.menuFrames.addAction(self.actionCapture_Georeferenced_Frame)
         self.menuFrames.addAction(self.actionExtract_All_Frames)
         self.menuMetadata.addAction(self.actionShow_Metadata)
         self.menuConverter.addAction(self.actionConverter_Video)
@@ -616,6 +619,7 @@ class Ui_PlayerWindow(object):
         self.actionCenter_on_Platform.toggled['bool'].connect(PlayerWindow.centerMapPlatform)
         self.actionCenter_Target.toggled['bool'].connect(PlayerWindow.centerMapTarget)
         self.actionNDVI.triggered['bool'].connect(PlayerWindow.NDVIFilter)
+        self.actionCapture_Georeferenced_Frame.triggered.connect(PlayerWindow.ExtractCurrentGeoFrame)
         QtCore.QMetaObject.connectSlotsByName(PlayerWindow)
 
     def retranslateUi(self, PlayerWindow):
@@ -708,6 +712,7 @@ class Ui_PlayerWindow(object):
         self.actionCenter_on_Footprint.setText(_translate("PlayerWindow", "Center on Footprint"))
         self.actionCenter_Target.setText(_translate("PlayerWindow", "Center on Target"))
         self.actionNDVI.setText(_translate("PlayerWindow", "NDVI"))
+        self.actionCapture_Georeferenced_Frame.setText(_translate("PlayerWindow", "Capture Georeferenced Frame"))
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc
