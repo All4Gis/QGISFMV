@@ -9,6 +9,7 @@ from PyQt5.QtCore import (QUrl,
 from PyQt5.QtGui import QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
 from PyQt5.QtWidgets import (QToolTip,
+                             QMessageBox,
                              QAbstractSlider,
                              QHeaderView,
                              QStyleOptionSlider,
@@ -44,7 +45,7 @@ from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.utils.QgsFmvUtils import GetGeotransform_affine
 from QGIS_FMV.video.QgsColor import ColorDialog
-from qgis.core import Qgis as QGis, QgsTask, QgsApplication
+from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject
 
 try:
     from pydevd import *
@@ -1042,7 +1043,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 if result['task'] == 'Show Video Info Task':
                     self.showVideoInfoDialog(self.converter.bytes_value)
                 if result['task'] == 'Save Current Georeferenced Frame Task':
-                    file = result['file']
+                    buttonReply = qgsu.CustomMessage("Info", "Do you want to load the layer?", icon="Information")
+                    if buttonReply == QMessageBox.Yes:
+                        file = result['file']
+                        root, _ = os.path.splitext(file)
+                        layer = QgsRasterLayer(file, root)
+                        QgsProject.instance().addMapLayer(layer)
                     return
         else:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(

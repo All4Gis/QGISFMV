@@ -40,7 +40,6 @@ class QgsUtils(object):
         d.setText(msg)
         d.setInformativeText(informative)
         d.setIconPixmap(QgsUtils.GetIcon(icon))
-        d.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowTitleHint)
         d.addButton(QMessageBox.Yes)
         d.addButton(QMessageBox.No)
         d.setDefaultButton(QMessageBox.No)
