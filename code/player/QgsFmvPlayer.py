@@ -1128,7 +1128,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         taskCurrentGeoFrame = QgsTask.fromFunction('Save Current Georeferenced Frame Task',
                                                 self.SaveGeoCapture,
-                                                image=image, output=directory, p=position,geotransform = geotransform,
+                                                image=image, output=directory, p=position, geotransform=geotransform,
                                                 on_finished=self.finishedTask,
                                                 flags=QgsTask.CanCancel)
  

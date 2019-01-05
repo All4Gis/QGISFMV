@@ -56,30 +56,30 @@ class VideoFilters():
         original = convertQImageToMat(image)
         lowerLimit = 5
 
-        #First, make containers
-        oldHeight, oldWidth = original[:,:,0].shape
-        ndviImage = np.zeros((oldHeight, oldWidth, 3), np.uint8) #make a blank RGB image
+        # First, make containers
+        oldHeight, oldWidth = original[:, :, 0].shape
+        ndviImage = np.zeros((oldHeight, oldWidth, 3), np.uint8)  # make a blank RGB image
 
-        red = (original[:,:,2]).astype('float')
-        blue = (original[:,:,0]).astype('float')
+        red = (original[:, :, 2]).astype('float')
+        blue = (original[:, :, 0]).astype('float')
 
-        #Perform NDVI calculation
-        summ = red+blue
-        summ[summ < lowerLimit] = lowerLimit #do some saturation to prevent low intensity noise
+        # Perform NDVI calculation
+        summ = red + blue
+        summ[summ < lowerLimit] = lowerLimit  # do some saturation to prevent low intensity noise
 
-        ndvi = (((red-blue)/(summ)+1)*127).astype('uint8')  #the index
+        ndvi = (((red - blue) / (summ) + 1) * 127).astype('uint8')  # the index
 
-        redSat = (ndvi - 128)*2  #red channel
-        bluSat = ((255 - ndvi) - 128)*2 #blue channel
-        redSat[ndvi < 128] = 0 #if the NDVI is negative, no red info
-        bluSat[ndvi >= 128] = 0 #if the NDVI is positive, no blue info
+        redSat = (ndvi - 128) * 2  # red channel
+        bluSat = ((255 - ndvi) - 128) * 2  # blue channel
+        redSat[ndvi < 128] = 0  # if the NDVI is negative, no red info
+        bluSat[ndvi >= 128] = 0  # if the NDVI is positive, no blue info
 
-        #Red Channel
-        ndviImage[:,:,2] = redSat
-        #Blue Channel
-        ndviImage[:,:,0] = bluSat
-        #Green Channel
-        ndviImage[:,:,1] = 255-(bluSat+redSat)
+        # Red Channel
+        ndviImage[:, :, 2] = redSat
+        # Blue Channel
+        ndviImage[:, :, 0] = bluSat
+        # Green Channel
+        ndviImage[:, :, 1] = 255 - (bluSat + redSat)
 
         return convertMatToQImage(ndviImage)
 
