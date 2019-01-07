@@ -40,6 +40,7 @@ from qgis.core import (
     QgsWkbTypes
 )
 
+
 from qgis.core import Qgis as QGis
 from qgis.utils import iface
 from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
@@ -245,8 +246,6 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
                 feature.setGeometry(surface)
                 footprintLyr.addFeatures([feature])
             else:
-                footprintLyr.beginEditCommand(
-                    "ChangeGeometry + ChangeAttribute")
                 fetId = 1
                 attrib = {0: cornerPointUL[1],
                           1: cornerPointUL[0],
@@ -270,7 +269,6 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
                         QgsPointXY(
                         cornerPointLL[1], cornerPointLL[0]),
                         QgsPointXY(cornerPointUL[1], cornerPointUL[0])]])})
-            footprintLyr.endEditCommand()
 
             CommonLayer(footprintLyr)
 
@@ -327,8 +325,6 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
                 beamsLyr.addFeatures([featureLL])
 
             else:
-                beamsLyr.beginEditCommand(
-                    "ChangeGeometry + ChangeAttribute")
                 # UL
                 fetId = 1
                 attrib = {0: lon, 1: lat, 2: alt,
@@ -368,8 +364,6 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
                         QgsPointXY(lon, lat),
                         QgsPointXY(cornerPointLL[1],
                                    cornerPointLL[0])])})
-
-                beamsLyr.endEditCommand()
 
             CommonLayer(beamsLyr)
 
@@ -446,8 +440,6 @@ def UpdateFrameAxisData(packet):
                 f.setGeometry(surface)
                 frameaxisLyr.addFeatures([f])
             else:
-                frameaxisLyr.beginEditCommand(
-                    "ChangeGeometry + ChangeAttribute")
                 fetId = 1
                 attrib = {0: lon, 1: lat, 2: alt,
                           3: fc_lon, 4: fc_lat}
@@ -455,7 +447,6 @@ def UpdateFrameAxisData(packet):
                     {fetId: attrib})
                 frameaxisLyr.dataProvider().changeGeometryValues(
                     {fetId: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(fc_lon, fc_lat)])})
-                frameaxisLyr.endEditCommand()
 
             CommonLayer(frameaxisLyr)
 
@@ -486,8 +477,6 @@ def UpdateFrameCenterData(packet):
                 frameCenterLyr.addFeatures([feature])
 
             else:
-                frameCenterLyr.beginEditCommand(
-                    "ChangeGeometry + ChangeAttribute")
                 fetId = 1
                 attrib = {0: lon, 1: lat, 2: alt}
                 frameCenterLyr.dataProvider().changeAttributeValues(
@@ -495,7 +484,6 @@ def UpdateFrameCenterData(packet):
 
                 frameCenterLyr.dataProvider().changeGeometryValues(
                     {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
-                frameCenterLyr.endEditCommand()
 
             CommonLayer(frameCenterLyr)
 
@@ -536,8 +524,6 @@ def UpdatePlatformData(packet):
                 platformLyr.addFeatures([feature])
 
             else:
-                platformLyr.beginEditCommand(
-                    "ChangeGeometry + ChangeAttribute")
                 fetId = 1
                 attrib = {0: lon, 1: lat, 2: alt}
                 platformLyr.dataProvider().changeAttributeValues(
@@ -545,7 +531,6 @@ def UpdatePlatformData(packet):
 
                 platformLyr.dataProvider().changeGeometryValues(
                     {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
-                platformLyr.endEditCommand()
 
             CommonLayer(platformLyr)
 
@@ -560,7 +545,7 @@ def CommonLayer(value):
     ''' Common commands Layers '''
     value.commitChanges()
     value.updateExtents()
-    value.triggerRepaint()
+    #value.triggerRepaint()
     iface.layerTreeView().refreshLayerSymbology(value.id())
 
 
@@ -638,6 +623,7 @@ def CreateVideoLayers():
             ["longitude", "latitude", "altitude"], epsg, Platform_lyr)
         SetDefaultPlatformStyle(lyr_platform)
         addLayerNoCrsDialog(lyr_platform)
+        # lyr_platform.beforeCommitChanges.connect(features_added )
 
     if qgsu.selectLayerByName(Point_lyr) is None:
         lyr_point = newPointsLayer(
@@ -724,7 +710,7 @@ def RemoveVideoLayers():
     except Exception:
         None
     iface.mapCanvas().refresh()
-    QApplication.processEvents()
+    #QApplication.processEvents()
     return
 
 

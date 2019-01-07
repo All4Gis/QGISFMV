@@ -229,7 +229,7 @@ def setCenterMode(mode, interface):
     global centerMode
     global iface
     centerMode = mode
-    iface = interface
+    iface = interface
 
 
 def getVideoLocationInfo(videoPath):
@@ -639,6 +639,7 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
                 "", "DTM successfully initialized, len: " + str(len(dtm_data)), onlyLog=True)
 
 
+
 def UpdateLayers(packet, parent=None, mosaic=False):
     ''' Update Layers Values '''
     global frameCenterElevation
@@ -652,14 +653,13 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     sensorLatitude = packet.SensorLatitude
     sensorLongitude = packet.SensorLongitude
     sensorTrueAltitude = packet.SensorTrueAltitude
+    OffsetLat1 = packet.OffsetCornerLatitudePoint1
+    LatitudePoint1Full = packet.CornerLatitudePoint1Full
 
     UpdatePlatformData(packet)
     UpdateTrajectoryData(packet)
     UpdateFrameCenterData(packet)
     UpdateFrameAxisData(packet)
-
-    OffsetLat1 = packet.OffsetCornerLatitudePoint1
-    LatitudePoint1Full = packet.CornerLatitudePoint1Full
 
     if OffsetLat1 is not None and LatitudePoint1Full is None:
         CornerEstimationWithOffsets(packet)
@@ -721,6 +721,7 @@ def UpdateLayers(packet, parent=None, mosaic=False):
         lyr = qgsu.selectLayerByName(FrameCenter_lyr)
         iface.mapCanvas().setExtent(lyr.extent())
 
+    iface.mapCanvas().refresh()
     return
 
 

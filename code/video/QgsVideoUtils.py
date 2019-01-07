@@ -16,8 +16,11 @@ class VideoUtils(object):
 
     @staticmethod
     def GetNormalizedWidth(surface):
-        return surface.widget.height(
-        ) * (GetImageWidth() / GetImageHeight())
+        try:
+            return surface.widget.height(
+            ) * (GetImageWidth() / GetImageHeight())
+        except ZeroDivisionError:
+            return 0.0
 
     @staticmethod
     def GetInverseMatrix(x, y, gt, surface):
@@ -43,9 +46,12 @@ class VideoUtils(object):
     def GetXBlackZone(surface):
         ''' Return is X in black screen on video '''
         x = 0.0
-        if (surface.widget.width() / surface.widget.height()) > (GetImageWidth() / GetImageHeight()):
-            x = (surface.widget.width() - 
-                 (VideoUtils.GetNormalizedWidth(surface))) / 2.0
+        try:
+            if (surface.widget.width() / surface.widget.height()) > (GetImageWidth() / GetImageHeight()):
+                x = (surface.widget.width() - 
+                     (VideoUtils.GetNormalizedWidth(surface))) / 2.0
+        except ZeroDivisionError:
+            None
         return x
 
     @staticmethod
