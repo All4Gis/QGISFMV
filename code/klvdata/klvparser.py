@@ -65,7 +65,10 @@ class KLVParser(object):
             # BER Long Form
             length = bytes_to_int(self.__read(byte_length - 128))
 
-        value = self.__read(length)
+        try:
+            value = self.__read(length)
+        except OverflowError:
+            value = self.__read(0)
 
         return key, value
 
