@@ -92,7 +92,6 @@ class QgsUtils(object):
 
     @staticmethod
     def removeFile(path):
-        settrace()
         try:
             os.remove(path)
         except OSError:

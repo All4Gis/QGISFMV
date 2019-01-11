@@ -25,6 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.5:
+    	- Convert Video is cancelable
     	- Preserve Metadata when Record video
     	- Save current Georeferenced Frame
     	- Add new icons
