@@ -150,9 +150,10 @@ class Converter(QObject):
                     task.setProgress(
                         int((100.0 * timecode) / info.format.duration))
             task.setProgress(100)
-        return {'task': task.description()}
         if task.isCanceled():
             return None
+        return {'task': task.description()}
+
 
     def probeToJson(self, task, fname, output):
         try:

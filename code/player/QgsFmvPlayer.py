@@ -865,6 +865,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     '-ss', startRecord,
                     '-to', endRecord,
                     '-c', 'copy',
+                    '-map', '0',
                     out])
         p.communicate()
         self.StopRecordAnimation()
