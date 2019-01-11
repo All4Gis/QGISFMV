@@ -8,6 +8,7 @@ from QGIS_FMV.converter.avcodecs import (video_codec_list,
 from QGIS_FMV.converter.ffmpeg import FFMpeg
 from QGIS_FMV.converter.formats import format_list
 from QGIS_FMV.utils.QgsFmvLog import log
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 try:
     from pydevd import *
@@ -106,54 +107,50 @@ class Converter(QObject):
 
         return optlist
 
-    # TODO : No puede cancelarse?arreglar
     def convert(self, task, infile, outfile, options, twopass):
-        while not task.isCanceled():
-            timeout = 10
+        try:
+            while not task.isCanceled():
+                self.ffmpeg = FFMpeg()
+                info = self.ffmpeg.probe(infile)
+                if info is None:
+                    task.cancel()
+                    return "Can't get information about source file"
 
-            self.ffmpeg = FFMpeg()
-            info = self.ffmpeg.probe(infile)
-            if info is None:
-                task.cancel()
-                return "Can't get information about source file"
+                if not info.video and not info.audio:
+                    task.cancel()
+                    return 'Source file has no audio or video streams'
 
-            if not info.video and not info.audio:
-                task.cancel()
-                return 'Source file has no audio or video streams'
+                if info.video and 'video' in options:
+                    options = options.copy()
+                    v = options['video'] = options['video'].copy()
+                    v['src_width'] = info.video.video_width
+                    v['src_height'] = info.video.video_height
 
-            if info.video and 'video' in options:
-                options = options.copy()
-                v = options['video'] = options['video'].copy()
-                v['src_width'] = info.video.video_width
-                v['src_height'] = info.video.video_height
+                if info.format.duration < 0.01:
+                    task.cancel()
+                    return 'Zero-length media'
 
-            if info.format.duration < 0.01:
-                task.cancel()
-                return 'Zero-length media'
+                if twopass:
+                    optlist1 = self.parse_options(options, 1)
+                    for timecode in self.ffmpeg.convert(infile, outfile, optlist1, task):
+                        task.setProgress(
+                            int((50.0 * timecode) / info.format.duration))
 
-            if twopass:
-                optlist1 = self.parse_options(options, 1)
-                for timecode in self.ffmpeg.convert(infile, outfile, optlist1,
-                                                    timeout=timeout):
-                    task.setProgress(
-                        int((50.0 * timecode) / info.format.duration))
-
-                optlist2 = self.parse_options(options, 2)
-                for timecode in self.ffmpeg.convert(infile, outfile, optlist2,
-                                                    timeout=timeout):
-                    task.setProgress(
-                        int(50.0 + (50.0 * timecode) / info.format.duration))
-            else:
-                optlist = self.parse_options(options, twopass)
-                for timecode in self.ffmpeg.convert(infile, outfile, optlist,
-                                                    timeout=timeout):
-                    task.setProgress(
-                        int((100.0 * timecode) / info.format.duration))
-            task.setProgress(100)
-        if task.isCanceled():
+                    optlist2 = self.parse_options(options, 2)
+                    for timecode in self.ffmpeg.convert(infile, outfile, optlist2, task):
+                        task.setProgress(
+                            int(50.0 + (50.0 * timecode) / info.format.duration))
+                else:
+                    optlist = self.parse_options(options, twopass)
+                    for timecode in self.ffmpeg.convert(infile, outfile, optlist, task):
+                        task.setProgress(
+                            int((100.0 * timecode) / info.format.duration))
+                task.setProgress(100)
+            if task.isCanceled():
+                return None
+        except Exception:
             return None
         return {'task': task.description()}
-
 
     def probeToJson(self, task, fname, output):
         try:

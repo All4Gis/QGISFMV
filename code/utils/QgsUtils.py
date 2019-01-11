@@ -79,7 +79,6 @@ class QgsUtils(object):
             log.warning(text)
         elif level == QGis.Critical:
             log.error(text)
-        # QCoreApplication.processEvents()
         return
 
     @staticmethod
@@ -90,6 +89,14 @@ class QgsUtils(object):
             shutil.rmtree(out, ignore_errors=True)
         except Exception:
             None
+
+    @staticmethod
+    def removeFile(path):
+        settrace()
+        try:
+            os.remove(path)
+        except OSError:
+            pass
 
     @staticmethod
     def SetShortcutForPluginFMV(text, value="Alt+F"):

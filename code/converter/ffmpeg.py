@@ -396,7 +396,7 @@ class FFMpeg(object):
 
         return info
 
-    def convert(self, infile, outfile, opts, timeout=10):
+    def convert(self, infile, outfile, opts, task, timeout=10):
         """
         Convert the source media (infile) according to specified options
         (a list of ffmpeg switches as strings) and save it to outfile.
@@ -425,7 +425,7 @@ class FFMpeg(object):
         cmds.extend(['-y', outfile])
         if windows:
             timeout = None
-        if timeout:
+        if timeout or task.isCanceled():
             raise Exception('timed out while waiting for ffmpeg')
 
         try:
@@ -438,12 +438,12 @@ class FFMpeg(object):
         total_output = ''
         pat = re.compile(r'time=([0-9.:]+) ')
         while True:
-            if timeout:
+            if timeout or task.isCanceled():
                 raise
 
             ret = p.stderr.read(10)
 
-            if timeout:
+            if timeout or task.isCanceled():
                 raise
 
             if not ret:
@@ -467,11 +467,13 @@ class FFMpeg(object):
                     yielded = True
                     yield timecode
 
-        if timeout:
+        if timeout or task.isCanceled():
             raise
 
         p.communicate()  # wait for process to exit
 
+        if task.isCanceled():
+            raise
         if total_output == '':
             raise FFMpegError('Error while calling ffmpeg binary')
 
@@ -496,3 +498,5 @@ class FFMpeg(object):
         if p.returncode != 0:
             raise FFMpegConvertError('Exited with code %d' % p.returncode, cmd,
                                      total_output, pid=p.pid)
+        if task.isCanceled():
+            raise
