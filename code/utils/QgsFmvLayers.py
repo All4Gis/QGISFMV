@@ -68,8 +68,7 @@ def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
         [pointIndex, Longitude, Latitude, Altitude])
     p = QgsPointXY()
     p.set(Longitude, Latitude)
-    geom = QgsGeometry.fromPointXY(p)
-    feature.setGeometry(geom)
+    feature.setGeometry(QgsGeometry.fromPointXY(p))
     pointLyr.addFeatures([feature])
     CommonLayer(pointLyr)
     return
@@ -326,41 +325,29 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
 
             else:
                 # UL
-                fetId = 1
-                attrib = {0: lon, 1: lat, 2: alt,
-                          3: cornerPointUL[1], 4: cornerPointUL[0]}
                 beamsLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
+                    {1: {0: lon, 1: lat, 2: alt, 3: cornerPointUL[1], 4: cornerPointUL[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(cornerPointUL[1], cornerPointUL[0])])})
+                    {1: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(cornerPointUL[1], cornerPointUL[0])])})
                 # UR
-                fetId = 2
-                attrib = {0: lon, 1: lat, 2: alt,
-                          3: cornerPointUR[1], 4: cornerPointUR[0]}
                 beamsLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
+                    {2: {0: lon, 1: lat, 2: alt, 3: cornerPointUR[1], 4: cornerPointUR[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([
+                    {2: QgsGeometry.fromPolylineXY([
                         QgsPointXY(lon, lat),
                         QgsPointXY(cornerPointUR[1], cornerPointUR[0])])})
                 # LR
-                fetId = 3
-                attrib = {0: lon, 1: lat, 2: alt,
-                          3: cornerPointLR[1], 4: cornerPointLR[0]}
                 beamsLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
+                    {3: {0: lon, 1: lat, 2: alt, 3: cornerPointLR[1], 4: cornerPointLR[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([
+                    {3: QgsGeometry.fromPolylineXY([
                         QgsPointXY(lon, lat),
                         QgsPointXY(cornerPointLR[1], cornerPointLR[0])])})
                 # LL
-                fetId = 4
-                attrib = {0: lon, 1: lat, 2: alt,
-                          3: cornerPointLL[1], 4: cornerPointLL[0]}
                 beamsLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
+                    {4: {0: lon, 1: lat, 2: alt, 3: cornerPointLL[1], 4: cornerPointLL[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([
+                    {4: QgsGeometry.fromPolylineXY([
                         QgsPointXY(lon, lat),
                         QgsPointXY(cornerPointLL[1],
                                    cornerPointLL[0])])})
@@ -440,13 +427,10 @@ def UpdateFrameAxisData(packet):
                 f.setGeometry(surface)
                 frameaxisLyr.addFeatures([f])
             else:
-                fetId = 1
-                attrib = {0: lon, 1: lat, 2: alt,
-                          3: fc_lon, 4: fc_lat}
                 frameaxisLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
+                    {1: {0: lon, 1: lat, 2: alt, 3: fc_lon, 4: fc_lat}})
                 frameaxisLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(fc_lon, fc_lat)])})
+                    {1: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(fc_lon, fc_lat)])})
 
             CommonLayer(frameaxisLyr)
 
@@ -472,15 +456,12 @@ def UpdateFrameCenterData(packet):
                 feature.setAttributes([lon, lat, alt])
                 p = QgsPointXY()
                 p.set(lon, lat)
-                geom = QgsGeometry.fromPointXY(p)
-                feature.setGeometry(geom)
+                feature.setGeometry(QgsGeometry.fromPointXY(p))
                 frameCenterLyr.addFeatures([feature])
 
             else:
-                fetId = 1
-                attrib = {0: lon, 1: lat, 2: alt}
                 frameCenterLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
+                    {1: {0: lon, 1: lat, 2: alt}})
 
                 frameCenterLyr.dataProvider().changeGeometryValues(
                     {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
@@ -519,15 +500,12 @@ def UpdatePlatformData(packet):
                 feature.setAttributes([lon, lat, alt])
                 p = QgsPointXY()
                 p.set(lon, lat)
-                geom = QgsGeometry.fromPointXY(p)
-                feature.setGeometry(geom)
+                feature.setGeometry(QgsGeometry.fromPointXY(p))
                 platformLyr.addFeatures([feature])
 
             else:
-                fetId = 1
-                attrib = {0: lon, 1: lat, 2: alt}
                 platformLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
+                    {1: {0: lon, 1: lat, 2: alt}})
 
                 platformLyr.dataProvider().changeGeometryValues(
                     {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
