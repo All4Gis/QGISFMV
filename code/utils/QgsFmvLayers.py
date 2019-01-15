@@ -37,11 +37,10 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsPointXY,
+    QgsPoint,
     QgsWkbTypes
 )
 
-
-from qgis.core import Qgis as QGis
 from qgis.utils import iface
 from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
 from itertools import groupby
@@ -498,17 +497,14 @@ def UpdatePlatformData(packet):
             if platformLyr.featureCount() == 0:
                 feature = QgsFeature()
                 feature.setAttributes([lon, lat, alt])
-                p = QgsPointXY()
-                p.set(lon, lat)
-                feature.setGeometry(QgsGeometry.fromPointXY(p))
+                feature.setGeometry(QgsPoint(lon, lat, alt))
                 platformLyr.addFeatures([feature])
 
             else:
                 platformLyr.dataProvider().changeAttributeValues(
                     {1: {0: lon, 1: lat, 2: alt}})
 
-                platformLyr.dataProvider().changeGeometryValues(
-                    {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
+                platformLyr.dataProvider().changeGeometryValues({1: QgsGeometry(QgsPoint(lon, lat, alt))})
 
             CommonLayer(platformLyr)
 
@@ -523,7 +519,6 @@ def CommonLayer(value):
     ''' Common commands Layers '''
     value.commitChanges()
     value.updateExtents()
-    #value.triggerRepaint()
     iface.layerTreeView().refreshLayerSymbology(value.id())
 
 
@@ -598,7 +593,7 @@ def CreateVideoLayers():
     if qgsu.selectLayerByName(Platform_lyr) is None:
         lyr_platform = newPointsLayer(
             None,
-            ["longitude", "latitude", "altitude"], epsg, Platform_lyr)
+            ["longitude", "latitude", "altitude"], epsg, Platform_lyr, PointZ)
         SetDefaultPlatformStyle(lyr_platform)
         addLayerNoCrsDialog(lyr_platform)
         # lyr_platform.beforeCommitChanges.connect(features_added )
@@ -688,7 +683,6 @@ def RemoveVideoLayers():
     except Exception:
         None
     iface.mapCanvas().refresh()
-    #QApplication.processEvents()
     return
 
 
@@ -858,18 +852,14 @@ TYPE_MAP = {
 
 GEOM_TYPE_MAP = {
     QgsWkbTypes.Point: 'Point',
+    QgsWkbTypes.PointZ: 'PointZ',
     QgsWkbTypes.LineString: 'LineString',
     QgsWkbTypes.Polygon: 'Polygon',
-    QgsWkbTypes.MultiPoint: 'MultiPoint',
-    QgsWkbTypes.MultiLineString: 'MultiLineString',
-    QgsWkbTypes.MultiPolygon: 'MultiPolygon',
 }
-QGis.WKBPoint = QgsWkbTypes.Point
-QGis.WKBMultiPoint = QgsWkbTypes.MultiPoint
-QGis.WKBLine = QgsWkbTypes.LineString
-QGis.WKBMultiLine = QgsWkbTypes.MultiLineString
-QGis.WKBPolygon = QgsWkbTypes.Polygon
-QGis.WKBMultiPolygon = QgsWkbTypes.MultiPolygon
+Point = QgsWkbTypes.Point
+PointZ = QgsWkbTypes.PointZ
+Line = QgsWkbTypes.LineString
+Polygon = QgsWkbTypes.Polygon
 
 
 def _toQgsField(f):
@@ -878,16 +868,16 @@ def _toQgsField(f):
     return QgsField(f[0], TYPE_MAP.get(f[1], QVariant.String))
 
 
-def newPointsLayer(filename, fields, crs, name=None, encoding="utf-8"):
-    return newVectorLayer(filename, fields, QGis.WKBPoint, crs, name, encoding)
+def newPointsLayer(filename, fields, crs, name=None, geometryType=Point, encoding="utf-8"):
+    return newVectorLayer(filename, fields, geometryType, crs, name, encoding)
 
 
 def newLinesLayer(filename, fields, crs, name=None, encoding="utf-8"):
-    return newVectorLayer(filename, fields, QGis.WKBLine, crs, name, encoding)
+    return newVectorLayer(filename, fields, Line, crs, name, encoding)
 
 
 def newPolygonsLayer(filename, fields, crs, name=None, encoding="utf-8"):
-    return newVectorLayer(filename, fields, QGis.WKBPolygon, crs, name, encoding)
+    return newVectorLayer(filename, fields, Polygon, crs, name, encoding)
 
 
 def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding="utf-8"):
