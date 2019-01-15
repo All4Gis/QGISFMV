@@ -37,8 +37,7 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsPointXY,
-    QgsPoint,
-    QgsWkbTypes
+    QgsPoint
 )
 
 from qgis.utils import iface
@@ -850,16 +849,10 @@ TYPE_MAP = {
     bool: QVariant.Bool
 }
 
-GEOM_TYPE_MAP = {
-    QgsWkbTypes.Point: 'Point',
-    QgsWkbTypes.PointZ: 'PointZ',
-    QgsWkbTypes.LineString: 'LineString',
-    QgsWkbTypes.Polygon: 'Polygon',
-}
-Point = QgsWkbTypes.Point
-PointZ = QgsWkbTypes.PointZ
-Line = QgsWkbTypes.LineString
-Polygon = QgsWkbTypes.Polygon
+Point = 'Point'
+PointZ = 'PointZ'
+Line = 'LineString'
+Polygon = 'Polygon'
 
 
 def _toQgsField(f):
@@ -896,7 +889,7 @@ def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding="utf
     if isinstance(crs, str):
         crs = QgsCoordinateReferenceSystem(crs)
     if filename is None:
-        uri = GEOM_TYPE_MAP[geometryType]
+        uri = geometryType
         if crs.isValid():
             uri += '?crs=' + crs.authid() + '&'
         fieldsdesc = ['field=' + f for f in fields]
