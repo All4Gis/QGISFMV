@@ -45,7 +45,7 @@ from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.utils.QgsFmvUtils import GetGeotransform_affine
 from QGIS_FMV.video.QgsColor import ColorDialog
-from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject
+from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject, QgsCoordinateReferenceSystem
 
 try:
     from pydevd import *
@@ -160,6 +160,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             setCenterMode(2, self.iface)
         elif self.actionCenter_Target.isChecked():
             setCenterMode(3, self.iface)
+
+        #Defalut WGS 84/ World Mercator (3D)
+        #QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(3395))
 
     def centerMapPlatform(self, checked):
         ''' Center map on Platform '''
@@ -1214,9 +1217,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.stop()
         self.parent._PlayerDlg = None
         self.parent.ToggleActiveFromTitle()
-        RemoveVideoLayers()
-        RemoveGroupByName()
-        ResetData()
+        #RemoveVideoLayers()
+        #RemoveGroupByName()
+        #ResetData()
 
         try:
             self.metadataDlg.hide()

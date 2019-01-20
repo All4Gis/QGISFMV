@@ -37,7 +37,8 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsPointXY,
-    QgsPoint
+    QgsPoint,
+    QgsLineString
 )
 
 from qgis.utils import iface
@@ -292,33 +293,25 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
                 featureUL = QgsFeature()
                 featureUL.setAttributes(
                     [lon, lat, alt, cornerPointUL[1], cornerPointUL[0]])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(cornerPointUL[1], cornerPointUL[0])])
-                featureUL.setGeometry(surface)
+                featureUL.setGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointUL[1], cornerPointUL[0])))
                 beamsLyr.addFeatures([featureUL])
                 # UR
                 featureUR = QgsFeature()
                 featureUR.setAttributes(
                     [lon, lat, alt, cornerPointUR[1], cornerPointUR[0]])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(cornerPointUR[1], cornerPointUR[0])])
-                featureUR.setGeometry(surface)
+                featureUR.setGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointUR[1], cornerPointUR[0])))
                 beamsLyr.addFeatures([featureUR])
                 # LR
                 featureLR = QgsFeature()
                 featureLR.setAttributes(
                     [lon, lat, alt, cornerPointLR[1], cornerPointLR[0]])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(cornerPointLR[1], cornerPointLR[0])])
-                featureLR.setGeometry(surface)
+                featureLR.setGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointLR[1], cornerPointLR[0])))
                 beamsLyr.addFeatures([featureLR])
                 # LL
                 featureLL = QgsFeature()
                 featureLL.setAttributes(
                     [lon, lat, alt, cornerPointLL[1], cornerPointLL[0]])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(cornerPointLL[1], cornerPointLL[0])])
-                featureLL.setGeometry(surface)
+                featureLL.setGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointLL[1], cornerPointLL[0])))
                 beamsLyr.addFeatures([featureLL])
 
             else:
@@ -326,29 +319,22 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
                 beamsLyr.dataProvider().changeAttributeValues(
                     {1: {0: lon, 1: lat, 2: alt, 3: cornerPointUL[1], 4: cornerPointUL[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {1: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(cornerPointUL[1], cornerPointUL[0])])})
+                    {1: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointUL[1], cornerPointUL[0])))})
                 # UR
                 beamsLyr.dataProvider().changeAttributeValues(
                     {2: {0: lon, 1: lat, 2: alt, 3: cornerPointUR[1], 4: cornerPointUR[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {2: QgsGeometry.fromPolylineXY([
-                        QgsPointXY(lon, lat),
-                        QgsPointXY(cornerPointUR[1], cornerPointUR[0])])})
+                    {2: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointUR[1], cornerPointUR[0])))})
                 # LR
                 beamsLyr.dataProvider().changeAttributeValues(
                     {3: {0: lon, 1: lat, 2: alt, 3: cornerPointLR[1], 4: cornerPointLR[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {3: QgsGeometry.fromPolylineXY([
-                        QgsPointXY(lon, lat),
-                        QgsPointXY(cornerPointLR[1], cornerPointLR[0])])})
+                    {3: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointLR[1], cornerPointLR[0])))})
                 # LL
                 beamsLyr.dataProvider().changeAttributeValues(
                     {4: {0: lon, 1: lat, 2: alt, 3: cornerPointLL[1], 4: cornerPointLL[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {4: QgsGeometry.fromPolylineXY([
-                        QgsPointXY(lon, lat),
-                        QgsPointXY(cornerPointLL[1],
-                                   cornerPointLL[0])])})
+                    {4: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointLL[1], cornerPointLL[0])))})
 
             CommonLayer(beamsLyr)
 
@@ -373,19 +359,13 @@ def UpdateTrajectoryData(packet):
             if trajectoryLyr.featureCount() == 0:
                 f.setAttributes(
                     [lon, lat, alt])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(lon, lat)])
-                f.setGeometry(surface)
+                f.setGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(lon, lat, alt)))
                 trajectoryLyr.addFeatures([f])
 
             else:
                 f_last = trajectoryLyr.getFeature(trajectoryLyr.featureCount())
-                f.setAttributes(
-                    [lon, lat, alt])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat),
-                     QgsPointXY(f_last.attribute(0), f_last.attribute(1))])
-                f.setGeometry(surface)
+                f.setAttributes([lon, lat, alt])
+                f.setGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(f_last.attribute(0), f_last.attribute(1), f_last.attribute(2))))
                 trajectoryLyr.addFeatures([f])
 
             CommonLayer(trajectoryLyr)
@@ -406,7 +386,7 @@ def UpdateFrameAxisData(packet):
     alt = packet.SensorTrueAltitude
     fc_lat = packet.FrameCenterLatitude
     fc_lon = packet.FrameCenterLongitude
-    # fc_alt = packet.FrameCenterElevation
+    fc_alt = packet.FrameCenterElevation
 
     frameaxisLyr = qgsu.selectLayerByName(FrameAxis_lyr)
 
@@ -419,16 +399,14 @@ def UpdateFrameAxisData(packet):
             if frameaxisLyr.featureCount() == 0:
                 f = QgsFeature()
                 f.setAttributes(
-                    [lon, lat, alt, fc_lon, fc_lat])
-                surface = QgsGeometry.fromPolylineXY(
-                    [QgsPointXY(lon, lat), QgsPointXY(fc_lon, fc_lat)])
-                f.setGeometry(surface)
+                    [lon, lat, alt, fc_lon, fc_lat, fc_alt])
+                f.setGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(fc_lon, fc_lat, fc_alt)))
                 frameaxisLyr.addFeatures([f])
             else:
                 frameaxisLyr.dataProvider().changeAttributeValues(
-                    {1: {0: lon, 1: lat, 2: alt, 3: fc_lon, 4: fc_lat}})
+                    {1: {0: lon, 1: lat, 2: alt, 3: fc_lon, 4: fc_lat, 5: fc_alt}})
                 frameaxisLyr.dataProvider().changeGeometryValues(
-                    {1: QgsGeometry.fromPolylineXY([QgsPointXY(lon, lat), QgsPointXY(fc_lon, fc_lat)])})
+                    {1: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(fc_lon, fc_lat, fc_alt)))})
 
             CommonLayer(frameaxisLyr)
 
@@ -572,20 +550,20 @@ def CreateVideoLayers():
              "Corner Longitude",
              "Corner Latitude"],
             epsg,
-            Beams_lyr)
+            Beams_lyr, LineZ)
         SetDefaultBeamsStyle(lyr_beams)
         addLayerNoCrsDialog(lyr_beams)
 
     if qgsu.selectLayerByName(Trajectory_lyr) is None:
         lyr_Trajectory = newLinesLayer(
             None,
-            ["longitude", "latitude", "altitude"], epsg, Trajectory_lyr)
+            ["longitude", "latitude", "altitude"], epsg, Trajectory_lyr, LineZ)
         SetDefaultTrajectoryStyle(lyr_Trajectory)
         addLayerNoCrsDialog(lyr_Trajectory)
 
     if qgsu.selectLayerByName(FrameAxis_lyr) is None:
         lyr_frameaxis = newLinesLayer(
-            None, ["longitude", "latitude", "altitude", "Corner Longitude", "Corner Latitude"], epsg, FrameAxis_lyr)
+            None, ["longitude", "latitude", "altitude", "Corner Longitude", "Corner Latitude", "Corner altitude"], epsg, FrameAxis_lyr, LineZ)
         SetDefaultFrameAxisStyle(lyr_frameaxis)
         addLayerNoCrsDialog(lyr_frameaxis)
 
@@ -851,6 +829,7 @@ TYPE_MAP = {
 
 Point = 'Point'
 PointZ = 'PointZ'
+LineZ = 'LineStringZ'
 Line = 'LineString'
 Polygon = 'Polygon'
 
@@ -865,8 +844,8 @@ def newPointsLayer(filename, fields, crs, name=None, geometryType=Point, encodin
     return newVectorLayer(filename, fields, geometryType, crs, name, encoding)
 
 
-def newLinesLayer(filename, fields, crs, name=None, encoding="utf-8"):
-    return newVectorLayer(filename, fields, Line, crs, name, encoding)
+def newLinesLayer(filename, fields, crs, name=None, geometryType=Line, encoding="utf-8"):
+    return newVectorLayer(filename, fields, geometryType, crs, name, encoding)
 
 
 def newPolygonsLayer(filename, fields, crs, name=None, encoding="utf-8"):
