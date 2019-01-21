@@ -44,6 +44,7 @@ from qgis.core import (
 from qgis.utils import iface
 from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
 from itertools import groupby
+from qgis._3d import *
 
 try:
     from pydevd import *
@@ -370,6 +371,9 @@ def UpdateTrajectoryData(packet):
 
             CommonLayer(trajectoryLyr)
 
+            # TODO : 3D
+            SetDefaultTrajectory3DStyle(trajectoryLyr)
+
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
@@ -409,6 +413,9 @@ def UpdateFrameAxisData(packet):
                     {1: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(fc_lon, fc_lat, fc_alt)))})
 
             CommonLayer(frameaxisLyr)
+
+            # TODO : 3D
+            SetDefaultFrameAxis3DStyle(frameaxisLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -471,6 +478,8 @@ def UpdatePlatformData(packet):
             platformLyr.startEditing()
             platformLyr.renderer().symbol().setAngle(float(PlatformHeading))
 
+            # TODO : 3D
+
             if platformLyr.featureCount() == 0:
                 feature = QgsFeature()
                 feature.setAttributes([lon, lat, alt])
@@ -484,6 +493,8 @@ def UpdatePlatformData(packet):
                 platformLyr.dataProvider().changeGeometryValues({1: QgsGeometry(QgsPoint(lon, lat, alt))})
 
             CommonLayer(platformLyr)
+            #TODO : Update 3D
+            SetDefaultPlatform3DStyle(platformLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -560,12 +571,16 @@ def CreateVideoLayers():
             ["longitude", "latitude", "altitude"], epsg, Trajectory_lyr, LineZ)
         SetDefaultTrajectoryStyle(lyr_Trajectory)
         addLayerNoCrsDialog(lyr_Trajectory)
+        # TODO : 3D Style
+        SetDefaultTrajectory3DStyle(lyr_Trajectory)
 
     if qgsu.selectLayerByName(FrameAxis_lyr) is None:
         lyr_frameaxis = newLinesLayer(
             None, ["longitude", "latitude", "altitude", "Corner Longitude", "Corner Latitude", "Corner altitude"], epsg, FrameAxis_lyr, LineZ)
         SetDefaultFrameAxisStyle(lyr_frameaxis)
         addLayerNoCrsDialog(lyr_frameaxis)
+        # TODO : 3D Style
+        SetDefaultFrameAxis3DStyle(lyr_frameaxis)
 
     if qgsu.selectLayerByName(Platform_lyr) is None:
         lyr_platform = newPointsLayer(
@@ -573,7 +588,8 @@ def CreateVideoLayers():
             ["longitude", "latitude", "altitude"], epsg, Platform_lyr, PointZ)
         SetDefaultPlatformStyle(lyr_platform)
         addLayerNoCrsDialog(lyr_platform)
-        # lyr_platform.beforeCommitChanges.connect(features_added )
+        # TODO : 3D Style
+        SetDefaultPlatform3DStyle(lyr_platform)
 
     if qgsu.selectLayerByName(Point_lyr) is None:
         lyr_point = newPointsLayer(
@@ -585,7 +601,7 @@ def CreateVideoLayers():
         lyr_framecenter = newPointsLayer(
             None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr)
         SetDefaultFrameCenterStyle(lyr_framecenter)
-        addLayerNoCrsDialog(lyr_framecenter)  
+        addLayerNoCrsDialog(lyr_framecenter)
 
     if qgsu.selectLayerByName(Line_lyr) is None:
         #         lyr_line = newLinesLayer(
@@ -702,6 +718,62 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
     return
 
 
+# TODO : Platform 3D Style
+def SetDefaultPlatform3DStyle(layer):
+    material = QgsPhongMaterialSettings()
+    material.setDiffuse(QColor(255, 0, 0))
+    material.setAmbient(QColor(255, 0, 0))
+    symbol = QgsPoint3DSymbol()
+    symbol.setShape(1)
+    S = {}
+    S['radius'] = 20
+    symbol.setShapeProperties(S)
+    symbol.setAltitudeClamping(2)
+    symbol.setMaterial(material)
+
+    renderer = QgsVectorLayer3DRenderer()
+    renderer.setLayer(layer)
+    renderer.setSymbol(symbol)
+    layer.setRenderer3D(renderer)
+    return
+
+
+# TODO : Trajectory 3D Style
+def SetDefaultTrajectory3DStyle(layer):
+    material = QgsPhongMaterialSettings()
+    material.setDiffuse(QColor(0, 0, 255))
+    material.setAmbient(QColor(0, 0, 255))
+    symbol = QgsLine3DSymbol()
+
+    symbol.setWidth(5)
+    symbol.setAltitudeClamping(2)
+    symbol.setMaterial(material)
+
+    renderer = QgsVectorLayer3DRenderer()
+    renderer.setLayer(layer)
+    renderer.setSymbol(symbol)
+    layer.setRenderer3D(renderer)
+    return
+
+
+# TODO : Frame Axis 3D Style
+def SetDefaultFrameAxis3DStyle(layer):
+    material = QgsPhongMaterialSettings()
+    material.setDiffuse(QColor(0, 0, 255))
+    material.setAmbient(QColor(0, 0, 255))
+    symbol = QgsLine3DSymbol()
+
+    symbol.setWidth(5)
+    symbol.setAltitudeClamping(2)
+    symbol.setMaterial(material)
+
+    renderer = QgsVectorLayer3DRenderer()
+    renderer.setLayer(layer)
+    renderer.setSymbol(symbol)
+    layer.setRenderer3D(renderer)
+    return
+
+
 def SetDefaultFrameCenterStyle(layer):
     ''' Point Symbol '''
     style = S.getFrameCenterPoint()
@@ -721,6 +793,7 @@ def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
                                            'outline_style': style['OUTLINE_STYLE']})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
+    
     return
 
 
