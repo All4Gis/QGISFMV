@@ -642,10 +642,10 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     OffsetLat1 = packet.OffsetCornerLatitudePoint1
     LatitudePoint1Full = packet.CornerLatitudePoint1Full
 
-    UpdatePlatformData(packet)
-    UpdateTrajectoryData(packet)
-    UpdateFrameCenterData(packet)
-    UpdateFrameAxisData(packet)
+    UpdatePlatformData(packet, hasElevationModel())
+    UpdateTrajectoryData(packet, hasElevationModel())
+    UpdateFrameCenterData(packet, hasElevationModel())
+    UpdateFrameAxisData(packet, hasElevationModel())
 
     if OffsetLat1 is not None and LatitudePoint1Full is None:
         CornerEstimationWithOffsets(packet)
@@ -683,10 +683,10 @@ def UpdateLayers(packet, parent=None, mosaic=False):
             return
 
         UpdateFootPrintData(
-            packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
+            packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 
         UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
-                        cornerPointLR, cornerPointLL)
+                        cornerPointLR, cornerPointLL, hasElevationModel())
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
@@ -810,17 +810,17 @@ def CornerEstimationWithOffsets(packet):
                 GetSensor(), cornerPointLL)
 
             UpdateFootPrintData(packet,
-                                pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL)
+                                pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL, hasElevationModel())
 
             UpdateBeamsData(packet, pCornerPointUL, pCornerPointUR,
-                            pCornerPointLR, pCornerPointLL)
+                            pCornerPointLR, pCornerPointLL, hasElevationModel())
         else:
 
             UpdateFootPrintData(packet,
-                                cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
+                                cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 
             UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
-                            cornerPointLR, cornerPointLL)
+                            cornerPointLR, cornerPointLL, hasElevationModel())
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
@@ -946,17 +946,17 @@ def CornerEstimationWithoutOffsets(packet):
                 GetSensor(), cornerPointLL)
 
             UpdateFootPrintData(packet,
-                                pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL)
+                                pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL, hasElevationModel())
 
             UpdateBeamsData(packet, pCornerPointUL, pCornerPointUR,
-                            pCornerPointLR, pCornerPointLL)
+                            pCornerPointLR, pCornerPointLL, hasElevationModel())
 
         else:
             UpdateFootPrintData(packet,
-                                cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
+                                cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 
             UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
-                            cornerPointLR, cornerPointLL)
+                            cornerPointLR, cornerPointLL, hasElevationModel())
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL,

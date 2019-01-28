@@ -44,7 +44,11 @@ from qgis.core import (
 from qgis.utils import iface
 from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
 from itertools import groupby
-from qgis._3d import QgsPhongMaterialSettings, QgsVectorLayer3DRenderer, QgsLine3DSymbol, QgsPoint3DSymbol, QgsPolygon3DSymbol
+from qgis._3d import (QgsPhongMaterialSettings,
+                      QgsVectorLayer3DRenderer,
+                      QgsLine3DSymbol,
+                      QgsPoint3DSymbol,
+                      QgsPolygon3DSymbol)
 
 try:
     from pydevd import *
@@ -52,9 +56,20 @@ except ImportError:
     None
 
 _layerreg = QgsProject.instance()
-crtSensorSrc = 'DEFAULT'
-crtSensorSrc2 = 'DEFAULT'
-crtPltTailNum = 'DEFAULT'
+crtSensorSrc = crtSensorSrc2 = crtPltTailNum = 'DEFAULT'
+
+TYPE_MAP = {
+    str: QVariant.String,
+    float: QVariant.Double,
+    int: QVariant.Int,
+    bool: QVariant.Bool
+}
+
+Point = 'Point'
+PointZ = 'PointZ'
+LineZ = 'LineStringZ'
+Line = 'LineString'
+Polygon = 'Polygon'
 
 
 def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
@@ -94,7 +109,6 @@ def AddDrawLineOnMap(drawLines):
                 points.append(pt)
             polyline = QgsGeometry.fromPolylineXY(points)
             f = QgsFeature()
-            # f.setAttributes([0, 0, 0])
             f.setGeometry(polyline)
             linelyr.addFeatures([f])
 
@@ -205,8 +219,7 @@ def AddDrawPolygonOnMap(poly_coordinates):
 def SetcrtSensorSrc():
     global crtSensorSrc
     global crtSensorSrc2
-    crtSensorSrc = 'DEFAULT'
-    crtSensorSrc2 = 'DEFAULT'
+    crtSensorSrc = crtSensorSrc2 = 'DEFAULT'
 
 
 def SetcrtPltTailNum():
@@ -214,7 +227,7 @@ def SetcrtPltTailNum():
     crtPltTailNum = 'DEFAULT'
 
 
-def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
+def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, ele):
     ''' Update Footprint Values '''
     global crtSensorSrc
     imgSS = packet.ImageSourceSensor
@@ -272,7 +285,7 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
 
             CommonLayer(footprintLyr)
             # 3D Style
-            if False:
+            if ele:
                 SetDefaultFootprint3DStyle(footprintLyr)
 
     except Exception as e:
@@ -281,7 +294,7 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
     return
 
 
-def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL):
+def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, ele):
     ''' Update Beams Values '''
     lat = packet.SensorLatitude
     lon = packet.SensorLongitude
@@ -343,7 +356,7 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
 
             CommonLayer(beamsLyr)
             # 3D Style
-            if False:
+            if ele:
                 SetDefaultBeams3DStyle(beamsLyr)
 
     except Exception as e:
@@ -352,7 +365,7 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
     return
 
 
-def UpdateTrajectoryData(packet):
+def UpdateTrajectoryData(packet,ele):
     ''' Update Trajectory Values '''
     lat = packet.SensorLatitude
     lon = packet.SensorLongitude
@@ -378,7 +391,7 @@ def UpdateTrajectoryData(packet):
 
             CommonLayer(trajectoryLyr)
             # 3D Style
-            if False:
+            if ele:
                 SetDefaultTrajectory3DStyle(trajectoryLyr)
 
     except Exception as e:
@@ -387,7 +400,7 @@ def UpdateTrajectoryData(packet):
     return
 
 
-def UpdateFrameAxisData(packet):
+def UpdateFrameAxisData(packet, ele):
     ''' Update Frame Axis Values '''
     global crtSensorSrc2
 
@@ -421,16 +434,16 @@ def UpdateFrameAxisData(packet):
 
             CommonLayer(frameaxisLyr)
             # 3D Style
-            if False:
+            if ele:
                 SetDefaultFrameAxis3DStyle(frameaxisLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Frameaxis Layer! : "), str(e))
+            "QgsFmvUtils", "Failed Update Frame axis Layer! : "), str(e))
     return
 
 
-def UpdateFrameCenterData(packet):
+def UpdateFrameCenterData(packet, ele):
     ''' Update FrameCenter Values '''
     lat = packet.FrameCenterLatitude
     lon = packet.FrameCenterLongitude
@@ -458,7 +471,7 @@ def UpdateFrameCenterData(packet):
 
             CommonLayer(frameCenterLyr)
             # 3D Style
-            if False:
+            if ele:
                 SetDefaultFrameCenter3DStyle(frameCenterLyr)
 
     except Exception as e:
@@ -468,7 +481,7 @@ def UpdateFrameCenterData(packet):
     return
 
 
-def UpdatePlatformData(packet):
+def UpdatePlatformData(packet, ele):
     ''' Update PlatForm Values '''
     global crtPltTailNum
 
@@ -502,7 +515,7 @@ def UpdatePlatformData(packet):
 
             CommonLayer(platformLyr)
             # 3D Style
-            if False:
+            if ele:
                 SetDefaultPlatform3DStyle(platformLyr)
 
     except Exception as e:
@@ -543,7 +556,7 @@ def RemoveGroupByName(name=frames_g):
     return
 
 
-def CreateVideoLayers():
+def CreateVideoLayers(ele):
     ''' Create Video Layers '''
     if qgsu.selectLayerByName(Footprint_lyr) is None:
         lyr_footprint = newPolygonsLayer(
@@ -562,7 +575,7 @@ def CreateVideoLayers():
         addLayerNoCrsDialog(lyr_footprint)
 
         # 3D Style
-        if False:
+        if ele:
             SetDefaultFootprint3DStyle(lyr_footprint)
 
     if qgsu.selectLayerByName(Beams_lyr) is None:
@@ -578,7 +591,7 @@ def CreateVideoLayers():
         SetDefaultBeamsStyle(lyr_beams)
         addLayerNoCrsDialog(lyr_beams)
         # 3D Style
-        if False:
+        if ele:
             SetDefaultBeams3DStyle(lyr_beams)
 
     if qgsu.selectLayerByName(Trajectory_lyr) is None:
@@ -588,7 +601,7 @@ def CreateVideoLayers():
         SetDefaultTrajectoryStyle(lyr_Trajectory)
         addLayerNoCrsDialog(lyr_Trajectory)
         # 3D Style
-        if False:
+        if ele:
             SetDefaultTrajectory3DStyle(lyr_Trajectory)
 
     if qgsu.selectLayerByName(FrameAxis_lyr) is None:
@@ -597,7 +610,7 @@ def CreateVideoLayers():
         SetDefaultFrameAxisStyle(lyr_frameaxis)
         addLayerNoCrsDialog(lyr_frameaxis)
         # 3D Style
-        if False:
+        if ele:
             SetDefaultFrameAxis3DStyle(lyr_frameaxis)
 
     if qgsu.selectLayerByName(Platform_lyr) is None:
@@ -607,7 +620,7 @@ def CreateVideoLayers():
         SetDefaultPlatformStyle(lyr_platform)
         addLayerNoCrsDialog(lyr_platform)
         # 3D Style
-        if False:
+        if ele:
             SetDefaultPlatform3DStyle(lyr_platform)
 
     if qgsu.selectLayerByName(Point_lyr) is None:
@@ -621,8 +634,8 @@ def CreateVideoLayers():
             None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr)
         SetDefaultFrameCenterStyle(lyr_framecenter)
         addLayerNoCrsDialog(lyr_framecenter)
-        # TODO : HAS ELEVATION 3D Style
-        if False:
+        # 3D Style
+        if ele:
             SetDefaultFrameCenter3DStyle(lyr_framecenter)
 
     if qgsu.selectLayerByName(Line_lyr) is None:
@@ -966,20 +979,6 @@ def addLayerNoCrsDialog(layer, loadInLegend=True, group=None):
     settings.setValue('/Projections/defaultBehavior', prjSetting3)
     QApplication.processEvents()
     return layer
-
-
-TYPE_MAP = {
-    str: QVariant.String,
-    float: QVariant.Double,
-    int: QVariant.Int,
-    bool: QVariant.Bool
-}
-
-Point = 'Point'
-PointZ = 'PointZ'
-LineZ = 'LineStringZ'
-Line = 'LineString'
-Polygon = 'Polygon'
 
 
 def _toQgsField(f):

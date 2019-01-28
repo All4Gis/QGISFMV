@@ -35,6 +35,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
                                         ResetData,
                                         _spawn,
                                         UpdateLayers,
+                                        hasElevationModel,
                                         _seconds_to_time,
                                         _seconds_to_time_frac,
                                         askForFiles,
@@ -803,7 +804,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(os.path.normpath(videoPath)))
 
-            CreateVideoLayers()
+            CreateVideoLayers(hasElevationModel())
             self.clearMetadata()
 
             self.HasFileAudio = True
