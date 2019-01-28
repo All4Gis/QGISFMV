@@ -39,11 +39,11 @@ from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
                                         _seconds_to_time_frac,
                                         askForFiles,
                                         askForFolder,
-                                        setCenterMode)
+                                        setCenterMode,
+                                        GetGeotransform_affine)
 from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from QGIS_FMV.utils.QgsFmvUtils import GetGeotransform_affine
 from QGIS_FMV.video.QgsColor import ColorDialog
 from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject, QgsCoordinateReferenceSystem
 
