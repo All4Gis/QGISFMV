@@ -230,7 +230,6 @@ def setCenterMode(mode, interface):
     centerMode = mode
     iface = interface
 
-
 def getVideoLocationInfo(videoPath):
     """ Get basic location info about the video """
     location = []
@@ -636,7 +635,6 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
         if dtm_data is not None:
             qgsu.showUserAndLogMessage(
                 "", "DTM successfully initialized, len: " + str(len(dtm_data)), onlyLog=True)
-
 
 
 def UpdateLayers(packet, parent=None, mosaic=False):

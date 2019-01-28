@@ -161,8 +161,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         elif self.actionCenter_Target.isChecked():
             setCenterMode(3, self.iface)
 
-        #Defalut WGS 84/ World Mercator (3D)
-        #QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(3395))
+        # Defalut WGS 84/ World Mercator (3D)
+        # QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(3395))
 
     def centerMapPlatform(self, checked):
         ''' Center map on Platform '''
@@ -1217,9 +1217,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.stop()
         self.parent._PlayerDlg = None
         self.parent.ToggleActiveFromTitle()
-        #RemoveVideoLayers()
-        #RemoveGroupByName()
-        #ResetData()
+        # RemoveVideoLayers()
+        # RemoveGroupByName()
+        # ResetData()
 
         try:
             self.metadataDlg.hide()

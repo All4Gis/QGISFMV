@@ -74,10 +74,13 @@ class VideoUtils(object):
             black borders or outside)
          '''
         res = True
-        if x > (VideoUtils.GetNormalizedWidth(surface) + VideoUtils.GetXBlackZone(surface)) or x < VideoUtils.GetXBlackZone(surface):
-            res = False
-        if y > (VideoUtils.GetNormalizedHeight(surface) + VideoUtils.GetYBlackZone(surface)) or y < VideoUtils.GetYBlackZone(surface):
-            res = False
+        try:
+            if x > (VideoUtils.GetNormalizedWidth(surface) + VideoUtils.GetXBlackZone(surface)) or x < VideoUtils.GetXBlackZone(surface):
+                res = False
+            if y > (VideoUtils.GetNormalizedHeight(surface) + VideoUtils.GetYBlackZone(surface)) or y < VideoUtils.GetYBlackZone(surface):
+                res = False
+        except ZeroDivisionError:
+            None
         return res
 
     @staticmethod

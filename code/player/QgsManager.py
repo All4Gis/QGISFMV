@@ -118,7 +118,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.pBars[str(rowPosition)] = pbar
         self.VManager.setVisible(True)
 
-        #settrace()
+        # settrace()
 
         if not self.isStreaming:
             info = FFMpeg().probe(filename)

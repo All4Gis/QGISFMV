@@ -13,7 +13,7 @@ from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QAbstractVideoSurface,
                                 QVideoSurfaceFormat)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtWidgets import QSizePolicy, QWidget, QRubberBand
+from PyQt5.QtWidgets import QWidget, QRubberBand
 
 from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         convertQImageToMat,

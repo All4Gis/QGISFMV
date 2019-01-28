@@ -44,7 +44,7 @@ from qgis.core import (
 from qgis.utils import iface
 from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
 from itertools import groupby
-from qgis._3d import *
+from qgis._3d import QgsPhongMaterialSettings, QgsVectorLayer3DRenderer, QgsLine3DSymbol, QgsPoint3DSymbol, QgsPolygon3DSymbol
 
 try:
     from pydevd import *
@@ -73,8 +73,9 @@ def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
     CommonLayer(pointLyr)
     return
 
-
 # TODO : Add only ID Attributes?
+
+
 def AddDrawLineOnMap(drawLines):
     '''  add Line on the map '''
 
@@ -270,6 +271,9 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
                         QgsPointXY(cornerPointUL[1], cornerPointUL[0])]])})
 
             CommonLayer(footprintLyr)
+            # 3D Style
+            if False:
+                SetDefaultFootprint3DStyle(footprintLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -294,25 +298,25 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
                 featureUL = QgsFeature()
                 featureUL.setAttributes(
                     [lon, lat, alt, cornerPointUL[1], cornerPointUL[0]])
-                featureUL.setGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointUL[1], cornerPointUL[0])))
+                featureUL.setGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(cornerPointUL[1], cornerPointUL[0])))
                 beamsLyr.addFeatures([featureUL])
                 # UR
                 featureUR = QgsFeature()
                 featureUR.setAttributes(
                     [lon, lat, alt, cornerPointUR[1], cornerPointUR[0]])
-                featureUR.setGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointUR[1], cornerPointUR[0])))
+                featureUR.setGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(cornerPointUR[1], cornerPointUR[0])))
                 beamsLyr.addFeatures([featureUR])
                 # LR
                 featureLR = QgsFeature()
                 featureLR.setAttributes(
                     [lon, lat, alt, cornerPointLR[1], cornerPointLR[0]])
-                featureLR.setGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointLR[1], cornerPointLR[0])))
+                featureLR.setGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(cornerPointLR[1], cornerPointLR[0])))
                 beamsLyr.addFeatures([featureLR])
                 # LL
                 featureLL = QgsFeature()
                 featureLL.setAttributes(
                     [lon, lat, alt, cornerPointLL[1], cornerPointLL[0]])
-                featureLL.setGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointLL[1], cornerPointLL[0])))
+                featureLL.setGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(cornerPointLL[1], cornerPointLL[0])))
                 beamsLyr.addFeatures([featureLL])
 
             else:
@@ -320,24 +324,27 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
                 beamsLyr.dataProvider().changeAttributeValues(
                     {1: {0: lon, 1: lat, 2: alt, 3: cornerPointUL[1], 4: cornerPointUL[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {1: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointUL[1], cornerPointUL[0])))})
+                    {1: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(cornerPointUL[1], cornerPointUL[0])))})
                 # UR
                 beamsLyr.dataProvider().changeAttributeValues(
                     {2: {0: lon, 1: lat, 2: alt, 3: cornerPointUR[1], 4: cornerPointUR[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {2: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointUR[1], cornerPointUR[0])))})
+                    {2: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(cornerPointUR[1], cornerPointUR[0])))})
                 # LR
                 beamsLyr.dataProvider().changeAttributeValues(
                     {3: {0: lon, 1: lat, 2: alt, 3: cornerPointLR[1], 4: cornerPointLR[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {3: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointLR[1], cornerPointLR[0])))})
+                    {3: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(cornerPointLR[1], cornerPointLR[0])))})
                 # LL
                 beamsLyr.dataProvider().changeAttributeValues(
                     {4: {0: lon, 1: lat, 2: alt, 3: cornerPointLL[1], 4: cornerPointLL[0]}})
                 beamsLyr.dataProvider().changeGeometryValues(
-                    {4: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(cornerPointLL[1], cornerPointLL[0])))})
+                    {4: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(cornerPointLL[1], cornerPointLL[0])))})
 
             CommonLayer(beamsLyr)
+            # 3D Style
+            if False:
+                SetDefaultBeams3DStyle(beamsLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -360,7 +367,7 @@ def UpdateTrajectoryData(packet):
             if trajectoryLyr.featureCount() == 0:
                 f.setAttributes(
                     [lon, lat, alt])
-                f.setGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(lon, lat, alt)))
+                f.setGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(lon, lat, alt)))
                 trajectoryLyr.addFeatures([f])
 
             else:
@@ -370,9 +377,9 @@ def UpdateTrajectoryData(packet):
                 trajectoryLyr.addFeatures([f])
 
             CommonLayer(trajectoryLyr)
-
-            # TODO : 3D
-            SetDefaultTrajectory3DStyle(trajectoryLyr)
+            # 3D Style
+            if False:
+                SetDefaultTrajectory3DStyle(trajectoryLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -410,12 +417,12 @@ def UpdateFrameAxisData(packet):
                 frameaxisLyr.dataProvider().changeAttributeValues(
                     {1: {0: lon, 1: lat, 2: alt, 3: fc_lon, 4: fc_lat, 5: fc_alt}})
                 frameaxisLyr.dataProvider().changeGeometryValues(
-                    {1: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt),QgsPoint(fc_lon, fc_lat, fc_alt)))})
+                    {1: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(fc_lon, fc_lat, fc_alt)))})
 
             CommonLayer(frameaxisLyr)
-
-            # TODO : 3D
-            SetDefaultFrameAxis3DStyle(frameaxisLyr)
+            # 3D Style
+            if False:
+                SetDefaultFrameAxis3DStyle(frameaxisLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -450,6 +457,9 @@ def UpdateFrameCenterData(packet):
                     {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
 
             CommonLayer(frameCenterLyr)
+            # 3D Style
+            if False:
+                SetDefaultFrameCenter3DStyle(frameCenterLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -478,8 +488,6 @@ def UpdatePlatformData(packet):
             platformLyr.startEditing()
             platformLyr.renderer().symbol().setAngle(float(PlatformHeading))
 
-            # TODO : 3D
-
             if platformLyr.featureCount() == 0:
                 feature = QgsFeature()
                 feature.setAttributes([lon, lat, alt])
@@ -493,8 +501,9 @@ def UpdatePlatformData(packet):
                 platformLyr.dataProvider().changeGeometryValues({1: QgsGeometry(QgsPoint(lon, lat, alt))})
 
             CommonLayer(platformLyr)
-            #TODO : Update 3D
-            SetDefaultPlatform3DStyle(platformLyr)
+            # 3D Style
+            if False:
+                SetDefaultPlatform3DStyle(platformLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -552,6 +561,10 @@ def CreateVideoLayers():
         SetDefaultFootprintStyle(lyr_footprint)
         addLayerNoCrsDialog(lyr_footprint)
 
+        # 3D Style
+        if False:
+            SetDefaultFootprint3DStyle(lyr_footprint)
+
     if qgsu.selectLayerByName(Beams_lyr) is None:
         lyr_beams = newLinesLayer(
             None,
@@ -564,6 +577,9 @@ def CreateVideoLayers():
             Beams_lyr, LineZ)
         SetDefaultBeamsStyle(lyr_beams)
         addLayerNoCrsDialog(lyr_beams)
+        # 3D Style
+        if False:
+            SetDefaultBeams3DStyle(lyr_beams)
 
     if qgsu.selectLayerByName(Trajectory_lyr) is None:
         lyr_Trajectory = newLinesLayer(
@@ -571,16 +587,18 @@ def CreateVideoLayers():
             ["longitude", "latitude", "altitude"], epsg, Trajectory_lyr, LineZ)
         SetDefaultTrajectoryStyle(lyr_Trajectory)
         addLayerNoCrsDialog(lyr_Trajectory)
-        # TODO : 3D Style
-        SetDefaultTrajectory3DStyle(lyr_Trajectory)
+        # 3D Style
+        if False:
+            SetDefaultTrajectory3DStyle(lyr_Trajectory)
 
     if qgsu.selectLayerByName(FrameAxis_lyr) is None:
         lyr_frameaxis = newLinesLayer(
             None, ["longitude", "latitude", "altitude", "Corner Longitude", "Corner Latitude", "Corner altitude"], epsg, FrameAxis_lyr, LineZ)
         SetDefaultFrameAxisStyle(lyr_frameaxis)
         addLayerNoCrsDialog(lyr_frameaxis)
-        # TODO : 3D Style
-        SetDefaultFrameAxis3DStyle(lyr_frameaxis)
+        # 3D Style
+        if False:
+            SetDefaultFrameAxis3DStyle(lyr_frameaxis)
 
     if qgsu.selectLayerByName(Platform_lyr) is None:
         lyr_platform = newPointsLayer(
@@ -588,8 +606,9 @@ def CreateVideoLayers():
             ["longitude", "latitude", "altitude"], epsg, Platform_lyr, PointZ)
         SetDefaultPlatformStyle(lyr_platform)
         addLayerNoCrsDialog(lyr_platform)
-        # TODO : 3D Style
-        SetDefaultPlatform3DStyle(lyr_platform)
+        # 3D Style
+        if False:
+            SetDefaultPlatform3DStyle(lyr_platform)
 
     if qgsu.selectLayerByName(Point_lyr) is None:
         lyr_point = newPointsLayer(
@@ -602,6 +621,9 @@ def CreateVideoLayers():
             None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr)
         SetDefaultFrameCenterStyle(lyr_framecenter)
         addLayerNoCrsDialog(lyr_framecenter)
+        # TODO : HASELEVATION 3D Style
+        if False:
+            SetDefaultFrameCenter3DStyle(lyr_framecenter)
 
     if qgsu.selectLayerByName(Line_lyr) is None:
         #         lyr_line = newLinesLayer(
@@ -691,6 +713,22 @@ def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
     return
 
 
+def SetDefaultFootprint3DStyle(layer):
+    ''' Platform 3D Symbol '''
+    material = QgsPhongMaterialSettings()
+    material.setDiffuse(QColor(255, 0, 0))
+    material.setAmbient(QColor(255, 0, 0))
+    symbol = QgsPolygon3DSymbol()
+    symbol.setAltitudeClamping(2)
+    symbol.setMaterial(material)
+
+    renderer = QgsVectorLayer3DRenderer()
+    renderer.setLayer(layer)
+    renderer.setSymbol(symbol)
+    layer.setRenderer3D(renderer)
+    return
+
+
 def SetDefaultTrajectoryStyle(layer):
     ''' Trajectory Symbol '''
     style = S.getTrajectory('DEFAULT')
@@ -718,8 +756,8 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
     return
 
 
-# TODO : Platform 3D Style
 def SetDefaultPlatform3DStyle(layer):
+    ''' Platform 3D Symbol '''
     material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(255, 0, 0))
     material.setAmbient(QColor(255, 0, 0))
@@ -738,8 +776,8 @@ def SetDefaultPlatform3DStyle(layer):
     return
 
 
-# TODO : Trajectory 3D Style
 def SetDefaultTrajectory3DStyle(layer):
+    ''' Trajectory 3D Symbol '''
     material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(0, 0, 255))
     material.setAmbient(QColor(0, 0, 255))
@@ -756,11 +794,29 @@ def SetDefaultTrajectory3DStyle(layer):
     return
 
 
-# TODO : Frame Axis 3D Style
 def SetDefaultFrameAxis3DStyle(layer):
+    ''' Frame Axis 3D Symbol '''
     material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(0, 0, 255))
     material.setAmbient(QColor(0, 0, 255))
+    symbol = QgsLine3DSymbol()
+
+    symbol.setWidth(5)
+    symbol.setAltitudeClamping(2)
+    symbol.setMaterial(material)
+
+    renderer = QgsVectorLayer3DRenderer()
+    renderer.setLayer(layer)
+    renderer.setSymbol(symbol)
+    layer.setRenderer3D(renderer)
+    return
+
+
+def SetDefaultBeams3DStyle(layer):
+    ''' Beams 3D Symbol '''
+    material = QgsPhongMaterialSettings()
+    material.setDiffuse(QColor(255, 255, 255))
+    material.setAmbient(QColor(255, 255, 255))
     symbol = QgsLine3DSymbol()
 
     symbol.setWidth(5)
@@ -775,12 +831,32 @@ def SetDefaultFrameAxis3DStyle(layer):
 
 
 def SetDefaultFrameCenterStyle(layer):
-    ''' Point Symbol '''
+    ''' Frame Center Symbol '''
     style = S.getFrameCenterPoint()
     symbol = QgsMarkerSymbol.createSimple(
         {'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size': style["SIZE"]})
     renderer = QgsSingleSymbolRenderer(symbol)
     layer.setRenderer(renderer)
+    return
+
+
+def SetDefaultFrameCenter3DStyle(layer):
+    ''' Frame Center 3D Symbol '''
+    material = QgsPhongMaterialSettings()
+    material.setDiffuse(QColor(255, 255, 255))
+    material.setAmbient(QColor(255, 255, 255))
+    symbol = QgsPoint3DSymbol()
+    symbol.setShape(1)
+    S = {}
+    S['radius'] = 20
+    symbol.setShapeProperties(S)
+    symbol.setAltitudeClamping(2)
+    symbol.setMaterial(material)
+
+    renderer = QgsVectorLayer3DRenderer()
+    renderer.setLayer(layer)
+    renderer.setSymbol(symbol)
+    layer.setRenderer3D(renderer)
     return
 
 
@@ -793,7 +869,6 @@ def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
                                            'outline_style': style['OUTLINE_STYLE']})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
-    
     return
 
 
