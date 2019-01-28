@@ -2,12 +2,11 @@
 import os
 import shutil
 
-from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox
 from QGIS_FMV.utils.QgsFmvLog import log
-from qgis.core import Qgis as QGis
-from qgis.core import QgsProject
+from qgis.core import (QgsProject,
+                       Qgis as QGis)
 from qgis.utils import iface
 from qgis.PyQt.QtCore import QSettings
 

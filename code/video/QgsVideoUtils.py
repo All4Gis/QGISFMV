@@ -1,7 +1,6 @@
 from QGIS_FMV.utils.QgsFmvUtils import (GetImageWidth,
-                                        GetImageHeight)
-
-from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
+                                        GetImageHeight,
+                                        GetSensor,
                                         GetLine3DIntersectionWithDEM,
                                         GetFrameCenter,
                                         hasElevationModel,

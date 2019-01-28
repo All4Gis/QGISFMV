@@ -14,11 +14,14 @@ from PyQt5.QtWidgets import QFileDialog
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.fmvConfig import (frames_g,
-                                DTM_buffer_size as dtm_buffer)
-from QGIS_FMV.fmvConfig import ffmpeg as ffmpeg_path
-from QGIS_FMV.fmvConfig import ffprobe as ffprobe_path
-from QGIS_FMV.fmvConfig import Reverse_geocoding_url
-from QGIS_FMV.fmvConfig import min_buffer_size, Platform_lyr, Footprint_lyr, FrameCenter_lyr
+                                Reverse_geocoding_url,
+                                min_buffer_size,
+                                Platform_lyr,
+                                Footprint_lyr,
+                                FrameCenter_lyr,
+                                DTM_buffer_size as dtm_buffer,
+                                ffmpeg as ffmpeg_path,
+                                ffprobe as ffprobe_path)
 from QGIS_FMV.geo import sphere as sphere
 from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          ExpandLayer,
@@ -40,14 +43,12 @@ from qgis.core import (QgsApplication,
                        QgsTask,
                        QgsRasterLayer,
                        Qgis as QGis)
+from osgeo import gdal, osr
 
 try:
     from homography import from_points
 except ImportError:
     None
-
-settings = QSettings()
-tm = QgsApplication.taskManager()
 
 try:
     from cv2 import (COLOR_BGR2RGB,
@@ -58,36 +59,36 @@ except ImportError:
     None
 
 try:
-    from osgeo import gdal, osr
-except ImportError:
-    import gdal
-
-try:
     from pydevd import *
 except ImportError:
     None
+
+
+settings = QSettings()
+tm = QgsApplication.taskManager()
 
 windows = platform.system() == 'Windows'
 
 xSize = 0
 ySize = 0
-geotransform = None
-geotransform_affine = None
+
 defaultTargetWidth = 200.0
 
-gcornerPointUL = None
-gcornerPointUR = None
-gcornerPointLR = None
-gcornerPointLL = None
-gframeCenterLon = None
-gframeCenterLat = None
-frameCenterElevation = None
-sensorLatitude = None
-sensorLongitude = None
-sensorTrueAltitude = None
+iface,\
+geotransform ,\
+geotransform_affine,\
+gcornerPointUL,\
+gcornerPointUR,\
+gcornerPointLR,\
+gcornerPointLL,\
+gframeCenterLon,\
+gframeCenterLat,\
+frameCenterElevation,\
+sensorLatitude,\
+sensorLongitude,\
+sensorTrueAltitude = [None] * 13
 
 centerMode = 0
-iface = None
 
 dtm_data = []
 dtm_transform = None
@@ -97,14 +98,7 @@ dtm_rowLowerBound = 0
 tLastLon = 0.0
 tLastLat = 0.0
 
-LAST_PATH = "LAST_PATH"
-BOOL = "bool"
-NUMBER = "number"
 _settings = {}
-try:
-    from qgis.PyQt.QtCore import QPyNullVariant
-except Exception:
-    pass
 
 if windows:
     ffmpeg_path = ffmpeg_path + '\\ffmpeg.exe'
@@ -313,9 +307,9 @@ def pluginSetting(name, namespace=None, typ=None):
 
     def _type_map(t):
         """Return setting python type"""
-        if t == BOOL:
+        if t == "bool":
             return bool
-        elif t == NUMBER:
+        elif t == "number":
             return float
         else:
             return unicode
@@ -326,11 +320,6 @@ def pluginSetting(name, namespace=None, typ=None):
         if typ is None:
             typ = _type_map(_find_in_cache(name, 'type'))
         v = settings.value(full_name, None, type=typ)
-        try:
-            if isinstance(v, QPyNullVariant):
-                v = None
-        except Exception:
-            pass
         return v
     else:
         return _find_in_cache(name, 'default')
@@ -355,7 +344,7 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
     ''' dialog for save or load files '''
     msg = msg or 'Select file'
     caller = _callerName().split(".")
-    name = "/".join([LAST_PATH, caller[-1]])
+    name = "/".join(["LAST_PATH", caller[-1]])
     namespace = caller[0]
     path = pluginSetting(name, namespace)
     f = None
@@ -397,7 +386,7 @@ def setPluginSetting(name, value, namespace=None):
 def askForFolder(parent, msg=None, options=QFileDialog.ShowDirsOnly):
     msg = msg or 'Select folder'
     caller = _callerName().split(".")
-    name = "/".join([LAST_PATH, caller[-1]])
+    name = "/".join(["LAST_PATH", caller[-1]])
     namespace = caller[0]
     path = pluginSetting(name, namespace)
     folder = QFileDialog.getExistingDirectory(parent, msg, path, options)

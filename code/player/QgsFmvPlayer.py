@@ -1217,9 +1217,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.stop()
         self.parent._PlayerDlg = None
         self.parent.ToggleActiveFromTitle()
-        # RemoveVideoLayers()
-        # RemoveGroupByName()
-        # ResetData()
+
+        RemoveVideoLayers()
+        RemoveGroupByName()
+        ResetData()
 
         try:
             self.metadataDlg.hide()

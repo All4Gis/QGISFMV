@@ -621,7 +621,7 @@ def CreateVideoLayers():
             None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr)
         SetDefaultFrameCenterStyle(lyr_framecenter)
         addLayerNoCrsDialog(lyr_framecenter)
-        # TODO : HASELEVATION 3D Style
+        # TODO : HAS ELEVATION 3D Style
         if False:
             SetDefaultFrameCenter3DStyle(lyr_framecenter)
 
