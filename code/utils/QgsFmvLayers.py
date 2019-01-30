@@ -217,8 +217,7 @@ def AddDrawPolygonOnMap(poly_coordinates):
 
 
 def SetcrtSensorSrc():
-    global crtSensorSrc
-    global crtSensorSrc2
+    global crtSensorSrc, crtSensorSrc2
     crtSensorSrc = crtSensorSrc2 = 'DEFAULT'
 
 

@@ -219,10 +219,10 @@ class callBackMetadataThread(threading.Thread):
 
 
 def setCenterMode(mode, interface):
-    global centerMode
-    global iface
+    global centerMode, iface
     centerMode = mode
     iface = interface
+
 
 def getVideoLocationInfo(videoPath):
     """ Get basic location info about the video """
@@ -419,20 +419,14 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     ''' Make Geotranform from pixel to lon lat coordinates '''
     gcps = []
 
-    global gcornerPointUL
+    global gcornerPointUL, gcornerPointUR, gcornerPointLR, gcornerPointLL, gframeCenterLat, gframeCenterLon, geotransform_affine, geotransform
+
     gcornerPointUL = cornerPointUL
-    global gcornerPointUR
     gcornerPointUR = cornerPointUR
-    global gcornerPointLR
     gcornerPointLR = cornerPointLR
-    global gcornerPointLL
     gcornerPointLL = cornerPointLL
-    global gframeCenterLat
     gframeCenterLat = frameCenterLat
-    global gframeCenterLon
     gframeCenterLon = frameCenterLon
-    global geotransform
-    global geotransform_affine
 
     Height = GetFrameCenter()[2]
 
@@ -505,8 +499,7 @@ def hasElevationModel():
 
 def SetImageSize(w, h):
     ''' Set Image Size '''
-    global xSize
-    global ySize
+    global xSize, ySize
     xSize = w
     ySize = h
     return
@@ -576,9 +569,7 @@ def deg2rad(degrees):
 
 
 def ResetData():
-    global dtm_data
-    global tLastLon
-    global tLastLat
+    global dtm_data, tLastLon, tLastLat
 
     SetcrtSensorSrc()
     SetcrtPltTailNum()
@@ -589,10 +580,7 @@ def ResetData():
 
 
 def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
-    global dtm_data
-    global dtm_transform
-    global dtm_colLowerBound
-    global dtm_rowLowerBound
+    global dtm_data, dtm_transform, dtm_colLowerBound, dtm_rowLowerBound
 
     # Initialize the dtm once, based on a zone arouind the target
     qgsu.showUserAndLogMessage("", "Initializing DTM.", onlyLog=True)
@@ -626,10 +614,7 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
 
 def UpdateLayers(packet, parent=None, mosaic=False):
     ''' Update Layers Values '''
-    global frameCenterElevation
-    global sensorLatitude
-    global sensorLongitude
-    global sensorTrueAltitude
+    global frameCenterElevation, sensorLatitude, sensorLongitude, sensorTrueAltitude
 
     frameCenterLat = packet.FrameCenterLatitude
     frameCenterLon = packet.FrameCenterLongitude
