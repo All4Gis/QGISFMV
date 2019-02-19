@@ -63,7 +63,6 @@ try:
 except ImportError:
     None
 
-
 settings = QSettings()
 tm = QgsApplication.taskManager()
 
@@ -74,18 +73,18 @@ ySize = 0
 
 defaultTargetWidth = 200.0
 
-iface,\
-geotransform ,\
-geotransform_affine,\
-gcornerPointUL,\
-gcornerPointUR,\
-gcornerPointLR,\
-gcornerPointLL,\
-gframeCenterLon,\
-gframeCenterLat,\
-frameCenterElevation,\
-sensorLatitude,\
-sensorLongitude,\
+iface, \
+geotransform , \
+geotransform_affine, \
+gcornerPointUL, \
+gcornerPointUR, \
+gcornerPointLR, \
+gcornerPointLL, \
+gframeCenterLon, \
+gframeCenterLat, \
+frameCenterElevation, \
+sensorLatitude, \
+sensorLongitude, \
 sensorTrueAltitude = [None] * 13
 
 centerMode = 0
@@ -222,7 +221,6 @@ def setCenterMode(mode, interface):
     global centerMode, iface
     centerMode = mode
     iface = interface
-
 
 def getVideoLocationInfo(videoPath):
     """ Get basic location info about the video """
@@ -738,6 +736,7 @@ def GeoreferenceFrame(task, image, output, p):
     dst_ds.SetProjection(srs.ExportToWkt())
 
     # Set location
+    # TODO : CHECK GEOTRANSFORM
     dst_ds.SetGeoTransform(geotransform_affine)
     dst_ds.GetRasterBand(1).SetNoDataValue(0)
     dst_ds.FlushCache()

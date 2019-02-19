@@ -25,6 +25,8 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.5:
+    	- Fix mosaic algorithm
+    	- Reimplimented algorithms
     	- Add 3D Support (Experimental)
     	- Convert Video is cancelable
     	- Preserve Metadata when Record video

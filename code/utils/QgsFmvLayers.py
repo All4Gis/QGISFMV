@@ -364,7 +364,7 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
     return
 
 
-def UpdateTrajectoryData(packet,ele):
+def UpdateTrajectoryData(packet, ele):
     ''' Update Trajectory Values '''
     lat = packet.SensorLatitude
     lon = packet.SensorLongitude
