@@ -247,7 +247,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def packetStreamParser(self, stdout_data):
         ''' Common packet process'''
-
         for packet in StreamParser(stdout_data):
             try:
                 if isinstance(packet, UnknownElement):
@@ -264,10 +263,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                              mosaic=self.createingMosaic)
                 QApplication.processEvents()
                 return
-            except Exception:
-                None
-#                     qgsu.showUserAndLogMessage(QCoreApplication.translate(
-#                         "QgsFmvPlayer", "Meta update failed! "), " Packet:" + str(packet) + ", error:" + str(inst), level=QGis.Warning)
+            except Exception as e:
+                qgsu.showUserAndLogMessage("", "QgsFmvPlayer packetStreamParser failed! : " + str(e), onlyLog=True)
+
 
     def callBackMetadata(self, currentTime, nextTime):
         """ Metadata CallBack """
@@ -285,9 +283,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             if t.is_alive():
                 t.p.terminate()
                 t.join()
-
-            qgsu.showUserAndLogMessage(
-                "", "callBackMetadataThread self.stdout: " + str(t.stdout), onlyLog=True)
 
             if t.stdout == b'':
                 return

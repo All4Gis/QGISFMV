@@ -270,7 +270,8 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
                         QgsPointXY(
                         cornerPointLL[1], cornerPointLL[0]),
                         QgsPointXY(cornerPointUL[1], cornerPointUL[0])]])})
-            footprintLyr.endEditCommand()
+                
+                footprintLyr.endEditCommand()
 
             CommonLayer(footprintLyr)
 
@@ -470,6 +471,9 @@ def UpdateFrameCenterData(packet):
     lat = packet.FrameCenterLatitude
     lon = packet.FrameCenterLongitude
     alt = packet.FrameCenterElevation
+    if packet.FrameCenterElevation == None:
+        alt = 0.0
+    
     frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr)
 
     try:
