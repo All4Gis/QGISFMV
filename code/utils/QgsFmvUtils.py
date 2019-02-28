@@ -243,7 +243,6 @@ def getVideoLocationInfo(videoPath):
 
         if stdout_data == b'':
             return
-
         for packet in StreamParser(stdout_data):
             if isinstance(packet, UnknownElement):
                 qgsu.showUserAndLogMessage(
@@ -471,6 +470,13 @@ def GetSensor():
 
 
 def GetFrameCenter():
+    global sensorTrueAltitude
+    global frameCenterElevation
+    global gframeCenterLat
+    global gframeCenterLon
+    #Todo if sensor height is null, compute it from sensor altitude.
+    if(frameCenterElevation == None):
+        frameCenterElevation = sensorTrueAltitude - 500    
     return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
 
 
@@ -622,6 +628,7 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
 
 def UpdateLayers(packet, parent=None, mosaic=False):
     ''' Update Layers Values '''
+
     global frameCenterElevation, sensorLatitude, sensorLongitude, sensorTrueAltitude
 
     frameCenterLat = packet.FrameCenterLatitude
@@ -651,13 +658,11 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     else:
         cornerPointUL = [packet.CornerLatitudePoint1Full,
                          packet.CornerLongitudePoint1Full]
-
         if None in cornerPointUL:
             return
 
         cornerPointUR = [packet.CornerLatitudePoint2Full,
                          packet.CornerLongitudePoint2Full]
-
         if None in cornerPointUR:
             return
 
@@ -672,7 +677,6 @@ def UpdateLayers(packet, parent=None, mosaic=False):
 
         if None in cornerPointLL:
             return
-
         UpdateFootPrintData(
             packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 

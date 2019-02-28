@@ -453,6 +453,9 @@ def UpdateFrameCenterData(packet, ele):
     lat = packet.FrameCenterLatitude
     lon = packet.FrameCenterLongitude
     alt = packet.FrameCenterElevation
+    if packet.FrameCenterElevation == None:
+        alt = 0.0
+    
     frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr)
 
     try:

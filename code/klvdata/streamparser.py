@@ -25,7 +25,6 @@
 
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.klvparser import KLVParser
-from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 try:
     from pydevd import *

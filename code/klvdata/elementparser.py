@@ -33,7 +33,8 @@ from QGIS_FMV.klvdata.common import (bytes_to_datetime,
                                      bytes_to_str,
                                      datetime_to_bytes,
                                      float_to_bytes,
-                                     str_to_bytes)
+                                     str_to_bytes,
+                                     ieee754_bytes_to_fp)
 from QGIS_FMV.klvdata.element import Element
 
 try:
@@ -188,3 +189,24 @@ class MappedValue(BaseValue):
 
     def __float__(self):
         return self.value
+
+class IEEE754ElementParser(ElementParser):
+    __metaclass__ = ABCMeta
+    
+    def __init__(self, value):
+        super().__init__(IEEE754Value(value))
+
+
+class IEEE754Value(BaseValue):
+    def __init__(self, value):
+        try:
+            self.value = ieee754_bytes_to_fp(value)
+        except TypeError:
+            self.value = value
+
+    def __bytes__(self):
+        #TODO
+        return ieee754_double_to_bytes(self.value)
+
+    def __str__(self):
+        return str(self.value)

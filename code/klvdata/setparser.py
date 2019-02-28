@@ -27,7 +27,7 @@ from abc import ABCMeta
 from abc import abstractmethod
 from collections import OrderedDict
 from pprint import pformat
-
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.klvdata.element import Element
 from QGIS_FMV.klvdata.klvparser import KLVParser
 
@@ -44,7 +44,6 @@ class SetParser(Element):
     def __init__(self, value, key_length=1):
         """All parser needs is the value, no other information"""
         super().__init__(self.key, value)
-        self.key_length = key_length
         self.items = OrderedDict()
         self.parse()
 
@@ -97,7 +96,8 @@ class SetParser(Element):
             try:
                 self.items[key] = self.parsers[key](value)
             except Exception:
-                None
+                #None
+                qgsu.showUserAndLogMessage("", "Value cannot be read for key: " + str(key.hex()), onlyLog=True)
 
     @classmethod
     def add_parser(cls, obj):
@@ -142,6 +142,8 @@ class SetParser(Element):
         def repeat(items, indent=1):
             for item in items:
                 try:
+                    if not hasattr(item.value, 'value'):
+                        continue                                                          
                     metadata[item.TAG] = (item.LDSName, str(item.value.value))
                     if item.TAG == 4:
                         self.PlatformTailNumber = item.value.value
@@ -204,7 +206,7 @@ class SetParser(Element):
                     elif item.TAG == 89:
                         self.CornerLongitudePoint4Full = item.value.value
                 except Exception:
-                    None
+                    qgsu.showUserAndLogMessage("", "Value cannot be read: " + str(item.value.value), onlyLog=True)
                 if hasattr(item, 'items'):
                     repeat(item.items.values(), indent + 1)
 
@@ -472,10 +474,7 @@ def str_dict(values):
 
     def per_item(value, indent=0):
         for item in value:
-            if isinstance(item):
-                out.append(indent * "\t" + str(item))
-            else:
-                out.append(indent * "\t" + str(item))
+            out.append(indent * "\t" + str(item))
 
     per_item(values)
 
