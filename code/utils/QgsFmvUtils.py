@@ -247,7 +247,6 @@ def getVideoLocationInfo(videoPath):
 
         if stdout_data == b'':
             return
-
         for packet in StreamParser(stdout_data):
             if isinstance(packet, UnknownElement):
                 qgsu.showUserAndLogMessage(
@@ -485,6 +484,13 @@ def GetSensor():
 
 
 def GetFrameCenter():
+    global sensorTrueAltitude
+    global frameCenterElevation
+    global gframeCenterLat
+    global gframeCenterLon
+    #Todo if sensor height is null, compute it from sensor altitude.
+    if(frameCenterElevation == None):
+        frameCenterElevation = sensorTrueAltitude - 500    
     return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
 
 
@@ -645,7 +651,6 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     global sensorLatitude
     global sensorLongitude
     global sensorTrueAltitude
-
     frameCenterLat = packet.FrameCenterLatitude
     frameCenterLon = packet.FrameCenterLongitude
     frameCenterElevation = packet.FrameCenterElevation
@@ -660,7 +665,6 @@ def UpdateLayers(packet, parent=None, mosaic=False):
 
     OffsetLat1 = packet.OffsetCornerLatitudePoint1
     LatitudePoint1Full = packet.CornerLatitudePoint1Full
-
     if OffsetLat1 is not None and LatitudePoint1Full is None:
         CornerEstimationWithOffsets(packet)
         if mosaic:
@@ -674,13 +678,11 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     else:
         cornerPointUL = [packet.CornerLatitudePoint1Full,
                          packet.CornerLongitudePoint1Full]
-
         if None in cornerPointUL:
             return
 
         cornerPointUR = [packet.CornerLatitudePoint2Full,
                          packet.CornerLongitudePoint2Full]
-
         if None in cornerPointUR:
             return
 
@@ -695,7 +697,6 @@ def UpdateLayers(packet, parent=None, mosaic=False):
 
         if None in cornerPointLL:
             return
-
         UpdateFootPrintData(
             packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL)
 

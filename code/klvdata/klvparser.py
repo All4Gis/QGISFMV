@@ -57,7 +57,7 @@ class KLVParser(object):
             byte_length = bytes_to_int(self.__read(4))
         else:
             byte_length = bytes_to_int(self.__read(1))
-
+        
         if byte_length < 128:
             # BER Short Form
             length = byte_length
@@ -66,7 +66,7 @@ class KLVParser(object):
             length = bytes_to_int(self.__read(byte_length - 128))
 
         value = self.__read(length)
-
+        
         return key, value
 
     def __read(self, size):

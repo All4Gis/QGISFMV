@@ -82,6 +82,8 @@ class SecurityLocalMetadataSet(SetParser):
     Must be a subclass of Element or duck type Element.
     """
     key, name = b'\x30', "Security Local Metadata Set"
+    LDSName = "Security Local Metadata Set"
+    key_length = 1                                                 
     parsers = {}
 
     _unknown_element = UnknownElement
@@ -96,7 +98,7 @@ class SecurityClassification(BytesElementParser):
     accordance with U.S. and NATO classification guidance.
     """
     key = b'\x01'
-
+    LDSName = "Security Classification"
     _classification = {
         b'\x01': 'UNCLASSIFIED',
         b'\x02': 'RESTRICTED',
