@@ -9,10 +9,7 @@ try:
 except ImportError:
     None
 
-try:
-    import xml.etree.cElementTree as etree
-except ImportError:
-    import xml.etree.ElementTree as etree
+import xml.etree.cElementTree as etree
 
 try:
     import numpy

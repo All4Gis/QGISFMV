@@ -1,19 +1,25 @@
 import os
-
+from os.path import dirname, abspath
 from PyQt5.QtGui import QColor, QFont, QPolygonF
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QCoreApplication, QPointF
-from QGIS_FMV.fmvConfig import (Platform_lyr,
-                                Beams_lyr,
-                                Footprint_lyr,
-                                FrameCenter_lyr,
-                                FrameAxis_lyr,
-                                Point_lyr,
-                                Line_lyr,
-                                Polygon_lyr,
-                                frames_g,
-                                Trajectory_lyr,
-                                epsg)
+
+from configparser import SafeConfigParser
+parser = SafeConfigParser()
+parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
+
+Platform_lyr = parser['LAYERS']['Platform_lyr']
+Beams_lyr = parser['LAYERS']['Beams_lyr']
+Footprint_lyr = parser['LAYERS']['Footprint_lyr']
+FrameCenter_lyr = parser['LAYERS']['FrameCenter_lyr']
+FrameAxis_lyr = parser['LAYERS']['FrameAxis_lyr']
+Point_lyr = parser['LAYERS']['Point_lyr']
+Line_lyr = parser['LAYERS']['Line_lyr']
+Polygon_lyr = parser['LAYERS']['Polygon_lyr']
+frames_g = parser['LAYERS']['frames_g']
+Trajectory_lyr = parser['LAYERS']['Trajectory_lyr']
+epsg = parser['LAYERS']['epsg']
+
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QVariant, QSettings
 from qgis.core import (

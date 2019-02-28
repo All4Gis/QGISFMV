@@ -25,6 +25,8 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.5:
+    	- Auto install dependencies on windows
+    	- Change FmvConfig file (settings.ini)
     	- Fix mosaic algorithm
     	- Reimplimented algorithms
     	- Add 3D Support (Experimental)

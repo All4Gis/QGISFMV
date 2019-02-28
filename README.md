@@ -99,6 +99,8 @@ The installation can be done from the executable if it is in windows or from the
 
 ## Installation on Windows
 
+Windows automatically installs all, with user permission,If an error occurs, you should perform some checks.
+
 [![Watch the video (Spanish)](https://i.imgur.com/vXpMJhS.png)](https://youtu.be/9C973pz5i6k "Como usa QGISFMV en windows")
 
 ## Installation on Archlinux
