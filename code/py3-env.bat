@@ -14,4 +14,4 @@ path %OSGEO4W_ROOT%\apps\qgis\bin;%PATH%
 
 cd /d %~dp0
 
-start cmd
+::start cmd

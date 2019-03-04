@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_FmvMetadata(object):
     def setupUi(self, FmvMetadata):
         FmvMetadata.setObjectName("FmvMetadata")
-        FmvMetadata.resize(780, 491)
+        FmvMetadata.resize(345, 491)
         FmvMetadata.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.dockWidgetContents = QtWidgets.QWidget()
         self.dockWidgetContents.setMinimumSize(QtCore.QSize(300, 0))
@@ -43,6 +43,7 @@ class Ui_FmvMetadata(object):
 "margin: 1px;\n"
 "text-align: center;\n"
 "font-family: arial;\n"
+"font-weight: bold;\n"
 "font-size:12px;\n"
 "}\n"
 "\n"

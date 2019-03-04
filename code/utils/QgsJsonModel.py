@@ -9,7 +9,7 @@ from PyQt5.QtCore import (QFile,
                           QByteArray,
                           QVariant,
                           QJsonParseError)
-
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 try:
     from pydevd import *
 except ImportError:
@@ -130,7 +130,8 @@ class QJsonModel(QAbstractItemModel):
             stream.close()
             self.loadJson(js)
         else:
-            print(stream.errorString())
+            qgsu.showUserAndLogMessage(
+                "", stream.errorString(), onlyLog=True)
 
     def loadJson(self, value):
         error = QJsonParseError()
@@ -146,7 +147,8 @@ class QJsonModel(QAbstractItemModel):
 
             return True
 
-        print("QJsonModel: error loading Json")
+        qgsu.showUserAndLogMessage(
+                "", "QJsonModel: error loading Json", onlyLog=True)
         return False
 
     def loadJsonFromConsole(self, value):
@@ -163,7 +165,8 @@ class QJsonModel(QAbstractItemModel):
 
             return True
 
-        print("QJsonModel: error loading Json")
+        qgsu.showUserAndLogMessage(
+                "", "QJsonModel: error loading Json", onlyLog=True)
         return False
 
     def data(self, index, role):

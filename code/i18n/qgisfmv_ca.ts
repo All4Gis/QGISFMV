@@ -77,37 +77,37 @@
         <translation>Desar</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="112"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="113"/>
         <source>Tag</source>
         <translation>Tag</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="122"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="123"/>
         <source>Key</source>
         <translation>Clau</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="132"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="133"/>
         <source>Value</source>
         <translation>Valor</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="150"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="151"/>
         <source>Save as PDF</source>
         <translation>Desar com a PDF</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="153"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="154"/>
         <source>Ctrl+Shift+P</source>
         <translation>Ctrl+Shift+P</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="162"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="163"/>
         <source>Save as CSV</source>
         <translation>Desar com a CSV</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMetadata.ui" line="165"/>
+        <location filename="../ui/ui_FmvMetadata.ui" line="166"/>
         <source>Ctrl+Shift+C</source>
         <translation>Ctrl+Shift+C</translation>
     </message>
