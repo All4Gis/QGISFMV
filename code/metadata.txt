@@ -25,6 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.5:
+    	- Added EG0104 Parser for legacy Predator Metadataset
     	- Auto install dependencies on windows
     	- Change FmvConfig file (settings.ini)
     	- Fix mosaic algorithm

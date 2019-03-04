@@ -8,9 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_PlayerWindow(object):
-
     def setupUi(self, PlayerWindow):
         PlayerWindow.setObjectName("PlayerWindow")
         PlayerWindow.resize(748, 652)
@@ -715,7 +713,6 @@ class Ui_PlayerWindow(object):
         self.actionCenter_Target.setText(_translate("PlayerWindow", "Center on Target"))
         self.actionNDVI.setText(_translate("PlayerWindow", "NDVI"))
         self.actionCapture_Georeferenced_Frame.setText(_translate("PlayerWindow", "Capture Georeferenced Frame"))
-
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc

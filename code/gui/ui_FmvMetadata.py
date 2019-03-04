@@ -8,9 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_FmvMetadata(object):
-
     def setupUi(self, FmvMetadata):
         FmvMetadata.setObjectName("FmvMetadata")
         FmvMetadata.resize(780, 491)
@@ -118,6 +116,5 @@ class Ui_FmvMetadata(object):
         self.actionSave_as_PDF.setShortcut(_translate("FmvMetadata", "Ctrl+Shift+P"))
         self.actionSave_as_CSV.setText(_translate("FmvMetadata", "Save as CSV"))
         self.actionSave_as_CSV.setShortcut(_translate("FmvMetadata", "Ctrl+Shift+C"))
-
 
 from QGIS_FMV.gui import resources_rc
