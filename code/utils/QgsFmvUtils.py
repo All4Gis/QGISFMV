@@ -474,7 +474,7 @@ def GetFrameCenter():
     global frameCenterElevation
     global gframeCenterLat
     global gframeCenterLon
-    #Todo if sensor height is null, compute it from sensor altitude.
+    # Todo if sensor height is null, compute it from sensor altitude.
     if(frameCenterElevation == None):
         frameCenterElevation = sensorTrueAltitude - 500    
     return [gframeCenterLat, gframeCenterLon, frameCenterElevation]

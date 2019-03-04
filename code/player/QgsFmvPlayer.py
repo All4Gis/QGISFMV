@@ -275,7 +275,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             except Exception as e:
                 qgsu.showUserAndLogMessage("", "QgsFmvPlayer packetStreamParser failed! : " + str(e), onlyLog=True)
 
-
     def callBackMetadata(self, currentTime, nextTime):
         """ Metadata CallBack """
         try:

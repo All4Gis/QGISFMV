@@ -96,7 +96,7 @@ class SetParser(Element):
             try:
                 self.items[key] = self.parsers[key](value)
             except Exception:
-                #None
+                # None
                 qgsu.showUserAndLogMessage("", "Value cannot be read for key: " + str(key.hex()), onlyLog=True)
 
     @classmethod

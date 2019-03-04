@@ -15,6 +15,7 @@ from qgis.utils import iface
 from qgis.core import Qgis as QGis
 from PyQt5.QtCore import Qt
 import pathlib
+import requests
 
 plugin_dir = pathlib.Path(__file__).parent.parent
 sys.path.append(plugin_dir)
@@ -24,6 +25,7 @@ fileConfig = os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini')
 parser.read(fileConfig)
 
 ffmpegConf = parser['GENERAL']['ffmpeg']
+DemConf = parser['GENERAL']['DTM_file']
 
 try:
     import winreg
@@ -45,6 +47,8 @@ if platform.machine().endswith('64'):
 else:
     FFMPEG = "https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-20190225-2e67f75-win32-static.zip"
 
+DemGlobal = "http://www.gisandbeers.com/RRSS/Cartografia/DEM-Mundial.rar"
+
 progress = QProgressBar()
 progress.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
@@ -63,6 +67,7 @@ def reporthook(blocknum, blocksize, totalsize):
 def WindowsInstaller():
     ''' complete windows installation '''
     if not IsLavFilters():
+        ''' lAV Filters '''
         buttonReply = qgsu.CustomMessage("QGIS FMV", "Missing dependency", "Do you want install Lav Filters?", icon="Information")
         if buttonReply == QMessageBox.Yes:
 
@@ -79,6 +84,7 @@ def WindowsInstaller():
             iface.messageBar().clearWidgets()
 
     if not IsFFMPEG():
+        ''' FFMPEG Lib '''
         buttonReply = qgsu.CustomMessage("QGIS FMV", "Missing dependency", "Do you want install FFMPEG?", icon="Information")
         if buttonReply == QMessageBox.Yes:
             # Download FFMPEG # Prevent HTTP Error 403: Forbidden
@@ -109,6 +115,16 @@ def WindowsInstaller():
             os.remove(filename)
             iface.messageBar().clearWidgets()
 
+    if not isDem():
+        ''' DEM File '''
+        progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Dem file not exist!")
+        iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
+        parser.set('GENERAL', 'DTM_file', "")
+
+        with open(fileConfig, 'w') as configfile:
+            parser.write(configfile)
+        iface.messageBar().clearWidgets()
+
     try:
         import homography, cv2, matplotlib
     except ImportError:
@@ -138,6 +154,14 @@ def LinuxInstaller():
 def MacInstaller():
     '''complete Mac installation '''
     return
+
+
+def isDem():
+    ''' Check if Dem is present '''
+    if windows:
+        if not os.path.isfile(DemConf):
+            return False
+    return True
 
 
 def IsLavFilters():
@@ -189,3 +213,39 @@ def WinSoftwareInstalled(hive, flag):
             continue
 
     return software_list
+
+
+def download_file_from_google_drive(id, destination):
+    URL = "https://docs.google.com/uc?export=download"
+
+    session = requests.Session()
+
+    response = session.get(URL, params={'id':id }, stream=True)
+    token = get_confirm_token(response)
+
+    if token:
+        params = {'id': id, 'confirm': token}
+        response = session.get(URL, params=params, stream=True)
+
+    save_response_content(response, destination)
+
+
+def get_confirm_token(response):
+    for key, value in response.cookies.items():
+        if key.startswith('download_warning'):
+            return value
+
+    return None
+
+
+def save_response_content(response, destination):
+    CHUNK_SIZE = 32768
+    total_length = int(response.headers.get('content-length'))
+    dl = 0
+    with open(destination, "wb") as f:
+        for chunk in response.iter_content(CHUNK_SIZE):
+            if chunk:  # filter out keep-alive new chunks
+                dl += len(chunk)
+                done = int(50 * dl / total_length)
+                f.write(chunk)
+                progress.setValue(done)

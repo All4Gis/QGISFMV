@@ -190,6 +190,7 @@ class MappedValue(BaseValue):
     def __float__(self):
         return self.value
 
+
 class IEEE754ElementParser(ElementParser):
     __metaclass__ = ABCMeta
     
@@ -198,6 +199,7 @@ class IEEE754ElementParser(ElementParser):
 
 
 class IEEE754Value(BaseValue):
+
     def __init__(self, value):
         try:
             self.value = ieee754_bytes_to_fp(value)
@@ -205,7 +207,7 @@ class IEEE754Value(BaseValue):
             self.value = value
 
     def __bytes__(self):
-        #TODO
+        # TODO
         return ieee754_double_to_bytes(self.value)
 
     def __str__(self):
