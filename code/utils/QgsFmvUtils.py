@@ -560,12 +560,22 @@ def install_pip_requirements():
             requirements_file), "", onlyLog=True)
         raise
     try:
-        process = Popen(["pip", "install", '-r', requirements_file],
+        process = Popen(["python", "-m", 'pip', "install",'--upgrade', 'pip'],
                         shell=True,
                         stdout=PIPE,
                         stderr=PIPE)
         process.wait()
-    except Exception:
+        process = Popen(["python", "-m", 'pip', "install",'-U', 'pip', 'setuptools'],
+                        shell=True,
+                        stdout=PIPE,
+                        stderr=PIPE)
+        process.wait()
+        process = Popen(["pip", "install", '--user', '-r', requirements_file],
+                        shell=True,
+                        stdout=PIPE,
+                        stderr=PIPE)
+        process.wait()
+    except Exception as e:
         raise
     return
 
