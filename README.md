@@ -40,7 +40,7 @@ for this reason, I decided to develop this open source project and, this way, of
 
 ## Dependencies
 
-* [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `fmvConfig.py` with the corresponding path.For example 'D://FFMPEG'
+* [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `settings.ini` with the corresponding path.For example D://FFMPEG
 
 * [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python`
 
