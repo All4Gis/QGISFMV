@@ -56,7 +56,7 @@ The plugin install automatically this requisites,but you can install it using:
 
 `python3 -m pip install -r requirements.txt`
 
-&uparrow; [Back to top](#table-of-contents)
+:arrow_up: [Back to top](#table-of-contents)
 
 ## For show video
 
