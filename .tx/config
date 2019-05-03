@@ -9,7 +9,6 @@ trans.es = code/i18n/qgisfmv_es.ts
 trans.ca = code/i18n/qgisfmv_ca.ts
 trans.fr = code/i18n/qgisfmv_fr.ts
 trans.gl = code/i18n/qgisfmv_gl.ts
-trans.de = code/i18n/qgisfmv_de.ts
 trans.fa = code/i18n/qgisfmv_fa.ts
 trans.it = code/i18n/qgisfmv_it.ts
 type = QT

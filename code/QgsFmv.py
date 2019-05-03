@@ -23,13 +23,13 @@
 """
 import os.path
 
-from PyQt5.QtCore import (QSettings,
+from qgis.PyQt.QtCore import (QSettings,
                           QCoreApplication,
                           QTranslator,
                           qVersion,
                           QThread)
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QAction
 from QGIS_FMV.player.QgsFmvAbout import FmvAbout
 from QGIS_FMV.player.QgsManager import FmvManager
 from QGIS_FMV.utils.QgsFmvLog import log
@@ -59,6 +59,7 @@ class Fmv:
         QSettings().setValue("/core/OpenClEnabled", True)
 
         self.plugin_dir = os.path.dirname(__file__)
+
         locale = QSettings().value("locale//userLocale")[0:2]
         localePath = os.path.join(
             self.plugin_dir, 'i18n', 'qgisfmv_{}.qm'.format(locale))
@@ -66,7 +67,7 @@ class Fmv:
             self.translator = QTranslator()
             self.translator.load(localePath)
 
-            if qVersion() > '5.9.0':
+            if qVersion() > '5.0.0':
                 QCoreApplication.installTranslator(self.translator)
 
         self._FMVManager = None

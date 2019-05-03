@@ -2,8 +2,8 @@
 import os
 import shutil
 
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMessageBox
+from qgis.PyQt.QtGui import QPixmap
+from qgis.PyQt.QtWidgets import QMessageBox
 from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.core import (QgsProject,
                        Qgis as QGis)

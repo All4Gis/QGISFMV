@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize
-from PyQt5.QtGui import (QImage,
+from qgis.PyQt.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize
+from qgis.PyQt.QtGui import (QImage,
                          QPalette,
                          QPixmap,
                          QPainter,
@@ -13,7 +13,7 @@ from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QAbstractVideoSurface,
                                 QVideoSurfaceFormat)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtWidgets import QWidget, QRubberBand
+from qgis.PyQt.QtWidgets import QWidget, QRubberBand
 
 from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
                                         convertQImageToMat,

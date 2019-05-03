@@ -11,12 +11,12 @@ from QGIS_FMV.utils.QgsFmvInstaller import WindowsInstaller
 import platform
 windows = platform.system() == 'Windows'
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from PyQt5.QtWidgets import QMessageBox
+from qgis.PyQt.QtWidgets import QMessageBox
 from qgis.utils import iface
 from qgis.utils import reloadPlugin
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import Qt
-from PyQt5.QtWidgets import QApplication
+from qgis.PyQt.QtWidgets import QApplication
 
 # Check dependencies
 if windows:

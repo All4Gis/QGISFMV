@@ -36,17 +36,17 @@
 <context>
     <name>Fmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="76"/>
+        <location filename="../QgsFmv.py" line="77"/>
         <source>Show Video Manager</source>
         <translation>Mostrar administrador de videos</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="103"/>
+        <location filename="../QgsFmv.py" line="104"/>
         <source>Full Motion Video (FMV)</source>
         <translation>Full Motion Video (FMV)</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="89"/>
+        <location filename="../QgsFmv.py" line="90"/>
         <source>Show About FMV</source>
         <translation>Mostrar acerca de FMV</translation>
     </message>
@@ -61,7 +61,7 @@
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="20"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Acerca de</translation>
     </message>
 </context>
 <context>
@@ -84,12 +84,12 @@
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="123"/>
         <source>Key</source>
-        <translation>Key</translation>
+        <translation>Clave</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="133"/>
         <source>Value</source>
-        <translation>Value</translation>
+        <translation>Valor</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="151"/>
@@ -142,12 +142,12 @@
     <message>
         <location filename="../player/QgsManager.py" line="170"/>
         <source>Start location not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ubicación de inicio no disponible.</translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="129"/>
         <source>Failed loading FFMPEG ! </source>
-        <translation type="unfinished"></translation>
+        <translation>Error al cargar FFMPEG!</translation>
     </message>
 </context>
 <context>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="186"/>
         <source>Open Stream</source>
-        <translation>Abir Stream</translation>
+        <translation>Abrir fichero MPEG2</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="153"/>
@@ -476,14 +476,9 @@
         <translation>Seguimiento de objetos</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="986"/>
-        <source>Ruler</source>
-        <translation>Regla</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1010"/>
-        <source>Horizontal Mirrored</source>
-        <translation>Espejo horizontal</translation>
+        <location filename="../ui/ui_FmvPlayer.ui" line="693"/>
+        <source>Map</source>
+        <translation>Mapa</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="713"/>
@@ -491,9 +486,24 @@
         <translation>Barra de Herramientas Utilidades</translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="986"/>
+        <source>Ruler</source>
+        <translation>Regla</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="998"/>
+        <source>Hand Draw</source>
+        <translation>Dibujo libre</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1010"/>
+        <source>Horizontal Mirrored</source>
+        <translation>Espejo horizontal</translation>
+    </message>
+    <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1025"/>
         <source>Censure</source>
-        <translation type="unfinished"></translation>
+        <translation>Censurar</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1034"/>
@@ -518,12 +528,12 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1094"/>
         <source>Remove Last Pinpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar Punto Anterior</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1109"/>
         <source>Remove All Pinpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar todos los puntos</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1139"/>
@@ -536,39 +546,29 @@
         <translation>Eliminar Línea Anterior</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="693"/>
-        <source>Map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1166"/>
         <source>Center on Platform</source>
-        <translation type="unfinished"></translation>
+        <translation>Centrar en la plataforma</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1178"/>
         <source>Center on Footprint</source>
-        <translation type="unfinished"></translation>
+        <translation>Centrar en la huella</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1193"/>
         <source>Center on Target</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="998"/>
-        <source>Hand Draw</source>
-        <translation type="unfinished"></translation>
+        <translation>Centrar en elTarget</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1205"/>
         <source>NDVI</source>
-        <translation type="unfinished"></translation>
+        <translation>NDVI</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1210"/>
         <source>Capture Georeferenced Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Capturar frame georeferenciado</translation>
     </message>
 </context>
 <context>
@@ -607,21 +607,6 @@
         <location filename="../player/QgsFmvPlayer.py" line="454"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadatos</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="814"/>
-        <source>Open Video File : </source>
-        <translation>Abrir archivo de video:</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="826"/>
-        <source>Save file succesfully!</source>
-        <translation type="obsolete">¡Archivo guardado exitosamente!</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="799"/>
-        <source>Playing : </source>
-        <translation>Reproduciendo :</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1195"/>
@@ -670,14 +655,24 @@
         <translation>Guardar video Bitrate</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1033"/>
-        <source>Completed with no exception and no result (probably manually canceled by the user)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../player/QgsFmvPlayer.py" line="1122"/>
         <source>Save Current Georeferenced Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar el frame georeferenciado actual</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="799"/>
+        <source>Playing : </source>
+        <translation>Reproduciendo : </translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="814"/>
+        <source>Open Video File : </source>
+        <translation>Abrir archivo de video : </translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="1033"/>
+        <source>Completed with no exception and no result (probably manually canceled by the user)</source>
+        <translation>Completado sin excepción y sin resultado (probablemente cancelado manualmente por el usuario)</translation>
     </message>
 </context>
 <context>

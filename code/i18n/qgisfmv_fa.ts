@@ -36,17 +36,17 @@
 <context>
     <name>Fmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="76"/>
+        <location filename="../QgsFmv.py" line="77"/>
         <source>Show Video Manager</source>
         <translation>نمایش مدیر ویدئو</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="103"/>
+        <location filename="../QgsFmv.py" line="104"/>
         <source>Full Motion Video (FMV)</source>
         <translation>ویدیو حرکت کامل (FMV)</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="89"/>
+        <location filename="../QgsFmv.py" line="90"/>
         <source>Show About FMV</source>
         <translation>نمایش درباره اِف اِم وی</translation>
     </message>
@@ -132,7 +132,7 @@
     <message>
         <location filename="../player/QgsManager.py" line="155"/>
         <source>This video don&apos;t have Metadata ! </source>
-        <translation type="unfinished"></translation>
+        <translation>این ویدئو بدون متادیتا می باشد ! :</translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="111"/>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="186"/>
         <source>Open Stream</source>
-        <translation>باز نمودن Stream</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="153"/>
@@ -200,7 +200,7 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="195"/>
         <source>Open Video File</source>
-        <translation type="unfinished"></translation>
+        <translation>بازنمودن بایگانی ویدئوها </translation>
     </message>
 </context>
 <context>
@@ -476,18 +476,28 @@
         <translation>دنبال نمودن هدف</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="986"/>
-        <source>Ruler</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1010"/>
-        <source>Horizontal Mirrored</source>
+        <location filename="../ui/ui_FmvPlayer.ui" line="693"/>
+        <source>Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="713"/>
         <source>Utils ToolBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="986"/>
+        <source>Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="998"/>
+        <source>Hand Draw</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1010"/>
+        <source>Horizontal Mirrored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -536,11 +546,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="693"/>
-        <source>Map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1166"/>
         <source>Center on Platform</source>
         <translation type="unfinished"></translation>
@@ -556,11 +561,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="998"/>
-        <source>Hand Draw</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1205"/>
         <source>NDVI</source>
         <translation type="unfinished"></translation>
@@ -568,7 +568,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1210"/>
         <source>Capture Georeferenced Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>ثبت این لحظه</translation>
     </message>
 </context>
 <context>
@@ -581,7 +581,7 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="205"/>
         <source>This video doesn&apos;t have Audio ! </source>
-        <translation type="unfinished"></translation>
+        <translation>این ویدئو بدون صدا می باشد ! :</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="213"/>
@@ -607,21 +607,6 @@
         <location filename="../player/QgsFmvPlayer.py" line="454"/>
         <source>Show Metadata</source>
         <translation>نمایش متادیتا</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="814"/>
-        <source>Open Video File : </source>
-        <translation>بازنمودن بایگانی ویدئوها :</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="826"/>
-        <source>Save file succesfully!</source>
-        <translation type="obsolete">ذخیره فایل با موفقیت انجام شد!</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="799"/>
-        <source>Playing : </source>
-        <translation>در حال پخش :</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1195"/>
@@ -670,13 +655,23 @@
         <translation>ذخیره جزئیات ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1033"/>
-        <source>Completed with no exception and no result (probably manually canceled by the user)</source>
+        <location filename="../player/QgsFmvPlayer.py" line="1122"/>
+        <source>Save Current Georeferenced Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1122"/>
-        <source>Save Current Georeferenced Frame</source>
+        <location filename="../player/QgsFmvPlayer.py" line="799"/>
+        <source>Playing : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="814"/>
+        <source>Open Video File : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="1033"/>
+        <source>Completed with no exception and no result (probably manually canceled by the user)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

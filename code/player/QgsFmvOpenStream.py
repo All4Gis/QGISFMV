@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtCore import QRegExp
-from PyQt5.QtGui import QIntValidator, QRegExpValidator
-from PyQt5.QtWidgets import QDialog
+from qgis.PyQt.QtCore import QRegExp
+from qgis.PyQt.QtGui import QIntValidator, QRegExpValidator
+from qgis.PyQt.QtWidgets import QDialog
 from QGIS_FMV.gui.ui_FmvOpenStream import Ui_FmvOpenStream
 
 try:

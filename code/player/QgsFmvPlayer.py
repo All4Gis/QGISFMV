@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import os.path
 
-from PyQt5.QtCore import (QUrl,
+from qgis.PyQt.QtCore import (QUrl,
                           QPoint,
                           QCoreApplication,
                           Qt,
                           QTimer)
-from PyQt5.QtGui import QIcon, QMovie
+from qgis.PyQt.QtGui import QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
-from PyQt5.QtWidgets import (QToolTip,
+from qgis.PyQt.QtWidgets import (QToolTip,
                              QMessageBox,
                              QAbstractSlider,
                              QHeaderView,
@@ -796,7 +796,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.player.setPlaylist(self.playlist)
 
             self.setWindowTitle(QCoreApplication.translate(
-                "QgsFmvPlayer", 'Playing : ') + os.path.basename(os.path.normpath(videoPath)))
+                "QgsFmvPlayer", 'Playing : ') + os.path.basename(videoPath))
 
             CreateVideoLayers(hasElevationModel())
             self.clearMetadata()
