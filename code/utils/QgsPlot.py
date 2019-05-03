@@ -1,7 +1,7 @@
 # Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
 
-from PyQt5.QtCore import QObject, QCoreApplication
+from qgis.PyQt.QtCore import QObject, QCoreApplication
 from QGIS_FMV.utils.QgsFmvUtils import _spawn
 
 try:

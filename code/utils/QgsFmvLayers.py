@@ -1,8 +1,8 @@
 import os
 from os.path import dirname, abspath
-from PyQt5.QtGui import QColor, QFont, QPolygonF
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QCoreApplication, QPointF
+from qgis.PyQt.QtGui import QColor, QFont, QPolygonF
+from qgis.PyQt.QtWidgets import QApplication
+from qgis.PyQt.QtCore import QCoreApplication, QPointF
 
 from configparser import SafeConfigParser
 parser = SafeConfigParser()

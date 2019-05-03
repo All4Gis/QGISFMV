@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtGui import QImage
+from qgis.PyQt.QtGui import QImage
 from QGIS_FMV.utils.QgsFmvUtils import convertMatToQImage, convertQImageToMat
 import numpy as np
 

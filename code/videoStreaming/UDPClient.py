@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtGui, QtNetwork
-from PyQt5.Qt import QImage, QByteArray, QBuffer, Qt, QImageReader, QColor, QImageWriter, QTransform, QPixmap
-from PyQt5.QtCore import QByteArray
-from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtNetwork import QUdpSocket, QHostAddress
-from PyQt5.QtWidgets import (QApplication, QDialog, QHBoxLayout, QLabel,
+from qgis.PyQt import QtGui, QtNetwork
+from qgis.PyQt.Qt import QImage, QByteArray, QBuffer, Qt, QImageReader, QColor, QImageWriter, QTransform, QPixmap
+from qgis.PyQt.QtCore import QByteArray
+from qgis.PyQt.QtGui import QPixmap, QImage
+from qgis.PyQt.QtNetwork import QUdpSocket, QHostAddress
+from qgis.PyQt.QtWidgets import (QApplication, QDialog, QHBoxLayout, QLabel,
                              QPushButton, QVBoxLayout)
-from PyQt5.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog
 from qgis.core import QgsMessageLog
 try:
     from pydevd import *

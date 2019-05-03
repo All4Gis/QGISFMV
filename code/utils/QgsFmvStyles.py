@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QColor, qRgba
+from qgis.PyQt.QtGui import QColor, qRgba
 
 
 class FmvLayerStyles(object):

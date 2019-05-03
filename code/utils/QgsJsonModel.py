@@ -1,7 +1,7 @@
 # 2017 by Gregor Engberding , MIT License
 # Modificated for work in QGIS FMV Plugin
 
-from PyQt5.QtCore import (QFile,
+from qgis.PyQt.QtCore import (QFile,
                           QJsonDocument,
                           QAbstractItemModel,
                           QModelIndex,

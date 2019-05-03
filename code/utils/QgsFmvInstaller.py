@@ -4,7 +4,7 @@ from os.path import dirname, abspath
 from urllib.request import urlretrieve
 import platform
 import zipfile
-from PyQt5.QtWidgets import QMessageBox
+from qgis.PyQt.QtWidgets import QMessageBox
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.utils.QgsFmvUtils import install_pip_requirements
 import urllib.request
@@ -13,7 +13,7 @@ from qgis.PyQt.QtWidgets import QProgressBar
 from qgis.PyQt.QtCore import *
 from qgis.utils import iface
 from qgis.core import Qgis as QGis
-from PyQt5.QtCore import Qt
+from qgis.PyQt.QtCore import Qt
 import pathlib
 import requests
 

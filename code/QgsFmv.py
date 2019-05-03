@@ -23,13 +23,13 @@
 """
 import os.path
 
-from PyQt5.QtCore import (QSettings,
+from qgis.PyQt.QtCore import (QSettings,
                           QCoreApplication,
                           QTranslator,
                           qVersion,
                           QThread)
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QAction
 from QGIS_FMV.player.QgsFmvAbout import FmvAbout
 from QGIS_FMV.player.QgsManager import FmvManager
 from QGIS_FMV.utils.QgsFmvLog import log

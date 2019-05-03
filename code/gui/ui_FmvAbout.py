@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from qgis.PyQt import QtCore, QtGui, QtWidgets
 
 class Ui_FmvAbout(object):
     def setupUi(self, FmvAbout):
@@ -31,5 +31,5 @@ class Ui_FmvAbout(object):
         _translate = QtCore.QCoreApplication.translate
         FmvAbout.setWindowTitle(_translate("FmvAbout", "About"))
 
-from PyQt5 import QtWebKitWidgets
+from qgis.PyQt import QtWebKitWidgets
 from QGIS_FMV.gui import resources_rc

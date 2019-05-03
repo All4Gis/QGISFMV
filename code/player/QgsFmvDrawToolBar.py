@@ -4,11 +4,11 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
                                         GetFrameCenter,
                                         hasElevationModel)
 
-from PyQt5.QtCore import QSize, QPointF
+from qgis.PyQt.QtCore import QSize, QPointF
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
-from PyQt5.QtCore import Qt, QPoint
+from qgis.PyQt.QtCore import Qt, QPoint
 from QGIS_FMV.geo import sphere as sphere
-from PyQt5.QtGui import (QPainter,
+from qgis.PyQt.QtGui import (QPainter,
                          QPainterPath,
                          QColor,
                          QFont,

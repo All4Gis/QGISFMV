@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import csv
 
-from PyQt5.QtCore import Qt, QCoreApplication
-from PyQt5.QtGui import (QCursor,
+from qgis.PyQt.QtCore import Qt, QCoreApplication
+from qgis.PyQt.QtGui import (QCursor,
                          QFont,
                          QTextCursor,
                          QTextDocument,
@@ -11,8 +11,8 @@ from PyQt5.QtGui import (QCursor,
                          QTextTableFormat,
                          QBrush,
                          QColor)
-from PyQt5.QtPrintSupport import QPrinter
-from PyQt5.QtWidgets import QDockWidget, QApplication
+from qgis.PyQt.QtPrintSupport import QPrinter
+from qgis.PyQt.QtWidgets import QDockWidget, QApplication
 from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGIS_FMV.utils.QgsFmvUtils import askForFiles
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu

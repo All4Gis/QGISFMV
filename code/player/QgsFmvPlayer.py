@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import os.path
 
-from PyQt5.QtCore import (QUrl,
+from qgis.PyQt.QtCore import (QUrl,
                           QPoint,
                           QCoreApplication,
                           Qt,
                           QTimer)
-from PyQt5.QtGui import QIcon, QMovie
+from qgis.PyQt.QtGui import QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
-from PyQt5.QtWidgets import (QToolTip,
+from qgis.PyQt.QtWidgets import (QToolTip,
                              QMessageBox,
                              QAbstractSlider,
                              QHeaderView,

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 from os.path import dirname, abspath
-from PyQt5.QtCore import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
-from PyQt5.QtWidgets import (QDockWidget,
+from qgis.PyQt.QtCore import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
+from qgis.PyQt.QtWidgets import (QDockWidget,
                              QTableWidgetItem,
                              QAction,
                              QMenu,
