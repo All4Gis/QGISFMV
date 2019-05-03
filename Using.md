@@ -59,6 +59,13 @@ Some options are also available through keyboard shortcuts and clicking on the m
 | Ctrl+A | Extract All Frames |
 | Ctrl+Shift+P | Save metadata/telemetry as PDF |
 | Ctrl+Shift+C | Save metadata/telemetry as CSV |
+| Ctrl+Left | Start Of Media |
+| Left | Rewind |
+| Ctrl+S | Stop |
+| Ctrl+P | Play/Pause |
+| Right | Forward |
+| Ctrl+Right | End Of Media |
+| Ctrl+L | Repeat |
 
 
 *Enjoy!*

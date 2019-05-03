@@ -340,7 +340,7 @@
            <normaloff>:/imgFMV/images/screenshot.png</normaloff>:/imgFMV/images/screenshot.png</iconset>
          </property>
          <property name="shortcut">
-          <string>Ctrl+Shift+Q</string>
+          <string>Ctrl+Q</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -401,6 +401,9 @@
           <iconset resource="resources.qrc">
            <normaloff>:/imgFMV/images/skip-previous.png</normaloff>:/imgFMV/images/skip-previous.png</iconset>
          </property>
+         <property name="shortcut">
+          <string>Ctrl+Left</string>
+         </property>
          <property name="flat">
           <bool>true</bool>
          </property>
@@ -420,6 +423,9 @@
          <property name="icon">
           <iconset resource="resources.qrc">
            <normaloff>:/imgFMV/images/fast-rewind.png</normaloff>:/imgFMV/images/fast-rewind.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>Left</string>
          </property>
          <property name="checkable">
           <bool>false</bool>
@@ -444,6 +450,9 @@
           <iconset resource="resources.qrc">
            <normaloff>:/imgFMV/images/stop.png</normaloff>:/imgFMV/images/stop.png</iconset>
          </property>
+         <property name="shortcut">
+          <string>Ctrl+S</string>
+         </property>
          <property name="flat">
           <bool>true</bool>
          </property>
@@ -464,6 +473,9 @@
           <iconset resource="resources.qrc">
            <normaloff>:/imgFMV/images/play-arrow.png</normaloff>:/imgFMV/images/play-arrow.png</iconset>
          </property>
+         <property name="shortcut">
+          <string>Ctrl+P</string>
+         </property>
          <property name="flat">
           <bool>true</bool>
          </property>
@@ -483,6 +495,9 @@
          <property name="icon">
           <iconset resource="resources.qrc">
            <normaloff>:/imgFMV/images/fast-forward.png</normaloff>:/imgFMV/images/fast-forward.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>Right</string>
          </property>
          <property name="checkable">
           <bool>false</bool>
@@ -510,6 +525,9 @@
           <iconset resource="resources.qrc">
            <normaloff>:/imgFMV/images/skip-next.png</normaloff>:/imgFMV/images/skip-next.png</iconset>
          </property>
+         <property name="shortcut">
+          <string>Ctrl+Right</string>
+         </property>
          <property name="flat">
           <bool>true</bool>
          </property>
@@ -529,6 +547,9 @@
          <property name="icon">
           <iconset resource="resources.qrc">
            <normaloff>:/imgFMV/images/repeat.png</normaloff>:/imgFMV/images/repeat.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+L</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
