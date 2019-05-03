@@ -59,6 +59,7 @@ class Fmv:
         QSettings().setValue("/core/OpenClEnabled", True)
 
         self.plugin_dir = os.path.dirname(__file__)
+
         locale = QSettings().value("locale//userLocale")[0:2]
         localePath = os.path.join(
             self.plugin_dir, 'i18n', 'qgisfmv_{}.qm'.format(locale))
@@ -66,7 +67,7 @@ class Fmv:
             self.translator = QTranslator()
             self.translator.load(localePath)
 
-            if qVersion() > '5.9.0':
+            if qVersion() > '5.0.0':
                 QCoreApplication.installTranslator(self.translator)
 
         self._FMVManager = None

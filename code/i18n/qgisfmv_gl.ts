@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="gl" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="gl">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -34,29 +35,11 @@
     </message>
 </context>
 <context>
-    <name>Fmv</name>
-    <message>
-        <location filename="../QgsFmv.py" line="76"/>
-        <source>Show Video Manager</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QgsFmv.py" line="103"/>
-        <source>Full Motion Video (FMV)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../QgsFmv.py" line="89"/>
-        <source>Show About FMV</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>FmvAbout</name>
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="34"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
+        <translation>about:blank</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="20"/>
@@ -99,7 +82,7 @@
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="154"/>
         <source>Ctrl+Shift+P</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+P</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="163"/>
@@ -109,13 +92,13 @@
     <message>
         <location filename="../ui/ui_FmvMetadata.ui" line="166"/>
         <source>Ctrl+Shift+C</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+C</translation>
     </message>
 </context>
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="57"/>
+        <location filename="../player/QgsManager.py" line="58"/>
         <source>Remove the current selection&apos;s video</source>
         <translation type="unfinished"></translation>
     </message>
@@ -140,7 +123,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="170"/>
+        <location filename="../player/QgsManager.py" line="146"/>
+        <location filename="../player/QgsManager.py" line="171"/>
         <source>Start location not available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -223,7 +207,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="231"/>
         <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+C</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="244"/>
@@ -233,7 +217,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="255"/>
         <source>Ctrl+Shift+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+R</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="271"/>
@@ -241,9 +225,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="281"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="775"/>
         <source>Ctrl+Shift+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+M</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="333"/>
@@ -251,9 +236,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="343"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="751"/>
         <source>Ctrl+Shift+Q</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+Q</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="380"/>
@@ -303,7 +289,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="584"/>
         <source>Ctrl+Shift+U</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+U</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="594"/>
@@ -368,7 +354,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="763"/>
         <source>Ctrl+Shift+A</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+A</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="772"/>
@@ -466,6 +452,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="956"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="959"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="962"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1058"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1076"/>
         <source>Draw Polygon</source>
         <translation type="unfinished"></translation>
@@ -476,8 +466,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="693"/>
+        <source>Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="710"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="713"/>
+        <source>Utils ToolBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="986"/>
         <source>Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="998"/>
+        <source>Hand Draw</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -486,11 +492,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="713"/>
-        <source>Utils ToolBar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1022"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1025"/>
         <source>Censure</source>
         <translation type="unfinished"></translation>
@@ -501,43 +503,46 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1043"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1121"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1124"/>
         <source>Remove All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1055"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1061"/>
         <source>Remove Last Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1073"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1079"/>
         <source>Remove All Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1091"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1094"/>
         <source>Remove Last Pinpoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1106"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1109"/>
         <source>Remove All Pinpoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1136"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1139"/>
         <source>Remove Last Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1151"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1154"/>
         <source>Remove Last Line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="693"/>
-        <source>Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -553,11 +558,6 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1193"/>
         <source>Center on Target</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="998"/>
-        <source>Hand Draw</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -589,37 +589,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="435"/>
+        <location filename="../player/QgsFmvPlayer.py" line="436"/>
         <source>Mute/Unmute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="441"/>
+        <location filename="../player/QgsFmvPlayer.py" line="442"/>
         <source>Extract All Frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="447"/>
+        <location filename="../player/QgsFmvPlayer.py" line="448"/>
         <source>Extract Current Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="454"/>
+        <location filename="../player/QgsFmvPlayer.py" line="455"/>
         <source>Show Metadata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="814"/>
-        <source>Open Video File : </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="799"/>
-        <source>Playing : </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1195"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1194"/>
         <source>Video Information : </source>
         <translation type="unfinished"></translation>
     </message>
@@ -629,7 +619,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1093"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1092"/>
         <source>Save Current Frame</source>
         <translation type="unfinished"></translation>
     </message>
@@ -639,37 +629,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="835"/>
+        <location filename="../player/QgsFmvPlayer.py" line="834"/>
         <source>Save video record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="918"/>
+        <location filename="../player/QgsFmvPlayer.py" line="917"/>
         <source>Save Video as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1060"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1059"/>
         <source>Save all Frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="996"/>
+        <location filename="../player/QgsFmvPlayer.py" line="995"/>
         <source>Save Audio Bitrate Plot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1013"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1012"/>
         <source>Save Video Bitrate Plot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1033"/>
-        <source>Completed with no exception and no result (probably manually canceled by the user)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1122"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1121"/>
         <source>Save Current Georeferenced Frame</source>
         <translation type="unfinished"></translation>
     </message>

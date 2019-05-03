@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="fa" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="fa">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -36,19 +37,16 @@
 <context>
     <name>Fmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="76"/>
         <source>Show Video Manager</source>
-        <translation>نمایش مدیر ویدئو</translation>
+        <translation type="vanished">نمایش مدیر ویدئو</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="103"/>
         <source>Full Motion Video (FMV)</source>
-        <translation>ویدیو حرکت کامل (FMV)</translation>
+        <translation type="vanished">ویدیو حرکت کامل (FMV)</translation>
     </message>
     <message>
-        <location filename="../QgsFmv.py" line="89"/>
         <source>Show About FMV</source>
-        <translation>نمایش درباره اِف اِم وی</translation>
+        <translation type="vanished">نمایش درباره اِف اِم وی</translation>
     </message>
 </context>
 <context>
@@ -115,7 +113,7 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="57"/>
+        <location filename="../player/QgsManager.py" line="58"/>
         <source>Remove the current selection&apos;s video</source>
         <translation>حذف ویدئوی انتخاب شده</translation>
     </message>
@@ -132,7 +130,7 @@
     <message>
         <location filename="../player/QgsManager.py" line="155"/>
         <source>This video don&apos;t have Metadata ! </source>
-        <translation type="unfinished"></translation>
+        <translation>این ویدئو بدون متادیتا می باشد ! :</translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="111"/>
@@ -140,7 +138,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="170"/>
+        <location filename="../player/QgsManager.py" line="146"/>
+        <location filename="../player/QgsManager.py" line="171"/>
         <source>Start location not available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -185,7 +184,7 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="186"/>
         <source>Open Stream</source>
-        <translation>باز نمودن Stream</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="153"/>
@@ -200,7 +199,7 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="195"/>
         <source>Open Video File</source>
-        <translation type="unfinished"></translation>
+        <translation>بازنمودن بایگانی ویدئوها </translation>
     </message>
 </context>
 <context>
@@ -241,6 +240,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ایجاد موزائیک&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="281"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="775"/>
         <source>Ctrl+Shift+M</source>
         <translation>Ctrl+Shift+M</translation>
@@ -251,6 +251,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ذخیره این لحظه&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="343"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="751"/>
         <source>Ctrl+Shift+Q</source>
         <translation>Ctrl+Shift+Q</translation>
@@ -428,7 +429,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="864"/>
         <source>Mono Filter</source>
-        <translation>فیلتر Mono </translation>
+        <translation>فیلتر Mono&#xa0;</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="876"/>
@@ -466,6 +467,10 @@
         <translation>رسم خط</translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="956"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="959"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="962"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1058"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1076"/>
         <source>Draw Polygon</source>
         <translation>رسم چندضلعی</translation>
@@ -476,8 +481,24 @@
         <translation>دنبال نمودن هدف</translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="693"/>
+        <source>Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="710"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="713"/>
+        <source>Utils ToolBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="986"/>
         <source>Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="998"/>
+        <source>Hand Draw</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -486,11 +507,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="713"/>
-        <source>Utils ToolBar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1022"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1025"/>
         <source>Censure</source>
         <translation type="unfinished"></translation>
@@ -501,43 +518,46 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1043"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1121"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1124"/>
         <source>Remove All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1055"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1061"/>
         <source>Remove Last Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1073"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1079"/>
         <source>Remove All Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1091"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1094"/>
         <source>Remove Last Pinpoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1106"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1109"/>
         <source>Remove All Pinpoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1136"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1139"/>
         <source>Remove Last Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1151"/>
         <location filename="../ui/ui_FmvPlayer.ui" line="1154"/>
         <source>Remove Last Line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="693"/>
-        <source>Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -556,11 +576,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="998"/>
-        <source>Hand Draw</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1205"/>
         <source>NDVI</source>
         <translation type="unfinished"></translation>
@@ -568,7 +583,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1210"/>
         <source>Capture Georeferenced Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>ثبت این لحظه</translation>
     </message>
 </context>
 <context>
@@ -581,7 +596,7 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="205"/>
         <source>This video doesn&apos;t have Audio ! </source>
-        <translation type="unfinished"></translation>
+        <translation>این ویدئو بدون صدا می باشد ! :</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="213"/>
@@ -589,42 +604,35 @@
         <translation>بررسی صدا با شکست مواجه شد! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="435"/>
+        <location filename="../player/QgsFmvPlayer.py" line="436"/>
         <source>Mute/Unmute</source>
         <translation>سکوت/صدا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="441"/>
+        <location filename="../player/QgsFmvPlayer.py" line="442"/>
         <source>Extract All Frames</source>
         <translation>استخراج تمام لحظه ها</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="447"/>
+        <location filename="../player/QgsFmvPlayer.py" line="448"/>
         <source>Extract Current Frame</source>
         <translation>استخراج همین لحظه</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="454"/>
+        <location filename="../player/QgsFmvPlayer.py" line="455"/>
         <source>Show Metadata</source>
         <translation>نمایش متادیتا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="814"/>
         <source>Open Video File : </source>
-        <translation>بازنمودن بایگانی ویدئوها :</translation>
+        <translation type="vanished">بازنمودن بایگانی ویدئوها :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="826"/>
-        <source>Save file succesfully!</source>
-        <translation type="obsolete">ذخیره فایل با موفقیت انجام شد!</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="799"/>
         <source>Playing : </source>
-        <translation>در حال پخش :</translation>
+        <translation type="vanished">در حال پخش :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1195"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1194"/>
         <source>Video Information : </source>
         <translation>اطلاعات ویدئو :</translation>
     </message>
@@ -635,7 +643,7 @@
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1093"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1092"/>
         <source>Save Current Frame</source>
         <translation>ذخیره لحظه حاضر</translation>
     </message>
@@ -645,37 +653,32 @@
         <translation>ذخیره Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="835"/>
+        <location filename="../player/QgsFmvPlayer.py" line="834"/>
         <source>Save video record</source>
         <translation>ذخیره رکورد ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="918"/>
+        <location filename="../player/QgsFmvPlayer.py" line="917"/>
         <source>Save Video as...</source>
         <translation>ذخیره ویدئو به عنوان ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1060"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1059"/>
         <source>Save all Frames</source>
         <translation>ذخیره همه لحظه ها</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="996"/>
+        <location filename="../player/QgsFmvPlayer.py" line="995"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>ذخیره جزئیات صدا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1013"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1012"/>
         <source>Save Video Bitrate Plot</source>
         <translation>ذخیره جزئیات ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1033"/>
-        <source>Completed with no exception and no result (probably manually canceled by the user)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1122"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1121"/>
         <source>Save Current Georeferenced Frame</source>
         <translation type="unfinished"></translation>
     </message>
@@ -685,7 +688,7 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="62"/>
         <source>Error: Missing OpenCV packages</source>
-        <translation>خطا: بسته های OpenCV گمشده اند</translation>
+        <translation>خطا: بسته های OpenCV&#xa0;گمشده اند</translation>
     </message>
 </context>
 </TS>
