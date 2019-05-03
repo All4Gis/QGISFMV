@@ -36,7 +36,7 @@ This development arises after observing that there was no free solution for the 
 [Esri](http://www.esri.com/products/arcgis-capabilities/imagery/full-motion-video),
 for this reason, I decided to develop this open source project and, this way, offer this open source alternative to the QGIS community.
 
-&uparrow; [Back to top](#table-of-contents)
+&#8593; [Back to top](#table-of-contents)
 
 ## Dependencies
 
