@@ -77,32 +77,32 @@ class Fmv:
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
                                  u"FMV", self.iface.mainWindow(),
                                  statusTip=QCoreApplication.translate(
-                                     "Fmv", "Show Video Manager"),
+                                     "QgsFmv", "Show Video Manager"),
                                  triggered=self.run)
 
         self.iface.registerMainWindowAction(
             self.actionFMV, qgsu.SetShortcutForPluginFMV(u"FMV"))
         self.iface.addToolBarIcon(self.actionFMV)
         self.iface.addPluginToMenu(QCoreApplication.translate(
-            "Fmv", "Full Motion Video (FMV)"), self.actionFMV)
+            "QgsFmv", "Full Motion Video (FMV)"), self.actionFMV)
 
         ''' About Action '''
         self.actionAbout = QAction(QIcon(":/imgFMV/images/Information.png"),
                                    u"FMV About", self.iface.mainWindow(),
                                    statusTip=QCoreApplication.translate(
-                                       "Fmv", "Show About FMV"),
+                                       "QgsFmv", "Show About FMV"),
                                    triggered=self.About)
         self.iface.registerMainWindowAction(
             self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About", "Alt+A"))
         self.iface.addPluginToMenu(QCoreApplication.translate(
-            "Fmv", "Full Motion Video (FMV)"), self.actionAbout)
+            "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
 
     def unload(self):
         ''' Unload Plugin '''
         self.iface.removePluginMenu(QCoreApplication.translate(
-            "Fmv", "Full Motion Video (FMV)"), self.actionFMV)
+            "QgsFmv", "Full Motion Video (FMV)"), self.actionFMV)
         self.iface.removePluginMenu(QCoreApplication.translate(
-            "Fmv", "Full Motion Video (FMV)"), self.actionAbout)
+            "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
         self.iface.removeToolBarIcon(self.actionFMV)
         log.removeLogging()
         qgsu.removeMosaicFolder()

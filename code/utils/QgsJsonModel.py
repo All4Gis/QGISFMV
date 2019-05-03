@@ -8,6 +8,7 @@ from qgis.PyQt.QtCore import (QFile,
                           Qt,
                           QByteArray,
                           QVariant,
+                          QCoreApplication,
                           QJsonParseError)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 try:
@@ -118,7 +119,9 @@ class QJsonModel(QAbstractItemModel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.mRootItem = QJsonTreeItem()
-        self.mHeaders = ["key", "value"]
+        key = QCoreApplication.translate("QgsJsonModel", "Key")
+        value = QCoreApplication.translate("QgsJsonModel", "Value")
+        self.mHeaders = [key, value]
 
     def load(self, fileName):
         if fileName is None or fileName is False:

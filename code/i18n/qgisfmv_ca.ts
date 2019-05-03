@@ -34,24 +34,6 @@
     </message>
 </context>
 <context>
-    <name>Fmv</name>
-    <message>
-        <location filename="../QgsFmv.py" line="77"/>
-        <source>Show Video Manager</source>
-        <translation>Mostrar Administrador de Vídeo</translation>
-    </message>
-    <message>
-        <location filename="../QgsFmv.py" line="104"/>
-        <source>Full Motion Video (FMV)</source>
-        <translation>Full Motion Video (FMV)</translation>
-    </message>
-    <message>
-        <location filename="../QgsFmv.py" line="90"/>
-        <source>Show About FMV</source>
-        <translation>Mostra sobre FMV</translation>
-    </message>
-</context>
-<context>
     <name>FmvAbout</name>
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="34"/>
@@ -576,6 +558,24 @@
     </message>
 </context>
 <context>
+    <name>QgsFmv</name>
+    <message>
+        <location filename="../QgsFmv.py" line="77"/>
+        <source>Show Video Manager</source>
+        <translation>Mostrar Administrador de Vídeo</translation>
+    </message>
+    <message>
+        <location filename="../QgsFmv.py" line="104"/>
+        <source>Full Motion Video (FMV)</source>
+        <translation>Full Motion Video (FMV)</translation>
+    </message>
+    <message>
+        <location filename="../QgsFmv.py" line="90"/>
+        <source>Show About FMV</source>
+        <translation>Mostra sobre FMV</translation>
+    </message>
+</context>
+<context>
     <name>QgsFmvPlayer</name>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="301"/>
@@ -679,6 +679,19 @@
         <location filename="../player/QgsFmvPlayer.py" line="1033"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
         <translation>Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
+    </message>
+</context>
+<context>
+    <name>QgsJsonModel</name>
+    <message>
+        <location filename="../utils/QgsJsonModel.py" line="123"/>
+        <source>Key</source>
+        <translation>Clau</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsJsonModel.py" line="124"/>
+        <source>Value</source>
+        <translation>Valor</translation>
     </message>
 </context>
 <context>

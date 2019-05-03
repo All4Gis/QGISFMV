@@ -7,7 +7,8 @@ FORMS = ../ui/ui_FmvAbout.ui \
 SOURCES = ../QgsFmv.py \
 		  ../player/QgsFmvPlayer.py  \
 		  ../player/QgsFmvAbout.py   \
-		  ../player/QgsManager.py
+		  ../player/QgsManager.py \
+		  ../utils/QgsJsonModel.py
 
 TRANSLATIONS = qgisfmv_en.ts \
 			   qgisfmv_es.ts \
