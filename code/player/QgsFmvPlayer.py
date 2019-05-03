@@ -796,7 +796,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.player.setPlaylist(self.playlist)
 
             self.setWindowTitle(QCoreApplication.translate(
-                "QgsFmvPlayer", 'Playing : ') + os.path.basename(os.path.normpath(videoPath)))
+                "QgsFmvPlayer", 'Playing : ') + os.path.basename(videoPath))
 
             CreateVideoLayers(hasElevationModel())
             self.clearMetadata()
