@@ -252,7 +252,7 @@
            <normalon>:/imgFMV/images/rec_on.png</normalon>:/imgFMV/images/record.png</iconset>
          </property>
          <property name="shortcut">
-          <string>Ctrl+Shift+R</string>
+          <string>Ctrl+R</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -278,7 +278,7 @@
            <normaloff>:/imgFMV/images/mosaic.png</normaloff>:/imgFMV/images/mosaic.png</iconset>
          </property>
          <property name="shortcut">
-          <string>Ctrl+Shift+M</string>
+          <string>Ctrl+M</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -581,7 +581,7 @@
              <normaloff>:/imgFMV/images/volume_up.png</normaloff>:/imgFMV/images/volume_up.png</iconset>
            </property>
            <property name="shortcut">
-            <string>Ctrl+Shift+U</string>
+            <string>Ctrl+U</string>
            </property>
            <property name="flat">
             <bool>true</bool>
@@ -627,7 +627,7 @@
      <x>0</x>
      <y>0</y>
      <width>748</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <property name="contextMenuPolicy">
@@ -748,7 +748,13 @@
     <string>Capture Current Frame</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+Q</string>
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
+   </property>
+   <property name="priority">
+    <enum>QAction::HighPriority</enum>
    </property>
   </action>
   <action name="actionExtract_All_Frames">
@@ -760,7 +766,13 @@
     <string>Extract All Frames</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+A</string>
+    <string>Ctrl+A</string>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
+   </property>
+   <property name="priority">
+    <enum>QAction::HighPriority</enum>
    </property>
   </action>
   <action name="actionShow_Metadata">
@@ -772,7 +784,13 @@
     <string>Show Metadata</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+M</string>
+    <string>Ctrl+T</string>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
+   </property>
+   <property name="priority">
+    <enum>QAction::HighPriority</enum>
    </property>
   </action>
   <action name="actionConverter_Video">
@@ -1206,6 +1224,10 @@
    </property>
   </action>
   <action name="actionCapture_Georeferenced_Frame">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/save_geoframe.png</normaloff>:/imgFMV/images/save_geoframe.png</iconset>
+   </property>
    <property name="text">
     <string>Capture Georeferenced Frame</string>
    </property>

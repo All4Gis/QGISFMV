@@ -9,6 +9,7 @@ Once you have them, click on the icon that will appear in QGIS, to open the mana
 
 - [Video Manager](#video-manager)
 - [Video Player](#video-player)
+- [Shortcuts](#shortcuts)
 
 <!-- /MarkdownTOC -->
 
@@ -42,8 +43,22 @@ The player also offers the typical options such as stop, rewind, fast-forward, g
 
 ![a](images/player.png)
 
+### Shortcuts
+
 Some options are also available through keyboard shortcuts and clicking on the mouse right button on the video.
 
-![a](images/shortcuts.png)
+| Shortcut Keys | Description |
+| ------ | ------ |
+| Alt+F | Open FMV |
+| Alt+A | Show about |
+| Ctrl+T | show metadata/telemetry dock |
+| Ctrl+R | Record Video |
+| Ctrl+M | Create mosaic from video |
+| Ctrl+Q | Capture Current Frame |
+| Ctrl+U | Mute/Unmute |
+| Ctrl+A | Extract All Frames |
+| Ctrl+Shift+P | Save metadata/telemetry as PDF |
+| Ctrl+Shift+C | Save metadata/telemetry as CSV |
+
 
 *Enjoy!*
