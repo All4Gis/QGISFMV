@@ -17,11 +17,14 @@ except ImportError:
 
 
 class Converter(QObject):
-
+    """
+    Converter Video Class
+    """
     video_codecs = {}
     audio_codecs = {}
     subtitle_codecs = {}
     formats = {}
+    ffmpeg = FFMpeg()
 
     for cls in audio_codec_list:
         name = cls.codec_name
@@ -40,7 +43,9 @@ class Converter(QObject):
         formats[name] = cls
 
     def parse_options(self, opt, twopass=None):
-
+        """
+        Parse Options
+        """
         f = opt['format']
         if f not in self.formats:
             log.error('Requested unknown format: ' + str(f))
@@ -108,9 +113,11 @@ class Converter(QObject):
         return optlist
 
     def convert(self, task, infile, outfile, options, twopass):
+        """
+        Convert Video
+        """
         try:
             while not task.isCanceled():
-                self.ffmpeg = FFMpeg()
                 info = self.ffmpeg.probe(infile)
                 if info is None:
                     task.cancel()
@@ -153,8 +160,10 @@ class Converter(QObject):
         return {'task': task.description()}
 
     def probeToJson(self, task, fname, output):
+        """
+        Task for save video information to Json
+        """
         try:
-            self.ffmpeg = FFMpeg()
             self.ffmpeg.probeToJson(fname, output)
             if task.isCanceled():
                 return None
@@ -163,8 +172,10 @@ class Converter(QObject):
             return None
 
     def probeShow(self, task, fname):
+        """
+        Task for show video information
+        """
         try:
-            self.ffmpeg = FFMpeg()
             self.bytes_value = self.ffmpeg.probeGetJson(fname)
             if task.isCanceled():
                 return None
@@ -173,8 +184,10 @@ class Converter(QObject):
             return None
 
     def probeInfo(self, fname, posters_as_video=True):
+        """
+        Extract video information
+        """
         try:
-            self.ffmpeg = FFMpeg()
             info = self.ffmpeg.probe(fname, posters_as_video)
             return info
         except Exception:

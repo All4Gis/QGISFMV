@@ -167,7 +167,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             return
         
         pbar.setValue(30)  
-        
         if not self.isStreaming:
             info = FFMpeg().probe(filename)
             if info is None:
@@ -181,7 +180,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 "", "buffered non-blocking metadata reader initialized.", onlyLog=True)
 
             pbar.setValue(60)
-
+            
             try:
                 # init point we can center the video on
                 self.initialPt[str(rowPosition)
@@ -191,7 +190,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                         QCoreApplication.translate(
                             "ManagerDock", "Start location not available.")))
                     self.ToggleActiveRow(rowPosition, value="Not MISB")
-                    pbar.setValue(100)
+                    pbar.setValue(99)
                     return
                 else:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
@@ -199,11 +198,12 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             except Exception:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "ManagerDock", "This video don't have Metadata ! "))
-                pbar.setValue(100)
+                pbar.setValue(99)
                 self.ToggleActiveRow(rowPosition, value="Not MISB")
                 return
 
             pbar.setValue(90)
+
             dtm_path = parser['GENERAL']['DTM_file']
             if self.initialPt[str(rowPosition)] and dtm_path != '':
                 try:
@@ -212,12 +212,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                     qgsu.showUserAndLogMessage(
                         "", "Elevation model initialized.", onlyLog=True)
                 except Exception:
-                    self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
-                        QCoreApplication.translate(
-                            "ManagerDock", "Start location not available.")))
-                    pbar.setValue(100)
-                    self.ToggleActiveRow(rowPosition, value="Not MISB")
-                    return
+                    None
         else:
             self.meta_reader[str(rowPosition)] = None
             self.initialPt[str(rowPosition)] = None
@@ -244,15 +239,14 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
     # Manager row double clicked
     def PlayVideoFromManager(self, model):
         ''' Play video from manager dock '''
-
-        # don't enable Play if video doesn't have metadata
+        # Don't enable Play if video doesn't have metadata
         if self.pBars[str(model.row())].value() < 100:
             return
 
         path = self.VManager.item(model.row(), 3).text()
 
         self.ToggleActiveRow(model.row())
-        # temp Fix metadata update
+
         try:
             self._PlayerDlg.close()
         except Exception:
@@ -291,7 +285,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def closeEvent(self, _):
         ''' Close Manager Event '''
-        FmvDock = qgis.utils.plugins["QGIS_FMV"]
+        FmvDock = qgis.utils.plugins[getNameSpace()]
         FmvDock._FMVManager = None
         try:
             self._PlayerDlg.close()
