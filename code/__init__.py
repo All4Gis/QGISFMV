@@ -2,7 +2,7 @@
 import sys
 try:
     sys.path.append(
-        "D:\eclipse\plugins\org.python.pydev.core_7.0.3.201811082356\pysrc")
+        "D:\eclipse\plugins\org.python.pydev.core_7.1.0.201902031515\pysrc")
     from pydevd import *
 except ImportError:
     None

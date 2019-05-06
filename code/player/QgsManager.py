@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+import ast
+from configparser import SafeConfigParser
 import os
 from os.path import dirname, abspath
 from qgis.PyQt.QtCore import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
+from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (QDockWidget,
                              QTableWidgetItem,
                              QAction,
@@ -9,20 +12,24 @@ from qgis.PyQt.QtWidgets import (QDockWidget,
                              QProgressBar,
                              QVBoxLayout,
                              QWidget)
+import qgis.utils
+
+from PyQt5.QtGui import QColor
+
+from QGIS_FMV.converter.ffmpeg import FFMpeg
 from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
 from QGIS_FMV.player.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
-from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from configparser import SafeConfigParser
-
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         BufferedMetaReader,
                                         initElevationModel,
+                                        AddVideoToSettings,
+                                        RemoveVideoToSettings,
+                                        getVideoManagerList,
+                                        getNameSpace,
                                         getVideoLocationInfo)
-import qgis.utils
-from QGIS_FMV.converter.ffmpeg import FFMpeg
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
-import ast
 
 try:
     from pydevd import *
@@ -54,18 +61,23 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
         # Context Menu
         self.VManager.customContextMenuRequested.connect(self.__context_menu)
-        self.removeAct = QAction(QCoreApplication.translate("ManagerDock", "Remove"), self,
-                                 statusTip=QCoreApplication.translate(
-                                     "ManagerDock", "Remove the current selection's video"),
+        self.removeAct = QAction(QIcon(":/imgFMV/images/mActionDeleteSelected.svg"),
+                                 QCoreApplication.translate("ManagerDock", "Remove from list"), self,
                                  triggered=self.remove)
 
-        self.VManager.setColumnWidth(0, 25)
         self.VManager.setColumnWidth(1, 150)
         self.VManager.setColumnWidth(2, 80)
         self.VManager.setColumnWidth(3, 300)
         self.VManager.setColumnWidth(4, 300)
-        self.VManager.setColumnWidth(5, 150)
         self.VManager.verticalHeader().setDefaultAlignment(Qt.AlignHCenter)
+        self.VManager.hideColumn(0)
+        
+        #Get Video Manager List
+        VideoList = getVideoManagerList()
+        for load_id in VideoList:
+            filename = s.value(getNameSpace() + "/Manager_List/"+load_id)
+            _, name = os.path.split(filename)
+            self.AddFileRowToManager(name, filename, load_id)
 
     def eventFilter(self, source, event):
         ''' Event Filter '''
@@ -84,7 +96,11 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def remove(self):
         ''' Remove current row '''
-        self.VManager.removeRow(self.VManager.currentRow())
+        cr = self.VManager.currentRow()
+        row_id = self.VManager.item(cr, 0).text()
+        self.VManager.removeRow(cr)
+        # Remove video to Settings List
+        RemoveVideoToSettings(row_id)
         return
 
     def openStreamDialog(self):
@@ -95,18 +111,38 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.OpenStream.exec_()
         return
 
-    def AddFileRowToManager(self, name, filename):
+    def AddFileRowToManager(self, name, filename, load_id=None):
         ''' Add file Video to new Row '''
+        # We limit the number of videos due to the buffer
+        if self.VManager.rowCount() > 5:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "ManagerDock", "You must delete some video from the list before adding a new one"))
+            return
+        
         w = QWidget()
         layout = QVBoxLayout()
         pbar = QProgressBar()
         layout.addWidget(pbar)
         w.setLayout(layout)
         rowPosition = self.VManager.rowCount()
-
+        
+        pbar.setGeometry(0, 0, 300, 30)
+        pbar.setValue(0)
+        pbar.setMaximumHeight(30)
+        self.pBars[str(rowPosition)] = pbar
+        
+        if load_id is None:
+            row_id = 0
+            if rowPosition != 0:
+                row_id = int(self.VManager.item(rowPosition - 1, 0).text()) + 1
+        else:
+            row_id = load_id  
+        
         self.VManager.insertRow(rowPosition)
+        
         self.VManager.setItem(
-            rowPosition, 0, QTableWidgetItem(str(rowPosition)))
+            rowPosition, 0, QTableWidgetItem(str(row_id)))
+                
         self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
         self.VManager.setItem(rowPosition, 2, QTableWidgetItem(QCoreApplication.translate(
             "ManagerDock", "Loading")))
@@ -116,13 +152,22 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
         self.VManager.setVisible(False)
         self.VManager.horizontalHeader().setStretchLastSection(True)
-
-        pbar.setGeometry(0, 0, 300, 30)
-        pbar.setValue(30)
-        pbar.setMaximumHeight(30)
-        self.pBars[str(rowPosition)] = pbar
         self.VManager.setVisible(True)
 
+        # Disable row if not exist video file
+        if not os.path.exists(filename):
+            self.ToggleActiveRow(rowPosition, value="Missing source file")
+            for j in range(self.VManager.columnCount()):
+                try:
+                    self.VManager.item(rowPosition, j).setFlags(Qt.NoItemFlags|Qt.ItemIsEnabled)
+                    self.VManager.item(rowPosition, j).setBackground(QColor(211,211,211))
+                except Exception:
+                    self.VManager.cellWidget(rowPosition, j).setStyleSheet("background-color:rgb(211,211,211);");
+                    pass
+            return
+        
+        pbar.setValue(30)  
+        
         if not self.isStreaming:
             info = FFMpeg().probe(filename)
             if info is None:
@@ -179,6 +224,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
         pbar.setValue(100)
         self.ToggleActiveRow(rowPosition, value="Ready")
+        #Add video to settings list
+        AddVideoToSettings(str(row_id),filename)
 
     def openVideoFileDialog(self):
         ''' Open video file dialog '''

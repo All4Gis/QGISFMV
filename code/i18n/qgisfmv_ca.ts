@@ -98,39 +98,34 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="57"/>
-        <source>Remove the current selection&apos;s video</source>
-        <translation>Eliminar vídeo seleccionat actual</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsManager.py" line="187"/>
+        <location filename="../player/QgsManager.py" line="228"/>
         <source>Open video</source>
         <translation>Obrir vídeo</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="57"/>
-        <source>Remove</source>
-        <translation>Eliminar</translation>
-    </message>
-    <message>
-        <location filename="../player/QgsManager.py" line="155"/>
+        <location filename="../player/QgsManager.py" line="194"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation>Aquest vídeo no conté Metadades ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="111"/>
+        <location filename="../player/QgsManager.py" line="141"/>
         <source>Loading</source>
         <translation>Carregant</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="170"/>
+        <location filename="../player/QgsManager.py" line="209"/>
         <source>Start location not available.</source>
         <translation>Iniciar localització no disponible</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="129"/>
+        <location filename="../player/QgsManager.py" line="168"/>
         <source>Failed loading FFMPEG ! </source>
         <translation>No s&apos;ha pogut carregar FFMPEG!</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsManager.py" line="64"/>
+        <source>Remove from list</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -166,7 +161,7 @@
         <translation>Font</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="186"/>
+        <location filename="../ui/ui_FmvManager.ui" line="181"/>
         <source>Open Stream</source>
         <translation>Obrir fitxer MPEG2</translation>
     </message>
@@ -181,7 +176,7 @@
         <translation>Progrés</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="195"/>
+        <location filename="../ui/ui_FmvManager.ui" line="190"/>
         <source>Open Video File</source>
         <translation>Obrir Fitxer de Vídeo</translation>
     </message>
@@ -600,19 +595,9 @@
 <context>
     <name>QgsFmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="77"/>
-        <source>Show Video Manager</source>
-        <translation>Mostrar Administrador de Vídeo</translation>
-    </message>
-    <message>
-        <location filename="../QgsFmv.py" line="104"/>
+        <location filename="../QgsFmv.py" line="100"/>
         <source>Full Motion Video (FMV)</source>
         <translation>Full Motion Video (FMV)</translation>
-    </message>
-    <message>
-        <location filename="../QgsFmv.py" line="90"/>
-        <source>Show About FMV</source>
-        <translation>Mostra sobre FMV</translation>
     </message>
 </context>
 <context>

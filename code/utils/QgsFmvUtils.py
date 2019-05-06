@@ -222,7 +222,29 @@ class callBackMetadataThread(threading.Thread):
         self.p = _spawn(self.cmds)
         self.stdout, _ = self.p.communicate()
 
+# Add video to settings list
+def AddVideoToSettings(row_id, path):
+    settings.setValue(getNameSpace() + "/Manager_List/" + row_id, path)
 
+# Remove video in settings list
+def RemoveVideoToSettings(row_id):
+    settings.remove(getNameSpace() + "/Manager_List/%s" % row_id)
+
+# Get Video Manager List
+def getVideoManagerList():
+    VideoList = []
+    try:
+        settings.beginGroup(getNameSpace() + "/Manager_List")
+        VideoList = settings.childKeys()
+        settings.endGroup()
+    except Exception:
+        None
+    return VideoList
+  
+def getNameSpace():
+    namespace = _callerName().split(".")[0]   
+    return namespace
+        
 def setCenterMode(mode, interface):
     global centerMode, iface
     centerMode = mode

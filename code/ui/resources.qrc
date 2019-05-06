@@ -70,6 +70,7 @@
         <file>../images/center_footprint.png</file>
         <file>../images/center_target.png</file>
         <file>../images/ndvi.png</file>   
-        <file>../images/save_geoframe.png</file>   
+        <file>../images/save_geoframe.png</file> 
+        <file>../images/mActionDeleteSelected.svg</file>  
     </qresource>
 </RCC>

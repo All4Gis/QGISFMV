@@ -168,11 +168,6 @@ color: rgb(56, 95, 107);
         </font>
        </property>
       </column>
-      <column>
-       <property name="text">
-        <string/>
-       </property>
-      </column>
      </widget>
     </item>
    </layout>

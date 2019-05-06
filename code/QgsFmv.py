@@ -76,8 +76,6 @@ class Fmv:
         ''' FMV Action '''
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
                                  u"FMV", self.iface.mainWindow(),
-                                 statusTip=QCoreApplication.translate(
-                                     "QgsFmv", "Show Video Manager"),
                                  triggered=self.run)
 
         self.iface.registerMainWindowAction(
@@ -89,8 +87,6 @@ class Fmv:
         ''' About Action '''
         self.actionAbout = QAction(QIcon(":/imgFMV/images/Information.png"),
                                    u"FMV About", self.iface.mainWindow(),
-                                   statusTip=QCoreApplication.translate(
-                                       "QgsFmv", "Show About FMV"),
                                    triggered=self.About)
         self.iface.registerMainWindowAction(
             self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About", "Alt+A"))
