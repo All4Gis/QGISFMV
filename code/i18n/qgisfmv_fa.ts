@@ -97,33 +97,38 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="228"/>
+        <location filename="../player/QgsManager.py" line="234"/>
         <source>Open video</source>
         <translation>بازنمودن ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="194"/>
+        <location filename="../player/QgsManager.py" line="200"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation>این ویدئو بدون متادیتا می باشد ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="141"/>
+        <location filename="../player/QgsManager.py" line="147"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="209"/>
+        <location filename="../player/QgsManager.py" line="215"/>
         <source>Start location not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="168"/>
+        <location filename="../player/QgsManager.py" line="174"/>
         <source>Failed loading FFMPEG ! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="64"/>
         <source>Remove from list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsManager.py" line="118"/>
+        <source>You must delete some video from the list before adding a new one</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

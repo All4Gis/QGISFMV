@@ -102,7 +102,7 @@
         <translation type="obsolete">Remove the current selection&apos;s video</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="228"/>
+        <location filename="../player/QgsManager.py" line="234"/>
         <source>Open video</source>
         <translation>Open video</translation>
     </message>
@@ -112,28 +112,33 @@
         <translation type="obsolete">Remove</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="194"/>
+        <location filename="../player/QgsManager.py" line="200"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation type="unfinished">This video don&apos;t have Metadata ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="141"/>
+        <location filename="../player/QgsManager.py" line="147"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="209"/>
+        <location filename="../player/QgsManager.py" line="215"/>
         <source>Start location not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="168"/>
+        <location filename="../player/QgsManager.py" line="174"/>
         <source>Failed loading FFMPEG ! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../player/QgsManager.py" line="64"/>
         <source>Remove from list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsManager.py" line="118"/>
+        <source>You must delete some video from the list before adding a new one</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
