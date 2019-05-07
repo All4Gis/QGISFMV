@@ -68,7 +68,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, isStreaming=False):
         """ Constructor """
-        super(QgsFmvPlayer, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
         self.iface = iface

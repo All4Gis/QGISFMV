@@ -15,7 +15,7 @@ class OpenStream(QDialog, Ui_FmvOpenStream):
 
     def __init__(self, iface, parent=None):
         """ Contructor """
-        super(OpenStream, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
         self.iface = iface

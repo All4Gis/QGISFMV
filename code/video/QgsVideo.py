@@ -86,7 +86,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def __init__(self, widget, parent=None):
         ''' Constructor '''
-        super(VideoWidgetSurface, self).__init__(parent)
+        super().__init__(parent)
 
         self.widget = widget
         self.imageFormat = QImage.Format_Invalid
@@ -243,7 +243,7 @@ class VideoWidget(QVideoWidget):
 
     def __init__(self, parent=None):
         ''' Constructor '''
-        super(VideoWidget, self).__init__(parent)
+        super().__init__(parent)
         self.surface = VideoWidgetSurface(self)
         self.Tracking_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
 
@@ -375,7 +375,7 @@ class VideoWidget(QVideoWidget):
             self.setFullScreen(not self.isFullScreen())
             event.accept()
         else:
-            super(VideoWidget, self).keyPressEvent(event)
+            super().keyPressEvent(event)
 
     def mouseDoubleClickEvent(self, event):
         """

@@ -13,7 +13,7 @@ class ColorDialog(QDialog, Ui_ColorDialog):
 
     def __init__(self, parent=None):
         """ Constructor """
-        super(ColorDialog, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
 

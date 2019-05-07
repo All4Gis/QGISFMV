@@ -31,7 +31,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
 
     def __init__(self, parent=None, player=None):
         """ Contructor"""
-        super(QgsFmvMetadata, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.player = player
         self.parent = parent
