@@ -25,6 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.6:
+    	- Fluid drawing in the video
     	- Save and restore manager video list
     	- Add shortcuts
     	- Update translations
