@@ -531,13 +531,14 @@ class VideoWidget(QVideoWidget):
         self.zoomed = False
         self.surface.updateVideoRect()
         
-    def RemoveMoveEventValue(self, values):
+    def RemoveAddMoveEventValue(self, values, Longitude, Latitude, Altitude):
         """
-        Remove move value for fluid drawing
+        Remove and Add move value for fluid drawing
         """
         for idx, pt in enumerate(values):
             if pt[-1]=="mouseMoveEvent":
                 del values[idx]
+        values.append([Longitude, Latitude, Altitude, "mouseMoveEvent"])
 
     def mouseMoveEvent(self, event):
         """
@@ -578,18 +579,15 @@ class VideoWidget(QVideoWidget):
 
             # Polygon drawer mouseMoveEvent
             if self._interaction.polygonDrawer:
-                self.RemoveMoveEventValue(self.drawPolygon)
-                self.drawPolygon.append([Longitude, Latitude, Altitude, "mouseMoveEvent"])
+                self.RemoveAddMoveEventValue(self.drawPolygon, Longitude, Latitude, Altitude)
                 
             # Line drawer mouseMoveEvent
             if self._interaction.lineDrawer:
-                self.RemoveMoveEventValue(self.drawLines)
-                self.drawLines.append([Longitude, Latitude, Altitude, "mouseMoveEvent"])
+                self.RemoveAddMoveEventValue(self.drawLines, Longitude, Latitude, Altitude)
                
             # Ruler drawer mouseMoveEvent
             if self._interaction.ruler and self.drawRuler:
-                self.RemoveMoveEventValue(self.drawRuler)
-                self.drawRuler.append([Longitude, Latitude, Altitude, "mouseMoveEvent"])
+                self.RemoveAddMoveEventValue(self.drawRuler, Longitude, Latitude, Altitude)
             
             self.UpdateSurface()
 
