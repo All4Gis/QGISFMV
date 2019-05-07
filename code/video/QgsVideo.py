@@ -544,13 +544,13 @@ class VideoWidget(QVideoWidget):
 
         if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.ruler:
             self.setCursor(QCursor(Qt.CrossCursor))
-
+            
         # Cursor Coordinates
         if self.gt is not None:
 
             Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                 event, self.surface)
-
+            
             txt = "<span style='font-size:10pt; font-weight:bold;'>Lon :</span>"
             txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
                 ("%.3f" % Longitude) + "</span>"
@@ -567,6 +567,16 @@ class VideoWidget(QVideoWidget):
                 txt += "<span style='font-size:9pt; font-weight:normal;'>-</span>"
 
             self.parent.lb_cursor_coord.setText(txt)
+                  
+            # Ruler drawer mouseMoveEvent
+            if self._interaction.ruler and self.drawRuler:
+                
+                for idx, pt in enumerate(self.drawRuler):
+                    if pt[-1]=="mouseMoveEvent":
+                        del self.drawRuler[idx]
+    
+                self.drawRuler.append([Longitude, Latitude, Altitude, "mouseMoveEvent"])
+                self.UpdateSurface()
 
         else:
             self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" + 
@@ -587,6 +597,7 @@ class VideoWidget(QVideoWidget):
             self.Censure_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
 
+        # Magnifier mouseMoveEvent
         if not self.zoomed:
             delta = event.pos() - self.pressPos
             if not self.snapped:

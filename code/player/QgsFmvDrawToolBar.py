@@ -68,7 +68,7 @@ class DrawToolBar(object):
                     drawPolygon, painter, surface, gt)
 
         # Draw Ruler on video
-        # the measures do not persist in the video
+        # the measures don't persist in the video
         if len(drawRuler) > 1:
             DrawToolBar.resetRulerDistance()
             for idx, pt in enumerate(drawRuler):
