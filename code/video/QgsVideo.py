@@ -530,6 +530,14 @@ class VideoWidget(QVideoWidget):
         QWidget.resizeEvent(self, event)
         self.zoomed = False
         self.surface.updateVideoRect()
+        
+    def RemoveMoveEventValue(self, values):
+        """
+        Remove move value for fluid drawing
+        """
+        for idx, pt in enumerate(values):
+            if pt[-1]=="mouseMoveEvent":
+                del values[idx]
 
     def mouseMoveEvent(self, event):
         """
@@ -567,16 +575,23 @@ class VideoWidget(QVideoWidget):
                 txt += "<span style='font-size:9pt; font-weight:normal;'>-</span>"
 
             self.parent.lb_cursor_coord.setText(txt)
-                  
+
+            # Polygon drawer mouseMoveEvent
+            if self._interaction.polygonDrawer:
+                self.RemoveMoveEventValue(self.drawPolygon)
+                self.drawPolygon.append([Longitude, Latitude, Altitude, "mouseMoveEvent"])
+                
+            # Line drawer mouseMoveEvent
+            if self._interaction.lineDrawer:
+                self.RemoveMoveEventValue(self.drawLines)
+                self.drawLines.append([Longitude, Latitude, Altitude, "mouseMoveEvent"])
+               
             # Ruler drawer mouseMoveEvent
             if self._interaction.ruler and self.drawRuler:
-                
-                for idx, pt in enumerate(self.drawRuler):
-                    if pt[-1]=="mouseMoveEvent":
-                        del self.drawRuler[idx]
-    
+                self.RemoveMoveEventValue(self.drawRuler)
                 self.drawRuler.append([Longitude, Latitude, Altitude, "mouseMoveEvent"])
-                self.UpdateSurface()
+            
+            self.UpdateSurface()
 
         else:
             self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" + 
