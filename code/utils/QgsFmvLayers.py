@@ -94,9 +94,6 @@ def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
     CommonLayer(pointLyr)
     return
 
-# TODO : Add only ID Attributes?
-
-
 def AddDrawLineOnMap(drawLines):
     '''  add Line on the map '''
 
@@ -223,11 +220,13 @@ def AddDrawPolygonOnMap(poly_coordinates):
 
 
 def SetcrtSensorSrc():
+    ''' Set Style based on Sensor type '''
     global crtSensorSrc, crtSensorSrc2
     crtSensorSrc = crtSensorSrc2 = 'DEFAULT'
 
 
 def SetcrtPltTailNum():
+    ''' Set Style based on Platform Type Number '''
     global crtPltTailNum
     crtPltTailNum = 'DEFAULT'
 
@@ -1039,7 +1038,7 @@ def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding="utf
         formats = QgsVectorFileWriter.supportedFiltersAndFormats()
         OGRCodes = {}
         for (key, value) in formats.items():
-            extension = unicode(key)
+            extension = str(key)
             extension = extension[extension.find('*.') + 2:]
             extension = extension[:extension.find(' ')]
             OGRCodes[extension] = value

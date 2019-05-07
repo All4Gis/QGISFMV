@@ -338,7 +338,7 @@ def pluginSetting(name, namespace=None, typ=None):
         elif t == "number":
             return float
         else:
-            return unicode
+            return str
 
     namespace = namespace or _callerName().split(".")[0]
     full_name = namespace + "/" + name
