@@ -147,7 +147,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.volumeSlider.setValue(self.player.volume())
         self.volumeSlider.enterEvent = self.showVolumeTip
 
-        self.metadataDlg = QgsFmvMetadata(parent=self, player=self)
+        self.metadataDlg = QgsFmvMetadata(player=self)
         self.addDockWidget(Qt.RightDockWidgetArea, self.metadataDlg)
         self.metadataDlg.setMinimumWidth(500)
         self.metadataDlg.hide()
@@ -1169,7 +1169,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def OpenQgsFmvMetadata(self):
         """ Open Metadata Dock """
         if self.metadataDlg is None:
-            self.metadataDlg = QgsFmvMetadata(parent=self, player=self)
+            self.metadataDlg = QgsFmvMetadata(player=self)
             self.addDockWidget(Qt.RightDockWidgetArea, self.metadataDlg)
             self.metadataDlg.show()
         else:

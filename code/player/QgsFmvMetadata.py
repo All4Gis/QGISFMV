@@ -2,8 +2,7 @@
 import csv
 
 from qgis.PyQt.QtCore import Qt, QCoreApplication
-from qgis.PyQt.QtGui import (QCursor,
-                         QFont,
+from qgis.PyQt.QtGui import (QFont,
                          QTextCursor,
                          QTextDocument,
                          QTextBlockFormat,
@@ -12,7 +11,7 @@ from qgis.PyQt.QtGui import (QCursor,
                          QBrush,
                          QColor)
 from qgis.PyQt.QtPrintSupport import QPrinter
-from qgis.PyQt.QtWidgets import QDockWidget, QApplication
+from qgis.PyQt.QtWidgets import QDockWidget
 from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGIS_FMV.utils.QgsFmvUtils import askForFiles
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
@@ -23,18 +22,30 @@ try:
 except ImportError:
     None
 
-tm = QgsApplication.taskManager()
-
 
 class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
     """ Metadata Class Reports """
 
-    def __init__(self, parent=None, player=None):
+    def __init__(self, player=None):
         """ Contructor"""
-        super().__init__(parent)
+        super().__init__()
         self.setupUi(self)
         self.player = player
-        self.parent = parent
+
+    def finishedTask(self, e, result=None):
+        """ Common finish task function """
+        if e is None:
+            if result is None:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvMetadata", 'Completed with no exception and no result '\
+                    '(probably manually canceled by the user)'), level=QGis.Warning)
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvMetadata", "Succesfully " + result['task'] + "!"))
+        else:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvMetadata", "Failed " + result['task'] + "!"), level=QGis.Warning)
+            raise e
 
     def SaveAsPDF(self):
         """ Save Table as pdf """
@@ -52,18 +63,8 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         if out == "":
             return
 
-        def finished(e):
-            QApplication.restoreOverrideCursor()
-            if e is None:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvMetadata", "Succesfully creating PDF"))
-            else:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvMetadata", "Failed creating PDF : "), str(e), level=QGis.Warning)
-            return
-
         task = QgsTask.fromFunction('Save PDF Report Task',
-                                    QgsFmvMetadata.CreatePDF,
+                                    self.CreatePDF,
                                     out=out,
                                     timestamp=timestamp,
                                     data=data,
@@ -72,24 +73,14 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
                                     columns=columns,
                                     fileName=fileName,
                                     VManager=self.VManager,
-                                    on_finished=finished,
+                                    on_finished=self.finishedTask,
                                     flags=QgsTask.CanCancel)
 
-        QCoreApplication.processEvents()
-        tm.addTask(task)
-        QCoreApplication.processEvents()
-        while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
-            QCoreApplication.processEvents()
-            pass
-        while QgsApplication.taskManager().countActiveTasks() > 0:
-            QCoreApplication.processEvents()
+        QgsApplication.taskManager().addTask(task)
         return
 
-    def CreatePDF(self, out, timestamp, data, frame, rows, columns, fileName, VManager):
+    def CreatePDF(self, task, out, timestamp, data, frame, rows, columns, fileName, VManager):
         ''' Create PDF QgsTask '''
-        QCoreApplication.processEvents()
-        QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
-
         font_normal = QFont("Helvetica", 10, QFont.Normal)
         font_bold = QFont("Helvetica", 12, QFont.Bold)
 
@@ -176,9 +167,11 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         centerFormat.setAlignment(Qt.AlignHCenter)
         cursor.insertBlock(centerFormat)
         cursor.insertImage(frame.scaledToWidth(500))
-        QCoreApplication.processEvents()
         document.print_(printer)
-        QCoreApplication.processEvents()
+        
+        if task.isCanceled():
+            return None
+        return {'task': task.description()}
 
     def SaveACSV(self):
         """ Save Table as CSV  """
@@ -190,38 +183,19 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         if out == "":
             return
 
-        def finished(e):
-            QApplication.restoreOverrideCursor()
-            if e is None:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvMetadata", "Succesfully creating CSV"))
-            else:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvMetadata", "Failed creating CSV : "), str(e), level=QGis.Warning)
-            return
-
         task = QgsTask.fromFunction('Save CSV Report Task',
-                                    QgsFmvMetadata.CreateCSV,
+                                    self.CreateCSV,
                                     out=out,
                                     data=data,
                                     VManager=self.VManager,
-                                    on_finished=finished,
+                                    on_finished=self.finishedTask,
                                     flags=QgsTask.CanCancel)
 
-        QCoreApplication.processEvents()
-        tm.addTask(task)
-        QCoreApplication.processEvents()
-        while task.status() not in [QgsTask.Complete, QgsTask.Terminated]:
-            QCoreApplication.processEvents()
-            pass
-        while QgsApplication.taskManager().countActiveTasks() > 0:
-            QCoreApplication.processEvents()
+        QgsApplication.taskManager().addTask(task)
         return
 
-    def CreateCSV(self, out, data, VManager):
+    def CreateCSV(self, task, out, data, VManager):
         ''' Create CSV QgsTask '''
-        QCoreApplication.processEvents()
-        QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
         with open(out, 'w') as stream:
             headers = list()
             # 3 Columns always
@@ -238,6 +212,10 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
                 rowdata[headers[1]] = str(data[key][0])
                 rowdata[headers[2]] = str(data[key][1])
                 writer.writerow(rowdata)
+            
+        if task.isCanceled():
+            return None
+        return {'task': task.description()}
 
     def closeEvent(self, _):
         """ Close Dock Event """
