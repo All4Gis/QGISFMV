@@ -119,6 +119,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         tableFormat = QTextTableFormat()
         tableFormat.setBorderBrush(QBrush(Qt.black))
         tableFormat.setAlignment(Qt.AlignHCenter)
+        tableFormat.setHeaderRowCount(1)
         tableFormat.setCellPadding(2)
         tableFormat.setCellSpacing(2)
 
