@@ -391,7 +391,7 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
                 parent, msg, path, extString) or None
             if ret[0] != "":
                 name, ext = os.path.splitext(ret[0])
-                if ext == "":
+                if not ext:
                     ret[0] += "." + exts[0]  # Default extension
         else:
             ret = QFileDialog.getOpenFileName(

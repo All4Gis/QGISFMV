@@ -607,6 +607,39 @@
     </message>
 </context>
 <context>
+    <name>QgsFmvMetadata</name>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="39"/>
+        <source>Completed with no exception and no result (probably manually canceled by the user)</source>
+        <translation>Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="59"/>
+        <source>Save PDF</source>
+        <translation>Guardar com a PDF</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="98"/>
+        <source>Video : </source>
+        <translation>Vídeo : </translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="99"/>
+        <source>TimeStamp : </source>
+        <translation>Marca de temps : </translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="160"/>
+        <source>Current Frame</source>
+        <translation>Fotograma actual</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="179"/>
+        <source>Save CSV</source>
+        <translation>Guardar com a CSV</translation>
+    </message>
+</context>
+<context>
     <name>QgsFmvPlayer</name>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="301"/>

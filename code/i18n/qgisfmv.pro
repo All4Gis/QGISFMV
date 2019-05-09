@@ -6,6 +6,7 @@ FORMS = ../ui/ui_FmvAbout.ui \
 
 SOURCES = ../QgsFmv.py \
 		  ../player/QgsFmvPlayer.py  \
+		  ../player/QgsFmvMetadata.py  \
 		  ../player/QgsFmvAbout.py   \
 		  ../player/QgsManager.py \
 		  ../utils/QgsJsonModel.py

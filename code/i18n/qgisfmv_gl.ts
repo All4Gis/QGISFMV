@@ -602,6 +602,39 @@
     </message>
 </context>
 <context>
+    <name>QgsFmvMetadata</name>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="39"/>
+        <source>Completed with no exception and no result (probably manually canceled by the user)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="59"/>
+        <source>Save PDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="98"/>
+        <source>Video : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="99"/>
+        <source>TimeStamp : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="160"/>
+        <source>Current Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvMetadata.py" line="179"/>
+        <source>Save CSV</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QgsFmvPlayer</name>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="301"/>
