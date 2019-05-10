@@ -579,7 +579,7 @@ class VideoWidget(QVideoWidget):
             return  
 
         # Mouser cursor drawing
-        if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.ruler or self._interaction.censure:
+        if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.ruler or self._interaction.censure or self._interaction.objectTracking:
             self.setCursor(QCursor(Qt.CrossCursor))
             
         # Cursor Coordinates
