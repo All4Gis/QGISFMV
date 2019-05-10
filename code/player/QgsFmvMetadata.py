@@ -13,10 +13,10 @@ from qgis.PyQt.QtPrintSupport import QPrinter
 from qgis.PyQt.QtWidgets import QDockWidget
 from qgis.core import Qgis as QGis, QgsTask, QgsApplication
 
-from PyQt5.QtGui import QTextFormat
+from PyQt5.QtGui import QTextFormat, QPainter
 
 from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
-from QGIS_FMV.utils.QgsFmvUtils import askForFiles, _seconds_to_time
+from QGIS_FMV.utils.QgsFmvUtils import askForFiles, _seconds_to_time, BurnDrawingsImage
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 
@@ -51,9 +51,14 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
             raise e
 
     def SaveAsPDF(self):
-        """ Save Table as pdf """
+        """ Save Table as pdf 
+            The drawings are saved by default 
+        """
         timestamp = _seconds_to_time(self.player.currentInfo)
-        frame = self.player.videoWidget.GetCurrentFrame()
+        
+        # Frame save drawings 
+        frame = BurnDrawingsImage(self.player.videoWidget.GetCurrentFrame() , self.player.videoWidget.grab(self.player.videoWidget.surface.videoRect()).toImage())
+
         data = self.player.GetPacketData()
         rows = self.VManager.rowCount()
         columns = self.VManager.columnCount()

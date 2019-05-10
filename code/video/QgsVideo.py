@@ -236,7 +236,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         painter.setTransform(oldTransform)
         self.currentFrame.unmap()
         self.widget.updateVideo()
-        return self.painter
+        return
 
 
 class VideoWidget(QVideoWidget):
@@ -279,7 +279,7 @@ class VideoWidget(QVideoWidget):
         self.parent = parent.parent()
 
         palette = self.palette()
-        palette.setColor(QPalette.Background, Qt.black)
+        palette.setColor(QPalette.Background, Qt.transparent)
         self.setPalette(palette)
 
         self.offset, self.origin, self.pressPos, self.dragPos = QPoint(
@@ -498,7 +498,7 @@ class VideoWidget(QVideoWidget):
                     self.painter.fillRect(rect, brush)
 
             try:
-                self.painter = self.surface.paint(self.painter)
+                self.surface.paint(self.painter)
             except Exception:
                 None
         else:

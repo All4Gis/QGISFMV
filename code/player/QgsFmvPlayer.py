@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 import os.path
-
 from qgis.PyQt.QtCore import (QUrl,
                           QPoint,
                           QCoreApplication,
                           Qt,
                           QTimer)
 from qgis.PyQt.QtGui import QIcon, QMovie
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
 from qgis.PyQt.QtWidgets import (QToolTip,
                              QMessageBox,
                              QAbstractSlider,
@@ -22,10 +20,14 @@ from qgis.PyQt.QtWidgets import (QToolTip,
                              QApplication,
                              QTableWidgetItem,
                              QToolBar)
+from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject
+
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
+
 from QGIS_FMV.converter.Converter import Converter
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
-from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.klvdata.element import UnknownElement
+from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.player.QgsFmvMetadata import QgsFmvMetadata
 from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          RemoveVideoLayers,
@@ -33,6 +35,7 @@ from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          RemoveGroupByName)
 from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
                                         ResetData,
+                                        BurnDrawingsImage,
                                         _spawn,
                                         UpdateLayers,
                                         hasElevationModel,
@@ -46,7 +49,7 @@ from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
-from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject, QgsCoordinateReferenceSystem
+
 
 try:
     from pydevd import *
@@ -1082,8 +1085,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return {'task': task.description()}
 
     def ExtractCurrentFrame(self):
-        """ Extract Current Frame Task """
-        image = self.videoWidget.GetCurrentFrame()
+        """ Extract Current Frame Task 
+            The drawings are saved by default 
+        """
+        #image = self.videoWidget.GetCurrentFrame()   # without drawings
+        image = BurnDrawingsImage(self.videoWidget.GetCurrentFrame(), self.videoWidget.grab(self.videoWidget.surface.videoRect()).toImage())
+         
         output, _ = askForFiles(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save Current Frame"),
             isSave=True,
@@ -1110,7 +1117,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def ExtractCurrentGeoFrame(self):
         """ Extract Current GeoReferenced Frame Task """
-        image = self.videoWidget.GetCurrentFrame()
+        #image = self.videoWidget.GetCurrentFrame() # without drawings
+        image = BurnDrawingsImage(self.videoWidget.GetCurrentFrame(), self.videoWidget.grab(self.videoWidget.surface.videoRect()).toImage())
+
         geotransform = GetGeotransform_affine()
         position = str(self.player.position())
         directory = askForFolder(self, QCoreApplication.translate(

@@ -1,20 +1,44 @@
 # -*- coding: utf-8 -*-
+from configparser import SafeConfigParser
+from datetime import datetime
 import inspect
+import json
 from math import atan, tan, sqrt, radians, pi
 import os
 from os.path import dirname, abspath
 import platform
-import json
-from datetime import datetime
+from qgis.PyQt.QtCore import (QSettings,
+                              QUrl,
+                              QEventLoop)
+from qgis.PyQt.QtCore import QCoreApplication, Qt
+from qgis.PyQt.QtGui import QImage, QPainter
+from qgis.PyQt.QtNetwork import QNetworkRequest
+from qgis.PyQt.QtWidgets import QFileDialog
+from qgis.core import (QgsApplication,
+                       QgsNetworkAccessManager,
+                       QgsTask,
+                       QgsRasterLayer,
+                       Qgis as QGis)
 from subprocess import Popen, PIPE, check_output
 import threading
 
-from qgis.PyQt.QtCore import QCoreApplication
-from qgis.PyQt.QtGui import QImage
-from qgis.PyQt.QtWidgets import QFileDialog
-from QGIS_FMV.klvdata.streamparser import StreamParser
+from osgeo import gdal, osr
+
+from QGIS_FMV.geo import sphere as sphere
 from QGIS_FMV.klvdata.element import UnknownElement
-from configparser import SafeConfigParser
+from QGIS_FMV.klvdata.streamparser import StreamParser
+from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
+                                         ExpandLayer,
+                                         UpdateFootPrintData,
+                                         UpdateTrajectoryData,
+                                         UpdateBeamsData,
+                                         UpdatePlatformData,
+                                         UpdateFrameCenterData,
+                                         UpdateFrameAxisData,
+                                         SetcrtSensorSrc,
+                                         SetcrtPltTailNum)
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+
 
 parser = SafeConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
@@ -28,28 +52,6 @@ FrameCenter_lyr = parser['LAYERS']['FrameCenter_lyr']
 dtm_buffer = int(parser['GENERAL']['DTM_buffer_size'])
 ffmpegConf = parser['GENERAL']['ffmpeg']
 
-from QGIS_FMV.geo import sphere as sphere
-from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
-                                         ExpandLayer,
-                                         UpdateFootPrintData,
-                                         UpdateTrajectoryData,
-                                         UpdateBeamsData,
-                                         UpdatePlatformData,
-                                         UpdateFrameCenterData,
-                                         UpdateFrameAxisData,
-                                         SetcrtSensorSrc,
-                                         SetcrtPltTailNum)
-from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from qgis.PyQt.QtNetwork import QNetworkRequest
-from qgis.PyQt.QtCore import (QSettings,
-                              QUrl,
-                              QEventLoop)
-from qgis.core import (QgsApplication,
-                       QgsNetworkAccessManager,
-                       QgsTask,
-                       QgsRasterLayer,
-                       Qgis as QGis)
-from osgeo import gdal, osr
 
 try:
     from homography import from_points
@@ -1127,3 +1129,17 @@ def _seconds_to_time_frac(sec, comma=False):
         return '%02d:%02d:%02d,%03d' % (hours, minutes, sec, frac)
     else:
         return '%02d:%02d:%07.4f' % (hours, minutes, sec)
+    
+def BurnDrawingsImage(source, overlay):
+    base = source.scaled(overlay.size(), Qt.IgnoreAspectRatio )
+    
+    p = QPainter()
+    p.setRenderHint(QPainter.HighQualityAntialiasing)
+    p.begin(base)
+    p.setCompositionMode(QPainter.CompositionMode_SourceOut)
+    p.drawImage(0, 0, overlay)
+    p.end()
+    
+    # Restore size
+    base = base.scaled(source.size(), Qt.IgnoreAspectRatio )
+    return base
