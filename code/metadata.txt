@@ -29,6 +29,7 @@ changelog=
     	- Change design pdf report
     	- Fix create report task
     	- Fluid drawing in the video
+    	- Control if the video exists or not in the manager list (disabled if not)
     	- Save and restore manager video list
     	- Add shortcuts
     	- Update translations
