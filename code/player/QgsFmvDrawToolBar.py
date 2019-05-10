@@ -80,7 +80,7 @@ class DrawToolBar(object):
                         pt, idx, painter, surface, gt, drawRuler)
 
         # Draw Censure
-        if len(drawCesure) > 0:
+        if drawCesure:
             DrawToolBar.drawCensuredOnVideo(painter, drawCesure)
             return
 

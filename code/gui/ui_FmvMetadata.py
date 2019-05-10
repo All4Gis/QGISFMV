@@ -24,7 +24,7 @@ class Ui_FmvMetadata(object):
 "}")
         self.menubarwidget.setObjectName("menubarwidget")
         self.menuSave = QtWidgets.QMenu(self.menubarwidget)
-        self.menuSave.setEnabled(False)
+        self.menuSave.setEnabled(True)
         self.menuSave.setObjectName("menuSave")
         self.verticalLayout.addWidget(self.menubarwidget)
         self.line = QtWidgets.QFrame(self.dockWidgetContents)

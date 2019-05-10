@@ -289,7 +289,12 @@ class VideoWidget(QVideoWidget):
 
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
-        if len(self.drawLines) > 0:
+        if self.drawLines:
+            try:
+                if self.drawLines[-1][3] == "mouseMoveEvent":
+                    del self.drawLines[-1] # Remove mouseMoveEvent element
+            except Exception:
+                None
             for pt in range(len(self.drawLines) - 1, -1, -1):
                 del self.drawLines[pt]
                 try:
@@ -303,7 +308,15 @@ class VideoWidget(QVideoWidget):
 
     def removeLastSegmentLine(self):
         ''' Remove Last Segment Line Objects '''
-        if len(self.drawLines) > 0:
+        try:
+            if self.drawLines[-1][3] == "mouseMoveEvent":
+                del self.drawLines[-1] # Remove mouseMoveEvent element
+        except Exception:
+            None
+        if self.drawLines:
+            if self.drawLines[-1][0] is None:
+                del self.drawLines[-1]
+            
             del self.drawLines[-1]
             self.UpdateSurface()
             AddDrawLineOnMap(self.drawLines)
@@ -311,10 +324,11 @@ class VideoWidget(QVideoWidget):
 
     def removeAllLines(self):
         ''' Resets Line List '''
-        self.drawLines = []
-        self.UpdateSurface()
-        # Clear all Layer
-        RemoveAllDrawLineOnMap()
+        if self.drawLines:
+            self.drawLines = []
+            self.UpdateSurface()
+            # Clear all Layer
+            RemoveAllDrawLineOnMap()
 
     def ResetDrawRuler(self):
         ''' Resets Ruler List '''
@@ -322,16 +336,17 @@ class VideoWidget(QVideoWidget):
 
     def removeAllCensure(self):
         ''' Remove All Censure Objects '''
-        self.drawCesure = []
+        if self.drawCesure:
+            self.drawCesure = []
 
     def removeLastCensured(self):
         ''' Remove Last Censure Objects '''
-        if len(self.drawCesure) > 0:
+        if self.drawCesure:
             del self.drawCesure[-1]
 
     def removeLastPoint(self):
         ''' Remove All Point Drawer Objects '''
-        if len(self.drawPtPos) > 0:
+        if self.drawPtPos:
             del self.drawPtPos[-1]
             self.UpdateSurface()
             RemoveLastDrawPointOnMap()
@@ -339,22 +354,29 @@ class VideoWidget(QVideoWidget):
 
     def removeAllPoint(self):
         ''' Remove All Point Drawer Objects '''
-        self.drawPtPos = []
-        self.UpdateSurface()
-        # Clear all Layer
-        RemoveAllDrawPointOnMap()
+        if self.drawPtPos:
+            self.drawPtPos = []
+            self.UpdateSurface()
+            # Clear all Layer
+            RemoveAllDrawPointOnMap()
         return
 
     def removeAllPolygon(self):
         ''' Remove All Polygon Drawer Objects '''
-        self.drawPolygon = []
-        self.UpdateSurface()
-        # Clear all Layer
-        RemoveAllDrawPolygonOnMap()
+        if self.drawPolygon:
+            self.drawPolygon = []
+            self.UpdateSurface()
+            # Clear all Layer
+            RemoveAllDrawPolygonOnMap()
 
     def removeLastPolygon(self):
         ''' Remove Last Polygon Drawer Objects '''
-        if len(self.drawPolygon) > 0:
+        if self.drawPolygon:
+            try:
+                if self.drawPolygon[-1][3] == "mouseMoveEvent":
+                    del self.drawPolygon[-1] # Remove mouseMoveEvent element
+            except Exception:
+                None
             for pt in range(len(self.drawPolygon) - 1, -1, -1):
                 del self.drawPolygon[pt]
                 try:
@@ -362,6 +384,7 @@ class VideoWidget(QVideoWidget):
                         break
                 except Exception:
                     None
+            
             self.UpdateSurface()
             # remove last index layer
             RemoveLastDrawPolygonOnMap()

@@ -613,27 +613,27 @@
         <translation>Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="62"/>
+        <location filename="../player/QgsFmvMetadata.py" line="67"/>
         <source>Save PDF</source>
         <translation>Guardar com a PDF</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="103"/>
+        <location filename="../player/QgsFmvMetadata.py" line="108"/>
         <source>Video : </source>
         <translation>Vídeo : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="104"/>
+        <location filename="../player/QgsFmvMetadata.py" line="109"/>
         <source>TimeStamp : </source>
         <translation>Marca de temps : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="156"/>
+        <location filename="../player/QgsFmvMetadata.py" line="161"/>
         <source>Current Frame</source>
         <translation>Fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="184"/>
+        <location filename="../player/QgsFmvMetadata.py" line="189"/>
         <source>Save CSV</source>
         <translation>Guardar com a CSV</translation>
     </message>
@@ -641,7 +641,7 @@
 <context>
     <name>QgsFmvPlayer</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="304"/>
+        <location filename="../player/QgsFmvPlayer.py" line="301"/>
         <source>Metadata Callback Failed! : </source>
         <translation>El buffer de metadades ha fallat! : 
 </translation>
@@ -657,89 +657,89 @@
         <translation>Error de verificació d&apos;àudio! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="437"/>
+        <location filename="../player/QgsFmvPlayer.py" line="434"/>
         <source>Mute/Unmute</source>
         <translation>Silenci/ No Silenci</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="442"/>
+        <location filename="../player/QgsFmvPlayer.py" line="439"/>
         <source>Extract All Frames</source>
         <translation>Extreure Tots els Frames</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="447"/>
+        <location filename="../player/QgsFmvPlayer.py" line="444"/>
         <source>Extract Current Frame</source>
         <translation>Extreu el frame actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="453"/>
+        <location filename="../player/QgsFmvPlayer.py" line="450"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadades</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1203"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1196"/>
         <source>Video Information : </source>
         <translation>Informació del vídeo:</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="257"/>
+        <location filename="../player/QgsFmvPlayer.py" line="255"/>
         <source>Metadata Buffer Failed! : </source>
         <translation>El buffer de metadades ha fallat! : 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1101"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1092"/>
         <source>Save Current Frame</source>
         <translation>Guarda el frame actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="341"/>
+        <location filename="../player/QgsFmvPlayer.py" line="338"/>
         <source>Save Json</source>
         <translation>Guardar a Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="833"/>
+        <location filename="../player/QgsFmvPlayer.py" line="830"/>
         <source>Save video record</source>
         <translation>Guarda la gravació del vídeo</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="916"/>
+        <location filename="../player/QgsFmvPlayer.py" line="913"/>
         <source>Save Video as...</source>
         <translation>Guardar vídeo com ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1058"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1055"/>
         <source>Save all Frames</source>
         <translation>Guardar Tots els Frames
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="994"/>
+        <location filename="../player/QgsFmvPlayer.py" line="991"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>Deseu el diagrama de bits d’àudio</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1011"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1008"/>
         <source>Save Video Bitrate Plot</source>
         <translation>Desa un gràfic de bits de vídeo</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1130"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1123"/>
         <source>Save Current Georeferenced Frame</source>
         <translation>Guardar el frame georeferenciat actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="797"/>
+        <location filename="../player/QgsFmvPlayer.py" line="794"/>
         <source>Playing : </source>
         <translation>Reproduint : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="812"/>
+        <location filename="../player/QgsFmvPlayer.py" line="809"/>
         <source>Open Video File : </source>
         <translation>Obrir Fitxer de Vídeo : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1031"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1028"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
         <translation>Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
     </message>
