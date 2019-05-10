@@ -105,14 +105,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.DrawToolBar.addAction(self.actionRuler)
         self.DrawToolBar.addSeparator()
 
-#         # Censure QToolButton
-#         self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
-#         self.DrawToolBar.addWidget(self.toolBtn_Cesure)
-#         self.DrawToolBar.addSeparator()
-#
-#         # Object Tracking
-#         self.DrawToolBar.addAction(self.actionObject_Tracking)
-        self.toolBtn_Cesure.setVisible(False)
+        # Censure QToolButton
+        self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
+        self.DrawToolBar.addWidget(self.toolBtn_Cesure)
+        self.DrawToolBar.addSeparator()
+
+        # Object Tracking
+        # self.DrawToolBar.addAction(self.actionObject_Tracking)
+        
         # Hide Color Button
         self.btn_Color.hide()
 

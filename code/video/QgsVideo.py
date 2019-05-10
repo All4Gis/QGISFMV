@@ -573,8 +573,13 @@ class VideoWidget(QVideoWidget):
         if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
             self.setCursor(QCursor(Qt.ArrowCursor))
             return
+        
+        # Prevent draw on video if not started or finished
+        if self.parent.player.position() == 0:
+            return  
 
-        if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.ruler:
+        # Mouser cursor drawing
+        if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.ruler or self._interaction.censure:
             self.setCursor(QCursor(Qt.CrossCursor))
             
         # Cursor Coordinates
@@ -671,6 +676,10 @@ class VideoWidget(QVideoWidget):
         """
         if GetImageHeight() == 0:
             return
+        
+        # Prevent draw on video if not started or finished
+        if self.parent.player.position() == 0:
+            return  
 
         if event.button() == Qt.LeftButton:
             self.snapped = True
@@ -759,8 +768,12 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
+        # Prevent draw on video if not started or finished
+        if self.parent.player.position() == 0:
+            return  
+
         if self._interaction.censure:
-            geom = self.Tracking_RubberBand.geometry()
+            geom = self.Censure_RubberBand.geometry()
             self.Censure_RubberBand.hide()
             self.drawCesure.append([geom])
 
