@@ -25,7 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.6:
-    	- Burn drawings in the image
+    	- Burn drawings in the image (geotiff,png and PDF report)
     	- Change design pdf report
     	- Fix create report task
     	- Fluid drawing in the video
