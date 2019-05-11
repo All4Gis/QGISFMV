@@ -260,7 +260,6 @@ class DrawToolBar(object):
                 None
         return
 
-    # TODO: Make This (Not work, tranformation error maybe)
     @staticmethod
     def drawCensuredOnVideo(painter, drawCesure):
         ''' Draw Censure on Video '''
@@ -283,28 +282,22 @@ class DrawToolBar(object):
     def drawMagnifierOnVideo(width, height, maskPixmap, dragPos, zoomPixmap, surface, painter, offset):
         ''' Draw Magnifier on Video '''
         dim = min(width, height)
-        MAX_MAGNIFIER = 229
+        MAX_MAGNIFIER = 200
         magnifierSize = min(MAX_MAGNIFIER, dim * 2 / 3)
         radius = magnifierSize / 2
         ring = radius - 15
         box = QSize(magnifierSize, magnifierSize)
 
-        # reupdate our mask
+        # Reupdate our mask
         if maskPixmap.size() != box:
             maskPixmap = QPixmap(box)
             maskPixmap.fill(Qt.transparent)
             g = QRadialGradient()
             g.setCenter(radius, radius)
-            g.setFocalPoint(radius, radius)
-            g.setRadius(radius)
-            g.setColorAt(1.0, QColor(64, 64, 64, 0))
-            g.setColorAt(0.5, QColor(0, 0, 0, 255))
             mask = QPainter(maskPixmap)
             mask.setRenderHint(QPainter.HighQualityAntialiasing)
             mask.setCompositionMode(QPainter.CompositionMode_Source)
-            mask.setBrush(g)
             mask.setPen(Qt.NoPen)
-            mask.drawRect(maskPixmap.rect())
             mask.setBrush(QColor(Qt.transparent))
             mask.drawEllipse(g.center(), ring, ring)
             mask.end()
@@ -313,23 +306,21 @@ class DrawToolBar(object):
         center += QPoint(0, radius / 2)
         corner = center - QPoint(radius, radius)
         xy = center * 2 - QPoint(radius, radius)
-        # only set the dimension to the magnified portion
+        # Only set the dimension to the magnified portion
         if zoomPixmap.size() != box:
             zoomPixmap = QPixmap(box)
             zoomPixmap.fill(Qt.lightGray)
 
-        if True:
-            painter_p = QPainter(zoomPixmap)
-            painter_p.translate(-xy)
-            largePixmap = QPixmap.fromImage(surface.image)
-            painter_p.drawPixmap(offset, largePixmap)
-            painter_p.end()
+        painter_p = QPainter(zoomPixmap)
+        painter_p.translate(-xy)
+        largePixmap = QPixmap.fromImage(surface.image)
+        painter_p.drawPixmap(offset, largePixmap)
+        painter_p.end()
 
         clipPath = QPainterPath()
         clipPath.addEllipse(QPointF(center), ring, ring)
         painter.setClipPath(clipPath)
         painter.drawPixmap(corner, zoomPixmap)
-        painter.setClipping(False)
         painter.drawPixmap(corner, maskPixmap)
         painter.setPen(Qt.gray)
         painter.drawPath(clipPath)

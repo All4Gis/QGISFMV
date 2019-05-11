@@ -199,39 +199,24 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         if self.widget._filterSatate.edgeDetectionFilter:
             try:
                 self.image = filter.EdgeFilter(self.image)
-            except Exception as e:
+            except Exception:
                 None
 
         # TODO : Test in other thread
         if self.widget._filterSatate.contrastFilter:
             try:
                 self.image = filter.AutoContrastFilter(self.image)
-            except Exception as e:
+            except Exception:
                 None
 
         # TODO : Test in other thread
         if self.widget._filterSatate.NDVI:
             try:
                 self.image = filter.NDVIFilter(self.image)
-            except Exception as e:
+            except Exception:
                 None
 
         painter.drawImage(self.targetRect, self.image, self.sourceRect)
-
-        if self._interaction.objectTracking and self.widget._isinit:
-            frame = convertQImageToMat(self.image)
-            # Update tracker
-            ok, bbox = self.widget.tracker.update(frame)
-            # Draw bounding box
-            if ok:
-                #                 qgsu.showUserAndLogMessage(
-                #                     "bbox : ", str(bbox), level=QGis.Warning)
-                painter.setPen(Qt.blue)
-                painter.drawRect(QRect(int(bbox[0]), int(
-                    bbox[1]), int(bbox[2]), int(bbox[3])))
-            else:
-                qgsu.showUserAndLogMessage(
-                    "Tracking failure detected ", "", level=QGis.Warning)
 
         painter.setTransform(oldTransform)
         self.currentFrame.unmap()
@@ -536,6 +521,22 @@ class VideoWidget(QVideoWidget):
         draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
                          self.drawRuler, self.drawCesure, self.painter, self.surface, self.gt)
 
+        
+        # Draw On Video Object tracking test
+        if self._interaction.objectTracking and self._isinit:
+            frame = convertQImageToMat(self.GetCurrentFrame())
+            # Update tracker
+            ok, bbox = self.tracker.update(frame)
+            # Draw bounding box
+            if ok:
+                print("bbox Traking: ", str(bbox))
+                self.painter.setPen(Qt.blue)
+                self.painter.drawRect(int(bbox[0]), int(
+                    bbox[1]), int(bbox[2]), int(bbox[3]))
+            else:
+                qgsu.showUserAndLogMessage(
+                    "Tracking failure detected ", "", level=QGis.Warning)
+                
         # Magnifier Glass
         if self.zoomed and self._interaction.magnifier:
             draw.drawMagnifierOnVideo(self.width(), self.height(
@@ -780,10 +781,13 @@ class VideoWidget(QVideoWidget):
         if self._interaction.objectTracking:
             geom = self.Tracking_RubberBand.geometry()
             bbox = (geom.x(), geom.y(), geom.width(), geom.height())
-            frame = convertQImageToMat(self.GetCurrentFrame())
+            print("bbox Ori : ", str(bbox))
+            img = self.GetCurrentFrame()
+            print("imagen ORI : " + img.width() + " " + img.height())
+            frame = convertQImageToMat(img)
             self.Tracking_RubberBand.hide()
             self.tracker = cv2.TrackerBoosting_create()
-            self.tracker.clear()
+            #self.tracker.clear()
             ok = self.tracker.init(frame, bbox)
             if ok:
                 self._isinit = True
