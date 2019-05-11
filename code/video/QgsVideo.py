@@ -631,10 +631,12 @@ class VideoWidget(QVideoWidget):
         if not event.buttons():
             return
 
+        # Object tracking rubberband
         if not self.Tracking_RubberBand.isHidden():
             self.Tracking_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
 
+        # Censure rubberband
         if not self.Censure_RubberBand.isHidden():
             self.Censure_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
