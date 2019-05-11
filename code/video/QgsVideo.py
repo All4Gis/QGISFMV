@@ -722,12 +722,14 @@ class VideoWidget(QVideoWidget):
 
                 AddDrawLineOnMap(self.drawLines)
 
+            # Object Tracking Interaction
             if self._interaction.objectTracking:
                 self.origin = event.pos()
                 self.Tracking_RubberBand.setGeometry(
                     QRect(self.origin, QSize()))
                 self.Tracking_RubberBand.show()
 
+            # Censure Interaction
             if self._interaction.censure:
                 self.origin = event.pos()
                 self.Censure_RubberBand.setGeometry(
