@@ -497,7 +497,6 @@ class VideoWidget(QVideoWidget):
  
         region = event.region()
         self.painter.fillRect(region.boundingRect() ,  brush)
-        print (" event.rect 0 : "+ str(region.boundingRect().width())+"  "+ str(region.boundingRect().height()))
  
         try:
             self.surface.paint(self.painter)
@@ -547,6 +546,7 @@ class VideoWidget(QVideoWidget):
         QWidget.resizeEvent(self, event)
         self.zoomed = False
         self.surface.updateVideoRect()
+        self.update()
         print (" widget : " + str(self.width())+"  "+str(self.height()) )
         print (" Video Rectangle : " + str(self.surface.videoRect().width())+"  "+str(self.surface.videoRect().height()))
         print (" Source Rectangle : " + str(self.surface.sourceRect().width())+"  "+str(self.surface.sourceRect().height()))
