@@ -123,7 +123,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             _format.pixelFormat())
         size = _format.frameSize()
         if (imageFormat != QImage.Format_Invalid and not size.isEmpty()):
-            self.sourceRect = _format.viewport()
+            self._sourceRect = _format.viewport()
             QAbstractVideoSurface.start(self, _format)
             self.imageFormat = imageFormat
             self.imageSize = size
@@ -136,7 +136,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
     def stop(self):
         ''' Stop Video '''
         self.currentFrame = QVideoFrame()
-        self.targetRect = QRect()
+        self._targetRect = QRect()
         QAbstractVideoSurface.stop(self)
         self.widget.update()
 
@@ -149,28 +149,29 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             return False
         else:
             self.currentFrame = frame
-            self.widget.repaint(self.targetRect)
+            self.widget.repaint(self._targetRect)
             return True
 
     def videoRect(self):
         ''' Get Video Rectangle '''
-        return self.targetRect
+        return self._targetRect
 
-    def GetsourceRect(self):
+    def sourceRect(self):
         ''' Get Source Rectangle '''
-        return self.sourceRect
+        return self._sourceRect
 
     def updateVideoRect(self):
         ''' Update video rectangle '''
         size = self.surfaceFormat().sizeHint()
         size.scale(self.widget.size().boundedTo(size), Qt.KeepAspectRatio)
-        self.targetRect = QRect(QPoint(0, 0), size)
-        self.targetRect.moveCenter(self.widget.rect().center())
+        self._targetRect = QRect(QPoint(0, 0), size)
+        self._targetRect.moveCenter(self.widget.rect().center())
 
     def paint(self, painter):
         ''' Paint Frame'''
         if (self.currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
             oldTransform = painter.transform()
+            painter.setTransform(oldTransform)
 
         if (self.surfaceFormat().scanLineDirection() == QVideoSurfaceFormat.BottomToTop):
             painter.scale(1, -1)
@@ -216,11 +217,9 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             except Exception:
                 None
 
-        painter.drawImage(self.targetRect, self.image, self.sourceRect)
+        painter.drawImage(self._targetRect, self.image, self._sourceRect)
 
-        painter.setTransform(oldTransform)
         self.currentFrame.unmap()
-        self.widget.updateVideo()
         return
 
 
@@ -267,10 +266,9 @@ class VideoWidget(QVideoWidget):
         palette.setColor(QPalette.Background, Qt.transparent)
         self.setPalette(palette)
 
-        self.offset, self.origin, self.pressPos, self.dragPos = QPoint(
-        ), QPoint(), QPoint(), QPoint()
+        self.origin, self.pressPos, self.dragPos = QPoint(), QPoint(), QPoint()
         self.tapTimer = QBasicTimer()
-        self.zoomPixmap, self.maskPixmap = QPixmap(), QPixmap()
+        
 
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
@@ -495,22 +493,17 @@ class VideoWidget(QVideoWidget):
 
         self.painter = QPainter(self)
         self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
-
-        if (self.surface.isActive()):
-            videoRect = self.surface.videoRect()
-            if not videoRect.contains(event.rect()):
-                region = event.region()
-                region.subtracted(QRegion(videoRect))
-                brush = self.palette().window()
-                for rect in region.rects():
-                    self.painter.fillRect(rect, brush)
-
-            try:
-                self.surface.paint(self.painter)
-            except Exception:
-                None
-        else:
-            self.painter.fillRect(event.rect(), self.palette().window())
+        brush = self.palette().window()
+ 
+        region = event.region()
+        self.painter.fillRect(region.boundingRect() ,  brush)
+        print (" event.rect 0 : "+ str(region.boundingRect().width())+"  "+ str(region.boundingRect().height()))
+ 
+        try:
+            self.surface.paint(self.painter)
+        except Exception:
+            None
+        
         try:
             SetImageSize(self.surface.currentFrame.width(),
                          self.surface.currentFrame.height())
@@ -539,8 +532,8 @@ class VideoWidget(QVideoWidget):
                 
         # Magnifier Glass
         if self.zoomed and self._interaction.magnifier:
-            draw.drawMagnifierOnVideo(self.width(), self.height(
-            ), self.maskPixmap, self.dragPos, self.zoomPixmap, self.surface, self.painter, self.offset)
+            #self.grab(self.surface.videoRect()).toImage()
+            draw.drawMagnifierOnVideo(self, self.dragPos, self.GetCurrentFrame(), self.painter)
 
         self.painter.end()
         return
@@ -554,6 +547,10 @@ class VideoWidget(QVideoWidget):
         QWidget.resizeEvent(self, event)
         self.zoomed = False
         self.surface.updateVideoRect()
+        print (" widget : " + str(self.width())+"  "+str(self.height()) )
+        print (" Video Rectangle : " + str(self.surface.videoRect().width())+"  "+str(self.surface.videoRect().height()))
+        print (" Source Rectangle : " + str(self.surface.sourceRect().width())+"  "+str(self.surface.sourceRect().height()))
+
         
     def AddMoveEventValue(self, values, Longitude, Latitude, Altitude):
         """
@@ -646,7 +643,6 @@ class VideoWidget(QVideoWidget):
             delta = event.pos() - self.pressPos
             if not self.snapped:
                 self.pressPos = event.pos()
-                self.pan(delta)
                 self.tapTimer.stop()
                 return
             else:
@@ -658,18 +654,13 @@ class VideoWidget(QVideoWidget):
 
         else:
             self.dragPos = event.pos()
+            #self.dragPos = self.mapToParent(event.pos())
             self.surface.updateVideoRect()
-
-    def pan(self, delta):
-        """ Pan Action (Magnifier method)"""
-        self.offset += delta
-        self.surface.updateVideoRect()
 
     def timerEvent(self, _):
         """ Time Event (Magnifier method)"""
         if not self.zoomed:
             self.activateMagnifier()
-        self.surface.updateVideoRect()
 
     def mousePressEvent(self, event):
         """

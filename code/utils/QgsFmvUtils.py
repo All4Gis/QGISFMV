@@ -599,7 +599,7 @@ def install_pip_requirements():
                         stdout=PIPE,
                         stderr=PIPE)
         process.wait()
-    except Exception as e:
+    except Exception:
         raise
     return
 
