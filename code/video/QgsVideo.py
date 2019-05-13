@@ -173,10 +173,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             oldTransform = painter.transform()
             painter.setTransform(oldTransform)
 
-        if (self.surfaceFormat().scanLineDirection() == QVideoSurfaceFormat.BottomToTop):
-            painter.scale(1, -1)
-            painter.translate(0, -self.widget.height())
-
         self.image = QImage(self.currentFrame.bits(),
                             self.currentFrame.width(),
                             self.currentFrame.height(),
