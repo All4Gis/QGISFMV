@@ -214,7 +214,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
                 None
 
         painter.drawImage(self._targetRect, self.image, self._sourceRect)
-
         self.currentFrame.unmap()
         return
 
@@ -427,7 +426,7 @@ class VideoWidget(QVideoWidget):
         ''' This property holds the recommended size for the widget '''
         return self.surface.surfaceFormat().sizeHint()
 
-    def GetCurrentFrame(self):
+    def currentFrame(self):
         ''' Return current frame QImage '''
         return self.surface.image
 
@@ -512,7 +511,7 @@ class VideoWidget(QVideoWidget):
         
         # Draw On Video Object tracking test
         if self._interaction.objectTracking and self._isinit:
-            frame = convertQImageToMat(self.GetCurrentFrame())
+            frame = convertQImageToMat(self.currentFrame())
             # Update tracker
             ok, bbox = self.tracker.update(frame)
             # Draw bounding box
@@ -528,7 +527,7 @@ class VideoWidget(QVideoWidget):
         # Magnifier Glass
         if self.zoomed and self._interaction.magnifier:
             #self.grab(self.surface.videoRect()).toImage()
-            draw.drawMagnifierOnVideo(self, self.dragPos, self.GetCurrentFrame(), self.painter)
+            draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
 
         self.painter.end()
         return
@@ -773,7 +772,7 @@ class VideoWidget(QVideoWidget):
             geom = self.Tracking_RubberBand.geometry()
             bbox = (geom.x(), geom.y(), geom.width(), geom.height())
             print("bbox Ori : ", str(bbox))
-            img = self.GetCurrentFrame()
+            img = self.currentFrame()
             print("imagen ORI : " + img.width() + " " + img.height())
             frame = convertQImageToMat(img)
             self.Tracking_RubberBand.hide()

@@ -57,7 +57,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         timestamp = _seconds_to_time(self.player.currentInfo)
         
         # Frame save drawings 
-        frame = BurnDrawingsImage(self.player.videoWidget.GetCurrentFrame() , self.player.videoWidget.grab(self.player.videoWidget.surface.videoRect()).toImage())
+        frame = BurnDrawingsImage(self.player.videoWidget.currentFrame() , self.player.videoWidget.grab(self.player.videoWidget.surface.videoRect()).toImage())
 
         data = self.player.GetPacketData()
         rows = self.VManager.rowCount()

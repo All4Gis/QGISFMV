@@ -1085,8 +1085,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Extract Current Frame Task 
             The drawings are saved by default 
         """
-        #image = self.videoWidget.GetCurrentFrame()   # without drawings
-        image = BurnDrawingsImage(self.videoWidget.GetCurrentFrame(), self.videoWidget.grab(self.videoWidget.surface.videoRect()).toImage())
+        #image = self.videoWidget.currentFrame()   # without drawings
+        image = BurnDrawingsImage(self.videoWidget.currentFrame(), self.videoWidget.grab(self.videoWidget.surface.videoRect()).toImage())
          
         output, _ = askForFiles(self, QCoreApplication.translate(
             "QgsFmvPlayer", "Save Current Frame"),
@@ -1114,8 +1114,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def ExtractCurrentGeoFrame(self):
         """ Extract Current GeoReferenced Frame Task """
-        #image = self.videoWidget.GetCurrentFrame() # without drawings
-        image = BurnDrawingsImage(self.videoWidget.GetCurrentFrame(), self.videoWidget.grab(self.videoWidget.surface.videoRect()).toImage())
+        #image = self.videoWidget.currentFrame() # without drawings
+        image = BurnDrawingsImage(self.videoWidget.currentFrame(), self.videoWidget.grab(self.videoWidget.surface.videoRect()).toImage())
 
         geotransform = GetGeotransform_affine()
         position = str(self.player.position())

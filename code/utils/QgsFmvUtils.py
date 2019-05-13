@@ -742,7 +742,7 @@ def UpdateLayers(packet, parent=None, mosaic=False):
 
 def georeferencingVideo(parent):
     """ Extract Current Frame Thread """
-    image = parent.videoWidget.GetCurrentFrame()
+    image = parent.videoWidget.currentFrame()
     root, _ = os.path.splitext(os.path.basename(parent.fileName))
     out = os.path.join(os.path.expanduser("~"), "QGIS_FMV", root)
     position = str(parent.player.position())
