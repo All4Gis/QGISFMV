@@ -62,9 +62,12 @@ class VideoUtils(object):
     def GetYBlackZone(surface):
         ''' Return is Y in black screen on video '''
         y = 0.0
-        if (surface.widget.width() / surface.widget.height()) < (GetImageWidth() / GetImageHeight()):
-            y = (surface.widget.height() - 
-                 (VideoUtils.GetNormalizedHeight(surface))) / 2.0
+        try:
+            if (surface.widget.width() / surface.widget.height()) < (GetImageWidth() / GetImageHeight()):
+                y = (surface.widget.height() - 
+                     (VideoUtils.GetNormalizedHeight(surface))) / 2.0
+        except ZeroDivisionError:
+            None       
         return y
 
     @staticmethod

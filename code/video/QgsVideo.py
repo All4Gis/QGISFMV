@@ -142,21 +142,20 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def stop(self):
         ''' Stop Video '''
-        self.currentFrame = QVideoFrame()
+        self._currentFrame = QVideoFrame()
         self._targetRect = QRect()
         QAbstractVideoSurface.stop(self)
         self.widget.update()
 
     def present(self, frame):
         ''' Present Frame '''
-        print ("Present")
         if (self.surfaceFormat().pixelFormat() != frame.pixelFormat() or
                 self.surfaceFormat().frameSize() != frame.size()):
             self.setError(QAbstractVideoSurface.IncorrectFormatError)
             self.stop()
             return False
         else:
-            self.currentFrame = frame
+            self._currentFrame = frame
             self.widget.repaint(self._targetRect)
             return True
 
@@ -177,15 +176,14 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def paint(self, painter):
         ''' Paint Frame'''
-        print ("Paint Frame")
-        if (self.currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
+        if (self._currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
             oldTransform = painter.transform()
             painter.setTransform(oldTransform)
 
-        self.image = QImage(self.currentFrame.bits(),
-                            self.currentFrame.width(),
-                            self.currentFrame.height(),
-                            self.currentFrame.bytesPerLine(),
+        self.image = QImage(self._currentFrame.bits(),
+                            self._currentFrame.width(),
+                            self._currentFrame.height(),
+                            self._currentFrame.bytesPerLine(),
                             self.imageFormat
                             )
 
@@ -223,7 +221,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
                 None
 
         painter.drawImage(self._targetRect, self.image, self._sourceRect)
-        self.currentFrame.unmap()
+        self._currentFrame.unmap()
         return
 
 
@@ -495,13 +493,10 @@ class VideoWidget(QVideoWidget):
 
     def paintEvent(self, event):
         ''' Paint Event '''
-        self.gt = GetGCPGeoTransform()
-
         self.painter = QPainter(self)
         self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
  
         region = event.region()
-
         self.painter.fillRect(region.boundingRect() ,  self.brush) # Background painter color
  
         try:
@@ -510,6 +505,13 @@ class VideoWidget(QVideoWidget):
                      self.currentFrame().height())
         except Exception:
             None
+            
+        # Prevent draw on video if not started or finished
+        if self.parent.player.position() == 0:
+            self.painter.end()
+            return          
+        
+        self.gt = GetGCPGeoTransform()
         
         # Draw On Video
         if self._interaction.hasInteractionDraw():
