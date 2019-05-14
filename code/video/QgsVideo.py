@@ -64,6 +64,11 @@ class InteractionState(object):
 
     def clear(self):
         self.__init__()
+        
+    def hasInteractionDraw(self):
+        if True in (self.pointDrawer,self.ruler, self.lineDrawer, self.polygonDrawer,self.censure):
+            return True
+        return False
 
 
 class FilterState(object):
@@ -505,8 +510,9 @@ class VideoWidget(QVideoWidget):
             None
 
         # Draw On Video
-        draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
-                         self.drawRuler, self.drawCesure, self.painter, self.surface, self.gt)
+        if self._interaction.hasInteractionDraw():
+            draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
+                             self.drawRuler, self.drawCesure, self.painter, self.surface, self.gt)
 
         
         # Draw On Video Object tracking test

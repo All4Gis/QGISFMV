@@ -284,11 +284,14 @@ class DrawToolBar(object):
     @staticmethod
     def drawMagnifierOnVideo(widget, dragPos, source, painter):
         ''' Draw Magnifier on Video '''
+        print (" source : " + str(source.width()) + "   " + str(source.height()))
+        oldTransform = painter.transform()
+        painter.setTransform(oldTransform)
         dim = min(widget.width(), widget.height())
         magnifierSize = min(DrawToolBar.MAX_MAGNIFIER, dim * 2 / 3)
         radius = magnifierSize / 2
         ring = radius - 15
-        box = QSize(magnifierSize, magnifierSize)
+        box = QSize(magnifierSize,magnifierSize)
 
         center = dragPos - QPoint(0, radius)
         center += QPoint(0, radius / 2)
@@ -302,12 +305,14 @@ class DrawToolBar(object):
         painter_p = QPainter(zoomPixmap)
         painter_p.translate(-xy)
         painter_p.drawImage(QPoint(0,0), source)
+        #painter_p.drawImage(widget.surface.videoRect(), source, widget.surface.sourceRect())
         painter_p.end()
 
         clipPath = QPainterPath()
         clipPath.addEllipse(QPointF(center), ring, ring)
         painter.setClipPath(clipPath)
         painter.drawPixmap(corner, zoomPixmap)
+        print (" zoomPixmap : " + str(zoomPixmap.width()) + "   " + str(zoomPixmap.height()))
         painter.setPen(QPen(QColor(192, 192, 192, 128), 6))
         painter.drawPath(clipPath)
         return
