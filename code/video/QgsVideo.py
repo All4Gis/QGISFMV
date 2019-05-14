@@ -8,19 +8,18 @@ from qgis.PyQt.QtGui import (QImage,
                          QColor,
                          QBrush,
                          QCursor)
+from qgis.PyQt.QtWidgets import QWidget, QRubberBand
+from qgis.core import Qgis as QGis, QgsPointXY
+from qgis.gui import QgsRubberBand
+from qgis.utils import iface
+
 from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QVideoFrame,
                                 QAbstractVideoSurface,
-                                QVideoSurfaceFormat)
+                                QVideoSurfaceFormat, QMediaPlayer)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from qgis.PyQt.QtWidgets import QWidget, QRubberBand
 
-from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
-                                        convertQImageToMat,
-                                        GetGCPGeoTransform,
-                                        hasElevationModel,
-                                        GetImageHeight)
-
+from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.utils.QgsFmvLayers import (AddDrawPointOnMap,
                                          AddDrawLineOnMap,
                                          AddDrawPolygonOnMap,
@@ -29,14 +28,17 @@ from QGIS_FMV.utils.QgsFmvLayers import (AddDrawPointOnMap,
                                          RemoveLastDrawPointOnMap,
                                          RemoveAllDrawPointOnMap,
                                          RemoveAllDrawLineOnMap)
-
+from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
+                                        convertQImageToMat,
+                                        GetGCPGeoTransform,
+                                        hasElevationModel,
+                                        GetImageHeight)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
-from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
-from qgis.gui import QgsRubberBand
-from qgis.utils import iface
-from qgis.core import Qgis as QGis, QgsPointXY
+
+
+
 
 try:
     from pydevd import *
@@ -89,9 +91,9 @@ class FilterState(object):
 
 class VideoWidgetSurface(QAbstractVideoSurface):
 
-    def __init__(self, widget, parent=None):
+    def __init__(self, widget):
         ''' Constructor '''
-        super().__init__(parent)
+        super().__init__()
 
         self.widget = widget
         self.imageFormat = QImage.Format_Invalid
@@ -147,6 +149,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def present(self, frame):
         ''' Present Frame '''
+        print ("Present")
         if (self.surfaceFormat().pixelFormat() != frame.pixelFormat() or
                 self.surfaceFormat().frameSize() != frame.size()):
             self.setError(QAbstractVideoSurface.IncorrectFormatError)
@@ -174,6 +177,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def paint(self, painter):
         ''' Paint Frame'''
+        print ("Paint Frame")
         if (self.currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
             oldTransform = painter.transform()
             painter.setTransform(oldTransform)
@@ -268,7 +272,7 @@ class VideoWidget(QVideoWidget):
 
         self.origin, self.pressPos, self.dragPos = QPoint(), QPoint(), QPoint()
         self.tapTimer = QBasicTimer()
-        
+        self.brush = QBrush(QColor(Qt.black))
 
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
@@ -396,13 +400,13 @@ class VideoWidget(QVideoWidget):
             return
 
         if self.gt is not None and self._interaction.lineDrawer:
-            self.drawLines.append([None, None, None])
-            self.UpdateSurface()
+            self.drawLines.append([None, None, None])          
             return
+        
         if self.gt is not None and self._interaction.ruler:
             self.drawRuler.append([None, None, None])
-            self.UpdateSurface()
             return
+        
         if self.gt is not None and self._interaction.polygonDrawer:
             self.drawPolygon.append([None, None, None])
 
@@ -413,9 +417,9 @@ class VideoWidget(QVideoWidget):
                 self.poly_RubberBand.removeLastPoint()
             # Empty List
             self.poly_coordinates = []
-            self.UpdateSurface()
             return
-
+        
+        self.UpdateSurface()
         self.setFullScreen(not self.isFullScreen())
         event.accept()
 
@@ -424,8 +428,10 @@ class VideoWidget(QVideoWidget):
         return self.surface
 
     def UpdateSurface(self):
-        ''' Update Video Surface '''
-        self.surface.widget.update()
+        ''' Update Video Surface '''   
+        if self.parent.playerState in (QMediaPlayer.StoppedState,
+                                QMediaPlayer.PausedState):
+            self.surface.widget.update()
 
     def sizeHint(self):
         ''' This property holds the recommended size for the widget '''
@@ -493,22 +499,18 @@ class VideoWidget(QVideoWidget):
 
         self.painter = QPainter(self)
         self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
-        brush = self.palette().window()
  
         region = event.region()
-        self.painter.fillRect(region.boundingRect() ,  brush)
+
+        self.painter.fillRect(region.boundingRect() ,  self.brush) # Background painter color
  
         try:
             self.surface.paint(self.painter)
+            SetImageSize(self.currentFrame().width(),
+                     self.currentFrame().height())
         except Exception:
             None
         
-        try:
-            SetImageSize(self.surface.currentFrame.width(),
-                         self.surface.currentFrame.height())
-        except Exception:
-            None
-
         # Draw On Video
         if self._interaction.hasInteractionDraw():
             draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
@@ -561,6 +563,8 @@ class VideoWidget(QVideoWidget):
             if pt[-1]=="mouseMoveEvent":
                 del values[idx]
         values.append([Longitude, Latitude, Altitude, "mouseMoveEvent"])
+
+        self.UpdateSurface()
 
     def mouseMoveEvent(self, event):
         """
@@ -616,7 +620,6 @@ class VideoWidget(QVideoWidget):
             if self._interaction.ruler and self.drawRuler:
                 self.AddMoveEventValue(self.drawRuler, Longitude, Latitude, Altitude)
             
-            self.UpdateSurface()
 
         else:
             self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" + 
@@ -645,6 +648,7 @@ class VideoWidget(QVideoWidget):
             if not self.snapped:
                 self.pressPos = event.pos()
                 self.tapTimer.stop()
+                self.surface.widget.update()
                 return
             else:
                 threshold = 10
@@ -652,11 +656,12 @@ class VideoWidget(QVideoWidget):
                 self.snapped &= delta.y() < threshold
                 self.snapped &= delta.x() > -threshold
                 self.snapped &= delta.y() > -threshold
+                self.surface.widget.update()
 
         else:
             self.dragPos = event.pos()
-            #self.dragPos = self.mapToParent(event.pos())
             self.surface.updateVideoRect()
+            self.surface.widget.update()
 
     def timerEvent(self, _):
         """ Time Event (Magnifier method)"""
@@ -680,10 +685,10 @@ class VideoWidget(QVideoWidget):
             self.snapped = True
             self.pressPos = self.dragPos = event.pos()
             self.tapTimer.stop()
-            self.tapTimer.start(100, self)
+            self.tapTimer.start(10, self)
 
             if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
-                self.UpdateSurface()
+                #self.UpdateSurface()
                 return
 
             # point drawer
