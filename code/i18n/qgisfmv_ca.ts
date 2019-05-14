@@ -537,11 +537,6 @@
         <translation>Centre sobre objectiu</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1244"/>
-        <source>NDVI</source>
-        <translation>NDVI</translation>
-    </message>
-    <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1253"/>
         <source>Capture Georeferenced Frame</source>
         <translation>Guardar el frame georeferenciat actual</translation>
@@ -594,6 +589,11 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="772"/>
         <source>Ctrl+Q</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1244"/>
+        <source>NDVI (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

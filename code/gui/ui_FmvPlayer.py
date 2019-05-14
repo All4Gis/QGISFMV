@@ -727,7 +727,7 @@ class Ui_PlayerWindow(object):
         self.actionCenter_on_Platform.setText(_translate("PlayerWindow", "Center on Platform"))
         self.actionCenter_on_Footprint.setText(_translate("PlayerWindow", "Center on Footprint"))
         self.actionCenter_Target.setText(_translate("PlayerWindow", "Center on Target"))
-        self.actionNDVI.setText(_translate("PlayerWindow", "NDVI"))
+        self.actionNDVI.setText(_translate("PlayerWindow", "NDVI (experimental)"))
         self.actionCapture_Georeferenced_Frame.setText(_translate("PlayerWindow", "Capture Georeferenced Frame"))
 
 from QGIS_FMV.video.QgsVideo import VideoWidget

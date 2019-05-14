@@ -1241,7 +1241,7 @@
      <normaloff>:/imgFMV/images/ndvi.png</normaloff>:/imgFMV/images/ndvi.png</iconset>
    </property>
    <property name="text">
-    <string>NDVI</string>
+    <string>NDVI (experimental)</string>
    </property>
   </action>
   <action name="actionCapture_Georeferenced_Frame">
