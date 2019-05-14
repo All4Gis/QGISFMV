@@ -111,7 +111,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.DrawToolBar.addSeparator()
 
         # Object Tracking
-        self.DrawToolBar.addAction(self.actionObject_Tracking)
+        # self.DrawToolBar.addAction(self.actionObject_Tracking)
         
         # Hide Color Button
         self.btn_Color.hide()

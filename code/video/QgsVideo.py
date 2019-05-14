@@ -522,7 +522,7 @@ class VideoWidget(QVideoWidget):
             ok, bbox = self.tracker.update(frame)
             # Draw bounding box
             if ok:
-                print("bbox Traking: ", str(bbox))
+                #print("bbox Traking: ", str(bbox))
                 self.painter.setPen(Qt.blue)
                 self.painter.drawRect(int(bbox[0]), int(
                     bbox[1]), int(bbox[2]), int(bbox[3]))
@@ -548,9 +548,9 @@ class VideoWidget(QVideoWidget):
         self.zoomed = False
         self.surface.updateVideoRect()
         self.update()
-        print (" widget : " + str(self.width())+"  "+str(self.height()) )
-        print (" Video Rectangle : " + str(self.surface.videoRect().width())+"  "+str(self.surface.videoRect().height()))
-        print (" Source Rectangle : " + str(self.surface.sourceRect().width())+"  "+str(self.surface.sourceRect().height()))
+        #print (" widget : " + str(self.width())+"  "+str(self.height()) )
+        #print (" Video Rectangle : " + str(self.surface.videoRect().width())+"  "+str(self.surface.videoRect().height()))
+        #print (" Source Rectangle : " + str(self.surface.sourceRect().width())+"  "+str(self.surface.sourceRect().height()))
 
         
     def AddMoveEventValue(self, values, Longitude, Latitude, Altitude):
@@ -777,9 +777,9 @@ class VideoWidget(QVideoWidget):
         if self._interaction.objectTracking:
             geom = self.Tracking_RubberBand.geometry()
             bbox = (geom.x(), geom.y(), geom.width(), geom.height())
-            print("bbox Ori : ", str(bbox))
+            #print("bbox Ori : ", str(bbox))
             img = self.currentFrame()
-            print("imagen ORI : " + img.width() + " " + img.height())
+            #print("imagen ORI : " + str(img.width()) + " " + str(img.height()))
             frame = convertQImageToMat(img)
             self.Tracking_RubberBand.hide()
             self.tracker = cv2.TrackerBoosting_create()

@@ -458,11 +458,11 @@ class SetParser(Element):
 
     def structure(self):
         ''' Return metadata structure'''
-        print(str(type(self)))
+        #print(str(type(self)))
 
         def repeat(items, indent=1):
             for item in items:
-                print(indent * "\t" + str(type(item)))
+                #print(indent * "\t" + str(type(item)))
                 if hasattr(item, 'items'):
                     repeat(item.items.values(), indent + 1)
 
