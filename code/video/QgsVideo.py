@@ -2,13 +2,11 @@
 from qgis.PyQt.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize
 from qgis.PyQt.QtGui import (QImage,
                          QPalette,
-                         QPixmap,
                          QPainter,
-                         QRegion,
                          QColor,
                          QBrush,
                          QCursor)
-from qgis.PyQt.QtWidgets import QWidget, QRubberBand
+from qgis.PyQt.QtWidgets import QRubberBand
 from qgis.core import Qgis as QGis, QgsPointXY
 from qgis.gui import QgsRubberBand
 from qgis.utils import iface
@@ -18,6 +16,7 @@ from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QAbstractVideoSurface,
                                 QVideoSurfaceFormat, QMediaPlayer)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PyQt5.QtWidgets import QApplication
 
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.utils.QgsFmvLayers import (AddDrawPointOnMap,
@@ -38,15 +37,13 @@ from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
 
 
-
-
 try:
     from pydevd import *
 except ImportError:
     None
 
 try:
-    import cv2
+    from cv2 import TrackerBoosting_create
 except ImportError:
     None
 
@@ -149,6 +146,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def present(self, frame):
         ''' Present Frame '''
+        print(" Present Frame")
         if (self.surfaceFormat().pixelFormat() != frame.pixelFormat() or
                 self.surfaceFormat().frameSize() != frame.size()):
             self.setError(QAbstractVideoSurface.IncorrectFormatError)
@@ -156,7 +154,8 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             return False
         else:
             self._currentFrame = frame
-            self.widget.repaint(self._targetRect)
+            #self.widget.repaint(self._targetRect)
+            self.widget.update()
             return True
 
     def videoRect(self):
@@ -176,6 +175,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def paint(self, painter):
         ''' Paint Frame'''
+        print(" Paint Frame")
         if (self._currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
             oldTransform = painter.transform()
             painter.setTransform(oldTransform)
@@ -205,7 +205,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
                 self.image = filter.EdgeFilter(self.image)
             except Exception:
                 None
-
         # TODO : Test in other thread
         if self.widget._filterSatate.contrastFilter:
             try:
@@ -231,6 +230,7 @@ class VideoWidget(QVideoWidget):
         ''' Constructor '''
         super().__init__(parent)
         self.surface = VideoWidgetSurface(self)
+        self.setAttribute(Qt.WA_OpaquePaintEvent)
         self.Tracking_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
 
         self.Censure_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
@@ -323,11 +323,13 @@ class VideoWidget(QVideoWidget):
         ''' Remove All Censure Objects '''
         if self.drawCesure:
             self.drawCesure = []
+            self.UpdateSurface()
 
     def removeLastCensured(self):
         ''' Remove Last Censure Objects '''
         if self.drawCesure:
             del self.drawCesure[-1]
+            self.UpdateSurface()
 
     def removeLastPoint(self):
         ''' Remove All Point Drawer Objects '''
@@ -430,6 +432,7 @@ class VideoWidget(QVideoWidget):
         if self.parent.playerState in (QMediaPlayer.StoppedState,
                                 QMediaPlayer.PausedState):
             self.surface.widget.update()
+        QApplication.processEvents()
 
     def sizeHint(self):
         ''' This property holds the recommended size for the widget '''
@@ -548,7 +551,7 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
-        QWidget.resizeEvent(self, event)
+        #QWidget.resizeEvent(self, event)
         self.zoomed = False
         self.surface.updateVideoRect()
         self.update()
@@ -789,7 +792,7 @@ class VideoWidget(QVideoWidget):
             #print("imagen ORI : " + str(img.width()) + " " + str(img.height()))
             frame = convertQImageToMat(img)
             self.Tracking_RubberBand.hide()
-            self.tracker = cv2.TrackerBoosting_create()
+            self.tracker = TrackerBoosting_create()
             #self.tracker.clear()
             ok = self.tracker.init(frame, bbox)
             if ok:

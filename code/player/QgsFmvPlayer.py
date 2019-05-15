@@ -135,7 +135,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.player.setVideoOutput(
             self.videoWidget.videoSurface())  # Abstract Surface
-
+        
         self.player.durationChanged.connect(self.durationChanged)
         self.player.positionChanged.connect(self.positionChanged)
         self.player.mediaStatusChanged.connect(self.statusChanged)
@@ -154,7 +154,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.addDockWidget(Qt.RightDockWidgetArea, self.metadataDlg)
         self.metadataDlg.setMinimumWidth(500)
         self.metadataDlg.hide()
-
+        
         self.converter = Converter()
         self.BitratePlot = CreatePlotsBitrate()
 
@@ -471,6 +471,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def NDVIFilter(self, value):
         ''' NDVI Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        # TODO : Temporarily we lower in rate. Player in other thread?
+        if value:
+            self.player.setPlaybackRate(0.7) 
+        QApplication.processEvents()
         self.videoWidget.SetNDVI(value)
         self.videoWidget.UpdateSurface()
         return
@@ -478,6 +482,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def edgeFilter(self, value):
         ''' Edge Detection Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        # TODO : Temporarily we lower in rate. Player in other thread?
+        if value:
+            self.player.setPlaybackRate(0.7) 
+        QApplication.processEvents()
         self.videoWidget.SetEdgeDetection(value)
         self.videoWidget.UpdateSurface()
         return
@@ -492,6 +500,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def autoContrastFilter(self, value):
         ''' Auto Contrast Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        # TODO : Temporarily we lower in rate. Player in other thread?
+        if value:
+            self.player.setPlaybackRate(0.7)         
+        QApplication.processEvents()
         self.videoWidget.SetAutoContrastFilter(value)
         self.videoWidget.UpdateSurface()
         return
@@ -591,6 +603,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionNDVI.setChecked(False)
 
         self.videoWidget.RestoreFilters()
+        self.player.setPlaybackRate(1.0)         
+        QApplication.processEvents()
 
         sender.setChecked(value)
         return

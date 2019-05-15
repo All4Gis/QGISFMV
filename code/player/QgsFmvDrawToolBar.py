@@ -13,7 +13,6 @@ from qgis.PyQt.QtGui import (QPainter,
                          QColor,
                          QFont,
                          QPixmap,
-                         QRadialGradient,
                          QPen,
                          QBrush,
                          QPolygonF)
@@ -268,15 +267,13 @@ class DrawToolBar(object):
         ''' Draw Censure on Video '''
         try:
             for geom in drawCesure:
-                pen = QPen(Qt.black)
-                pen.setWidth(3)
                 brush = QBrush()
                 brush.setColor(QColor(0, 0, 0))
                 brush.setStyle(Qt.SolidPattern)
                 painter.setBrush(brush)
-                painter.setPen(pen)
                 painter.drawRect(geom[0].x(), geom[0].y(),
                                  geom[0].width(), geom[0].height())
+
         except Exception:
             None
         return
@@ -287,6 +284,7 @@ class DrawToolBar(object):
         #print (" source : " + str(source.width()) + "   " + str(source.height()))
         oldTransform = painter.transform()
         painter.setTransform(oldTransform)
+        
         dim = min(widget.width(), widget.height())
         magnifierSize = min(DrawToolBar.MAX_MAGNIFIER, dim * 2 / 3)
         radius = magnifierSize / 2
