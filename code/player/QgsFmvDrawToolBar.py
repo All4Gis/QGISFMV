@@ -28,14 +28,36 @@ class DrawToolBar(object):
     
     MAX_MAGNIFIER = 250
     zoomPixmap = QPixmap()
+    
+    line_width = 3
+    yellow_pen = QPen(QColor('#FCD76C'),line_width) 
 
+    small_pt = 5
+    white_pen = QPen(Qt.white, small_pt)
+    white_pen.setCapStyle(Qt.RoundCap)
+    
+    black_pen = QPen(Qt.black, small_pt)
+    black_pen.setCapStyle(Qt.RoundCap)
+    
+    green_pen = QPen(QColor(185, 224, 175),line_width, cap=Qt.RoundCap, join=Qt.RoundJoin)
+
+    big_radius = 10
+    red_pen = QPen(QColor(220, 20, 60), big_radius, cap=Qt.RoundCap)
+    
+    glass_pen = QPen(QColor(192, 192, 192, 128), 6)
+    
+    green_brush = QBrush(QColor(185, 224, 175, 100))
+    
+    black_brush = QBrush(Qt.black)
+    
+    bold_12 = QFont("Arial", 12, QFont.Bold)
+        
+          
     @staticmethod
     def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawRuler, drawCesure, painter, surface, gt):
         # Draw clicked points on video
-        i = 1
-        for pt in drawPtPos:
-            DrawToolBar.drawPointOnVideo(i, pt, painter, surface, gt)
-            i += 1
+        for position, pt in enumerate(drawPtPos):
+            DrawToolBar.drawPointOnVideo(position + 1, pt, painter, surface, gt)
 
         # Draw clicked lines on video
         if len(drawLines) > 1:
@@ -104,17 +126,12 @@ class DrawToolBar(object):
 
         if scr_x > vut.GetXBlackZone(surface) + vut.GetNormalizedWidth(surface) or scr_y > vut.GetYBlackZone(surface) + vut.GetNormalizedHeight(surface):
             return
-
-        radius = 10
+       
         center = QPoint(scr_x, scr_y)
-
-        pen = QPen(Qt.red)
-        pen.setWidth(radius)
-        pen.setCapStyle(Qt.RoundCap)
-        painter.setPen(pen)
+        
+        painter.setPen(DrawToolBar.red_pen)
         painter.drawPoint(center)
-        font12 = QFont("Arial", 12, weight=QFont.Bold)
-        painter.setFont(font12)
+        painter.setFont(DrawToolBar.bold_12)
         painter.drawText(center + QPoint(5, -5), str(number))
         return
 
@@ -128,16 +145,9 @@ class DrawToolBar(object):
         scr_x, scr_y = vut.GetInverseMatrix(
             pt[1], pt[0], gt, surface)
 
-        radius = 3
-        radius_pt = 5
         center = QPoint(scr_x, scr_y)
 
-        pen = QPen(Qt.yellow)
-        pen.setWidth(radius)
-        pen.setCapStyle(Qt.RoundCap)
-        # pen.setDashPattern([1, 4, 5, 4])
-
-        painter.setPen(pen)
+        painter.setPen(DrawToolBar.green_pen)
 
         if len(drawLines) > 1:
             try:
@@ -151,13 +161,9 @@ class DrawToolBar(object):
                 painter.drawLine(center, end)
 
                 # Draw Start/End Points
-                pen = QPen(Qt.white)
-                pen.setWidth(radius_pt)
-                pen.setCapStyle(Qt.RoundCap)
-                painter.setPen(pen)
+                painter.setPen(DrawToolBar.white_pen)
                 painter.drawPoint(center)
                 painter.drawPoint(end)
-
             except Exception:
                 None
         return
@@ -174,27 +180,17 @@ class DrawToolBar(object):
                 pt[1], pt[0], gt, surface)
             center = QPoint(scr_x, scr_y)
             poly.append(center)
-
-        poly.append(poly[0])
-
-        radius = 3
+ 
         polygon = QPolygonF(poly)
-        pen = QPen()
-        pen.setColor(Qt.green)
-        pen.setWidth(radius)
-        pen.setCapStyle(Qt.RoundCap)
-        pen.setJoinStyle(Qt.RoundJoin)
-
-        brush = QBrush()
-        brush.setColor(QColor(176, 255, 128, 28))
-        brush.setStyle(Qt.SolidPattern)
-
+        
         path = QPainterPath()
         path.addPolygon(polygon)
 
-        painter.setPen(pen)
+        painter.setPen(DrawToolBar.green_pen)
         painter.drawPolygon(polygon)
-        painter.fillPath(path, brush)
+        painter.fillPath(path, DrawToolBar.green_brush)
+        painter.setPen(DrawToolBar.white_pen)
+        painter.drawPoints(polygon)
         return
 
     @staticmethod
@@ -212,16 +208,11 @@ class DrawToolBar(object):
         scr_x, scr_y = vut.GetInverseMatrix(
             pt[1], pt[0], gt, surface)
 
-        center_pt = pt
-
-        radius_pt = 5
         center = QPoint(scr_x, scr_y)
 
         if len(drawRuler) > 1:
             try:
-                pen = QPen(Qt.red)
-                pen.setWidth(3)
-                painter.setPen(pen)
+                painter.setPen(DrawToolBar.yellow_pen)
 
                 end_pt = drawRuler[idx + 1]
 
@@ -233,31 +224,27 @@ class DrawToolBar(object):
                 end = QPoint(scr_x, scr_y)
                 painter.drawLine(center, end)
 
-                font12 = QFont("Arial", 12, weight=QFont.Bold)
-                painter.setFont(font12)
+                painter.setFont(DrawToolBar.bold_12)
 
                 distance = round(sphere.distance(
-                    (center_pt[0], center_pt[1]), (end_pt[0], end_pt[1])), 2)
+                    (pt[0], pt[1]), (end_pt[0], end_pt[1])), 2)
 
                 text = str(distance) + " m"
                 global RulerTotalMeasure
                 RulerTotalMeasure += distance
 
-                # Draw Start/End Points
-                pen = QPen(Qt.white)
-                pen.setWidth(radius_pt)
-                pen.setCapStyle(Qt.RoundCap)
-                painter.setPen(pen)
-                painter.drawPoint(center)
-                painter.drawPoint(end)
+                # Line lenght
+                painter.setPen(DrawToolBar.yellow_pen)
+                painter.drawText(end + QPoint(5, -10), text)
 
-                painter.drawText(end + QPoint(5, -5), text)
-
-                pen = QPen(QColor(255, 51, 153))
-                painter.setPen(pen)
+                painter.setPen(DrawToolBar.white_pen)
+                # Total lenght
                 painter.drawText(end + QPoint(5, 10),
                                  str(round(RulerTotalMeasure, 2)) + " m")
 
+                # Draw Start/End Points
+                painter.drawPoint(center)
+                painter.drawPoint(end)
             except Exception:
                 None
         return
@@ -267,10 +254,8 @@ class DrawToolBar(object):
         ''' Draw Censure on Video '''
         try:
             for geom in drawCesure:
-                brush = QBrush()
-                brush.setColor(QColor(0, 0, 0))
-                brush.setStyle(Qt.SolidPattern)
-                painter.setBrush(brush)
+                painter.setPen(DrawToolBar.black_pen)
+                painter.setBrush(DrawToolBar.black_brush)
                 painter.drawRect(geom[0].x(), geom[0].y(),
                                  geom[0].width(), geom[0].height())
 
@@ -311,6 +296,6 @@ class DrawToolBar(object):
         painter.setClipPath(clipPath)
         painter.drawPixmap(corner, zoomPixmap)
         #print (" zoomPixmap : " + str(zoomPixmap.width()) + "   " + str(zoomPixmap.height()))
-        painter.setPen(QPen(QColor(192, 192, 192, 128), 6))
+        painter.setPen(DrawToolBar.glass_pen)
         painter.drawPath(clipPath)
         return

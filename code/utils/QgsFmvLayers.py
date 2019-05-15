@@ -210,7 +210,11 @@ def AddDrawPolygonOnMap(poly_coordinates):
             area_wsg84.sourceCrs().ellipsoidAcronym())
 
     # Calculate Centroid
-    centroid = feature.geometry().centroid().asPoint()
+    try:
+        centroid = feature.geometry().centroid().asPoint()
+    except Exception:
+        iface.vectorLayerTools().stopEditing(polyLyr,False)
+        return False
 
     feature.setAttributes([centroid.x(), centroid.y(
     ), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
@@ -218,7 +222,7 @@ def AddDrawPolygonOnMap(poly_coordinates):
     polyLyr.addFeatures([feature])
 
     CommonLayer(polyLyr)
-    return
+    return True
 
 
 def SetcrtSensorSrc():

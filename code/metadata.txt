@@ -25,6 +25,9 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.6:
+    	- Measure Area Tool
+    	- Better performance for measurements
+    	- Better performance for drawings
     	- Burn drawings in the image (geotiff,png and PDF report)
     	- Change design pdf report
     	- Fix create report task

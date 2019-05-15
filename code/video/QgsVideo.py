@@ -146,7 +146,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def present(self, frame):
         ''' Present Frame '''
-        print(" Present Frame")
+        # print(" Present Frame")
         if (self.surfaceFormat().pixelFormat() != frame.pixelFormat() or
                 self.surfaceFormat().frameSize() != frame.size()):
             self.setError(QAbstractVideoSurface.IncorrectFormatError)
@@ -175,7 +175,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def paint(self, painter):
         ''' Paint Frame'''
-        print(" Paint Frame")
+        # print(" Paint Frame")
         if (self._currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
             oldTransform = painter.transform()
             painter.setTransform(oldTransform)
@@ -408,9 +408,13 @@ class VideoWidget(QVideoWidget):
             return
         
         if self.gt is not None and self._interaction.polygonDrawer:
+            
+            ok = AddDrawPolygonOnMap(self.poly_coordinates)
+            # Prevent invalid geometry (Polygon with 2 points)
+            if not ok:
+                return
+            
             self.drawPolygon.append([None, None, None])
-
-            AddDrawPolygonOnMap(self.poly_coordinates)
 
             # Empty RubberBand
             for _ in range(self.poly_RubberBand.numberOfVertices()):

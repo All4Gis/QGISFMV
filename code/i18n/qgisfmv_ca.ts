@@ -677,7 +677,7 @@
         <translation>Mostrar metadades</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1196"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1210"/>
         <source>Video Information : </source>
         <translation>Informació del vídeo:</translation>
     </message>
@@ -688,7 +688,7 @@
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1092"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1106"/>
         <source>Save Current Frame</source>
         <translation>Guarda el frame actual</translation>
     </message>
@@ -698,48 +698,48 @@
         <translation>Guardar a Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="830"/>
+        <location filename="../player/QgsFmvPlayer.py" line="844"/>
         <source>Save video record</source>
         <translation>Guarda la gravació del vídeo</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="913"/>
+        <location filename="../player/QgsFmvPlayer.py" line="927"/>
         <source>Save Video as...</source>
         <translation>Guardar vídeo com ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1055"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1069"/>
         <source>Save all Frames</source>
         <translation>Guardar Tots els Frames
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="991"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1005"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>Deseu el diagrama de bits d’àudio</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1008"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1022"/>
         <source>Save Video Bitrate Plot</source>
         <translation>Desa un gràfic de bits de vídeo</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1123"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1137"/>
         <source>Save Current Georeferenced Frame</source>
         <translation>Guardar el frame georeferenciat actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="794"/>
+        <location filename="../player/QgsFmvPlayer.py" line="808"/>
         <source>Playing : </source>
         <translation>Reproduint : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="809"/>
+        <location filename="../player/QgsFmvPlayer.py" line="823"/>
         <source>Open Video File : </source>
         <translation>Obrir Fitxer de Vídeo : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1028"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1042"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
         <translation>Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
     </message>
