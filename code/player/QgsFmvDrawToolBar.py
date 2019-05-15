@@ -30,7 +30,7 @@ class DrawToolBar(object):
     zoomPixmap = QPixmap()
     
     line_width = 3
-    yellow_pen = QPen(QColor('#FCD76C'),line_width) 
+    yellow_pen = QPen(QColor(252,215,108),line_width) 
 
     small_pt = 5
     white_pen = QPen(Qt.white, small_pt)
@@ -47,6 +47,8 @@ class DrawToolBar(object):
     glass_pen = QPen(QColor(192, 192, 192, 128), 6)
     
     green_brush = QBrush(QColor(185, 224, 175, 100))
+    yellow_brush = QBrush(QColor(252,215,108, 100))
+    transparent_brush = QBrush(Qt.transparent)
     
     black_brush = QBrush(Qt.black)
     
@@ -147,7 +149,7 @@ class DrawToolBar(object):
 
         center = QPoint(scr_x, scr_y)
 
-        painter.setPen(DrawToolBar.green_pen)
+        painter.setPen(DrawToolBar.yellow_pen)
 
         if len(drawLines) > 1:
             try:
@@ -186,9 +188,9 @@ class DrawToolBar(object):
         path = QPainterPath()
         path.addPolygon(polygon)
 
-        painter.setPen(DrawToolBar.green_pen)
+        painter.setPen(DrawToolBar.yellow_pen)
         painter.drawPolygon(polygon)
-        painter.fillPath(path, DrawToolBar.green_brush)
+        painter.fillPath(path, DrawToolBar.yellow_brush)
         painter.setPen(DrawToolBar.white_pen)
         painter.drawPoints(polygon)
         return
@@ -212,7 +214,7 @@ class DrawToolBar(object):
 
         if len(drawRuler) > 1:
             try:
-                painter.setPen(DrawToolBar.yellow_pen)
+                painter.setPen(DrawToolBar.green_pen)
 
                 end_pt = drawRuler[idx + 1]
 
@@ -234,7 +236,7 @@ class DrawToolBar(object):
                 RulerTotalMeasure += distance
 
                 # Line lenght
-                painter.setPen(DrawToolBar.yellow_pen)
+                painter.setPen(DrawToolBar.green_pen)
                 painter.drawText(end + QPoint(5, -10), text)
 
                 painter.setPen(DrawToolBar.white_pen)
@@ -269,7 +271,7 @@ class DrawToolBar(object):
         #print (" source : " + str(source.width()) + "   " + str(source.height()))
         oldTransform = painter.transform()
         painter.setTransform(oldTransform)
-        
+        painter.setBrush(DrawToolBar.transparent_brush)
         dim = min(widget.width(), widget.height())
         magnifierSize = min(DrawToolBar.MAX_MAGNIFIER, dim * 2 / 3)
         radius = magnifierSize / 2
