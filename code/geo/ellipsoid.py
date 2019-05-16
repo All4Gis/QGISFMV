@@ -128,16 +128,6 @@ def _py_from3395_to4326(point, ellipsoid=WGS84):
     return (lon, lat)
 
 
-try:
-    from ._ellipsoid import (
-        _distance,
-        _from4326_to3395,
-        _from3395_to4326
-    )
-    distance = _distance
-    from4326_to3395 = _from4326_to3395
-    from3395_to4326 = _from3395_to4326
-except ImportError:  # pragma: no cover
-    distance = _py_distance
-    from4326_to3395 = _py_from4326_to3395
-    from3395_to4326 = _py_from3395_to4326
+distance = _py_distance
+from4326_to3395 = _py_from4326_to3395
+from3395_to4326 = _py_from3395_to4326

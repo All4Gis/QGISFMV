@@ -7,7 +7,8 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
 from qgis.PyQt.QtCore import QSize, QPointF
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
 from qgis.PyQt.QtCore import Qt, QPoint
-from QGIS_FMV.geo import sphere as sphere
+from QGIS_FMV.geo import sphere
+
 from qgis.PyQt.QtGui import (QPainter,
                          QPainterPath,
                          QColor,
@@ -56,7 +57,7 @@ class DrawToolBar(object):
         
           
     @staticmethod
-    def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawRuler, drawCesure, painter, surface, gt):
+    def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawMDistance, drawMArea, drawCesure, painter, surface, gt):
         # Draw clicked points on video
         for position, pt in enumerate(drawPtPos):
             DrawToolBar.drawPointOnVideo(position + 1, pt, painter, surface, gt)
@@ -93,18 +94,42 @@ class DrawToolBar(object):
                 DrawToolBar.drawPolygonOnVideo(
                     drawPolygon, painter, surface, gt)
 
-        # Draw Ruler on video
+        # Draw Measure Distance on video
         # the measures don't persist in the video
-        if len(drawRuler) > 1:
-            DrawToolBar.resetRulerDistance()
-            for idx, pt in enumerate(drawRuler):
+        if len(drawMDistance) > 1:
+            DrawToolBar.resetMeasureDistance()
+            for idx, pt in enumerate(drawMDistance):
                 if pt[0] is None:
-                    DrawToolBar.resetRulerDistance()
+                    DrawToolBar.resetMeasureDistance()
                     continue
                 else:
-                    DrawToolBar.drawRulerOnVideo(
-                        pt, idx, painter, surface, gt, drawRuler)
+                    DrawToolBar.drawMeasureDistanceOnVideo(
+                        pt, idx, painter, surface, gt, drawMDistance)
 
+        # Draw Measure Area on video
+        # the measures don't persist in the video
+        if len(drawMArea) > 1:
+            poly = []
+            if any(None == x[1] for x in drawMArea):
+                for pt in drawMArea:
+                    if pt[0] is None:
+                        DrawToolBar.drawMeasureAreaOnVideo(
+                            poly, painter, surface, gt)
+                        poly = []
+                        continue
+                    poly.append(pt)
+                last_occurence = len(
+                    drawMArea) - drawMArea[::-1].index([None, None, None])
+                poly = []
+                for pt in range(last_occurence, len(drawMArea)):
+                    poly.append(drawMArea[pt])
+                if len(poly) > 1:
+                    DrawToolBar.drawMeasureAreaOnVideo(
+                        poly, painter, surface, gt)
+            else:
+                DrawToolBar.drawMeasureAreaOnVideo(
+                    drawMArea, painter, surface, gt)
+                
         # Draw Censure
         if drawCesure:
             DrawToolBar.drawCensuredOnVideo(painter, drawCesure)
@@ -196,13 +221,13 @@ class DrawToolBar(object):
         return
 
     @staticmethod
-    def resetRulerDistance():
+    def resetMeasureDistance():
         global RulerTotalMeasure
         RulerTotalMeasure = 0.0
 
     @staticmethod
-    def drawRulerOnVideo(pt, idx, painter, surface, gt, drawRuler):
-        ''' Draw Ruler on Video '''
+    def drawMeasureDistanceOnVideo(pt, idx, painter, surface, gt, drawMDistance):
+        ''' Draw Measure Distance on Video '''
         if hasElevationModel():
             pt = GetLine3DIntersectionWithPlane(
                 GetSensor(), pt, GetFrameCenter()[2])
@@ -212,11 +237,11 @@ class DrawToolBar(object):
 
         center = QPoint(scr_x, scr_y)
 
-        if len(drawRuler) > 1:
+        if len(drawMDistance) > 1:
             try:
                 painter.setPen(DrawToolBar.green_pen)
 
-                end_pt = drawRuler[idx + 1]
+                end_pt = drawMDistance[idx + 1]
 
                 if hasElevationModel():
                     end_pt = GetLine3DIntersectionWithPlane(
@@ -251,6 +276,60 @@ class DrawToolBar(object):
                 None
         return
 
+    @staticmethod
+    def drawMeasureAreaOnVideo(values, painter, surface, gt):
+        ''' Draw Measure Area on Video '''
+
+        a_value = sphere.polygon_area([values])
+        
+        poly = []
+        lat = []
+        long = []
+        for pt in values:
+            if hasElevationModel():
+                pt = GetLine3DIntersectionWithPlane(
+                    GetSensor(), pt, GetFrameCenter()[2])
+            scr_x, scr_y = vut.GetInverseMatrix(
+                pt[1], pt[0], gt, surface)
+            center = QPoint(scr_x, scr_y)
+            poly.append(center)
+            
+            lat.append(pt[0])
+            long.append(pt[1])
+
+#         Fix: Temporary correction
+#         mousePressEvent calls after mouseMoveEvent.
+#         A problem occurs because the centroid is miscalculated.
+#         We remove duplicates values
+        lat = list(dict.fromkeys(lat))
+        long = list(dict.fromkeys(long))
+
+        # Calculate Centroid Position
+        scr_x, scr_y = vut.GetInverseMatrix(
+                sum(long)/len(long), sum(lat)/len(lat), gt, surface)
+        
+        centroid = QPoint(scr_x, scr_y)
+        
+        # Create Poligon
+        polygon = QPolygonF(poly)
+        
+        path = QPainterPath()
+        path.addPolygon(polygon)
+        
+        painter.setFont(DrawToolBar.bold_12)
+        painter.setPen(DrawToolBar.green_pen)
+        painter.drawPolygon(polygon)
+        painter.fillPath(path, DrawToolBar.green_brush)
+        painter.setPen(DrawToolBar.white_pen)
+        painter.drawPoints(polygon)
+        
+        # Area
+        if a_value >= 10000:
+            painter.drawText(centroid , str(round(a_value/1000000, 2)) + " km²")
+        else:
+            painter.drawText(centroid , str(round(a_value, 2)) + " m²")
+        return
+    
     @staticmethod
     def drawCensuredOnVideo(painter, drawCesure):
         ''' Draw Censure on Video '''

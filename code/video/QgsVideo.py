@@ -53,7 +53,8 @@ class InteractionState(object):
 
     def __init__(self):
         self.pointDrawer = False
-        self.ruler = False
+        self.measureDistance = False
+        self.measureArea = False
         self.lineDrawer = False
         self.polygonDrawer = False
         self.magnifier = False
@@ -247,7 +248,7 @@ class VideoWidget(QVideoWidget):
         self.gt = None
 
         self.drawCesure = []
-        self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawRuler, self.drawPolygon = [], [], [], [], []
+        self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawMeasureDistance,self.drawMeasureArea, self.drawPolygon = [], [],[], [], [], []
         self.poly_RubberBand = QgsRubberBand(
             iface.mapCanvas(), True)  # Polygon type
         # set rubber band style
@@ -310,9 +311,13 @@ class VideoWidget(QVideoWidget):
             # Clear all Layer
             RemoveAllDrawLineOnMap()
 
-    def ResetDrawRuler(self):
-        ''' Resets Ruler List '''
-        self.drawRuler = []
+    def ResetDrawMeasureDistance(self):
+        ''' Resets Measure Distance List '''
+        self.drawMeasureDistance = []
+        
+    def ResetDrawMeasureArea(self):
+        ''' Resets Measure Area List '''
+        self.drawMeasureArea = []
 
     def removeAllCensure(self):
         ''' Remove All Censure Objects '''
@@ -398,8 +403,12 @@ class VideoWidget(QVideoWidget):
             self.drawLines.append([None, None, None])          
             return
         
-        if self.gt is not None and self._interaction.ruler:
-            self.drawRuler.append([None, None, None])
+        if self.gt is not None and self._interaction.measureDistance:
+            self.drawMeasureDistance.append([None, None, None])
+            return
+        
+        if self.gt is not None and self._interaction.measureArea:
+            self.drawMeasureArea.append([None, None, None])
             return
         
         if self.gt is not None and self._interaction.polygonDrawer:
@@ -449,9 +458,13 @@ class VideoWidget(QVideoWidget):
         ''' Set Object Tracking '''
         self._interaction.objectTracking = value
 
-    def SetRuler(self, value):
-        ''' Set Ruler '''
-        self._interaction.ruler = value
+    def SetMeasureDistance(self, value):
+        ''' Set measure Distance '''
+        self._interaction.measureDistance = value
+        
+    def SetMeasureArea(self, value):
+        ''' Set measure Area '''
+        self._interaction.measureArea = value
 
     def SetHandDraw(self, value):
         ''' Set Hand Draw '''
@@ -517,7 +530,7 @@ class VideoWidget(QVideoWidget):
         
         # Draw On Video
         draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
-                         self.drawRuler, self.drawCesure, self.painter, self.surface, self.gt)
+                         self.drawMeasureDistance,self.drawMeasureArea, self.drawCesure, self.painter, self.surface, self.gt)
 
         
         # Draw On Video Object tracking test
@@ -585,7 +598,7 @@ class VideoWidget(QVideoWidget):
             return  
 
         # Mouser cursor drawing
-        if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.ruler or self._interaction.censure or self._interaction.objectTracking:
+        if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.measureDistance or self._interaction.measureArea or self._interaction.censure or self._interaction.objectTracking:
             self.setCursor(QCursor(Qt.CrossCursor))
             
         # Cursor Coordinates
@@ -619,10 +632,13 @@ class VideoWidget(QVideoWidget):
             if self._interaction.lineDrawer:
                 self.AddMoveEventValue(self.drawLines, Longitude, Latitude, Altitude)
                
-            # Ruler drawer mouseMoveEvent
-            if self._interaction.ruler and self.drawRuler:
-                self.AddMoveEventValue(self.drawRuler, Longitude, Latitude, Altitude)
+            # Measure Distance drawer mouseMoveEvent
+            if self._interaction.measureDistance and self.drawMeasureDistance:
+                self.AddMoveEventValue(self.drawMeasureDistance, Longitude, Latitude, Altitude)
             
+            # Measure Area drawer mouseMoveEvent
+            if self._interaction.measureArea and self.drawMeasureArea:
+                self.AddMoveEventValue(self.drawMeasureArea, Longitude, Latitude, Altitude)  
 
         else:
             self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" + 
@@ -736,12 +752,18 @@ class VideoWidget(QVideoWidget):
                     QRect(self.origin, QSize()))
                 self.Censure_RubberBand.show()
 
-            # Ruler drawer
-            if self.gt is not None and self._interaction.ruler:
+            # Measure Distance drawer
+            if self.gt is not None and self._interaction.measureDistance:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
-                self.drawRuler.append([Longitude, Latitude, Altitude])
+                self.drawMeasureDistance.append([Longitude, Latitude, Altitude])
 
+            # Measure Distance drawer
+            if self.gt is not None and self._interaction.measureArea:
+                Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
+                    event, self.surface)
+                self.drawMeasureArea.append([Longitude, Latitude, Altitude])
+                
         # if not called, the paint event is not triggered.
         self.UpdateSurface()
 

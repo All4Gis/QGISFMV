@@ -94,15 +94,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.toolBtn_DPoint.setDefaultAction(self.actionDraw_Pinpoint)
         self.DrawToolBar.addWidget(self.toolBtn_DPoint)
 
-        # Draw Point QToolButton
+        # Draw Line QToolButton
         self.toolBtn_DLine.setDefaultAction(self.actionDraw_Line)
         self.DrawToolBar.addWidget(self.toolBtn_DLine)
 
 #         self.DrawToolBar.addSeparator()
 #         self.DrawToolBar.addAction(self.actionHandDraw)
         self.DrawToolBar.addSeparator()
-
-        self.DrawToolBar.addAction(self.actionRuler)
+        
+        # Measure QToolButton
+        self.toolBtn_Measure.setDefaultAction(self.actionMeasureDistance)
+        self.DrawToolBar.addWidget(self.toolBtn_Measure)
         self.DrawToolBar.addSeparator()
 
         # Censure QToolButton
@@ -546,12 +548,24 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetObjectTracking(value)
         self.videoWidget.UpdateSurface()
 
-    def VideoRuler(self, value):
-        ''' Video Ruler '''
+    def VideoMeasureDistance(self, value):
+        ''' Video Measure Distance '''
+        self.toolBtn_Measure.setDefaultAction(self.actionMeasureDistance)
         self.UncheckUtils(self.sender(), value)
-        self.videoWidget.SetRuler(value)
+        self.videoWidget.SetMeasureDistance(value)
         if not value:
-            self.videoWidget.ResetDrawRuler()
+            self.videoWidget.ResetDrawMeasureDistance()
+
+        self.CommonPauseTool(value)
+        self.videoWidget.UpdateSurface()
+        
+    def VideoMeasureArea(self, value):
+        ''' Video Measure Area '''
+        self.toolBtn_Measure.setDefaultAction(self.actionMeasureArea)
+        self.UncheckUtils(self.sender(), value)
+        self.videoWidget.SetMeasureArea(value)
+        if not value:
+            self.videoWidget.ResetDrawMeasureArea()
 
         self.CommonPauseTool(value)
         self.videoWidget.UpdateSurface()
@@ -584,7 +598,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionDraw_Line.setChecked(False)
         self.actionDraw_Polygon.setChecked(False)
         self.actionObject_Tracking.setChecked(False)
-        self.actionRuler.setChecked(False)
+        self.actionMeasureDistance.setChecked(False)
+        self.actionMeasureArea.setChecked(False)
         self.actionCensure.setChecked(False)
 
         self.videoWidget.RestoreDrawer()
@@ -906,10 +921,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if self.playerState in (QMediaPlayer.StoppedState,
                                 QMediaPlayer.PausedState):
             self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
-            # Uncheck Ruler
-            self.videoWidget.ResetDrawRuler()
-            self.actionRuler.setChecked(False)
-            self.videoWidget.SetRuler(False)
+            # Remove Measure when video is playing
+            # Uncheck Measure Distance
+            self.videoWidget.ResetDrawMeasureDistance()
+            self.actionMeasureDistance.setChecked(False)
+            self.videoWidget.SetMeasureDistance(False)
+            # Uncheck Measure Area
+            self.videoWidget.ResetDrawMeasureArea()
+            self.actionMeasureArea.setChecked(False)
+            self.videoWidget.SetMeasureArea(False)
+            
             # Play Video
             self.player.play()
         elif self.playerState == QMediaPlayer.PlayingState:

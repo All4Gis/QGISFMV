@@ -164,23 +164,66 @@ def _py_from3857_to4326(point):
     lat = degrees(2.0 * atan(exp(y / EARTH_EQUATORIAL_RADIUS)) - HALF_PI)
     return (lon, lat)
 
+# Original code https://github.com/mapbox/geojson-area
+def ring__area(coordinates):
+    """
+    Calculate the approximate _area of the polygon were it projected onto
+        the earth.  Note that this _area will be positive if ring is oriented
+        clockwise, otherwise it will be negative.
 
-try:
-    from ._sphere import (
-        _approximate_distance,
-        _haversine_distance,
-        _distance,
-        _from4326_to3857,
-        _from3857_to4326,
-    )
-    approximate_distance = _approximate_distance
-    haversine_distance = _haversine_distance
-    distance = _distance
-    from4326_to3857 = _from4326_to3857
-    from3857_to4326 = _from3857_to4326
-except ImportError:  # pragma: no cover
-    approximate_distance = _py_approximate_distance
-    haversine_distance = _py_haversine_distance
-    distance = _py_distance
-    from4326_to3857 = _py_from4326_to3857
-    from3857_to4326 = _py_from3857_to4326
+    Reference:
+        Robert. G. Chamberlain and William H. Duquette, "Some Algorithms for
+        Polygons on a Sphere", JPL Publication 07-03, Jet Propulsion
+        Laboratory, Pasadena, CA, June 2007 http://trs-new.jpl.nasa.gov/dspace/handle/2014/40409
+
+    @Returns
+
+    {float} The approximate signed geodesic _area of the polygon in square meters.
+    """
+    _area = 0
+    coordinates_length = len(coordinates)
+
+    if coordinates_length > 2:
+        for i in range(0, coordinates_length):
+            if i == (coordinates_length - 2):
+                lower_index = coordinates_length - 2
+                middle_index = coordinates_length - 1
+                upper_index = 0
+            elif i == (coordinates_length - 1):
+                lower_index = coordinates_length - 1
+                middle_index = 0
+                upper_index = 1
+            else:
+                lower_index = i
+                middle_index = i + 1
+                upper_index = i + 2
+
+            p1 = coordinates[lower_index]
+            p2 = coordinates[middle_index]
+            p3 = coordinates[upper_index]
+
+            _area += (radians(p3[0]) - radians(p1[0])) * sin(radians(p2[1]))
+
+        _area = _area * EARTH_EQUATORIAL_RADIUS * EARTH_EQUATORIAL_RADIUS / 2
+
+    return _area
+
+
+def _polygon__area(coordinates):
+
+    _area = 0
+    if len(coordinates) > 0:
+        _area += abs(ring__area(coordinates[0]))
+
+        for i in range(1, len(coordinates)):
+            _area -= abs(ring__area(coordinates[i]))
+
+    return _area
+
+
+approximate_distance = _py_approximate_distance
+haversine_distance = _py_haversine_distance
+distance = _py_distance
+from4326_to3857 = _py_from4326_to3857
+from3857_to4326 = _py_from3857_to4326
+polygon_area = _polygon__area

@@ -46,28 +46,6 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
-       <widget class="QToolButton" name="toolBtn_DPoint">
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="autoExclusive">
-         <bool>false</bool>
-        </property>
-        <property name="popupMode">
-         <enum>QToolButton::MenuButtonPopup</enum>
-        </property>
-        <property name="autoRaise">
-         <bool>false</bool>
-        </property>
-        <addaction name="actionDraw_Pinpoint"/>
-        <addaction name="actionRemove_Last_Pinpoint"/>
-        <addaction name="actionRemove_All_Pinpoint"/>
-       </widget>
-      </item>
-      <item>
        <widget class="QToolButton" name="toolBtn_DPolygon">
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
@@ -90,19 +68,25 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="toolBtn_Cesure">
+       <widget class="QToolButton" name="toolBtn_DPoint">
         <property name="cursor">
-         <cursorShape>OpenHandCursor</cursorShape>
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="text">
          <string/>
         </property>
+        <property name="autoExclusive">
+         <bool>false</bool>
+        </property>
         <property name="popupMode">
          <enum>QToolButton::MenuButtonPopup</enum>
         </property>
-        <addaction name="actionCensure"/>
-        <addaction name="actionRemove_Last_censured"/>
-        <addaction name="actionRemove_All_censured"/>
+        <property name="autoRaise">
+         <bool>false</bool>
+        </property>
+        <addaction name="actionDraw_Pinpoint"/>
+        <addaction name="actionRemove_Last_Pinpoint"/>
+        <addaction name="actionRemove_All_Pinpoint"/>
        </widget>
       </item>
       <item>
@@ -120,6 +104,43 @@
         <addaction name="actionLast_Segment_Line"/>
         <addaction name="actionRemove_Last_Line"/>
         <addaction name="actionRemove_All_Line"/>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolBtn_Cesure">
+        <property name="cursor">
+         <cursorShape>OpenHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::MenuButtonPopup</enum>
+        </property>
+        <addaction name="actionCensure"/>
+        <addaction name="actionRemove_Last_censured"/>
+        <addaction name="actionRemove_All_censured"/>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolBtn_Measure">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="autoExclusive">
+         <bool>false</bool>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::MenuButtonPopup</enum>
+        </property>
+        <property name="autoRaise">
+         <bool>false</bool>
+        </property>
+        <addaction name="actionMeasureDistance"/>
+        <addaction name="actionMeasureArea"/>
        </widget>
       </item>
       <item>
@@ -856,11 +877,19 @@
    </property>
   </action>
   <action name="actionSave_Audio">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/save-bitrate.png</normaloff>:/imgFMV/images/save-bitrate.png</iconset>
+   </property>
    <property name="text">
     <string>Save Audio</string>
    </property>
   </action>
   <action name="actionSave_Video">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/save-bitrate.png</normaloff>:/imgFMV/images/save-bitrate.png</iconset>
+   </property>
    <property name="text">
     <string>Save Video</string>
    </property>
@@ -1013,7 +1042,7 @@
     <string>Object Tracking</string>
    </property>
   </action>
-  <action name="actionRuler">
+  <action name="actionMeasureDistance">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1022,7 +1051,19 @@
      <normaloff>:/imgFMV/images/ruler.png</normaloff>:/imgFMV/images/ruler.png</iconset>
    </property>
    <property name="text">
-    <string>Ruler</string>
+    <string>Measure Distance</string>
+   </property>
+  </action>
+  <action name="actionMeasureArea">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/ruler_surface.png</normaloff>:/imgFMV/images/ruler_surface.png</iconset>
+   </property>
+   <property name="text">
+    <string>Measure Area</string>
    </property>
   </action>
   <action name="actionHandDraw">
@@ -1283,8 +1324,8 @@
    <slot>toggleGroup(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>137</x>
-     <y>622</y>
+     <x>148</x>
+     <y>615</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1299,8 +1340,8 @@
    <slot>playClicked(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>147</x>
-     <y>612</y>
+     <x>174</x>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
      <x>11</x>
@@ -1315,8 +1356,8 @@
    <slot>seek(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>60</x>
-     <y>495</y>
+     <x>72</x>
+     <y>462</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -1331,8 +1372,8 @@
    <slot>setVolume(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>693</x>
-     <y>610</y>
+     <x>684</x>
+     <y>596</y>
     </hint>
     <hint type="destinationlabel">
      <x>509</x>
@@ -1363,8 +1404,8 @@
    <slot>ExtractCurrentFrame()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>728</x>
-     <y>549</y>
+     <x>724</x>
+     <y>527</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -1379,8 +1420,8 @@
    <slot>showColorDialog()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>46</x>
-     <y>549</y>
+     <x>55</x>
+     <y>527</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -1395,8 +1436,8 @@
    <slot>setMuted()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>507</x>
-     <y>612</y>
+     <x>531</x>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
      <x>349</x>
@@ -1411,8 +1452,8 @@
    <slot>stop(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>612</y>
+     <x>134</x>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
      <x>112</x>
@@ -1427,8 +1468,8 @@
    <slot>StartMedia()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>45</x>
-     <y>612</y>
+     <x>54</x>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -1443,8 +1484,8 @@
    <slot>EndMedia()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>215</x>
-     <y>612</y>
+     <x>254</x>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
      <x>212</x>
@@ -1459,8 +1500,8 @@
    <slot>AutoRepeat(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>249</x>
-     <y>612</y>
+     <x>294</x>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
      <x>511</x>
@@ -1667,8 +1708,8 @@
    <slot>rewindMedia()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>612</y>
+     <x>94</x>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
      <x>26</x>
@@ -1683,8 +1724,8 @@
    <slot>forwardMedia()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>181</x>
-     <y>612</y>
+     <x>214</x>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
      <x>179</x>
@@ -1699,8 +1740,8 @@
    <slot>RecordVideo(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>549</y>
+     <x>95</x>
+     <y>527</y>
     </hint>
     <hint type="destinationlabel">
      <x>44</x>
@@ -1827,8 +1868,8 @@
    <slot>createMosaic(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>114</x>
-     <y>549</y>
+     <x>135</x>
+     <y>527</y>
     </hint>
     <hint type="destinationlabel">
      <x>110</x>
@@ -1885,10 +1926,26 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionRuler</sender>
+   <sender>actionMeasureDistance</sender>
    <signal>triggered(bool)</signal>
    <receiver>PlayerWindow</receiver>
-   <slot>VideoRuler(bool)</slot>
+   <slot>VideoMeasureDistance(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>370</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMeasureArea</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>VideoMeasureArea(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -2208,7 +2265,7 @@
   <slot>lineDrawer(bool)</slot>
   <slot>polygonDrawer(bool)</slot>
   <slot>ojectTracking(bool)</slot>
-  <slot>VideoRuler(bool)</slot>
+  <slot>VideoMeasureDistance(bool)</slot>
   <slot>MirrorHorizontalFilter(bool)</slot>
   <slot>VideoCensure(bool)</slot>
   <slot>removeLastCensured()</slot>
@@ -2225,5 +2282,6 @@
   <slot>centerMapTarget(bool)</slot>
   <slot>NDVIFilter(bool)</slot>
   <slot>ExtractCurrentGeoFrame()</slot>
+  <slot>VideoMeasureArea(bool)</slot>
  </slots>
 </ui>
