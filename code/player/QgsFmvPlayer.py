@@ -81,6 +81,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.createingMosaic = False
         self.currentInfo = 0.0
         self.data = None
+        self.staticDraw = False
 
         # Create Draw Toolbar
         self.DrawToolBar.addAction(self.actionMagnifying_glass)
@@ -558,6 +559,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.CommonPauseTool(value)
         self.videoWidget.UpdateSurface()
+        self.staticDraw = value
         
     def VideoMeasureArea(self, value):
         ''' Video Measure Area '''
@@ -569,7 +571,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.CommonPauseTool(value)
         self.videoWidget.UpdateSurface()
-
+        self.staticDraw = value
+        
     # TODO : Make draw hand tool
     def VideoHandDraw(self, value):
         self.videoWidget.SetHandDraw(value)
@@ -578,11 +581,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def CommonPauseTool(self, value):
         if value:
-            self.player.pause()
-            self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
+            if self.playerState == QMediaPlayer.PlayingState:
+                self.player.pause()
+                self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
         else:
-            self.player.play()
-            self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
+            if self.playerState in (QMediaPlayer.StoppedState,
+                                QMediaPlayer.PausedState):
+                self.player.play()
+                self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
+        QApplication.processEvents()
 
     def VideoCensure(self, value):
         ''' Censure Video Parts'''
@@ -740,6 +747,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def positionChanged(self, progress):
         ''' Current Video position change '''
         progress /= 1000
+        # Remove measure if slider position change
+        if self.staticDraw:
+            self.RemoveMeasures()
 
         if not self.sliderDuration.isSliderDown():
             self.sliderDuration.setValue(progress)        
@@ -915,21 +925,28 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.pause()
         self.StartMedia()
         self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
+        
+    def RemoveMeasures(self):
+        # Remove Measure when video is playing
+        # Uncheck Measure Distance
+        self.videoWidget.ResetDrawMeasureDistance()
+        self.actionMeasureDistance.setChecked(False)
+        self.videoWidget.SetMeasureDistance(False)
+        # Uncheck Measure Area
+        self.videoWidget.ResetDrawMeasureArea()
+        self.actionMeasureArea.setChecked(False)
+        self.videoWidget.SetMeasureArea(False)
+        
+        self.staticDraw = False
 
     def playClicked(self, _):
         ''' Stop and Play video '''
         if self.playerState in (QMediaPlayer.StoppedState,
                                 QMediaPlayer.PausedState):
             self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
-            # Remove Measure when video is playing
-            # Uncheck Measure Distance
-            self.videoWidget.ResetDrawMeasureDistance()
-            self.actionMeasureDistance.setChecked(False)
-            self.videoWidget.SetMeasureDistance(False)
-            # Uncheck Measure Area
-            self.videoWidget.ResetDrawMeasureArea()
-            self.actionMeasureArea.setChecked(False)
-            self.videoWidget.SetMeasureArea(False)
+
+            if self.staticDraw:
+                self.RemoveMeasures()
             
             # Play Video
             self.player.play()
