@@ -575,11 +575,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         
     # TODO : Make draw hand tool
     def VideoHandDraw(self, value):
+        ''' Video Free Hand Draw '''
         self.videoWidget.SetHandDraw(value)
         self.CommonPauseTool(value)
         self.videoWidget.UpdateSurface()
 
     def CommonPauseTool(self, value):
+        ''' Static draw common function '''
         if value:
             if self.playerState == QMediaPlayer.PlayingState:
                 self.player.pause()
