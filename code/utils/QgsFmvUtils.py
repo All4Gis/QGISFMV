@@ -498,7 +498,7 @@ def GetFrameCenter():
     global frameCenterElevation
     global gframeCenterLat
     global gframeCenterLon
-    # Todo if sensor height is null, compute it from sensor altitude.
+    # if sensor height is null, compute it from sensor altitude.
     if(frameCenterElevation == None):
         frameCenterElevation = sensorTrueAltitude - 500    
     return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
@@ -784,7 +784,6 @@ def GeoreferenceFrame(task, image, output, p):
     dst_ds.SetProjection(srs.ExportToWkt())
 
     # Set location
-    # TODO : CHECK GEOTRANSFORM
     dst_ds.SetGeoTransform(geotransform_affine)
     dst_ds.GetRasterBand(1).SetNoDataValue(0)
     dst_ds.FlushCache()

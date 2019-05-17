@@ -14,7 +14,7 @@ from qgis.utils import iface
 from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
                                 QVideoFrame,
                                 QAbstractVideoSurface,
-                                QVideoSurfaceFormat, QMediaPlayer)
+                                QMediaPlayer)
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QApplication
 
@@ -554,7 +554,7 @@ class VideoWidget(QVideoWidget):
         self.painter.end()
         return
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, _):
         """
         :type event: QMouseEvent
         :param event:
