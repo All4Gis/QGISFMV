@@ -437,7 +437,7 @@ class VideoWidget(QVideoWidget):
         ''' Update Video Surface '''   
         if self.parent.playerState in (QMediaPlayer.StoppedState,
                                 QMediaPlayer.PausedState):
-            self.surface.widget.update()
+            self.update()
         QApplication.processEvents()
 
     def sizeHint(self):

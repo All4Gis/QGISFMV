@@ -121,6 +121,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.btn_Color.hide()
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
+        self.playIcon = QIcon(":/imgFMV/images/play-arrow.png")
+        self.pauseIcon = QIcon(":/imgFMV/images/pause.png")
 
         self.videoWidget.customContextMenuRequested[QPoint].connect(
             self.contextMenuRequested)
@@ -377,7 +379,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if state != self.playerState:
             self.playerState = state
             if state == QMediaPlayer.StoppedState:
-                self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
+                self.btn_play.setIcon(self.playIcon)
 
         return
 
@@ -552,26 +554,28 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def VideoMeasureDistance(self, value):
         ''' Video Measure Distance '''
+        self.CommonPauseTool(value)
+        self.videoWidget.UpdateSurface()
+        
         self.toolBtn_Measure.setDefaultAction(self.actionMeasureDistance)
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetMeasureDistance(value)
         if not value:
             self.videoWidget.ResetDrawMeasureDistance()
 
-        self.CommonPauseTool(value)
-        self.videoWidget.UpdateSurface()
         self.staticDraw = value
         
     def VideoMeasureArea(self, value):
         ''' Video Measure Area '''
+        self.CommonPauseTool(value)
+        self.videoWidget.UpdateSurface()
+        
         self.toolBtn_Measure.setDefaultAction(self.actionMeasureArea)
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetMeasureArea(value)
         if not value:
             self.videoWidget.ResetDrawMeasureArea()
 
-        self.CommonPauseTool(value)
-        self.videoWidget.UpdateSurface()
         self.staticDraw = value
         
     # TODO : Make draw hand tool
@@ -586,12 +590,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if value:
             if self.playerState == QMediaPlayer.PlayingState:
                 self.player.pause()
-                self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
+                self.btn_play.setIcon(self.playIcon)
         else:
             if self.playerState in (QMediaPlayer.StoppedState,
                                 QMediaPlayer.PausedState):
                 self.player.play()
-                self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
+                self.btn_play.setIcon(self.pauseIcon)
         QApplication.processEvents()
 
     def VideoCensure(self, value):
@@ -613,8 +617,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionCensure.setChecked(False)
 
         self.videoWidget.RestoreDrawer()
-
+        QApplication.processEvents()
         sender.setChecked(value)
+        QApplication.processEvents()
         return
 
     def UncheckFilters(self, sender, value):
@@ -630,8 +635,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.RestoreFilters()
         self.player.setPlaybackRate(1.0)         
         QApplication.processEvents()
-
         sender.setChecked(value)
+        QApplication.processEvents()
         return
     # End Snnipet FILTERS
 
@@ -927,7 +932,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         '''self.player.stop() make a black screen and not reproduce it again'''
         self.player.pause()
         self.StartMedia()
-        self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
+        self.btn_play.setIcon(self.playIcon)
         
     def RemoveMeasures(self):
         # Remove Measure when video is playing
@@ -946,7 +951,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Stop and Play video '''
         if self.playerState in (QMediaPlayer.StoppedState,
                                 QMediaPlayer.PausedState):
-            self.btn_play.setIcon(QIcon(":/imgFMV/images/pause.png"))
+            self.btn_play.setIcon(self.pauseIcon)
 
             if self.staticDraw:
                 self.RemoveMeasures()
@@ -954,7 +959,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             # Play Video
             self.player.play()
         elif self.playerState == QMediaPlayer.PlayingState:
-            self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
+            self.btn_play.setIcon(self.playIcon)
             self.player.pause()
         QApplication.processEvents()
 
