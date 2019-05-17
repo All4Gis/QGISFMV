@@ -242,8 +242,6 @@ class VideoWidget(QVideoWidget):
         self._interaction = InteractionState()
         self._filterSatate = FilterState()
 
-        self.snapped = False
-        self.zoomed = False
         self._isinit = False
         self.gt = None
 
@@ -264,7 +262,7 @@ class VideoWidget(QVideoWidget):
         palette.setColor(QPalette.Background, Qt.transparent)
         self.setPalette(palette)
 
-        self.origin, self.pressPos, self.dragPos = QPoint(), QPoint(), QPoint()
+        self.origin, self.dragPos = QPoint(), QPoint()
         self.tapTimer = QBasicTimer()
         self.brush = QBrush(QColor(Qt.black))
 
@@ -549,7 +547,7 @@ class VideoWidget(QVideoWidget):
                     "Tracking failure detected ", "", level=QGis.Warning)
                 
         # Magnifier Glass
-        if self.zoomed and self._interaction.magnifier:
+        if self._interaction.magnifier and not self.dragPos.isNull():
             #self.grab(self.surface.videoRect()).toImage()
             draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
 
@@ -563,9 +561,12 @@ class VideoWidget(QVideoWidget):
         :return:
         """
         #QWidget.resizeEvent(self, event)
-        self.zoomed = False
         self.surface.updateVideoRect()
         self.update()
+        # Magnifier Glass
+        if self._interaction.magnifier and not self.dragPos.isNull():
+            #self.grab(self.surface.videoRect()).toImage()
+            draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
         #print (" widget : " + str(self.width())+"  "+str(self.height()) )
         #print (" Video Rectangle : " + str(self.surface.videoRect().width())+"  "+str(self.surface.videoRect().height()))
         #print (" Source Rectangle : " + str(self.surface.sourceRect().width())+"  "+str(self.surface.sourceRect().height()))
@@ -662,29 +663,13 @@ class VideoWidget(QVideoWidget):
                 QRect(self.origin, event.pos()).normalized())
 
         # Magnifier mouseMoveEvent
-        if not self.zoomed:
-            delta = event.pos() - self.pressPos
-            if not self.snapped:
-                self.pressPos = event.pos()
-                self.tapTimer.stop()
-                self.surface.widget.update()
-                return
-            else:
-                threshold = 10
-                self.snapped &= delta.x() < threshold
-                self.snapped &= delta.y() < threshold
-                self.snapped &= delta.x() > -threshold
-                self.snapped &= delta.y() > -threshold
-                self.surface.widget.update()
-
-        else:
+        if self._interaction.magnifier:
             self.dragPos = event.pos()
-            self.surface.updateVideoRect()
-            self.surface.widget.update()
+            self.UpdateSurface()
 
     def timerEvent(self, _):
         """ Time Event (Magnifier method)"""
-        if not self.zoomed:
+        if not self._interaction.magnifier:
             self.activateMagnifier()
 
     def mousePressEvent(self, event):
@@ -701,10 +686,12 @@ class VideoWidget(QVideoWidget):
             return  
 
         if event.button() == Qt.LeftButton:
-            self.snapped = True
-            self.pressPos = self.dragPos = event.pos()
-            self.tapTimer.stop()
-            self.tapTimer.start(10, self)
+            
+            # Magnifier Glass
+            if self._interaction.magnifier:
+                self.dragPos = event.pos()
+                self.tapTimer.stop()
+                self.tapTimer.start(10, self)
 
             if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
                 #self.UpdateSurface()
@@ -764,18 +751,22 @@ class VideoWidget(QVideoWidget):
                     event, self.surface)
                 self.drawMeasureArea.append([Longitude, Latitude, Altitude])
                 
-        # if not called, the paint event is not triggered.
-        self.UpdateSurface()
+            # if not called, the paint event is not triggered.
+            self.UpdateSurface()
 
     def activateMagnifier(self):
         """ Activate Magnifier Glass """
-        self.zoomed = True
         self.tapTimer.stop()
-        self.surface.updateVideoRect()
+        self.UpdateSurface()
 
     def SetMagnifier(self, value):
         """ Set Magnifier Glass """
         self._interaction.magnifier = value
+        #We avoid that the second time we activate the tool, save the previous position.
+        #Always keep the same behavior of the tool    
+        if not value:
+            self.dragPos = QPoint()
+            self.tapTimer.stop()
 
     def SetPointDrawer(self, value):
         """ Set Point Drawer """

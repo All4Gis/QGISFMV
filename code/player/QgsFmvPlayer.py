@@ -1266,19 +1266,27 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.stop()
         self.parent._PlayerDlg = None
         self.parent.ToggleActiveFromTitle()
-
+        
+        # Remove TOC video layers
         RemoveVideoLayers()
+        # Remove mosaic group if exist
         RemoveGroupByName()
+        # Reset internal variables
         ResetData()
 
+        # We close metadata dock if it is open
         try:
             self.metadataDlg.hide()
         except Exception:
             None
+            
+        # We close matplot graphics if it is open
         try:
             self.matplot.close()
         except Exception:
             None
+            
+        # We close Video info json if it is open
         try:
             self.VideoInfoDialog.hide()
         except Exception:
