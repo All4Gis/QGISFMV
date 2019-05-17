@@ -1,12 +1,10 @@
 # 2017 by Gregor Engberding , MIT License
 # Modificated for work in QGIS FMV Plugin
 
-from qgis.PyQt.QtCore import (QFile,
-                          QJsonDocument,
+from qgis.PyQt.QtCore import (QJsonDocument,
                           QAbstractItemModel,
                           QModelIndex,
                           Qt,
-                          QByteArray,
                           QVariant,
                           QCoreApplication,
                           QJsonParseError)
@@ -115,46 +113,48 @@ class QJsonTreeItem(object):
 
 
 class QJsonModel(QAbstractItemModel):
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    ''' Json Abstract Item Model '''
+    def __init__(self):
+        super().__init__()
         self.mRootItem = QJsonTreeItem()
         key = QCoreApplication.translate("QgsJsonModel", "Key")
         value = QCoreApplication.translate("QgsJsonModel", "Value")
         self.mHeaders = [key, value]
 
-    def load(self, fileName):
-        if fileName is None or fileName is False:
-            return False
-        js = None
-        stream = QFile(fileName)
-        if stream.open(QFile.ReadOnly):
-            js = QByteArray((stream.readAll()))
-            stream.close()
-            self.loadJson(js)
-        else:
-            qgsu.showUserAndLogMessage(
-                "", stream.errorString(), onlyLog=True)
-
-    def loadJson(self, value):
-        error = QJsonParseError()
-        self.mDocument = QJsonDocument.fromJson(value, error)
-
-        if self.mDocument is not None:
-            self.beginResetModel()
-            if self.mDocument.isArray():
-                self.mRootItem.load(list(self.mDocument.array()))
-            else:
-                self.mRootItem = self.mRootItem.load(self.mDocument.object())
-            self.endResetModel()
-
-            return True
-
-        qgsu.showUserAndLogMessage(
-                "", "QJsonModel: error loading Json", onlyLog=True)
-        return False
+#     def load(self, fileName):
+#         ''' Load Json from file '''
+#         if fileName is None or fileName is False:
+#             return False
+#         js = None
+#         stream = QFile(fileName)
+#         if stream.open(QFile.ReadOnly):
+#             js = QByteArray((stream.readAll()))
+#             stream.close()
+#             self.loadJson(js)
+#         else:
+#             qgsu.showUserAndLogMessage(
+#                 "", stream.errorString(), onlyLog=True)
+# 
+#     def loadJson(self, value):
+#         error = QJsonParseError()
+#         self.mDocument = QJsonDocument.fromJson(value, error)
+# 
+#         if self.mDocument is not None:
+#             self.beginResetModel()
+#             if self.mDocument.isArray():
+#                 self.mRootItem.load(list(self.mDocument.array()))
+#             else:
+#                 self.mRootItem = self.mRootItem.load(self.mDocument.object())
+#             self.endResetModel()
+# 
+#             return True
+# 
+#         qgsu.showUserAndLogMessage(
+#                 "", "QJsonModel: error loading Json", onlyLog=True)
+#         return False
 
     def loadJsonFromConsole(self, value):
+        ''' Load Json from console output '''
         error = QJsonParseError()
         self.mDocument = QJsonDocument.fromJson(value, error)
 

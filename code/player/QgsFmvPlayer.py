@@ -82,6 +82,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.currentInfo = 0.0
         self.data = None
         self.staticDraw = False
+        self.playbackRateSlow = 0.7
 
         # Create Draw Toolbar
         self.DrawToolBar.addAction(self.actionMagnifying_glass)
@@ -476,7 +477,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.UncheckFilters(self.sender(), value)
         # TODO : Temporarily we lower in rate. Player in other thread?
         if value:
-            self.player.setPlaybackRate(0.7) 
+            self.player.setPlaybackRate(self.playbackRateSlow) 
         QApplication.processEvents()
         self.videoWidget.SetNDVI(value)
         self.videoWidget.UpdateSurface()
@@ -487,7 +488,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.UncheckFilters(self.sender(), value)
         # TODO : Temporarily we lower in rate. Player in other thread?
         if value:
-            self.player.setPlaybackRate(0.7) 
+            self.player.setPlaybackRate(self.playbackRateSlow) 
         QApplication.processEvents()
         self.videoWidget.SetEdgeDetection(value)
         self.videoWidget.UpdateSurface()
@@ -505,7 +506,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.UncheckFilters(self.sender(), value)
         # TODO : Temporarily we lower in rate. Player in other thread?
         if value:
-            self.player.setPlaybackRate(0.7)         
+            self.player.setPlaybackRate(self.playbackRateSlow)         
         QApplication.processEvents()
         self.videoWidget.SetAutoContrastFilter(value)
         self.videoWidget.UpdateSurface()
@@ -955,6 +956,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         elif self.playerState == QMediaPlayer.PlayingState:
             self.btn_play.setIcon(QIcon(":/imgFMV/images/play-arrow.png"))
             self.player.pause()
+        QApplication.processEvents()
 
     def seek(self, seconds):
         '''Slider Move'''
@@ -1245,7 +1247,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         view.setModel(model)
         model.loadJsonFromConsole(outjson)
 
-        self.VideoInfoDialog = QDialog(self)
+        self.VideoInfoDialog = QDialog(self, Qt.Window | Qt.WindowCloseButtonHint)
         self.VideoInfoDialog.setWindowTitle(QCoreApplication.translate(
             "QgsFmvPlayer", "Video Information : ") + self.fileName)
         self.VideoInfoDialog.setWindowIcon(
@@ -1256,9 +1258,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         view.expandAll()
         view.header().setSectionResizeMode(QHeaderView.ResizeToContents)
 
-        self.VideoInfoDialog.setWindowFlags(
-            Qt.Window | Qt.WindowCloseButtonHint)
-        self.VideoInfoDialog.setObjectName("VideoInfoDialog")
         self.VideoInfoDialog.resize(500, 400)
         self.VideoInfoDialog.show()
 
@@ -1278,6 +1277,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             None
         try:
             self.matplot.close()
+        except Exception:
+            None
+        try:
+            self.VideoInfoDialog.hide()
         except Exception:
             None
         # Restore Filters State
