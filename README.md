@@ -1,6 +1,6 @@
 # QGIS Full Motion Video (FMV) #
 
-[![Build Status](https://travis-ci.org/All4Gis/QGISFMV.svg?branch=master)](https://travis-ci.org/All4Gis/QGISFMV)
+[![Build Status](https://travis-ci.org/All4Gis/QGISFMV.svg?branch=master)](https://travis-ci.org/All4Gis/QGISFMV) [![Project Stats](https://www.openhub.net/p/QGISFMV/widgets/project_thin_badge.gif)](https://www.openhub.net/p/QGISFMV)
 
 ![a](images/banner.png)
 
