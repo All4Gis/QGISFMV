@@ -549,6 +549,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def ojectTracking(self, value):
         ''' Object Tracking '''
         self.UncheckUtils(self.sender(), value)
+        # TODO : Temporarily we lower in rate. Player in other thread?
+        if value:
+            self.player.setPlaybackRate(self.playbackRateSlow) 
         self.videoWidget.SetObjectTracking(value)
         self.videoWidget.UpdateSurface()
 
@@ -617,6 +620,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionCensure.setChecked(False)
 
         self.videoWidget.RestoreDrawer()
+        self.player.setPlaybackRate(1.0)   
         QApplication.processEvents()
         sender.setChecked(value)
         QApplication.processEvents()

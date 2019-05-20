@@ -43,7 +43,7 @@ except ImportError:
     None
 
 try:
-    from cv2 import TrackerBoosting_create
+    from cv2 import TrackerMOSSE_create
 except ImportError:
     None
 
@@ -538,11 +538,12 @@ class VideoWidget(QVideoWidget):
             ok, bbox = self.tracker.update(frame)
             # Draw bounding box
             if ok:
-                #print("bbox Traking: ", str(bbox))
+                print("bbox Traking: ", str(bbox))
                 self.painter.setPen(Qt.blue)
                 self.painter.drawRect(int(bbox[0]), int(
                     bbox[1]), int(bbox[2]), int(bbox[3]))
             else:
+                self.tracker.clear()
                 qgsu.showUserAndLogMessage(
                     "Tracking failure detected ", "", level=QGis.Warning)
                 
@@ -785,21 +786,23 @@ class VideoWidget(QVideoWidget):
         if self.parent.player.position() == 0:
             return  
 
+        # Censure Draw Interaction
         if self._interaction.censure:
             geom = self.Censure_RubberBand.geometry()
             self.Censure_RubberBand.hide()
             self.drawCesure.append([geom])
 
+        # Object Tracking Interaction
         if self._interaction.objectTracking:
             geom = self.Tracking_RubberBand.geometry()
             bbox = (geom.x(), geom.y(), geom.width(), geom.height())
-            #print("bbox Ori : ", str(bbox))
+            print("bbox Ori : ", str(bbox))
             img = self.currentFrame()
-            #print("imagen ORI : " + str(img.width()) + " " + str(img.height()))
+            print("imagen ORI : " + str(img.width()) + " " + str(img.height()))
             frame = convertQImageToMat(img)
             self.Tracking_RubberBand.hide()
-            self.tracker = TrackerBoosting_create()
-            #self.tracker.clear()
+            self.tracker = TrackerMOSSE_create()
+            self.tracker.clear()
             ok = self.tracker.init(frame, bbox)
             if ok:
                 self._isinit = True
