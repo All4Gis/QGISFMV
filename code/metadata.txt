@@ -25,6 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.6:
+    	- Fix magnifier QPainter size/scale
     	- Measure Area Tool
     	- Better performance for measurements
     	- Better performance for drawings

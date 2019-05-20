@@ -142,7 +142,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def present(self, frame):
         ''' Present Frame '''
-        # print(" Present Frame")
         if (self.surfaceFormat().pixelFormat() != frame.pixelFormat() or
                 self.surfaceFormat().frameSize() != frame.size()):
             self.setError(QAbstractVideoSurface.IncorrectFormatError)
@@ -150,7 +149,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
             return False
         else:
             self._currentFrame = frame
-            #self.widget.repaint(self._targetRect)
             self.widget.update()
             return True
 
@@ -171,7 +169,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
 
     def paint(self, painter):
         ''' Paint Frame'''
-        # print(" Paint Frame")
         if (self._currentFrame.map(QAbstractVideoBuffer.ReadOnly)):
             oldTransform = painter.transform()
             painter.setTransform(oldTransform)
@@ -503,6 +500,9 @@ class VideoWidget(QVideoWidget):
     def RestoreDrawer(self):
         ''' Remove and restore all Drawer Options '''
         self._interaction.clear()
+        # Magnifier Glass
+        self.dragPos = QPoint()
+        self.tapTimer.stop()
 
     def paintEvent(self, event):
         ''' Paint Event '''
@@ -548,7 +548,6 @@ class VideoWidget(QVideoWidget):
                 
         # Magnifier Glass
         if self._interaction.magnifier and not self.dragPos.isNull():
-            #self.grab(self.surface.videoRect()).toImage()
             draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
 
         self.painter.end()
@@ -560,17 +559,11 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
-        #QWidget.resizeEvent(self, event)
         self.surface.updateVideoRect()
         self.update()
         # Magnifier Glass
         if self._interaction.magnifier and not self.dragPos.isNull():
-            #self.grab(self.surface.videoRect()).toImage()
             draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
-        #print (" widget : " + str(self.width())+"  "+str(self.height()) )
-        #print (" Video Rectangle : " + str(self.surface.videoRect().width())+"  "+str(self.surface.videoRect().height()))
-        #print (" Source Rectangle : " + str(self.surface.sourceRect().width())+"  "+str(self.surface.sourceRect().height()))
-
         
     def AddMoveEventValue(self, values, Longitude, Latitude, Altitude):
         """
@@ -589,6 +582,13 @@ class VideoWidget(QVideoWidget):
         :param event:
         :return:
         """
+        # Magnifier mouseMoveEvent
+        # Magnifier can move on black screen for show image borders
+        if self._interaction.magnifier:
+            if event.buttons():
+                self.dragPos = event.pos()
+                self.UpdateSurface()
+
         # check if the point  is on picture (not in black borders)
         if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
             self.setCursor(QCursor(Qt.ArrowCursor))
@@ -662,10 +662,6 @@ class VideoWidget(QVideoWidget):
             self.Censure_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
 
-        # Magnifier mouseMoveEvent
-        if self._interaction.magnifier:
-            self.dragPos = event.pos()
-            self.UpdateSurface()
 
     def timerEvent(self, _):
         """ Time Event (Magnifier method)"""
@@ -694,7 +690,6 @@ class VideoWidget(QVideoWidget):
                 self.tapTimer.start(10, self)
 
             if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
-                #self.UpdateSurface()
                 return
 
             # point drawer

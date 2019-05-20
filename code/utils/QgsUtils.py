@@ -63,7 +63,6 @@ class QgsUtils(object):
             if not os.path.exists(directory):
                 os.makedirs(directory)
         except OSError:
-            #print ('Error: Creating directory. ' + directory)
             None
 
     @staticmethod

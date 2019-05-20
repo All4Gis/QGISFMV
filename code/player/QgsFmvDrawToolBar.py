@@ -28,7 +28,7 @@ RulerTotalMeasure = 0.0
 class DrawToolBar(object):
     
     MAX_MAGNIFIER = 250
-    zoomPixmap = QPixmap()
+    MAX_FACTOR = 2
     
     line_width = 3
     yellow_pen = QPen(QColor(252,215,108),line_width) 
@@ -45,7 +45,7 @@ class DrawToolBar(object):
     big_radius = 10
     red_pen = QPen(QColor(220, 20, 60), big_radius, cap=Qt.RoundCap)
     
-    glass_pen = QPen(QColor(192, 192, 192, 128), 6)
+    glass_pen = QPen(QColor(192, 192, 192, 128), 3)
     
     green_brush = QBrush(QColor(185, 224, 175, 100))
     yellow_brush = QBrush(QColor(252,215,108, 100))
@@ -347,7 +347,6 @@ class DrawToolBar(object):
     @staticmethod
     def drawMagnifierOnVideo(widget, dragPos, source, painter):
         ''' Draw Magnifier on Video '''
-        #print (" source : " + str(source.width()) + "   " + str(source.height()))
         oldTransform = painter.transform()
         painter.setTransform(oldTransform)
         painter.setBrush(DrawToolBar.transparent_brush)
@@ -360,23 +359,24 @@ class DrawToolBar(object):
         center = dragPos - QPoint(0, radius)
         center += QPoint(0, radius / 2)
         corner = center - QPoint(radius, radius)
-        xy = center * 2 - QPoint(radius, radius)
+        xy = center * DrawToolBar.MAX_FACTOR - QPoint(radius, radius)
+        
         # only set the dimension to the magnified portion
-        if DrawToolBar.zoomPixmap.size() != box:
-            zoomPixmap = QPixmap(box)
-            zoomPixmap.fill(Qt.lightGray)
+        zoomPixmap = QPixmap(box)
+        zoomPixmap.fill(Qt.black)
 
         painter_p = QPainter(zoomPixmap)
+        painter_p.setRenderHint(QPainter.HighQualityAntialiasing)
         painter_p.translate(-xy)
-        painter_p.drawImage(QPoint(0,0), source)
-        #painter_p.drawImage(widget.surface.videoRect(), source, widget.surface.sourceRect())
+        painter_p.scale(DrawToolBar.MAX_FACTOR, DrawToolBar.MAX_FACTOR)
+        painter_p.drawImage(widget.surface.videoRect(), source, widget.surface.sourceRect())
+        
         painter_p.end()
 
         clipPath = QPainterPath()
         clipPath.addEllipse(QPointF(center), ring, ring)
         painter.setClipPath(clipPath)
         painter.drawPixmap(corner, zoomPixmap)
-        #print (" zoomPixmap : " + str(zoomPixmap.width()) + "   " + str(zoomPixmap.height()))
         painter.setPen(DrawToolBar.glass_pen)
         painter.drawPath(clipPath)
         return
