@@ -617,8 +617,8 @@ class VideoWidget(QVideoWidget):
             if self._MGRS :
                 try:
                     mgrsCoords = mgrs.toMgrs(Latitude, Longitude)
-                except Exception as e:
-                    mgrsCoords = None
+                except Exception:
+                    mgrsCoords = ""
                 
                 txt = "<span style='font-size:9pt; font-weight:normal;'>" + \
                     ("%s" % mgrsCoords) + "</span>"
