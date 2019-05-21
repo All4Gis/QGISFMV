@@ -346,6 +346,42 @@
         </spacer>
        </item>
        <item>
+        <widget class="QComboBox" name="cmb_cursorCoord">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QComboBox::AdjustToContents</enum>
+         </property>
+         <item>
+          <property name="text">
+           <string>WGS84</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>MGRS</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QPushButton" name="btn_CaptureFrame">
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
@@ -2229,6 +2265,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>cmb_cursorCoord</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>MouseLocationCoordinates(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>471</x>
+     <y>512</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>364</x>
+     <y>620</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleGroup(bool)</slot>
@@ -2283,5 +2335,6 @@
   <slot>NDVIFilter(bool)</slot>
   <slot>ExtractCurrentGeoFrame()</slot>
   <slot>VideoMeasureArea(bool)</slot>
+  <slot>MouseLocationCoordinates(int)</slot>
  </slots>
 </ui>

@@ -35,7 +35,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
-
+from QGIS_FMV.geo import mgrs
 
 try:
     from pydevd import *
@@ -240,6 +240,7 @@ class VideoWidget(QVideoWidget):
         self._filterSatate = FilterState()
 
         self._isinit = False
+        self._MGRS = False
         self.gt = None
 
         self.drawCesure = []
@@ -468,6 +469,10 @@ class VideoWidget(QVideoWidget):
     def SetCensure(self, value):
         ''' Set Censure Video Parts '''
         self._interaction.censure = value
+        
+    def SetMGRS(self, value):
+        ''' Set MGRS Cursor Coordinates '''
+        self._MGRS = value
 
     def SetGray(self, value):
         ''' Set gray scale '''
@@ -609,20 +614,31 @@ class VideoWidget(QVideoWidget):
             Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                 event, self.surface)
             
-            txt = "<span style='font-size:10pt; font-weight:bold;'>Lon :</span>"
-            txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
-                ("%.3f" % Longitude) + "</span>"
-            txt += "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>"
-            txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
-                ("%.3f" % Latitude) + "</span>"
-
-            if hasElevationModel():
-                txt += "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>"
-                txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
-                    ("%.0f" % Altitude) + "</span>"
+            if self._MGRS :
+                try:
+                    mgrsCoords = mgrs.toMgrs(Latitude, Longitude)
+                except Exception as e:
+                    mgrsCoords = None
+                
+                txt = "<span style='font-size:9pt; font-weight:normal;'>" + \
+                    ("%s" % mgrsCoords) + "</span>"
+            
             else:
-                txt += "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>"
-                txt += "<span style='font-size:9pt; font-weight:normal;'>-</span>"
+                
+                txt = "<span style='font-size:10pt; font-weight:bold;'>Lon : </span>"
+                txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
+                    ("%.3f" % Longitude) + "</span>"
+                txt += "<span style='font-size:10pt; font-weight:bold;'> Lat : </span>"
+                txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
+                    ("%.3f" % Latitude) + "</span>"
+    
+                if hasElevationModel():
+                    txt += "<span style='font-size:10pt; font-weight:bold;'> Alt : </span>"
+                    txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
+                        ("%.0f" % Altitude) + "</span>"
+                else:
+                    txt += "<span style='font-size:10pt; font-weight:bold;'> Alt : </span>"
+                    txt += "<span style='font-size:9pt; font-weight:normal;'>-</span>"
 
             self.parent.lb_cursor_coord.setText(txt)
 

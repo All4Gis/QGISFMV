@@ -200,6 +200,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             setCenterMode(3, self.iface)
         else:
             setCenterMode(0, self.iface)
+            
+    def MouseLocationCoordinates(self, idx):
+        ''' Set Cursor Video Coordinates , WGS84/MGRS '''
+        if idx == 1:
+            self.videoWidget.SetMGRS(True)
+        else:
+            self.videoWidget.SetMGRS(False)
+            
 
     def HasAudio(self, videoPath):
         """ Check if video have Metadata or not """
