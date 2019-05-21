@@ -25,6 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.6:
+    	- Add Confidential Stamp on video
     	- Add Military Grid Reference System (MGRS) support for video cursor coordinates
     	- Fix magnifier QPainter size/scale
     	- Measure Area Tool

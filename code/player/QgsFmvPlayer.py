@@ -116,6 +116,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         # Object Tracking
         # self.DrawToolBar.addAction(self.actionObject_Tracking)
+        # Stamp
+        self.DrawToolBar.addAction(self.actionStamp)
         
         # Hide Color Button
         self.btn_Color.hide()
@@ -535,6 +537,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetMagnifier(value)
         self.videoWidget.UpdateSurface()
         return
+    
+    def stamp(self, value):
+        ''' Stamo Utils '''
+        self.UncheckUtils(self.sender(), value)
+        self.videoWidget.SetStamp(value)
+        self.videoWidget.UpdateSurface()
+        return
 
     def pointDrawer(self, value):
         ''' Draw Point '''
@@ -626,6 +635,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionMeasureDistance.setChecked(False)
         self.actionMeasureArea.setChecked(False)
         self.actionCensure.setChecked(False)
+        self.actionStamp.setChecked(False)
 
         self.videoWidget.RestoreDrawer()
         self.player.setPlaybackRate(1.0)   

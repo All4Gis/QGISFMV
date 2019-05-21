@@ -1078,6 +1078,18 @@
     <string>Object Tracking</string>
    </property>
   </action>
+  <action name="actionStamp">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/rubber-stamp.png</normaloff>:/imgFMV/images/rubber-stamp.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stamp</string>
+   </property>
+  </action>
   <action name="actionMeasureDistance">
    <property name="checkable">
     <bool>true</bool>
@@ -1946,6 +1958,22 @@
    </hints>
   </connection>
   <connection>
+   <sender>actionStamp</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>stamp(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>370</x>
+     <y>339</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>actionDraw_Polygon</sender>
    <signal>triggered(bool)</signal>
    <receiver>PlayerWindow</receiver>
@@ -2272,8 +2300,8 @@
    <slot>MouseLocationCoordinates(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>471</x>
-     <y>512</y>
+     <x>637</x>
+     <y>523</y>
     </hint>
     <hint type="destinationlabel">
      <x>364</x>
@@ -2336,5 +2364,6 @@
   <slot>ExtractCurrentGeoFrame()</slot>
   <slot>VideoMeasureArea(bool)</slot>
   <slot>MouseLocationCoordinates(int)</slot>
+  <slot>stamp(bool)</slot>
  </slots>
 </ui>

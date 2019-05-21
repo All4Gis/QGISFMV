@@ -18,6 +18,7 @@ from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QApplication
 
+from QGIS_FMV.geo import mgrs
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.utils.QgsFmvLayers import (AddDrawPointOnMap,
                                          AddDrawLineOnMap,
@@ -35,7 +36,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
-from QGIS_FMV.geo import mgrs
+
 
 try:
     from pydevd import *
@@ -58,6 +59,7 @@ class InteractionState(object):
         self.lineDrawer = False
         self.polygonDrawer = False
         self.magnifier = False
+        self.stamp = False
         self.objectTracking = False
         self.censure = False
         self.HandDraw = False
@@ -556,6 +558,10 @@ class VideoWidget(QVideoWidget):
         if self._interaction.magnifier and not self.dragPos.isNull():
             draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
 
+        # Stamp On Video
+        if self._interaction.stamp:
+            draw.drawStampOnVideo(self, self.painter)
+            
         self.painter.end()
         return
 
@@ -779,6 +785,10 @@ class VideoWidget(QVideoWidget):
         if not value:
             self.dragPos = QPoint()
             self.tapTimer.stop()
+            
+    def SetStamp(self, value):
+        """ Set Stamp """
+        self._interaction.stamp = value
 
     def SetPointDrawer(self, value):
         """ Set Point Drawer """

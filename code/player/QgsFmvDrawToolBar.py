@@ -1,14 +1,6 @@
 # -*- coding: utf-8 -*-
-from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
-                                        GetLine3DIntersectionWithPlane,
-                                        GetFrameCenter,
-                                        hasElevationModel)
-
 from qgis.PyQt.QtCore import QSize, QPointF
-from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
 from qgis.PyQt.QtCore import Qt, QPoint
-from QGIS_FMV.geo import sphere
-
 from qgis.PyQt.QtGui import (QPainter,
                          QPainterPath,
                          QColor,
@@ -17,6 +9,17 @@ from qgis.PyQt.QtGui import (QPainter,
                          QPen,
                          QBrush,
                          QPolygonF)
+
+from PyQt5.QtGui import QImage
+
+from QGIS_FMV.geo import sphere
+from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
+                                        GetLine3DIntersectionWithPlane,
+                                        GetFrameCenter,
+                                        hasElevationModel)
+from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
+
+
 try:
     from pydevd import *
 except ImportError:
@@ -54,6 +57,9 @@ class DrawToolBar(object):
     black_brush = QBrush(Qt.black)
     
     bold_12 = QFont("Arial", 12, QFont.Bold)
+    
+    # Stamp Image
+    confidential = QPixmap.fromImage(QImage(":/imgFMV/images/stamp/confidential.png"))
         
           
     @staticmethod
@@ -380,3 +386,9 @@ class DrawToolBar(object):
         painter.setPen(DrawToolBar.glass_pen)
         painter.drawPath(clipPath)
         return
+
+    @staticmethod
+    def drawStampOnVideo(widget, painter):
+        ''' Draw Stamp Confidential on Video '''
+        painter.drawPixmap(widget.surface.videoRect(), DrawToolBar.confidential, widget.surface.sourceRect())
+        
