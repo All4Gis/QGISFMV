@@ -75,6 +75,8 @@
         <file>../images/save_geoframe.png</file> 
         <file>../images/mActionDeleteSelected.svg</file>  
         <file>../images/rubber-stamp.png</file>  
+        <file>../images/custom-options.png</file>  
         <file>../images/stamp/confidential.png</file>  
+        <file>../images/zoom-rectangle.png</file> 
     </qresource>
 </RCC>

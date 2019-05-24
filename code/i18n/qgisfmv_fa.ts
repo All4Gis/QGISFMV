@@ -657,104 +657,109 @@
 <context>
     <name>QgsFmvPlayer</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="315"/>
+        <location filename="../player/QgsFmvPlayer.py" line="318"/>
         <source>Metadata Callback Failed! : </source>
         <translation>بازخوانی متادیتا شکست خورد! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="222"/>
+        <location filename="../player/QgsFmvPlayer.py" line="225"/>
         <source>This video doesn&apos;t have Audio ! </source>
         <translation>این ویدئو بدون صدا می باشد ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="230"/>
+        <location filename="../player/QgsFmvPlayer.py" line="233"/>
         <source>Audio check Failed! : </source>
         <translation>بررسی صدا با شکست مواجه شد! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="448"/>
+        <location filename="../player/QgsFmvPlayer.py" line="451"/>
         <source>Mute/Unmute</source>
         <translation>سکوت/صدا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="453"/>
+        <location filename="../player/QgsFmvPlayer.py" line="456"/>
         <source>Extract All Frames</source>
         <translation>استخراج تمام لحظه ها</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="458"/>
+        <location filename="../player/QgsFmvPlayer.py" line="461"/>
         <source>Extract Current Frame</source>
         <translation>استخراج همین لحظه</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="464"/>
+        <location filename="../player/QgsFmvPlayer.py" line="467"/>
         <source>Show Metadata</source>
         <translation>نمایش متادیتا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1277"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1291"/>
         <source>Video Information : </source>
         <translation>اطلاعات ویدئو :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="269"/>
+        <location filename="../player/QgsFmvPlayer.py" line="272"/>
         <source>Metadata Buffer Failed! : </source>
         <translation>حافشه میانی متادیتا با شکست مواجه شد! : 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1173"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1181"/>
         <source>Save Current Frame</source>
         <translation>ذخیره لحظه حاضر</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="352"/>
+        <location filename="../player/QgsFmvPlayer.py" line="355"/>
         <source>Save Json</source>
         <translation>ذخیره Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="897"/>
+        <location filename="../player/QgsFmvPlayer.py" line="905"/>
         <source>Save video record</source>
         <translation>ذخیره رکورد ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="994"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1002"/>
         <source>Save Video as...</source>
         <translation>ذخیره ویدئو به عنوان ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1136"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1144"/>
         <source>Save all Frames</source>
         <translation>ذخیره همه لحظه ها</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1072"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1080"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>ذخیره جزئیات صدا</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1089"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1097"/>
         <source>Save Video Bitrate Plot</source>
         <translation>ذخیره جزئیات ویدئو</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1204"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1212"/>
         <source>Save Current Georeferenced Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="861"/>
+        <location filename="../player/QgsFmvPlayer.py" line="869"/>
         <source>Playing : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="876"/>
+        <location filename="../player/QgsFmvPlayer.py" line="884"/>
         <source>Open Video File : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1109"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1117"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="472"/>
+        <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -774,7 +779,7 @@
 <context>
     <name>VideoProcessor</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="65"/>
+        <location filename="../player/QgsFmvPlayer.py" line="66"/>
         <source>Error: Missing OpenCV packages</source>
         <translation>خطا: بسته های OpenCV گمشده اند</translation>
     </message>

@@ -26,6 +26,7 @@ from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
 
 from QGIS_FMV.converter.Converter import Converter
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
+from QGIS_FMV.player.QgsFmvOptions import FmvOptions
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.player.QgsFmvMetadata import QgsFmvMetadata
@@ -466,6 +467,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         actionShowMetadata = menu.addAction(QIcon(":/imgFMV/images/show-metadata.png"),
             QCoreApplication.translate("QgsFmvPlayer", "Show Metadata"))
         actionShowMetadata.triggered.connect(self.OpenQgsFmvMetadata)
+        
+        menu.addSeparator()
+        actionOptions = menu.addAction(QIcon(":/imgFMV/images/custom-options.png"),
+            QCoreApplication.translate("QgsFmvPlayer", "Options"))
+        actionOptions.triggered.connect(self.OpenOptions)
 
         menu.exec_(self.mapToGlobal(point))
 
@@ -1266,6 +1272,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.addMetadata(self.data)
         return
+    
+    def OpenOptions(self):
+        """ Open Options Dialog """
+        self.Options = FmvOptions()
+        self.Options.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
+        self.Options.exec_()
 
     def showVideoInfoDialog(self, outjson):
         """ Show Video Information Dialog """

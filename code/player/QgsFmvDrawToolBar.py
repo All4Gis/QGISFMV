@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from qgis.PyQt.QtCore import QSize, QPointF
-from qgis.PyQt.QtCore import Qt, QPoint
+from qgis.PyQt.QtCore import QSize, QPointF, Qt, QPoint, QSettings
 from qgis.PyQt.QtGui import (QPainter,
                          QPainterPath,
                          QColor,
@@ -16,7 +15,8 @@ from QGIS_FMV.geo import sphere
 from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
                                         GetLine3DIntersectionWithPlane,
                                         GetFrameCenter,
-                                        hasElevationModel)
+                                        hasElevationModel,
+                                        getNameSpace)
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
 
 
@@ -61,6 +61,7 @@ class DrawToolBar(object):
     # Stamp Image
     confidential = QPixmap.fromImage(QImage(":/imgFMV/images/stamp/confidential.png"))
         
+    settings = QSettings()
           
     @staticmethod
     def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawMDistance, drawMArea, drawCesure, painter, surface, gt):
@@ -379,8 +380,25 @@ class DrawToolBar(object):
         
         painter_p.end()
 
+        shape_type = DrawToolBar.settings.value(getNameSpace() + "/Options/magnifier/shape")
+
         clipPath = QPainterPath()
-        clipPath.addEllipse(QPointF(center), ring, ring)
+        center = QPointF(center)
+        
+        # Shape Type
+        if shape_type is not None:
+            
+            if shape_type == 0:
+                # Square
+                clipPath.addRect(center.x(),center.y(), magnifierSize, magnifierSize)
+                clipPath.translate(-radius , -radius )
+            else:
+                # Circle
+                clipPath.addEllipse(center, ring, ring)
+        else:
+            # Circle by default
+            clipPath.addEllipse(center, ring, ring)
+
         painter.setClipPath(clipPath)
         painter.drawPixmap(corner, zoomPixmap)
         painter.setPen(DrawToolBar.glass_pen)
