@@ -1277,7 +1277,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Open Options Dialog """
         self.Options = FmvOptions()
         self.Options.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
-        self.Options.exec_()
+        self.Options.show()
 
     def showVideoInfoDialog(self, outjson):
         """ Show Video Information Dialog """

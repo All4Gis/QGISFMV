@@ -95,6 +95,44 @@
     </message>
 </context>
 <context>
+    <name>FmvOpenStream</name>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="20"/>
+        <source>Open Stream</source>
+        <translation type="unfinished">Obrir fitxer MPEG2</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="39"/>
+        <source>RTP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="44"/>
+        <source>UDP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="49"/>
+        <source>TCP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="60"/>
+        <source>127.0.0.1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="73"/>
+        <source>5005</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="87"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ManagerDock</name>
     <message>
         <location filename="../player/QgsManager.py" line="229"/>
@@ -183,6 +221,49 @@
         <location filename="../ui/ui_FmvManager.ui" line="190"/>
         <source>Open Video File</source>
         <translation>Obrir Fitxer de Vídeo</translation>
+    </message>
+</context>
+<context>
+    <name>OptionsDialog</name>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="14"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="28"/>
+        <source>Magnifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="40"/>
+        <source>Maximum size in pixels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="69"/>
+        <source>Magnification factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="94"/>
+        <source>Shape </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="101"/>
+        <source>Square</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="108"/>
+        <source>Circle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="155"/>
+        <source>Accept</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

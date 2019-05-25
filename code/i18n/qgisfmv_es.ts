@@ -95,6 +95,44 @@
     </message>
 </context>
 <context>
+    <name>FmvOpenStream</name>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="20"/>
+        <source>Open Stream</source>
+        <translation>Abir Stream</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="39"/>
+        <source>RTP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="44"/>
+        <source>UDP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="49"/>
+        <source>TCP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="60"/>
+        <source>127.0.0.1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="73"/>
+        <source>5005</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOpenStream.ui" line="87"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ManagerDock</name>
     <message>
         <location filename="../player/QgsManager.py" line="229"/>
@@ -183,6 +221,49 @@
         <location filename="../ui/ui_FmvManager.ui" line="190"/>
         <source>Open Video File</source>
         <translation>Abrir archivo de video</translation>
+    </message>
+</context>
+<context>
+    <name>OptionsDialog</name>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="14"/>
+        <source>Options</source>
+        <translation>Opciones</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="28"/>
+        <source>Magnifier</source>
+        <translation>Lupa</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="40"/>
+        <source>Maximum size in pixels</source>
+        <translation>Tamaño máximo en píxeles</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="69"/>
+        <source>Magnification factor</source>
+        <translation>Factor de aumento</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="94"/>
+        <source>Shape </source>
+        <translation>Forma</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="101"/>
+        <source>Square</source>
+        <translation>Cuadrado</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="108"/>
+        <source>Circle</source>
+        <translation>Circulo</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="155"/>
+        <source>Accept</source>
+        <translation>Aceptar</translation>
     </message>
 </context>
 <context>
@@ -611,7 +692,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1090"/>
         <source>Stamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Marca</translation>
     </message>
 </context>
 <context>
@@ -761,7 +842,7 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="472"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opciones</translation>
     </message>
 </context>
 <context>

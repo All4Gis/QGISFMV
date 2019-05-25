@@ -30,6 +30,8 @@ RulerTotalMeasure = 0.0
 
 class DrawToolBar(object):
     
+    NameSpace = getNameSpace()
+    
     MAX_MAGNIFIER = 250
     MAX_FACTOR = 2
     
@@ -358,6 +360,11 @@ class DrawToolBar(object):
         painter.setTransform(oldTransform)
         painter.setBrush(DrawToolBar.transparent_brush)
         dim = min(widget.width(), widget.height())
+        
+        mSize = DrawToolBar.settings.value(DrawToolBar.NameSpace + "/Options/magnifier/size")
+        if mSize is not None:
+            DrawToolBar.MAX_MAGNIFIER = mSize
+        
         magnifierSize = min(DrawToolBar.MAX_MAGNIFIER, dim * 2 / 3)
         radius = magnifierSize / 2
         ring = radius - 15
@@ -366,6 +373,11 @@ class DrawToolBar(object):
         center = dragPos - QPoint(0, radius)
         center += QPoint(0, radius / 2)
         corner = center - QPoint(radius, radius)
+        
+        mFactor = DrawToolBar.settings.value(DrawToolBar.NameSpace + "/Options/magnifier/factor")
+        if mFactor is not None:
+            DrawToolBar.MAX_FACTOR = mFactor
+            
         xy = center * DrawToolBar.MAX_FACTOR - QPoint(radius, radius)
         
         # only set the dimension to the magnified portion
@@ -380,7 +392,7 @@ class DrawToolBar(object):
         
         painter_p.end()
 
-        shape_type = DrawToolBar.settings.value(getNameSpace() + "/Options/magnifier/shape")
+        shape_type = DrawToolBar.settings.value(DrawToolBar.NameSpace + "/Options/magnifier/shape")
 
         clipPath = QPainterPath()
         center = QPointF(center)

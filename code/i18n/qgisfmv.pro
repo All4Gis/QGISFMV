@@ -2,6 +2,8 @@ FORMS = ../ui/ui_FmvAbout.ui \
 		../ui/ui_ColorDialog.ui \
 		../ui/ui_FmvManager.ui \
 		../ui/ui_FmvMetadata.ui \
+		../ui/ui_FmvOptions.ui \
+		../ui/ui_FmvOpenStream.ui \
 		../ui/ui_FmvPlayer.ui 
 
 SOURCES = ../QgsFmv.py \
@@ -9,6 +11,7 @@ SOURCES = ../QgsFmv.py \
 		  ../player/QgsFmvMetadata.py  \
 		  ../player/QgsFmvAbout.py   \
 		  ../player/QgsManager.py \
+		  ../player/QgsFmvOptions.py \
 		  ../utils/QgsJsonModel.py
 
 TRANSLATIONS = qgisfmv_en.ts \
