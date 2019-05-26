@@ -164,12 +164,12 @@ class FmvLayerStyles(object):
     #
     DP['DEFAULT'] = {}
     DP['DEFAULT']['NAME'] = 'cross'
-    DP['DEFAULT']['LINE_COLOR'] = '#FF0000'
+    DP['DEFAULT']['LINE_COLOR'] = '#DC143C'
     DP['DEFAULT']['LINE_WIDTH'] = '1'
     DP['DEFAULT']['SIZE'] = '4'
     DP['DEFAULT']['LABEL_FONT'] = 'Arial'
     DP['DEFAULT']['LABEL_FONT_SIZE'] = 12
-    DP['DEFAULT']['LABEL_FONT_COLOR'] = 'red'
+    DP['DEFAULT']['LABEL_FONT_COLOR'] = '#DC143C'
     DP['DEFAULT']['LABEL_SIZE'] = 12
     DP['DEFAULT']['LABEL_BUFFER_COLOR'] = 'white'
 
@@ -177,15 +177,15 @@ class FmvLayerStyles(object):
     # DRAWINGS LINE STYLES
     #
     DL['DEFAULT'] = {}
-    DL['DEFAULT']['COLOR'] = QColor.fromRgb(245, 255, 15)
+    DL['DEFAULT']['COLOR'] = QColor.fromRgb(252,215,108)
     DL['DEFAULT']['WIDTH'] = 1
 
     #
     # DRAWINGS POLYGONS STYLES
     #
     DPL['DEFAULT'] = {}
-    DPL['DEFAULT']['COLOR'] = '176, 255, 128, 28'
-    DPL['DEFAULT']['OUTLINE_COLOR'] = '#B0FF80'
+    DPL['DEFAULT']['COLOR'] = '252, 215, 108, 100'
+    DPL['DEFAULT']['OUTLINE_COLOR'] = '#FCD76C'
     DPL['DEFAULT']['OUTLINE_STYLE'] = 'solid'
     DPL['DEFAULT']['OUTLINE_WIDTH'] = '1'
 

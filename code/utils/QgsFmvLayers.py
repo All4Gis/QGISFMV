@@ -961,6 +961,59 @@ def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
     symbol.setColor(QColor.fromRgba(style['COLOR']))
     return
 
+# def UpdateStylesDrawLayers(NameSpace):
+#     ''' Update Symbology Drawing Layers '''
+#     s = QSettings()
+#     settrace()
+#     pointLyr = qgsu.selectLayerByName(Point_lyr)
+#     if pointLyr is None:
+#         return
+#     
+#     style = S.getDrawingPoint()
+#     LINE_COLOR = s.value(NameSpace + "/Options/drawings/points/pen")
+#     
+#     symbol = QgsMarkerSymbol.createSimple(
+#         {'name': style["NAME"],
+#          'line_color': LINE_COLOR.name(),
+#          'line_width': s.value(NameSpace + "/Options/drawings/points/width"),
+#          'size': style["SIZE"]})
+#     
+#     renderer = QgsSingleSymbolRenderer(symbol)
+#     pointLyr.setRenderer(renderer)
+#     CommonLayer(pointLyr)
+#         
+#     linelyr = qgsu.selectLayerByName(Line_lyr)
+#     if linelyr is None:
+#         return
+#     
+#     style = S.getDrawingLine()
+#     symbol = linelyr.renderer().symbol()
+#     
+#     COLOR = s.value(NameSpace + "/Options/drawings/lines/pen")
+#     
+#     symbol.setColor(COLOR.name())
+#     symbol.setWidth(s.value(NameSpace + "/Options/drawings/lines/width"))
+#     CommonLayer(linelyr)
+#         
+#     polyLyr = qgsu.selectLayerByName(Polygon_lyr)
+#     if polyLyr is None:
+#         return
+#     
+#     style = S.getDrawingPolygon()
+#     
+#     OUTLINE_COLOR = s.value(NameSpace + "/Options/drawings/polygons/pen")
+#     COLOR = s.value(NameSpace + "/Options/drawings/polygons/brush")
+#     
+#     fill_sym = QgsFillSymbol.createSimple({'color': COLOR.name(),
+#                                        'outline_color': OUTLINE_COLOR.name(),
+#                                        'outline_style': style['OUTLINE_STYLE'],
+#                                        'outline_width': s.value(NameSpace + "/Options/drawings/polygons/width")})
+#     
+#     renderer = QgsSingleSymbolRenderer(fill_sym)
+#     polyLyr.setRenderer(renderer)
+#     CommonLayer(polyLyr)
+#     QApplication.processEvents()
+#     return
 
 def addLayer(layer, loadInLegend=True, group=None):
     """

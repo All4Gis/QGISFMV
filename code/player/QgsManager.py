@@ -16,6 +16,7 @@ import qgis.utils
 
 from PyQt5.QtGui import QColor
 
+from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.converter.ffmpeg import FFMpeg
 from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
 from QGIS_FMV.player.QgsFmvOpenStream import OpenStream
@@ -78,6 +79,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             filename = s.value(getNameSpace() + "/Manager_List/"+load_id)
             _, name = os.path.split(filename)
             self.AddFileRowToManager(name, filename, load_id)
+            
+        draw.setValues()
             
     def eventFilter(self, source, event):
         ''' Event Filter '''

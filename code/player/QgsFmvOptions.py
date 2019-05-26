@@ -7,6 +7,7 @@ from PyQt5.QtGui import QColor
 from QGIS_FMV.gui.ui_FmvOptions import Ui_OptionsDialog
 from QGIS_FMV.utils.QgsFmvUtils import getNameSpace
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
+#from QGIS_FMV.utils.QgsFmvLayers import UpdateStylesDrawLayers
 
 try:
     from pydevd import *
@@ -70,6 +71,8 @@ class FmvOptions(QDialog, Ui_OptionsDialog):
         self.settings.setValue(self.NameSpace + "/Options/drawings/measures/brush", self.measures_brush.color())
         
         draw.setValues(self)
+        
+        #UpdateStylesDrawLayers(self.NameSpace)
         
         self.close()
         return

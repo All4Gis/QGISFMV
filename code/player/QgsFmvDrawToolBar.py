@@ -18,7 +18,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
                                         hasElevationModel,
                                         getNameSpace)
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
-
+from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
 
 try:
     from pydevd import *
@@ -30,16 +30,23 @@ MAX_MAGNIFIER = 250
 MAX_FACTOR = 2
 TYPE_MAGNIFIER = 1
 
+# Polygon Draw
+style = S.getDrawingPolygon()
 PolyWidth = 3
-PolyPen = QPen(QColor(252,215,108),PolyWidth)
+PolyPen = QPen(QColor(style['OUTLINE_COLOR']),PolyWidth)
 PolyBrush = QBrush(QColor(252,215,108, 100))
 
+# Point Draw
+style = S.getDrawingPoint()
 PointWidth = 10
-PointPen = QPen(QColor(220, 20, 60), PointWidth, cap=Qt.RoundCap)
+PointPen = QPen(QColor(style["LINE_COLOR"]), PointWidth, cap=Qt.RoundCap)
 
+# Line Draw
+style = S.getDrawingLine()
 LineWidth = 3
-LinePen = QPen(QColor(252,215,108),LineWidth)
+LinePen = QPen(QColor(style['COLOR']),LineWidth)
 
+# Measure Draw
 MeasureWidth = 3
 MeasurePen = QPen(QColor(185, 224, 175),MeasureWidth, cap=Qt.RoundCap, join=Qt.RoundJoin)
 MeasureBrush = QBrush(QColor(185, 224, 175, 100))
@@ -67,7 +74,7 @@ class DrawToolBar(object):
     confidential = QPixmap.fromImage(QImage(":/imgFMV/images/stamp/confidential.png"))
 
     @staticmethod
-    def setValues(options):
+    def setValues(options=None):
         ''' Function to set Drawing Values '''
         s = QSettings()
         
@@ -77,24 +84,27 @@ class DrawToolBar(object):
         if shape_type is not None:
             global TYPE_MAGNIFIER
             TYPE_MAGNIFIER = shape_type
-            if TYPE_MAGNIFIER == 0:
-                # Square
-                options.rB_Square_m.setChecked(True)
-            else:
-                # Circle
-                options.rB_Circle_m.setChecked(True)   
+            if options is not None:
+                if TYPE_MAGNIFIER == 0:
+                    # Square
+                    options.rB_Square_m.setChecked(True)
+                else:
+                    # Circle
+                    options.rB_Circle_m.setChecked(True)   
             
         mFactor = s.value(DrawToolBar.NameSpace + "/Options/magnifier/factor")
         if mFactor is not None:
             global MAX_FACTOR
-            MAX_FACTOR = int(mFactor) 
-            options.sb_factor.setValue(MAX_FACTOR)  
+            MAX_FACTOR = int(mFactor)
+            if options is not None:
+                options.sb_factor.setValue(MAX_FACTOR)  
         
         mSize = s.value(DrawToolBar.NameSpace + "/Options/magnifier/size")
         if mSize is not None:
             global MAX_MAGNIFIER
             MAX_MAGNIFIER = int(mSize)
-            options.sl_Size.setValue(MAX_MAGNIFIER) 
+            if options is not None:
+                options.sl_Size.setValue(MAX_MAGNIFIER) 
             
         ####### Drawings #######
         
@@ -102,7 +112,8 @@ class DrawToolBar(object):
         if poly_w is not None:
             global PolyWidth
             PolyWidth = int(poly_w)
-            options.poly_width.setValue(PolyWidth)  
+            if options is not None:
+                options.poly_width.setValue(PolyWidth)  
             
         poly_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/pen")
         if poly_p is not None:
@@ -110,19 +121,22 @@ class DrawToolBar(object):
             PolyPen =  QPen(QColor(poly_p))
             PolyPen.setCapStyle(Qt.RoundCap)
             PolyPen.setWidth(PolyWidth)
-            options.poly_pen.setColor(QColor(poly_p))
+            if options is not None:
+                options.poly_pen.setColor(QColor(poly_p))
         
         poly_b = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/brush")
         if poly_b is not None:
             global PolyBrush
             PolyBrush = QBrush(QColor(poly_b))
-            options.poly_brush.setColor(QColor(poly_b)) 
+            if options is not None:
+                options.poly_brush.setColor(QColor(poly_b)) 
         
         point_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/points/width")
         if point_w is not None:
             global PointWidth
             PointWidth = int(point_w)
-            options.point_width.setValue(PointWidth)  
+            if options is not None:
+                options.point_width.setValue(PointWidth)  
             
         point_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/points/pen")
         if point_p is not None:
@@ -130,13 +144,15 @@ class DrawToolBar(object):
             PointPen = QPen(QColor(point_p))
             PointPen.setCapStyle(Qt.RoundCap)
             PointPen.setWidth(PointWidth)
-            options.point_pen.setColor(QColor(point_p))                
+            if options is not None:
+                options.point_pen.setColor(QColor(point_p))                
         
         line_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/lines/width")
         if line_w is not None:
             global LineWidth
             LineWidth = int(line_w)
-            options.lines_width.setValue(LineWidth)  
+            if options is not None:
+                options.lines_width.setValue(LineWidth)  
         
         line_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/lines/pen")
         if line_p is not None:
@@ -144,13 +160,15 @@ class DrawToolBar(object):
             LinePen = QPen(QColor(line_p))
             LinePen.setCapStyle(Qt.RoundCap)
             LinePen.setWidth(LineWidth)
-            options.lines_pen.setColor(QColor(line_p))    
+            if options is not None:
+                options.lines_pen.setColor(QColor(line_p))    
         
         measure_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/width")
         if measure_w is not None:
             global MeasureWidth
             MeasureWidth = int(measure_w)
-            options.measures_width.setValue(MeasureWidth)   
+            if options is not None:
+                options.measures_width.setValue(MeasureWidth)   
         
         measure_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/pen")
         if measure_p is not None:
@@ -158,15 +176,16 @@ class DrawToolBar(object):
             MeasurePen = QPen(QColor(measure_p))
             MeasurePen.setCapStyle(Qt.RoundCap)
             MeasurePen.setWidth(MeasureWidth)
-            options.measures_pen.setColor(QColor(measure_p))   
+            if options is not None:
+                options.measures_pen.setColor(QColor(measure_p))   
         
         measure_b = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/brush")
         if measure_b is not None:
             global MeasureBrush
             MeasureBrush = QBrush(QColor(measure_b))
-            options.measures_brush.setColor(QColor(measure_b))   
-            
-            
+            if options is not None:
+                options.measures_brush.setColor(QColor(measure_b))   
+  
         return
           
     @staticmethod
