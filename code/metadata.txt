@@ -25,7 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.6:
-    	- Start Option menu for changes default values (Only magnifier for now)
+    	- Start Option menu for changes default values (Magnifier, Drawings colors ...) on Video
     	- Add Confidential Stamp on video
     	- Add Military Grid Reference System (MGRS) support for video cursor coordinates
     	- Fix magnifier QPainter size/scale

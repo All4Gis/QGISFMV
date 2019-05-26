@@ -78,7 +78,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             filename = s.value(getNameSpace() + "/Manager_List/"+load_id)
             _, name = os.path.split(filename)
             self.AddFileRowToManager(name, filename, load_id)
-
+            
     def eventFilter(self, source, event):
         ''' Event Filter '''
         if (event.type() == QEvent.MouseButtonPress and source is self.VManager.viewport() and self.VManager.itemAt(event.pos()) is None):

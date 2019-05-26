@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>461</width>
-    <height>256</height>
+    <height>561</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -129,6 +129,397 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Drawings</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { font-weight: bold; }</string>
+         </property>
+         <property name="title">
+          <string>Polygons</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="poly_width">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Pen Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="poly_pen">
+              <property name="color">
+               <color>
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color>
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>brush Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="poly_brush">
+              <property name="color">
+               <color alpha="100">
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color alpha="100">
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { font-weight: bold; }</string>
+         </property>
+         <property name="title">
+          <string>Points</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="point_width">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>20</number>
+              </property>
+              <property name="value">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Pen Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="point_pen">
+              <property name="color">
+               <color>
+                <red>220</red>
+                <green>20</green>
+                <blue>60</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color>
+                <red>220</red>
+                <green>20</green>
+                <blue>60</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { font-weight: bold; }</string>
+         </property>
+         <property name="title">
+          <string>Lines</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="lines_width">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Pen Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="lines_pen">
+              <property name="color">
+               <color>
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color>
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { font-weight: bold; }</string>
+         </property>
+         <property name="title">
+          <string>Measures</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="measures_width">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Pen Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="measures_pen">
+              <property name="color">
+               <color>
+                <red>185</red>
+                <green>224</green>
+                <blue>175</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color>
+                <red>185</red>
+                <green>224</green>
+                <blue>175</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>brush Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="measures_brush">
+              <property name="color">
+               <color alpha="100">
+                <red>185</red>
+                <green>224</green>
+                <blue>175</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color alpha="100">
+                <red>185</red>
+                <green>224</green>
+                <blue>175</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -160,6 +551,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsColorButton</class>
+   <extends>QToolButton</extends>
+   <header>qgscolorbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>

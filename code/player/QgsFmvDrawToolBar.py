@@ -26,34 +26,37 @@ except ImportError:
     None
 
 RulerTotalMeasure = 0.0
+MAX_MAGNIFIER = 250
+MAX_FACTOR = 2
+TYPE_MAGNIFIER = 1
 
+PolyWidth = 3
+PolyPen = QPen(QColor(252,215,108),PolyWidth)
+PolyBrush = QBrush(QColor(252,215,108, 100))
+
+PointWidth = 10
+PointPen = QPen(QColor(220, 20, 60), PointWidth, cap=Qt.RoundCap)
+
+LineWidth = 3
+LinePen = QPen(QColor(252,215,108),LineWidth)
+
+MeasureWidth = 3
+MeasurePen = QPen(QColor(185, 224, 175),MeasureWidth, cap=Qt.RoundCap, join=Qt.RoundJoin)
+MeasureBrush = QBrush(QColor(185, 224, 175, 100))
 
 class DrawToolBar(object):
     
     NameSpace = getNameSpace()
-    
-    MAX_MAGNIFIER = 250
-    MAX_FACTOR = 2
-    
-    line_width = 3
-    yellow_pen = QPen(QColor(252,215,108),line_width) 
-
+ 
     small_pt = 5
     white_pen = QPen(Qt.white, small_pt)
     white_pen.setCapStyle(Qt.RoundCap)
     
     black_pen = QPen(Qt.black, small_pt)
     black_pen.setCapStyle(Qt.RoundCap)
-    
-    green_pen = QPen(QColor(185, 224, 175),line_width, cap=Qt.RoundCap, join=Qt.RoundJoin)
-
-    big_radius = 10
-    red_pen = QPen(QColor(220, 20, 60), big_radius, cap=Qt.RoundCap)
-    
+ 
     glass_pen = QPen(QColor(192, 192, 192, 128), 3)
-    
-    green_brush = QBrush(QColor(185, 224, 175, 100))
-    yellow_brush = QBrush(QColor(252,215,108, 100))
+
     transparent_brush = QBrush(Qt.transparent)
     
     black_brush = QBrush(Qt.black)
@@ -62,11 +65,113 @@ class DrawToolBar(object):
     
     # Stamp Image
     confidential = QPixmap.fromImage(QImage(":/imgFMV/images/stamp/confidential.png"))
+
+    @staticmethod
+    def setValues(options):
+        ''' Function to set Drawing Values '''
+        s = QSettings()
         
-    settings = QSettings()
+        ####### Magnifier Glass #######
+        
+        shape_type = s.value(DrawToolBar.NameSpace + "/Options/magnifier/shape")
+        if shape_type is not None:
+            global TYPE_MAGNIFIER
+            TYPE_MAGNIFIER = shape_type
+            if TYPE_MAGNIFIER == 0:
+                # Square
+                options.rB_Square_m.setChecked(True)
+            else:
+                # Circle
+                options.rB_Circle_m.setChecked(True)   
+            
+        mFactor = s.value(DrawToolBar.NameSpace + "/Options/magnifier/factor")
+        if mFactor is not None:
+            global MAX_FACTOR
+            MAX_FACTOR = int(mFactor) 
+            options.sb_factor.setValue(MAX_FACTOR)  
+        
+        mSize = s.value(DrawToolBar.NameSpace + "/Options/magnifier/size")
+        if mSize is not None:
+            global MAX_MAGNIFIER
+            MAX_MAGNIFIER = int(mSize)
+            options.sl_Size.setValue(MAX_MAGNIFIER) 
+            
+        ####### Drawings #######
+        
+        poly_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/width")
+        if poly_w is not None:
+            global PolyWidth
+            PolyWidth = int(poly_w)
+            options.poly_width.setValue(PolyWidth)  
+            
+        poly_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/pen")
+        if poly_p is not None:
+            global PolyPen
+            PolyPen =  QPen(QColor(poly_p))
+            PolyPen.setCapStyle(Qt.RoundCap)
+            PolyPen.setWidth(PolyWidth)
+            options.poly_pen.setColor(QColor(poly_p))
+        
+        poly_b = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/brush")
+        if poly_b is not None:
+            global PolyBrush
+            PolyBrush = QBrush(QColor(poly_b))
+            options.poly_brush.setColor(QColor(poly_b)) 
+        
+        point_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/points/width")
+        if point_w is not None:
+            global PointWidth
+            PointWidth = int(point_w)
+            options.point_width.setValue(PointWidth)  
+            
+        point_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/points/pen")
+        if point_p is not None:
+            global PointPen
+            PointPen = QPen(QColor(point_p))
+            PointPen.setCapStyle(Qt.RoundCap)
+            PointPen.setWidth(PointWidth)
+            options.point_pen.setColor(QColor(point_p))                
+        
+        line_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/lines/width")
+        if line_w is not None:
+            global LineWidth
+            LineWidth = int(line_w)
+            options.lines_width.setValue(LineWidth)  
+        
+        line_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/lines/pen")
+        if line_p is not None:
+            global LinePen
+            LinePen = QPen(QColor(line_p))
+            LinePen.setCapStyle(Qt.RoundCap)
+            LinePen.setWidth(LineWidth)
+            options.lines_pen.setColor(QColor(line_p))    
+        
+        measure_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/width")
+        if measure_w is not None:
+            global MeasureWidth
+            MeasureWidth = int(measure_w)
+            options.measures_width.setValue(MeasureWidth)   
+        
+        measure_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/pen")
+        if measure_p is not None:
+            global MeasurePen
+            MeasurePen = QPen(QColor(measure_p))
+            MeasurePen.setCapStyle(Qt.RoundCap)
+            MeasurePen.setWidth(MeasureWidth)
+            options.measures_pen.setColor(QColor(measure_p))   
+        
+        measure_b = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/brush")
+        if measure_b is not None:
+            global MeasureBrush
+            MeasureBrush = QBrush(QColor(measure_b))
+            options.measures_brush.setColor(QColor(measure_b))   
+            
+            
+        return
           
     @staticmethod
     def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawMDistance, drawMArea, drawCesure, painter, surface, gt):
+        ''' Function to paint over the video '''
         # Draw clicked points on video
         for position, pt in enumerate(drawPtPos):
             DrawToolBar.drawPointOnVideo(position + 1, pt, painter, surface, gt)
@@ -165,7 +270,7 @@ class DrawToolBar(object):
        
         center = QPoint(scr_x, scr_y)
         
-        painter.setPen(DrawToolBar.red_pen)
+        painter.setPen(PointPen)
         painter.drawPoint(center)
         painter.setFont(DrawToolBar.bold_12)
         painter.drawText(center + QPoint(5, -5), str(number))
@@ -183,7 +288,7 @@ class DrawToolBar(object):
 
         center = QPoint(scr_x, scr_y)
 
-        painter.setPen(DrawToolBar.yellow_pen)
+        painter.setPen(LinePen)
 
         if len(drawLines) > 1:
             try:
@@ -222,9 +327,9 @@ class DrawToolBar(object):
         path = QPainterPath()
         path.addPolygon(polygon)
 
-        painter.setPen(DrawToolBar.yellow_pen)
+        painter.setPen(PolyPen)
         painter.drawPolygon(polygon)
-        painter.fillPath(path, DrawToolBar.yellow_brush)
+        painter.fillPath(path, PolyBrush)
         painter.setPen(DrawToolBar.white_pen)
         painter.drawPoints(polygon)
         return
@@ -248,7 +353,7 @@ class DrawToolBar(object):
 
         if len(drawMDistance) > 1:
             try:
-                painter.setPen(DrawToolBar.green_pen)
+                painter.setPen(MeasurePen)
 
                 end_pt = drawMDistance[idx + 1]
 
@@ -270,7 +375,7 @@ class DrawToolBar(object):
                 RulerTotalMeasure += distance
 
                 # Line lenght
-                painter.setPen(DrawToolBar.green_pen)
+                painter.setPen(MeasurePen)
                 painter.drawText(end + QPoint(5, -10), text)
 
                 painter.setPen(DrawToolBar.white_pen)
@@ -326,9 +431,10 @@ class DrawToolBar(object):
         path.addPolygon(polygon)
         
         painter.setFont(DrawToolBar.bold_12)
-        painter.setPen(DrawToolBar.green_pen)
+
+        painter.setPen(MeasurePen)
         painter.drawPolygon(polygon)
-        painter.fillPath(path, DrawToolBar.green_brush)
+        painter.fillPath(path, MeasureBrush)
         painter.setPen(DrawToolBar.white_pen)
         painter.drawPoints(polygon)
         
@@ -361,11 +467,7 @@ class DrawToolBar(object):
         painter.setBrush(DrawToolBar.transparent_brush)
         dim = min(widget.width(), widget.height())
         
-        mSize = DrawToolBar.settings.value(DrawToolBar.NameSpace + "/Options/magnifier/size")
-        if mSize is not None:
-            DrawToolBar.MAX_MAGNIFIER = mSize
-        
-        magnifierSize = min(DrawToolBar.MAX_MAGNIFIER, dim * 2 / 3)
+        magnifierSize = min(MAX_MAGNIFIER, dim * 2 / 3)
         radius = magnifierSize / 2
         ring = radius - 15
         box = QSize(magnifierSize,magnifierSize)
@@ -373,12 +475,8 @@ class DrawToolBar(object):
         center = dragPos - QPoint(0, radius)
         center += QPoint(0, radius / 2)
         corner = center - QPoint(radius, radius)
-        
-        mFactor = DrawToolBar.settings.value(DrawToolBar.NameSpace + "/Options/magnifier/factor")
-        if mFactor is not None:
-            DrawToolBar.MAX_FACTOR = mFactor
-            
-        xy = center * DrawToolBar.MAX_FACTOR - QPoint(radius, radius)
+                    
+        xy = center * MAX_FACTOR - QPoint(radius, radius)
         
         # only set the dimension to the magnified portion
         zoomPixmap = QPixmap(box)
@@ -387,28 +485,21 @@ class DrawToolBar(object):
         painter_p = QPainter(zoomPixmap)
         painter_p.setRenderHint(QPainter.HighQualityAntialiasing)
         painter_p.translate(-xy)
-        painter_p.scale(DrawToolBar.MAX_FACTOR, DrawToolBar.MAX_FACTOR)
+        painter_p.scale(MAX_FACTOR, MAX_FACTOR)
         painter_p.drawImage(widget.surface.videoRect(), source, widget.surface.sourceRect())
         
         painter_p.end()
-
-        shape_type = DrawToolBar.settings.value(DrawToolBar.NameSpace + "/Options/magnifier/shape")
 
         clipPath = QPainterPath()
         center = QPointF(center)
         
         # Shape Type
-        if shape_type is not None:
-            
-            if shape_type == 0:
-                # Square
-                clipPath.addRect(center.x(),center.y(), magnifierSize, magnifierSize)
-                clipPath.translate(-radius , -radius )
-            else:
-                # Circle
-                clipPath.addEllipse(center, ring, ring)
+        if TYPE_MAGNIFIER == 0:
+            # Square
+            clipPath.addRect(center.x(),center.y(), magnifierSize, magnifierSize)
+            clipPath.translate(-radius , -radius )
         else:
-            # Circle by default
+            # Circle
             clipPath.addEllipse(center, ring, ring)
 
         painter.setClipPath(clipPath)

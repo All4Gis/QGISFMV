@@ -1330,5 +1330,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.VideoInfoDialog.hide()
         except Exception:
             None
+
+        # We close Options dialog if it is open
+        try:
+            self.Options.hide()
+        except Exception:
+            None
+
         # Restore Filters State
         self.videoWidget.RestoreFilters()

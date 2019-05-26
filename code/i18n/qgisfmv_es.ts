@@ -261,9 +261,49 @@
         <translation>Circulo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvOptions.ui" line="155"/>
+        <location filename="../ui/ui_FmvOptions.ui" line="546"/>
         <source>Accept</source>
         <translation>Aceptar</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="134"/>
+        <source>Drawings</source>
+        <translation>Dibujos</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="149"/>
+        <source>Polygons</source>
+        <translation>Poligonos</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="413"/>
+        <source>Width</source>
+        <translation>Ancho</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="433"/>
+        <source>Pen Color</source>
+        <translation>Color de la pluma</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="465"/>
+        <source>brush Color</source>
+        <translation>Color de la brocha</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="261"/>
+        <source>Points</source>
+        <translation>Puntos</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="328"/>
+        <source>Lines</source>
+        <translation>Líneas</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="402"/>
+        <source>Measures</source>
+        <translation>Medidas</translation>
     </message>
 </context>
 <context>

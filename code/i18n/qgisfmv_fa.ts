@@ -261,8 +261,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvOptions.ui" line="155"/>
+        <location filename="../ui/ui_FmvOptions.ui" line="546"/>
         <source>Accept</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="134"/>
+        <source>Drawings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="149"/>
+        <source>Polygons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="413"/>
+        <source>Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="433"/>
+        <source>Pen Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="465"/>
+        <source>brush Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="261"/>
+        <source>Points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="328"/>
+        <source>Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvOptions.ui" line="402"/>
+        <source>Measures</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
