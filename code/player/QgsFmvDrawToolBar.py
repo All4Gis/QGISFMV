@@ -18,7 +18,6 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
                                         hasElevationModel,
                                         getNameSpace)
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
-from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
 
 try:
     from pydevd import *
@@ -31,20 +30,17 @@ MAX_FACTOR = 2
 TYPE_MAGNIFIER = 1
 
 # Polygon Draw
-style = S.getDrawingPolygon()
 PolyWidth = 3
-PolyPen = QPen(QColor(style['OUTLINE_COLOR']),PolyWidth)
+PolyPen = QPen(QColor(252,215,108),PolyWidth)
 PolyBrush = QBrush(QColor(252,215,108, 100))
 
 # Point Draw
-style = S.getDrawingPoint()
 PointWidth = 10
-PointPen = QPen(QColor(style["LINE_COLOR"]), PointWidth, cap=Qt.RoundCap)
+PointPen = QPen(QColor(220,20,60), PointWidth, cap=Qt.RoundCap)
 
 # Line Draw
-style = S.getDrawingLine()
 LineWidth = 3
-LinePen = QPen(QColor(style['COLOR']),LineWidth)
+LinePen = QPen(QColor(252,215,108),LineWidth)
 
 # Measure Draw
 MeasureWidth = 3
