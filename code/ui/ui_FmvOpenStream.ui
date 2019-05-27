@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>355</width>
-    <height>71</height>
+    <height>83</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -84,7 +84,7 @@
         <cursorShape>PointingHandCursor</cursorShape>
        </property>
        <property name="text">
-        <string>Ok</string>
+        <string>Accept</string>
        </property>
       </widget>
      </item>
