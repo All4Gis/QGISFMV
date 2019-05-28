@@ -15,6 +15,7 @@ except ImportError:
     None
 
 # TODO :Make this functionality
+# This is just a proof of concept
 
 
 class UDPClient(QDialog):

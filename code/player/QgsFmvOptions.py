@@ -2,8 +2,6 @@
 from qgis.PyQt.QtCore import QUrl, Qt, QSettings, QPoint
 from qgis.PyQt.QtWidgets import QDialog, QStyleOptionSlider, QToolTip
 
-from PyQt5.QtGui import QColor
-
 from QGIS_FMV.gui.ui_FmvOptions import Ui_OptionsDialog
 from QGIS_FMV.utils.QgsFmvUtils import getNameSpace
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
