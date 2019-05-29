@@ -423,15 +423,16 @@ def askForFolder(parent, msg=None, options=QFileDialog.ShowDirsOnly):
     return folder
 
 
-def convertQImageToMat(img):
+def convertQImageToMat(img, cn=3):
     '''  Converts a QImage into an opencv MAT format  '''
+    # TODO : The correct values is 4 not 3 and not RGB888
     img = img.convertToFormat(QImage.Format_RGB888)
     ptr = img.bits()
     ptr.setsize(img.byteCount())
-    return np.array(ptr).reshape(img.height(), img.width(), 3)
+    return np.array(ptr).reshape(img.height(), img.width(), cn)
 
 
-def convertMatToQImage(img):
+def convertMatToQImage(img, t= QImage.Format_RGB888):
     '''  Converts an opencv MAT image to a QImage  '''
     height, width = img.shape[:2]
     if img.ndim == 3:
@@ -440,7 +441,7 @@ def convertMatToQImage(img):
         rgb = cvtColor(img, COLOR_GRAY2RGB)
     else:
         raise Exception("Unstatistified image data format!")
-    return QImage(rgb, width, height, QImage.Format_RGB888)
+    return QImage(rgb, width, height, t)
 
 
 def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat):

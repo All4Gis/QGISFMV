@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-from qgis.PyQt.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize
+from qgis.PyQt.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize, QRectF
 from qgis.PyQt.QtGui import (QImage,
                          QPalette,
                          QPainter,
+                         QPen,
                          QColor,
                          QBrush,
                          QCursor)
 from qgis.PyQt.QtWidgets import QRubberBand
-from qgis.core import Qgis as QGis, QgsPointXY
+from qgis.core import QgsPointXY, QgsWkbTypes
 from qgis.gui import QgsRubberBand
 from qgis.utils import iface
 
@@ -44,7 +45,7 @@ except ImportError:
     None
 
 try:
-    from cv2 import TrackerMOSSE_create
+    from cv2 import TrackerMOSSE_create, resize
 except ImportError:
     None
 
@@ -226,13 +227,13 @@ class VideoWidget(QVideoWidget):
         super().__init__(parent)
         self.surface = VideoWidgetSurface(self)
         self.setAttribute(Qt.WA_OpaquePaintEvent)
-        self.Tracking_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
+        self.Tracking_Video_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
 
         self.Censure_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
 
         pal = QPalette()
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
-        self.Tracking_RubberBand.setPalette(pal)
+        self.Tracking_Video_RubberBand.setPalette(pal)
 
         pal = QPalette()
         pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.black)))
@@ -247,15 +248,25 @@ class VideoWidget(QVideoWidget):
 
         self.drawCesure = []
         self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawMeasureDistance,self.drawMeasureArea, self.drawPolygon = [], [],[], [], [], []
-        self.poly_RubberBand = QgsRubberBand(
+        # Draw Polygon Canvas Rubberband
+        self.poly_Canvas_RubberBand = QgsRubberBand(
             iface.mapCanvas(), True)  # Polygon type
         # set rubber band style
         color = QColor(176, 255, 128)
-        self.poly_RubberBand.setColor(color)
+        self.poly_Canvas_RubberBand.setColor(color)
         color.setAlpha(190)
-        self.poly_RubberBand.setStrokeColor(color)
-        self.poly_RubberBand.setWidth(3)
+        self.poly_Canvas_RubberBand.setStrokeColor(color)
+        self.poly_Canvas_RubberBand.setWidth(3)
 
+        # Tracking Canvas Rubberband
+        self.Track_Canvas_RubberBand = QgsRubberBand(
+            iface.mapCanvas(), QgsWkbTypes.LineGeometry)
+        # set rubber band style
+        color = QColor(Qt.blue)
+        self.Track_Canvas_RubberBand.setColor(color)
+        self.Track_Canvas_RubberBand.setStrokeColor(color)
+        self.Track_Canvas_RubberBand.setWidth(10)
+        
         self.parent = parent.parent()
 
         palette = self.palette()
@@ -265,6 +276,7 @@ class VideoWidget(QVideoWidget):
         self.origin, self.dragPos = QPoint(), QPoint()
         self.tapTimer = QBasicTimer()
         self.brush = QBrush(QColor(Qt.black))
+        self.blue_Pen = QPen(QColor(Qt.blue),3)
 
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
@@ -419,8 +431,8 @@ class VideoWidget(QVideoWidget):
             self.drawPolygon.append([None, None, None])
 
             # Empty RubberBand
-            for _ in range(self.poly_RubberBand.numberOfVertices()):
-                self.poly_RubberBand.removeLastPoint()
+            for _ in range(self.poly_Canvas_RubberBand.numberOfVertices()):
+                self.poly_Canvas_RubberBand.removeLastPoint()
             # Empty List
             self.poly_coordinates = []
             return
@@ -510,6 +522,11 @@ class VideoWidget(QVideoWidget):
         # Magnifier Glass
         self.dragPos = QPoint()
         self.tapTimer.stop()
+        
+    def RemoveCanvasRubberbands(self):
+        ''' Remove Canvas Rubberbands '''
+        self.poly_Canvas_RubberBand.reset()
+        self.Track_Canvas_RubberBand.reset()
 
     def paintEvent(self, event):
         ''' Paint Event '''
@@ -541,18 +558,34 @@ class VideoWidget(QVideoWidget):
         # Draw On Video Object tracking test
         if self._interaction.objectTracking and self._isinit:
             frame = convertQImageToMat(self.currentFrame())
+            offset = self.surface.videoRect()
             # Update tracker
-            ok, bbox = self.tracker.update(frame)
+            result = resize(frame,(offset.width(),offset.height()))
+            ok, bbox = self.tracker.update(result)
+#             print (ok)
+#             print (bbox)
             # Draw bounding box
             if ok:
-                print("bbox Traking: ", str(bbox))
-                self.painter.setPen(Qt.blue)
-                self.painter.drawRect(int(bbox[0]), int(
-                    bbox[1]), int(bbox[2]), int(bbox[3]))
+                # check negative values
+                x = bbox[0] + offset.x()
+                y = bbox[1] + offset.y()
+                if x >= 0:
+                    self.painter.setPen(self.blue_Pen)
+                    self.painter.drawRect(x, y, bbox[2], bbox[3])
+                    
+                    # Get Traker center
+                    xc= x + (bbox[2]/2)
+                    yc= y + (bbox[3]/2)
+                    p = QPoint(xc,yc)
+                    Longitude, Latitude, _ = vut.GetPointCommonCoords(
+                        p, self.surface)
+                    # Draw Rubber Band on canvas
+                    self.Track_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
+                    
             else:
-                self.tracker.clear()
-                qgsu.showUserAndLogMessage(
-                    "Tracking failure detected ", "", level=QGis.Warning)
+                self._isinit = False
+                self.Track_Canvas_RubberBand.reset()
+                del self.tracker
                 
         # Magnifier Glass
         if self._interaction.magnifier and not self.dragPos.isNull():
@@ -676,8 +709,8 @@ class VideoWidget(QVideoWidget):
             return
 
         # Object tracking rubberband
-        if not self.Tracking_RubberBand.isHidden():
-            self.Tracking_RubberBand.setGeometry(
+        if not self.Tracking_Video_RubberBand.isHidden():
+            self.Tracking_Video_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
 
         # Censure rubberband
@@ -730,8 +763,8 @@ class VideoWidget(QVideoWidget):
             if self.gt is not None and self._interaction.polygonDrawer:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
-                self.poly_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
-                self.poly_coordinates.extend(QgsPointXY(Longitude, Latitude))
+                self.poly_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
+                #self.poly_coordinates.extend(QgsPointXY(Longitude, Latitude))
                 self.drawPolygon.append([Longitude, Latitude, Altitude])
 
             # line drawer
@@ -743,16 +776,15 @@ class VideoWidget(QVideoWidget):
 
                 AddDrawLineOnMap(self.drawLines)
 
+            self.origin = event.pos()
             # Object Tracking Interaction
             if self._interaction.objectTracking:
-                self.origin = event.pos()
-                self.Tracking_RubberBand.setGeometry(
+                self.Tracking_Video_RubberBand.setGeometry(
                     QRect(self.origin, QSize()))
-                self.Tracking_RubberBand.show()
+                self.Tracking_Video_RubberBand.show()
 
             # Censure Interaction
             if self._interaction.censure:
-                self.origin = event.pos()
                 self.Censure_RubberBand.setGeometry(
                     QRect(self.origin, QSize()))
                 self.Censure_RubberBand.show()
@@ -820,18 +852,30 @@ class VideoWidget(QVideoWidget):
 
         # Object Tracking Interaction
         if self._interaction.objectTracking:
-            geom = self.Tracking_RubberBand.geometry()
-            bbox = (geom.x(), geom.y(), geom.width(), geom.height())
-            print("bbox Ori : ", str(bbox))
+            geom = self.Tracking_Video_RubberBand.geometry()
+            offset = self.surface.videoRect()
+            bbox = (geom.x() - offset.x(), geom.y() - offset.y(), geom.width(), geom.height())
             img = self.currentFrame()
-            print("imagen ORI : " + str(img.width()) + " " + str(img.height()))
             frame = convertQImageToMat(img)
-            self.Tracking_RubberBand.hide()
+            self.Tracking_Video_RubberBand.hide()
+            
             self.tracker = TrackerMOSSE_create()
-            self.tracker.clear()
-            ok = self.tracker.init(frame, bbox)
+            result = resize(frame,(offset.width(),offset.height()))
+
+            try:
+                ok = self.tracker.init(result, bbox)
+            except Exception:
+                return
             if ok:
                 self._isinit = True
+                # Get Traker center
+                xc= bbox[0] + (geom.width()/2)
+                yc= bbox[1] + (geom.height()/2)
+                p = QPoint(xc,yc)
+                Longitude, Latitude, _ = vut.GetPointCommonCoords(
+                    p, self.surface)
+                # Draw Rubber Band on canvas
+                self.Track_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
             else:
                 self._isinit = False
 

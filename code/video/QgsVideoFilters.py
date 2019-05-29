@@ -86,8 +86,8 @@ class VideoFilters():
     @staticmethod
     def AutoContrastFilter(image):
         ''' Auto Contrast Image Filter '''
-        img = convertQImageToMat(image)
-        clahe = createCLAHE(clipLimit=4., tileGridSize=(40, 40))
+        img = convertQImageToMat(image, cn=4)
+        clahe = createCLAHE(clipLimit=4., tileGridSize=(8, 8))
         # convert from BGR to LAB color space
         lab = cvtColor(img, COLOR_BGR2LAB)
         l, a, b = split(lab)  # split on 3 different channels
