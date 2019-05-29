@@ -562,8 +562,6 @@ class VideoWidget(QVideoWidget):
             # Update tracker
             result = resize(frame,(offset.width(),offset.height()))
             ok, bbox = self.tracker.update(result)
-#             print (ok)
-#             print (bbox)
             # Draw bounding box
             if ok:
                 # check negative values
