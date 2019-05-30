@@ -496,7 +496,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' NDVI Video Filter '''
         self.UncheckFilters(self.sender(), value)
         # TODO : Temporarily we lower in rate. Player in other thread?
-        if value:
+        if value and self.player.playbackRate()!= self.playbackRateSlow:
             self.player.setPlaybackRate(self.playbackRateSlow) 
         QApplication.processEvents()
         self.videoWidget.SetNDVI(value)
@@ -507,7 +507,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Edge Detection Video Filter '''
         self.UncheckFilters(self.sender(), value)
         # TODO : Temporarily we lower in rate. Player in other thread?
-        if value:
+        if value and self.player.playbackRate()!= self.playbackRateSlow:
             self.player.setPlaybackRate(self.playbackRateSlow) 
         QApplication.processEvents()
         self.videoWidget.SetEdgeDetection(value)
@@ -525,7 +525,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Auto Contrast Video Filter '''
         self.UncheckFilters(self.sender(), value)
         # TODO : Temporarily we lower in rate. Player in other thread?
-        if value:
+        if value and self.player.playbackRate()!= self.playbackRateSlow:
             self.player.setPlaybackRate(self.playbackRateSlow)         
         QApplication.processEvents()
         self.videoWidget.SetAutoContrastFilter(value)
@@ -575,8 +575,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Object Tracking '''
         self.UncheckUtils(self.sender(), value)
         # TODO : Temporarily we lower in rate. Player in other thread?
-        if value:
+        if value and self.player.playbackRate()!= self.playbackRateSlow:
             self.player.setPlaybackRate(self.playbackRateSlow) 
+        QApplication.processEvents()
         self.videoWidget.SetObjectTracking(value)
         self.videoWidget.UpdateSurface()
 
@@ -646,7 +647,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionStamp.setChecked(False)
 
         self.videoWidget.RestoreDrawer()
-        self.player.setPlaybackRate(1.0)   
+        if not value and self.player.playbackRate() == self.playbackRateSlow:
+            self.player.setPlaybackRate(1.0)   
         QApplication.processEvents()
         sender.setChecked(value)
         QApplication.processEvents()
@@ -663,7 +665,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionNDVI.setChecked(False)
 
         self.videoWidget.RestoreFilters()
-        self.player.setPlaybackRate(1.0)         
+        if not value and self.player.playbackRate() == self.playbackRateSlow:
+            self.player.setPlaybackRate(1.0)         
         QApplication.processEvents()
         sender.setChecked(value)
         QApplication.processEvents()

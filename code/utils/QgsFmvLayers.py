@@ -961,6 +961,7 @@ def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
     symbol.setColor(QColor.fromRgba(style['COLOR']))
     return
 
+# TODO : Update layer symbology if draw color change?
 # def UpdateStylesDrawLayers(NameSpace):
 #     ''' Update Symbology Drawing Layers '''
 #     s = QSettings()

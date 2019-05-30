@@ -605,6 +605,7 @@ class VideoWidget(QVideoWidget):
         # Magnifier Glass
         if self._interaction.magnifier and not self.dragPos.isNull():
             draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
+        #QApplication.processEvents()
         
     def AddMoveEventValue(self, values, Longitude, Latitude, Altitude):
         """
