@@ -20,6 +20,8 @@ class Ui_ManagerWindow(object):
         self.dockWidgetContents = QtWidgets.QWidget()
         self.dockWidgetContents.setObjectName("dockWidgetContents")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.dockWidgetContents)
+        self.verticalLayout.setContentsMargins(5, 7, 5, 7)
+        self.verticalLayout.setSpacing(5)
         self.verticalLayout.setObjectName("verticalLayout")
         self.menubarwidget = QtWidgets.QMenuBar(self.dockWidgetContents)
         self.menubarwidget.setStyleSheet("QMenuBar {\n"

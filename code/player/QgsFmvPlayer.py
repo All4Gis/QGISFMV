@@ -679,7 +679,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.videoWidget.RestoreFilters()
         
-        if not value and self.player.playbackRate() == self.playbackRateSlow:
+        if not value and self.player.playbackRate() == self.playbackRateSlow and not self.actionObject_Tracking.isChecked():
             self.player.setPlaybackRate(1.0)         
         
         QApplication.processEvents()
@@ -859,8 +859,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def playFile(self, videoPath):
         ''' Play file from path '''
         try:
-            RemoveVideoLayers()
-            RemoveGroupByName()
+            # Remove All Data
+            self.RemoveAllData()
 #             if "udp://" in videoPath:
 #                 host, port = videoPath.split("://")[1].split(":")
 #                 receiver = UDPClient(host, int(port), type="udp")
@@ -1318,6 +1318,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.VideoInfoDialog.resize(500, 400)
         self.VideoInfoDialog.show()
+        
+    def RemoveAllData(self):
+        ''' Remove All TOC/Cnavas Data '''
+        # Remove TOC video layers
+        RemoveVideoLayers()
+        # Remove mosaic group if exist
+        RemoveGroupByName()
+        # Reset internal variables
+        ResetData()
+        # Remove Canvas RubberBands
+        self.videoWidget.RemoveCanvasRubberbands()
 
     def closeEvent(self, _):
         """ Close Event """
@@ -1325,15 +1336,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.parent._PlayerDlg = None
         self.parent.ToggleActiveFromTitle()
         
-        # Remove TOC video layers
-        RemoveVideoLayers()
-        # Remove mosaic group if exist
-        RemoveGroupByName()
-        # Reset internal variables
-        ResetData()
-
-        # Remove Canvas RubberBands
-        self.videoWidget.RemoveCanvasRubberbands()
+        # Remove All Data
+        self.RemoveAllData()
         
         # We close metadata dock if it is open
         try:

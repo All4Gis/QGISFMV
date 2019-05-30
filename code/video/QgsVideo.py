@@ -66,7 +66,7 @@ class InteractionState(object):
         self.HandDraw = False
 
     def clear(self):
-        ''' Reset Intereaction variables '''
+        ''' Reset Interaction variables '''
         self.__init__()
 
 
@@ -574,7 +574,7 @@ class VideoWidget(QVideoWidget):
                 # check negative values
                 x = bbox[0] + offset.x()
                 y = bbox[1] + offset.y()
-                if x >= 0:
+                if vut.IsPointOnScreen(x, y, self.surface):
                     self.painter.setPen(self.blue_Pen)
                     self.painter.drawRect(x, y, bbox[2], bbox[3])
                     

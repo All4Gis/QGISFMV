@@ -16,6 +16,8 @@ class Ui_OptionsDialog(object):
         icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/custom-options.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         OptionsDialog.setWindowIcon(icon)
         self.verticalLayout = QtWidgets.QVBoxLayout(OptionsDialog)
+        self.verticalLayout.setContentsMargins(5, 5, 5, 5)
+        self.verticalLayout.setSpacing(5)
         self.verticalLayout.setObjectName("verticalLayout")
         self.tabWidget = QtWidgets.QTabWidget(OptionsDialog)
         self.tabWidget.setObjectName("tabWidget")
