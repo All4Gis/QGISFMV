@@ -54,7 +54,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.isStreaming = False
         self.meta_reader = {}
         self.initialPt = {}
-        self.pBars = {}
         self.pass_time = 250
         self.actionOpen_Stream.setVisible(False)
 
@@ -132,7 +131,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         pbar.setGeometry(0, 0, 300, 30)
         pbar.setValue(0)
         pbar.setMaximumHeight(30)
-        self.pBars[str(rowPosition)] = pbar
         
         if load_id is None:
             row_id = 0
@@ -243,19 +241,20 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
     def PlayVideoFromManager(self, model):
         ''' Play video from manager dock '''
         # Don't enable Play if video doesn't have metadata
-        if self.pBars[str(model.row())].value() < 100:
+        row = model.row()
+        if self.VManager.cellWidget(row, 5).findChild(QProgressBar).value() < 100:
             return
 
-        path = self.VManager.item(model.row(), 3).text()
+        path = self.VManager.item(row, 3).text()
 
-        self.ToggleActiveRow(model.row())
+        self.ToggleActiveRow(row)
 
         try:
             self._PlayerDlg.close()
         except Exception:
             None
         if self._PlayerDlg is None:
-            self.CreatePlayer(path, model.row())
+            self.CreatePlayer(path, row)
         else:
             if path != self._PlayerDlg.fileName:
                 self.ToggleActiveFromTitle()

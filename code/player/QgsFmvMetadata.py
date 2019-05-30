@@ -13,7 +13,7 @@ from qgis.PyQt.QtPrintSupport import QPrinter
 from qgis.PyQt.QtWidgets import QDockWidget
 from qgis.core import Qgis as QGis, QgsTask, QgsApplication
 
-from PyQt5.QtGui import QTextFormat, QPainter
+from PyQt5.QtGui import QTextFormat
 
 from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGIS_FMV.utils.QgsFmvUtils import askForFiles, _seconds_to_time, BurnDrawingsImage

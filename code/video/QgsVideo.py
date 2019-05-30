@@ -227,17 +227,21 @@ class VideoWidget(QVideoWidget):
         super().__init__(parent)
         self.surface = VideoWidgetSurface(self)
         self.setAttribute(Qt.WA_OpaquePaintEvent)
+        
         self.Tracking_Video_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
-
         self.Censure_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
 
-        pal = QPalette()
-        pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.blue)))
-        self.Tracking_Video_RubberBand.setPalette(pal)
+        color_blue = QColor(Qt.blue)
+        color_black = QColor(Qt.black)
+        color_amber = QColor(252,215,108)
+        
+        pal_blue = QPalette()
+        pal_blue.setBrush(QPalette.Highlight, QBrush(color_blue))
+        self.Tracking_Video_RubberBand.setPalette(pal_blue)
 
-        pal = QPalette()
-        pal.setBrush(QPalette.Highlight, QBrush(QColor(Qt.black)))
-        self.Censure_RubberBand.setPalette(pal)
+        pal_black = QPalette()
+        pal_black.setBrush(QPalette.Highlight, QBrush(color_black))
+        self.Censure_RubberBand.setPalette(pal_black)
 
         self._interaction = InteractionState()
         self._filterSatate = FilterState()
@@ -252,20 +256,15 @@ class VideoWidget(QVideoWidget):
         self.poly_Canvas_RubberBand = QgsRubberBand(
             iface.mapCanvas(), True)  # Polygon type
         # set rubber band style
-        color = QColor(176, 255, 128)
-        self.poly_Canvas_RubberBand.setColor(color)
-        color.setAlpha(190)
-        self.poly_Canvas_RubberBand.setStrokeColor(color)
+        self.poly_Canvas_RubberBand.setColor(color_amber)
         self.poly_Canvas_RubberBand.setWidth(3)
 
         # Tracking Canvas Rubberband
         self.Track_Canvas_RubberBand = QgsRubberBand(
             iface.mapCanvas(), QgsWkbTypes.LineGeometry)
         # set rubber band style
-        color = QColor(Qt.blue)
-        self.Track_Canvas_RubberBand.setColor(color)
-        self.Track_Canvas_RubberBand.setStrokeColor(color)
-        self.Track_Canvas_RubberBand.setWidth(10)
+        self.Track_Canvas_RubberBand.setColor(color_blue)
+        self.Track_Canvas_RubberBand.setWidth(7)
         
         self.parent = parent.parent()
 
@@ -275,8 +274,8 @@ class VideoWidget(QVideoWidget):
 
         self.origin, self.dragPos = QPoint(), QPoint()
         self.tapTimer = QBasicTimer()
-        self.brush = QBrush(QColor(Qt.black))
-        self.blue_Pen = QPen(QColor(Qt.blue),3)
+        self.brush = QBrush(color_black)
+        self.blue_Pen = QPen(color_blue,3)
 
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
@@ -762,7 +761,7 @@ class VideoWidget(QVideoWidget):
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
                 self.poly_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
-                #self.poly_coordinates.extend(QgsPointXY(Longitude, Latitude))
+                self.poly_coordinates.extend(QgsPointXY(Longitude, Latitude))
                 self.drawPolygon.append([Longitude, Latitude, Altitude])
 
             # line drawer
