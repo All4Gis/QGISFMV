@@ -66,6 +66,7 @@ class InteractionState(object):
         self.HandDraw = False
 
     def clear(self):
+        ''' Reset Intereaction variables '''
         self.__init__()
 
 
@@ -82,7 +83,14 @@ class FilterState(object):
         self.NDVI = False
 
     def clear(self):
+        ''' Reset Filter variables '''
         self.__init__()
+        
+    def hasFiltersSlow(self):
+        ''' Check if video has Slow filters aplicated '''
+        if True in (self.contrastFilter, self.edgeDetectionFilter, self.NDVI):
+            return True
+        return False
 
 
 class VideoWidgetSurface(QAbstractVideoSurface):

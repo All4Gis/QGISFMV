@@ -477,10 +477,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         menu.exec_(self.mapToGlobal(point))
 
-    # Start Snnipet FILTERS
     def grayFilter(self, value):
         ''' Gray Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        if value and self.player.playbackRate() == self.playbackRateSlow:
+            self.player.setPlaybackRate(1.0)
         self.videoWidget.SetGray(value)
         self.videoWidget.UpdateSurface()
         return
@@ -488,6 +489,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def MirrorHorizontalFilter(self, value):
         ''' Mirror Horizontal Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        if value and self.player.playbackRate() == self.playbackRateSlow:
+            self.player.setPlaybackRate(1.0)
         self.videoWidget.SetMirrorH(value)
         self.videoWidget.UpdateSurface()
         return
@@ -517,6 +520,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def invertColorFilter(self, value):
         ''' Invert Color Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        if value and self.player.playbackRate() == self.playbackRateSlow:
+            self.player.setPlaybackRate(1.0)
         self.videoWidget.SetInvertColor(value)
         self.videoWidget.UpdateSurface()
         return
@@ -535,6 +540,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def monoFilter(self, value):
         ''' Filter Mono Video '''
         self.UncheckFilters(self.sender(), value)
+        if value and self.player.playbackRate() == self.playbackRateSlow:
+            self.player.setPlaybackRate(1.0)
         self.videoWidget.SetMonoFilter(value)
         self.videoWidget.UpdateSurface()
         return
@@ -573,6 +580,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def ojectTracking(self, value):
         ''' Object Tracking '''
+        # Remove tracking if is unchecked
+        #if not value:
+        self.videoWidget.Track_Canvas_RubberBand.reset() 
+        
         self.UncheckUtils(self.sender(), value)
         # TODO : Temporarily we lower in rate. Player in other thread?
         if value and self.player.playbackRate()!= self.playbackRateSlow:
@@ -647,8 +658,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionStamp.setChecked(False)
 
         self.videoWidget.RestoreDrawer()
-        if not value and self.player.playbackRate() == self.playbackRateSlow:
+        
+        if not value and self.player.playbackRate() == self.playbackRateSlow and sender.objectName() == "actionObject_Tracking" and not self.videoWidget._filterSatate.hasFiltersSlow():
             self.player.setPlaybackRate(1.0)   
+        
         QApplication.processEvents()
         sender.setChecked(value)
         QApplication.processEvents()
@@ -665,13 +678,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.actionNDVI.setChecked(False)
 
         self.videoWidget.RestoreFilters()
+        
         if not value and self.player.playbackRate() == self.playbackRateSlow:
             self.player.setPlaybackRate(1.0)         
+        
         QApplication.processEvents()
         sender.setChecked(value)
         QApplication.processEvents()
         return
-    # End Snnipet FILTERS
 
     def isMuted(self):
         ''' Is muted video property'''
