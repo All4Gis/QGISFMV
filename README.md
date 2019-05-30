@@ -1,4 +1,4 @@
-# QGIS Full Motion Video (FMV)  ![](http://i.imgur.com/tXSoThF.png) [#QGISFMV](https://twitter.com/hashtag/qgisfmv)
+# QGIS Full Motion Video (FMV)  [#QGISFMV](https://twitter.com/hashtag/qgisfmv)
 
 [![Build Status](https://travis-ci.org/All4Gis/QGISFMV.svg?branch=master)](https://travis-ci.org/All4Gis/QGISFMV) 
 [![Project Stats](https://www.openhub.net/p/QGISFMV/widgets/project_thin_badge.gif)](https://www.openhub.net/p/QGISFMV)
