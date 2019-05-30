@@ -264,7 +264,7 @@ class VideoWidget(QVideoWidget):
             iface.mapCanvas(), QgsWkbTypes.LineGeometry)
         # set rubber band style
         self.Track_Canvas_RubberBand.setColor(color_blue)
-        self.Track_Canvas_RubberBand.setWidth(7)
+        self.Track_Canvas_RubberBand.setWidth(5)
         
         self.parent = parent.parent()
 
@@ -570,7 +570,7 @@ class VideoWidget(QVideoWidget):
                     self.painter.setPen(self.blue_Pen)
                     self.painter.drawRect(x, y, bbox[2], bbox[3])
                     
-                    # Get Traker center
+                    # Get Track object center
                     xc= x + (bbox[2]/2)
                     yc= y + (bbox[3]/2)
                     p = QPoint(xc,yc)
@@ -581,7 +581,6 @@ class VideoWidget(QVideoWidget):
                     
             else:
                 self._isinit = False
-                self.Track_Canvas_RubberBand.reset()
                 del self.tracker
                 
         # Magnifier Glass
@@ -854,7 +853,9 @@ class VideoWidget(QVideoWidget):
             bbox = (geom.x() - offset.x(), geom.y() - offset.y(), geom.width(), geom.height())
             img = self.currentFrame()
             frame = convertQImageToMat(img)
+            # Remo rubberband on canvas and video
             self.Tracking_Video_RubberBand.hide()
+            self.Track_Canvas_RubberBand.reset()
             
             self.tracker = TrackerMOSSE_create()
             result = resize(frame,(offset.width(),offset.height()))

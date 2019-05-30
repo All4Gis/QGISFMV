@@ -25,6 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.6:
+    	- Object tracking on video and drawn on canvas (RubberBand)
     	- Start Option menu for changes default values (Magnifier, Drawings colors ...)
     	- Add Confidential Stamp on video
     	- Add Military Grid Reference System (MGRS) support for video cursor coordinates
@@ -40,6 +41,7 @@ changelog=
     	- Save and restore manager video list
     	- Add shortcuts
     	- Update translations
+    	- Clean code
     	- Minor changes
     1.5:
     	- Added EG0104 Parser for legacy Predator Metadataset
