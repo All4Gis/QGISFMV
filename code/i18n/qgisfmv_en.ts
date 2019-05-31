@@ -765,7 +765,7 @@
 <context>
     <name>QgsFmvInstaller</name>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="138"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="90"/>
         <source>Missing dependency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -790,33 +790,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="144"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="143"/>
         <source>Python libraries installed correctly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="160"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="158"/>
         <source>Error installing the python libraries, use the requirements file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="152"/>
-        <source>Upgrade dependency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="152"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="151"/>
         <source>Do you want upgrade dependencies?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="158"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="156"/>
         <source>Python libraries updated correctly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="277"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="275"/>
         <source>No requirements file found in {}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="151"/>
+        <source>Updates available</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

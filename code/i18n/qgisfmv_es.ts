@@ -746,7 +746,7 @@
 <context>
     <name>QgsFmvInstaller</name>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="138"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="90"/>
         <source>Missing dependency</source>
         <translation>Dependencia faltante</translation>
     </message>
@@ -771,34 +771,34 @@
         <translation>El archivo MDE no existe!</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="144"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="143"/>
         <source>Python libraries installed correctly</source>
         <translation>Bibliotecas de Python instaladas correctamente</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="160"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="158"/>
         <source>Error installing the python libraries, use the requirements file!</source>
         <translation>¡Error al instalar las bibliotecas de python, usa el archivo de requisitos!</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="152"/>
-        <source>Upgrade dependency</source>
-        <translation>Actualizar dependencias</translation>
-    </message>
-    <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="152"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="151"/>
         <source>Do you want upgrade dependencies?</source>
         <translation>¿Quieres actualizar las dependencias?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="158"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="156"/>
         <source>Python libraries updated correctly</source>
         <translation>Bibliotecas de Python actualizadas correctamente</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="277"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="275"/>
         <source>No requirements file found in {}</source>
         <translation>No se encontró el archivo de requisitos en {}</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="151"/>
+        <source>Updates available</source>
+        <translation>Actualización disponible</translation>
     </message>
 </context>
 <context>

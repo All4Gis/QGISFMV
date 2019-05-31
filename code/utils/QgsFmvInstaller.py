@@ -135,8 +135,7 @@ def WindowsInstaller():
         import homography, cv2, matplotlib
     except ImportError:
         try:
-            buttonReply = qgsu.CustomMessage("QGIS FMV",
-                                             QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
+            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing dependencies"),
                                              QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
                                              icon="Information")
             if buttonReply == QMessageBox.Yes:
@@ -149,8 +148,7 @@ def WindowsInstaller():
             import homography, cv2, matplotlib
             # We update dependencies 
             if matplotlib.__version__ < '3.1.0' or cv2.__version__ < '4.1.0':
-                buttonReply = qgsu.CustomMessage("QGIS FMV",
-                                                 QCoreApplication.translate("QgsFmvInstaller", "Upgrade dependency"),
+                buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Updates available"),
                                                  QCoreApplication.translate("QgsFmvInstaller", "Do you want upgrade dependencies?"),
                                                  icon="Information")
                 if buttonReply == QMessageBox.Yes:
