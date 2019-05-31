@@ -743,6 +743,64 @@
     </message>
 </context>
 <context>
+    <name>QgsFmvInstaller</name>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="138"/>
+        <source>Missing dependency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="70"/>
+        <source>Do you want install Lav Filters?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="90"/>
+        <source>Do you want install FFMPEG?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="138"/>
+        <source>Do you want install missing dependencies?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="125"/>
+        <source>Dem file not exist!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="144"/>
+        <source>Python libraries installed correctly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="160"/>
+        <source>Error installing the python libraries, use the requirements file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="152"/>
+        <source>Upgrade dependency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="152"/>
+        <source>Do you want upgrade dependencies?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="158"/>
+        <source>Python libraries updated correctly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="277"/>
+        <source>No requirements file found in {}</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QgsFmvMetadata</name>
     <message>
         <location filename="../player/QgsFmvMetadata.py" line="42"/>
@@ -813,7 +871,7 @@
         <translation>Voir les Métadonnées</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1310"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1313"/>
         <source>Video Information : </source>
         <translation>Information Vidéo :</translation>
     </message>
@@ -823,7 +881,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1200"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1203"/>
         <source>Save Current Frame</source>
         <translation type="unfinished"></translation>
     </message>
@@ -843,7 +901,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1163"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1166"/>
         <source>Save all Frames</source>
         <translation type="unfinished"></translation>
     </message>
@@ -858,7 +916,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1231"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1234"/>
         <source>Save Current Georeferenced Frame</source>
         <translation type="unfinished"></translation>
     </message>
@@ -880,6 +938,21 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="474"/>
         <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="1149"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="1149"/>
+        <source>Do you want to load the layer?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="260"/>
+        <source>Buffering metadata...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

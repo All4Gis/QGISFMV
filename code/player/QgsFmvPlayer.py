@@ -257,8 +257,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             # Values need to be read, pause the video a short while
             elif stdout_data == 'BUFFERING':
-                qgsu.showUserAndLogMessage(
-                    "Buffering metadata...", "", duration=4, level=QGis.Info)
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Buffering metadata..."), duration=4, level=QGis.Info)
                 self.player.pause()
                 QTimer.singleShot(2500, lambda: self.player.play()) 
                 return
@@ -1145,7 +1145,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 if result['task'] == 'Show Video Info Task':
                     self.showVideoInfoDialog(self.converter.bytes_value)
                 if result['task'] == 'Save Current Georeferenced Frame Task':
-                    buttonReply = qgsu.CustomMessage("Info", "Do you want to load the layer?", icon="Information")
+                    buttonReply = qgsu.CustomMessage(
+                        QCoreApplication.translate("QgsFmvPlayer", "Information"),
+                        QCoreApplication.translate("QgsFmvPlayer", "Do you want to load the layer?"), 
+                        icon="Information")
                     if buttonReply == QMessageBox.Yes:
                         file = result['file']
                         root, _ = os.path.splitext(file)

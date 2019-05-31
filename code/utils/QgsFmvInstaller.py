@@ -1,21 +1,20 @@
-import subprocess
+from configparser import SafeConfigParser
 import os, sys
 from os.path import dirname, abspath
-from urllib.request import urlretrieve
-import platform
-import zipfile
-from qgis.PyQt.QtWidgets import QMessageBox
-from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from QGIS_FMV.utils.QgsFmvUtils import install_pip_requirements
-import urllib.request
-from configparser import SafeConfigParser
-from qgis.PyQt.QtWidgets import QProgressBar
-from qgis.PyQt.QtCore import *
-from qgis.utils import iface
-from qgis.core import Qgis as QGis
-from qgis.PyQt.QtCore import Qt
 import pathlib
+import platform
+from qgis.PyQt.QtCore import Qt,QCoreApplication
+from qgis.PyQt.QtWidgets import QMessageBox, QProgressBar
+from qgis.core import Qgis as QGis, QgsApplication
+from qgis.utils import iface
+from subprocess import Popen, PIPE
+from urllib.request import urlretrieve, build_opener, install_opener
+import zipfile
+
 import requests
+
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+
 
 plugin_dir = pathlib.Path(__file__).parent.parent
 sys.path.append(plugin_dir)
@@ -52,9 +51,9 @@ DemGlobal = "http://www.gisandbeers.com/RRSS/Cartografia/DEM-Mundial.rar"
 progress = QProgressBar()
 progress.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
-opener = urllib.request.build_opener()
+opener = build_opener()
 opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
-urllib.request.install_opener(opener)
+install_opener(opener)
 
 
 def reporthook(blocknum, blocksize, totalsize):
@@ -68,7 +67,10 @@ def WindowsInstaller():
     ''' complete windows installation '''
     if not IsLavFilters():
         ''' lAV Filters '''
-        buttonReply = qgsu.CustomMessage("QGIS FMV", "Missing dependency", "Do you want install Lav Filters?", icon="Information")
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                         QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
+                                         QCoreApplication.translate("QgsFmvInstaller", "Do you want install Lav Filters?"),
+                                         icon="Information")
         if buttonReply == QMessageBox.Yes:
 
             progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading LAV Filters...")
@@ -78,14 +80,17 @@ def WindowsInstaller():
             # Install Lav Filter
             filename = 'LavFilters.exe'
             urlretrieve(LavFilters, filename, reporthook)
-            process = subprocess.Popen(filename, stdout=subprocess.PIPE, creationflags=0x08000000)
+            process = Popen(filename, stdout=PIPE, creationflags=0x08000000)
             process.wait()
             os.remove(filename)
             iface.messageBar().clearWidgets()
 
     if not IsFFMPEG():
         ''' FFMPEG Lib '''
-        buttonReply = qgsu.CustomMessage("QGIS FMV", "Missing dependency", "Do you want install FFMPEG?", icon="Information")
+        buttonReply = qgsu.CustomMessage("QGIS FMV", 
+                                         QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
+                                         QCoreApplication.translate("QgsFmvInstaller", "Do you want install FFMPEG?"),
+                                         icon="Information")
         if buttonReply == QMessageBox.Yes:
             # Download FFMPEG # Prevent HTTP Error 403: Forbidden
             progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading FFMPEG...")
@@ -117,7 +122,8 @@ def WindowsInstaller():
 
     if not isDem():
         ''' DEM File '''
-        progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Dem file not exist!")
+        progressMessageBar = iface.messageBar().createMessage("QGIS FMV", 
+                                                              QCoreApplication.translate("QgsFmvInstaller", "Dem file not exist!"))
         iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
         parser.set('GENERAL', 'DTM_file', "")
 
@@ -129,17 +135,30 @@ def WindowsInstaller():
         import homography, cv2, matplotlib
     except ImportError:
         try:
-            buttonReply = qgsu.CustomMessage("QGIS FMV", "Missing dependency", "Do you want install missing dependencies?", icon="Information")
+            buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                             QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
+                                             QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
+                                             icon="Information")
             if buttonReply == QMessageBox.Yes:
                 install_pip_requirements()
-                iface.messageBar().pushMessage("QGIS FMV", "Python libraries installed correctly", QGis.Info, 3)
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
         except ImportError:
             None
     finally:
         try:
             import homography, cv2, matplotlib
+            # We update dependencies 
+            if matplotlib.__version__ < '3.1.0' or cv2.__version__ < '4.1.0':
+                buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                                 QCoreApplication.translate("QgsFmvInstaller", "Upgrade dependency"),
+                                                 QCoreApplication.translate("QgsFmvInstaller", "Do you want upgrade dependencies?"),
+                                                 icon="Information")
+                if buttonReply == QMessageBox.Yes:
+                    install_pip_requirements()
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries updated correctly"))
         except ImportError:
-            iface.messageBar().pushMessage("QGIS FMV", "Error installing the python libraries, use the requirements file!", QGis.Critical, 3)
+            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
+                                       level=QGis.Critical)
             raise
     return
 
@@ -249,3 +268,31 @@ def save_response_content(response, destination):
                 done = int(50 * dl / total_length)
                 f.write(chunk)
                 progress.setValue(done)
+                
+def install_pip_requirements():
+    ''' Install Requeriments from pip >= 10.0.1'''
+    package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
+    requirements_file = os.path.join(package_dir, 'requirements.txt')
+    if not os.path.isfile(requirements_file):
+        qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "No requirements file found in {}").format(
+            requirements_file), onlyLog=True)
+        raise
+    try:
+        process = Popen(["python", "-m", 'pip', "install",'--upgrade', 'pip'],
+                        shell=True,
+                        stdout=PIPE,
+                        stderr=PIPE)
+        process.wait()
+        process = Popen(["python", "-m", 'pip', "install",'-U', 'pip', 'setuptools'],
+                        shell=True,
+                        stdout=PIPE,
+                        stderr=PIPE)
+        process.wait()
+        process = Popen(["pip", "install", '--user', '-r', requirements_file],
+                        shell=True,
+                        stdout=PIPE,
+                        stderr=PIPE)
+        process.wait()
+    except Exception:
+        raise
+    return

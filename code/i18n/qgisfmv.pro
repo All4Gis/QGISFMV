@@ -12,7 +12,8 @@ SOURCES = ../QgsFmv.py \
 		  ../player/QgsFmvAbout.py   \
 		  ../player/QgsManager.py \
 		  ../player/QgsFmvOptions.py \
-		  ../utils/QgsJsonModel.py
+		  ../utils/QgsJsonModel.py \
+		  ../utils/QgsFmvInstaller.py
 
 TRANSLATIONS = qgisfmv_en.ts \
 			   qgisfmv_es.ts \

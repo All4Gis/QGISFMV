@@ -575,36 +575,6 @@ def _spawn(cmds, t="ffmpeg"):
                  bufsize=0,
                  close_fds=(not windows))
 
-
-def install_pip_requirements():
-    ''' Install Requeriments from pip >= 10.0.1'''
-    package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
-    requirements_file = os.path.join(package_dir, 'requirements.txt')
-    if not os.path.isfile(requirements_file):
-        qgsu.showUserAndLogMessage("", 'No requirements file found in {}'.format(
-            requirements_file), "", onlyLog=True)
-        raise
-    try:
-        process = Popen(["python", "-m", 'pip', "install",'--upgrade', 'pip'],
-                        shell=True,
-                        stdout=PIPE,
-                        stderr=PIPE)
-        process.wait()
-        process = Popen(["python", "-m", 'pip', "install",'-U', 'pip', 'setuptools'],
-                        shell=True,
-                        stdout=PIPE,
-                        stderr=PIPE)
-        process.wait()
-        process = Popen(["pip", "install", '--user', '-r', requirements_file],
-                        shell=True,
-                        stdout=PIPE,
-                        stderr=PIPE)
-        process.wait()
-    except Exception:
-        raise
-    return
-
-
 def rad2deg(radians):
     ''' Radians to Degrees '''
     degrees = 180 * radians / pi

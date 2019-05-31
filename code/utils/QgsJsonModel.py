@@ -121,38 +121,6 @@ class QJsonModel(QAbstractItemModel):
         value = QCoreApplication.translate("QgsJsonModel", "Value")
         self.mHeaders = [key, value]
 
-#     def load(self, fileName):
-#         ''' Load Json from file '''
-#         if fileName is None or fileName is False:
-#             return False
-#         js = None
-#         stream = QFile(fileName)
-#         if stream.open(QFile.ReadOnly):
-#             js = QByteArray((stream.readAll()))
-#             stream.close()
-#             self.loadJson(js)
-#         else:
-#             qgsu.showUserAndLogMessage(
-#                 "", stream.errorString(), onlyLog=True)
-# 
-#     def loadJson(self, value):
-#         error = QJsonParseError()
-#         self.mDocument = QJsonDocument.fromJson(value, error)
-# 
-#         if self.mDocument is not None:
-#             self.beginResetModel()
-#             if self.mDocument.isArray():
-#                 self.mRootItem.load(list(self.mDocument.array()))
-#             else:
-#                 self.mRootItem = self.mRootItem.load(self.mDocument.object())
-#             self.endResetModel()
-# 
-#             return True
-# 
-#         qgsu.showUserAndLogMessage(
-#                 "", "QJsonModel: error loading Json", onlyLog=True)
-#         return False
-
     def loadJsonFromConsole(self, value):
         ''' Load Json from console output '''
         error = QJsonParseError()

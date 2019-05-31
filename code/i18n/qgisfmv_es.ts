@@ -744,6 +744,64 @@
     </message>
 </context>
 <context>
+    <name>QgsFmvInstaller</name>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="138"/>
+        <source>Missing dependency</source>
+        <translation>Dependencia faltante</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="70"/>
+        <source>Do you want install Lav Filters?</source>
+        <translation>¿Quieres instalar LAV Filters?</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="90"/>
+        <source>Do you want install FFMPEG?</source>
+        <translation>¿Quieres instalar FFMPEG?</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="138"/>
+        <source>Do you want install missing dependencies?</source>
+        <translation>¿Quieres instalar las dependencias faltantes?</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="125"/>
+        <source>Dem file not exist!</source>
+        <translation>El archivo MDE no existe!</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="144"/>
+        <source>Python libraries installed correctly</source>
+        <translation>Bibliotecas de Python instaladas correctamente</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="160"/>
+        <source>Error installing the python libraries, use the requirements file!</source>
+        <translation>¡Error al instalar las bibliotecas de python, usa el archivo de requisitos!</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="152"/>
+        <source>Upgrade dependency</source>
+        <translation>Actualizar dependencias</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="152"/>
+        <source>Do you want upgrade dependencies?</source>
+        <translation>¿Quieres actualizar las dependencias?</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="158"/>
+        <source>Python libraries updated correctly</source>
+        <translation>Bibliotecas de Python actualizadas correctamente</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="277"/>
+        <source>No requirements file found in {}</source>
+        <translation>No se encontró el archivo de requisitos en {}</translation>
+    </message>
+</context>
+<context>
     <name>QgsFmvMetadata</name>
     <message>
         <location filename="../player/QgsFmvMetadata.py" line="42"/>
@@ -814,7 +872,7 @@
         <translation>Mostrar metadatos</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1310"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1313"/>
         <source>Video Information : </source>
         <translation>Información del video:</translation>
     </message>
@@ -825,7 +883,7 @@
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1200"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1203"/>
         <source>Save Current Frame</source>
         <translation>Guardar fotograma actual</translation>
     </message>
@@ -845,7 +903,7 @@
         <translation>Guardar video como ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1163"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1166"/>
         <source>Save all Frames</source>
         <translation>Guardar todos los fotogramas</translation>
     </message>
@@ -860,7 +918,7 @@
         <translation>Guardar video Bitrate</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1231"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1234"/>
         <source>Save Current Georeferenced Frame</source>
         <translation>Guardar el frame georeferenciado actual</translation>
     </message>
@@ -883,6 +941,21 @@
         <location filename="../player/QgsFmvPlayer.py" line="474"/>
         <source>Options</source>
         <translation>Opciones</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="1149"/>
+        <source>Information</source>
+        <translation>Información</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="1149"/>
+        <source>Do you want to load the layer?</source>
+        <translation>¿Quieres cargar la capa?</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="260"/>
+        <source>Buffering metadata...</source>
+        <translation>Buffering metadatos...</translation>
     </message>
 </context>
 <context>
