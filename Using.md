@@ -36,7 +36,6 @@ then, a background process will start that will store the current frame or all t
 - **Conversion**: this option allows to convert the video into a different format. To do it, you have to select the corresponding extension in the save dialog window.
 - **Video information**: this option allows to save the video information in json format o to show the information in a dialog window.
 - **Plot**: this option allows to show or save the information about the audio or video channels.
-- **Color**: this option allows to modify the video brightness, saturation and contrast.
 - **Record**: this option extracts parts of the video and store them in the destination directory.
 
 The player also offers the typical options such as stop, rewind, fast-forward, go to the first or last frame.
