@@ -53,7 +53,7 @@ For them, simply click on **Save** and select option.
 
 - ![](code/images/video-info.png)**Video information**: This option allows to save the video information in json format o to show the information in a dialog window.
 
-![](images/video_info.png)
+<img src="images/video_info.png" width="250"/>
 
 - ![](code/images/show-bitrate.png)**Plot**: This option allows to show or save the information about the audio or video channels.If the video has no audio, the audio options are disabled.
 
@@ -84,11 +84,11 @@ The utility bar offers us tools to interact with the video. This bar can hide it
 
 If on the contrary we want to leave it but we don't like where it is, we can move it where we want.
 
-![](images/willmove_draw_toolbar.png)
+<img src="images/willmove_draw_toolbar.png" width="350"/>
 
 And we release it where we want,
 
-![](images/moved_draw_toolbar.png)
+<img src="images/moved_draw_toolbar.png" width="350"/>
 
 The options offered are the following:
 
@@ -121,16 +121,15 @@ To access this menu we must right click and select the option **Options**.
 
 And magnifying glass options tab,
 
-![](images/customize_magnifier.png)
+<img src="images/customize_magnifier.png" width="350"/>
 
 And drawings options tab,
 
-![](images/customize_drawings.png)
+<img src="images/customize_drawings.png" width="350"/>
 
-These values are saved in the general configuration of QGIS,so if you want to return to the original colors of the plugin, you must select **Default color**
+These values are saved in the general configuration of QGIS,so if you want to return to the original colors of the plugin, you must select **Default color**.
 
-![](images/select_color2.png)
-
+<img src="images/select_color2.png" width="350"/>
 
 ## Shortcuts
 
