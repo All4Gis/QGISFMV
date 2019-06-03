@@ -47,7 +47,7 @@ then, a background process will start that will store the current frame or all t
 If we want to save the information about the current frame we can do it in a **.csv** file or in a more elaborated report in **.pdf**.
 For them, simply click on **Save** and select option.
 
-	![](images/save_report.png)
+![](images/save_report.png)
 
 - ![](code/images/video-converter.png)**Conversion**: This option allows to convert the video into a different format. To do it, you have to select the corresponding extension in the save dialog window.
 
