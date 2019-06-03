@@ -82,13 +82,9 @@ The utility bar offers us tools to interact with the video. This bar can hide it
 
 ![](images/hide_draw_toolbar.png)
 
-If on the contrary we want to leave it but we don't like where it is, we can move it where we want.
+If on the contrary we want to leave it but we don't like where it is, we can move it where we want,
 
-<img src="images/willmove_draw_toolbar.png" width="350"/>
-
-And we release it where we want,
-
-<img src="images/moved_draw_toolbar.png" width="350"/>
+<img src="images/willmove_draw_toolbar.png" width="350"/>        <img src="images/moved_draw_toolbar.png" width="350"/>
 
 The options offered are the following:
 
@@ -119,13 +115,9 @@ To access this menu we must right click and select the option **Options**.
 
 ![](images/contextMenu.png)
 
-And magnifying glass options tab,
+And magnifying glass options tab, And drawings options tab,
 
-<img src="images/customize_magnifier.png" width="350"/>
-
-And drawings options tab,
-
-<img src="images/customize_drawings.png" width="350"/>
+<img src="images/customize_magnifier.png" width="350"/>        <img src="images/customize_drawings.png" width="350"/>
 
 These values are saved in the general configuration of QGIS,so if you want to return to the original colors of the plugin, you must select **Default color**.
 
