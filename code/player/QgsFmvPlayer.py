@@ -480,69 +480,90 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def grayFilter(self, value):
         ''' Gray Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        self.videoWidget.SetGray(value)
+        
         if value and self.player.playbackRate() == self.playbackRateSlow:
             self.player.setPlaybackRate(1.0)
-        self.videoWidget.SetGray(value)
+            return
+        
         self.videoWidget.UpdateSurface()
         return
 
     def MirrorHorizontalFilter(self, value):
         ''' Mirror Horizontal Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        self.videoWidget.SetMirrorH(value)
+        
         if value and self.player.playbackRate() == self.playbackRateSlow:
             self.player.setPlaybackRate(1.0)
-        self.videoWidget.SetMirrorH(value)
+            return
+        
         self.videoWidget.UpdateSurface()
         return
 
     def NDVIFilter(self, value):
         ''' NDVI Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        self.videoWidget.SetNDVI(value)
+        
         # TODO : Temporarily we lower in rate. Player in other thread?
         if value and self.player.playbackRate()!= self.playbackRateSlow:
-            self.player.setPlaybackRate(self.playbackRateSlow) 
-        QApplication.processEvents()
-        self.videoWidget.SetNDVI(value)
+            self.player.setPlaybackRate(self.playbackRateSlow)
+            return
+
+        #QApplication.processEvents()
         self.videoWidget.UpdateSurface()
         return
 
     def edgeFilter(self, value):
         ''' Edge Detection Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        self.videoWidget.SetEdgeDetection(value)
+        
         # TODO : Temporarily we lower in rate. Player in other thread?
         if value and self.player.playbackRate()!= self.playbackRateSlow:
-            self.player.setPlaybackRate(self.playbackRateSlow) 
-        QApplication.processEvents()
-        self.videoWidget.SetEdgeDetection(value)
+            self.player.setPlaybackRate(self.playbackRateSlow)
+            return    
+        #QApplication.processEvents()
         self.videoWidget.UpdateSurface()
         return
 
     def invertColorFilter(self, value):
         ''' Invert Color Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        self.videoWidget.SetInvertColor(value)
+        
         if value and self.player.playbackRate() == self.playbackRateSlow:
             self.player.setPlaybackRate(1.0)
-        self.videoWidget.SetInvertColor(value)
+            return
+        
+        #QApplication.processEvents()
         self.videoWidget.UpdateSurface()
         return
 
     def autoContrastFilter(self, value):
         ''' Auto Contrast Video Filter '''
         self.UncheckFilters(self.sender(), value)
+        self.videoWidget.SetAutoContrastFilter(value)
         # TODO : Temporarily we lower in rate. Player in other thread?
         if value and self.player.playbackRate()!= self.playbackRateSlow:
-            self.player.setPlaybackRate(self.playbackRateSlow)         
-        QApplication.processEvents()
-        self.videoWidget.SetAutoContrastFilter(value)
+            self.player.setPlaybackRate(self.playbackRateSlow)
+            return       
+ 
+        #QApplication.processEvents()
         self.videoWidget.UpdateSurface()
         return
 
     def monoFilter(self, value):
         ''' Filter Mono Video '''
         self.UncheckFilters(self.sender(), value)
+        self.videoWidget.SetMonoFilter(value)
+        
         if value and self.player.playbackRate() == self.playbackRateSlow:
             self.player.setPlaybackRate(1.0)
-        self.videoWidget.SetMonoFilter(value)
+            return
+        
+        #QApplication.processEvents()
         self.videoWidget.UpdateSurface()
         return
 

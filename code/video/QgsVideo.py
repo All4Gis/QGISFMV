@@ -156,7 +156,8 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         if (self.surfaceFormat().pixelFormat() != frame.pixelFormat() or
                 self.surfaceFormat().frameSize() != frame.size()):
             self.setError(QAbstractVideoSurface.IncorrectFormatError)
-            self.stop()
+            # if is a hight quality frame is stopped and not call start function
+            #self.stop()
             return False
         else:
             self._currentFrame = frame
@@ -207,7 +208,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         if self.widget._filterSatate.edgeDetectionFilter:
             try:
                 self.image = filter.EdgeFilter(self.image)
-            except Exception:
+            except Exception as e:
                 None
         # TODO : Test in other thread
         if self.widget._filterSatate.contrastFilter:
@@ -453,7 +454,7 @@ class VideoWidget(QVideoWidget):
         return self.surface
 
     def UpdateSurface(self):
-        ''' Update Video Surface '''   
+        ''' Update Video Surface only is is stopped or paused '''   
         if self.parent.playerState in (QMediaPlayer.StoppedState,
                                 QMediaPlayer.PausedState):
             self.update()
@@ -537,6 +538,12 @@ class VideoWidget(QVideoWidget):
 
     def paintEvent(self, event):
         ''' Paint Event '''
+        if not self.surface.isActive():
+            return
+        
+        #print("paintEvent : " + str(event.region().boundingRect()))
+        #print("Active : " + str(self.surface.isActive()))
+        
         self.painter = QPainter(self)
         self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
  
