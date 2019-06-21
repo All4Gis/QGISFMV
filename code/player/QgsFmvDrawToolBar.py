@@ -31,21 +31,22 @@ TYPE_MAGNIFIER = 1
 
 # Polygon Draw
 PolyWidth = 3
-PolyPen = QPen(QColor(252,215,108),PolyWidth)
-PolyBrush = QBrush(QColor(252,215,108, 100))
+PolyPen = QPen(QColor(252, 215, 108), PolyWidth)
+PolyBrush = QBrush(QColor(252, 215, 108, 100))
 
 # Point Draw
 PointWidth = 10
-PointPen = QPen(QColor(220,20,60), PointWidth, cap=Qt.RoundCap)
+PointPen = QPen(QColor(220, 20, 60), PointWidth, cap=Qt.RoundCap)
 
 # Line Draw
 LineWidth = 3
-LinePen = QPen(QColor(252,215,108),LineWidth)
+LinePen = QPen(QColor(252, 215, 108), LineWidth)
 
 # Measure Draw
 MeasureWidth = 3
-MeasurePen = QPen(QColor(185, 224, 175),MeasureWidth, cap=Qt.RoundCap, join=Qt.RoundJoin)
+MeasurePen = QPen(QColor(185, 224, 175), MeasureWidth, cap=Qt.RoundCap, join=Qt.RoundJoin)
 MeasureBrush = QBrush(QColor(185, 224, 175, 100))
+
 
 class DrawToolBar(object):
     
@@ -114,7 +115,7 @@ class DrawToolBar(object):
         poly_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/pen")
         if poly_p is not None:
             global PolyPen
-            PolyPen =  QPen(QColor(poly_p))
+            PolyPen = QPen(QColor(poly_p))
             PolyPen.setCapStyle(Qt.RoundCap)
             PolyPen.setWidth(PolyWidth)
             if options is not None:
@@ -435,7 +436,7 @@ class DrawToolBar(object):
 
         # Calculate Centroid Position
         scr_x, scr_y = vut.GetInverseMatrix(
-                sum(long)/len(long), sum(lat)/len(lat), gt, surface)
+                sum(long) / len(long), sum(lat) / len(lat), gt, surface)
         
         centroid = QPoint(scr_x, scr_y)
         
@@ -455,7 +456,7 @@ class DrawToolBar(object):
         
         # Area
         if a_value >= 10000:
-            painter.drawText(centroid , str(round(a_value/1000000, 2)) + " km²")
+            painter.drawText(centroid , str(round(a_value / 1000000, 2)) + " km²")
         else:
             painter.drawText(centroid , str(round(a_value, 2)) + " m²")
         return
@@ -485,7 +486,7 @@ class DrawToolBar(object):
         magnifierSize = min(MAX_MAGNIFIER, dim * 2 / 3)
         radius = magnifierSize / 2
         ring = radius - 15
-        box = QSize(magnifierSize,magnifierSize)
+        box = QSize(magnifierSize, magnifierSize)
 
         center = dragPos - QPoint(0, radius)
         center += QPoint(0, radius / 2)
@@ -511,8 +512,8 @@ class DrawToolBar(object):
         # Shape Type
         if TYPE_MAGNIFIER == 0:
             # Square
-            clipPath.addRect(center.x(),center.y(), magnifierSize, magnifierSize)
-            clipPath.translate(-radius , -radius )
+            clipPath.addRect(center.x(), center.y(), magnifierSize, magnifierSize)
+            clipPath.translate(-radius , -radius)
         else:
             # Circle
             clipPath.addEllipse(center, ring, ring)

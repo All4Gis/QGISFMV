@@ -154,7 +154,10 @@ class MappedElementParser(ElementParser):
     __metaclass__ = ABCMeta
 
     def __init__(self, value):
-        super().__init__(MappedValue(value, self._domain, self._range))
+        try:
+            super().__init__(MappedValue(value, self._domain, self._range))
+        except ValueError:
+            print('Error in decoding Tag n.', self.key.hex(), ' (hexadecimal)')
 
     @property
     @classmethod

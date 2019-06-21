@@ -4,6 +4,7 @@ FORMS = ../ui/ui_FmvAbout.ui \
 		../ui/ui_FmvMetadata.ui \
 		../ui/ui_FmvOptions.ui \
 		../ui/ui_FmvOpenStream.ui \
+		../ui/ui_FmvMultiplexer.ui \
 		../ui/ui_FmvPlayer.ui 
 
 SOURCES = ../QgsFmv.py \
@@ -12,6 +13,7 @@ SOURCES = ../QgsFmv.py \
 		  ../player/QgsFmvAbout.py   \
 		  ../player/QgsManager.py \
 		  ../player/QgsFmvOptions.py \
+		  ../player/QgsMultiplexor.py \
 		  ../utils/QgsJsonModel.py \
 		  ../utils/QgsFmvInstaller.py
 

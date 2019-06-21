@@ -78,5 +78,7 @@
         <file>../images/custom-options.png</file>  
         <file>../images/stamp/confidential.png</file>  
         <file>../images/zoom-rectangle.png</file> 
+        <file>../images/opened-folder.png</file> 
+        <file>../images/multiplexer.png</file> 
     </qresource>
 </RCC>

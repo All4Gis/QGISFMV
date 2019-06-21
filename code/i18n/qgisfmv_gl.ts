@@ -135,37 +135,37 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="230"/>
+        <location filename="../player/QgsManager.py" line="252"/>
         <source>Open video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="200"/>
+        <location filename="../player/QgsManager.py" line="219"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="148"/>
+        <location filename="../player/QgsManager.py" line="168"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="190"/>
+        <location filename="../player/QgsManager.py" line="209"/>
         <source>Start location not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="174"/>
+        <location filename="../player/QgsManager.py" line="194"/>
         <source>Failed loading FFMPEG ! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="64"/>
+        <location filename="../player/QgsManager.py" line="66"/>
         <source>Remove from list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="120"/>
+        <location filename="../player/QgsManager.py" line="138"/>
         <source>You must delete some video from the list before adding a new one</source>
         <translation type="unfinished"></translation>
     </message>
@@ -183,43 +183,61 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="128"/>
+        <location filename="../ui/ui_FmvManager.ui" line="129"/>
         <source>Id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="138"/>
+        <location filename="../ui/ui_FmvManager.ui" line="139"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="148"/>
+        <location filename="../ui/ui_FmvManager.ui" line="149"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="158"/>
+        <location filename="../ui/ui_FmvManager.ui" line="159"/>
         <source>Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="196"/>
+        <location filename="../ui/ui_FmvManager.ui" line="197"/>
         <source>Open Stream</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="168"/>
+        <location filename="../ui/ui_FmvManager.ui" line="169"/>
         <source>Start Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="178"/>
+        <location filename="../ui/ui_FmvManager.ui" line="179"/>
         <source>Progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="205"/>
+        <location filename="../ui/ui_FmvManager.ui" line="206"/>
         <source>Open Video File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvManager.ui" line="215"/>
+        <source>Create MISB File</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Multiplexor</name>
+    <message>
+        <location filename="../player/QgsMultiplexor.py" line="141"/>
+        <source>Open file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../player/QgsMultiplexor.py" line="156"/>
+        <source>You must complete all the information</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -745,90 +763,95 @@
 <context>
     <name>QgsFmvInstaller</name>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="90"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="89"/>
         <source>Missing dependency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="70"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="69"/>
         <source>Do you want install Lav Filters?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="90"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="89"/>
         <source>Do you want install FFMPEG?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="138"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="137"/>
         <source>Do you want install missing dependencies?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="125"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="124"/>
         <source>Dem file not exist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="143"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="142"/>
         <source>Python libraries installed correctly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="158"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="157"/>
         <source>Error installing the python libraries, use the requirements file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="151"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="150"/>
         <source>Do you want upgrade dependencies?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="156"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="155"/>
         <source>Python libraries updated correctly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="275"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="274"/>
         <source>No requirements file found in {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="151"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="150"/>
         <source>Updates available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="137"/>
+        <source>Missing dependencies</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QgsFmvMetadata</name>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="42"/>
+        <location filename="../player/QgsFmvMetadata.py" line="41"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="67"/>
+        <location filename="../player/QgsFmvMetadata.py" line="66"/>
         <source>Save PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="108"/>
+        <location filename="../player/QgsFmvMetadata.py" line="107"/>
         <source>Video : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="109"/>
+        <location filename="../player/QgsFmvMetadata.py" line="108"/>
         <source>TimeStamp : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="161"/>
+        <location filename="../player/QgsFmvMetadata.py" line="160"/>
         <source>Current Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="189"/>
+        <location filename="../player/QgsFmvMetadata.py" line="188"/>
         <source>Save CSV</source>
         <translation type="unfinished"></translation>
     </message>
@@ -836,42 +859,42 @@
 <context>
     <name>QgsFmvPlayer</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="320"/>
+        <location filename="../player/QgsFmvPlayer.py" line="321"/>
         <source>Metadata Callback Failed! : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="227"/>
+        <location filename="../player/QgsFmvPlayer.py" line="228"/>
         <source>This video doesn&apos;t have Audio ! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="235"/>
+        <location filename="../player/QgsFmvPlayer.py" line="236"/>
         <source>Audio check Failed! : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="453"/>
+        <location filename="../player/QgsFmvPlayer.py" line="466"/>
         <source>Mute/Unmute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="458"/>
+        <location filename="../player/QgsFmvPlayer.py" line="471"/>
         <source>Extract All Frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="463"/>
+        <location filename="../player/QgsFmvPlayer.py" line="476"/>
         <source>Extract Current Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="469"/>
+        <location filename="../player/QgsFmvPlayer.py" line="482"/>
         <source>Show Metadata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1313"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1350"/>
         <source>Video Information : </source>
         <translation type="unfinished"></translation>
     </message>
@@ -881,72 +904,72 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1203"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1240"/>
         <source>Save Current Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="357"/>
+        <location filename="../player/QgsFmvPlayer.py" line="373"/>
         <source>Save Json</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="924"/>
+        <location filename="../player/QgsFmvPlayer.py" line="961"/>
         <source>Save video record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1021"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1058"/>
         <source>Save Video as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1166"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1203"/>
         <source>Save all Frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1099"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1136"/>
         <source>Save Audio Bitrate Plot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1116"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1153"/>
         <source>Save Video Bitrate Plot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1234"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1271"/>
         <source>Save Current Georeferenced Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="888"/>
+        <location filename="../player/QgsFmvPlayer.py" line="925"/>
         <source>Playing : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="903"/>
+        <location filename="../player/QgsFmvPlayer.py" line="940"/>
         <source>Open Video File : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1136"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1173"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="474"/>
+        <location filename="../player/QgsFmvPlayer.py" line="487"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1149"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1186"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1149"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1186"/>
         <source>Do you want to load the layer?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -959,13 +982,71 @@
 <context>
     <name>QgsJsonModel</name>
     <message>
-        <location filename="../utils/QgsJsonModel.py" line="121"/>
+        <location filename="../utils/QgsJsonModel.py" line="122"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsJsonModel.py" line="122"/>
+        <location filename="../utils/QgsJsonModel.py" line="123"/>
         <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>VideoMultiplexer</name>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="14"/>
+        <source>Video Multiplexer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="24"/>
+        <source>Input Video File (e.g video.ts)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="58"/>
+        <source>Input Metadata File (e.g video_metadata.csv)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="183"/>
+        <source>Create MISB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="92"/>
+        <source>Select drone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="117"/>
+        <source>Horizontal FOV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="131"/>
+        <source>Vertical FOV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="103"/>
+        <source>DJI Mavic Pro</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="158"/>
+        <source>Available telemetry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="164"/>
+        <source>Select the correct one if there is more than one</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="151"/>
+        <source>Extract Recordings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

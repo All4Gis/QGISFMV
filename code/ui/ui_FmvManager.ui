@@ -53,6 +53,7 @@
        </property>
        <addaction name="actionOpen_Stream"/>
        <addaction name="actionOpen_MPEG2_File"/>
+	   <addaction name="actionCreate_MISB_File"/>
       </widget>
       <addaction name="menuFile"/>
      </widget>
@@ -205,6 +206,15 @@ color: rgb(56, 95, 107);
     <string>Open Video File</string>
    </property>
   </action>
+  <action name="actionCreate_MISB_File">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/multiplexer.png</normaloff>:/imgFMV/images/multiplexer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create MISB File</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="resources.qrc"/>
@@ -258,10 +268,27 @@ color: rgb(56, 95, 107);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionCreate_MISB_File</sender>
+   <signal>triggered()</signal>
+   <receiver>ManagerWindow</receiver>
+   <slot>openMuiltiplexorDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>380</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openVideoFileDialog()</slot>
   <slot>PlayVideoFromManager()</slot>
   <slot>openStreamDialog()</slot>
+  <slot>openMuiltiplexorDialog()</slot>
  </slots>
 </ui>

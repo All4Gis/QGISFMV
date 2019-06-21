@@ -177,7 +177,7 @@ class FmvLayerStyles(object):
     # DRAWINGS LINE STYLES
     #
     DL['DEFAULT'] = {}
-    DL['DEFAULT']['COLOR'] = QColor.fromRgb(252,215,108)
+    DL['DEFAULT']['COLOR'] = QColor.fromRgb(252, 215, 108)
     DL['DEFAULT']['WIDTH'] = 1
 
     #

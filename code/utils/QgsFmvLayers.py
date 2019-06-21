@@ -94,6 +94,7 @@ def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
     CommonLayer(pointLyr)
     return
 
+
 def AddDrawLineOnMap(drawLines):
     '''  add Line on the map '''
 
@@ -213,7 +214,7 @@ def AddDrawPolygonOnMap(poly_coordinates):
     try:
         centroid = feature.geometry().centroid().asPoint()
     except Exception:
-        iface.vectorLayerTools().stopEditing(polyLyr,False)
+        iface.vectorLayerTools().stopEditing(polyLyr, False)
         return False
 
     feature.setAttributes([centroid.x(), centroid.y(
@@ -965,7 +966,6 @@ def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
 # def UpdateStylesDrawLayers(NameSpace):
 #     ''' Update Symbology Drawing Layers '''
 #     s = QSettings()
-#     settrace()
 #     pointLyr = qgsu.selectLayerByName(Point_lyr)
 #     if pointLyr is None:
 #         return
@@ -1015,6 +1015,7 @@ def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
 #     CommonLayer(polyLyr)
 #     QApplication.processEvents()
 #     return
+
 
 def addLayer(layer, loadInLegend=True, group=None):
     """

@@ -164,6 +164,7 @@ def _py_from3857_to4326(point):
     lat = degrees(2.0 * atan(exp(y / EARTH_EQUATORIAL_RADIUS)) - HALF_PI)
     return (lon, lat)
 
+
 # Original code https://github.com/mapbox/geojson-area
 def ring__area(coordinates):
     """

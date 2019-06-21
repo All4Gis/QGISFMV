@@ -5,7 +5,7 @@ from qgis.PyQt.QtWidgets import QDialog, QStyleOptionSlider, QToolTip
 from QGIS_FMV.gui.ui_FmvOptions import Ui_OptionsDialog
 from QGIS_FMV.utils.QgsFmvUtils import getNameSpace
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
-#from QGIS_FMV.utils.QgsFmvLayers import UpdateStylesDrawLayers
+# from QGIS_FMV.utils.QgsFmvLayers import UpdateStylesDrawLayers
 
 try:
     from pydevd import *
@@ -44,10 +44,9 @@ class FmvOptions(QDialog, Ui_OptionsDialog):
         ####### Magnifier Glass #######
         # Shape Type
         if self.rB_Square_m.isChecked():
-            self.settings.setValue(self.NameSpace + "/Options/magnifier/shape", 0) #Square
+            self.settings.setValue(self.NameSpace + "/Options/magnifier/shape", 0)  # Square
         else:
-            self.settings.setValue(self.NameSpace + "/Options/magnifier/shape", 1) #Circle
-            
+            self.settings.setValue(self.NameSpace + "/Options/magnifier/shape", 1)  # Circle
 
         self.settings.setValue(self.NameSpace + "/Options/magnifier/size", self.sl_Size.value())
         self.settings.setValue(self.NameSpace + "/Options/magnifier/factor", self.sb_factor.value())
@@ -70,7 +69,7 @@ class FmvOptions(QDialog, Ui_OptionsDialog):
         
         draw.setValues(self)
         
-        #UpdateStylesDrawLayers(self.NameSpace)
+        # UpdateStylesDrawLayers(self.NameSpace)
         
         self.close()
         return

@@ -27,19 +27,17 @@ __copyright__ = '(C) 2016 Boundless, http://boundlessgeo.com'
 
 __revision__ = '$Format:%H$'
 
-
 import math
 import itertools
 
 from osgeo import osr
-
 
 ALPHABET = {l: c for c, l in enumerate('ABCDEFGHIJKLMNOPQRSTUVWXYZ')}
 
 ONEHT = 100000.0
 TWOMIL = 2000000.0
 
-MAX_PRECISION = 5         # Maximum precision of easting & northing
+MAX_PRECISION = 5  # Maximum precision of easting & northing
 MIN_EAST_NORTH = 0
 MAX_EAST_NORTH = 4000000
 
@@ -92,7 +90,7 @@ def toMgrs(latitude, longitude, precision=5):
     @returns - MGRS coordinate string
     """
 
-    #To avoid precision issues, which appear when using more than 6 decimal places
+    # To avoid precision issues, which appear when using more than 6 decimal places
     latitude = round(latitude, 6)
     longitude = round(longitude, 6)
 

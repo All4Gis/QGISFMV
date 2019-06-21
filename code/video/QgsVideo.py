@@ -38,7 +38,6 @@ from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
 
-
 try:
     from pydevd import *
 except ImportError:
@@ -157,7 +156,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
                 self.surfaceFormat().frameSize() != frame.size()):
             self.setError(QAbstractVideoSurface.IncorrectFormatError)
             # if is a hight quality frame is stopped and not call start function
-            #self.stop()
+            # self.stop()
             return False
         else:
             self._currentFrame = frame
@@ -242,7 +241,7 @@ class VideoWidget(QVideoWidget):
 
         color_blue = QColor(Qt.blue)
         color_black = QColor(Qt.black)
-        color_amber = QColor(252,215,108)
+        color_amber = QColor(252, 215, 108)
         
         pal_blue = QPalette()
         pal_blue.setBrush(QPalette.Highlight, QBrush(color_blue))
@@ -260,7 +259,7 @@ class VideoWidget(QVideoWidget):
         self.gt = None
 
         self.drawCesure = []
-        self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawMeasureDistance,self.drawMeasureArea, self.drawPolygon = [], [],[], [], [], []
+        self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawMeasureDistance, self.drawMeasureArea, self.drawPolygon = [], [], [], [], [], []
         # Draw Polygon Canvas Rubberband
         self.poly_Canvas_RubberBand = QgsRubberBand(
             iface.mapCanvas(), True)  # Polygon type
@@ -284,14 +283,14 @@ class VideoWidget(QVideoWidget):
         self.origin, self.dragPos = QPoint(), QPoint()
         self.tapTimer = QBasicTimer()
         self.brush = QBrush(color_black)
-        self.blue_Pen = QPen(color_blue,3)
+        self.blue_Pen = QPen(color_blue, 3)
 
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
         if self.drawLines:
             try:
                 if self.drawLines[-1][3] == "mouseMoveEvent":
-                    del self.drawLines[-1] # Remove mouseMoveEvent element
+                    del self.drawLines[-1]  # Remove mouseMoveEvent element
             except Exception:
                 None
             for pt in range(len(self.drawLines) - 1, -1, -1):
@@ -309,7 +308,7 @@ class VideoWidget(QVideoWidget):
         ''' Remove Last Segment Line Objects '''
         try:
             if self.drawLines[-1][3] == "mouseMoveEvent":
-                del self.drawLines[-1] # Remove mouseMoveEvent element
+                del self.drawLines[-1]  # Remove mouseMoveEvent element
         except Exception:
             None
         if self.drawLines:
@@ -379,7 +378,7 @@ class VideoWidget(QVideoWidget):
         if self.drawPolygon:
             try:
                 if self.drawPolygon[-1][3] == "mouseMoveEvent":
-                    del self.drawPolygon[-1] # Remove mouseMoveEvent element
+                    del self.drawPolygon[-1]  # Remove mouseMoveEvent element
             except Exception:
                 None
             for pt in range(len(self.drawPolygon) - 1, -1, -1):
@@ -541,14 +540,14 @@ class VideoWidget(QVideoWidget):
         if not self.surface.isActive():
             return
         
-        #print("paintEvent : " + str(event.region().boundingRect()))
-        #print("Active : " + str(self.surface.isActive()))
+        # print("paintEvent : " + str(event.region().boundingRect()))
+        # print("Active : " + str(self.surface.isActive()))
         
         self.painter = QPainter(self)
         self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
  
         region = event.region()
-        self.painter.fillRect(region.boundingRect() ,  self.brush) # Background painter color
+        self.painter.fillRect(region.boundingRect() , self.brush)  # Background painter color
  
         try:
             self.surface.paint(self.painter)
@@ -566,15 +565,14 @@ class VideoWidget(QVideoWidget):
         
         # Draw On Video
         draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
-                         self.drawMeasureDistance,self.drawMeasureArea, self.drawCesure, self.painter, self.surface, self.gt)
-
+                         self.drawMeasureDistance, self.drawMeasureArea, self.drawCesure, self.painter, self.surface, self.gt)
         
         # Draw On Video Object tracking test
         if self._interaction.objectTracking and self._isinit:
             frame = convertQImageToMat(self.currentFrame())
             offset = self.surface.videoRect()
             # Update tracker
-            result = resize(frame,(offset.width(),offset.height()))
+            result = resize(frame, (offset.width(), offset.height()))
             ok, bbox = self.tracker.update(result)
             # Draw bounding box
             if ok:
@@ -586,9 +584,9 @@ class VideoWidget(QVideoWidget):
                     self.painter.drawRect(x, y, bbox[2], bbox[3])
                     
                     # Get Track object center
-                    xc= x + (bbox[2]/2)
-                    yc= y + (bbox[3]/2)
-                    p = QPoint(xc,yc)
+                    xc = x + (bbox[2] / 2)
+                    yc = y + (bbox[3] / 2)
+                    p = QPoint(xc, yc)
                     Longitude, Latitude, _ = vut.GetPointCommonCoords(
                         p, self.surface)
                     # Draw Rubber Band on canvas
@@ -620,14 +618,14 @@ class VideoWidget(QVideoWidget):
         # Magnifier Glass
         if self._interaction.magnifier and not self.dragPos.isNull():
             draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
-        #QApplication.processEvents()
+        # QApplication.processEvents()
         
     def AddMoveEventValue(self, values, Longitude, Latitude, Altitude):
         """
         Remove and Add move value for fluid drawing
         """
         for idx, pt in enumerate(values):
-            if pt[-1]=="mouseMoveEvent":
+            if pt[-1] == "mouseMoveEvent":
                 del values[idx]
         values.append([Longitude, Latitude, Altitude, "mouseMoveEvent"])
 
@@ -730,7 +728,6 @@ class VideoWidget(QVideoWidget):
             self.Censure_RubberBand.setGeometry(
                 QRect(self.origin, event.pos()).normalized())
 
-
     def timerEvent(self, _):
         """ Time Event (Magnifier method)"""
         if not self._interaction.magnifier:
@@ -824,8 +821,8 @@ class VideoWidget(QVideoWidget):
     def SetMagnifier(self, value):
         """ Set Magnifier Glass """
         self._interaction.magnifier = value
-        #We avoid that the second time we activate the tool, save the previous position.
-        #Always keep the same behavior of the tool    
+        # We avoid that the second time we activate the tool, save the previous position.
+        # Always keep the same behavior of the tool    
         if not value:
             self.dragPos = QPoint()
             self.tapTimer.stop()
@@ -874,7 +871,7 @@ class VideoWidget(QVideoWidget):
             self.Track_Canvas_RubberBand.reset()
             
             self.tracker = TrackerMOSSE_create()
-            result = resize(frame,(offset.width(),offset.height()))
+            result = resize(frame, (offset.width(), offset.height()))
 
             try:
                 ok = self.tracker.init(result, bbox)
@@ -883,9 +880,9 @@ class VideoWidget(QVideoWidget):
             if ok:
                 self._isinit = True
                 # Get Traker center
-                xc= bbox[0] + (geom.width()/2)
-                yc= bbox[1] + (geom.height()/2)
-                p = QPoint(xc,yc)
+                xc = bbox[0] + (geom.width() / 2)
+                yc = bbox[1] + (geom.height() / 2)
+                p = QPoint(xc, yc)
                 Longitude, Latitude, _ = vut.GetPointCommonCoords(
                     p, self.surface)
                 # Draw Rubber Band on canvas

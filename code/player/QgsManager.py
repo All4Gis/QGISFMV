@@ -19,6 +19,7 @@ from PyQt5.QtGui import QColor
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.converter.ffmpeg import FFMpeg
 from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
+from QGIS_FMV.player.QgsMultiplexor import Multiplexor
 from QGIS_FMV.player.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
@@ -26,11 +27,12 @@ from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         initElevationModel,
                                         AddVideoToSettings,
                                         RemoveVideoToSettings,
+                                        RemoveVideoFolder,
+                                        getVideoFolder,
                                         getVideoManagerList,
                                         getNameSpace,
                                         getVideoLocationInfo)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-
 
 try:
     from pydevd import *
@@ -72,12 +74,19 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.verticalHeader().setDefaultAlignment(Qt.AlignHCenter)
         self.VManager.hideColumn(0)
         
-        #Get Video Manager List
+        # Get Video Manager List
         VideoList = getVideoManagerList()
         for load_id in VideoList:
-            filename = s.value(getNameSpace() + "/Manager_List/"+load_id)
+            filename = s.value(getNameSpace() + "/Manager_List/" + load_id)
             _, name = os.path.split(filename)
-            self.AddFileRowToManager(name, filename, load_id)
+
+            folder = getVideoFolder(filename)
+            klv_folder = os.path.join(folder, "klv")
+            exist = os.path.exists(klv_folder)
+            if exist:
+                self.AddFileRowToManager(name, filename, load_id, exist, klv_folder)
+            else:
+                self.AddFileRowToManager(name, filename, load_id)
             
         draw.setValues()
             
@@ -100,9 +109,12 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         ''' Remove current row '''
         cr = self.VManager.currentRow()
         row_id = self.VManager.item(cr, 0).text()
+        row_text = self.VManager.item(cr, 1).text()
         self.VManager.removeRow(cr)
         # Remove video to Settings List
         RemoveVideoToSettings(row_id)
+        # Remove folder if is local
+        RemoveVideoFolder(row_text)
         return
 
     def openStreamDialog(self):
@@ -113,7 +125,13 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.OpenStream.exec_()
         return
 
-    def AddFileRowToManager(self, name, filename, load_id=None):
+    def openMuiltiplexorDialog(self):
+        self.Muiltiplexor = Multiplexor(self.iface, parent=self, Exts=ast.literal_eval(parser.get("FILES", "Exts")))
+        self.Muiltiplexor.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
+        self.Muiltiplexor.exec_()
+        return
+
+    def AddFileRowToManager(self, name, filename, load_id=None, islocal=False, klv_folder=None):
         ''' Add file Video to new Row '''
         # We limit the number of videos due to the buffer
         if self.VManager.rowCount() > 5:
@@ -121,6 +139,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                     "ManagerDock", "You must delete some video from the list before adding a new one"))
             return
         
+        self.islocal = islocal
+        self.klv_folder = klv_folder
         w = QWidget()
         layout = QVBoxLayout()
         pbar = QProgressBar()
@@ -160,8 +180,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self.ToggleActiveRow(rowPosition, value="Missing source file")
             for j in range(self.VManager.columnCount()):
                 try:
-                    self.VManager.item(rowPosition, j).setFlags(Qt.NoItemFlags|Qt.ItemIsEnabled)
-                    self.VManager.item(rowPosition, j).setBackground(QColor(211,211,211))
+                    self.VManager.item(rowPosition, j).setFlags(Qt.NoItemFlags | Qt.ItemIsEnabled)
+                    self.VManager.item(rowPosition, j).setBackground(QColor(211, 211, 211))
                 except Exception:
                     self.VManager.cellWidget(rowPosition, j).setStyleSheet("background-color:rgb(211,211,211);");
                     pass
@@ -181,11 +201,10 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 "", "buffered non-blocking metadata reader initialized.", onlyLog=True)
 
             pbar.setValue(60)
-            
             try:
                 # init point we can center the video on
                 self.initialPt[str(rowPosition)
-                               ] = getVideoLocationInfo(filename)
+                               ] = getVideoLocationInfo(filename, islocal, klv_folder)
                 if not self.initialPt[str(rowPosition)]:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                         QCoreApplication.translate(
@@ -219,9 +238,12 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self.initialPt[str(rowPosition)] = None
 
         pbar.setValue(100)
-        self.ToggleActiveRow(rowPosition, value="Ready")
-        #Add video to settings list
-        AddVideoToSettings(str(row_id),filename)
+        if islocal:
+            self.ToggleActiveRow(rowPosition, value="Ready Local")
+        else:
+            self.ToggleActiveRow(rowPosition, value="Ready")
+        # Add video to settings list
+        AddVideoToSettings(str(row_id), filename)
 
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
@@ -246,25 +268,34 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             return
 
         path = self.VManager.item(row, 3).text()
-
+        text = self.VManager.item(row, 1).text()
         self.ToggleActiveRow(row)
-
+        
+        folder = getVideoFolder(text)
+        klv_folder = os.path.join(folder, "klv")
+        exist = os.path.exists(klv_folder)
         try:
             self._PlayerDlg.close()
         except Exception:
             None
         if self._PlayerDlg is None:
-            self.CreatePlayer(path, row)
+            if exist:
+                self.CreatePlayer(path, row, islocal=True, klv_folder=klv_folder)
+            else:
+                self.CreatePlayer(path, row)
         else:
             if path != self._PlayerDlg.fileName:
                 self.ToggleActiveFromTitle()
-                self._PlayerDlg.playFile(path)
+                if exist:
+                    self._PlayerDlg.playFile(path,islocal=True, klv_folder=klv_folder)
+                else:
+                    self._PlayerDlg.playFile(path)
                 return
 
-    def CreatePlayer(self, path, row):
+    def CreatePlayer(self, path, row,islocal=False,klv_folder=None):
         ''' Create Player '''
         self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(
-            row)], pass_time=self.pass_time, isStreaming=self.isStreaming)
+            row)], pass_time=self.pass_time, isStreaming=self.isStreaming, islocal=islocal, klv_folder=klv_folder)
         self._PlayerDlg.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()
@@ -275,8 +306,15 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         for row in range(self.VManager.rowCount()):
             if self.VManager.item(row, column) is not None:
                 v = self.VManager.item(row, column).text()
+                text = self.VManager.item(row, 1).text()
                 if v == "Playing":
-                    self.ToggleActiveRow(row, value="Ready")
+                    folder = getVideoFolder(text)
+                    klv_folder = os.path.join(folder, "klv")
+                    exist = os.path.exists(klv_folder)
+                    if exist:
+                        self.ToggleActiveRow(row, value="Ready Local")
+                    else:
+                        self.ToggleActiveRow(row, value="Ready")
                     return
 
     def ToggleActiveRow(self, row, value="Playing"):

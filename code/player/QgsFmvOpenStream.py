@@ -11,6 +11,7 @@ except ImportError:
 
 # TODO : Develop that functionality 
 
+
 class OpenStream(QDialog, Ui_FmvOpenStream):
     """ Open Stream Dialog """
 

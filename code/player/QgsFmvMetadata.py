@@ -19,7 +19,6 @@ from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGIS_FMV.utils.QgsFmvUtils import askForFiles, _seconds_to_time, BurnDrawingsImage
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
-
 try:
     from pydevd import *
 except ImportError:
@@ -147,7 +146,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
 
         row = 1
         for key in sorted(data.keys()):
-            values = [str(key), str(data[key][0]),str(data[key][1])]
+            values = [str(key), str(data[key][0]), str(data[key][1])]
             for column in range(columns):
                 cursor.insertText(values[column])
                 if (row) % 2 == 0:
@@ -160,10 +159,10 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
 
         current_t = QCoreApplication.translate("QgsFmvMetadata", "Current Frame")
         
-        self.TextBlockCenter(cursor, TextFormat= QTextFormat.PageBreak_AlwaysBefore)
+        self.TextBlockCenter(cursor, TextFormat=QTextFormat.PageBreak_AlwaysBefore)
         
         cursor.insertHtml("""
-                          <br><p style='text-align: center;'><strong>""" + current_t +"""</strong></p><br>
+                          <br><p style='text-align: center;'><strong>""" + current_t + """</strong></p><br>
                           """)
          
         self.TextBlockCenter(cursor)

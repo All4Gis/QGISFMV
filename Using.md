@@ -17,7 +17,12 @@ Once you have them, click on the icon that will appear in QGIS, to open the mana
 ##  Video Manager
 
 From the manager, you can open and manage your play list.
-For adding a video, simply click on **File -> Open Video File** and select a video from the dialog window to add it to the play list.
+For adding a video, If our video is an MISB simply click on **File -> Open Video File** and select a video from the dialog window to add it to the play list.
+
+But if we don't have an MISB, we will have to create it, for that click on **File -> Create MISB File** and we will select the video and the telemetry file.
+The telemetry file must be obtained from our drone and converted to **.csv** using the [CsvView tool](https://datfile.net/CsvView/downloads.html).
+**IMPORTANT: Only tested using DJI data for now**
+
 If you want to play a video after adding it to the play list, *double-click* on any video in the manager and the player will be opened playing the selected video. 
 For playing another video, it is not necessary to close the player, just click on a different video and it will be played.
 

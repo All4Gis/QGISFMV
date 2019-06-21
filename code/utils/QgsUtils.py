@@ -80,14 +80,15 @@ class QgsUtils(object):
             log.error(text)
         return
 
-    @staticmethod
-    def removeMosaicFolder():
-        ''' Remove mosaic folder '''
-        out = os.path.join(os.path.expanduser("~"), "QGIS_FMV")
-        try:
-            shutil.rmtree(out, ignore_errors=True)
-        except Exception:
-            None
+#     @staticmethod
+#     def removeMosaicFolder(video_file):
+#         ''' Remove mosaic folder '''
+#         folder = getVideoFolder(video_file)
+#         out = os.path.join(folder, "mosaic")
+#         try:
+#             shutil.rmtree(out, ignore_errors=True)
+#         except Exception:
+#             None
 
     @staticmethod
     def removeFile(path):

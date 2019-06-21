@@ -7,6 +7,7 @@ from math import atan, tan, sqrt, radians, pi
 import os
 from os.path import dirname, abspath
 import platform
+import shutil
 from qgis.PyQt.QtCore import (QSettings,
                               QUrl,
                               QEventLoop)
@@ -39,7 +40,6 @@ from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          SetcrtPltTailNum)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
-
 parser = SafeConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 
@@ -51,7 +51,6 @@ Footprint_lyr = parser['LAYERS']['Footprint_lyr']
 FrameCenter_lyr = parser['LAYERS']['FrameCenter_lyr']
 dtm_buffer = int(parser['GENERAL']['DTM_buffer_size'])
 ffmpegConf = parser['GENERAL']['ffmpeg']
-
 
 try:
     from homography import from_points
@@ -142,7 +141,7 @@ class BufferedMetaReader():
     def bufferParalell(self, start, size):
         start_sec = _time_to_seconds(start)
         start_milisec = int(start_sec * 1000)
-
+        
         for k in range(start_milisec, start_milisec + (size * self.intervall), self.intervall):
             cTime = k / 1000.0
             nTime = (k + self.pass_time) / 1000.0
@@ -222,18 +221,24 @@ class callBackMetadataThread(threading.Thread):
     def run(self):
         # qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
         self.p = _spawn(self.cmds)
+        print (self.cmds)
         self.stdout, _ = self.p.communicate()
+        print (self.stdout)
+        print (_)
 
-# Add video to settings list
+
 def AddVideoToSettings(row_id, path):
+    ''' Add video to settings list '''
     settings.setValue(getNameSpace() + "/Manager_List/" + row_id, path)
 
-# Remove video in settings list
+
 def RemoveVideoToSettings(row_id):
+    ''' Remove video in settings list '''
     settings.remove(getNameSpace() + "/Manager_List/%s" % row_id)
 
-# Get Video Manager List
+
 def getVideoManagerList():
+    ''' Get Video Manager List '''
     VideoList = []
     try:
         settings.beginGroup(getNameSpace() + "/Manager_List")
@@ -242,28 +247,60 @@ def getVideoManagerList():
     except Exception:
         None
     return VideoList
-  
+
+
+def getVideoFolder(video_file):
+    ''' Get or create Video Temporal folder '''
+    home = os.path.expanduser("~")
+    
+    qgsu.createFolderByName(home, "QGIS_FMV")
+    
+    root, _ = os.path.splitext(os.path.basename(video_file))
+    homefmv = os.path.join(home, "QGIS_FMV")
+    
+    qgsu.createFolderByName(homefmv, root)
+    return os.path.join(homefmv, root)
+
+
+def RemoveVideoFolder(filename):
+    ''' Remove video temporal folder if exist '''
+    file, _ = os.path.splitext(filename)
+    folder = getVideoFolder(file)
+    try:
+        shutil.rmtree(folder, ignore_errors=True)
+    except Exception:
+        None
+    return
+
+ 
 def getNameSpace():
+    ''' Get plugin name space '''
     namespace = _callerName().split(".")[0]   
     return namespace
+
         
 def setCenterMode(mode, interface):
+    ''' Set map center mode '''
     global centerMode, iface
     centerMode = mode
     iface = interface
 
-def getVideoLocationInfo(videoPath):
+def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None):
     """ Get basic location info about the video """
     location = []
-
     try:
-        p = _spawn(['-i', videoPath,
-                    '-ss', '00:00:00',
-                    '-to', '00:00:01',
-                    '-map', 'data-re',
-                    '-f', 'data', '-'])
+        if islocal:
+            dataFile = os.path.join(klv_folder, "0.0.klv")
+            f = open(dataFile, 'rb')
+            stdout_data = f.read()
+        else:
+            p = _spawn(['-i', videoPath,
+                        '-ss', '00:00:00',
+                        '-to', '00:00:01',
+                        '-map', 'data-re',
+                        '-f', 'data', '-'])
 
-        stdout_data, _ = p.communicate()
+            stdout_data, _ = p.communicate()
 
         if stdout_data == b'':
             return
@@ -432,7 +469,7 @@ def convertQImageToMat(img, cn=3):
     return np.array(ptr).reshape(img.height(), img.width(), cn)
 
 
-def convertMatToQImage(img, t= QImage.Format_RGB888):
+def convertMatToQImage(img, t=QImage.Format_RGB888):
     '''  Converts an opencv MAT image to a QImage  '''
     height, width = img.shape[:2]
     if img.ndim == 3:
@@ -575,6 +612,7 @@ def _spawn(cmds, t="ffmpeg"):
                  bufsize=0,
                  close_fds=(not windows))
 
+
 def rad2deg(radians):
     ''' Radians to Degrees '''
     degrees = 180 * radians / pi
@@ -649,51 +687,51 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     UpdateTrajectoryData(packet, hasElevationModel())
     UpdateFrameCenterData(packet, hasElevationModel())
     UpdateFrameAxisData(packet, hasElevationModel())
-
+ 
     if OffsetLat1 is not None and LatitudePoint1Full is None:
         CornerEstimationWithOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
-
+ 
     elif OffsetLat1 is None and LatitudePoint1Full is None:
         CornerEstimationWithoutOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
-
+ 
     else:
         cornerPointUL = [packet.CornerLatitudePoint1Full,
                          packet.CornerLongitudePoint1Full]
         if None in cornerPointUL:
             return
-
+ 
         cornerPointUR = [packet.CornerLatitudePoint2Full,
                          packet.CornerLongitudePoint2Full]
         if None in cornerPointUR:
             return
-
+ 
         cornerPointLR = [packet.CornerLatitudePoint3Full,
                          packet.CornerLongitudePoint3Full]
-
+ 
         if None in cornerPointLR:
             return
-
+ 
         cornerPointLL = [packet.CornerLatitudePoint4Full,
                          packet.CornerLongitudePoint4Full]
-
+ 
         if None in cornerPointLL:
             return
         UpdateFootPrintData(
             packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
-
+ 
         UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
                         cornerPointLR, cornerPointLL, hasElevationModel())
-
+ 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
-
+ 
         if mosaic:
             georeferencingVideo(parent)
-
+ 
     # recenter map on platform
     if centerMode == 1:
         lyr = qgsu.selectLayerByName(Platform_lyr)
@@ -706,7 +744,7 @@ def UpdateLayers(packet, parent=None, mosaic=False):
     elif centerMode == 3:
         lyr = qgsu.selectLayerByName(FrameCenter_lyr)
         iface.mapCanvas().setExtent(lyr.extent())
-
+ 
     iface.mapCanvas().refresh()
     return
 
@@ -714,8 +752,11 @@ def UpdateLayers(packet, parent=None, mosaic=False):
 def georeferencingVideo(parent):
     """ Extract Current Frame Thread """
     image = parent.videoWidget.currentFrame()
-    root, _ = os.path.splitext(os.path.basename(parent.fileName))
-    out = os.path.join(os.path.expanduser("~"), "QGIS_FMV", root)
+    
+    folder = getVideoFolder(parent.fileName)
+    qgsu.createFolderByName(folder, "mosaic")
+    out = os.path.join(folder, "mosaic")
+    
     position = str(parent.player.position())
 
     taskGeoreferencingVideo = QgsTask.fromFunction('Georeferencing Current Frame Task',
@@ -1099,9 +1140,10 @@ def _seconds_to_time_frac(sec, comma=False):
         return '%02d:%02d:%02d,%03d' % (hours, minutes, sec, frac)
     else:
         return '%02d:%02d:%07.4f' % (hours, minutes, sec)
+
     
 def BurnDrawingsImage(source, overlay):
-    base = source.scaled(overlay.size(), Qt.IgnoreAspectRatio )
+    base = source.scaled(overlay.size(), Qt.IgnoreAspectRatio)
     
     p = QPainter()
     p.setRenderHint(QPainter.HighQualityAntialiasing)
@@ -1111,5 +1153,5 @@ def BurnDrawingsImage(source, overlay):
     p.end()
     
     # Restore size
-    base = base.scaled(source.size(), Qt.IgnoreAspectRatio )
+    base = base.scaled(source.size(), Qt.IgnoreAspectRatio)
     return base

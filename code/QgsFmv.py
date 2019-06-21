@@ -101,7 +101,7 @@ class Fmv:
             "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
         self.iface.removeToolBarIcon(self.actionFMV)
         log.removeLogging()
-        qgsu.removeMosaicFolder()
+        # qgsu.removeMosaicFolder()
 
     def About(self):
         ''' Show About Dialog '''

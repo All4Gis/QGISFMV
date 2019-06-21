@@ -114,6 +114,7 @@ class QJsonTreeItem(object):
 
 class QJsonModel(QAbstractItemModel):
     ''' Json Abstract Item Model '''
+
     def __init__(self):
         super().__init__()
         self.mRootItem = QJsonTreeItem()

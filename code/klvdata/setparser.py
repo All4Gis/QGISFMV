@@ -139,76 +139,81 @@ class SetParser(Element):
         ''' Return metadata dictionary'''
         metadata = {}
 
-        def repeat(items, indent=1):
+        def repeat(items, indent=1, parentTAG=0):
             for item in items:
                 try:
                     if not hasattr(item.value, 'value'):
-                        continue                                                          
-                    metadata[item.TAG] = (item.LDSName, str(item.value.value))
-                    if item.TAG == 4:
-                        self.PlatformTailNumber = item.value.value
-                    elif item.TAG == 5:
-                        self.PlatformHeadingAngle = item.value.value
-                    elif item.TAG == 11:
-                        self.ImageSourceSensor = item.value.value
-                    elif item.TAG == 13:
-                        self.SensorLatitude = item.value.value
-                    elif item.TAG == 14:
-                        self.SensorLongitude = item.value.value
-                    elif item.TAG == 15:
-                        self.SensorTrueAltitude = item.value.value
-                    elif item.TAG == 16:
-                        self.SensorHorizontalFieldOfView = item.value.value
-                    elif item.TAG == 17:
-                        self.SensorVerticalFieldOfView = item.value.value
-                    elif item.TAG == 18:
-                        self.SensorRelativeAzimuthAngle = item.value.value
-                    elif item.TAG == 21:
-                        self.SlantRange = item.value.value
-                    elif item.TAG == 22:
-                        self.targetWidth = item.value.value
-                    elif item.TAG == 23:
-                        self.FrameCenterLatitude = item.value.value
-                    elif item.TAG == 24:
-                        self.FrameCenterLongitude = item.value.value
-                    elif item.TAG == 25:
-                        self.FrameCenterElevation = item.value.value
-                    elif item.TAG == 26:
-                        self.OffsetCornerLatitudePoint1 = item.value.value
-                    elif item.TAG == 27:
-                        self.OffsetCornerLongitudePoint1 = item.value.value
-                    elif item.TAG == 28:
-                        self.OffsetCornerLatitudePoint2 = item.value.value
-                    elif item.TAG == 29:
-                        self.OffsetCornerLongitudePoint2 = item.value.value
-                    elif item.TAG == 30:
-                        self.OffsetCornerLatitudePoint3 = item.value.value
-                    elif item.TAG == 31:
-                        self.OffsetCornerLongitudePoint3 = item.value.value
-                    elif item.TAG == 32:
-                        self.OffsetCornerLatitudePoint4 = item.value.value
-                    elif item.TAG == 33:
-                        self.OffsetCornerLongitudePoint4 = item.value.value
-                    elif item.TAG == 82:
-                        self.CornerLatitudePoint1Full = item.value.value
-                    elif item.TAG == 83:
-                        self.CornerLongitudePoint1Full = item.value.value
-                    elif item.TAG == 84:
-                        self.CornerLatitudePoint2Full = item.value.value
-                    elif item.TAG == 85:
-                        self.CornerLongitudePoint2Full = item.value.value
-                    elif item.TAG == 86:
-                        self.CornerLatitudePoint3Full = item.value.value
-                    elif item.TAG == 87:
-                        self.CornerLongitudePoint3Full = item.value.value
-                    elif item.TAG == 88:
-                        self.CornerLatitudePoint4Full = item.value.value
-                    elif item.TAG == 89:
-                        self.CornerLongitudePoint4Full = item.value.value
+                        continue  
+                    if not parentTAG :                                                        
+                        metadata[item.TAG] = (item.LDSName, str(item.value.value))
+                        if item.TAG == 4:
+                            self.PlatformTailNumber = item.value.value
+                        elif item.TAG == 5:
+                            self.PlatformHeadingAngle = item.value.value
+                        elif item.TAG == 11:
+                            self.ImageSourceSensor = item.value.value
+                        elif item.TAG == 13:
+                            self.SensorLatitude = item.value.value
+                        elif item.TAG == 14:
+                            self.SensorLongitude = item.value.value
+                        elif item.TAG == 15:
+                            self.SensorTrueAltitude = item.value.value
+                        elif item.TAG == 16:
+                            self.SensorHorizontalFieldOfView = item.value.value
+                        elif item.TAG == 17:
+                            self.SensorVerticalFieldOfView = item.value.value
+                        elif item.TAG == 18:
+                            self.SensorRelativeAzimuthAngle = item.value.value
+                        elif item.TAG == 21:
+                            self.SlantRange = item.value.value
+                        elif item.TAG == 22:
+                            self.targetWidth = item.value.value
+                        elif item.TAG == 23:
+                            self.FrameCenterLatitude = item.value.value
+                        elif item.TAG == 24:
+                            self.FrameCenterLongitude = item.value.value
+                        elif item.TAG == 25:
+                            self.FrameCenterElevation = item.value.value
+                        elif item.TAG == 26:
+                            self.OffsetCornerLatitudePoint1 = item.value.value
+                        elif item.TAG == 27:
+                            self.OffsetCornerLongitudePoint1 = item.value.value
+                        elif item.TAG == 28:
+                            self.OffsetCornerLatitudePoint2 = item.value.value
+                        elif item.TAG == 29:
+                            self.OffsetCornerLongitudePoint2 = item.value.value
+                        elif item.TAG == 30:
+                            self.OffsetCornerLatitudePoint3 = item.value.value
+                        elif item.TAG == 31:
+                            self.OffsetCornerLongitudePoint3 = item.value.value
+                        elif item.TAG == 32:
+                            self.OffsetCornerLatitudePoint4 = item.value.value
+                        elif item.TAG == 33:
+                            self.OffsetCornerLongitudePoint4 = item.value.value
+                        elif item.TAG == 82:
+                            self.CornerLatitudePoint1Full = item.value.value
+                        elif item.TAG == 83:
+                            self.CornerLongitudePoint1Full = item.value.value
+                        elif item.TAG == 84:
+                            self.CornerLatitudePoint2Full = item.value.value
+                        elif item.TAG == 85:
+                            self.CornerLongitudePoint2Full = item.value.value
+                        elif item.TAG == 86:
+                            self.CornerLatitudePoint3Full = item.value.value
+                        elif item.TAG == 87:
+                            self.CornerLongitudePoint3Full = item.value.value
+                        elif item.TAG == 88:
+                            self.CornerLatitudePoint4Full = item.value.value
+                        elif item.TAG == 89:
+                            self.CornerLongitudePoint4Full = item.value.value
+                    else :
+                        metadata[parentTAG][len(metadata[parentTAG]) - 1][item.TAG] = (item.LDSName, item.ESDName, item.UDSName, str(item.value.value))
+                
                 except Exception:
                     qgsu.showUserAndLogMessage("", "Value cannot be read: " + str(item.value.value), onlyLog=True)
                 if hasattr(item, 'items'):
-                    repeat(item.items.values(), indent + 1)
+                    metadata[item.TAG] = (item.LDSName, item.ESDName, item.UDSName, {})
+                    repeat(item.items.values(), indent + 1, item.TAG)
 
         repeat(self.items.values())
         return OrderedDict(metadata)
@@ -458,11 +463,11 @@ class SetParser(Element):
 
     def structure(self):
         ''' Return metadata structure'''
-        #print(str(type(self)))
+        # print(str(type(self)))
 
         def repeat(items, indent=1):
             for item in items:
-                #print(indent * "\t" + str(type(item)))
+                # print(indent * "\t" + str(type(item)))
                 if hasattr(item, 'items'):
                     repeat(item.items.values(), indent + 1)
 

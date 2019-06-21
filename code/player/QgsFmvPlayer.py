@@ -36,6 +36,7 @@ from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          RemoveGroupByName)
 from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
                                         ResetData,
+                                        getVideoFolder,
                                         BurnDrawingsImage,
                                         _spawn,
                                         UpdateLayers,
@@ -50,7 +51,6 @@ from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
-
 
 try:
     from pydevd import *
@@ -70,7 +70,7 @@ except Exception as e:
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     """ Video Player Class """
 
-    def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, isStreaming=False):
+    def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, isStreaming=False, islocal=False, klv_folder=None):
         """ Constructor """
         super().__init__(parent)
         self.setupUi(self)
@@ -79,6 +79,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.fileName = path
         self.meta_reader = meta_reader
         self.isStreaming = isStreaming
+        self.islocal = islocal
+        self.klv_folder = klv_folder
         self.createingMosaic = False
         self.currentInfo = 0.0
         self.data = None
@@ -154,7 +156,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.stateChanged.connect(self.setCurrentState)
 
         self.playerState = QMediaPlayer.LoadingMedia
-        self.playFile(path)
+        self.playFile(path, self.islocal, self.klv_folder)
 
         self.sliderDuration.setRange(0, self.player.duration() / 1000)
 
@@ -212,7 +214,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.videoWidget.SetMGRS(True)
         else:
             self.videoWidget.SetMGRS(False)
-            
 
     def HasAudio(self, videoPath):
         """ Check if video have Metadata or not """
@@ -246,8 +247,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             # To get rid of this, we fill a buffer (BufferedMetaReader) in the QManager with some Metadata in advance,
             # and hope they'll be ready to read here in a totaly non-blocking
             # way (increase the buffer size if needed in QManager).
-
-            stdout_data = self.meta_reader.get(currentTime)
+            if not self.islocal:
+                stdout_data = self.meta_reader.get(currentTime)
+            else:
+                stdout_data = b'\x15'
             # qgsu.showUserAndLogMessage(
             #    "", "stdout_data: " + str(stdout_data) + " currentTime: " + str(currentTime), onlyLog=True)
             if stdout_data == 'NOT_READY':
@@ -286,18 +289,20 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.data = data
                 if self.metadataDlg.isVisible():  # Only add metadata to table if this QDockWidget is visible (speed plugin)
                     self.addMetadata(data)
-
-                UpdateLayers(packet, parent=self,
-                             mosaic=self.createingMosaic)
+                try:
+                    UpdateLayers(packet, parent=self,
+                                 mosaic=self.createingMosaic)
+                except:
+                    None
                 QApplication.processEvents()
                 return
             except Exception as e:
                 qgsu.showUserAndLogMessage("", "QgsFmvPlayer packetStreamParser failed! : " + str(e), onlyLog=True)
 
     def callBackMetadata(self, currentTime, nextTime):
-        """ Metadata CallBack """
+        """ Metadata CallBack Streaming"""
         try:
-
+            
             port = int(self.fileName.split(':')[2])
             t = callBackMetadataThread(cmds=['-i', self.fileName.replace(str(port), str(port + 1)),
                                              '-ss', currentTime,
@@ -319,6 +324,21 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e))
+            
+    def readLocal(self, currentInfo):
+        try:
+            dataFile = os.path.join(self.klv_folder, str(round(currentInfo, 1)) + ".klv")
+            f = open(dataFile, 'rb')
+            stdout_data = f.read()
+        except Exception:
+            return
+        
+        if stdout_data == b'':
+            return
+
+        self.packetStreamParser(stdout_data)
+
+        return
 
     def GetPacketData(self):
         ''' Return Current Packet data '''
@@ -411,12 +431,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def createMosaic(self, value):
         ''' Function for create Video Mosaic '''
-        home = os.path.expanduser("~")
+        folder = getVideoFolder(self.fileName)
+        qgsu.createFolderByName(folder, "mosaic")
 
-        qgsu.createFolderByName(home, "QGIS_FMV")
-        homefmv = os.path.join(home, "QGIS_FMV")
-        root, _ = os.path.splitext(os.path.basename(self.fileName))
-        qgsu.createFolderByName(homefmv, root)
         self.createingMosaic = value
         # Create Group
         CreateGroupByName()
@@ -507,11 +524,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetNDVI(value)
         
         # TODO : Temporarily we lower in rate. Player in other thread?
-        if value and self.player.playbackRate()!= self.playbackRateSlow:
+        if value and self.player.playbackRate() != self.playbackRateSlow:
             self.player.setPlaybackRate(self.playbackRateSlow)
             return
 
-        #QApplication.processEvents()
+        # QApplication.processEvents()
         self.videoWidget.UpdateSurface()
         return
 
@@ -521,10 +538,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetEdgeDetection(value)
         
         # TODO : Temporarily we lower in rate. Player in other thread?
-        if value and self.player.playbackRate()!= self.playbackRateSlow:
+        if value and self.player.playbackRate() != self.playbackRateSlow:
             self.player.setPlaybackRate(self.playbackRateSlow)
             return    
-        #QApplication.processEvents()
+        # QApplication.processEvents()
         self.videoWidget.UpdateSurface()
         return
 
@@ -537,7 +554,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.player.setPlaybackRate(1.0)
             return
         
-        #QApplication.processEvents()
+        # QApplication.processEvents()
         self.videoWidget.UpdateSurface()
         return
 
@@ -546,11 +563,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetAutoContrastFilter(value)
         # TODO : Temporarily we lower in rate. Player in other thread?
-        if value and self.player.playbackRate()!= self.playbackRateSlow:
+        if value and self.player.playbackRate() != self.playbackRateSlow:
             self.player.setPlaybackRate(self.playbackRateSlow)
             return       
  
-        #QApplication.processEvents()
+        # QApplication.processEvents()
         self.videoWidget.UpdateSurface()
         return
 
@@ -563,7 +580,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.player.setPlaybackRate(1.0)
             return
         
-        #QApplication.processEvents()
+        # QApplication.processEvents()
         self.videoWidget.UpdateSurface()
         return
 
@@ -602,12 +619,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def ojectTracking(self, value):
         ''' Object Tracking '''
         # Remove tracking if is unchecked
-        #if not value:
+        # if not value:
         self.videoWidget.Track_Canvas_RubberBand.reset() 
         
         self.UncheckUtils(self.sender(), value)
         # TODO : Temporarily we lower in rate. Player in other thread?
-        if value and self.player.playbackRate()!= self.playbackRateSlow:
+        if value and self.player.playbackRate() != self.playbackRateSlow:
             self.player.setPlaybackRate(self.playbackRateSlow) 
         QApplication.processEvents()
         self.videoWidget.SetObjectTracking(value)
@@ -842,14 +859,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             currentTime = _seconds_to_time(currentInfo)
             tStr = currentTime + " / " + totalTime
             currentTimeInfo = _seconds_to_time_frac(currentInfo)
-            # Get Metadata from buffer
-            if not self.isStreaming:
-                self.get_metadata_from_buffer(currentTimeInfo)
-            else:
+          
+            if self.isStreaming:
                 qgsu.showUserAndLogMessage("", "Streaming on ", onlyLog=True)
                 nextTime = currentInfo + self.pass_time / 1000
                 nextTimeInfo = _seconds_to_time_frac(nextTime)
                 self.callBackMetadata(currentTimeInfo, nextTimeInfo)
+            elif self.islocal:
+                self.readLocal(currentInfo)
+            else:
+                # Get Metadata from buffer 
+                self.get_metadata_from_buffer(currentTimeInfo)
 
         else:
             tStr = ""
@@ -877,8 +897,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         else:
             self.videoAvailableChanged(True)
 
-    def playFile(self, videoPath):
+    def playFile(self, videoPath, islocal=False, klv_folder=None):
         ''' Play file from path '''
+        self.islocal = islocal
+        self.klv_folder = klv_folder
         try:
             # Remove All Data
             self.RemoveAllData()
@@ -1168,7 +1190,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 if result['task'] == 'Save Current Georeferenced Frame Task':
                     buttonReply = qgsu.CustomMessage(
                         QCoreApplication.translate("QgsFmvPlayer", "Information"),
-                        QCoreApplication.translate("QgsFmvPlayer", "Do you want to load the layer?"), 
+                        QCoreApplication.translate("QgsFmvPlayer", "Do you want to load the layer?"),
                         icon="Information")
                     if buttonReply == QMessageBox.Yes:
                         file = result['file']
@@ -1217,7 +1239,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Extract Current Frame Task 
             The drawings are saved by default 
         """
-        #image = self.videoWidget.currentFrame()   # without drawings
+        # image = self.videoWidget.currentFrame()   # without drawings
         image = BurnDrawingsImage(self.videoWidget.currentFrame(), self.videoWidget.grab(self.videoWidget.surface.videoRect()).toImage())
          
         output, _ = askForFiles(self, QCoreApplication.translate(
@@ -1246,7 +1268,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def ExtractCurrentGeoFrame(self):
         """ Extract Current GeoReferenced Frame Task """
-        #image = self.videoWidget.currentFrame() # without drawings
+        # image = self.videoWidget.currentFrame() # without drawings
         image = BurnDrawingsImage(self.videoWidget.currentFrame(), self.videoWidget.grab(self.videoWidget.surface.videoRect()).toImage())
 
         geotransform = GetGeotransform_affine()

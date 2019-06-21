@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>VideoMultiplexer</class>
+ <widget class="QDialog" name="VideoMultiplexer">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>425</width>
+    <height>464</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Video Multiplexer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/imgFMV/images/multiplexer.png</normaloff>:/imgFMV/images/multiplexer.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Input Video File (e.g video.ts)</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="formWidget_4" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLineEdit" name="ln_inputVideo">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/imgFMV/images/opened-folder.png</normaloff>:/imgFMV/images/opened-folder.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Input Metadata File (e.g video_metadata.csv)</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="formWidget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLineEdit" name="ln_inputMeta">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/imgFMV/images/opened-folder.png</normaloff>:/imgFMV/images/opened-folder.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Select drone</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QComboBox" name="cmb_drone">
+        <item>
+         <property name="text">
+          <string>DJI Mavic Pro</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget_2" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Horizontal FOV</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sp_hfov">
+        <property name="value">
+         <number>81</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Vertical FOV</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sp_vfov">
+        <property name="value">
+         <number>66</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="bt_createCSV">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="text">
+      <string>Extract Recordings</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="gb_telemetry">
+     <property name="title">
+      <string>Available telemetry</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Select the correct one if there is more than one</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="cmb_telemetry"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="bt_createMISB">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="text">
+      <string>Create MISB</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>bt_createMISB</sender>
+   <signal>clicked()</signal>
+   <receiver>VideoMultiplexer</receiver>
+   <slot>CreateMISB()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>234</x>
+     <y>452</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>VideoMultiplexer</receiver>
+   <slot>OpenVideoFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>402</x>
+     <y>73</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>VideoMultiplexer</receiver>
+   <slot>OpenCsvFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>402</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>142</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bt_createCSV</sender>
+   <signal>clicked()</signal>
+   <receiver>VideoMultiplexer</receiver>
+   <slot>CreateCSV()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>139</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>325</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>OpenCsvFile()</slot>
+  <slot>CreateMISB()</slot>
+  <slot>OpenVideoFile()</slot>
+  <slot>CreateCSV()</slot>
+ </slots>
+</ui>

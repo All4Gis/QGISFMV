@@ -3,7 +3,7 @@ import os, sys
 from os.path import dirname, abspath
 import pathlib
 import platform
-from qgis.PyQt.QtCore import Qt,QCoreApplication
+from qgis.PyQt.QtCore import Qt, QCoreApplication
 from qgis.PyQt.QtWidgets import QMessageBox, QProgressBar
 from qgis.core import Qgis as QGis, QgsApplication
 from qgis.utils import iface
@@ -14,7 +14,6 @@ import zipfile
 import requests
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-
 
 plugin_dir = pathlib.Path(__file__).parent.parent
 sys.path.append(plugin_dir)
@@ -87,7 +86,7 @@ def WindowsInstaller():
 
     if not IsFFMPEG():
         ''' FFMPEG Lib '''
-        buttonReply = qgsu.CustomMessage("QGIS FMV", 
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
                                          QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
                                          QCoreApplication.translate("QgsFmvInstaller", "Do you want install FFMPEG?"),
                                          icon="Information")
@@ -122,7 +121,7 @@ def WindowsInstaller():
 
     if not isDem():
         ''' DEM File '''
-        progressMessageBar = iface.messageBar().createMessage("QGIS FMV", 
+        progressMessageBar = iface.messageBar().createMessage("QGIS FMV",
                                                               QCoreApplication.translate("QgsFmvInstaller", "Dem file not exist!"))
         iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
         parser.set('GENERAL', 'DTM_file', "")
@@ -231,7 +230,6 @@ def WinSoftwareInstalled(hive, flag):
 
     return software_list
 
-
 # def download_file_from_google_drive(id, destination):
 #     URL = "https://docs.google.com/uc?export=download"
 # 
@@ -266,6 +264,7 @@ def WinSoftwareInstalled(hive, flag):
 #                 done = int(50 * dl / total_length)
 #                 f.write(chunk)
 #                 progress.setValue(done)
+
                 
 def install_pip_requirements():
     ''' Install Requeriments from pip >= 10.0.1'''
@@ -276,12 +275,12 @@ def install_pip_requirements():
             requirements_file), onlyLog=True)
         raise
     try:
-        process = Popen(["python", "-m", 'pip', "install",'--upgrade', 'pip'],
+        process = Popen(["python", "-m", 'pip', "install", '--upgrade', 'pip'],
                         shell=True,
                         stdout=PIPE,
                         stderr=PIPE)
         process.wait()
-        process = Popen(["python", "-m", 'pip', "install",'-U', 'pip', 'setuptools'],
+        process = Popen(["python", "-m", 'pip', "install", '-U', 'pip', 'setuptools'],
                         shell=True,
                         stdout=PIPE,
                         stderr=PIPE)

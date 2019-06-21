@@ -5,7 +5,7 @@
 
 ![](images/banner.png)
 
-Plugin for **QGIS > 2.99** which allows to analyze, visualize and process videos inside the QGIS environment. **QGIS FMV** accepts multiple video formats such as _mp4, ts, avi_, etc. It is also able to extract video frames, to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more. It also offers the possibility to create reports with video metadata.
+Plugin for **QGIS 3** which allows to analyze, visualize and process videos inside the QGIS environment. **QGIS FMV** accepts multiple video formats such as _mp4, ts, avi_, etc. It is also able to extract video frames, to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more. It also offers the possibility to create reports with video metadata.
 
 Standards supported:
 
@@ -74,6 +74,8 @@ The use of this application is simple.
 It only needs a video with metadata, like for example one of these [(ESRI copyright)](https://drive.google.com/open?id=1-B2uaW7_cfYZohZYFozrgBhIaztI1MSP)
 Then, open the plugin where the "video manager" will be shown, open the video and with a double-click, the "player" will be opened. 
 At this moment, you will see that new shapes have been added and you will see the platform position, metadata, etc.
+
+If we don't have a MISB video we can create it from a video file and telemetry file from a DJI for example.
 
 [Link to Usage Documentation!](https://all4gis.github.io/QGISFMV/Using)
 
