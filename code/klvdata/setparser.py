@@ -211,6 +211,7 @@ class SetParser(Element):
                 
                 except Exception:
                     qgsu.showUserAndLogMessage("", "Value cannot be read: " + str(item.value.value), onlyLog=True)
+                    continue
                 if hasattr(item, 'items'):
                     metadata[item.TAG] = (item.LDSName, item.ESDName, item.UDSName, {})
                     repeat(item.items.values(), indent + 1, item.TAG)
