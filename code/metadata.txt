@@ -120,7 +120,7 @@ tracker=https://github.com/All4Gis/QGISFMV/issues
 repository=https://github.com/All4Gis/QGISFMV
 
 # tags are comma separated with spaces allowed
-tags=fmv, uav, python, drone, telemetry, MISB, 
+tags=fmv, uav, python, drone, telemetry, MISB, object tracking, DJI, stanag, video, mosaic, klv
 
 icon=images/icon.png
 experimental=False
