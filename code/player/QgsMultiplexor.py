@@ -11,7 +11,6 @@ import time
 import itertools
 from datetime import datetime
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from math import cos, atan
 from QGIS_FMV.utils.QgsFmvUtils import _spawn, getVideoFolder
 
 try:
@@ -23,7 +22,7 @@ except ImportError:
 'TODO : After all the tests I haven't managed to generate a MISB video,
 for now I make this adaptation to be able to see it in QGIS FMV
 '''
-
+# Klv header
 cle = b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00'
 
 # Checksum
@@ -157,11 +156,8 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "Multiplexor", "You must complete all the information"))
             return
-        
-#         if self.hasEmptyValues(input_metadata):
-#             self.ReadCSVRecordings(input_metadata)
-        self.ReadCSVRecordings(input_metadata)
-            
+
+        self.ReadCSVRecordings(input_metadata)           
         # Enable create video button
         self.bt_createMISB.setEnabled(True)
         return
@@ -437,7 +433,6 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         
         if not rows_list:
             rows_list.append(rows)
-        
         # Create csv
         self.CreateDJICsv(rows_list, csv_raw)
         return
