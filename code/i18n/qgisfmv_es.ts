@@ -225,20 +225,20 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="215"/>
         <source>Create MISB File</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear archivo MISB</translation>
     </message>
 </context>
 <context>
     <name>Multiplexor</name>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="141"/>
+        <location filename="../player/QgsMultiplexor.py" line="142"/>
         <source>Open file</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir archivo</translation>
     </message>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="156"/>
+        <location filename="../player/QgsMultiplexor.py" line="157"/>
         <source>You must complete all the information</source>
-        <translation type="unfinished"></translation>
+        <translation>Debes completar toda la información.</translation>
     </message>
 </context>
 <context>
@@ -821,7 +821,7 @@
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="137"/>
         <source>Missing dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Dependencias faltantes</translation>
     </message>
 </context>
 <context>
@@ -860,7 +860,7 @@
 <context>
     <name>QgsFmvPlayer</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="321"/>
+        <location filename="../player/QgsFmvPlayer.py" line="325"/>
         <source>Metadata Callback Failed! : </source>
         <translation>¡Falló la devolución de metadatos! :</translation>
     </message>
@@ -875,108 +875,108 @@
         <translation>La prueba de audio Falló! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="466"/>
+        <location filename="../player/QgsFmvPlayer.py" line="470"/>
         <source>Mute/Unmute</source>
         <translation>Silenciar / No silenciar</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="471"/>
+        <location filename="../player/QgsFmvPlayer.py" line="475"/>
         <source>Extract All Frames</source>
         <translation>Extraer todos los fotogramas</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="476"/>
+        <location filename="../player/QgsFmvPlayer.py" line="480"/>
         <source>Extract Current Frame</source>
         <translation>Extraer fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="482"/>
+        <location filename="../player/QgsFmvPlayer.py" line="486"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadatos</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1350"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1356"/>
         <source>Video Information : </source>
         <translation>Información del video:</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="274"/>
+        <location filename="../player/QgsFmvPlayer.py" line="277"/>
         <source>Metadata Buffer Failed! : </source>
         <translation>¡Error en el almacenamiento intermedio de metadatos! : 
 </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1240"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1246"/>
         <source>Save Current Frame</source>
         <translation>Guardar fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="373"/>
+        <location filename="../player/QgsFmvPlayer.py" line="377"/>
         <source>Save Json</source>
         <translation>Guardar Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="961"/>
+        <location filename="../player/QgsFmvPlayer.py" line="967"/>
         <source>Save video record</source>
         <translation>Guardar grabación</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1058"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1064"/>
         <source>Save Video as...</source>
         <translation>Guardar video como ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1203"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1209"/>
         <source>Save all Frames</source>
         <translation>Guardar todos los fotogramas</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1136"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1142"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>Guardar audio Bitrate</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1153"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1159"/>
         <source>Save Video Bitrate Plot</source>
         <translation>Guardar video Bitrate</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1271"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1277"/>
         <source>Save Current Georeferenced Frame</source>
         <translation>Guardar el frame georeferenciado actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="925"/>
+        <location filename="../player/QgsFmvPlayer.py" line="931"/>
         <source>Playing : </source>
         <translation>Reproduciendo : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="940"/>
+        <location filename="../player/QgsFmvPlayer.py" line="946"/>
         <source>Open Video File : </source>
         <translation>Abrir archivo de video : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1173"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1179"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
         <translation>Completado sin excepción y sin resultado (probablemente cancelado manualmente por el usuario)</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="487"/>
+        <location filename="../player/QgsFmvPlayer.py" line="491"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1186"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1192"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1186"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1192"/>
         <source>Do you want to load the layer?</source>
         <translation>¿Quieres cargar la capa?</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="260"/>
+        <location filename="../player/QgsFmvPlayer.py" line="263"/>
         <source>Buffering metadata...</source>
         <translation>Buffering metadatos...</translation>
     </message>
@@ -999,57 +999,57 @@
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="14"/>
         <source>Video Multiplexer</source>
-        <translation type="unfinished"></translation>
+        <translation>Multiplexor de video</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="24"/>
         <source>Input Video File (e.g video.ts)</source>
-        <translation type="unfinished"></translation>
+        <translation>Video de entrada (por ejemplo, video.ts)</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="58"/>
         <source>Input Metadata File (e.g video_metadata.csv)</source>
-        <translation type="unfinished"></translation>
+        <translation>Metadatos de entrada (por ejemplo, video_metadata.csv)</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="183"/>
         <source>Create MISB</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear archivo MISB</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="92"/>
         <source>Select drone</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar drone</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="117"/>
         <source>Horizontal FOV</source>
-        <translation type="unfinished"></translation>
+        <translation>FOV horizontal</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="131"/>
         <source>Vertical FOV</source>
-        <translation type="unfinished"></translation>
+        <translation>FOV vertical</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="103"/>
         <source>DJI Mavic Pro</source>
-        <translation type="unfinished"></translation>
+        <translation>DJI Mavic Pro</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="158"/>
         <source>Available telemetry</source>
-        <translation type="unfinished"></translation>
+        <translation>Telemetria disponible</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="164"/>
         <source>Select the correct one if there is more than one</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona la correcta si hay más de una.</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="151"/>
         <source>Extract Recordings</source>
-        <translation type="unfinished"></translation>
+        <translation>Extraer grabaciones</translation>
     </message>
 </context>
 <context>
