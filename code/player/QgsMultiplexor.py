@@ -399,18 +399,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         self.parent.AddFileRowToManager(name, self.video_file, islocal=True, klv_folder=self.klv_folder)
         self.close()
         return
-    
-    def hasEmptyValues(self, csv_raw):
-        ''' Receive the csv from CsvViewer and check that the csv has empty values or not to generate the csv of each video recording '''
-        with open(csv_raw) as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                for k in row:
-                    if k == "CUSTOM.isVideo":
-                        if row[k].strip() == "":
-                            return True
-            return False
-                    
+                        
     def ReadCSVRecordings(self, csv_raw):
         ''' Read the csv for each recording '''
         rows_list = []
