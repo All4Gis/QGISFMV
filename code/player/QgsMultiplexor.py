@@ -10,6 +10,7 @@ import csv
 import time
 import itertools
 from datetime import datetime
+from math import tan, atan
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.utils.QgsFmvUtils import _spawn, getVideoFolder
 
@@ -179,8 +180,9 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         width, height = bytes_to_str(output).split("x")
         
         VFOV = self.sp_vfov.value()
-                        
-        # focallength = (0.5 * int(height)) / atan(float(VFOV) / 2)
+        
+        # TODO: Calculate focal length
+        #focallength = (int(height)/2) / atan(float(VFOV) / 2)
         
         index = self.cmb_telemetry.currentIndex()
         out_record = self.cmb_telemetry.itemData(index)
