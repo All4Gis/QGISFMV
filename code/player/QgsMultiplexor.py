@@ -350,6 +350,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     bufferData += _bytes
                     
                     # TODO : Make mathematical formulas for calculate Slant range and frame center
+                    # currently doesn't work
                     # Slant Range
                     #h_e = HFOV*math.pi/360.
                     v_e = VFOV*math.pi/360.
