@@ -10,7 +10,7 @@ import csv
 import time
 import itertools
 from datetime import datetime
-from math import tan, atan
+from math import tan, atan, radians
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.utils.QgsFmvUtils import _spawn, getVideoFolder
 import math
@@ -303,7 +303,8 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                         
                         # Sensor Relative Elevation Angle
                         if k == "GIMBAL.pitch":
-                            _bytes = float_to_bytes(float(v), _domain19, _range19)
+                            GIMBAL_pitch = float(v)
+                            _bytes = float_to_bytes(GIMBAL_pitch, _domain19, _range19)
                             _len = int_to_bytes(len(_bytes))
                             _bytes = _key19 + _len + _bytes
                             sizeTotal += len(_bytes)
@@ -311,7 +312,8 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                         
                         # Sensor Relative Roll Angle
                         if k == "GIMBAL.roll":
-                            _bytes = float_to_bytes(float(v), _domain20, _range20)
+                            GIMBAL_roll = float(v)
+                            _bytes = float_to_bytes(GIMBAL_roll, _domain20, _range20)
                             _len = int_to_bytes(len(_bytes))
                             _bytes = _key20 + _len + _bytes
                             sizeTotal += len(_bytes)
@@ -353,14 +355,12 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     # currently doesn't work
                     # Slant Range
                     #h_e = HFOV*math.pi/360.
-                    v_e = VFOV*math.pi/360.
-                    #hPrint = 2*h*math.tan(h_e) #sensor footprint width in m
-                    vPrint = 2*OSD_height*math.tan(v_e) #sensor footprint length in m
-                    #fPrint = float(vPrint*hPrint) # sensor footprint area in m^2
-                                        
-                    distance = OSD_altitude/tan(OSD_pitch)
+                    v_e = radians(VFOV)
+                    vPrint = 2*OSD_height*math.tan(v_e) #sensor footprint length in m 
+                    pitch_r = radians((GIMBAL_pitch + OSD_pitch) % 360.0 ) # pitch              
+                    distance = OSD_altitude/tan(pitch_r)
                     
-                    angle =atan((distance + (vPrint/2)) / OSD_altitude)
+                    angle =atan(OSD_altitude/(distance + (vPrint/2)))
 
                     slant = (distance + (vPrint/2)) / math.cos(angle)
                     
@@ -379,8 +379,10 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     
                     # Frame Center Latitude
                     initialPoint = (OSD_longitude, OSD_latitude)
-
-                    destPoint = sphere.destination(initialPoint, slant, GIMBAL_yaw)
+                    #Heading = (OSD_yaw + GIMBAL_yaw) % 360.0  # Heading
+                    Heading = (OSD_yaw) % 360.0  # Heading
+                    bearing = Heading
+                    destPoint = sphere.destination(initialPoint, (distance + (vPrint/2)), bearing)
                     
                     _bytes = float_to_bytes(destPoint[1], _domain23, _range23)
                     _len = int_to_bytes(len(_bytes))
