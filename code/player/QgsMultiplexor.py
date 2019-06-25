@@ -356,11 +356,12 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     # Slant Range
                     #h_e = HFOV*math.pi/360.
                     v_e = radians(VFOV)
-                    vPrint = 2*OSD_height*math.tan(v_e) #sensor footprint length in m 
+                    h = OSD_height
+                    vPrint = 2*h*math.tan(v_e) #sensor footprint length in m 
                     pitch_r = radians((GIMBAL_pitch + OSD_pitch) % 360.0 ) # pitch              
-                    distance = OSD_altitude/tan(pitch_r)
+                    distance = h/tan(pitch_r)
                     
-                    angle =atan(OSD_altitude/(distance + (vPrint/2)))
+                    angle =atan(h/(distance + (vPrint/2)))
 
                     slant = (distance + (vPrint/2)) / math.cos(angle)
                     
