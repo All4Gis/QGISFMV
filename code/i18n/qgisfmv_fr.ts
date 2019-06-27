@@ -231,12 +231,12 @@
 <context>
     <name>Multiplexor</name>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="142"/>
+        <location filename="../player/QgsMultiplexor.py" line="200"/>
         <source>Open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="157"/>
+        <location filename="../player/QgsMultiplexor.py" line="215"/>
         <source>You must complete all the information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1005,47 +1005,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="58"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="56"/>
         <source>Input Metadata File (e.g video_metadata.csv)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="183"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="173"/>
         <source>Create MISB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="92"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="88"/>
         <source>Select drone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="117"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="107"/>
         <source>Horizontal FOV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="131"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="121"/>
         <source>Vertical FOV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="103"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="96"/>
         <source>DJI Mavic Pro</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="158"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="148"/>
         <source>Available telemetry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="164"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="154"/>
         <source>Select the correct one if there is more than one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="151"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="141"/>
         <source>Extract Recordings</source>
         <translation type="unfinished"></translation>
     </message>

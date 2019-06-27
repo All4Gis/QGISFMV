@@ -287,12 +287,12 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             if path != self._PlayerDlg.fileName:
                 self.ToggleActiveFromTitle()
                 if exist:
-                    self._PlayerDlg.playFile(path,islocal=True, klv_folder=klv_folder)
+                    self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
                 else:
                     self._PlayerDlg.playFile(path)
                 return
 
-    def CreatePlayer(self, path, row,islocal=False,klv_folder=None):
+    def CreatePlayer(self, path, row, islocal=False, klv_folder=None):
         ''' Create Player '''
         self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(
             row)], pass_time=self.pass_time, isStreaming=self.isStreaming, islocal=islocal, klv_folder=klv_folder)

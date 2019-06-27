@@ -231,12 +231,12 @@
 <context>
     <name>Multiplexor</name>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="142"/>
+        <location filename="../player/QgsMultiplexor.py" line="200"/>
         <source>Open file</source>
         <translation>Abrir archivo</translation>
     </message>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="157"/>
+        <location filename="../player/QgsMultiplexor.py" line="215"/>
         <source>You must complete all the information</source>
         <translation>Debes completar toda la información.</translation>
     </message>
@@ -1007,47 +1007,47 @@
         <translation>Video de entrada (por ejemplo, video.ts)</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="58"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="56"/>
         <source>Input Metadata File (e.g video_metadata.csv)</source>
         <translation>Metadatos de entrada (por ejemplo, video_metadata.csv)</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="183"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="173"/>
         <source>Create MISB</source>
         <translation>Crear archivo MISB</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="92"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="88"/>
         <source>Select drone</source>
         <translation>Seleccionar drone</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="117"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="107"/>
         <source>Horizontal FOV</source>
         <translation>FOV horizontal</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="131"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="121"/>
         <source>Vertical FOV</source>
         <translation>FOV vertical</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="103"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="96"/>
         <source>DJI Mavic Pro</source>
         <translation>DJI Mavic Pro</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="158"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="148"/>
         <source>Available telemetry</source>
         <translation>Telemetria disponible</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="164"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="154"/>
         <source>Select the correct one if there is more than one</source>
         <translation>Selecciona la correcta si hay más de una.</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="151"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="141"/>
         <source>Extract Recordings</source>
         <translation>Extraer grabaciones</translation>
     </message>

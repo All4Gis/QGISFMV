@@ -872,21 +872,35 @@ def CornerEstimationWithOffsets(packet):
     return True
 
 
-def CornerEstimationWithoutOffsets(packet):
+def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, FOV=None, others=None):
     ''' Corner estimation without Offsets '''
     try:
-        sensorLatitude = packet.SensorLatitude
-        sensorLongitude = packet.SensorLongitude
-        sensorTrueAltitude = packet.SensorTrueAltitude
-        frameCenterLat = packet.FrameCenterLatitude
-        frameCenterLon = packet.FrameCenterLongitude
-        frameCenterElevation = packet.FrameCenterElevation
-        sensorVerticalFOV = packet.SensorVerticalFieldOfView
-        sensorHorizontalFOV = packet.SensorHorizontalFieldOfView
-        headingAngle = packet.PlatformHeadingAngle
-        sensorRelativeAzimut = packet.SensorRelativeAzimuthAngle
-        targetWidth = packet.targetWidth
-        slantRange = packet.SlantRange
+        if packet is not None:
+            sensorLatitude = packet.SensorLatitude
+            sensorLongitude = packet.SensorLongitude
+            sensorTrueAltitude = packet.SensorTrueAltitude
+            frameCenterLat = packet.FrameCenterLatitude
+            frameCenterLon = packet.FrameCenterLongitude
+            frameCenterElevation = packet.FrameCenterElevation
+            sensorVerticalFOV = packet.SensorVerticalFieldOfView
+            sensorHorizontalFOV = packet.SensorHorizontalFieldOfView
+            headingAngle = packet.PlatformHeadingAngle
+            sensorRelativeAzimut = packet.SensorRelativeAzimuthAngle
+            targetWidth = packet.targetWidth
+            slantRange = packet.SlantRange
+        else:
+            sensorLatitude = sensor[1]
+            sensorLongitude = sensor[0]
+            sensorTrueAltitude = sensor[2]
+            frameCenterLat = frameCenter[1]
+            frameCenterLon = frameCenter[0]
+            frameCenterElevation = frameCenter[2]
+            sensorVerticalFOV = FOV[0]
+            sensorHorizontalFOV = FOV[1]
+            headingAngle = others[0]
+            sensorRelativeAzimut = others[1]
+            targetWidth = others[2]
+            slantRange = others[3]
 
         # If target width = 0 (occurs on some platforms), compute it with the slate range.
         # Otherwise it leaves the footprint as a point.
@@ -899,15 +913,15 @@ def CornerEstimationWithoutOffsets(packet):
         elif targetWidth == 0 and slantRange == 0:
             # default target width to not leave footprint as a point.
             targetWidth = defaultTargetWidth
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvUtils", "Target width unknown, defaults to: " + str(targetWidth) + "m."))
+#             qgsu.showUserAndLogMessage(QCoreApplication.translate(
+#                 "QgsFmvUtils", "Target width unknown, defaults to: " + str(targetWidth) + "m."))
 
         # compute distance to ground
         if frameCenterElevation != 0:
             sensorGroundAltitude = sensorTrueAltitude - frameCenterElevation
         else:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvUtils", "Sensor ground elevation narrowed to true altitude: " + str(sensorTrueAltitude) + "m."))
+#             qgsu.showUserAndLogMessage(QCoreApplication.translate(
+#                 "QgsFmvUtils", "Sensor ground elevation narrowed to true altitude: " + str(sensorTrueAltitude) + "m."))
             sensorGroundAltitude = sensorTrueAltitude
 
         if sensorLatitude == 0:
@@ -985,6 +999,9 @@ def CornerEstimationWithoutOffsets(packet):
                 GetSensor(), cornerPointLR)
             pCornerPointLL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointLL)
+            
+            if sensor is not None:
+                return pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL
 
             UpdateFootPrintData(packet,
                                 pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL, hasElevationModel())
@@ -993,6 +1010,9 @@ def CornerEstimationWithoutOffsets(packet):
                             pCornerPointLR, pCornerPointLL, hasElevationModel())
 
         else:
+            if sensor is not None:
+                return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL
+            
             UpdateFootPrintData(packet,
                                 cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 
