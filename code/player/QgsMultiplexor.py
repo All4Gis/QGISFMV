@@ -242,7 +242,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         QApplication.processEvents()
                 
         HFOV = self.sp_hfov.value()
-        #VFOV = self.sp_vfov.value()
+        # VFOV = self.sp_vfov.value()
         
         index = self.cmb_telemetry.currentIndex()
         out_record = self.cmb_telemetry.itemData(index)
@@ -349,7 +349,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                         
                         # Sensor Relative Azimuth Angle
                         if k == "GIMBAL.yaw":
-                            #GIMBAL_yaw = float(v)
+                            # GIMBAL_yaw = float(v)
                             GIMBAL_yaw = 0.0
                             _bytes = float_to_bytes(round(GIMBAL_yaw, 4), _domain18, _range18)
                             _len = int_to_bytes(len(_bytes))
@@ -434,8 +434,8 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     tgHzDist = OSD_altitude * tan(radians(angle))
                     r_earth = 6371008.8
                     
-                    dy =  tgHzDist * cos(radians(OSD_yaw))
-                    framecenterlatitude = OSD_latitude  + (dy / r_earth) * (180 / pi)
+                    dy = tgHzDist * cos(radians(OSD_yaw))
+                    framecenterlatitude = OSD_latitude + (dy / r_earth) * (180 / pi)
                     
                     _bytes = float_to_bytes(round(framecenterlatitude, 4), _domain23, _range23)
                     _len = int_to_bytes(len(_bytes))
@@ -445,7 +445,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                        
                     # Frame Center Longitude
                     dx = tgHzDist * sin(radians(OSD_yaw))
-                    framecenterlongitude = OSD_longitude + (dx / r_earth) * (180 / pi) / cos(OSD_latitude * pi/180)
+                    framecenterlongitude = OSD_longitude + (dx / r_earth) * (180 / pi) / cos(OSD_latitude * pi / 180)
                     
                     _bytes = float_to_bytes(round(framecenterlongitude, 4), _domain24, _range24)
                     _len = int_to_bytes(len(_bytes))

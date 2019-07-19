@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+﻿  # -*- coding: utf-8 -*-
+
+
 class BaseFormat(object):
     """
     Base format class.

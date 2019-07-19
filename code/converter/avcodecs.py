@@ -1,3 +1,6 @@
+﻿  # -*- coding: utf-8 -*-
+
+
 class BaseCodec(object):
     """
     Base audio/video codec class.

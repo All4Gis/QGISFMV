@@ -25,7 +25,8 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.7:
-    	- Reproduce DJI Videos
+    	- Linux autoinstaller
+    	- Reproduce DJI Videos and extract telemetry in real time
     	- Create Klv data from DJI Telemetry
     	- MISB 0102.12 quick impelementation
     1.6:

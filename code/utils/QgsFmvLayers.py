@@ -1,3 +1,4 @@
+﻿  # -*- coding: utf-8 -*-
 import os
 from os.path import dirname, abspath
 from qgis.PyQt.QtGui import QColor, QFont, QPolygonF

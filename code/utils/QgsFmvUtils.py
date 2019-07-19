@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿  # -*- coding: utf-8 -*-
 from configparser import SafeConfigParser
 from datetime import datetime
 import inspect
@@ -608,7 +608,7 @@ def _spawn(cmds, t="ffmpeg"):
     cmds.insert(3, '-preset')
     cmds.insert(4, 'ultrafast')
 
-    return Popen(cmds, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE,
+    return Popen(cmds, shell=windows, stdin=PIPE, stdout=PIPE, stderr=PIPE,
                  bufsize=0,
                  close_fds=(not windows))
 

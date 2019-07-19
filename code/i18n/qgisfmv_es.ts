@@ -231,12 +231,12 @@
 <context>
     <name>Multiplexor</name>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="200"/>
+        <location filename="../player/QgsMultiplexor.py" line="199"/>
         <source>Open file</source>
         <translation>Abrir archivo</translation>
     </message>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="215"/>
+        <location filename="../player/QgsMultiplexor.py" line="214"/>
         <source>You must complete all the information</source>
         <translation>Debes completar toda la información.</translation>
     </message>
@@ -764,64 +764,109 @@
 <context>
     <name>QgsFmvInstaller</name>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="89"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="220"/>
         <source>Missing dependency</source>
         <translation>Dependencia faltante</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="69"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="75"/>
         <source>Do you want install Lav Filters?</source>
         <translation>¿Quieres instalar LAV Filters?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="89"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="220"/>
         <source>Do you want install FFMPEG?</source>
         <translation>¿Quieres instalar FFMPEG?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="137"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="143"/>
         <source>Do you want install missing dependencies?</source>
         <translation>¿Quieres instalar las dependencias faltantes?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="124"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="270"/>
         <source>Dem file not exist!</source>
         <translation>El archivo MDE no existe!</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="142"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="148"/>
         <source>Python libraries installed correctly</source>
         <translation>Bibliotecas de Python instaladas correctamente</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="157"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="163"/>
         <source>Error installing the python libraries, use the requirements file!</source>
         <translation>¡Error al instalar las bibliotecas de python, usa el archivo de requisitos!</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="150"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="156"/>
         <source>Do you want upgrade dependencies?</source>
         <translation>¿Quieres actualizar las dependencias?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="155"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="161"/>
         <source>Python libraries updated correctly</source>
         <translation>Bibliotecas de Python actualizadas correctamente</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="274"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="397"/>
         <source>No requirements file found in {}</source>
         <translation>No se encontró el archivo de requisitos en {}</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="150"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="156"/>
         <source>Updates available</source>
         <translation>Actualización disponible</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="137"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="143"/>
         <source>Missing dependencies</source>
         <translation>Dependencias faltantes</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="192"/>
+        <source>Do you want install GStreamer?</source>
+        <translation>¿Quieres instalar GStreamer?</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="205"/>
+        <source>INSTALLATION FAILED: Failed to install GStreamer library.</source>
+        <translation>LA INSTALACIÓN FALLÓ: Error al instalar la biblioteca GStreamer.</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="207"/>
+        <source>INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.</source>
+        <translation>INSTALACIÓN EXITOSA: El paquete GStreamer se instaló con éxito.</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="233"/>
+        <source>Failed to install ffmpeg library, trying add-apt-repository.</source>
+        <translation>Error al instalar la biblioteca ffmpeg, intentamos add-apt-repository.</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="252"/>
+        <source>INSTALLATION FAILED: Could not install ffmpeg package.</source>
+        <translation>LA INSTALACIÓN FALLÓ: No se pudo instalar el paquete ffmpeg.</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="241"/>
+        <source>GET REPO SUCCESSFUL: Successfully added trusty-media repo where ffmpeg is located</source>
+        <translation>OBTENCIÓN DEL REPOSITORIO EXITOSO: Se ha agregado con éxito el repositorio donde se encuentra ffmpeg</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="246"/>
+        <source>UPDATE FAILED: Failed to retrieve packages.</source>
+        <translation>ACTUALIZACIÓN FALLIDA: Error al recuperar los paquetes.</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="248"/>
+        <source>UPDATE SUCCESSFUL: Sucessfully retrived updated packages.</source>
+        <translation>ACTUALIZACIÓN EXITOSA: Se recuperaron con éxito los paquetes actualizados.</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="254"/>
+        <source>INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.</source>
+        <translation>INSTALACIÓN EXITOSA: El paquete ffmpeg se instaló con éxito.</translation>
     </message>
 </context>
 <context>
