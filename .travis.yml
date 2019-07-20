@@ -1,15 +1,21 @@
-language: python
-
-# sudo false implies containerized builds
+language: python # This lets us use newer python versions from virtualenv
+python: "3.5"
+compiler: clang
+dist: xenial
 sudo: false
-
-python:
-  - "3.7"
-  - "3.8"
 
 branches:
   only:
   - master
+
+env:
+  global:
+    - TRAVIS_TIMESTAMP=$(date +%s)
+    - TRAVIS_AVAILABLE_TIME=150 # in minutes
+    - TRAVIS_UPLOAD_TIME=5 # time considered to start the machine and the container (minutes)
+
+matrix:
+  fast_finish: true
 
 # Install dependencies
 install:
