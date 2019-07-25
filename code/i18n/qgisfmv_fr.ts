@@ -135,37 +135,37 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../player/QgsManager.py" line="252"/>
+        <location filename="../manager/QgsManager.py" line="252"/>
         <source>Open video</source>
         <translation>Ouvrir vidéo</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="219"/>
+        <location filename="../manager/QgsManager.py" line="219"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="168"/>
+        <location filename="../manager/QgsManager.py" line="168"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="209"/>
+        <location filename="../manager/QgsManager.py" line="209"/>
         <source>Start location not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="194"/>
+        <location filename="../manager/QgsManager.py" line="194"/>
         <source>Failed loading FFMPEG ! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="66"/>
+        <location filename="../manager/QgsManager.py" line="66"/>
         <source>Remove from list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="138"/>
+        <location filename="../manager/QgsManager.py" line="138"/>
         <source>You must delete some video from the list before adding a new one</source>
         <translation type="unfinished"></translation>
     </message>
@@ -231,12 +231,12 @@
 <context>
     <name>Multiplexor</name>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="199"/>
+        <location filename="../manager/QgsMultiplexor.py" line="199"/>
         <source>Open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="214"/>
+        <location filename="../manager/QgsMultiplexor.py" line="214"/>
         <source>You must complete all the information</source>
         <translation type="unfinished"></translation>
     </message>
