@@ -242,7 +242,6 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         QApplication.processEvents()
                 
         HFOV = self.sp_hfov.value()
-        # VFOV = self.sp_vfov.value()
         
         index = self.cmb_telemetry.currentIndex()
         out_record = self.cmb_telemetry.itemData(index)
