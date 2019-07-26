@@ -29,6 +29,7 @@ changelog=
     	- Reproduce DJI Videos and extract telemetry in real time
     	- Create Klv data from DJI Telemetry
     	- MISB 0102.12 quick impelementation
+    	- Minor changes
     1.6:
     	- Update Usage documentation
     	- Update Python dependencies (requirements.txt , code and user question if want upgrade dependencies)

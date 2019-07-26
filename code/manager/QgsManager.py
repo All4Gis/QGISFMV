@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import ast
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 import os
 from os.path import dirname, abspath
 from qgis.PyQt.QtCore import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
@@ -40,7 +40,7 @@ except ImportError:
     None
 
 s = QSettings()
-parser = SafeConfigParser()
+parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 
 

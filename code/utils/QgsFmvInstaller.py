@@ -1,5 +1,5 @@
 ﻿  # -*- coding: utf-8 -*-
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 import os, sys
 from os.path import dirname, abspath
 import pathlib
@@ -19,7 +19,7 @@ from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 plugin_dir = pathlib.Path(__file__).parent.parent
 sys.path.append(plugin_dir)
 
-parser = SafeConfigParser(delimiters=(':'), comment_prefixes='/', allow_no_value=True)
+parser = ConfigParser(delimiters=(':'), comment_prefixes='/', allow_no_value=True)
 fileConfig = os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini')
 parser.read(fileConfig)
 
