@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-from configparser import SafeConfigParser
+﻿  # -*- coding: utf-8 -*-
+from configparser import ConfigParser
 from datetime import datetime
 import inspect
 import json
@@ -40,7 +40,7 @@ from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          SetcrtPltTailNum)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
-parser = SafeConfigParser()
+parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 
 frames_g = parser['LAYERS']['frames_g']
@@ -608,7 +608,7 @@ def _spawn(cmds, t="ffmpeg"):
     cmds.insert(3, '-preset')
     cmds.insert(4, 'ultrafast')
 
-    return Popen(cmds, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE,
+    return Popen(cmds, shell=windows, stdin=PIPE, stdout=PIPE, stderr=PIPE,
                  bufsize=0,
                  close_fds=(not windows))
 

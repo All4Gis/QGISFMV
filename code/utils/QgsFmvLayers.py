@@ -1,11 +1,12 @@
+﻿  # -*- coding: utf-8 -*-
 import os
 from os.path import dirname, abspath
 from qgis.PyQt.QtGui import QColor, QFont, QPolygonF
 from qgis.PyQt.QtWidgets import QApplication
 from qgis.PyQt.QtCore import QCoreApplication, QPointF
 
-from configparser import SafeConfigParser
-parser = SafeConfigParser()
+from configparser import ConfigParser
+parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 
 Platform_lyr = parser['LAYERS']['Platform_lyr']

@@ -140,7 +140,7 @@
         <translation type="obsolete">Remove the current selection&apos;s video</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="252"/>
+        <location filename="../manager/QgsManager.py" line="252"/>
         <source>Open video</source>
         <translation>Open video</translation>
     </message>
@@ -150,32 +150,32 @@
         <translation type="obsolete">Remove</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="219"/>
+        <location filename="../manager/QgsManager.py" line="219"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation type="unfinished">This video don&apos;t have Metadata ! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="168"/>
+        <location filename="../manager/QgsManager.py" line="168"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="209"/>
+        <location filename="../manager/QgsManager.py" line="209"/>
         <source>Start location not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="194"/>
+        <location filename="../manager/QgsManager.py" line="194"/>
         <source>Failed loading FFMPEG ! </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="66"/>
+        <location filename="../manager/QgsManager.py" line="66"/>
         <source>Remove from list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsManager.py" line="138"/>
+        <location filename="../manager/QgsManager.py" line="138"/>
         <source>You must delete some video from the list before adding a new one</source>
         <translation type="unfinished"></translation>
     </message>
@@ -241,12 +241,12 @@
 <context>
     <name>Multiplexor</name>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="200"/>
+        <location filename="../manager/QgsMultiplexor.py" line="199"/>
         <source>Open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../player/QgsMultiplexor.py" line="215"/>
+        <location filename="../manager/QgsMultiplexor.py" line="214"/>
         <source>You must complete all the information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -783,63 +783,108 @@
 <context>
     <name>QgsFmvInstaller</name>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="89"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="220"/>
         <source>Missing dependency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="69"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="75"/>
         <source>Do you want install Lav Filters?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="89"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="220"/>
         <source>Do you want install FFMPEG?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="137"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="143"/>
         <source>Do you want install missing dependencies?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="124"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="270"/>
         <source>Dem file not exist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="142"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="148"/>
         <source>Python libraries installed correctly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="157"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="163"/>
         <source>Error installing the python libraries, use the requirements file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="150"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="156"/>
         <source>Do you want upgrade dependencies?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="155"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="161"/>
         <source>Python libraries updated correctly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="274"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="397"/>
         <source>No requirements file found in {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="150"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="156"/>
         <source>Updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="137"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="143"/>
         <source>Missing dependencies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="192"/>
+        <source>Do you want install GStreamer?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="205"/>
+        <source>INSTALLATION FAILED: Failed to install GStreamer library.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="207"/>
+        <source>INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="233"/>
+        <source>Failed to install ffmpeg library, trying add-apt-repository.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="252"/>
+        <source>INSTALLATION FAILED: Could not install ffmpeg package.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="241"/>
+        <source>GET REPO SUCCESSFUL: Successfully added trusty-media repo where ffmpeg is located</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="246"/>
+        <source>UPDATE FAILED: Failed to retrieve packages.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="248"/>
+        <source>UPDATE SUCCESSFUL: Sucessfully retrived updated packages.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="254"/>
+        <source>INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

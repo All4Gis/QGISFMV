@@ -1,10 +1,11 @@
-from configparser import SafeConfigParser
+﻿  # -*- coding: utf-8 -*-
+from configparser import ConfigParser
 import os, sys
 from os.path import dirname, abspath
 import pathlib
 import platform
 from qgis.PyQt.QtCore import Qt, QCoreApplication
-from qgis.PyQt.QtWidgets import QMessageBox, QProgressBar
+from qgis.PyQt.QtWidgets import QMessageBox, QProgressBar, QInputDialog, QLineEdit
 from qgis.core import Qgis as QGis, QgsApplication
 from qgis.utils import iface
 from subprocess import Popen, PIPE
@@ -12,13 +13,13 @@ from urllib.request import urlretrieve, build_opener, install_opener
 import zipfile
 
 import requests
-
+import subprocess
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 plugin_dir = pathlib.Path(__file__).parent.parent
 sys.path.append(plugin_dir)
 
-parser = SafeConfigParser(delimiters=(':'), comment_prefixes='/', allow_no_value=True)
+parser = ConfigParser(delimiters=(':'), comment_prefixes='/', allow_no_value=True)
 fileConfig = os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini')
 parser.read(fileConfig)
 
@@ -27,6 +28,10 @@ DemConf = parser['GENERAL']['DTM_file']
 
 try:
     import winreg
+except ImportError:
+    None
+try:
+    import apt
 except ImportError:
     None
 try:
@@ -56,6 +61,7 @@ install_opener(opener)
 
 
 def reporthook(blocknum, blocksize, totalsize):
+    ''' Url retrieve progress '''
     readsofar = blocknum * blocksize
     if totalsize > 0:
         percent = readsofar * 1e2 / totalsize
@@ -160,9 +166,143 @@ def WindowsInstaller():
     return
 
 
-# TODO
+def get_password():
+        """Return Linux user Password."""
+        password, ok = QInputDialog.getText(
+            None, "Enter Linux user password for install missing dependencies", "Password:",
+            QLineEdit.Password
+        )
+        return password if ok else ''
+
+
 def LinuxInstaller():
     '''complete Linux installation '''
+    pwd = None
+    
+    if not IsLavFilters():    
+        ''' lAV Filters (GStreamer on Linux)'''
+        if pwd is None:
+            ret = get_password()
+            if ret == "":
+                return
+            
+            pwd = ret
+        
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                         QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
+                                         QCoreApplication.translate("QgsFmvInstaller", "Do you want install GStreamer?"),
+                                         icon="Information")
+        if buttonReply == QMessageBox.Yes:
+            # Install GStreamer
+            progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading GStreamer...")
+            progressMessageBar.layout().addWidget(progress)
+            iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
+            
+            cmd = 'sudo apt-get -y install gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio'
+            gst_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+            if gst_rc != 0:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION FAILED: Failed to install GStreamer library.'), level=QGis.Critical)
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.'))
+            
+            iface.messageBar().clearWidgets()
+            
+    if not IsFFMPEG():
+        ''' FFMPEG Lib '''
+        if pwd is None:
+            ret = get_password()
+            if ret == "":
+                return
+            
+            pwd = ret
+        
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                         QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
+                                         QCoreApplication.translate("QgsFmvInstaller", "Do you want install FFMPEG?"),
+                                         icon="Information")
+        if buttonReply == QMessageBox.Yes:
+            # Download FFMPEG 
+            progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading FFMPEG...")
+            progressMessageBar.layout().addWidget(progress)
+            iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
+            
+            cmd = 'sudo apt-get -y install ffmpeg'
+            ff_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+            if ff_rc != 0:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'Failed to install ffmpeg library, trying add-apt-repository.'), level=QGis.Critical)
+
+                cmd = 'sudo add-apt-repository ppa:jonathonf/ffmpeg-4'
+                ppa_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                if ppa_rc != 0:
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION FAILED: Could not install ffmpeg package.'), level=QGis.Critical)
+
+                else:
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'GET REPO SUCCESSFUL: Successfully added trusty-media repo where ffmpeg is located'))
+
+                    cmd = 'sudo apt-get update'
+                    up_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                    if up_rc != 0:
+                        qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'UPDATE FAILED: Failed to retrieve packages.'), level=QGis.Critical)
+                    else:
+                        qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'UPDATE SUCCESSFUL: Sucessfully retrived updated packages.'))
+                        cmd = 'sudo apt-get -y install ffmpeg'
+                        ffm_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                        if ffm_rc != 0:
+                            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION FAILED: Could not install ffmpeg package.'), level=QGis.Critical)
+                        else:
+                            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.'))
+                
+                            parser.set('GENERAL', 'ffmpeg', '/usr/bin/')                
+                            with open(fileConfig, 'w') as configfile:
+                                parser.write(configfile)
+                            
+                            iface.messageBar().clearWidgets()
+            else:
+                parser.set('GENERAL', 'ffmpeg', '/usr/bin/')                
+                with open(fileConfig, 'w') as configfile:
+                    parser.write(configfile)    
+                
+                iface.messageBar().clearWidgets()   
+
+    if not isDem():
+        ''' DEM File '''
+        progressMessageBar = iface.messageBar().createMessage("QGIS FMV",
+                                                              QCoreApplication.translate("QgsFmvInstaller", "Dem file not exist!"))
+        iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
+        parser.set('GENERAL', 'DTM_file', "")
+
+        with open(fileConfig, 'w') as configfile:
+            parser.write(configfile)
+        iface.messageBar().clearWidgets()
+
+#    TODO: If install opencv when make "import cv2" close QGIS ¿ ?
+#     try:
+#         import homography, cv2, matplotlib
+#     except ImportError:
+#         try:
+#             buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing dependencies"),
+#                                              QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
+#                                              icon="Information")
+#             if buttonReply == QMessageBox.Yes:
+#                 install_pip_requirements()
+#                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
+#         except ImportError:
+#             None
+#     finally:
+#         try:
+#             import homography, cv2, matplotlib
+#             # We update dependencies 
+#             if matplotlib.__version__ < '3.1.0' or cv2.__version__ < '4.1.0':
+#                 buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Updates available"),
+#                                                  QCoreApplication.translate("QgsFmvInstaller", "Do you want upgrade dependencies?"),
+#                                                  icon="Information")
+#                 if buttonReply == QMessageBox.Yes:
+#                     install_pip_requirements()
+#                     qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries updated correctly"))
+#         except ImportError:
+#             qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
+#                                        level=QGis.Critical)
+#             raise
     return
 
 
@@ -187,6 +327,15 @@ def IsLavFilters():
         if not any('LAV Filters' in software['name'] for software in software_list):
             # does not exist
             return False
+    else:
+        cache = apt.Cache()
+        cache.open()
+        try:
+            print("lav filters")
+            return cache["gst123"].is_installed
+        except Exception:
+            # does not exist
+            return False
     return True
 
 
@@ -196,6 +345,14 @@ def IsFFMPEG():
         if not os.path.isdir(ffmpegConf):
             return False
         if not os.path.isfile(os.path.join(ffmpegConf, 'ffmpeg.exe')):
+            return False
+    else:
+        cache = apt.Cache()
+        cache.open()
+        try:
+            return cache["ffmpeg"].is_installed
+        except Exception:
+            # does not exist
             return False
     return True
 
@@ -230,41 +387,6 @@ def WinSoftwareInstalled(hive, flag):
 
     return software_list
 
-# def download_file_from_google_drive(id, destination):
-#     URL = "https://docs.google.com/uc?export=download"
-# 
-#     session = requests.Session()
-# 
-#     response = session.get(URL, params={'id':id }, stream=True)
-#     token = get_confirm_token(response)
-# 
-#     if token:
-#         params = {'id': id, 'confirm': token}
-#         response = session.get(URL, params=params, stream=True)
-# 
-#     save_response_content(response, destination)
-# 
-# 
-# def get_confirm_token(response):
-#     for key, value in response.cookies.items():
-#         if key.startswith('download_warning'):
-#             return value
-# 
-#     return None
-# 
-# 
-# def save_response_content(response, destination):
-#     CHUNK_SIZE = 32768
-#     total_length = int(response.headers.get('content-length'))
-#     dl = 0
-#     with open(destination, "wb") as f:
-#         for chunk in response.iter_content(CHUNK_SIZE):
-#             if chunk:  # filter out keep-alive new chunks
-#                 dl += len(chunk)
-#                 done = int(50 * dl / total_length)
-#                 f.write(chunk)
-#                 progress.setValue(done)
-
                 
 def install_pip_requirements():
     ''' Install Requeriments from pip >= 10.0.1'''
@@ -275,21 +397,22 @@ def install_pip_requirements():
             requirements_file), onlyLog=True)
         raise
     try:
-        process = Popen(["python", "-m", 'pip', "install", '--upgrade', 'pip'],
-                        shell=True,
+        process = Popen(["python3", "-m", 'pip', "install", '--upgrade', 'pip'],
+                        shell=windows,
                         stdout=PIPE,
                         stderr=PIPE)
         process.wait()
-        process = Popen(["python", "-m", 'pip', "install", '-U', 'pip', 'setuptools'],
-                        shell=True,
+        process = Popen(["python3", "-m", 'pip', "install", '-U', 'pip', 'setuptools'],
+                        shell=windows,
                         stdout=PIPE,
                         stderr=PIPE)
         process.wait()
-        process = Popen(["pip", "install", '--user', '-r', requirements_file],
-                        shell=True,
+        process = Popen(["pip3", "install", '--user', '-r', requirements_file],
+                        shell=windows,
                         stdout=PIPE,
                         stderr=PIPE)
         process.wait()
     except Exception:
         raise
+    
     return

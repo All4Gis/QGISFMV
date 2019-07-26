@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿  # -*- coding: utf-8 -*-
 from math import (
     degrees, radians,
     sin, cos, asin, tan, atan, atan2, pi,

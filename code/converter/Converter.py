@@ -1,6 +1,6 @@
-# Original Code : https://github.com/senko/python-video-converter
+﻿  # Original Code : https://github.com/senko/python-video-converter
 # Modificated for work in QGIS FMV Plugin
-
+# -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QObject
 from QGIS_FMV.converter.avcodecs import (video_codec_list,
                                          audio_codec_list,

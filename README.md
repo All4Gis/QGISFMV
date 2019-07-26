@@ -20,6 +20,7 @@ Standards supported:
 - [Recommended readings](#recommended-readings)
 - [Installation](#installation)
     - [Installation on Windows](#installation-on-windows)
+    - [Installation on Ubuntu](#installation-on-ubuntu)
     - [Installation on Archlinux](#installation-on-archlinux)
 - [Slides](#slides)
 - [Screenshots](#screenshots)
@@ -65,6 +66,8 @@ To see the video you need:
 
   - **Linux**: install <a href="https://gstreamer.freedesktop.org/documentation/installing/on-linux.html" target="_blank">GStreamer dependencies</a>
   - **Window**: install LAV Filters (install <a href="https://github.com/Nevcairiel/LAVFilters/releases" target="_blank">DirectShow Media Decoders</a>) 
+  
+If everything works well the plugin should install these dependencies automatically in both, Windows and Linux.
 
 &#8593; [Back to top](#table-of-contents)
 
@@ -105,6 +108,10 @@ The installation can be done from the QGIS Python Plugins Repository or from the
 Windows automatically installs all, with user permission,If an error occurs, you should perform some checks.
 
 [![Watch the video (Spanish)](https://i.imgur.com/vXpMJhS.png)](https://youtu.be/9C973pz5i6k "Como usa QGISFMV en windows")
+
+## Installation on Ubuntu
+
+Ubuntu automatically installs all the dependencies if the user wants, for this his password will be requested.
 
 ## Installation on Archlinux
 

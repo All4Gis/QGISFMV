@@ -30,8 +30,8 @@ from qgis.PyQt.QtCore import (QSettings,
                           QThread)
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
-from QGIS_FMV.player.QgsFmvAbout import FmvAbout
-from QGIS_FMV.player.QgsManager import FmvManager
+from QGIS_FMV.about.QgsFmvAbout import FmvAbout
+from QGIS_FMV.manager.QgsManager import FmvManager
 from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.PyQt.QtCore import Qt
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
@@ -101,7 +101,6 @@ class Fmv:
             "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
         self.iface.removeToolBarIcon(self.actionFMV)
         log.removeLogging()
-        # qgsu.removeMosaicFolder()
 
     def About(self):
         ''' Show About Dialog '''

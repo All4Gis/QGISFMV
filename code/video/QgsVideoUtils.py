@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from QGIS_FMV.utils.QgsFmvUtils import (GetImageWidth,
                                         GetImageHeight,
                                         GetSensor,
