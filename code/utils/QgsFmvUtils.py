@@ -221,10 +221,10 @@ class callBackMetadataThread(threading.Thread):
     def run(self):
         # qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
         self.p = _spawn(self.cmds)
-        print (self.cmds)
+        # print (self.cmds)
         self.stdout, _ = self.p.communicate()
-        print (self.stdout)
-        print (_)
+        # print (self.stdout)
+        # print (_)
 
 
 def AddVideoToSettings(row_id, path):
