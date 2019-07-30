@@ -22,7 +22,8 @@ To add a video, (if the video is already MISB compliant) simply click on **File 
 
 ##  Multiplexor
 
-## *Insert Image of Multiplexor GUI*
+![](images/multiplexor.png)
+
 If your video is not MISB compliant, you will have to create it via the **Multiplexor**. To do this you will need the telemetry file that corresponds to the video. This file can be found in your Ground Control Station (phone or tablets) file folder. 
 - The folder path will look similar to this: Pixel 3 XL\DJI\Dji.go.v4\FlightRecords 
 - The file you need will look like this: DJIFlightRecord_2018-10-25_[10-34-38] 
