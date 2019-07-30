@@ -22,18 +22,19 @@ To add a video, (if the video is already MISB compliant) simply click on **File 
 
 ##  Multiplexor
 
+## *Insert Image of Multiplexor GUI*
 If your video is not MISB compliant, you will have to create it via the **Multiplexor**. To do this you will need the telemetry file that corresponds to the video. This file can be found in your Ground Control Station (phone or tablets) file folder. 
 - The folder path will look similar to this: Pixel 3 XL\DJI\Dji.go.v4\FlightRecords 
 - The file you need will look like this: DJIFlightRecord_2018-10-25_[10-34-38] 
 
 Convert it to **.csv** using the [CsvView tool](https://datfile.net/CsvView/downloads.html) Simply open the telemetry file in CsvView and save it out as a .csv file. 
 
-Once you have this converted file you can use the **Multiplexor** to create a MISB compliant video by merging the telemetry with the video.  
+Once this is done you can use the **Multiplexor** to create a MISB compliant video.  
 
-From the manager simpy click on **File -> Create MISB File**, select the video and the corresponding telemetry files. 
-You can modify the Horizontal and Vertical Fields of View if necessary. 
+From the manager simpy click on **File -> Create MISB File**, select the video and the corresponding telemetry file. 
+There is an option to modify the Horizontal and Vertical Fields of View if necessary. 
 
-**Note:** If you have more than one video recorded in a flight, the Multiplxor tool needs to identify each recodring event. Simply select **Extract Recordings** Then select the corresponsing recording to the video as it was captured. Ex: If you started and stopped the video 3 times over the course of one flight and wna to t use the second one. The Multiplexor tool will find three Recordings. Chose the matching one, the second one. 
+**Note:** If you have more than one video recorded in a flight, the Multiplxor tool needs to identify each recodring event. Simply select **Extract Recordings** Then select the corresponsing recording to the video as it was captured. Ex: If you started and stopped the video 3 times over the course of one flight and want to use the second one. The Multiplexor tool will find three Recordings. Chose the matching one, the second one. 
 
 Once all information has been provided select the **Create MISB button**. It will load the new file into the Video Manager. 
  
