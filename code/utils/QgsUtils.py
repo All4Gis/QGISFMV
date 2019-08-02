@@ -5,7 +5,7 @@ import shutil
 from qgis.PyQt.QtGui import QPixmap
 from qgis.PyQt.QtWidgets import QMessageBox
 from QGIS_FMV.utils.QgsFmvLog import log
-from qgis.core import (QgsProject, QgsLayerTreeLayer, QgsLayerTreeNode,
+from qgis.core import (QgsProject,
                        Qgis as QGis)
 from qgis.utils import iface
 from qgis.PyQt.QtCore import QSettings
