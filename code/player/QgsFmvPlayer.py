@@ -918,7 +918,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.playlist = QMediaPlaylist()
             
             # Remove All Data
-            # TODO : Chequear si esta abierto o no
             self.RemoveAllData()
             
             # Create Group
@@ -1375,13 +1374,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         
     def RemoveAllData(self):
         ''' Remove All TOC/Cnavas Data '''
-        # TODO
         # Remove group
         root = QgsProject.instance().layerTreeRoot()
         group = root.findGroup(self.fileName)
         if group is not None:
-#             for child in group.children():
-#                 QgsProject.instance().removeMapLayer(child.layerId())
             root.removeChildNode(group)    
         # Remove TOC video layers
         # RemoveVideoLayers()
