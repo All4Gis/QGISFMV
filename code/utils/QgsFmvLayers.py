@@ -688,6 +688,7 @@ def ExpandLayer(layer, value=True):
     QApplication.processEvents()
     return
 
+
 def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
     ''' Footprint Symbol '''
     style = S.getSensor(sensor)

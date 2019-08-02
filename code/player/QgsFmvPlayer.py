@@ -1372,7 +1372,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.VideoInfoDialog.show()
         
     def RemoveAllData(self):
-        ''' Remove All TOC/Cnavas Data '''
+        ''' Remove All TOC/Canvas Data '''
         # Remove group
         RemoveGroupByName(self.fileName)  
         # Reset internal variables
