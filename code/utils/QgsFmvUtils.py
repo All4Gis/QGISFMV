@@ -16,6 +16,7 @@ from qgis.PyQt.QtGui import QImage, QPainter
 from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.core import (QgsApplication,
+                       QgsProject,
                        QgsNetworkAccessManager,
                        QgsTask,
                        QgsRasterLayer,
@@ -72,7 +73,7 @@ except ImportError:
 
 settings = QSettings()
 tm = QgsApplication.taskManager()
-
+groupName = None
 windows = platform.system() == 'Windows'
 
 xSize = 0
@@ -669,11 +670,11 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
                 "", "DTM successfully initialized, len: " + str(len(dtm_data)), onlyLog=True)
 
 
-def UpdateLayers(packet, parent=None, mosaic=False):
+def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     ''' Update Layers Values '''
-
-    global frameCenterElevation, sensorLatitude, sensorLongitude, sensorTrueAltitude
-
+    global frameCenterElevation, sensorLatitude, sensorLongitude, sensorTrueAltitude, groupName
+    
+    groupName = group
     frameCenterLat = packet.FrameCenterLatitude
     frameCenterLon = packet.FrameCenterLongitude
     frameCenterElevation = packet.FrameCenterElevation
@@ -734,15 +735,15 @@ def UpdateLayers(packet, parent=None, mosaic=False):
  
     # recenter map on platform
     if centerMode == 1:
-        lyr = qgsu.selectLayerByName(Platform_lyr)
+        lyr = qgsu.selectLayerByName(Platform_lyr, groupName)
         iface.mapCanvas().setExtent(lyr.extent())
     # recenter map on footprint
     elif centerMode == 2:
-        lyr = qgsu.selectLayerByName(Footprint_lyr)
+        lyr = qgsu.selectLayerByName(Footprint_lyr, groupName)
         iface.mapCanvas().setExtent(lyr.extent())
     # recenter map on target
     elif centerMode == 3:
-        lyr = qgsu.selectLayerByName(FrameCenter_lyr)
+        lyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
         iface.mapCanvas().setExtent(lyr.extent())
  
     iface.mapCanvas().refresh()
@@ -771,6 +772,7 @@ def georeferencingVideo(parent):
 
 def GeoreferenceFrame(task, image, output, p):
     ''' Save Current Image '''
+    global groupName
     ext = ".tiff"
     t = "out_" + p + ext
     name = "g_" + p
@@ -804,7 +806,7 @@ def GeoreferenceFrame(task, image, output, p):
 
     # Add Layer to canvas
     layer = QgsRasterLayer(dst_filename, name)
-    addLayerNoCrsDialog(layer, False, frames_g)
+    addLayerNoCrsDialog(layer, False, frames_g, isSubGroup=True)
     ExpandLayer(layer, False)
     if task.isCanceled():
         return None

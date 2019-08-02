@@ -20,7 +20,7 @@ from qgis.PyQt.QtWidgets import (QToolTip,
                              QApplication,
                              QTableWidgetItem,
                              QToolBar)
-from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject
+from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject, QgsLayerTreeGroup
 
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
 
@@ -291,7 +291,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     self.addMetadata(data)
                 try:
                     UpdateLayers(packet, parent=self,
-                                 mosaic=self.createingMosaic)
+                                 mosaic=self.createingMosaic, group=self.fileName)
                 except:
                     None
                 QApplication.processEvents()
@@ -902,8 +902,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.islocal = islocal
         self.klv_folder = klv_folder
         try:
-            # Remove All Data
-            self.RemoveAllData()
 #             if "udp://" in videoPath:
 #                 host, port = videoPath.split("://")[1].split(":")
 #                 receiver = UDPClient(host, int(port), type="udp")
@@ -918,6 +916,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 #                 return
             self.fileName = videoPath
             self.playlist = QMediaPlaylist()
+            
+            # Remove All Data
+            # TODO : Chequear si esta abierto o no
+            self.RemoveAllData()
+            
+            # Create Group
+            root = QgsProject.instance().layerTreeRoot()
+            node_group = QgsLayerTreeGroup(videoPath)
+            root.addChildNode(node_group)
+            
             if self.isStreaming:
                 url = QUrl(videoPath)
             else:
@@ -930,7 +938,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(videoPath))
 
-            CreateVideoLayers(hasElevationModel())
+            CreateVideoLayers(hasElevationModel(), videoPath)
             self.clearMetadata()
 
             self.HasFileAudio = True
@@ -1367,21 +1375,38 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         
     def RemoveAllData(self):
         ''' Remove All TOC/Cnavas Data '''
+        # TODO
+        # Remove group
+        root = QgsProject.instance().layerTreeRoot()
+        group = root.findGroup(self.fileName)
+        if group is not None:
+#             for child in group.children():
+#                 QgsProject.instance().removeMapLayer(child.layerId())
+            root.removeChildNode(group)    
         # Remove TOC video layers
-        RemoveVideoLayers()
+        # RemoveVideoLayers()
         # Remove mosaic group if exist
-        RemoveGroupByName()
+        # RemoveGroupByName()
         # Reset internal variables
-        ResetData()
+        # ResetData()
         # Remove Canvas RubberBands
-        self.videoWidget.RemoveCanvasRubberbands()
+        # self.videoWidget.RemoveCanvasRubberbands()
 
-    def closeEvent(self, _):
+    def closeEvent(self, event):
         """ Close Event """
+        # Ask when the player is closed
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                         QCoreApplication.translate("QgsFmvPlayer", "If you close or reopen the video all the information will be erased."),
+                                         QCoreApplication.translate("QgsFmvPlayer", "Do you want to close or reopen it?"),
+                                         icon="Information")
+        if buttonReply == QMessageBox.No:
+            event.ignore()
+            return
+        
         self.stop()
         self.parent._PlayerDlg = None
         self.parent.ToggleActiveFromTitle()
-        
+
         # Remove All Data
         self.RemoveAllData()
         

@@ -8,7 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_OptionsDialog(object):
+
     def setupUi(self, OptionsDialog):
         OptionsDialog.setObjectName("OptionsDialog")
         OptionsDialog.resize(461, 561)
@@ -268,6 +270,7 @@ class Ui_OptionsDialog(object):
         self.label_13.setText(_translate("OptionsDialog", "brush Color"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("OptionsDialog", "Drawings"))
         self.pushButton.setText(_translate("OptionsDialog", "Accept"))
+
 
 from qgscolorbutton import QgsColorButton
 from QGIS_FMV.gui import resources_rc

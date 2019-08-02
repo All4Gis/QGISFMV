@@ -5,7 +5,7 @@ import shutil
 from qgis.PyQt.QtGui import QPixmap
 from qgis.PyQt.QtWidgets import QMessageBox
 from QGIS_FMV.utils.QgsFmvLog import log
-from qgis.core import (QgsProject,
+from qgis.core import (QgsProject, QgsLayerTreeLayer, QgsLayerTreeNode,
                        Qgis as QGis)
 from qgis.utils import iface
 from qgis.PyQt.QtCore import QSettings
@@ -46,12 +46,22 @@ class QgsUtils(object):
         return ret
 
     @staticmethod
-    def selectLayerByName(layerName):
+    def selectLayerByName(layerName, group=None):
         ''' Select Layer by Name '''
         returnLayer = None
         try:
-            returnLayer = QgsProject.instance().mapLayersByName(layerName)[0]
-            return returnLayer
+            if group is None:
+                returnLayer = QgsProject.instance().mapLayersByName(layerName)[0]
+                return returnLayer
+            else:
+                root = QgsProject.instance().layerTreeRoot()
+                returnLayer = QgsProject.instance().mapLayersByName(layerName)
+                g = root.findGroup(group)
+                for child in returnLayer:
+                    layer = g.findLayer(child.id())
+                    if layer is not None:
+                        returnLayer = child
+                        return returnLayer
         except IndexError:
             return returnLayer
 
