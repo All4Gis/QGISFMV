@@ -31,7 +31,6 @@ from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.player.QgsFmvMetadata import QgsFmvMetadata
 from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
-                                         RemoveVideoLayers,
                                          CreateGroupByName,
                                          RemoveGroupByName)
 from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
@@ -1375,18 +1374,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def RemoveAllData(self):
         ''' Remove All TOC/Cnavas Data '''
         # Remove group
-        root = QgsProject.instance().layerTreeRoot()
-        group = root.findGroup(self.fileName)
-        if group is not None:
-            root.removeChildNode(group)    
-        # Remove TOC video layers
-        # RemoveVideoLayers()
-        # Remove mosaic group if exist
-        # RemoveGroupByName()
+        RemoveGroupByName(self.fileName)  
         # Reset internal variables
-        # ResetData()
+        ResetData()
         # Remove Canvas RubberBands
-        # self.videoWidget.RemoveCanvasRubberbands()
+        self.videoWidget.RemoveCanvasRubberbands()
 
     def closeEvent(self, event):
         """ Close Event """

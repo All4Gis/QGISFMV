@@ -688,58 +688,6 @@ def ExpandLayer(layer, value=True):
     QApplication.processEvents()
     return
 
-
-def RemoveVideoLayers():
-    ''' Remove Video Layers '''
-    try:
-        _layerreg.removeMapLayer(
-            qgsu.selectLayerByName(Platform_lyr, groupName).id())
-    except Exception:
-        None
-    try:
-        _layerreg.removeMapLayer(
-            qgsu.selectLayerByName(Beams_lyr, groupName).id())
-    except Exception:
-        None
-    try:
-        _layerreg.removeMapLayer(
-            qgsu.selectLayerByName(Footprint_lyr, groupName).id())
-    except Exception:
-        None
-    try:
-        _layerreg.removeMapLayer(
-            qgsu.selectLayerByName(Trajectory_lyr, groupName).id())
-    except Exception:
-        None
-    try:
-        _layerreg.removeMapLayer(
-            qgsu.selectLayerByName(FrameCenter_lyr, groupName).id())
-    except Exception:
-        None
-    try:
-        _layerreg.removeMapLayer(
-            qgsu.selectLayerByName(FrameAxis_lyr, groupName).id())
-    except Exception:
-        None
-    try:
-        _layerreg.removeMapLayer(
-            qgsu.selectLayerByName(Point_lyr, groupName).id())
-    except Exception:
-        None
-    try:
-        _layerreg.removeMapLayer(
-            qgsu.selectLayerByName(Line_lyr, groupName).id())
-    except Exception:
-        None
-    try:
-        _layerreg.removeMapLayer(
-            qgsu.selectLayerByName(Polygon_lyr, groupName).id())
-    except Exception:
-        None
-    iface.mapCanvas().refresh()
-    return
-
-
 def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
     ''' Footprint Symbol '''
     style = S.getSensor(sensor)
