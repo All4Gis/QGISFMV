@@ -25,6 +25,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.8:
+    	- Fix csv enconding
     	- Group Video layers/rasters etc
     	- Minor changes
     1.7:
