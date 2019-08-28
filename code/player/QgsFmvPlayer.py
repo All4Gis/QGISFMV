@@ -1227,6 +1227,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def SaveAllFrames(self, task, fileName, directory):
+        ''' Extract and save all video frames into directory '''
         vidcap = cv2.VideoCapture(fileName)
         length = int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT))
         count = 0

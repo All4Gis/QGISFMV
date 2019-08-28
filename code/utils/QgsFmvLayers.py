@@ -1021,6 +1021,7 @@ def addLayerNoCrsDialog(layer, loadInLegend=True, group=None, isSubGroup=False):
 
 
 def _toQgsField(f):
+    ''' Create QgsFiel '''
     if isinstance(f, QgsField):
         return f
     return QgsField(f[0], TYPE_MAP.get(f[1], QVariant.String))
