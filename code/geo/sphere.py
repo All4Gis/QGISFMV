@@ -124,6 +124,9 @@ def destination(point, distance, bearing):
 
 
 def approximate_destination(point, distance, theta):
+    '''
+    Calculate destination point from point,distance and bearing
+    '''
     # http://stackoverflow.com/questions/2187657/calculate-second-point-knowing-the-starting-point-and-distance
     lon, lat = point
     radians_theta = radians(theta)
@@ -211,7 +214,7 @@ def ring__area(coordinates):
 
 
 def _polygon__area(coordinates):
-
+    ''' Calculate polygon area '''
     _area = 0
     if len(coordinates) > 0:
         _area += abs(ring__area(coordinates[0]))

@@ -1340,7 +1340,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def ExtractCurrentGeoFrame(self):
         """ Extract Current GeoReferenced Frame Task """
-        # image = self.videoWidget.currentFrame() # without drawings
         image = BurnDrawingsImage(self.videoWidget.currentFrame(), self.videoWidget.grab(self.videoWidget.surface.videoRect()).toImage())
 
         geotransform = GetGeotransform_affine()
@@ -1464,25 +1463,25 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # Remove All Data
         self.RemoveAllData()
         
-        # We close metadata dock if it is open
+        # We close metadata dock if it's open
         try:
             self.metadataDlg.hide()
         except Exception:
             None
             
-        # We close matplot graphics if it is open
+        # We close matplot graphics if it's open
         try:
             self.matplot.close()
         except Exception:
             None
             
-        # We close Video info json if it is open
+        # We close Video info json if it's open
         try:
             self.VideoInfoDialog.hide()
         except Exception:
             None
 
-        # We close Options dialog if it is open
+        # We close Options dialog if it's open
         try:
             self.Options.hide()
         except Exception:

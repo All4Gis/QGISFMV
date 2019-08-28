@@ -2,7 +2,6 @@
 import sys
 from QGIS_FMV.utils.QgsFmvInstaller import WindowsInstaller, LinuxInstaller
 import platform
-windows = platform.system() == 'Windows'
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtWidgets import QMessageBox
 from qgis.utils import iface
@@ -15,6 +14,8 @@ from qgis.PyQt.QtWidgets import QApplication
 try:
     QApplication.setOverrideCursor(Qt.PointingHandCursor)
     QApplication.processEvents()
+    
+    windows = platform.system() == 'Windows'
     
     if windows:  # Windows Installer
         try:
@@ -35,16 +36,12 @@ try:
         LinuxInstaller() 
     
     reloadPlugin('QGIS_FMV')
-    iface.messageBar().pushMessage("QGIS FMV", "QGIS Full Motion Video installed correctly", QGis.Info, 3)
+    iface.messageBar().pushMessage("QGIS FMV", "QGIS Full Motion Video installed correctly!", QGis.Info, 3)
     QApplication.restoreOverrideCursor()
 except Exception as e:
+    iface.messageBar().pushMessage("QGIS FMV", "Ooops! QGIS Full Motion Video instalation failed!", QGis.Warning, 3)
     QApplication.restoreOverrideCursor()
     None
-#         buttonReply = qgsu.CustomMessage("QGIS FMV", "", "you need to restart your QGIS,Do you really close?", icon="Information")
-#         if buttonReply == QMessageBox.Yes:
-#             # TODO : Restart QGIS
-#             iface.actionExit().trigger()
-
 
 def classFactory(iface):
     from .QgsFmv import Fmv
