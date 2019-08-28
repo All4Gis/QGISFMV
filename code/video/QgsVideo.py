@@ -269,10 +269,17 @@ class VideoWidget(QVideoWidget):
 
         # Tracking Canvas Rubberband
         self.Track_Canvas_RubberBand = QgsRubberBand(
-            iface.mapCanvas(), QgsWkbTypes.LineGeometry)
+            iface.mapCanvas(), QgsWkbTypes.LineGeometry)                
         # set rubber band style
         self.Track_Canvas_RubberBand.setColor(color_blue)
         self.Track_Canvas_RubberBand.setWidth(5)
+       
+        # Cursor Canvas Rubberband
+        self.Cursor_Canvas_RubberBand = QgsRubberBand(
+            iface.mapCanvas(), QgsWkbTypes.PointGeometry)
+        self.Cursor_Canvas_RubberBand.setWidth(4)
+        self.Cursor_Canvas_RubberBand.setColor(QColor(255, 100, 100, 250))
+        self.Cursor_Canvas_RubberBand.setIcon(QgsRubberBand.ICON_FULL_DIAMOND)
         
         self.parent = parent.parent()
 
@@ -533,7 +540,8 @@ class VideoWidget(QVideoWidget):
     def RemoveCanvasRubberbands(self):
         ''' Remove Canvas Rubberbands '''
         self.poly_Canvas_RubberBand.reset()
-        self.Track_Canvas_RubberBand.reset()
+        self.Track_Canvas_RubberBand.reset(QgsWkbTypes.LineGeometry)   
+        self.Cursor_Canvas_RubberBand.reset(QgsWkbTypes.PointGeometry)
 
     def paintEvent(self, event):
         ''' Paint Event '''
@@ -647,6 +655,7 @@ class VideoWidget(QVideoWidget):
         # check if the point  is on picture (not in black borders)
         if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
             self.setCursor(QCursor(Qt.ArrowCursor))
+            self.Cursor_Canvas_RubberBand.reset(QgsWkbTypes.PointGeometry)
             return
         
         # Prevent draw on video if not started or finished
@@ -662,6 +671,13 @@ class VideoWidget(QVideoWidget):
 
             Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                 event, self.surface)
+
+            vertices = self.Cursor_Canvas_RubberBand.numberOfVertices()
+            if vertices > 0:
+                self.Cursor_Canvas_RubberBand.removePoint(0, True, 0)
+                self.Cursor_Canvas_RubberBand.movePoint(QgsPointXY(Longitude, Latitude), 0)
+            else:   
+                self.Cursor_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
             
             if self._MGRS :
                 try:
@@ -842,7 +858,7 @@ class VideoWidget(QVideoWidget):
     def SetPolygonDrawer(self, value):
         """ Set Polygon Drawer """
         self._interaction.polygonDrawer = value
-
+        
     def mouseReleaseEvent(self, _):
         """
         :type event: QMouseEvent
@@ -891,5 +907,9 @@ class VideoWidget(QVideoWidget):
                 self._isinit = False
 
     def leaveEvent(self, _):
+        # Remove coordinates label value
         self.parent.lb_cursor_coord.setText("")
+        # Change cursor
         self.setCursor(QCursor(Qt.ArrowCursor))
+        # Reset mouse rubberband
+        self.Cursor_Canvas_RubberBand.reset(QgsWkbTypes.PointGeometry)
