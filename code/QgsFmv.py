@@ -114,6 +114,6 @@ class Fmv:
             self.CreateDockWidget()
 
     def CreateDockWidget(self):
-        ''' Show Manager Video Dock '''
+        ''' Create Manager Video QDockWidget '''
         self._FMVManager = FmvManager(self.iface)
         self.iface.addDockWidget(Qt.BottomDockWidgetArea, self._FMVManager)

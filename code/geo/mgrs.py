@@ -22,11 +22,6 @@ __author__ = 'Alexander Bruy'
 __date__ = 'August 2016'
 __copyright__ = '(C) 2016 Boundless, http://boundlessgeo.com'
 
-# Repo https://github.com/boundlessgeo/mgrspy
-# This will get replaced with a git SHA1 when you do a git archive
-
-__revision__ = '$Format:%H$'
-
 import math
 import itertools
 
