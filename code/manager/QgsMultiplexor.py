@@ -289,6 +289,8 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                         # Platform Heading Angle
                         if k == "OSD.yaw":
                             OSD_yaw = float(v)
+                            if OSD_yaw < 0:
+                                OSD_yaw = OSD_yaw + 360
                             _bytes = float_to_bytes(round(OSD_yaw, 4), _domain5, _range5)
                             _len = int_to_bytes(len(_bytes))
                             _bytes = _key5 + _len + _bytes
