@@ -547,10 +547,7 @@ class VideoWidget(QVideoWidget):
         ''' Paint Event '''
         if not self.surface.isActive():
             return
-        
-        # print("paintEvent : " + str(event.region().boundingRect()))
-        # print("Active : " + str(self.surface.isActive()))
-        
+                
         self.painter = QPainter(self)
         self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
  
