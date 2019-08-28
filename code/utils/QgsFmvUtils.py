@@ -3,7 +3,7 @@ from configparser import ConfigParser
 from datetime import datetime
 import inspect
 import json
-from math import atan, tan, sqrt, radians, pi
+from math import atan, tan, sqrt, radians, pi, degrees
 import os
 from os.path import dirname, abspath
 import platform
@@ -16,7 +16,6 @@ from qgis.PyQt.QtGui import QImage, QPainter
 from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.core import (QgsApplication,
-                       QgsProject,
                        QgsNetworkAccessManager,
                        QgsTask,
                        QgsRasterLayer,
@@ -119,6 +118,7 @@ class BufferedMetaReader():
     ''' Non-Blocking metadata reader with buffer  '''
 
     def __init__(self, video_path, pass_time=250, intervall=500):
+        ''' Constructor '''
         # don't go too low with pass_time or we won't catch any metadata at
         # all.
         # 8 x 500 = 4000ms buffer time
@@ -363,6 +363,7 @@ def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None):
 def pluginSetting(name, namespace=None, typ=None):
 
     def _find_in_cache(name, key):
+        ''' Find key in QGIS settings '''
         try:
             for setting in _settings[namespace]:
                 if setting["name"] == name:
@@ -392,6 +393,7 @@ def pluginSetting(name, namespace=None, typ=None):
 
 
 def _callerName():
+    ''' Get QGIS plugin name '''
     stack = inspect.stack()
     parentframe = stack[2][0]
     name = []
@@ -445,11 +447,13 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
 
 
 def setPluginSetting(name, value, namespace=None):
+    ''' Set plugin name in QGIS settings '''
     namespace = namespace or _callerName().split(".")[0]
     settings.setValue(namespace + "/" + name, value)
 
 
 def askForFolder(parent, msg=None, options=QFileDialog.ShowDirsOnly):
+    ''' dialog for save or load folder '''
     msg = msg or 'Select folder'
     caller = _callerName().split(".")
     name = "/".join(["LAST_PATH", caller[-1]])
@@ -463,7 +467,6 @@ def askForFolder(parent, msg=None, options=QFileDialog.ShowDirsOnly):
 
 def convertQImageToMat(img, cn=3):
     '''  Converts a QImage into an opencv MAT format  '''
-    # TODO : The correct values is 4 not 3 and not RGB888
     img = img.convertToFormat(QImage.Format_RGB888)
     ptr = img.bits()
     ptr.setsize(img.byteCount())
@@ -622,19 +625,6 @@ def _spawn(cmds, t="ffmpeg"):
                  bufsize=0,
                  close_fds=(not windows))
 
-
-def rad2deg(radians):
-    ''' Radians to Degrees '''
-    degrees = 180 * radians / pi
-    return degrees
-
-
-def deg2rad(degrees):
-    ''' Degrees to Radians '''
-    radians = pi * degrees / 180
-    return radians
-
-
 def ResetData():
     ''' Reset Global Data '''
     global dtm_data, tLastLon, tLastLat
@@ -762,7 +752,9 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
 
 
 def georeferencingVideo(parent):
-    """ Extract Current Frame Thread """
+    """ Extract Current Frame Thread 
+    :param packet: Parent class
+    """
     image = parent.videoWidget.currentFrame()
     
     folder = getVideoFolder(parent.fileName)
@@ -825,11 +817,14 @@ def GeoreferenceFrame(task, image, output, p):
 
 
 def GetGeotransform_affine():
+    ''' Get current frame affine transformation '''
     return geotransform_affine
 
 
 def CornerEstimationWithOffsets(packet):
-    ''' Corner estimation using Offsets '''
+    ''' Corner estimation using Offsets 
+    :param packet: Metada packet
+    '''
     try:
 
         OffsetLat1 = packet.OffsetCornerLatitudePoint1
@@ -961,22 +956,22 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
         value5 = sqrt(pow(distance, 2.0) + pow(sensorGroundAltitude, 2.0))
         value6 = targetWidth * aspectRatio / 2.0
 
-        degrees = rad2deg(atan(value3 / distance))
+        degrees_value = degrees(atan(value3 / distance))
 
-        value8 = rad2deg(atan(distance / sensorGroundAltitude))
-        value9 = rad2deg(atan(value6 / value5))
+        value8 = degrees(atan(distance / sensorGroundAltitude))
+        value9 = degrees(atan(value6 / value5))
         value10 = value8 + value9
         value11 = sensorGroundAltitude * tan(radians(value10))
         value12 = value8 - value9
         value13 = sensorGroundAltitude * tan(radians(value12))
         value14 = distance - value13
         value15 = value11 - distance
-        value16 = value3 - value14 * tan(radians(degrees))
-        value17 = value3 + value15 * tan(radians(degrees))
+        value16 = value3 - value14 * tan(radians(degrees_value))
+        value17 = value3 + value15 * tan(radians(degrees_value))
         distance2 = sqrt(pow(value14, 2.0) + pow(value16, 2.0))
         value19 = sqrt(pow(value15, 2.0) + pow(value17, 2.0))
-        value20 = rad2deg(atan(value16 / value14))
-        value21 = rad2deg(atan(value17 / value15))
+        value20 = degrees(atan(value16 / value14))
+        value21 = degrees(atan(value17 / value15))
 
         # CP Up Left
         bearing = (value2 + 360.0 - value21) % 360.0
@@ -1162,7 +1157,10 @@ def _seconds_to_time_frac(sec, comma=False):
 
     
 def BurnDrawingsImage(source, overlay):
-    ''' Burn drawings into image '''
+    ''' Burn drawings into image 
+    :param source: QImage, Original Image
+    :param overlay: QImage, Drawings image
+    '''
     base = source.scaled(overlay.size(), Qt.IgnoreAspectRatio)
     
     p = QPainter()
