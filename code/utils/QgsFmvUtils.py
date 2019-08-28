@@ -529,10 +529,12 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
 
 
 def GetSensor():
+    ''' Get Sensor values '''
     return [sensorLatitude, sensorLongitude, sensorTrueAltitude]
 
 
 def GetFrameCenter():
+    ''' Get Frame Center values '''
     global sensorTrueAltitude
     global frameCenterElevation
     global gframeCenterLat
@@ -544,18 +546,22 @@ def GetFrameCenter():
 
 
 def GetcornerPointUL():
+    ''' Get Corner upper Left values '''
     return gcornerPointUL
 
 
 def GetcornerPointUR():
+    ''' Get Corner upper Right values '''
     return gcornerPointUR
 
 
 def GetcornerPointLR():
+    ''' Get Corner lower Right values '''
     return gcornerPointLR
 
 
 def GetcornerPointLL():
+    ''' Get Corner lower left values '''
     return gcornerPointLL
 
 
@@ -565,6 +571,7 @@ def GetGCPGeoTransform():
 
 
 def hasElevationModel():
+    ''' Check if DEM is loaded '''
     if dtm_data is not None and len(dtm_data) > 0:
         return True
     else:
@@ -580,10 +587,12 @@ def SetImageSize(w, h):
 
 
 def GetImageWidth():
+    ''' Get Image Width '''
     return xSize
 
 
 def GetImageHeight():
+    ''' Get Image Height '''
     return ySize
 
 
@@ -627,6 +636,7 @@ def deg2rad(degrees):
 
 
 def ResetData():
+    ''' Reset Global Data '''
     global dtm_data, tLastLon, tLastLat
 
     SetcrtSensorSrc()
@@ -638,6 +648,7 @@ def ResetData():
 
 
 def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
+    ''' Start DEM transformation and extract data for set Z value in points '''
     global dtm_data, dtm_transform, dtm_colLowerBound, dtm_rowLowerBound
 
     # Initialize the dtm once, based on a zone arouind the target
@@ -1019,6 +1030,7 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
 
 
 def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
+    ''' Obtain height for points,intersecting with DEM '''
     pt = []
 
     sensorLat = sensorPt[0]
@@ -1150,6 +1162,7 @@ def _seconds_to_time_frac(sec, comma=False):
 
     
 def BurnDrawingsImage(source, overlay):
+    ''' Burn drawings into image '''
     base = source.scaled(overlay.size(), Qt.IgnoreAspectRatio)
     
     p = QPainter()

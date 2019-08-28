@@ -325,6 +325,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e))
             
     def readLocal(self, currentInfo):
+        ''' Read Local Metadata ,klv files'''
         try:
             dataFile = os.path.join(self.klv_folder, str(round(currentInfo, 1)) + ".klv")
             f = open(dataFile, 'rb')

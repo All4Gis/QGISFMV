@@ -22,6 +22,8 @@ Trajectory_lyr = parser['LAYERS']['Trajectory_lyr']
 epsg = parser['LAYERS']['epsg']
 groupName = None
 
+encoding="utf-8"
+
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QVariant, QSettings
 from qgis.core import (
@@ -1024,19 +1026,22 @@ def _toQgsField(f):
     return QgsField(f[0], TYPE_MAP.get(f[1], QVariant.String))
 
 
-def newPointsLayer(filename, fields, crs, name=None, geometryType=Point, encoding="utf-8"):
+def newPointsLayer(filename, fields, crs, name=None, geometryType=Point, encoding=encoding):
+    ''' Create new Point Layer '''
     return newVectorLayer(filename, fields, geometryType, crs, name, encoding)
 
 
-def newLinesLayer(filename, fields, crs, name=None, geometryType=Line, encoding="utf-8"):
+def newLinesLayer(filename, fields, crs, name=None, geometryType=Line, encoding=encoding):
+    ''' Create new Line Layer '''
     return newVectorLayer(filename, fields, geometryType, crs, name, encoding)
 
 
-def newPolygonsLayer(filename, fields, crs, name=None, encoding="utf-8"):
+def newPolygonsLayer(filename, fields, crs, name=None, encoding=encoding):
+    ''' Create new Polygon Layer '''
     return newVectorLayer(filename, fields, Polygon, crs, name, encoding)
 
 
-def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding="utf-8"):
+def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding=encoding):
     '''
     Creates a new vector layer
     :param filename: The filename to store the file. The extensions determines the type of file.
