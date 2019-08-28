@@ -181,7 +181,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(3395))
 
     def centerMapPlatform(self, checked):
-        ''' Center map on Platform '''
+        ''' Center map on Platform 
+        @param checked: Boolean if button is checked
+        '''
         if checked:
             self.actionCenter_on_Footprint.setChecked(False)
             self.actionCenter_Target.setChecked(False)
@@ -190,7 +192,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             setCenterMode(0, self.iface)
 
     def centerMapFootprint(self, checked):
-        ''' Center Map on Footprint '''
+        ''' Center Map on Footprint 
+        @param checked: Boolean if button is checked
+        '''
         if checked:
             self.actionCenter_on_Platform.setChecked(False)
             self.actionCenter_Target.setChecked(False)
@@ -199,7 +203,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             setCenterMode(0, self.iface)
 
     def centerMapTarget(self, checked):
-        ''' Center Map on Target '''
+        ''' Center Map on Target 
+        @param checked: Boolean if button is checked
+        '''
         if checked:
             self.actionCenter_on_Platform.setChecked(False)
             self.actionCenter_on_Footprint.setChecked(False)
@@ -208,14 +214,18 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             setCenterMode(0, self.iface)
             
     def MouseLocationCoordinates(self, idx):
-        ''' Set Cursor Video Coordinates , WGS84/MGRS '''
+        ''' Set Cursor Video Coordinates , WGS84/MGRS 
+        @param idx: QComboBox index
+        '''
         if idx == 1:
             self.videoWidget.SetMGRS(True)
         else:
             self.videoWidget.SetMGRS(False)
 
     def HasAudio(self, videoPath):
-        """ Check if video have Metadata or not """
+        """ Check if video have Metadata or not 
+        @param videoPath: Video file path
+        """
         try:
             p = _spawn(['-i', videoPath,
                         '-show_streams', '-select_streams', 'a',
@@ -238,7 +248,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.actionSave_Audio.setEnabled(False)
 
     def get_metadata_from_buffer(self, currentTime):
-        """ Metadata CallBack """
+        """ Metadata CallBack 
+        @param currentTime: Current video timestamp
+        """
         try:
 
             # There is no way to spawn a thread and call after join() without blocking the video UI thread.
@@ -277,7 +289,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 "QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst))
 
     def packetStreamParser(self, stdout_data):
-        ''' Common packet process'''
+        ''' Common packet process 
+        @param stdout_data: Binary data
+        '''
         for packet in StreamParser(stdout_data):
             try:
                 if isinstance(packet, UnknownElement):
@@ -299,7 +313,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 qgsu.showUserAndLogMessage("", "QgsFmvPlayer packetStreamParser failed! : " + str(e), onlyLog=True)
 
     def callBackMetadata(self, currentTime, nextTime):
-        """ Metadata CallBack Streaming"""
+        ''' Metadata CallBack Streaming 
+         @param currentTime: Current timestamp
+         @param nextTime: Next timestamp
+        '''
         try:
             
             port = int(self.fileName.split(':')[2])
@@ -345,7 +362,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return self.data
 
     def addMetadata(self, packet):
-        ''' Add Metadata to List '''
+        ''' Add Metadata to List 
+        @param packet: Metadata packet
+        '''
         self.clearMetadata()
         row = 0
         if packet is None:
@@ -393,7 +412,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def showVideoInfo(self):
         ''' Show default probe info '''
-
         taskSaveInfoToJson = QgsTask.fromFunction('Show Video Info Task',
                                                   self.converter.probeShow,
                                                   fname=self.fileName,
@@ -408,7 +426,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return self.playerState
 
     def setCurrentState(self, state):
-        ''' Set Current State '''
+        ''' Set Current State 
+        @param state: Current video state (play/pause ...) QMediaPlayer::State
+        '''
         if state != self.playerState:
             self.playerState = state
             if state == QMediaPlayer.StoppedState:
@@ -440,7 +460,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def contextMenuBarRequested(self, point):
-        ''' Context Menu Menu Bar '''
+        ''' Context Menu Bar for toggle visibility of Menu Bar'''
         menu = QMenu('ToolBars')
         toolbars = self.findChildren(QToolBar)
         for toolbar in toolbars:
@@ -495,7 +515,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         menu.exec_(self.mapToGlobal(point))
 
     def grayFilter(self, value):
-        ''' Gray Video Filter '''
+        ''' Gray Video Filter 
+        @param value: Button checked state
+        '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetGray(value)
         
@@ -507,7 +529,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def MirrorHorizontalFilter(self, value):
-        ''' Mirror Horizontal Video Filter '''
+        ''' Mirror Horizontal Video Filter 
+        @param value: Button checked state
+        '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetMirrorH(value)
         
@@ -519,7 +543,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def NDVIFilter(self, value):
-        ''' NDVI Video Filter '''
+        ''' NDVI Video Filter 
+        @param value: Button checked state
+        '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetNDVI(value)
         
@@ -533,7 +559,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def edgeFilter(self, value):
-        ''' Edge Detection Video Filter '''
+        ''' Edge Detection Video Filter 
+        @param value: Button checked state
+        '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetEdgeDetection(value)
         
@@ -546,7 +574,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def invertColorFilter(self, value):
-        ''' Invert Color Video Filter '''
+        ''' Invert Color Video Filter 
+        @param value: Button checked state
+        '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetInvertColor(value)
         
@@ -559,7 +589,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def autoContrastFilter(self, value):
-        ''' Auto Contrast Video Filter '''
+        ''' Auto Contrast Video Filter 
+        @param value: Button checked state
+        '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetAutoContrastFilter(value)
         # TODO : Temporarily we lower in rate. Player in other thread?
@@ -572,7 +604,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def monoFilter(self, value):
-        ''' Filter Mono Video '''
+        ''' Filter Mono Video 
+        @param value: Button checked state
+        '''
         self.UncheckFilters(self.sender(), value)
         self.videoWidget.SetMonoFilter(value)
         
@@ -585,39 +619,51 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def magnifier(self, value):
-        ''' Magnifier Glass Utils '''
+        ''' Magnifier Glass Utils 
+        @param value: Button checked state
+        '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetMagnifier(value)
         self.videoWidget.UpdateSurface()
         return
     
     def stamp(self, value):
-        ''' Stamo Utils '''
+        ''' Stamo Utils 
+        @param value: Button checked state
+        '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetStamp(value)
         self.videoWidget.UpdateSurface()
         return
 
     def pointDrawer(self, value):
-        ''' Draw Point '''
+        ''' Draw Point 
+        @param value: Button checked state
+        '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetPointDrawer(value)
         self.videoWidget.UpdateSurface()
 
     def lineDrawer(self, value):
-        ''' Draw Line '''
+        ''' Draw Line 
+        @param value: Button checked state
+        '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetLineDrawer(value)
         self.videoWidget.UpdateSurface()
 
     def polygonDrawer(self, value):
-        ''' Draw Polygon '''
+        ''' Draw Polygon 
+        @param value: Button checked state
+        '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetPolygonDrawer(value)
         self.videoWidget.UpdateSurface()
 
     def ojectTracking(self, value):
-        ''' Object Tracking '''
+        ''' Object Tracking 
+        @param value: Button checked state
+        '''
         # Remove tracking if is unchecked
         # if not value:
         self.videoWidget.Track_Canvas_RubberBand.reset() 
@@ -631,7 +677,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.UpdateSurface()
 
     def VideoMeasureDistance(self, value):
-        ''' Video Measure Distance '''
+        ''' Video Measure Distance 
+        @param value: Button checked state
+        '''
         self.CommonPauseTool(value)
         self.videoWidget.UpdateSurface()
         
@@ -644,7 +692,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.staticDraw = value
         
     def VideoMeasureArea(self, value):
-        ''' Video Measure Area '''
+        ''' Video Measure Area 
+        @param value: Button checked state
+        '''
         self.CommonPauseTool(value)
         self.videoWidget.UpdateSurface()
         
@@ -658,13 +708,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         
     # TODO : Make draw hand tool
     def VideoHandDraw(self, value):
-        ''' Video Free Hand Draw '''
+        ''' Video Free Hand Draw 
+        @param value: Button checked state
+        '''
         self.videoWidget.SetHandDraw(value)
         self.CommonPauseTool(value)
         self.videoWidget.UpdateSurface()
 
     def CommonPauseTool(self, value):
-        ''' Static draw common function '''
+        ''' Static draw common function 
+        @param value: Button checked state
+        '''
         if value:
             if self.playerState == QMediaPlayer.PlayingState:
                 self.player.pause()
@@ -677,7 +731,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         QApplication.processEvents()
 
     def VideoCensure(self, value):
-        ''' Censure Video Parts'''
+        ''' Censure Video Parts 
+        @param value: Button checked state
+        '''
         self.UncheckUtils(self.sender(), value)
         self.videoWidget.SetCensure(value)
         self.videoWidget.UpdateSurface()
@@ -755,7 +811,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return self.volumeSlider.value()
 
     def setVolume(self, volume):
-        ''' Tooltip and set Volume value and icon '''
+        ''' Tooltip and set Volume value and icon 
+        @param volume: QSlider value
+        '''
         self.player.setVolume(volume)
         self.showVolumeTip(volume)
         if 0 < volume <= 30:
@@ -796,7 +854,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.setPosition(rewindTime)
 
     def AutoRepeat(self, checked):
-        ''' Button AutoRepeat Video '''
+        ''' Button AutoRepeat Video 
+        @param checked: Button checked state
+        '''
         if checked:
             self.playlist.setPlaybackMode(QMediaPlaylist.Loop)
         else:
@@ -963,7 +1023,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.btn_Rec.setIcon(QIcon(":/imgFMV/images/record.png"))
 
     def RecordVideo(self, value):
-        ''' Cut Video '''
+        ''' Cut Video 
+        @param value: Button checked state
+        '''
         currentTime = _seconds_to_time(self.currentInfo)
 
         if value is False:
@@ -1018,7 +1080,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def toggleGroup(self, state):
-        ''' Toggle GroupBox '''
+        ''' Toggle GroupBox 
+        @param state: Expand/collapse QGroupBox
+        '''
         sender = self.sender()
         if state:
             sender.setFixedHeight(sender.sizeHint().height())

@@ -983,8 +983,8 @@ def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
 def addLayer(layer, loadInLegend=True, group=None, isSubGroup=False):
     """
     Add one or several layers to the QGIS session and layer registry.
-    :param layer: The layer object or list with layers  to add the QGIS layer registry and session.
-    :param loadInLegend: True if this layer should be added to the legend.
+    @param layer: The layer object or list with layers  to add the QGIS layer registry and session.
+    @param loadInLegend: True if this layer should be added to the legend.
     :return: The added layer
     """
     global groupName
@@ -1045,15 +1045,15 @@ def newPolygonsLayer(filename, fields, crs, name=None, encoding=encoding):
 def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding=encoding):
     '''
     Creates a new vector layer
-    :param filename: The filename to store the file. The extensions determines the type of file.
+    @param filename: The filename to store the file. The extensions determines the type of file.
     If extension is not among the supported ones, a shapefile will be created and the file will
     get an added '.shp' to its path.
     If the filename is None, a memory layer will be created
-    :param fields: the fields to add to the layer. Accepts a QgsFields object or a list of tuples (field_name, field_type)
+    @param fields: the fields to add to the layer. Accepts a QgsFields object or a list of tuples (field_name, field_type)
     Accepted field types are basic Python types str, float, int and bool
-    :param geometryType: The type of geometry of the layer to create.
-    :param crs: The crs of the layer to create. Accepts a QgsCoordinateSystem object or a string with the CRS authId.
-    :param encoding: The layer encoding
+    @param geometryType: The type of geometry of the layer to create.
+    @param crs: The crs of the layer to create. Accepts a QgsCoordinateSystem object or a string with the CRS authId.
+    @param encoding: The layer encoding
     '''
     if isinstance(crs, str):
         crs = QgsCoordinateReferenceSystem(crs)

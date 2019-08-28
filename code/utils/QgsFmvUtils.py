@@ -1116,7 +1116,7 @@ def _convert_timestamp(ts):
 
 
 def _add_secs_to_time(timeval, secs_to_add):
-    ''' Seconds to time'''
+    ''' Seconds to time '''
     secs = timeval.hour * 3600 + timeval.minute * 60 + timeval.second
     secs += secs_to_add
     return _seconds_to_time(secs)
