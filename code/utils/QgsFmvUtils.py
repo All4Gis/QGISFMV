@@ -843,27 +843,20 @@ def CornerEstimationWithOffsets(packet):
                          OffsetLon4 + frameCenterLon)
 
         if hasElevationModel():
-            pCornerPointUL = GetLine3DIntersectionWithDEM(
+            cornerPointUL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointUL)
-            pCornerPointUR = GetLine3DIntersectionWithDEM(
+            cornerPointUR = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointUR)
-            pCornerPointLR = GetLine3DIntersectionWithDEM(
+            cornerPointLR = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointLR)
-            pCornerPointLL = GetLine3DIntersectionWithDEM(
+            cornerPointLL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointLL)
 
-            UpdateFootPrintData(packet,
-                                pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL, hasElevationModel())
+        UpdateFootPrintData(packet,
+                            cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 
-            UpdateBeamsData(packet, pCornerPointUL, pCornerPointUR,
-                            pCornerPointLR, pCornerPointLL, hasElevationModel())
-        else:
-
-            UpdateFootPrintData(packet,
-                                cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
-
-            UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
-                            cornerPointLR, cornerPointLL, hasElevationModel())
+        UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
+                        cornerPointLR, cornerPointLL, hasElevationModel())
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
@@ -909,6 +902,8 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
         # In some case targetWidth don't have value then equal to 0
         if targetWidth is None:
             targetWidth = 0
+        if slantRange is None:
+            slantRange = 0
         if targetWidth == 0 and slantRange != 0:
             targetWidth = 2.0 * slantRange * \
                 tan(radians(sensorHorizontalFOV / 2.0))
@@ -993,38 +988,28 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
             reversed(sphere.destination(destPoint, distance2, bearing)))
 
         if hasElevationModel():
-            pCornerPointUL = GetLine3DIntersectionWithDEM(
+            cornerPointUL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointUL)
-            pCornerPointUR = GetLine3DIntersectionWithDEM(
+            cornerPointUR = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointUR)
-            pCornerPointLR = GetLine3DIntersectionWithDEM(
+            cornerPointLR = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointLR)
-            pCornerPointLL = GetLine3DIntersectionWithDEM(
+            cornerPointLL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointLL)
-            
-            if sensor is not None:
-                return pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL
 
-            UpdateFootPrintData(packet,
-                                pCornerPointUL, pCornerPointUR, pCornerPointLR, pCornerPointLL, hasElevationModel())
+        if sensor is not None:
+            return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL
+        
+        UpdateFootPrintData(packet,
+                            cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 
-            UpdateBeamsData(packet, pCornerPointUL, pCornerPointUR,
-                            pCornerPointLR, pCornerPointLL, hasElevationModel())
-
-        else:
-            if sensor is not None:
-                return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL
-            
-            UpdateFootPrintData(packet,
-                                cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
-
-            UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
-                            cornerPointLR, cornerPointLL, hasElevationModel())
+        UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
+                        cornerPointLR, cornerPointLL, hasElevationModel())
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL,
                               frameCenterLon, frameCenterLat)
-
+                      
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "CornerEstimationWithoutOffsets failed! : "), str(e))
