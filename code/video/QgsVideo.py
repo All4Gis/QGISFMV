@@ -401,7 +401,11 @@ class VideoWidget(QVideoWidget):
             RemoveLastDrawPolygonOnMap()
 
     def keyPressEvent(self, event):
-        ''' Exit fullscreen '''
+        ''' Exit fullscreen 
+        :type event: QKeyEvent 
+        :param event:
+        :return:
+        '''
         if event.key() == Qt.Key_Escape and self.isFullScreen():
             self.setFullScreen(False)
             event.accept()
@@ -475,55 +479,107 @@ class VideoWidget(QVideoWidget):
         return self.surface.image
 
     def SetInvertColor(self, value):
-        ''' Set Invert color filter '''
+        ''' Set Invert color filter 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._filterSatate.invertColorFilter = value
 
     def SetObjectTracking(self, value):
-        ''' Set Object Tracking '''
+        ''' Set Object Tracking 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._interaction.objectTracking = value
 
     def SetMeasureDistance(self, value):
-        ''' Set measure Distance '''
+        ''' Set measure Distance 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._interaction.measureDistance = value
         
     def SetMeasureArea(self, value):
-        ''' Set measure Area '''
+        ''' Set measure Area 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._interaction.measureArea = value
 
     def SetHandDraw(self, value):
-        ''' Set Hand Draw '''
+        ''' Set Hand Draw 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._interaction.HandDraw = value
 
     def SetCensure(self, value):
-        ''' Set Censure Video Parts '''
+        ''' Set Censure Video Parts 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._interaction.censure = value
         
     def SetMGRS(self, value):
-        ''' Set MGRS Cursor Coordinates '''
+        ''' Set MGRS Cursor Coordinates 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._MGRS = value
 
     def SetGray(self, value):
-        ''' Set gray scale '''
+        ''' Set gray scale 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._filterSatate.grayColorFilter = value
 
     def SetMirrorH(self, value):
-        ''' Set Horizontal Mirror '''
+        ''' Set Horizontal Mirror 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._filterSatate.MirroredHFilter = value
 
     def SetNDVI(self, value):
-        ''' Set NDVI '''
+        ''' Set NDVI 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._filterSatate.NDVI = value
 
     def SetEdgeDetection(self, value):
-        ''' Set Canny Edge filter '''
+        ''' Set Canny Edge filter 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._filterSatate.edgeDetectionFilter = value
 
     def SetAutoContrastFilter(self, value):
-        ''' Set Automatic Contrast filter '''
+        ''' Set Automatic Contrast filter 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._filterSatate.contrastFilter = value
 
     def SetMonoFilter(self, value):
-        ''' Set mono filter '''
+        ''' Set mono filter 
+        @type value: bool 
+        @param value:
+        @return:
+        '''
         self._filterSatate.monoFilter = value
 
     def RestoreFilters(self):
@@ -544,7 +600,11 @@ class VideoWidget(QVideoWidget):
         self.Cursor_Canvas_RubberBand.reset(QgsWkbTypes.PointGeometry)
 
     def paintEvent(self, event):
-        ''' Paint Event '''
+        """
+        @type event: QPaintEvent 
+        @param event:
+        @return:
+        """
         if not self.surface.isActive():
             return
                 
@@ -614,9 +674,9 @@ class VideoWidget(QVideoWidget):
 
     def resizeEvent(self, _):
         """
-        :type event: QMouseEvent
-        :param event:
-        :return:
+        @type _: QMouseEvent
+        @param _:
+        @return:
         """
         self.surface.updateVideoRect()
         self.update()
@@ -638,9 +698,9 @@ class VideoWidget(QVideoWidget):
 
     def mouseMoveEvent(self, event):
         """
-        :type event: QMouseEvent
-        :param event:
-        :return:
+        @type event: QMouseEvent
+        @param event:
+        @return:
         """
         # Magnifier mouseMoveEvent
         # Magnifier can move on black screen for show image borders
@@ -748,9 +808,9 @@ class VideoWidget(QVideoWidget):
 
     def mousePressEvent(self, event):
         """
-        :type event: QMouseEvent
-        :param event:
-        :return:
+        @type event: QMouseEvent
+        @param event:
+        @return:
         """
         if GetImageHeight() == 0:
             return
@@ -858,9 +918,9 @@ class VideoWidget(QVideoWidget):
         
     def mouseReleaseEvent(self, _):
         """
-        :type event: QMouseEvent
-        :param event:
-        :return:
+        @type event: QMouseEvent
+        @param event:
+        @return:
         """
         # Prevent draw on video if not started or finished
         if self.parent.player.position() == 0:
@@ -904,6 +964,11 @@ class VideoWidget(QVideoWidget):
                 self._isinit = False
 
     def leaveEvent(self, _):
+        """
+        @type _: QEvent
+        @param _:
+        @return:
+        """
         # Remove coordinates label value
         self.parent.lb_cursor_coord.setText("")
         # Change cursor
