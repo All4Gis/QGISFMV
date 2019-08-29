@@ -409,7 +409,6 @@ class DrawToolBar(object):
     @staticmethod
     def drawMeasureAreaOnVideo(values, painter, surface, gt):
         ''' Draw Measure Area on Video '''
-
         a_value = sphere.polygon_area([values])
         
         poly = []
@@ -427,10 +426,6 @@ class DrawToolBar(object):
             lat.append(pt[0])
             long.append(pt[1])
 
-#         Fix: Temporary correction
-#         mousePressEvent calls after mouseMoveEvent.
-#         A problem occurs because the centroid is miscalculated.
-#         We remove duplicates values
         lat = list(dict.fromkeys(lat))
         long = list(dict.fromkeys(long))
 

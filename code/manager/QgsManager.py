@@ -126,6 +126,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         return
 
     def openMuiltiplexorDialog(self):
+        ''' Open Multiplexor Dialog '''
         self.Muiltiplexor = Multiplexor(self.iface, parent=self, Exts=ast.literal_eval(parser.get("FILES", "Exts")))
         self.Muiltiplexor.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self.Muiltiplexor.exec_()
@@ -259,9 +260,10 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
         return
 
-    # Manager row double clicked
     def PlayVideoFromManager(self, model):
-        ''' Play video from manager dock '''
+        ''' Play video from manager dock.
+            Manager row double clicked
+        '''
         # Don't enable Play if video doesn't have metadata
         row = model.row()
         if self.VManager.cellWidget(row, 5).findChild(QProgressBar).value() < 100:

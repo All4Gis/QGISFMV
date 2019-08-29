@@ -625,6 +625,7 @@ def _spawn(cmds, t="ffmpeg"):
                  bufsize=0,
                  close_fds=(not windows))
 
+
 def ResetData():
     ''' Reset Global Data '''
     global dtm_data, tLastLon, tLastLat

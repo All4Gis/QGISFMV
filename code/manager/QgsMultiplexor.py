@@ -224,7 +224,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         return
     
     def GetRows(self, csv_file):
-        with open(csv_file, "r", encoding = encoding) as f:
+        with open(csv_file, "r", encoding=encoding) as f:
             reader = csv.reader(f, delimiter=",")
             data = list(reader)
             row_count = len(data)
@@ -252,13 +252,13 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         progress.setMaximum(rowCount)
         
         d = {}
-        with open(out_record, encoding = encoding) as csvfile:
+        with open(out_record, encoding=encoding) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 date_start = datetime.strptime(row["CUSTOM.updateTime"], '%Y/%m/%d %H:%M:%S.%f')
                 break
         
-        with open(out_record, encoding = encoding) as csvfile:
+        with open(out_record, encoding=encoding) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 for k in row:
@@ -575,7 +575,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
     def ReadCSVRecordings(self, csv_raw):
         ''' Read the csv for each recording '''
         rows_list = []
-        with open(csv_raw, encoding = encoding) as csvfile:
+        with open(csv_raw, encoding=encoding) as csvfile:
             reader = csv.DictReader(csvfile)
             rows = []
             index = 0
@@ -616,7 +616,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
             filename = "_".join(["recording", str(timestamp)])
             out_record = os.path.join(out_csv, filename + ".csv")
             # The column that corresponds to the stop is also removed
-            with open(csv_raw, 'r', encoding = encoding) as f_input, open(out_record, 'w', newline='', encoding = "ISO-8859-1") as f_output:
+            with open(csv_raw, 'r', encoding=encoding) as f_input, open(out_record, 'w', newline='', encoding="ISO-8859-1") as f_output:
                 csv_input = csv.reader(f_input)
                 csv.writer(f_output).writerows(itertools.islice(csv_input, 0, 1))
                 csv.writer(f_output).writerows(itertools.islice(csv_input, int(values[0]), int(values[-1])))

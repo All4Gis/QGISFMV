@@ -16,6 +16,7 @@ class VideoUtils(object):
 
     @staticmethod
     def GetNormalizedWidth(surface):
+        ''' Calculate normalized Width '''
         try:
             return surface.widget.height(
             ) * (GetImageWidth() / GetImageHeight())
@@ -56,6 +57,7 @@ class VideoUtils(object):
 
     @staticmethod
     def GetNormalizedHeight(surface):
+        ''' Calculate normalized Height '''
         return surface.widget.width(
         ) / (GetImageWidth() / GetImageHeight())
 

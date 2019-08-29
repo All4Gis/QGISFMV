@@ -43,6 +43,7 @@ except Exception as e:
     QApplication.restoreOverrideCursor()
     None
 
+
 def classFactory(iface):
     from .QgsFmv import Fmv
     return Fmv(iface)

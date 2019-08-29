@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from qgis.PyQt.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize, QRectF
+from qgis.PyQt.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize
 from qgis.PyQt.QtGui import (QImage,
                          QPalette,
                          QPainter,

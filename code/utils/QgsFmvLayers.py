@@ -22,7 +22,7 @@ Trajectory_lyr = parser['LAYERS']['Trajectory_lyr']
 epsg = parser['LAYERS']['epsg']
 groupName = None
 
-encoding="utf-8"
+encoding = "utf-8"
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QVariant, QSettings

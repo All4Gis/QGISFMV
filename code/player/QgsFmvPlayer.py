@@ -877,7 +877,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.volumeSlider.value()) + " %", self)
 
     def showMoveTip(self, currentInfo):
-        ''' Player Silder Move Tooptip Trick '''
+        ''' Player Silder Move Tooptip Trick 
+        @param currentInfo: Current time value
+        '''
         self.style = self.sliderDuration.style()
         self.opt = QStyleOptionSlider()
         self.sliderDuration.initStyleOption(self.opt)
@@ -892,13 +894,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         QToolTip.showText(pos_global, tStr, self)
 
     def durationChanged(self, duration):
-        ''' Duration video change signal '''
+        ''' Duration video change signal 
+        @param duration: Video duration
+        '''
         duration /= 1000
         self.duration = duration
         self.sliderDuration.setMaximum(duration)        
 
     def positionChanged(self, progress):
-        ''' Current Video position change '''
+        ''' Current Video position change 
+        @param progress: Slide video duration current value
+        '''
         progress /= 1000
         # Remove measure if slider position change
         if self.staticDraw:
@@ -910,7 +916,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.updateDurationInfo(progress)
 
     def updateDurationInfo(self, currentInfo):
-        ''' Update labels duration Info and CallBack Metadata '''
+        ''' Update labels duration Info and CallBack Metadata 
+        @param currentInfo: Current time value
+        '''
         duration = self.duration
         self.currentInfo = currentInfo
         if currentInfo or duration:
@@ -937,7 +945,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.labelDuration.setText(tStr)
 
     def handleCursor(self, status):
-        ''' Change cursor '''
+        ''' Change cursor 
+        @param status: Video status
+        '''
         if status in (QMediaPlayer.LoadingMedia,
                       QMediaPlayer.BufferingMedia,
                       QMediaPlayer.StalledMedia):
@@ -946,7 +956,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.unsetCursor()
 
     def statusChanged(self, status):
-        ''' Signal Status video change '''
+        ''' Signal Status video change 
+        @param status: Video status
+        '''
         self.handleCursor(status)
         if status is QMediaPlayer.LoadingMedia or status is QMediaPlayer.StalledMedia or status is QMediaPlayer.InvalidMedia:
             self.videoAvailableChanged(False)
@@ -958,7 +970,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.videoAvailableChanged(True)
 
     def playFile(self, videoPath, islocal=False, klv_folder=None):
-        ''' Play file from path '''
+        ''' Play file from path 
+        @param videoPath: Video file path
+        @param islocal: Check if video is local,created using multiplexor or is MISB
+        @param klv_folder: klv folder if video is created using multiplexor
+        '''
         self.islocal = islocal
         self.klv_folder = klv_folder
         try:
@@ -1416,7 +1432,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.Options.show()
 
     def showVideoInfoDialog(self, outjson):
-        """ Show Video Information Dialog """
+        """ Show Video Information Dialog 
+        @param outjson: Json file utput
+        """
         view = QTreeView()
         model = QJsonModel()
         view.setModel(model)
