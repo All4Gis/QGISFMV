@@ -27,22 +27,42 @@ class VideoFilters():
 
     @staticmethod
     def GrayFilter(image):
-        ''' Gray Image Filter '''
+        ''' 
+        Gray Image Filter 
+        @type image: QImage 
+        @param image:
+        @return: QImage 
+        '''
         return image.convertToFormat(QImage.Format_Grayscale8)
 
     @staticmethod
     def MirrredFilter(image):
-        ''' Mirror Horizontal Image Filter '''
+        ''' 
+        Mirror Horizontal Image Filter 
+        @type image: QImage 
+        @param image:
+        @return: QImage
+        '''
         return image.mirrored(True, False)
 
     @staticmethod
     def MonoFilter(image):
-        ''' Mono Image Filter '''
+        ''' 
+        Mono Image Filter 
+        @type image: QImage 
+        @param image:
+        @return: QImage
+        '''
         return image.convertToFormat(QImage.Format_Mono)
 
     @staticmethod
     def EdgeFilter(image, sigma=0.33):
-        ''' Edge Image Filter '''
+        ''' 
+        Edge Image Filter 
+        @type image: QImage 
+        @param image:
+        @return: QImage
+        '''
         gray = convertQImageToMat(image)
         v = np.median(gray)
         lower = int(max(0, (1.0 - sigma) * v))
@@ -52,7 +72,12 @@ class VideoFilters():
 
     @staticmethod
     def NDVIFilter(image):
-        ''' NDVI Filter '''
+        ''' 
+        NDVI Filter 
+        @type image: QImage 
+        @param image:
+        @return: QImage 
+        '''
         original = convertQImageToMat(image)
         lowerLimit = 5
 
@@ -85,7 +110,12 @@ class VideoFilters():
 
     @staticmethod
     def AutoContrastFilter(image):
-        ''' Auto Contrast Image Filter '''
+        ''' 
+        Auto Contrast Image Filter 
+        @type image: QImage 
+        @param image:
+        @return: QImage
+        '''
         img = convertQImageToMat(image, cn=4)
         clahe = createCLAHE(clipLimit=4., tileGridSize=(8, 8))
         # convert from BGR to LAB color space
