@@ -1124,7 +1124,11 @@ def _add_secs_to_time(timeval, secs_to_add):
 
 
 def _time_to_seconds(dateStr):
-    '''Time to seconds'''
+    '''
+    Time to seconds
+    @type dateStr: String
+    @param dateStr: Date string value
+    '''
     timeval = datetime.strptime(dateStr, '%H:%M:%S.%f')
     secs = timeval.hour * 3600 + timeval.minute * 60 + \
         timeval.second + timeval.microsecond / 1000000
@@ -1133,8 +1137,12 @@ def _time_to_seconds(dateStr):
 
 
 def _seconds_to_time(sec):
-    '''Returns a string representation of the length of time provided.
-    For example, 3675.14 -> '01:01:15' '''
+    '''
+    Returns a string representation of the length of time provided.
+    For example, 3675.14 -> '01:01:15' 
+    @type sec: String
+    @param sec: seconds string value
+    '''
     hours = int(sec / 3600)
     sec -= hours * 3600
     minutes = int(sec / 60)
@@ -1143,9 +1151,13 @@ def _seconds_to_time(sec):
 
 
 def _seconds_to_time_frac(sec, comma=False):
-    '''Returns a string representation of the length of time provided,
+    '''
+    Returns a string representation of the length of time provided,
     including partial seconds.
-    For example, 3675.14 -> '01:01:15.140000' '''
+    For example, 3675.14 -> '01:01:15.140000' 
+    @type sec: String
+    @param sec: seconds string value
+    '''
     hours = int(sec / 3600)
     sec -= hours * 3600
     minutes = int(sec / 60)
@@ -1158,9 +1170,14 @@ def _seconds_to_time_frac(sec, comma=False):
 
     
 def BurnDrawingsImage(source, overlay):
-    ''' Burn drawings into image 
-    :param source: QImage, Original Image
-    :param overlay: QImage, Drawings image
+    ''' 
+    Burn drawings into image 
+    @type source: QImage
+    @param source: Original Image
+    
+    @type overlay: QImage
+    @param overlay: Drawings image
+    @return: QImage
     '''
     base = source.scaled(overlay.size(), Qt.IgnoreAspectRatio)
     
