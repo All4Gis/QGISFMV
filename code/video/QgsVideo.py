@@ -401,7 +401,8 @@ class VideoWidget(QVideoWidget):
             RemoveLastDrawPolygonOnMap()
 
     def keyPressEvent(self, event):
-        ''' Exit fullscreen 
+        ''' 
+        Exit fullscreen 
         :type event: QKeyEvent 
         :param event:
         :return:
@@ -417,6 +418,7 @@ class VideoWidget(QVideoWidget):
 
     def mouseDoubleClickEvent(self, event):
         """
+         Mouse double click event
         :type event: QMouseEvent
         :param event:
         :return:
@@ -479,7 +481,8 @@ class VideoWidget(QVideoWidget):
         return self.surface.image
 
     def SetInvertColor(self, value):
-        ''' Set Invert color filter 
+        ''' 
+        Set Invert color filter 
         @type value: bool 
         @param value:
         @return:
@@ -487,7 +490,8 @@ class VideoWidget(QVideoWidget):
         self._filterSatate.invertColorFilter = value
 
     def SetObjectTracking(self, value):
-        ''' Set Object Tracking 
+        ''' 
+        Set Object Tracking 
         @type value: bool 
         @param value:
         @return:
@@ -495,7 +499,8 @@ class VideoWidget(QVideoWidget):
         self._interaction.objectTracking = value
 
     def SetMeasureDistance(self, value):
-        ''' Set measure Distance 
+        ''' 
+        Set measure Distance 
         @type value: bool 
         @param value:
         @return:
@@ -503,7 +508,8 @@ class VideoWidget(QVideoWidget):
         self._interaction.measureDistance = value
         
     def SetMeasureArea(self, value):
-        ''' Set measure Area 
+        ''' 
+        Set measure Area 
         @type value: bool 
         @param value:
         @return:
@@ -511,7 +517,8 @@ class VideoWidget(QVideoWidget):
         self._interaction.measureArea = value
 
     def SetHandDraw(self, value):
-        ''' Set Hand Draw 
+        ''' 
+        Set Hand Draw 
         @type value: bool 
         @param value:
         @return:
@@ -519,7 +526,8 @@ class VideoWidget(QVideoWidget):
         self._interaction.HandDraw = value
 
     def SetCensure(self, value):
-        ''' Set Censure Video Parts 
+        ''' 
+        Set Censure Video Parts 
         @type value: bool 
         @param value:
         @return:
@@ -527,7 +535,8 @@ class VideoWidget(QVideoWidget):
         self._interaction.censure = value
         
     def SetMGRS(self, value):
-        ''' Set MGRS Cursor Coordinates 
+        ''' 
+        Set MGRS Cursor Coordinates 
         @type value: bool 
         @param value:
         @return:
@@ -535,7 +544,8 @@ class VideoWidget(QVideoWidget):
         self._MGRS = value
 
     def SetGray(self, value):
-        ''' Set gray scale 
+        ''' 
+        Set gray scale 
         @type value: bool 
         @param value:
         @return:
@@ -543,7 +553,8 @@ class VideoWidget(QVideoWidget):
         self._filterSatate.grayColorFilter = value
 
     def SetMirrorH(self, value):
-        ''' Set Horizontal Mirror 
+        ''' 
+        Set Horizontal Mirror 
         @type value: bool 
         @param value:
         @return:
@@ -551,7 +562,8 @@ class VideoWidget(QVideoWidget):
         self._filterSatate.MirroredHFilter = value
 
     def SetNDVI(self, value):
-        ''' Set NDVI 
+        ''' 
+        Set NDVI 
         @type value: bool 
         @param value:
         @return:
@@ -559,7 +571,8 @@ class VideoWidget(QVideoWidget):
         self._filterSatate.NDVI = value
 
     def SetEdgeDetection(self, value):
-        ''' Set Canny Edge filter 
+        ''' 
+        Set Canny Edge filter 
         @type value: bool 
         @param value:
         @return:
@@ -567,7 +580,8 @@ class VideoWidget(QVideoWidget):
         self._filterSatate.edgeDetectionFilter = value
 
     def SetAutoContrastFilter(self, value):
-        ''' Set Automatic Contrast filter 
+        ''' 
+        Set Automatic Contrast filter 
         @type value: bool 
         @param value:
         @return:
@@ -575,7 +589,8 @@ class VideoWidget(QVideoWidget):
         self._filterSatate.contrastFilter = value
 
     def SetMonoFilter(self, value):
-        ''' Set mono filter 
+        ''' 
+        Set mono filter 
         @type value: bool 
         @param value:
         @return:
@@ -688,6 +703,19 @@ class VideoWidget(QVideoWidget):
     def AddMoveEventValue(self, values, Longitude, Latitude, Altitude):
         """
         Remove and Add move value for fluid drawing
+        
+        @type values: list
+        @param values: Points list
+
+        @type Longitude: float
+        @param Longitude: Longitude value
+        
+        @type Latitude: float
+        @param Latitude: Latitude value
+        
+        @type Altitude: float
+        @param Altitude: Altitude value                       
+        
         """
         for idx, pt in enumerate(values):
             if pt[-1] == "mouseMoveEvent":
@@ -892,7 +920,11 @@ class VideoWidget(QVideoWidget):
         self.UpdateSurface()
 
     def SetMagnifier(self, value):
-        """ Set Magnifier Glass """
+        """ 
+        Set Magnifier Glass 
+        @type value: bool
+        @param value:
+        """
         self._interaction.magnifier = value
         # We avoid that the second time we activate the tool, save the previous position.
         # Always keep the same behavior of the tool    
@@ -901,19 +933,35 @@ class VideoWidget(QVideoWidget):
             self.tapTimer.stop()
             
     def SetStamp(self, value):
-        """ Set Stamp """
+        """ 
+        Set Stamp 
+        @type value: bool
+        @param value:
+        """
         self._interaction.stamp = value
 
     def SetPointDrawer(self, value):
-        """ Set Point Drawer """
+        """ 
+        Set Point Drawer 
+        @type value: bool
+        @param value:
+        """
         self._interaction.pointDrawer = value
 
     def SetLineDrawer(self, value):
-        """ Set Line Drawer """
+        """ 
+        Set Line Drawer 
+        @type value: bool
+        @param value:
+        """
         self._interaction.lineDrawer = value
 
     def SetPolygonDrawer(self, value):
-        """ Set Polygon Drawer """
+        """ 
+        Set Polygon Drawer 
+        @type value: bool
+        @param value:
+        """
         self._interaction.polygonDrawer = value
         
     def mouseReleaseEvent(self, _):
