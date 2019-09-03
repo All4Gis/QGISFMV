@@ -177,6 +177,9 @@ def get_password():
 
 def LinuxInstaller():
     '''complete Linux installation '''
+    # sudo apt install python3-pyqt5.qtmultimedia
+    # pip3 install opencv-contrib-python-headless
+    
     pwd = None
     
     if not IsLavFilters():    

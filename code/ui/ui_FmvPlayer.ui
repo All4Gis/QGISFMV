@@ -843,9 +843,6 @@
    <property name="shortcut">
     <string>Ctrl+Q</string>
    </property>
-   <property name="shortcutVisibleInContextMenu">
-    <bool>true</bool>
-   </property>
    <property name="priority">
     <enum>QAction::HighPriority</enum>
    </property>
@@ -861,9 +858,6 @@
    <property name="shortcut">
     <string>Ctrl+A</string>
    </property>
-   <property name="shortcutVisibleInContextMenu">
-    <bool>true</bool>
-   </property>
    <property name="priority">
     <enum>QAction::HighPriority</enum>
    </property>
@@ -878,9 +872,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
-   </property>
-   <property name="shortcutVisibleInContextMenu">
-    <bool>true</bool>
    </property>
    <property name="priority">
     <enum>QAction::HighPriority</enum>

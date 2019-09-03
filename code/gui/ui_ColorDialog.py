@@ -8,9 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_ColorDialog(object):
-
     def setupUi(self, ColorDialog):
         ColorDialog.setObjectName("ColorDialog")
         ColorDialog.resize(347, 161)
@@ -82,6 +80,5 @@ class Ui_ColorDialog(object):
         self.label_3.setText(_translate("ColorDialog", "Hue"))
         self.label_4.setText(_translate("ColorDialog", "Saturation"))
         self.pushButton.setText(_translate("ColorDialog", "Reset"))
-
 
 from QGIS_FMV.gui import resources_rc

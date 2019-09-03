@@ -29,10 +29,11 @@ try:
     else:  # Linux Installer
         try:
             sys.path.append(
-                "/home/fran/Escritorio/eclipse/plugins/org.python.pydev.core_7.2.1.201904261721/pysrc")
+                "/home/fran/.eclipse/360744294_linux_gtk_x86_64/plugins/org.python.pydev.core_7.3.0.201908161924/pysrc")
             from pydevd import *
         except ImportError:
             None 
+        settrace()
         LinuxInstaller() 
     
     reloadPlugin('QGIS_FMV')

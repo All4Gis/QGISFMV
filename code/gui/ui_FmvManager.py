@@ -8,9 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_ManagerWindow(object):
-
     def setupUi(self, ManagerWindow):
         ManagerWindow.setObjectName("ManagerWindow")
         ManagerWindow.resize(761, 281)
@@ -153,6 +151,5 @@ class Ui_ManagerWindow(object):
         self.actionOpen_Stream.setText(_translate("ManagerWindow", "Open Stream"))
         self.actionOpen_MPEG2_File.setText(_translate("ManagerWindow", "Open Video File"))
         self.actionCreate_MISB_File.setText(_translate("ManagerWindow", "Create MISB File"))
-
 
 from QGIS_FMV.gui import resources_rc
