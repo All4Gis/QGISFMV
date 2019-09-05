@@ -54,11 +54,11 @@ from qgis.core import (
 from qgis.utils import iface
 from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
 from itertools import groupby
-from qgis._3d import (QgsPhongMaterialSettings,
+'''from qgis._3d import (QgsPhongMaterialSettings,
                       QgsVectorLayer3DRenderer,
                       QgsLine3DSymbol,
                       QgsPoint3DSymbol,
-                      QgsPolygon3DSymbol)
+                      QgsPolygon3DSymbol)'''
 
 try:
     from pydevd import *
@@ -703,9 +703,9 @@ def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
     return
 
 
-def SetDefaultFootprint3DStyle(layer):
-    ''' Platform 3D Symbol '''
-    material = QgsPhongMaterialSettings()
+''' def SetDefaultFootprint3DStyle(layer): '''
+''' Platform 3D Symbol '''
+'''    material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(255, 0, 0))
     material.setAmbient(QColor(255, 0, 0))
     symbol = QgsPolygon3DSymbol()
@@ -716,7 +716,7 @@ def SetDefaultFootprint3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
+    return '''
 
 
 def SetDefaultTrajectoryStyle(layer):
