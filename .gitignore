@@ -3,3 +3,9 @@ Deploy/
 code/install_pip_packages.bat
 pull-transifex-translations.bat
 push-transifex-translations.bat
+
+.project
+
+.pydevproject
+
+.settings/
