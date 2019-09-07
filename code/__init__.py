@@ -33,7 +33,6 @@ try:
             from pydevd import *
         except ImportError:
             None 
-        settrace()
         LinuxInstaller() 
     
     reloadPlugin('QGIS_FMV')
