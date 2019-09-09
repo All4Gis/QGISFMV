@@ -1,8 +1,6 @@
 .project
 .pydevproject
 Compile.bat
-ReleaseI18n.bat
-Deploy.bat
 *.pyc
 .settings/
 __pycache__/
