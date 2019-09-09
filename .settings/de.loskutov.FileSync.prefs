@@ -3,5 +3,5 @@ defaultDestination=C\:/Users/Fran Raga/AppData/Roaming/QGIS/QGIS3/profiles/defau
 defaultVariables=
 eclipse.preferences.version=1
 includeTeamPrivateFiles=false
-map|0=code|,|,|,|,
+map|0=code|,|,|*.ini|,
 useCurrentDateForDestinationFiles=false
