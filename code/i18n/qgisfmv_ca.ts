@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="ca" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" sourcelanguage="" version="2.0">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -38,7 +37,7 @@
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="34"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="20"/>
@@ -104,27 +103,27 @@
     <message>
         <location filename="../ui/ui_FmvOpenStream.ui" line="39"/>
         <source>RTP</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvOpenStream.ui" line="44"/>
         <source>UDP</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvOpenStream.ui" line="49"/>
         <source>TCP</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvOpenStream.ui" line="60"/>
         <source>127.0.0.1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvOpenStream.ui" line="73"/>
         <source>5005</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvOpenStream.ui" line="87"/>
@@ -135,9 +134,19 @@
 <context>
     <name>ManagerDock</name>
     <message>
+        <location filename="../player/QgsManager.py" line="57"/>
+        <source>Remove the current selection&apos;s video</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../manager/QgsManager.py" line="253"/>
         <source>Open video</source>
         <translation>Obrir vídeo</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsManager.py" line="57"/>
+        <source>Remove</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../manager/QgsManager.py" line="220"/>
@@ -354,7 +363,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="291"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="307"/>
@@ -364,12 +373,17 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="317"/>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="405"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capture current frame&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capturar fotograma actual&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="343"/>
+        <source>Ctrl+Shift+Q</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="452"/>
@@ -419,7 +433,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="677"/>
         <source>Ctrl+U</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="687"/>
@@ -480,6 +494,11 @@
         <location filename="../ui/ui_FmvPlayer.ui" line="856"/>
         <source>Extract All Frames</source>
         <translation>Extreure Tots els Frames</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="763"/>
+        <source>Ctrl+Shift+A</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="871"/>
@@ -674,52 +693,52 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="859"/>
         <source>Ctrl+A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="874"/>
         <source>Ctrl+T</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="477"/>
         <source>Ctrl+Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="500"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="526"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="549"/>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="572"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="601"/>
         <source>Ctrl+Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="624"/>
         <source>Ctrl+L</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="844"/>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1339"/>
@@ -739,12 +758,12 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="373"/>
         <source>WGS84</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="378"/>
         <source>MGRS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1096"/>
@@ -800,17 +819,17 @@
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="156"/>
         <source>Do you want upgrade dependencies?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vol actualitzar les dependències?</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="161"/>
         <source>Python libraries updated correctly</source>
-        <translation type="unfinished"></translation>
+        <translation>Les biblioteques Python s’han actualitzat correctament</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="400"/>
         <source>No requirements file found in {}</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;ha trobat cap fitxer de requisits a {}</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="156"/>
@@ -830,42 +849,42 @@
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="208"/>
         <source>INSTALLATION FAILED: Failed to install GStreamer library.</source>
-        <translation type="unfinished"></translation>
+        <translation>INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar la biblioteca GStreamer.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="210"/>
         <source>INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.</source>
-        <translation type="unfinished"></translation>
+        <translation>INSTAL·LACIÓ CORRECTA: El paquet GStreamer instal·lat amb èxit.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="236"/>
         <source>Failed to install ffmpeg library, trying add-apt-repository.</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;ha pogut instal·lar la biblioteca ffmpeg, provant add-apt-repository.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="255"/>
         <source>INSTALLATION FAILED: Could not install ffmpeg package.</source>
-        <translation type="unfinished"></translation>
+        <translation>INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar el paquet ffmpeg.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="244"/>
         <source>GET REPO SUCCESSFUL: Successfully added trusty-media repo where ffmpeg is located</source>
-        <translation type="unfinished"></translation>
+        <translation>OBTENCIO CORRECTA: S&apos;ha afegit el repo on es troba el ffmpeg</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="249"/>
         <source>UPDATE FAILED: Failed to retrieve packages.</source>
-        <translation type="unfinished"></translation>
+        <translation>ACTUALITZACIÓ FALLIDA: No s&apos;ha pogut recuperar els paquets.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="251"/>
         <source>UPDATE SUCCESSFUL: Sucessfully retrived updated packages.</source>
-        <translation type="unfinished"></translation>
+        <translation>ACTUALIZACIO CORRECTA: S&apos;han recuperat els paquets actualitzats amb èxit.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="257"/>
         <source>INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.</source>
-        <translation type="unfinished"></translation>
+        <translation>INSTAL·LACIÓ CORRECTA: Paquet ffmpeg instal·lat amb èxit.</translation>
     </message>
 </context>
 <context>
@@ -1022,17 +1041,17 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="282"/>
         <source>Buffering metadata...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1553"/>
         <source>If you close or reopen the video all the information will be erased.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si tanqueu o torneu a obrir el vídeo, esborrarà tota la informació.</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1553"/>
         <source>Do you want to close or reopen it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voleu tancar-lo o reobrir-lo?</translation>
     </message>
 </context>
 <context>
@@ -1053,17 +1072,17 @@
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="14"/>
         <source>Video Multiplexer</source>
-        <translation type="unfinished"></translation>
+        <translation>Multiplexor de vídeo</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="24"/>
         <source>Input Video File (e.g video.ts)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxer de vídeo d&apos;entrada (per exemple, vídeo.ts)</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="56"/>
         <source>Input Metadata File (e.g video_metadata.csv)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxer de metadades d&apos;entrada (per exemple, video_metadata.csv)</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="173"/>
@@ -1103,7 +1122,7 @@
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="141"/>
         <source>Extract Recordings</source>
-        <translation type="unfinished"></translation>
+        <translation>Extracte de gravacions</translation>
     </message>
 </context>
 <context>

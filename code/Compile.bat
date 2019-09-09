@@ -1,7 +1,7 @@
 @ECHO OFF 
 cd /d %~dp0
 
-call "py3-env.bat"
+call py3-env.bat
  
 @ECHO ON
 
@@ -19,6 +19,10 @@ call pyuic5 --import-from QGIS_FMV.gui ui\ui_FmvPlayer.ui -o gui\ui_FmvPlayer.py
 call pyrcc5 ui\resources.qrc -o gui\resources_rc.py
 
 ::Translations
+cd..
+call pull-transifex-translations.bat
+cd..
+call push-transifex-translations.bat
 
 @ECHO OFF
 GOTO END
@@ -30,3 +34,4 @@ GOTO END
    
 :END
 @ECHO OFF
+pause
