@@ -34,4 +34,3 @@ GOTO END
    
 :END
 @ECHO OFF
-pause
