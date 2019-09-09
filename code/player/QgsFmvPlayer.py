@@ -912,7 +912,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.setPosition(rewindTime)
 
     def AutoRepeat(self, checked):
-        ''' Button AutoRepeat Video 
+        ''' 
+        Button AutoRepeat Video 
         @param checked: Button checked state
         '''
         if checked:
@@ -922,7 +923,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         return
 
     def showVolumeTip(self, _):
-        ''' Volume Slider Tooltip Trick '''
+        ''' 
+        Volume Slider Tooltip Trick 
+        @type _: QEvent 
+        @param _: Enter Event
+        '''
         self.style = self.volumeSlider.style()
         self.opt = QStyleOptionSlider()
         self.volumeSlider.initStyleOption(self.opt)
