@@ -174,11 +174,9 @@ def get_password():
         )
         return password if ok else ''
 
-
+# Tested using QGIS 3.8 and Ubuntu 18.04
 def LinuxInstaller():
-    '''complete Linux installation '''
-    # sudo apt install python3-pyqt5.qtmultimedia
-    
+    '''complete Linux installation '''    
     pwd = None
     
     if not IsLavFilters():    
@@ -277,34 +275,30 @@ def LinuxInstaller():
             parser.write(configfile)
         iface.messageBar().clearWidgets()
 
-#    TODO: If install opencv when make "import cv2" close QGIS ¿ ?
-#     try:
-#         import homography, cv2, matplotlib
-#     except ImportError:
-#         try:
-#             buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing dependencies"),
-#                                              QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
-#                                              icon="Information")
-#             if buttonReply == QMessageBox.Yes:
-#                 install_pip_requirements()
-#                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
-#         except ImportError:
-#             None
-#     finally:
-#         try:
-#             import homography, cv2, matplotlib
-#             # We update dependencies 
-#             if matplotlib.__version__ < '3.1.0' or cv2.__version__ < '4.1.0':
-#                 buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Updates available"),
-#                                                  QCoreApplication.translate("QgsFmvInstaller", "Do you want upgrade dependencies?"),
-#                                                  icon="Information")
-#                 if buttonReply == QMessageBox.Yes:
-#                     install_pip_requirements()
-#                     qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries updated correctly"))
-#         except ImportError:
-#             qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
-#                                        level=QGis.Critical)
-#             raise
+    try:
+        import homography, cv2, matplotlib
+    except ImportError:
+        try:
+            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing dependencies"),
+                                             QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
+                                             icon="Information")
+            if buttonReply == QMessageBox.Yes:
+                cmd = 'sudo apt -y install python3-opencv python3-matplotlib'
+                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                
+                cmd = 'sudo pip3 install homography'
+                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
+        except ImportError:
+            None
+    finally:
+        try:
+            import homography, cv2, matplotlib
+        except ImportError:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
+                                       level=QGis.Critical)
+            raise
     return
 
 
