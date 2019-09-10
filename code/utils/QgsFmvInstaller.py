@@ -174,7 +174,7 @@ def get_password():
         )
         return password if ok else ''
 
-# Tested using QGIS 3.8 and Ubuntu 18.04
+# Tested using QGIS 3.8 Zanzibar and Ubuntu 18.04
 def LinuxInstaller():
     '''complete Linux installation '''    
     pwd = None
@@ -275,6 +275,7 @@ def LinuxInstaller():
             parser.write(configfile)
         iface.messageBar().clearWidgets()
 
+    # TODO : sudo pip3 install opencv-contrib-python==3.4.4.19 QGIS die
     try:
         import homography, cv2, matplotlib
     except ImportError:

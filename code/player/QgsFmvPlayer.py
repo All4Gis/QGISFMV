@@ -71,6 +71,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, isStreaming=False, islocal=False, klv_folder=None):
         """ Constructor """
+
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
@@ -337,7 +338,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             t = callBackMetadataThread(cmds=['-i', self.fileName.replace(str(port), str(port + 1)),
                                              '-ss', currentTime,
                                              '-to', nextTime,
-                                             '-map', 'data-re',
+                                             '-map', '0:d',
                                              '-preset', 'ultrafast',
                                              '-f', 'data', '-'])
             t.start()
