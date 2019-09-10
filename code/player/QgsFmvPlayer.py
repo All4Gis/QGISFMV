@@ -71,6 +71,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, isStreaming=False, islocal=False, klv_folder=None):
         """ Constructor """
+
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
@@ -337,7 +338,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             t = callBackMetadataThread(cmds=['-i', self.fileName.replace(str(port), str(port + 1)),
                                              '-ss', currentTime,
                                              '-to', nextTime,
-                                             '-map', 'data-re',
+                                             '-map', '0:d',
                                              '-preset', 'ultrafast',
                                              '-f', 'data', '-'])
             t.start()
@@ -873,7 +874,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @param volume: QSlider value
         '''
         self.player.setVolume(volume)
-        self.showVolumeTip()
+        self.showVolumeTip(None)
         if 0 < volume <= 30:
             self.btn_volume.setIcon(QIcon(":/imgFMV/images/volume_30.png"))
         elif 30 < volume <= 60:
@@ -912,7 +913,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.setPosition(rewindTime)
 
     def AutoRepeat(self, checked):
-        ''' Button AutoRepeat Video 
+        ''' 
+        Button AutoRepeat Video 
         @param checked: Button checked state
         '''
         if checked:
@@ -921,8 +923,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.playlist.setPlaybackMode(QMediaPlaylist.Sequential)
         return
 
-    def showVolumeTip(self):
-        ''' Volume Slider Tooltip Trick '''
+    def showVolumeTip(self, _):
+        ''' 
+        Volume Slider Tooltip Trick 
+        @type _: QEvent 
+        @param _: Enter Event
+        '''
         self.style = self.volumeSlider.style()
         self.opt = QStyleOptionSlider()
         self.volumeSlider.initStyleOption(self.opt)
@@ -937,7 +943,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def showMoveTip(self, currentInfo):
         ''' 
         Player Silder Move Tooptip Trick 
-        @type showVolumeTip: String
+        @type currentInfo: String
         @param currentInfo: Current time value
         '''
         self.style = self.sliderDuration.style()
