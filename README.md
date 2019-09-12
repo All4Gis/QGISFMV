@@ -42,7 +42,7 @@ for this reason, I decided to develop this open source project and, this way, of
 
 ## Dependencies
 
-* [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `settings.ini` with the corresponding path.For example D://FFMPEG
+* [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `settings.ini` with the corresponding path. For example `D://FFMPEG` or `/usr/bin/`
 
 * [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python`
 
@@ -54,7 +54,7 @@ for this reason, I decided to develop this open source project and, this way, of
 
 * [Homography](https://github.com/satellogic/homography) : `python3 -m pip install homography`
 
-The plugin install automatically this requisites,but you can install it using:
+The plugin install automatically this requisites,but you can install it using on Windows and Linux:
 
 `python3 -m pip install -r requirements.txt`
 
@@ -112,6 +112,8 @@ Windows automatically installs all, with user permission,If an error occurs, you
 ## Installation on Ubuntu
 
 Ubuntu automatically installs all the dependencies if the user wants, for this his password will be requested.
+
+The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for this reason you will have to install these dependencies using this [script](https://github.com/All4Gis/QGISFMV/tree/master/code/install-opencv.sh)
 
 ## Installation on Archlinux
 

@@ -174,9 +174,9 @@ def get_password():
         )
         return password if ok else ''
 
-
+# Tested using QGIS 3.8 Zanzibar and Ubuntu 18.04
 def LinuxInstaller():
-    '''complete Linux installation '''
+    '''complete Linux installation '''    
     pwd = None
     
     if not IsLavFilters():    
@@ -198,7 +198,7 @@ def LinuxInstaller():
             progressMessageBar.layout().addWidget(progress)
             iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
             
-            cmd = 'sudo apt-get -y install gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio'
+            cmd = 'sudo apt-get -y install python3-pyqt5.qtmultimedia gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio'
             gst_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
             if gst_rc != 0:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION FAILED: Failed to install GStreamer library.'), level=QGis.Critical)
@@ -275,34 +275,38 @@ def LinuxInstaller():
             parser.write(configfile)
         iface.messageBar().clearWidgets()
 
-#    TODO: If install opencv when make "import cv2" close QGIS ¿ ?
-#     try:
-#         import homography, cv2, matplotlib
-#     except ImportError:
-#         try:
-#             buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing dependencies"),
-#                                              QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
-#                                              icon="Information")
-#             if buttonReply == QMessageBox.Yes:
-#                 install_pip_requirements()
-#                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
-#         except ImportError:
-#             None
-#     finally:
-#         try:
-#             import homography, cv2, matplotlib
-#             # We update dependencies 
-#             if matplotlib.__version__ < '3.1.0' or cv2.__version__ < '4.1.0':
-#                 buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Updates available"),
-#                                                  QCoreApplication.translate("QgsFmvInstaller", "Do you want upgrade dependencies?"),
-#                                                  icon="Information")
-#                 if buttonReply == QMessageBox.Yes:
-#                     install_pip_requirements()
-#                     qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries updated correctly"))
-#         except ImportError:
-#             qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
-#                                        level=QGis.Critical)
-#             raise
+    try:
+        import homography, cv2, matplotlib
+    except ImportError:
+        try:
+            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing dependencies"),
+                                             QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
+                                             icon="Information")
+            if buttonReply == QMessageBox.Yes:
+                # Install matplotlib
+                cmd = 'sudo apt -y install python3-matplotlib'
+                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                
+                # Install matplotlib
+                cmd = 'sudo pip3 install matplotlib'
+                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                
+#                 # Install OpenCV
+#                 package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
+#                 opencv_file = os.path.join(package_dir, 'install-opencv.sh')
+#                 cmd = 'sh ' + opencv_file
+#                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
+        except ImportError:
+            None
+    finally:
+        try:
+            import homography, cv2, matplotlib
+        except ImportError:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
+                                       level=QGis.Critical)
+            raise
     return
 
 

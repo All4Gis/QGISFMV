@@ -153,7 +153,7 @@ class BufferedMetaReader():
                                                                    '-ss', new_key,
                                                                    '-to', _seconds_to_time_frac(
                                                                        nTime),
-                                                                   '-map', 'data-re',
+                                                                   '-map', '0:d',
                                                                    '-f', 'data', '-'])
                 self._meta[new_key].start()
 
@@ -298,7 +298,7 @@ def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None):
             p = _spawn(['-i', videoPath,
                         '-ss', '00:00:00',
                         '-to', '00:00:01',
-                        '-map', 'data-re',
+                        '-map', '0:d',
                         '-f', 'data', '-'])
 
             stdout_data, _ = p.communicate()

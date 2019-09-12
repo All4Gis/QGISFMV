@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui\ui_FmvPlayer.ui'
+# Form implementation generated from reading ui file 'ui/ui_FmvPlayer.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_PlayerWindow(object):
-
     def setupUi(self, PlayerWindow):
         PlayerWindow.setObjectName("PlayerWindow")
         PlayerWindow.resize(748, 652)
@@ -334,21 +332,18 @@ class Ui_PlayerWindow(object):
         self.actionEdge_Detection.setObjectName("actionEdge_Detection")
         self.actionCapture_Current_Frame = QtWidgets.QAction(PlayerWindow)
         self.actionCapture_Current_Frame.setIcon(icon4)
-        self.actionCapture_Current_Frame.setShortcutVisibleInContextMenu(True)
         self.actionCapture_Current_Frame.setPriority(QtWidgets.QAction.HighPriority)
         self.actionCapture_Current_Frame.setObjectName("actionCapture_Current_Frame")
         self.actionExtract_All_Frames = QtWidgets.QAction(PlayerWindow)
         icon14 = QtGui.QIcon()
         icon14.addPixmap(QtGui.QPixmap(":/imgFMV/images/capture_all_frames.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionExtract_All_Frames.setIcon(icon14)
-        self.actionExtract_All_Frames.setShortcutVisibleInContextMenu(True)
         self.actionExtract_All_Frames.setPriority(QtWidgets.QAction.HighPriority)
         self.actionExtract_All_Frames.setObjectName("actionExtract_All_Frames")
         self.actionShow_Metadata = QtWidgets.QAction(PlayerWindow)
         icon15 = QtGui.QIcon()
         icon15.addPixmap(QtGui.QPixmap(":/imgFMV/images/show-metadata.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionShow_Metadata.setIcon(icon15)
-        self.actionShow_Metadata.setShortcutVisibleInContextMenu(True)
         self.actionShow_Metadata.setPriority(QtWidgets.QAction.HighPriority)
         self.actionShow_Metadata.setObjectName("actionShow_Metadata")
         self.actionConverter_Video = QtWidgets.QAction(PlayerWindow)
@@ -775,7 +770,6 @@ class Ui_PlayerWindow(object):
         self.actionCenter_Target.setText(_translate("PlayerWindow", "Center on Target"))
         self.actionNDVI.setText(_translate("PlayerWindow", "NDVI (experimental)"))
         self.actionCapture_Georeferenced_Frame.setText(_translate("PlayerWindow", "Capture Georeferenced Frame"))
-
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc
