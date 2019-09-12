@@ -275,7 +275,6 @@ def LinuxInstaller():
             parser.write(configfile)
         iface.messageBar().clearWidgets()
 
-    # TODO : sudo pip3 install opencv-contrib-python==3.4.4.19 QGIS die
     try:
         import homography, cv2, matplotlib
     except ImportError:
@@ -284,11 +283,19 @@ def LinuxInstaller():
                                              QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
                                              icon="Information")
             if buttonReply == QMessageBox.Yes:
-                cmd = 'sudo apt -y install python3-opencv python3-matplotlib'
+                # Install matplotlib
+                cmd = 'sudo apt -y install python3-matplotlib'
                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
                 
-                cmd = 'sudo pip3 install homography'
+                # Install matplotlib
+                cmd = 'sudo pip3 install matplotlib'
                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                
+#                 # Install OpenCV
+#                 package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
+#                 opencv_file = os.path.join(package_dir, 'install-opencv.sh')
+#                 cmd = 'sh ' + opencv_file
+#                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
                 
                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
         except ImportError:
