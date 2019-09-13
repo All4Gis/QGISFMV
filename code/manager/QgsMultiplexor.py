@@ -20,12 +20,12 @@ try:
     from pydevd import *
 except ImportError:
     None
-    
+
 '''
 'TODO : After all the tests I haven't managed to generate a MISB video,
 for now I make this adaptation to be able to see it in QGIS FMV
 '''
-    
+
 encoding = "ISO-8859-1"
 
 # Klv header
@@ -132,12 +132,12 @@ _domain83 = (-(2 ** 31 - 1), 2 ** 31 - 1)
 _range83 = (-180, 180)
 _key83 = b'\x53'
 
-# Corner Latitude Point 2 (Full) 
+# Corner Latitude Point 2 (Full)
 _domain84 = (-(2 ** 31 - 1), 2 ** 31 - 1)
 _range84 = (-90, 90)
 _key84 = b'\x54'
 
-# Corner Longitude Point 2 (Full) 
+# Corner Longitude Point 2 (Full)
 _domain85 = (-(2 ** 31 - 1), 2 ** 31 - 1)
 _range85 = (-180, 180)
 _key85 = b'\x55'
@@ -182,10 +182,10 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         self.setupUi(self)
         self.iface = iface
         self.parent = parent
-        
+
         self.video_file = None
         self.csv_file = None
-        self.Exts = Exts        
+        self.Exts = Exts
 
     def OpenCsvFile(self):
         ''' Open Csv File '''
@@ -206,30 +206,30 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
             self.video_file = filename
             self.ln_inputVideo.setText(self.video_file)
         return
-    
+
     def CreateCSV(self):
         ''' Create csv for each recording '''
         self.cmb_telemetry.clear()
         input_video = self.ln_inputVideo.text()
         input_metadata = self.ln_inputMeta.text()
-        
+
         if input_video == "" or input_metadata == "":
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "Multiplexor", "You must complete all the information"))
+                "Multiplexor", "You must complete all the information"))
             return
 
-        self.ReadCSVRecordings(input_metadata)           
+        self.ReadCSVRecordings(input_metadata)
         # Enable create video button
         self.bt_createMISB.setEnabled(True)
         return
-    
+
     def GetRows(self, csv_file):
         with open(csv_file, "r", encoding=encoding) as f:
             reader = csv.reader(f, delimiter=",")
             data = list(reader)
             row_count = len(data)
         return row_count
-    
+
     def CreateMISB(self):
         ''' Create MISB Video '''
         ''' Only tested using DJI Data '''
@@ -240,32 +240,32 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         progress.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         progressMessageBar.layout().addWidget(progress)
         self.iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
-        
+
         QApplication.setOverrideCursor(Qt.WaitCursor)
         QApplication.processEvents()
-                
+
         HFOV = self.sp_hfov.value()
-        
+
         index = self.cmb_telemetry.currentIndex()
         out_record = self.cmb_telemetry.itemData(index)
         rowCount = self.GetRows(out_record)
         progress.setMaximum(rowCount)
-        
+
         d = {}
         with open(out_record, encoding=encoding) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 date_start = datetime.strptime(row["CUSTOM.updateTime"], '%Y/%m/%d %H:%M:%S.%f')
                 break
-        
+
         with open(out_record, encoding=encoding) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 for k in row:
                     stripK = k.strip()
                     stripV = row[k].strip()
-                    d[stripK] = stripV    
-            
+                    d[stripK] = stripV
+
                 # We create the klv file for every moment
                 sizeTotal = 0
                 bufferData = b''
@@ -277,15 +277,15 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             # We prevent it from failing in the exact times that don't have milliseconds
                             try:
                                 date_end = datetime.strptime(v, '%Y/%m/%d %H:%M:%S.%f')
-                            except:
+                            except Exception:
                                 date_end = datetime.strptime(v, '%Y/%m/%d %H:%M:%S')
-    
+
                             _bytes = datetime_to_bytes(date_end)
                             _len = int_to_bytes(len(_bytes))
                             _bytes = _key2 + _len + _bytes
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
-                        
+
                         # Platform Heading Angle
                         if k == "OSD.yaw":
                             OSD_yaw = float(v)
@@ -295,8 +295,8 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             _len = int_to_bytes(len(_bytes))
                             _bytes = _key5 + _len + _bytes
                             sizeTotal += len(_bytes)
-                            bufferData += _bytes   
-                        
+                            bufferData += _bytes
+
                         # Platform Pitch Angle
                         if k == "OSD.pitch":
                             OSD_pitch = float(v)
@@ -305,7 +305,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             _bytes = _key6 + _len + _bytes
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
-                        
+
                         # Platform Roll Angle
                         if k == "OSD.roll":
                             OSD_roll = float(v)
@@ -314,7 +314,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             _bytes = _key7 + _len + _bytes
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
-                        
+
                         # Sensor Latitude
                         if k == "OSD.latitude":
                             OSD_latitude = float(v)
@@ -323,7 +323,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             _bytes = _key13 + _len + _bytes
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
-                        
+
                         # Sensor Longitude
                         if k == "OSD.longitude":
                             OSD_longitude = float(v)
@@ -341,7 +341,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             _bytes = _key15 + _len + _bytes
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
-                        
+
                         # Sensor Ellipsoid Height
                         if k == "OSD.height [m]":
                             OSD_height = float(v)
@@ -350,7 +350,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             _bytes = _key75 + _len + _bytes
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
-                        
+
                         # Sensor Relative Azimuth Angle
                         if k == "GIMBAL.yaw":
                             # GIMBAL_yaw = float(v)
@@ -359,8 +359,8 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             _len = int_to_bytes(len(_bytes))
                             _bytes = _key18 + _len + _bytes
                             sizeTotal += len(_bytes)
-                            bufferData += _bytes   
-                        
+                            bufferData += _bytes
+
                         # Sensor Relative Elevation Angle
                         if k == "GIMBAL.pitch":
                             GIMBAL_pitch = float(v)
@@ -368,8 +368,8 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             _len = int_to_bytes(len(_bytes))
                             _bytes = _key19 + _len + _bytes
                             sizeTotal += len(_bytes)
-                            bufferData += _bytes   
-                        
+                            bufferData += _bytes
+
                         # Sensor Relative Roll Angle
                         if k == "GIMBAL.roll":
                             GIMBAL_roll = float(v)
@@ -377,17 +377,17 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             _len = int_to_bytes(len(_bytes))
                             _bytes = _key20 + _len + _bytes
                             sizeTotal += len(_bytes)
-                            bufferData += _bytes   
-                            
+                            bufferData += _bytes
+
                     except Exception:
                         print("Multiplexer error")
-                        continue    
-                
+                        continue
+
                 try:
                     # Diference time
                     td = date_end - date_start
                     end_path = self.klv_folder + "/%.1f.klv" % (round(td.total_seconds(), 1))
-                    
+
                     # CheckSum
                     v = abs(hash(end_path)) % (10 ** 4)
                     _bytes = int_to_bytes(v, 4)
@@ -395,7 +395,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     _bytes = _key1 + _len + _bytes
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
-                    
+
                     # Sensor Horizontal Field of View
                     v = self.sp_hfov.value()
                     _bytes = float_to_bytes(float(v), _domain16, _range16)
@@ -403,7 +403,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     _bytes = _key16 + _len + _bytes
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
-                    
+
                     # Sensor Vertical Field of View
                     v = self.sp_vfov.value()
                     _bytes = float_to_bytes(float(v), _domain17, _range17)
@@ -413,53 +413,53 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     bufferData += _bytes
 
                     # TODO : Check these calculations
-                    # Slant Range                    
+                    # Slant Range
                     anlge = 180 + (OSD_pitch + GIMBAL_pitch)
                     slantRange = abs(OSD_altitude / (cos(radians(anlge))))
-                    
+
                     _bytes = float_to_bytes(round(slantRange, 4), _domain21, _range21)
                     _len = int_to_bytes(len(_bytes))
                     _bytes = _key21 + _len + _bytes
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
-                    
+
                     # Target Width
                     # targetWidth = 0.0
-                    targetWidth = 2.0 * slantRange * tan(radians(HFOV / 2.0)) 
-                    
+                    targetWidth = 2.0 * slantRange * tan(radians(HFOV / 2.0))
+
                     _bytes = float_to_bytes(round(targetWidth, 4), _domain22, _range22)
                     _len = int_to_bytes(len(_bytes))
                     _bytes = _key22 + _len + _bytes
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
-                    
+
                     # Frame Center Latitude
                     angle = 90 + (OSD_pitch + GIMBAL_pitch)
                     tgHzDist = OSD_altitude * tan(radians(angle))
                     r_earth = 6371008.8
-                    
+
                     dy = tgHzDist * cos(radians(OSD_yaw))
                     framecenterlatitude = OSD_latitude + (dy / r_earth) * (180 / pi)
-                    
+
                     _bytes = float_to_bytes(round(framecenterlatitude, 4), _domain23, _range23)
                     _len = int_to_bytes(len(_bytes))
                     _bytes = _key23 + _len + _bytes
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
-                       
+
                     # Frame Center Longitude
                     dx = tgHzDist * sin(radians(OSD_yaw))
                     framecenterlongitude = OSD_longitude + (dx / r_earth) * (180 / pi) / cos(OSD_latitude * pi / 180)
-                    
+
                     _bytes = float_to_bytes(round(framecenterlongitude, 4), _domain24, _range24)
                     _len = int_to_bytes(len(_bytes))
                     _bytes = _key24 + _len + _bytes
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
-                    
-                    # Frame Center Elevation 
+
+                    # Frame Center Elevation
                     frameCenterElevation = 0.0
-                    
+
                     _bytes = float_to_bytes(frameCenterElevation, _domain25, _range25)
                     _len = int_to_bytes(len(_bytes))
                     _bytes = _key25 + _len + _bytes
@@ -473,96 +473,96 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
 #                     FOV = (VFOV, HFOV)
 #                     others = (OSD_yaw, GIMBAL_yaw, targetWidth, slantRange)
 #                     cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL = CornerEstimationWithoutOffsets(sensor=sensor, frameCenter=frameCenter, FOV=FOV, others=others)
-#                      
+#
 #                     # Corner Latitude Point 1 (Full)
 #                     _bytes = float_to_bytes(round(cornerPointUL[0],4), _domain82, _range82)
 #                     _len = int_to_bytes(len(_bytes))
 #                     _bytes = _key82 + _len + _bytes
 #                     sizeTotal += len(_bytes)
 #                     bufferData += _bytes
-#                       
+#
 #                     # Corner Longitude Point 1 (Full)
 #                     _bytes = float_to_bytes(round(cornerPointUL[1],4), _domain83, _range83)
 #                     _len = int_to_bytes(len(_bytes))
 #                     _bytes = _key83 + _len + _bytes
 #                     sizeTotal += len(_bytes)
 #                     bufferData += _bytes
-#                       
-#                     # Corner Latitude Point 2 (Full) 
+#
+#                     # Corner Latitude Point 2 (Full)
 #                     _bytes = float_to_bytes(round(cornerPointUR[0],4), _domain84, _range84)
 #                     _len = int_to_bytes(len(_bytes))
 #                     _bytes = _key84 + _len + _bytes
 #                     sizeTotal += len(_bytes)
 #                     bufferData += _bytes
-#                       
-#                     # Corner Longitude Point 2 (Full) 
+#
+#                     # Corner Longitude Point 2 (Full)
 #                     _bytes = float_to_bytes(round(cornerPointUR[1],4), _domain85, _range85)
 #                     _len = int_to_bytes(len(_bytes))
 #                     _bytes = _key85 + _len + _bytes
 #                     sizeTotal += len(_bytes)
 #                     bufferData += _bytes
-#                       
+#
 #                     # Corner Latitude Point 3 (Full)
 #                     _bytes = float_to_bytes(round(cornerPointLR[0],4), _domain86, _range86)
 #                     _len = int_to_bytes(len(_bytes))
 #                     _bytes = _key86 + _len + _bytes
 #                     sizeTotal += len(_bytes)
 #                     bufferData += _bytes
-#                        
+#
 #                     # Corner Longitude Point 3 (Full)
 #                     _bytes = float_to_bytes(round(cornerPointLR[1],4), _domain87, _range87)
 #                     _len = int_to_bytes(len(_bytes))
 #                     _bytes = _key87 + _len + _bytes
 #                     sizeTotal += len(_bytes)
 #                     bufferData += _bytes
-#                       
+#
 #                     # Corner Latitude Point 4 (Full)
 #                     _bytes = float_to_bytes(round(cornerPointLL[0],4), _domain88, _range88)
 #                     _len = int_to_bytes(len(_bytes))
 #                     _bytes = _key88 + _len + _bytes
 #                     sizeTotal += len(_bytes)
 #                     bufferData += _bytes
-#                        
+#
 #                     # Corner Longitude Point 4 (Full)
 #                     _bytes = float_to_bytes(round(cornerPointLL[1],4), _domain89, _range89)
 #                     _len = int_to_bytes(len(_bytes))
 #                     _bytes = _key89 + _len + _bytes
 #                     sizeTotal += len(_bytes)
 #                     bufferData += _bytes
-                     
+
                     # Platform Pitch Angle (Full)
                     _bytes = float_to_bytes(round(OSD_pitch, 4), _domain90, _range90)
                     _len = int_to_bytes(len(_bytes))
                     _bytes = _key90 + _len + _bytes
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
-                     
+
                     # Platform Roll Angle (Full)
                     _bytes = float_to_bytes(round(OSD_roll, 4), _domain91, _range91)
                     _len = int_to_bytes(len(_bytes))
                     _bytes = _key91 + _len + _bytes
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
-                            
+
                     # set packet header
                     writeData = cle
                     writeData += int_to_bytes(sizeTotal)
                     writeData += bufferData
-                    
+
                     # Write packet
                     f_write = open(end_path, "wb+")
                     f_write.write(writeData)
                     f_write.close()
-                    
+
                     cnt += 1
-                    
+
                     progress.setValue(cnt)
-                    
+
                 except Exception as e:
-                    print("Multiplexer error : " + str(e))   
- 
-        QApplication.restoreOverrideCursor() 
-        QApplication.processEvents()    
+                    print("Multiplexer error : " + str(e))
+
+        QApplication.restoreOverrideCursor()
+        QApplication.processEvents()
         progress.setValue(rowCount)
         self.iface.messageBar().clearWidgets()
         # We add it to the manager
@@ -571,7 +571,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         # Close dialog
         self.close()
         return
-                        
+
     def ReadCSVRecordings(self, csv_raw):
         ''' Read the csv for each recording '''
         rows_list = []
@@ -587,11 +587,11 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                                 continue
                             else:
                                 rows_list.append(rows)
-                                rows = []     
+                                rows = []
                         else:
                             rows.append(index)
                 index += 1
-        
+
         if not rows_list:
             rows_list.append(rows)
         # Create csv
@@ -602,16 +602,16 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         ''' DJI Drone: Create csv result files for each record '''
         QApplication.setOverrideCursor(Qt.WaitCursor)
         QApplication.processEvents()
-        
+
         folder = getVideoFolder(self.video_file)
-        
+
         qgsu.createFolderByName(folder, "klv")
         qgsu.createFolderByName(folder, "csv")
-        
+
         self.klv_folder = os.path.join(folder, "klv")
         out_csv = os.path.join(folder, "csv")
 
-        for values in rows_list:            
+        for values in rows_list:
             timestamp = int(time.time() * 1000.0)
             filename = "_".join(["recording", str(timestamp)])
             out_record = os.path.join(out_csv, filename + ".csv")
@@ -620,10 +620,10 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                 csv_input = csv.reader(f_input)
                 csv.writer(f_output).writerows(itertools.islice(csv_input, 0, 1))
                 csv.writer(f_output).writerows(itertools.islice(csv_input, int(values[0]), int(values[-1])))
-                
+
             self.cmb_telemetry.addItem(filename, out_record)
-        
-        self.bt_createMISB.setEnabled(True) 
-        QApplication.restoreOverrideCursor() 
-        QApplication.processEvents()      
+
+        self.bt_createMISB.setEnabled(True)
+        QApplication.restoreOverrideCursor()
+        QApplication.processEvents()
         return

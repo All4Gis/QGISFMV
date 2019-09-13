@@ -9,7 +9,7 @@ try:
 except ImportError:
     None
 
-# TODO : Develop that functionality 
+# TODO : Develop that functionality
 
 
 class OpenStream(QDialog, Ui_FmvOpenStream):

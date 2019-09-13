@@ -1,17 +1,16 @@
 ﻿  # -*- coding: utf-8 -*-
 from math import (
     degrees, radians,
-    sin, cos, asin, tan, atan, atan2, pi,
+    sin, cos, asin, tan, atan, atan2,
     sqrt, exp, log, fabs
 )
 
-from QGIS_FMV.geo.constants import (
-    EARTH_MEAN_RADIUS,
-    EARTH_MEAN_DIAMETER,
-    EARTH_EQUATORIAL_RADIUS,
-    EARTH_EQUATORIAL_METERS_PER_DEGREE,
-    HALF_PI
-)
+from QGIS_FMV.geo.constants import (EARTH_MEAN_RADIUS,
+                                    EARTH_MEAN_DIAMETER,
+                                    EARTH_EQUATORIAL_RADIUS,
+                                    EARTH_EQUATORIAL_METERS_PER_DEGREE,
+                                    HALF_PI
+                                    )
 
 
 def _py_approximate_distance(point1, point2):

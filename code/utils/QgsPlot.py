@@ -186,8 +186,7 @@ class CreatePlotsBitrate(QObject):
                                 if self.frame_count > 1:
                                     frame_time += float(node.get('pkt_duration_time'))
 
-                        frame_bitrate = (float(node.get('pkt_size'))
-                                         * 8 / 1000) * frame_rate
+                        frame_bitrate = (float(node.get('pkt_size')) * 8 / 1000) * frame_rate
                         frame = (frame_time, frame_bitrate)
 
                         # create new frame list if new type

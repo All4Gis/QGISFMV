@@ -16,9 +16,8 @@ class VideoUtils(object):
 
     @staticmethod
     def GetNormalizedWidth(surface):
-        ''' 
-        Calculate normalized Width 
-        @type surface: QAbstractVideoSurface 
+        '''Calculate normalized Width
+        @type surface: QAbstractVideoSurface
         @param surface: Abstract video surface
         @return: double
         '''
@@ -40,9 +39,8 @@ class VideoUtils(object):
 
     @staticmethod
     def GetXRatio(surface):
-        ''' 
-        ratio between event.x() and real image width on screen. 
-        @type surface: QAbstractVideoSurface 
+        '''ratio between event.x() and real image width on screen.
+        @type surface: QAbstractVideoSurface
         @param surface: Abstract video surface
         @return: double
         '''
@@ -50,9 +48,8 @@ class VideoUtils(object):
 
     @staticmethod
     def GetYRatio(surface):
-        ''' 
-        ratio between event.y() and real image height on screen. 
-        @type surface: QAbstractVideoSurface 
+        '''ratio between event.y() and real image height on screen.
+        @type surface: QAbstractVideoSurface
         @param surface: Abstract video surface
         @return: double
         '''
@@ -60,16 +57,15 @@ class VideoUtils(object):
 
     @staticmethod
     def GetXBlackZone(surface):
-        ''' 
-        Return is X in black screen on video 
-        @type surface: QAbstractVideoSurface 
+        '''Return is X in black screen on video
+        @type surface: QAbstractVideoSurface
         @param surface: Abstract video surface
         @return: double
         '''
         x = 0.0
         try:
             if (surface.widget.width() / surface.widget.height()) > (GetImageWidth() / GetImageHeight()):
-                x = (surface.widget.width() - 
+                x = (surface.widget.width() -
                      (VideoUtils.GetNormalizedWidth(surface))) / 2.0
         except ZeroDivisionError:
             None
@@ -77,9 +73,8 @@ class VideoUtils(object):
 
     @staticmethod
     def GetNormalizedHeight(surface):
-        ''' 
-        Calculate normalized Height 
-        @type surface: QAbstractVideoSurface 
+        '''Calculate normalized Height
+        @type surface: QAbstractVideoSurface
         @param surface: Abstract video surface
         @return: double
         '''
@@ -88,33 +83,31 @@ class VideoUtils(object):
 
     @staticmethod
     def GetYBlackZone(surface):
-        ''' 
-        Return is Y in black screen on video 
-        @type surface: QAbstractVideoSurface 
+        '''Return is Y in black screen on video
+        @type surface: QAbstractVideoSurface
         @param surface: Abstract video surface
         @return: double
         '''
         y = 0.0
         try:
             if (surface.widget.width() / surface.widget.height()) < (GetImageWidth() / GetImageHeight()):
-                y = (surface.widget.height() - 
+                y = (surface.widget.height() -
                      (VideoUtils.GetNormalizedHeight(surface))) / 2.0
         except ZeroDivisionError:
-            None       
+            None
         return y
 
     @staticmethod
     def IsPointOnScreen(x, y, surface):
-        ''' 
-        determines if a clicked point lands on the image (False if lands on the
+        '''determines if a clicked point lands on the image (False if lands on the
             black borders or outside)
-        @type x: int 
+        @type x: int
         @param x:
-        
-        @type y: int 
+
+        @type y: int
         @param y:
-               
-        @type surface: QAbstractVideoSurface 
+
+        @type surface: QAbstractVideoSurface
         @param surface: Abstract video surface
         @return: bool
          '''
@@ -130,28 +123,26 @@ class VideoUtils(object):
 
     @staticmethod
     def GetTransf(event, surface):
-        ''' 
-        Return video coordinates to map coordinates 
-        @type event: QMouseEvent  
+        '''Return video coordinates to map coordinates
+        @type event: QMouseEvent
         @param event:
-        
-        @type surface: QAbstractVideoSurface 
+
+        @type surface: QAbstractVideoSurface
         @param surface: Abstract video surface
-        @return: 
+        @return:
         '''
         gt = GetGCPGeoTransform()
         return gt([(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)])
 
     @staticmethod
     def GetPointCommonCoords(event, surface):
-        ''' 
-        Common functon for get coordinates on mousepressed 
-        @type event: QMouseEvent  
+        ''' Common functon for get coordinates on mousepressed
+        @type event: QMouseEvent
         @param event:
-        
-        @type surface: QAbstractVideoSurface 
+
+        @type surface: QAbstractVideoSurface
         @param surface: Abstract video surface
-        @return:  
+        @return:
         '''
         transf = VideoUtils.GetTransf(event, surface)
         targetAlt = GetFrameCenter()[2]

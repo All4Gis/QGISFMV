@@ -1,4 +1,4 @@
-﻿  # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from configparser import ConfigParser
 from datetime import datetime
 import inspect
@@ -142,7 +142,7 @@ class BufferedMetaReader():
     def bufferParalell(self, start, size):
         start_sec = _time_to_seconds(start)
         start_milisec = int(start_sec * 1000)
-        
+
         for k in range(start_milisec, start_milisec + (size * self.intervall), self.intervall):
             cTime = k / 1000.0
             nTime = (k + self.pass_time) / 1000.0
@@ -253,12 +253,12 @@ def getVideoManagerList():
 def getVideoFolder(video_file):
     ''' Get or create Video Temporal folder '''
     home = os.path.expanduser("~")
-    
+
     qgsu.createFolderByName(home, "QGIS_FMV")
-    
+
     root, _ = os.path.splitext(os.path.basename(video_file))
     homefmv = os.path.join(home, "QGIS_FMV")
-    
+
     qgsu.createFolderByName(homefmv, root)
     return os.path.join(homefmv, root)
 
@@ -273,13 +273,13 @@ def RemoveVideoFolder(filename):
         None
     return
 
- 
+
 def getNameSpace():
     ''' Get plugin name space '''
-    namespace = _callerName().split(".")[0]   
+    namespace = _callerName().split(".")[0]
     return namespace
 
-        
+
 def setCenterMode(mode, interface):
     ''' Set map center mode '''
     global centerMode, iface
@@ -344,7 +344,7 @@ def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None):
 
             location = [frameCenterLat, frameCenterLon, loc]
 
-            qgsu.showUserAndLogMessage("", "Got Location: lon: " + str(frameCenterLon) + 
+            qgsu.showUserAndLogMessage("", "Got Location: lon: " + str(frameCenterLon) +
                                        " lat: " + str(frameCenterLat) + " location: " + str(loc), onlyLog=True)
 
             break
@@ -543,8 +543,8 @@ def GetFrameCenter():
     global gframeCenterLat
     global gframeCenterLon
     # if sensor height is null, compute it from sensor altitude.
-    if(frameCenterElevation == None):
-        frameCenterElevation = sensorTrueAltitude - 500    
+    if(frameCenterElevation is None):
+        frameCenterElevation = sensorTrueAltitude - 500
     return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
 
 
@@ -675,7 +675,7 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
 def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     ''' Update Layers Values '''
     global frameCenterElevation, sensorLatitude, sensorLongitude, sensorTrueAltitude, groupName
-    
+
     groupName = group
     frameCenterLat = packet.FrameCenterLatitude
     frameCenterLon = packet.FrameCenterLongitude
@@ -690,51 +690,51 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     UpdateTrajectoryData(packet, hasElevationModel())
     UpdateFrameCenterData(packet, hasElevationModel())
     UpdateFrameAxisData(packet, hasElevationModel())
- 
+
     if OffsetLat1 is not None and LatitudePoint1Full is None:
         CornerEstimationWithOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
- 
+
     elif OffsetLat1 is None and LatitudePoint1Full is None:
         CornerEstimationWithoutOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
- 
+
     else:
         cornerPointUL = [packet.CornerLatitudePoint1Full,
                          packet.CornerLongitudePoint1Full]
         if None in cornerPointUL:
             return
- 
+
         cornerPointUR = [packet.CornerLatitudePoint2Full,
                          packet.CornerLongitudePoint2Full]
         if None in cornerPointUR:
             return
- 
+
         cornerPointLR = [packet.CornerLatitudePoint3Full,
                          packet.CornerLongitudePoint3Full]
- 
+
         if None in cornerPointLR:
             return
- 
+
         cornerPointLL = [packet.CornerLatitudePoint4Full,
                          packet.CornerLongitudePoint4Full]
- 
+
         if None in cornerPointLL:
             return
         UpdateFootPrintData(
             packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
- 
+
         UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
                         cornerPointLR, cornerPointLL, hasElevationModel())
- 
+
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat)
- 
+
         if mosaic:
             georeferencingVideo(parent)
- 
+
     # recenter map on platform
     if centerMode == 1:
         lyr = qgsu.selectLayerByName(Platform_lyr, groupName)
@@ -747,21 +747,21 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     elif centerMode == 3:
         lyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
         iface.mapCanvas().setExtent(lyr.extent())
- 
+
     iface.mapCanvas().refresh()
     return
 
 
 def georeferencingVideo(parent):
-    """ Extract Current Frame Thread 
+    """ Extract Current Frame Thread
     :param packet: Parent class
     """
     image = parent.videoWidget.currentFrame()
-    
+
     folder = getVideoFolder(parent.fileName)
     qgsu.createFolderByName(folder, "mosaic")
     out = os.path.join(folder, "mosaic")
-    
+
     position = str(parent.player.position())
 
     taskGeoreferencingVideo = QgsTask.fromFunction('Georeferencing Current Frame Task',
@@ -786,7 +786,7 @@ def GeoreferenceFrame(task, image, output, p):
     image.save(src_file)
 
     # Opens source dataset
-    src_ds = gdal.OpenEx(src_file, gdal.OF_RASTER | 
+    src_ds = gdal.OpenEx(src_file, gdal.OF_RASTER |
                          gdal.OF_READONLY, open_options=['NUM_THREADS=ALL_CPUS'])
 
     # Open destination dataset
@@ -823,7 +823,7 @@ def GetGeotransform_affine():
 
 
 def CornerEstimationWithOffsets(packet):
-    ''' Corner estimation using Offsets 
+    ''' Corner estimation using Offsets
     :param packet: Metada packet
     '''
     try:
@@ -1006,7 +1006,7 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
 
         if sensor is not None:
             return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL
-        
+
         UpdateFootPrintData(packet,
                             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 
@@ -1016,7 +1016,7 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL,
                               frameCenterLon, frameCenterLat)
-                      
+
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "CornerEstimationWithoutOffsets failed! : "), str(e))
@@ -1057,13 +1057,13 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
 
     diffAlt = -1
     for k in range(0, int(dtm_buffer * pixelWidthMeter), int(pixelWidthMeter)):
-        point = [sensorLon + k * dLon, sensorLat + 
+        point = [sensorLon + k * dLon, sensorLat +
                  k * dLat, sensorAlt + k * dAlt]
 
         col = int((point[0] - xOrigin) / pixelWidth)
         row = int((yOrigin - point[1]) / pixelHeight)
         try:
-            diffAlt = point[2] - dtm_data[row - 
+            diffAlt = point[2] - dtm_data[row -
                                           dtm_rowLowerBound][col - dtm_colLowerBound]
 
         except Exception:
@@ -1098,7 +1098,7 @@ def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
     dAlt = (demPtAlt - sensorAlt) / distance
 
     k = ((demPtAlt - planeHeight) / (sensorAlt - demPtAlt)) * distance
-    pt = [sensorLon + (distance + k) * dLon, sensorLat + 
+    pt = [sensorLon + (distance + k) * dLon, sensorLat +
           (distance + k) * dLat, sensorAlt + (distance + k) * dAlt]
 
     return pt
@@ -1137,9 +1137,8 @@ def _time_to_seconds(dateStr):
 
 
 def _seconds_to_time(sec):
-    '''
-    Returns a string representation of the length of time provided.
-    For example, 3675.14 -> '01:01:15' 
+    '''Returns a string representation of the length of time provided.
+    For example, 3675.14 -> '01:01:15'
     @type sec: String
     @param sec: seconds string value
     '''
@@ -1151,10 +1150,9 @@ def _seconds_to_time(sec):
 
 
 def _seconds_to_time_frac(sec, comma=False):
-    '''
-    Returns a string representation of the length of time provided,
+    '''Returns a string representation of the length of time provided,
     including partial seconds.
-    For example, 3675.14 -> '01:01:15.140000' 
+    For example, 3675.14 -> '01:01:15.140000'
     @type sec: String
     @param sec: seconds string value
     '''
@@ -1168,26 +1166,25 @@ def _seconds_to_time_frac(sec, comma=False):
     else:
         return '%02d:%02d:%07.4f' % (hours, minutes, sec)
 
-    
+
 def BurnDrawingsImage(source, overlay):
-    ''' 
-    Burn drawings into image 
+    '''Burn drawings into image
     @type source: QImage
     @param source: Original Image
-    
+
     @type overlay: QImage
     @param overlay: Drawings image
     @return: QImage
     '''
     base = source.scaled(overlay.size(), Qt.IgnoreAspectRatio)
-    
+
     p = QPainter()
     p.setRenderHint(QPainter.HighQualityAntialiasing)
     p.begin(base)
     p.setCompositionMode(QPainter.CompositionMode_SourceOut)
     p.drawImage(0, 0, overlay)
     p.end()
-    
+
     # Restore size
     base = base.scaled(source.size(), Qt.IgnoreAspectRatio)
     return base

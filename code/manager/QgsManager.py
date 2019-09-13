@@ -6,12 +6,12 @@ from os.path import dirname, abspath
 from qgis.PyQt.QtCore import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (QDockWidget,
-                             QTableWidgetItem,
-                             QAction,
-                             QMenu,
-                             QProgressBar,
-                             QVBoxLayout,
-                             QWidget)
+                                 QTableWidgetItem,
+                                 QAction,
+                                 QMenu,
+                                 QProgressBar,
+                                 QVBoxLayout,
+                                 QWidget)
 import qgis.utils
 
 from PyQt5.QtGui import QColor
@@ -73,7 +73,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.setColumnWidth(4, 300)
         self.VManager.verticalHeader().setDefaultAlignment(Qt.AlignHCenter)
         self.VManager.hideColumn(0)
-        
+
         # Get Video Manager List
         VideoList = getVideoManagerList()
         for load_id in VideoList:
@@ -87,9 +87,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 self.AddFileRowToManager(name, filename, load_id, exist, klv_folder)
             else:
                 self.AddFileRowToManager(name, filename, load_id)
-            
+
         draw.setValues()
-            
+
     def eventFilter(self, source, event):
         ''' Event Filter '''
         if (event.type() == QEvent.MouseButtonPress and source is self.VManager.viewport() and self.VManager.itemAt(event.pos()) is None):
@@ -137,9 +137,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # We limit the number of videos due to the buffer
         if self.VManager.rowCount() > 5:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "ManagerDock", "You must delete some video from the list before adding a new one"))
+                "ManagerDock", "You must delete some video from the list before adding a new one"))
             return
-        
+
         self.islocal = islocal
         self.klv_folder = klv_folder
         w = QWidget()
@@ -148,23 +148,23 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         layout.addWidget(pbar)
         w.setLayout(layout)
         rowPosition = self.VManager.rowCount()
-        
+
         pbar.setGeometry(0, 0, 300, 30)
         pbar.setValue(0)
         pbar.setMaximumHeight(30)
-        
+
         if load_id is None:
             row_id = 0
             if rowPosition != 0:
                 row_id = int(self.VManager.item(rowPosition - 1, 0).text()) + 1
         else:
-            row_id = load_id  
-        
+            row_id = load_id
+
         self.VManager.insertRow(rowPosition)
-        
+
         self.VManager.setItem(
             rowPosition, 0, QTableWidgetItem(str(row_id)))
-                
+
         self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
         self.VManager.setItem(rowPosition, 2, QTableWidgetItem(QCoreApplication.translate(
             "ManagerDock", "Loading")))
@@ -184,11 +184,11 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                     self.VManager.item(rowPosition, j).setFlags(Qt.NoItemFlags | Qt.ItemIsEnabled)
                     self.VManager.item(rowPosition, j).setBackground(QColor(211, 211, 211))
                 except Exception:
-                    self.VManager.cellWidget(rowPosition, j).setStyleSheet("background-color:rgb(211,211,211);");
+                    self.VManager.cellWidget(rowPosition, j).setStyleSheet("background-color:rgb(211,211,211);")
                     pass
             return
-        
-        pbar.setValue(30)  
+
+        pbar.setValue(30)
         if not self.isStreaming:
             info = FFMpeg().probe(filename)
             if info is None:
@@ -272,7 +272,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         path = self.VManager.item(row, 3).text()
         text = self.VManager.item(row, 1).text()
         self.ToggleActiveRow(row)
-        
+
         folder = getVideoFolder(text)
         klv_folder = os.path.join(folder, "klv")
         exist = os.path.exists(klv_folder)

@@ -46,7 +46,7 @@ UPS_CONSTANTS = {0: (ALPHABET['A'], ALPHABET['J'], ALPHABET['Z'], ALPHABET['Z'],
                  1: (ALPHABET['B'], ALPHABET['A'], ALPHABET['R'], ALPHABET['Z'], 2000000.0, 800000.0),
                  2: (ALPHABET['Y'], ALPHABET['J'], ALPHABET['Z'], ALPHABET['P'], 800000.0, 1300000.0),
                  3: (ALPHABET['Z'], ALPHABET['A'], ALPHABET['J'], ALPHABET['P'], 2000000.0, 1300000.0)
-                }
+                 }
 
 # letter, minimum northing, upper latitude, lower latitude, northing offset
 LATITUDE_BANDS = [(ALPHABET['C'], 1100000.0, -72.0, -80.5, 0.0),
@@ -194,7 +194,7 @@ def _upsToMgrs(hemisphere, easting, northing, precision):
         letters[2] = letters[2] + 1
 
     gridEasting = easting
-    gridEasting = gridEasting - falseEasting;
+    gridEasting = gridEasting - falseEasting
     letters[1] = ltr2LowValue + int(gridEasting / ONEHT)
 
     if easting < TWOMIL:
@@ -295,36 +295,6 @@ def _utmToMgrs(zone, hemisphere, latitude, longitude, easting, northing, precisi
     @param precision - precision level of MGRS string
     @returns - MGRS coordinate string
     """
-    # FIXME: do we really need this?
-    # Special check for rounding to (truncated) eastern edge of zone 31V
-    # if (zone == 31) and (((latitude >= 56.0) and (latitude < 64.0)) and ((longitude >= 3.0) or (easting >= 500000.0))):
-    #    # Reconvert to UTM zone 32
-    #    override = 32
-    #    lat = int(latitude)
-    #    lon = int(longitude)
-    #    if zone == 1 and override == 60:
-    #        zone = override
-    #    elif zone == 60 and override == 1:
-    #        zone = override
-    #    elif (lat > 71) and (lon > -1) and (lon < 42):
-    #        if (zone - 2 <= override) and (override <= zone + 2):
-    #            zone = override
-    #        else:
-    #            raise MgrsException('Zone outside of valid range (1 to 60) and within 1 of "natural" zone')
-    #    elif (zone - 1 <= override) and (override <= zone + 1):
-    #        zone = override
-    #    else:
-    #        raise MgrsException('Zone outside of valid range (1 to 60) and within 1 of "natural" zone')
-    #
-    #    epsg = _epsgForUtm(zone, hemisphere)
-    #
-    #    src = osr.SpatialReference()
-    #    src.ImportFromEPSG(4326)
-    #    dst = osr.SpatialReference()
-    #    dst.ImportFromEPSG(epsg)
-    #    ct = osr.CoordinateTransformation(src, dst)
-    #    x, y, z = ct.TransformPoint(longitude, latitude)
-
     if latitude <= 0.0 and northing == 1.0e7:
         latitude = 0
         northing = 0
@@ -381,7 +351,7 @@ def _mgrsToUtm(mgrs):
     # Check that the second letter of the MGRS string is within the range
     # of valid second letter values. Also check that the third letter is valid
     if (letters[1] < ltr2LowValue) or (letters[1] > ltr2HighValue) or (letters[2] > ALPHABET['V']):
-        raise  MgrsException('An MGRS string error: string too long, too short, or badly formed')
+        raise MgrsException('An MGRS string error: string too long, too short, or badly formed')
 
     rowLetterNorthing = float(letters[2] * ONEHT)
     gridEasting = float((letters[1] - ltr2LowValue + 1) * ONEHT)
@@ -423,7 +393,6 @@ def _mgrsString(zone, letters, easting, northing, precision):
     @param precision - precision level of MGRS string
     @returns - MGRS coordinate string
     """
-    mrgs = ''
     if zone:
         tmp = str(zone)
         mgrs = tmp.zfill(3 - len(tmp))

@@ -143,8 +143,8 @@ class SetParser(Element):
             for item in items:
                 try:
                     if not hasattr(item.value, 'value'):
-                        continue  
-                    if not parentTAG :                                                        
+                        continue
+                    if not parentTAG:
                         metadata[item.TAG] = (item.LDSName, str(item.value.value))
                         if item.TAG == 4:
                             self.PlatformTailNumber = item.value.value
@@ -206,9 +206,9 @@ class SetParser(Element):
                             self.CornerLatitudePoint4Full = item.value.value
                         elif item.TAG == 89:
                             self.CornerLongitudePoint4Full = item.value.value
-                    else :
+                    else:
                         metadata[parentTAG][len(metadata[parentTAG]) - 1][item.TAG] = (item.LDSName, item.ESDName, item.UDSName, str(item.value.value))
-                
+
                 except Exception:
                     qgsu.showUserAndLogMessage("", "Value cannot be read: " + str(item.value.value), onlyLog=True)
                     continue

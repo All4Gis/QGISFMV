@@ -143,7 +143,7 @@ def ieee754_bytes_to_fp(value):
     elif l == 8:
         return unpack('>d', value)[0]
     else:
-        raise ValueError                               
+        raise ValueError
 
 
 def float_to_bytes(value, _domain, _range):

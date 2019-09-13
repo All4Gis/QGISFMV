@@ -85,13 +85,13 @@ class SecurityLocalMetadataSet(SetParser):
     Must be a subclass of Element or duck type Element.
     """
     key, name = b'\x30', "Security Local Metadata Set"
-    
+
     TAG = 48
     UDSKey = hexstr_to_bytes('06 0E 2B 34 - 02 03 01 01 – 0E 01 03 03 - 02 00 00 00')
     LDSName = "Security Local Metadata Set"
     ESDName = ""
     UDSName = ""
-    
+
     parsers = {}
 
     _unknown_element = UnknownElement
@@ -111,7 +111,7 @@ class SecurityClassification(BytesElementParser):
     LDSName = "Security Classification"
     ESDName = ""
     UDSName = ""
-    
+
     _classification = {
         b'\x01': 'UNCLASSIFIED',
         b'\x02': 'RESTRICTED',
@@ -131,7 +131,7 @@ class ClassifyingCountryAndReleasingInstructionCCM(BytesElementParser):
     LDSName = "Classifying Country And Releasing Instruction Country Coding Method"
     ESDName = ""
     UDSName = ""
-    
+
     _classification = _classifying_country_coding
 
 
@@ -254,7 +254,7 @@ class ObjectCountryCodingMethod(BytesElementParser):
     LDSName = 'Object Country Coding Method'
     ESDName = ""
     UDSName = ""
-    
+
     _classification = _object_country_coding
 
 
