@@ -1,4 +1,4 @@
-﻿  # -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 from math import (
     degrees, radians,
     sin, cos, asin, tan, atan, atan2,
@@ -40,7 +40,7 @@ def _py_haversine_distance(point1, point2):
     dlat = (lat2 - lat1)
     dlon = (lon2 - lon1)
     a = (
-        sin(dlat * 0.5) ** 2 + 
+        sin(dlat * 0.5) ** 2 +
         cos(lat1) * cos(lat2) * sin(dlon * 0.5) ** 2
     )
 
@@ -58,11 +58,11 @@ def _py_distance(point1, point2):
     dlon = fabs(lon1 - lon2)
 
     numerator = sqrt(
-        (cos(lat2) * sin(dlon)) ** 2 + 
+        (cos(lat2) * sin(dlon)) ** 2 +
         ((cos(lat1) * sin(lat2)) - (sin(lat1) * cos(lat2) * cos(dlon))) ** 2)
 
     denominator = (
-        (sin(lat1) * sin(lat2)) + 
+        (sin(lat1) * sin(lat2)) +
         (cos(lat1) * cos(lat2) * cos(dlon)))
 
     c = atan2(numerator, denominator)
@@ -80,7 +80,7 @@ def bearing(point1, point2):
     dlon = (lon2 - lon1)
     numerator = sin(dlon) * cos(lat2)
     denominator = (
-        cos(lat1) * sin(lat2) - 
+        cos(lat1) * sin(lat2) -
         (sin(lat1) * cos(lat2) * cos(dlon))
     )
 
@@ -108,7 +108,7 @@ def destination(point, distance, bearing):
     delta = distance / EARTH_MEAN_RADIUS
 
     lat2 = asin(
-        sin(lat1) * cos(delta) + 
+        sin(lat1) * cos(delta) +
         cos(lat1) * sin(delta) * cos(radians_bearing)
     )
     numerator = sin(radians_bearing) * sin(delta) * cos(lat1)
