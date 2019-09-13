@@ -27,9 +27,9 @@ from qgis.PyQt.QtCore import (QSettings,
                           QCoreApplication,
                           QTranslator,
                           qVersion,
-                          QThread)
+                          QThread, Qt)
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QHBoxLayout, QSizePolicy
 from QGIS_FMV.about.QgsFmvAbout import FmvAbout
 from QGIS_FMV.manager.QgsManager import FmvManager
 from QGIS_FMV.utils.QgsFmvLog import log
@@ -74,6 +74,7 @@ class Fmv:
                     QCoreApplication.installTranslator(self.translator)
 
         self._FMVManager = None
+        self.bottomBar = None
 
     def initGui(self):
         ''' FMV Action '''
@@ -81,6 +82,7 @@ class Fmv:
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
                                  u"FMV", self.iface.mainWindow(),
                                  triggered=self.run)
+        self.actionFMV.setCheckable( True )
         self.iface.addAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Custom tab")
 
     def unload(self):
@@ -98,12 +100,26 @@ class Fmv:
         self.About.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self.About.exec_()
 
-    def run(self):
+    def run(self, toggleState ):
         ''' Run method '''
-        if self._FMVManager is None:
-            self.CreateDockWidget()
+        if toggleState:
+            self.createManagerWidget()
+        else:
+            self.deleteManagerWidget()
 
-    def CreateDockWidget(self):
+    def createManagerWidget(self):
         ''' Create Manager Video QDockWidget '''
-        self._FMVManager = FmvManager(self.iface)
-        self.iface.mainWindow().addDockWidget( Qt.BottomDockWidgetArea, self._FMVManager )
+        if not self.bottomBar and not self._FMVManager:
+            self.bottomBar = KadasBottomBar( self.iface.mapCanvas() )
+            self.bottomBar.setLayout( QHBoxLayout() )
+            self._FMVManager = FmvManager(self.iface)
+            self.bottomBar.layout().addWidget( self._FMVManager )
+            self.bottomBar.resize( self._FMVManager.size() )
+            
+        self.bottomBar.show()
+        
+    def deleteManagerWidget( self ):
+        del self._FMVManager
+        self._FMVManager = None
+        del self.bottomBar
+        self.bottomBar = None
