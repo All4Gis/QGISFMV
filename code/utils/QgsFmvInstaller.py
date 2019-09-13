@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 from configparser import ConfigParser
-import os, sys
+import os
+import sys
 from os.path import dirname, abspath
 import pathlib
 import platform
@@ -137,7 +138,7 @@ def WindowsInstaller():
         iface.messageBar().clearWidgets()
 
     try:
-        import homography, cv2, matplotlib
+        import homography, cv2, matplotlib # noqa
     except ImportError:
         try:
             buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing dependencies"),
@@ -150,7 +151,7 @@ def WindowsInstaller():
             None
     finally:
         try:
-            import homography, cv2, matplotlib
+            import homography, cv2, matplotlib # noqa
             # We update dependencies
             if matplotlib.__version__ < '3.1.0' or cv2.__version__ < '4.1.0':
                 buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Updates available"),
@@ -277,7 +278,7 @@ def LinuxInstaller():
         iface.messageBar().clearWidgets()
 
     try:
-        import homography, cv2, matplotlib
+        import homography, cv2, matplotlib # noqa
     except ImportError:
         try:
             buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing dependencies"),
@@ -303,7 +304,7 @@ def LinuxInstaller():
             None
     finally:
         try:
-            import homography, cv2, matplotlib
+            import homography, cv2, matplotlib # noqa
         except ImportError:
             qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
                                        level=QGis.Critical)

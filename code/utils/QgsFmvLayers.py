@@ -6,6 +6,46 @@ from qgis.PyQt.QtWidgets import QApplication
 from qgis.PyQt.QtCore import QCoreApplication, QPointF
 
 from configparser import ConfigParser
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from qgis.PyQt.QtCore import QVariant, QSettings
+from qgis.core import (QgsPalLayerSettings,
+                       QgsTextFormat,
+                       QgsTextBufferSettings,
+                       QgsVectorLayerSimpleLabeling,
+                       QgsMarkerSymbol,
+                       QgsLayerTreeLayer,
+                       QgsField,
+                       QgsFields,
+                       QgsVectorLayer,
+                       QgsVectorFileWriter,
+                       QgsFillSymbol,
+                       QgsLineSymbol,
+                       QgsSvgMarkerSymbolLayer,
+                       QgsSingleSymbolRenderer,
+                       QgsDistanceArea,
+                       QgsCoordinateReferenceSystem,
+                       QgsProject,
+                       QgsFeature,
+                       QgsGeometry,
+                       QgsPointXY,
+                       QgsPoint,
+                       QgsLineString
+                       )
+
+from qgis.utils import iface
+from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
+from itertools import groupby
+from qgis._3d import (QgsPhongMaterialSettings,
+                      QgsVectorLayer3DRenderer,
+                      QgsLine3DSymbol,
+                      QgsPoint3DSymbol,
+                      QgsPolygon3DSymbol)
+
+try:
+    from pydevd import *
+except ImportError:
+    None
+
 parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 
@@ -23,47 +63,6 @@ epsg = parser['LAYERS']['epsg']
 groupName = None
 
 encoding = "utf-8"
-
-from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from qgis.PyQt.QtCore import QVariant, QSettings
-from qgis.core import (
-    QgsPalLayerSettings,
-    QgsTextFormat,
-    QgsTextBufferSettings,
-    QgsVectorLayerSimpleLabeling,
-    QgsMarkerSymbol,
-    QgsLayerTreeLayer,
-    QgsField,
-    QgsFields,
-    QgsVectorLayer,
-    QgsVectorFileWriter,
-    QgsFillSymbol,
-    QgsLineSymbol,
-    QgsSvgMarkerSymbolLayer,
-    QgsSingleSymbolRenderer,
-    QgsDistanceArea,
-    QgsCoordinateReferenceSystem,
-    QgsProject,
-    QgsFeature,
-    QgsGeometry,
-    QgsPointXY,
-    QgsPoint,
-    QgsLineString
-)
-
-from qgis.utils import iface
-from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
-from itertools import groupby
-from qgis._3d import (QgsPhongMaterialSettings,
-                      QgsVectorLayer3DRenderer,
-                      QgsLine3DSymbol,
-                      QgsPoint3DSymbol,
-                      QgsPolygon3DSymbol)
-
-try:
-    from pydevd import *
-except ImportError:
-    None
 
 _layerreg = QgsProject.instance()
 crtSensorSrc = crtSensorSrc2 = crtPltTailNum = 'DEFAULT'

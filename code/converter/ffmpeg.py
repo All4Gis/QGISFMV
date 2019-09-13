@@ -1,4 +1,4 @@
-﻿  # -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import locale
 import os
 import os.path
@@ -45,7 +45,7 @@ class FFMpegConvertError(Exception):
 
     def __repr__(self):
         error = self.details if self.details else self.message
-        return ('<FFMpegConvertError error="%s", pid=%s, cmd="%s">' % 
+        return ('<FFMpegConvertError error="%s", pid=%s, cmd="%s">' %
                 (error, self.pid, self.cmd))
 
     def __str__(self):
