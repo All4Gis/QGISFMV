@@ -36,6 +36,7 @@ from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.PyQt.QtCore import Qt
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import QgsApplication
+from kadas.kadasgui import *
 
 try:
     from pydevd import *
@@ -49,7 +50,7 @@ class Fmv:
     def __init__(self, iface):
         """ Contructor """
 
-        self.iface = iface
+        self.iface = KadasPluginInterface.cast( iface )
         log.initLogging()
         threadcount = QThread.idealThreadCount()
         # use all available cores and parallel rendering
@@ -60,38 +61,27 @@ class Fmv:
 
         self.plugin_dir = os.path.dirname(__file__)
 
-        locale = QSettings().value("locale//userLocale")[0:2]
-        localePath = os.path.join(
-            self.plugin_dir, 'i18n', 'qgisfmv_{}.qm'.format(locale))
-        if os.path.exists(localePath):
-            self.translator = QTranslator()
-            self.translator.load(localePath)
+        localeSetting = QSettings().value("locale//userLocale")
+        if localeSetting:
+            locale = localSetting[0:2]
+            localePath = os.path.join(
+                self.plugin_dir, 'i18n', 'qgisfmv_{}.qm'.format(locale))
+            if os.path.exists(localePath):
+                self.translator = QTranslator()
+                self.translator.load(localePath)
 
-            if qVersion() > '5.0.0':
-                QCoreApplication.installTranslator(self.translator)
+                if qVersion() > '5.0.0':
+                    QCoreApplication.installTranslator(self.translator)
 
         self._FMVManager = None
 
     def initGui(self):
         ''' FMV Action '''
+        
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
                                  u"FMV", self.iface.mainWindow(),
                                  triggered=self.run)
-
-        self.iface.registerMainWindowAction(
-            self.actionFMV, qgsu.SetShortcutForPluginFMV(u"FMV"))
-        self.iface.addToolBarIcon(self.actionFMV)
-        self.iface.addPluginToMenu(QCoreApplication.translate(
-            "QgsFmv", "Full Motion Video (FMV)"), self.actionFMV)
-
-        ''' About Action '''
-        self.actionAbout = QAction(QIcon(":/imgFMV/images/Information.png"),
-                                   u"FMV About", self.iface.mainWindow(),
-                                   triggered=self.About)
-        self.iface.registerMainWindowAction(
-            self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About", "Alt+A"))
-        self.iface.addPluginToMenu(QCoreApplication.translate(
-            "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
+        self.iface.addAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Custom tab")
 
     def unload(self):
         ''' Unload Plugin '''
@@ -116,4 +106,4 @@ class Fmv:
     def CreateDockWidget(self):
         ''' Create Manager Video QDockWidget '''
         self._FMVManager = FmvManager(self.iface)
-        self.iface.addDockWidget(Qt.BottomDockWidgetArea, self._FMVManager)
+        self.iface.mainWindow().addDockWidget( Qt.BottomDockWidgetArea, self._FMVManager )
