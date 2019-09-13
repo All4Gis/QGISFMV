@@ -1,4 +1,4 @@
-﻿  # -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 from configparser import ConfigParser
 import os, sys
 from os.path import dirname, abspath
@@ -151,7 +151,7 @@ def WindowsInstaller():
     finally:
         try:
             import homography, cv2, matplotlib
-            # We update dependencies 
+            # We update dependencies
             if matplotlib.__version__ < '3.1.0' or cv2.__version__ < '4.1.0':
                 buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Updates available"),
                                                  QCoreApplication.translate("QgsFmvInstaller", "Do you want upgrade dependencies?"),
@@ -174,20 +174,21 @@ def get_password():
         )
         return password if ok else ''
 
+
 # Tested using QGIS 3.8 Zanzibar and Ubuntu 18.04
 def LinuxInstaller():
-    '''complete Linux installation '''    
+    '''complete Linux installation '''
     pwd = None
-    
-    if not IsLavFilters():    
+
+    if not IsLavFilters():
         ''' lAV Filters (GStreamer on Linux)'''
         if pwd is None:
             ret = get_password()
             if ret == "":
                 return
-            
+
             pwd = ret
-        
+
         buttonReply = qgsu.CustomMessage("QGIS FMV",
                                          QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
                                          QCoreApplication.translate("QgsFmvInstaller", "Do you want install GStreamer?"),
@@ -197,35 +198,35 @@ def LinuxInstaller():
             progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading GStreamer...")
             progressMessageBar.layout().addWidget(progress)
             iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
-            
+
             cmd = 'sudo apt-get -y install python3-pyqt5.qtmultimedia gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio'
             gst_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
             if gst_rc != 0:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION FAILED: Failed to install GStreamer library.'), level=QGis.Critical)
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.'))
-            
+
             iface.messageBar().clearWidgets()
-            
+
     if not IsFFMPEG():
         ''' FFMPEG Lib '''
         if pwd is None:
             ret = get_password()
             if ret == "":
                 return
-            
+
             pwd = ret
-        
+
         buttonReply = qgsu.CustomMessage("QGIS FMV",
                                          QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
                                          QCoreApplication.translate("QgsFmvInstaller", "Do you want install FFMPEG?"),
                                          icon="Information")
         if buttonReply == QMessageBox.Yes:
-            # Download FFMPEG 
+            # Download FFMPEG
             progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading FFMPEG...")
             progressMessageBar.layout().addWidget(progress)
             iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
-            
+
             cmd = 'sudo apt-get -y install ffmpeg'
             ff_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
             if ff_rc != 0:
@@ -251,18 +252,18 @@ def LinuxInstaller():
                             qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION FAILED: Could not install ffmpeg package.'), level=QGis.Critical)
                         else:
                             qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.'))
-                
-                            parser.set('GENERAL', 'ffmpeg', '/usr/bin/')                
+
+                            parser.set('GENERAL', 'ffmpeg', '/usr/bin/')
                             with open(fileConfig, 'w') as configfile:
                                 parser.write(configfile)
-                            
+
                             iface.messageBar().clearWidgets()
             else:
-                parser.set('GENERAL', 'ffmpeg', '/usr/bin/')                
+                parser.set('GENERAL', 'ffmpeg', '/usr/bin/')
                 with open(fileConfig, 'w') as configfile:
-                    parser.write(configfile)    
-                
-                iface.messageBar().clearWidgets()   
+                    parser.write(configfile)
+
+                iface.messageBar().clearWidgets()
 
     if not isDem():
         ''' DEM File '''
@@ -286,17 +287,17 @@ def LinuxInstaller():
                 # Install matplotlib
                 cmd = 'sudo apt -y install python3-matplotlib'
                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
-                
+
                 # Install matplotlib
                 cmd = 'sudo pip3 install matplotlib'
                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
-                
+
 #                 # Install OpenCV
 #                 package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
 #                 opencv_file = os.path.join(package_dir, 'install-opencv.sh')
 #                 cmd = 'sh ' + opencv_file
 #                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
-                
+
                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
         except ImportError:
             None
@@ -391,7 +392,7 @@ def WinSoftwareInstalled(hive, flag):
 
     return software_list
 
-                
+
 def install_pip_requirements():
     ''' Install Requeriments from pip >= 10.0.1'''
     package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
@@ -418,5 +419,5 @@ def install_pip_requirements():
         process.wait()
     except Exception:
         raise
-    
+
     return

@@ -25,7 +25,7 @@ class FmvOptions(QDialog, Ui_OptionsDialog):
 
         self.sl_Size.enterEvent = self.showSizeTip
         draw.setValues(self)
-                 
+
     def showSizeTip(self, _):
         ''' Size Slider Tooltip Trick '''
         self.style = self.sl_Size.style()
@@ -38,10 +38,10 @@ class FmvOptions(QDialog, Ui_OptionsDialog):
         pos_global = self.sl_Size.mapToGlobal(pos_local)
         QToolTip.showText(pos_global, str(
             self.sl_Size.value()) + " px", self)
-    
+
     def SaveOptions(self):
         ''' Save Options '''
-        ####### Magnifier Glass #######
+        # Magnifier Glass #
         # Shape Type
         if self.rB_Square_m.isChecked():
             self.settings.setValue(self.NameSpace + "/Options/magnifier/shape", 0)  # Square
@@ -50,26 +50,26 @@ class FmvOptions(QDialog, Ui_OptionsDialog):
 
         self.settings.setValue(self.NameSpace + "/Options/magnifier/size", self.sl_Size.value())
         self.settings.setValue(self.NameSpace + "/Options/magnifier/factor", self.sb_factor.value())
-        
-        ####### Drawings #######
-        
+
+        # Drawings #
+
         self.settings.setValue(self.NameSpace + "/Options/drawings/polygons/width", self.poly_width.value())
         self.settings.setValue(self.NameSpace + "/Options/drawings/polygons/pen", self.poly_pen.color())
         self.settings.setValue(self.NameSpace + "/Options/drawings/polygons/brush", self.poly_brush.color())
-        
+
         self.settings.setValue(self.NameSpace + "/Options/drawings/points/width", self.point_width.value())
-        self.settings.setValue(self.NameSpace + "/Options/drawings/points/pen", self.point_pen.color())                
-        
+        self.settings.setValue(self.NameSpace + "/Options/drawings/points/pen", self.point_pen.color())
+
         self.settings.setValue(self.NameSpace + "/Options/drawings/lines/width", self.lines_width.value())
-        self.settings.setValue(self.NameSpace + "/Options/drawings/lines/pen", self.lines_pen.color()) 
-        
+        self.settings.setValue(self.NameSpace + "/Options/drawings/lines/pen", self.lines_pen.color())
+
         self.settings.setValue(self.NameSpace + "/Options/drawings/measures/width", self.measures_width.value())
         self.settings.setValue(self.NameSpace + "/Options/drawings/measures/pen", self.measures_pen.color())
         self.settings.setValue(self.NameSpace + "/Options/drawings/measures/brush", self.measures_brush.color())
-        
+
         draw.setValues(self)
-        
+
         # UpdateStylesDrawLayers(self.NameSpace)
-        
+
         self.close()
         return

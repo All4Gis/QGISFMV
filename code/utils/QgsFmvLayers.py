@@ -1,4 +1,4 @@
-﻿  # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
 from os.path import dirname, abspath
 from qgis.PyQt.QtGui import QColor, QFont, QPolygonF
@@ -466,9 +466,9 @@ def UpdateFrameCenterData(packet, ele):
     lat = packet.FrameCenterLatitude
     lon = packet.FrameCenterLongitude
     alt = packet.FrameCenterElevation
-    if packet.FrameCenterElevation == None:
+    if packet.FrameCenterElevation is None:
         alt = 0.0
-    
+
     global groupName
     frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
 
@@ -932,47 +932,47 @@ def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
 #     pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
 #     if pointLyr is None:
 #         return
-#     
+#
 #     style = S.getDrawingPoint()
 #     LINE_COLOR = s.value(NameSpace + "/Options/drawings/points/pen")
-#     
+#
 #     symbol = QgsMarkerSymbol.createSimple(
 #         {'name': style["NAME"],
 #          'line_color': LINE_COLOR.name(),
 #          'line_width': s.value(NameSpace + "/Options/drawings/points/width"),
 #          'size': style["SIZE"]})
-#     
+#
 #     renderer = QgsSingleSymbolRenderer(symbol)
 #     pointLyr.setRenderer(renderer)
 #     CommonLayer(pointLyr)
-#         
+#
 #     linelyr = qgsu.selectLayerByName(Line_lyr, groupName)
 #     if linelyr is None:
 #         return
-#     
+#
 #     style = S.getDrawingLine()
 #     symbol = linelyr.renderer().symbol()
-#     
+#
 #     COLOR = s.value(NameSpace + "/Options/drawings/lines/pen")
-#     
+#
 #     symbol.setColor(COLOR.name())
 #     symbol.setWidth(s.value(NameSpace + "/Options/drawings/lines/width"))
 #     CommonLayer(linelyr)
-#         
+#
 #     polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
 #     if polyLyr is None:
 #         return
-#     
+#
 #     style = S.getDrawingPolygon()
-#     
+#
 #     OUTLINE_COLOR = s.value(NameSpace + "/Options/drawings/polygons/pen")
 #     COLOR = s.value(NameSpace + "/Options/drawings/polygons/brush")
-#     
+#
 #     fill_sym = QgsFillSymbol.createSimple({'color': COLOR.name(),
 #                                        'outline_color': OUTLINE_COLOR.name(),
 #                                        'outline_style': style['OUTLINE_STYLE'],
 #                                        'outline_width': s.value(NameSpace + "/Options/drawings/polygons/width")})
-#     
+#
 #     renderer = QgsSingleSymbolRenderer(fill_sym)
 #     polyLyr.setRenderer(renderer)
 #     CommonLayer(polyLyr)
@@ -991,17 +991,17 @@ def addLayer(layer, loadInLegend=True, group=None, isSubGroup=False):
     if not hasattr(layer, "__iter__"):
         layer = [layer]
     if group is not None:
-        _layerreg.addMapLayers(layer, False)  
+        _layerreg.addMapLayers(layer, False)
         root = _layerreg.layerTreeRoot()
         if isSubGroup:
             vg = root.findGroup(groupName)
             g = vg.findGroup(group)
             g.insertChildNode(0, QgsLayerTreeLayer(layer[0]))
-        else:  
+        else:
             g = root.findGroup(group)
             g.insertChildNode(0, QgsLayerTreeLayer(layer[0]))
     else:
-        _layerreg.addMapLayers(layer, loadInLegend)  
+        _layerreg.addMapLayers(layer, loadInLegend)
     return layer
 
 

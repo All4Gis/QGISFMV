@@ -2,12 +2,12 @@
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import (QJsonDocument,
-                          QAbstractItemModel,
-                          QModelIndex,
-                          Qt,
-                          QVariant,
-                          QCoreApplication,
-                          QJsonParseError)
+                              QAbstractItemModel,
+                              QModelIndex,
+                              Qt,
+                              QVariant,
+                              QCoreApplication,
+                              QJsonParseError)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 try:
     from pydevd import *
@@ -137,8 +137,7 @@ class QJsonModel(QAbstractItemModel):
 
             return True
 
-        qgsu.showUserAndLogMessage(
-                "", "QJsonModel: error loading Json", onlyLog=True)
+        qgsu.showUserAndLogMessage("", "QJsonModel: error loading Json", onlyLog=True)
         return False
 
     def data(self, index, role):

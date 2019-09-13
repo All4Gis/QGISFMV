@@ -193,7 +193,7 @@ class MappedValue(BaseValue):
 
 class IEEE754ElementParser(ElementParser):
     __metaclass__ = ABCMeta
-    
+
     def __init__(self, value):
         super().__init__(IEEE754Value(value))
 

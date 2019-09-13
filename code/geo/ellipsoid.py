@@ -73,11 +73,10 @@ def _py_distance(point1, point2, ellipsoid=WGS84):
     A = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)))
     B = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)))
     deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma * 
-                                                       (-1 + 2 * cos2SigmaM ** 2)
-                                                       -B / 6 * cos2SigmaM * 
-                                                       (-3 + 4 * sinSigma ** 2)
-                                                       * (-3 + 4 * cos2SigmaM
-                                                          ** 2)))
+                                                       (-1 + 2 * cos2SigmaM ** 2) - 
+                                                       B / 6 * cos2SigmaM * 
+                                                       (-3 + 4 * sinSigma ** 2) * 
+                                                       (-3 + 4 * cos2SigmaM ** 2)))
     s = ellipsoid.b * A * (sigma - deltaSigma)
     return s
 

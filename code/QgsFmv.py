@@ -24,10 +24,10 @@
 import os.path
 
 from qgis.PyQt.QtCore import (QSettings,
-                          QCoreApplication,
-                          QTranslator,
-                          qVersion,
-                          QThread)
+                              QCoreApplication,
+                              QTranslator,
+                              qVersion,
+                              QThread)
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 from QGIS_FMV.about.QgsFmvAbout import FmvAbout

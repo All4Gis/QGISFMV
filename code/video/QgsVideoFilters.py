@@ -27,19 +27,17 @@ class VideoFilters():
 
     @staticmethod
     def GrayFilter(image):
-        ''' 
-        Gray Image Filter 
-        @type image: QImage 
+        '''Gray Image Filter
+        @type image: QImage
         @param image:
-        @return: QImage 
+        @return: QImage
         '''
         return image.convertToFormat(QImage.Format_Grayscale8)
 
     @staticmethod
     def MirrredFilter(image):
-        ''' 
-        Mirror Horizontal Image Filter 
-        @type image: QImage 
+        '''Mirror Horizontal Image Filter
+        @type image: QImage
         @param image:
         @return: QImage
         '''
@@ -47,9 +45,8 @@ class VideoFilters():
 
     @staticmethod
     def MonoFilter(image):
-        ''' 
-        Mono Image Filter 
-        @type image: QImage 
+        '''Mono Image Filter
+        @type image: QImage
         @param image:
         @return: QImage
         '''
@@ -57,9 +54,8 @@ class VideoFilters():
 
     @staticmethod
     def EdgeFilter(image, sigma=0.33):
-        ''' 
-        Edge Image Filter 
-        @type image: QImage 
+        '''Edge Image Filter
+        @type image: QImage
         @param image:
         @return: QImage
         '''
@@ -72,11 +68,10 @@ class VideoFilters():
 
     @staticmethod
     def NDVIFilter(image):
-        ''' 
-        NDVI Filter 
-        @type image: QImage 
+        '''NDVI Filter
+        @type image: QImage
         @param image:
-        @return: QImage 
+        @return: QImage
         '''
         original = convertQImageToMat(image)
         lowerLimit = 5
@@ -110,9 +105,8 @@ class VideoFilters():
 
     @staticmethod
     def AutoContrastFilter(image):
-        ''' 
-        Auto Contrast Image Filter 
-        @type image: QImage 
+        '''Auto Contrast Image Filter
+        @type image: QImage
         @param image:
         @return: QImage
         '''
