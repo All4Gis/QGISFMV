@@ -1075,7 +1075,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             # Create Group
             root = QgsProject.instance().layerTreeRoot()
             node_group = QgsLayerTreeGroup(videoPath)
-            root.addChildNode(node_group)
+            root.insertChildNode( 0, node_group )
             
             if self.isStreaming:
                 url = QUrl(videoPath)
