@@ -284,7 +284,8 @@ def setCenterMode(mode, interface):
     ''' Set map center mode '''
     global centerMode, iface
     centerMode = mode
-    iface = interface
+    iface = interface
+
 
 def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None):
     """ Get basic location info about the video """
@@ -671,7 +672,6 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
             qgsu.showUserAndLogMessage(
                 "", "DTM successfully initialized, len: " + str(len(dtm_data)), onlyLog=True)
 
-
 def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     ''' Update Layers Values '''
     global frameCenterElevation, sensorLatitude, sensorLongitude, sensorTrueAltitude, groupName
@@ -738,15 +738,15 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     # recenter map on platform
     if centerMode == 1:
         lyr = qgsu.selectLayerByName(Platform_lyr, groupName)
-        iface.mapCanvas().setExtent(lyr.extent())
+        iface.mapCanvas().setExtent( iface.mapCanvas().mapSettings().layerExtentToOutputExtent(lyr, lyr.extent() ) )
     # recenter map on footprint
     elif centerMode == 2:
         lyr = qgsu.selectLayerByName(Footprint_lyr, groupName)
-        iface.mapCanvas().setExtent(lyr.extent())
+        iface.mapCanvas().setExtent( iface.mapCanvas().mapSettings().layerExtentToOutputExtent(lyr, lyr.extent() ) )
     # recenter map on target
     elif centerMode == 3:
         lyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
-        iface.mapCanvas().setExtent(lyr.extent())
+        iface.mapCanvas().setExtent( iface.mapCanvas().mapSettings().layerExtentToOutputExtent(lyr, lyr.extent() ) )
  
     iface.mapCanvas().refresh()
     return
