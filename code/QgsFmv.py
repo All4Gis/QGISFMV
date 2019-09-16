@@ -80,10 +80,10 @@ class Fmv:
         ''' FMV Action '''
         
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
-                                 u"FMV", self.iface.mainWindow(),
+                                 "UAV", self.iface.mainWindow(),
                                  triggered=self.run)
         self.actionFMV.setCheckable( True )
-        self.iface.addAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Custom tab")
+        self.iface.addAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Plugins")
 
     def unload(self):
         ''' Unload Plugin '''
