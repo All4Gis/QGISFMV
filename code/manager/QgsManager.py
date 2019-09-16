@@ -44,7 +44,7 @@ parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 
 
-class FmvManager(QDockWidget, Ui_ManagerWindow):
+class FmvManager(QWidget, Ui_ManagerWindow):
     ''' Video Manager '''
 
     def __init__(self, iface, parent=None):
