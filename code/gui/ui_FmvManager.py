@@ -53,9 +53,9 @@ class Ui_ManagerWindow(object):
 "color: rgb(56, 95, 107);\n"
 " }\n"
 "")
-        self.VManager.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.VManager.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.VManager.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
+        self.VManager.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.VManager.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.VManager.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.VManager.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.VManager.setDragDropMode(QtWidgets.QAbstractItemView.NoDragDrop)
         self.VManager.setAlternatingRowColors(True)

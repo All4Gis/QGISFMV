@@ -114,7 +114,7 @@ class Fmv:
             self.bottomBar.setLayout( QHBoxLayout() )
             self._FMVManager = FmvManager(self.iface)
             self.bottomBar.layout().addWidget( self._FMVManager )
-            self.bottomBar.resize( self._FMVManager.size() )
+            self.bottomBar.adjustSize()
             
         self.bottomBar.show()
         
