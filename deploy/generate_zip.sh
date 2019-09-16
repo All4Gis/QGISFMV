@@ -1,6 +1,6 @@
 #!/bin/sh
 ###########################################################################
-#    ReleaseI18n.sh
+#    generate_zip.sh
 #    ---------------------
 #    Date                 : June 2017
 #    Copyright            : (C) 2017 by Fran Raga
@@ -14,10 +14,7 @@
 #                                                                         #
 ###########################################################################
 
-#sudo apt-get install qt5-default
+echo "Generate Zip for upload to QGIS Repo"
 
-echo "compile strings"
-
-lrelease i18n/qgisfmv.pro -compress -removeidentical
-
+python3 plugin_zip.py
 

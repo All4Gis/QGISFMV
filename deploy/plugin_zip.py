@@ -1,4 +1,5 @@
 # coding: utf-8
+# Create QGIS Plugin Zip
 from configparser import ConfigParser
 import shutil
 import sys
