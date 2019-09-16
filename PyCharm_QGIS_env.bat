@@ -1,6 +1,6 @@
 @echo off
 REM ***************************************************************************
-REM    eclipse_QGIS_env.bat
+REM    PyCharm_QGIS_env.bat
 REM    ---------------------
 REM    begin                : June 2017
 REM    copyright            : (C) 2017 by Fran Raga
@@ -14,11 +14,9 @@ REM *   (at your option) any later version.                                   *
 REM *                                                                         *
 REM ***************************************************************************
 
-:: QGIS development environment in eclipse for Windows
+:: QGIS development environment in PyCharm for Windows
 
 set OSGEO4W_ROOT=D:\OSGeo4W64
-set JAVA_HOME=C:\Program Files\Java\jre1.8.0_221
-set ECLIPSE_HOME=D:\eclipse
 
 call "%OSGEO4W_ROOT%\bin\o4w_env.bat"
 call "%OSGEO4W_ROOT%\bin\qt5_env.bat"
@@ -27,4 +25,4 @@ call "%OSGEO4W_ROOT%\bin\py3_env.bat"
 set QT_QPA_PLATFORM_PLUGIN_PATH=%OSGEO4W_ROOT%\apps\Qt5\plugins
 set PATH=%PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\bin
 
-start "QGIS eclipse" "%ECLIPSE_HOME%\eclipse.exe" -vm "%JAVA_HOME%\bin\javaw.exe" -data .
+start "QGIS PyCharm" /B "C:\Program Files\JetBrains\PyCharm Community Edition 2019.2.1\bin\pycharm64.exe" %*
