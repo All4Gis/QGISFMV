@@ -26,5 +26,5 @@ install:
 
 script:
   - python code/tests/test.py
-  - pep8 --ignore=E501 --first code/.
-  - pep8 --ignore=E501 --count deploy/.
+  - pep8 --ignore=E501 code/.
+  - pep8 --ignore=E501 deploy/.
