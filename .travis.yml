@@ -23,8 +23,10 @@ install:
   - pip install -r code/requirements.txt
   - pip install coveralls
   - pip install pep8
-  - pep8 --ignore E501
 
+before_script:
+  - "pep8 --ignore=E501"
+  
 script:
   - python code/tests/test.py
   - pep8 --first code/.
