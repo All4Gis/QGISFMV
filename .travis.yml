@@ -22,9 +22,9 @@ matrix:
 install:
   - pip install -r code/requirements.txt
   - pip install coveralls
-  - pip install pep8
+  - pip install pycodestyle
 
 script:
   - python code/tests/test.py
-  - pep8 --ignore=E501 code/.
-  - pep8 --ignore=E501 deploy/.
+  - pycodestyle --ignore=E501 code/.
+  - pycodestyle --ignore=E501 deploy/.
