@@ -14,17 +14,17 @@ from qgis.PyQt.QtWidgets import QApplication
 try:
     QApplication.setOverrideCursor(Qt.PointingHandCursor)
     QApplication.processEvents()
-    
+
     windows = platform.system() == 'Windows'
-    
+
     if windows:  # Windows Installer
         try:
             sys.path.append(
-                "D:\eclipse\plugins\org.python.pydev.core_7.1.0.201902031515\pysrc")
+                "D:/eclipse/plugins/org.python.pydev.core_7.1.0.201902031515/pysrc")
             from pydevd import *
         except ImportError:
             None
-        
+
         WindowsInstaller()
     else:  # Linux Installer
         try:
@@ -32,9 +32,9 @@ try:
                 "/home/fran/.eclipse/360744294_linux_gtk_x86_64/plugins/org.python.pydev.core_7.3.0.201908161924/pysrc")
             from pydevd import *
         except ImportError:
-            None 
-        LinuxInstaller() 
-    
+            None
+        LinuxInstaller()
+
     reloadPlugin('QGIS_FMV')
     iface.messageBar().pushMessage("QGIS FMV", "QGIS Full Motion Video installed correctly!", QGis.Info, 3)
     QApplication.restoreOverrideCursor()

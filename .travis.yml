@@ -7,6 +7,7 @@ sudo: false
 branches:
   only:
   - master
+  - dev
 
 env:
   global:
@@ -21,9 +22,9 @@ matrix:
 install:
   - pip install -r code/requirements.txt
   - pip install coveralls
-  - pip install pep8
+  - pip install pycodestyle
 
 script:
   - python code/tests/test.py
-  - pep8 --first code/.
-  - pep8 --count deploy/.
+  - pycodestyle --ignore=E501 code/*.py --statistics --exclude=code/gui/*.py
+  - pycodestyle --ignore=E501 deploy/*.py --statistics
