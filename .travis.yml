@@ -21,6 +21,9 @@ matrix:
 install:
   - pip install -r code/requirements.txt
   - pip install coveralls
+  - pip install pep8
 
 script:
   - python code/tests/test.py
+  - pep8 --first code/.
+  - pep8 --count deploy/.
