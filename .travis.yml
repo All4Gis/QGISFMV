@@ -24,10 +24,7 @@ install:
   - pip install coveralls
   - pip install pep8
 
-before_script:
-  - "pep8 --ignore=E501"
-  
 script:
   - python code/tests/test.py
-  - pep8 --first code/.
-  - pep8 --count deploy/.
+  - pep8 --ignore=E501 --first code/.
+  - pep8 --ignore=E501 --count deploy/.
