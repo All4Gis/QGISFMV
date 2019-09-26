@@ -39,10 +39,8 @@ def _py_haversine_distance(point1, point2):
     lon2, lat2 = (radians(coord) for coord in point2[:2])
     dlat = (lat2 - lat1)
     dlon = (lon2 - lon1)
-    a = (
-        sin(dlat * 0.5) ** 2 +
-        cos(lat1) * cos(lat2) * sin(dlon * 0.5) ** 2
-    )
+    a = (sin(dlat * 0.5) ** 2 +
+         cos(lat1) * cos(lat2) * sin(dlon * 0.5) ** 2)
 
     return EARTH_MEAN_DIAMETER * asin(sqrt(a))
 
