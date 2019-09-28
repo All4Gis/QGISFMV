@@ -15,6 +15,7 @@ from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 from QGIS_FMV.geo import sphere
 from qgis.core import Qgis as QGis
+from io import StringIO
 
 try:
     from pydevd import *
@@ -576,7 +577,10 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         ''' Read the csv for each recording '''
         rows_list = []
         with open(csv_raw, encoding=encoding) as csvfile:
-            reader = csv.DictReader(csvfile)
+            # Prevent “_csv.Error: line contains NULL byte”
+            data = csvfile.read()
+            data = data.replace('\x00', '?')
+            reader = csv.DictReader(StringIO(data))
             rows = []
             index = 0
             for row in reader:
@@ -617,7 +621,10 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
             out_record = os.path.join(out_csv, filename + ".csv")
             # The column that corresponds to the stop is also removed
             with open(csv_raw, 'r', encoding=encoding) as f_input, open(out_record, 'w', newline='', encoding="ISO-8859-1") as f_output:
-                csv_input = csv.reader(f_input)
+                # Prevent “_csv.Error: line contains NULL byte”
+                data = f_input.read()
+                data = data.replace('\x00', '?')
+                csv_input = csv.reader(StringIO(data))
                 csv.writer(f_output).writerows(itertools.islice(csv_input, 0, 1))
                 csv.writer(f_output).writerows(itertools.islice(csv_input, int(values[0]), int(values[-1])))
 
