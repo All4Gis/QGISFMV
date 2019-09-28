@@ -20,7 +20,7 @@ try:
     if windows:  # Windows Installer
         try:
             sys.path.append(
-                "D:/eclipse/plugins/org.python.pydev.core_7.1.0.201902031515/pysrc")
+                "D:/eclipse/plugins/org.python.pydev.core_7.3.0.201908161924/pysrc")
             from pydevd import *
         except ImportError:
             None
