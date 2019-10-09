@@ -428,7 +428,11 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     # targetWidth = 0.0
                     targetWidth = 2.0 * slantRange * tan(radians(HFOV / 2.0))
 
-                    _bytes = float_to_bytes(round(targetWidth, 4), _domain22, _range22)
+                    try:
+                        _bytes = float_to_bytes(round(targetWidth, 4), _domain22, _range22)
+                    except Exception:
+                        _bytes = float_to_bytes(round(0.0, 4), _domain22, _range22)
+
                     _len = int_to_bytes(len(_bytes))
                     _bytes = _key22 + _len + _bytes
                     sizeTotal += len(_bytes)
