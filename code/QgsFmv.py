@@ -63,7 +63,7 @@ class Fmv:
 
         localeSetting = QSettings().value("locale//userLocale")
         if localeSetting:
-            locale = localSetting[0:2]
+            locale = localeSetting[0:2]
             localePath = os.path.join(
                 self.plugin_dir, 'i18n', 'qgisfmv_{}.qm'.format(locale))
             if os.path.exists(localePath):
@@ -78,7 +78,7 @@ class Fmv:
 
     def initGui(self):
         ''' FMV Action '''
-        
+
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
                                  "UAV", self.iface.mainWindow(),
                                  triggered=self.run)
@@ -115,9 +115,9 @@ class Fmv:
             self._FMVManager = FmvManager(self.iface)
             self.bottomBar.layout().addWidget( self._FMVManager )
             self.bottomBar.adjustSize()
-            
+
         self.bottomBar.show()
-        
+
     def deleteManagerWidget( self ):
         del self._FMVManager
         self._FMVManager = None
