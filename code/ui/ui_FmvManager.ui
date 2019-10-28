@@ -7,33 +7,48 @@
     <x>0</x>
     <y>0</y>
     <width>870</width>
-    <height>158</height>
+    <height>353</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Video Manager</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QMenuBar" name="menubarwidget">
-     <property name="styleSheet">
-      <string notr="true">QMenuBar {
-    background-color: transparent;
-}</string>
+   <item row="0" column="1">
+    <widget class="QToolButton" name="mOpenMPEGButton">
+     <property name="text">
+      <string/>
      </property>
-     <widget class="QMenu" name="menuFile">
-      <property name="title">
-       <string>Fi&amp;le</string>
-      </property>
-      <addaction name="actionOpen_Stream"/>
-      <addaction name="actionOpen_MPEG2_File"/>
-      <addaction name="actionCreate_MISB_File"/>
-     </widget>
-     <addaction name="menuFile"/>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="0" column="2">
+    <widget class="QToolButton" name="mActionCreateMISBButton">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>773</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" colspan="4">
     <widget class="QTableWidget" name="VManager">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>300</height>
+      </size>
+     </property>
      <property name="font">
       <font>
        <family>Arial</family>

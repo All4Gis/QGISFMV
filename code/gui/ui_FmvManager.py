@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/ui_FmvManager.ui'
+# Form implementation generated from reading ui file './ui/ui_FmvManager.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
 #
@@ -11,18 +11,21 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ManagerWindow(object):
     def setupUi(self, ManagerWindow):
         ManagerWindow.setObjectName("ManagerWindow")
-        ManagerWindow.resize(870, 158)
+        ManagerWindow.resize(870, 353)
         self.gridLayout = QtWidgets.QGridLayout(ManagerWindow)
         self.gridLayout.setObjectName("gridLayout")
-        self.menubarwidget = QtWidgets.QMenuBar(ManagerWindow)
-        self.menubarwidget.setStyleSheet("QMenuBar {\n"
-"    background-color: transparent;\n"
-"}")
-        self.menubarwidget.setObjectName("menubarwidget")
-        self.menuFile = QtWidgets.QMenu(self.menubarwidget)
-        self.menuFile.setObjectName("menuFile")
-        self.gridLayout.addWidget(self.menubarwidget, 0, 0, 1, 1)
+        self.mOpenMPEGButton = QtWidgets.QToolButton(ManagerWindow)
+        self.mOpenMPEGButton.setText("")
+        self.mOpenMPEGButton.setObjectName("mOpenMPEGButton")
+        self.gridLayout.addWidget(self.mOpenMPEGButton, 0, 1, 1, 1)
+        self.mActionCreateMISBButton = QtWidgets.QToolButton(ManagerWindow)
+        self.mActionCreateMISBButton.setText("")
+        self.mActionCreateMISBButton.setObjectName("mActionCreateMISBButton")
+        self.gridLayout.addWidget(self.mActionCreateMISBButton, 0, 2, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(773, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 0, 3, 1, 1)
         self.VManager = QtWidgets.QTableWidget(ManagerWindow)
+        self.VManager.setMinimumSize(QtCore.QSize(0, 300))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -97,7 +100,7 @@ class Ui_ManagerWindow(object):
         self.VManager.setHorizontalHeaderItem(5, item)
         self.VManager.horizontalHeader().setStretchLastSection(True)
         self.VManager.verticalHeader().setVisible(False)
-        self.gridLayout.addWidget(self.VManager, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.VManager, 1, 0, 1, 4)
         self.actionOpen_Stream = QtWidgets.QAction(ManagerWindow)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/stream.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -113,10 +116,6 @@ class Ui_ManagerWindow(object):
         icon2.addPixmap(QtGui.QPixmap(":/imgFMV/images/multiplexer.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionCreate_MISB_File.setIcon(icon2)
         self.actionCreate_MISB_File.setObjectName("actionCreate_MISB_File")
-        self.menuFile.addAction(self.actionOpen_Stream)
-        self.menuFile.addAction(self.actionOpen_MPEG2_File)
-        self.menuFile.addAction(self.actionCreate_MISB_File)
-        self.menubarwidget.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(ManagerWindow)
         self.actionOpen_Stream.triggered.connect(ManagerWindow.openStreamDialog)
@@ -128,7 +127,6 @@ class Ui_ManagerWindow(object):
     def retranslateUi(self, ManagerWindow):
         _translate = QtCore.QCoreApplication.translate
         ManagerWindow.setWindowTitle(_translate("ManagerWindow", "Video Manager"))
-        self.menuFile.setTitle(_translate("ManagerWindow", "Fi&le"))
         item = self.VManager.horizontalHeaderItem(0)
         item.setText(_translate("ManagerWindow", "Id"))
         item = self.VManager.horizontalHeaderItem(1)
