@@ -84,15 +84,9 @@ class Fmv:
                                  triggered=self.run)
         self.actionFMV.setCheckable( True )
         self.iface.addAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Plugins")
-
+        
     def unload(self):
-        ''' Unload Plugin '''
-        self.iface.removePluginMenu(QCoreApplication.translate(
-            "QgsFmv", "Full Motion Video (FMV)"), self.actionFMV)
-        self.iface.removePluginMenu(QCoreApplication.translate(
-            "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
-        self.iface.removeToolBarIcon(self.actionFMV)
-        log.removeLogging()
+        self.iface.removeAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Plugins")
 
     def About(self):
         ''' Show About Dialog '''
