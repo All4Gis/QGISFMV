@@ -1554,14 +1554,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def closeEvent(self, event):
         """ Close Event """
-        # Ask when the player is closed
-        buttonReply = qgsu.CustomMessage("QGIS FMV",
-                                         QCoreApplication.translate("QgsFmvPlayer", "If you close or reopen the video all the information will be erased."),
-                                         QCoreApplication.translate("QgsFmvPlayer", "Do you want to close or reopen it?"),
-                                         icon="Information")
-        if buttonReply == QMessageBox.No:
-            event.ignore()
-            return
         
         self.stop()
         self.parent._PlayerDlg = None
