@@ -70,6 +70,7 @@ def reporthook(blocknum, blocksize, totalsize):
 
 
 def WindowsInstaller():
+    return
     ''' complete windows installation '''
     if not IsLavFilters():
         ''' lAV Filters '''

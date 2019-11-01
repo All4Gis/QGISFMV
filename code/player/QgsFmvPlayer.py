@@ -250,7 +250,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.actionAudio.setEnabled(False)
             self.actionSave_Audio.setEnabled(False)
 
-    def get_metadata_from_buffer(self, currentTime):
+    def get_metadata_from_buffer(self, currentTime=None):
         """Metadata CallBack
         @type currentTime: String
         @param currentTime: Current video timestamp
@@ -967,10 +967,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             currentTimeInfo = _seconds_to_time_frac(currentInfo)
 
             if self.isStreaming:
-                qgsu.showUserAndLogMessage("", "Streaming on ", onlyLog=True)
-                nextTime = currentInfo + self.pass_time / 1000
-                nextTimeInfo = _seconds_to_time_frac(nextTime)
-                self.callBackMetadata(currentTimeInfo, nextTimeInfo)
+                #get last metadata available
+                self.get_metadata_from_buffer()
+                #qgsu.showUserAndLogMessage("", "Streaming on ", onlyLog=True)
+                #nextTime = currentInfo + self.pass_time / 1000
+                #nextTimeInfo = _seconds_to_time_frac(nextTime)
+                #self.callBackMetadata(currentTimeInfo, nextTimeInfo)
             elif self.islocal:
                 self.readLocal(currentInfo)
             else:
@@ -1042,7 +1044,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             root.addChildNode(node_group)
 
             if self.isStreaming:
-                url = QUrl(videoPath)
+                #show video from splitter (port +1)
+                oldPort = videoPath.split(":")[2]
+                newPort = str(int(oldPort) + 10)
+                url = QUrl(videoPath.replace(oldPort, newPort))
             else:
                 url = QUrl.fromLocalFile(videoPath)
             qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)

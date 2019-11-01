@@ -20,8 +20,9 @@ from qgis.core import (QgsApplication,
                        QgsTask,
                        QgsRasterLayer,
                        Qgis as QGis)
-from subprocess import Popen, PIPE, check_output
+from subprocess import Popen, PIPE, STARTF_USESHOWWINDOW, STARTUPINFO, check_output
 import threading
+from queue import Queue, Empty
 
 from osgeo import gdal, osr
 
@@ -113,6 +114,101 @@ else:
     ffmpeg_path = os.path.join(ffmpegConf, 'ffmpeg')
     ffprobe_path = os.path.join(ffmpegConf, 'ffprobe')
 
+
+class NonBlockingStreamReader:
+    def __init__(self, process):
+        self._p = process
+        self._q = Queue()
+
+        def _populateQueue(process, queue):
+            '''
+            Collect lines from metadata stream and put them in 'queue'.
+            '''
+            packetsPerQueueElement = 1
+            metaFound = 0
+            data = b''
+            while self._p.poll() is None:
+                line = process.stdout.read(16)
+                if line:
+                    # ADD header for legacy metadata
+                    if line == b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00':
+                        #qgsu.showUserAndLogMessage("", "metaFound" + str(metaFound), onlyLog=True)
+                        metaFound = metaFound+1
+
+                    #feed the current packet
+                    if metaFound <= packetsPerQueueElement:
+                        #qgsu.showUserAndLogMessage("", "feeding packet" + str(metaFound), onlyLog=True)
+                        data = data+line
+                    #add to queue and start a new one
+                    else:
+                        #qgsu.showUserAndLogMessage("", "Put to queue and start over" + repr(data), onlyLog=True)
+                        queue.put(data)
+                        data = line
+                        metaFound = 1
+                               
+                    #qgsu.showUserAndLogMessage("", "reader got line:" + repr(line), onlyLog=True)
+                #End of stream
+                else:
+                    qgsu.showUserAndLogMessage("", "reader got end of stream.", onlyLog=True)
+                    break
+                #time.sleep(0.1)
+
+        self._t = threading.Thread(target = _populateQueue, args = (self._p, self._q))
+        self._t.daemon = True
+        self._t.start() #start collecting lines from the stream
+
+        
+    def readline(self, timeout = None):
+        try:
+            return self._q.get(block = timeout is not None,
+                    timeout = timeout)
+        except Empty:
+            return None
+            #return "---"
+
+class Splitter(threading.Thread):
+    
+    def __init__(self, cmds, type="ffmpeg"):
+        self.stdout = None
+        self.stderr = None
+        self.cmds = cmds
+        self.type = type
+        self.p = None
+        threading.Thread.__init__(self)
+
+    def run(self):
+        if self.type is "ffmpeg":
+            self.cmds.insert(0, ffmpeg_path)
+        else:
+            self.cmds.insert(0, ffprobe_path)
+        #self.cmds = [r'c:\Windows\System32\cmd.exe', '/c', 'dir c:']
+        qgsu.showUserAndLogMessage("", "starting Splitter on thread:" + str(threading.current_thread().ident), onlyLog=True)
+        qgsu.showUserAndLogMessage("", "with args:" + ' '.join(self.cmds), onlyLog=True)
+
+        #startupinfo = subprocess.STARTUPINFO()
+        #startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        #self.p = Popen(self.cmds, startupinfo=startupinfo, stdout = PIPE)
+        self.p = Popen(self.cmds, stdout = PIPE)
+        #self.p = _spawn(self.cmds)
+        self.nbsr = NonBlockingStreamReader(self.p)      
+        self.nbsr._t.join()
+
+
+class StreamMetaReader():
+    
+    def __init__(self, video_path):
+        self.srcPort = int(video_path.split(":")[2])
+        self.destPort = self.srcPort + 10
+        self.splitter = Splitter(['-hide_banner', '-loglevel', 'panic', '-i', 'rtp://127.0.0.1:'+str(self.srcPort), '-c', 'copy', '-map', '0:v', '-map', '0:a', '-f', 'rtp_mpegts', 'rtp://127.0.0.1:'+str(self.destPort), '-map', '0:d', '-f', 'data', '-' ])
+        self.splitter.start()
+        qgsu.showUserAndLogMessage("", "Splitter started.", onlyLog=True)
+        
+    def getSize(self):
+        return self.splitter.nbsr._q.qsize()
+
+    def get(self, t):
+        qgsu.showUserAndLogMessage("", "Get called on Streamreader.", onlyLog=True)
+        return self.splitter.nbsr.readline()
 
 class BufferedMetaReader():
     ''' Non-Blocking metadata reader with buffer  '''
@@ -284,7 +380,8 @@ def setCenterMode(mode, interface):
     ''' Set map center mode '''
     global centerMode, iface
     centerMode = mode
-    iface = interface
+    iface = interface
+
 
 def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None):
     """ Get basic location info about the video """
