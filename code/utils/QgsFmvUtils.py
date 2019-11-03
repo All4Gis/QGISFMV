@@ -20,7 +20,8 @@ from qgis.core import (QgsApplication,
                        QgsTask,
                        QgsRasterLayer,
                        Qgis as QGis)
-from subprocess import Popen, PIPE, STARTF_USESHOWWINDOW, STARTUPINFO, check_output
+#from subprocess import Popen, PIPE, STARTF_USESHOWWINDOW, STARTUPINFO, check_output, DEVNULL
+import subprocess
 import threading
 from queue import Queue, Empty
 
@@ -119,6 +120,7 @@ class NonBlockingStreamReader:
     def __init__(self, process):
         self._p = process
         self._q = Queue()
+        self.stopped = False
 
         def _populateQueue(process, queue):
             '''
@@ -127,11 +129,11 @@ class NonBlockingStreamReader:
             packetsPerQueueElement = 1
             metaFound = 0
             data = b''
-            while self._p.poll() is None:
+            while self._p.poll() is None and not self.stopped:
                 line = process.stdout.read(16)
                 if line:
-                    # ADD header for legacy metadata
-                    if line == b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00':
+                    # find starting block for misb0601 or misbeg0104
+                    if line == b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00' or line == b'\x06\x0e+4\x02\x01\x01\x01\x0e\x01\x01\x02\x01\x01\x00\x00':
                         #qgsu.showUserAndLogMessage("", "metaFound" + str(metaFound), onlyLog=True)
                         metaFound = metaFound+1
 
@@ -146,12 +148,13 @@ class NonBlockingStreamReader:
                         data = line
                         metaFound = 1
                                
-                    #qgsu.showUserAndLogMessage("", "reader got line:" + repr(line), onlyLog=True)
                 #End of stream
                 else:
                     qgsu.showUserAndLogMessage("", "reader got end of stream.", onlyLog=True)
                     break
-                #time.sleep(0.1)
+            
+            if self.stopped:
+                qgsu.showUserAndLogMessage("", "NonBlockingStreamReader ended because stop signal received.", onlyLog=True)
 
         self._t = threading.Thread(target = _populateQueue, args = (self._p, self._q))
         self._t.daemon = True
@@ -166,6 +169,9 @@ class NonBlockingStreamReader:
             return None
             #return "---"
 
+# Splitter class for streaming.
+# Reads input stream and split AV to Port: (src + 10), and reads metadata from stdout to a Queue,
+# later passed to the metadata decoder.
 class Splitter(threading.Thread):
     
     def __init__(self, cmds, type="ffmpeg"):
@@ -181,17 +187,21 @@ class Splitter(threading.Thread):
             self.cmds.insert(0, ffmpeg_path)
         else:
             self.cmds.insert(0, ffprobe_path)
-        #self.cmds = [r'c:\Windows\System32\cmd.exe', '/c', 'dir c:']
+        
         qgsu.showUserAndLogMessage("", "starting Splitter on thread:" + str(threading.current_thread().ident), onlyLog=True)
         qgsu.showUserAndLogMessage("", "with args:" + ' '.join(self.cmds), onlyLog=True)
 
-        #startupinfo = subprocess.STARTUPINFO()
-        #startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        #self.p = Popen(self.cmds, startupinfo=startupinfo, stdout = PIPE)
-        self.p = Popen(self.cmds, stdout = PIPE)
-        #self.p = _spawn(self.cmds)
+        #Hide shell windows that pops up on windows.
+        if windows:
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = subprocess.SW_HIDE
+        
+        self.p = subprocess.Popen(self.cmds, startupinfo=startupinfo, stdin=subprocess.DEVNULL, stdout = subprocess.PIPE)
+        
         self.nbsr = NonBlockingStreamReader(self.p)      
         self.nbsr._t.join()
+        qgsu.showUserAndLogMessage("", "Splitter thread ended.", onlyLog=True)
 
 
 class StreamMetaReader():
@@ -209,6 +219,12 @@ class StreamMetaReader():
     def get(self, t):
         qgsu.showUserAndLogMessage("", "Get called on Streamreader.", onlyLog=True)
         return self.splitter.nbsr.readline()
+
+    def dispose(self):
+        qgsu.showUserAndLogMessage("", "Dispose called on StreamMetaReader.", onlyLog=True)
+        self.splitter.nbsr.stopped = True        
+        
+        
 
 class BufferedMetaReader():
     ''' Non-Blocking metadata reader with buffer  '''
@@ -305,6 +321,9 @@ class BufferedMetaReader():
         # qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
 
         return value
+    
+    def dispose(self):
+        pass
 
 
 class callBackMetadataThread(threading.Thread):
@@ -704,7 +723,7 @@ def _check_output(cmds, t="ffmpeg"):
     else:
         cmds.insert(0, ffprobe_path)
 
-    return check_output(cmds, shell=True, close_fds=(not windows))
+    return subprocess.check_output(cmds, shell=True, close_fds=(not windows))
 
 
 def _spawn(cmds, t="ffmpeg"):
@@ -718,7 +737,7 @@ def _spawn(cmds, t="ffmpeg"):
     cmds.insert(3, '-preset')
     cmds.insert(4, 'ultrafast')
 
-    return Popen(cmds, shell=windows, stdin=PIPE, stdout=PIPE, stderr=PIPE,
+    return subprocess.Popen(cmds, shell=windows, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                  bufsize=0,
                  close_fds=(not windows))
 

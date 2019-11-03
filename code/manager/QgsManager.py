@@ -116,6 +116,11 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         RemoveVideoToSettings(row_id)
         # Remove folder if is local
         RemoveVideoFolder(row_text)
+
+        self.meta_reader[str(cr)].dispose()
+        self.meta_reader[str(cr)] = None
+
+        
         return
 
     def openStreamDialog(self):
@@ -175,9 +180,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.setVisible(False)
         self.VManager.horizontalHeader().setStretchLastSection(True)
         self.VManager.setVisible(True)
-        
-        qgsu.showUserAndLogMessage(QCoreApplication.translate("", "FileName: "+filename))
-        
+                
         #resolve if it is a stream
         if "://" in filename:
             self.isStreaming = True
