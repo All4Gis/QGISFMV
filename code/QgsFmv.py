@@ -81,7 +81,7 @@ class Fmv:
 
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
                                  "UAV", self.iface.mainWindow(),
-                                 triggered=self.run)
+                                 toggled=self.run)
         self.actionFMV.setCheckable( True )
         self.iface.addAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Plugins")
         
@@ -106,7 +106,7 @@ class Fmv:
         if not self.bottomBar and not self._FMVManager:
             self.bottomBar = KadasBottomBar( self.iface.mapCanvas() )
             self.bottomBar.setLayout( QHBoxLayout() )
-            self._FMVManager = FmvManager(self.iface)
+            self._FMVManager = FmvManager(self.iface, self.actionFMV )
             self.bottomBar.layout().addWidget( self._FMVManager )
             self.bottomBar.setSizePolicy( QSizePolicy.Expanding, QSizePolicy.Preferred )
             self.bottomBar.adjustSize()

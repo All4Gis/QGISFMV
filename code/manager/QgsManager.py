@@ -47,11 +47,12 @@ parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 class FmvManager(QWidget, Ui_ManagerWindow):
     ''' Video Manager '''
 
-    def __init__(self, iface, parent=None):
+    def __init__(self, iface, action, parent=None):
         super().__init__(parent)
         self.setupUi(self)
         self.mOpenMPEGButton.setDefaultAction( self.actionOpen_MPEG2_File )
         self.mActionCreateMISBButton.setDefaultAction( self.actionCreate_MISB_File )
+        self.mCloseButton.clicked.connect( action.toggle )
         self.parent = parent
         self.iface = iface
         self._PlayerDlg = None
