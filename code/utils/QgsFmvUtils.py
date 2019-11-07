@@ -209,7 +209,7 @@ class StreamMetaReader():
     def __init__(self, video_path):
         self.srcPort = int(video_path.split(":")[2])
         self.destPort = self.srcPort + 10
-        self.splitter = Splitter(['-hide_banner', '-loglevel', 'panic', '-i', 'rtp://127.0.0.1:'+str(self.srcPort), '-c', 'copy', '-map', '0:v', '-map', '0:a', '-f', 'rtp_mpegts', 'rtp://127.0.0.1:'+str(self.destPort), '-map', '0:d', '-f', 'data', '-' ])
+        self.splitter = Splitter(['-hide_banner', '-loglevel', 'panic', '-i', 'rtp://127.0.0.1:'+str(self.srcPort), '-c', 'copy', '-map', '0:v?', '-map', '0:a?', '-f', 'rtp_mpegts', 'rtp://127.0.0.1:'+str(self.destPort), '-map', '0:d?', '-f', 'data', '-' ])
         self.splitter.start()
         qgsu.showUserAndLogMessage("", "Splitter started.", onlyLog=True)
         
@@ -222,7 +222,14 @@ class StreamMetaReader():
 
     def dispose(self):
         qgsu.showUserAndLogMessage("", "Dispose called on StreamMetaReader.", onlyLog=True)
-        self.splitter.nbsr.stopped = True        
+        self.splitter.nbsr.stopped = True
+        # kill the process if open, releases source port
+        try:
+            self.splitter.p.kill()
+            qgsu.showUserAndLogMessage("", "Splitter Popen process killed.", onlyLog=True)
+        except OSError:
+            # can't kill a dead proc
+            pass
         
         
 
@@ -638,7 +645,11 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
         np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize]]))
     dst = np.float64(
         np.array([cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]))
-    geotransform = from_points(src, dst)
+
+    try:
+        geotransform = from_points(src, dst)
+    except:
+        pass
 
     if geotransform is None:
         qgsu.showUserAndLogMessage(

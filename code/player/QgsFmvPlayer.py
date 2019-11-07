@@ -264,33 +264,35 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             # way (increase the buffer size if needed in QManager).
             if not self.islocal:
                 stdout_data = self.meta_reader.get(currentTime)
+                #debug
+                qgsu.showUserAndLogMessage("", "Buffer size:" + str(self.meta_reader.getSize()), onlyLog=True)
             else:
                 stdout_data = b'\x15'
             # qgsu.showUserAndLogMessage(
             #    "", "stdout_data: " + str(stdout_data) + " currentTime: " + str(currentTime), onlyLog=True)
             if stdout_data == 'NOT_READY':
-                qgsu.showUserAndLogMessage(
-                    "", "Buffer value read but is not ready, increase buffer size. : ", onlyLog=True)
+                qgsu.showUserAndLogMessage("", "Buffer value read but is not ready, increase buffer size:" + str(self.meta_reader.getSize()), onlyLog=True)
                 return
-
             # Values need to be read, pause the video a short while
             elif stdout_data == 'BUFFERING':
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Buffering metadata..."), duration=4, level=QGis.Info)
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Buffering metadata..."), duration=4, level=QGis.Info)
                 self.player.pause()
                 QTimer.singleShot(2500, lambda: self.player.play())
                 return
-
+            elif stdout_data == None:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size:" + str(self.meta_reader.getSize())), level=QGis.Info)
+                #qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned None Type, check pass_time. : ", onlyLog=True)
+                return
             elif stdout_data == b'' or len(stdout_data) == 0:
-                qgsu.showUserAndLogMessage(
-                    "", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size:" + str(self.meta_reader.getSize())), level=QGis.Info)
+                #qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
                 return
 
             self.packetStreamParser(stdout_data)
 
         except Exception as inst:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst))
+            qgsu.showUserAndLogMessage("", "Metadata Buffer Failed! : " + str(inst), onlyLog=True)
+            #qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst))
 
     def packetStreamParser(self, stdout_data):
         '''Common packet process
