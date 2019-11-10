@@ -208,9 +208,13 @@ class Splitter(threading.Thread):
 class StreamMetaReader():
 
     def __init__(self, video_path):
-        self.srcPort = int(video_path.split(":")[2])
+        self.split = video_path.split(":")
+        self.srcProtocol = self.split[0]
+        self.srcHost = self.split[1]
+        self.srcPort = int(self.split[2])
         self.destPort = self.srcPort + 10
-        self.splitter = Splitter(['-hide_banner', '-loglevel', 'panic', '-i', 'rtp://127.0.0.1:' + str(self.srcPort), '-c', 'copy', '-map', '0:v?', '-map', '0:a?', '-f', 'rtp_mpegts', 'rtp://127.0.0.1:' + str(self.destPort), '-map', '0:d?', '-f', 'data', '-'])
+        self.connection = self.srcProtocol + ':' + self.srcHost + ':' + str(self.srcPort)
+        self.splitter = Splitter(['-i', self.connection, '-c', 'copy', '-map', '0:v?', '-map', '0:a?', '-f', 'rtp_mpegts', self.connection, '-map', '0:d?', '-f', 'data', '-'])
         self.splitter.start()
         qgsu.showUserAndLogMessage("", "Splitter started.", onlyLog=True)
 
