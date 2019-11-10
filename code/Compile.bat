@@ -34,6 +34,8 @@ call pyuic5 --import-from QGIS_FMV.gui ui\ui_FmvPlayer.ui -o gui\ui_FmvPlayer.py
 call pyrcc5 ui\resources.qrc -o gui\resources_rc.py
 
 ::Translations
+call pylupdate5 i18n\qgisfmv.pro
+
 cd..
 call pull-transifex-translations.bat
 cd..
