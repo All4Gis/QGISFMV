@@ -184,22 +184,22 @@ class Splitter(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        if self.type is "ffmpeg":
-            self.cmds.insert(0, ffmpeg_path)
-        else:
-            self.cmds.insert(0, ffprobe_path)
-
-        qgsu.showUserAndLogMessage("", "starting Splitter on thread:" + str(threading.current_thread().ident), onlyLog=True)
-        qgsu.showUserAndLogMessage("", "with args:" + ' '.join(self.cmds), onlyLog=True)
-
-        # Hide shell windows that pops up on windows.
-        if windows:
-            startupinfo = subprocess.STARTUPINFO()
-            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-            startupinfo.wShowWindow = subprocess.SW_HIDE
-
-        self.p = subprocess.Popen(self.cmds, startupinfo=startupinfo, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE)
-
+#         if self.type is "ffmpeg":
+#             self.cmds.insert(0, ffmpeg_path)
+#         else:
+#             self.cmds.insert(0, ffprobe_path)
+# 
+#         qgsu.showUserAndLogMessage("", "starting Splitter on thread:" + str(threading.current_thread().ident), onlyLog=True)
+#         qgsu.showUserAndLogMessage("", "with args:" + ' '.join(self.cmds), onlyLog=True)
+# 
+#         # Hide shell windows that pops up on windows.
+#         if windows:
+#             startupinfo = subprocess.STARTUPINFO()
+#             startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+#             startupinfo.wShowWindow = subprocess.SW_HIDE
+# 
+#         self.p = subprocess.Popen(self.cmds, startupinfo=startupinfo, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE)
+        self.p = _spawn(self.cmds)
         self.nbsr = NonBlockingStreamReader(self.p)
         self.nbsr._t.join()
         qgsu.showUserAndLogMessage("", "Splitter thread ended.", onlyLog=True)
