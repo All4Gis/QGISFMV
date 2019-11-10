@@ -52,8 +52,10 @@
         <string>File</string>
        </property>
        <addaction name="actionOpen_Stream"/>
+       <addaction name="separator"/>
        <addaction name="actionOpen_MPEG2_File"/>
-	   <addaction name="actionCreate_MISB_File"/>
+       <addaction name="separator"/>
+       <addaction name="actionCreate_MISB_File"/>
       </widget>
       <addaction name="menuFile"/>
      </widget>

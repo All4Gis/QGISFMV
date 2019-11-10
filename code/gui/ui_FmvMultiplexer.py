@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/ui_FmvMultiplexer.ui'
+# Form implementation generated from reading ui file 'ui\ui_FmvMultiplexer.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_VideoMultiplexer(object):
-
     def setupUi(self, VideoMultiplexer):
         VideoMultiplexer.setObjectName("VideoMultiplexer")
         VideoMultiplexer.resize(425, 402)
@@ -120,6 +118,5 @@ class Ui_VideoMultiplexer(object):
         self.gb_telemetry.setTitle(_translate("VideoMultiplexer", "Available telemetry"))
         self.label_6.setText(_translate("VideoMultiplexer", "Select the correct one if there is more than one"))
         self.bt_createMISB.setText(_translate("VideoMultiplexer", "Create MISB"))
-
 
 from QGIS_FMV.gui import resources_rc

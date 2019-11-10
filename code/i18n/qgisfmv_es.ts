@@ -214,7 +214,7 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="197"/>
         <source>Open Stream</source>
-        <translation>Abrir fichero MPEG2</translation>
+        <translation>Abir Stream</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="169"/>
@@ -1047,12 +1047,12 @@
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1553"/>
         <source>If you close or reopen the video all the information will be erased.</source>
-        <translation type="unfinished"/>
+        <translation>Si cierra o vuelve a abrir el vídeo, se borrará toda la información.</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1553"/>
         <source>Do you want to close or reopen it?</source>
-        <translation type="unfinished"/>
+        <translation>¿Quieres cerrarlo o reabrirlo?</translation>
     </message>
 </context>
 <context>

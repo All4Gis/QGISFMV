@@ -264,7 +264,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             # way (increase the buffer size if needed in QManager).
             if not self.islocal:
                 stdout_data = self.meta_reader.get(currentTime)
-                #debug
+                # debug
                 qgsu.showUserAndLogMessage("", "Buffer size:" + str(self.meta_reader.getSize()), onlyLog=True)
             else:
                 stdout_data = b'\x15'
@@ -279,20 +279,20 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.player.pause()
                 QTimer.singleShot(2500, lambda: self.player.play())
                 return
-            elif stdout_data == None:
+            elif stdout_data is None:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size:" + str(self.meta_reader.getSize())), level=QGis.Info)
-                #qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned None Type, check pass_time. : ", onlyLog=True)
+                # qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned None Type, check pass_time. : ", onlyLog=True)
                 return
             elif stdout_data == b'' or len(stdout_data) == 0:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size:" + str(self.meta_reader.getSize())), level=QGis.Info)
-                #qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
+                # qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
                 return
 
             self.packetStreamParser(stdout_data)
 
         except Exception as inst:
             qgsu.showUserAndLogMessage("", "Metadata Buffer Failed! : " + str(inst), onlyLog=True)
-            #qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst))
+            # qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst))
 
     def packetStreamParser(self, stdout_data):
         '''Common packet process
@@ -969,12 +969,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             currentTimeInfo = _seconds_to_time_frac(currentInfo)
 
             if self.isStreaming:
-                #get last metadata available
+                # get last metadata available
                 self.get_metadata_from_buffer()
-                #qgsu.showUserAndLogMessage("", "Streaming on ", onlyLog=True)
-                #nextTime = currentInfo + self.pass_time / 1000
-                #nextTimeInfo = _seconds_to_time_frac(nextTime)
-                #self.callBackMetadata(currentTimeInfo, nextTimeInfo)
+                # qgsu.showUserAndLogMessage("", "Streaming on ", onlyLog=True)
+                # nextTime = currentInfo + self.pass_time / 1000
+                # nextTimeInfo = _seconds_to_time_frac(nextTime)
+                # self.callBackMetadata(currentTimeInfo, nextTimeInfo)
             elif self.islocal:
                 self.readLocal(currentInfo)
             else:
@@ -1022,18 +1022,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.islocal = islocal
         self.klv_folder = klv_folder
         try:
-#             if "udp://" in videoPath:
-#                 host, port = videoPath.split("://")[1].split(":")
-#                 receiver = UDPClient(host, int(port), type="udp")
-#                 receiver.show()
-#                 self.close()
-#                 return
-#             if "tcp://" in videoPath:
-#                 host, port = videoPath.split("://")[1].split(":")
-#                 receiver = UDPClient(host, port, type="tcp")
-#                 receiver.show()
-#                 self.close()
-#                 return
             self.fileName = videoPath
             self.playlist = QMediaPlaylist()
 
@@ -1046,7 +1034,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             root.addChildNode(node_group)
 
             if self.isStreaming:
-                #show video from splitter (port +1)
+                # show video from splitter (port +1)
                 oldPort = videoPath.split(":")[2]
                 newPort = str(int(oldPort) + 10)
                 url = QUrl(videoPath.replace(oldPort, newPort))

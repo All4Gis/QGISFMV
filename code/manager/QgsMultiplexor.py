@@ -581,7 +581,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         ''' Read the csv for each recording '''
         rows_list = []
         with open(csv_raw, encoding=encoding) as csvfile:
-            # Prevent “_csv.Error: line contains NULL byte”
+            # Prevent “_csv.Error: line contains NULL byte�?
             data = csvfile.read()
             data = data.replace('\x00', '?')
             reader = csv.DictReader(StringIO(data))
@@ -625,7 +625,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
             out_record = os.path.join(out_csv, filename + ".csv")
             # The column that corresponds to the stop is also removed
             with open(csv_raw, 'r', encoding=encoding) as f_input, open(out_record, 'w', newline='', encoding="ISO-8859-1") as f_output:
-                # Prevent “_csv.Error: line contains NULL byte”
+                # Prevent “_csv.Error: line contains NULL byte�?
                 data = f_input.read()
                 data = data.replace('\x00', '?')
                 csv_input = csv.reader(StringIO(data))

@@ -215,7 +215,7 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="197"/>
         <source>Open Stream</source>
-        <translation type="unfinished">Open MPEG2 file</translation>
+        <translation type="unfinished">Open Stream</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="169"/>

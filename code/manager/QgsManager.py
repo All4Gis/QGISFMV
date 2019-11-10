@@ -58,7 +58,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.meta_reader = {}
         self.initialPt = {}
         self.pass_time = 250
-        #self.actionOpen_Stream.setVisible(False)
 
         self.VManager.viewport().installEventFilter(self)
 
@@ -120,7 +119,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.meta_reader[str(cr)].dispose()
         self.meta_reader[str(cr)] = None
 
-        
         return
 
     def openStreamDialog(self):
@@ -180,11 +178,11 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.setVisible(False)
         self.VManager.horizontalHeader().setStretchLastSection(True)
         self.VManager.setVisible(True)
-                
-        #resolve if it is a stream
+
+        # resolve if it is a stream
         if "://" in filename:
             self.isStreaming = True
-        
+
         if not self.isStreaming:
             # Disable row if not exist video file
             if not os.path.exists(filename):

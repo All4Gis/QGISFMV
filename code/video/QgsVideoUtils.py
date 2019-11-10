@@ -65,7 +65,7 @@ class VideoUtils(object):
         x = 0.0
         try:
             if (surface.widget.width() / surface.widget.height()) > (GetImageWidth() / GetImageHeight()):
-                x = (surface.widget.width() -
+                x = (surface.widget.width() - 
                      (VideoUtils.GetNormalizedWidth(surface))) / 2.0
         except ZeroDivisionError:
             None
@@ -91,7 +91,7 @@ class VideoUtils(object):
         y = 0.0
         try:
             if (surface.widget.width() / surface.widget.height()) < (GetImageWidth() / GetImageHeight()):
-                y = (surface.widget.height() -
+                y = (surface.widget.height() - 
                      (VideoUtils.GetNormalizedHeight(surface))) / 2.0
         except ZeroDivisionError:
             None
