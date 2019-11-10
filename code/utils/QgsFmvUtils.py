@@ -214,7 +214,8 @@ class StreamMetaReader():
         self.srcPort = int(self.split[2])
         self.destPort = self.srcPort + 10
         self.connection = self.srcProtocol + ':' + self.srcHost + ':' + str(self.srcPort)
-        self.splitter = Splitter(['-i', self.connection, '-c', 'copy', '-map', '0:v?', '-map', '0:a?', '-f', 'rtp_mpegts', self.connection, '-map', '0:d?', '-f', 'data', '-'])
+        self.connectionDest = self.srcProtocol + ':' + self.srcHost + ':' + str(self.destPort)
+        self.splitter = Splitter(['-i', self.connection, '-c', 'copy', '-map', '0:v?', '-map', '0:a?', '-f', 'rtp_mpegts', self.connectionDest, '-map', '0:d?', '-f', 'data', '-'])
         self.splitter.start()
         qgsu.showUserAndLogMessage("", "Splitter started.", onlyLog=True)
 
