@@ -135,16 +135,16 @@ class NonBlockingStreamReader:
                 if line:
                     # find starting block for misb0601 or misbeg0104
                     if line == b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00' or line == b'\x06\x0e+4\x02\x01\x01\x01\x0e\x01\x01\x02\x01\x01\x00\x00':
-                        # qgsu.showUserAndLogMessage("", "metaFound" + str(metaFound), onlyLog=True)
+                        #qgsu.showUserAndLogMessage("", "metaFound" + str(metaFound), onlyLog=True)
                         metaFound = metaFound + 1
 
                     # feed the current packet
                     if metaFound <= packetsPerQueueElement:
-                        # qgsu.showUserAndLogMessage("", "feeding packet" + str(metaFound), onlyLog=True)
+                        #qgsu.showUserAndLogMessage("", "feeding packet" + str(metaFound), onlyLog=True)
                         data = data + line
                     # add to queue and start a new one
                     else:
-                        # qgsu.showUserAndLogMessage("", "Put to queue and start over" + repr(data), onlyLog=True)
+                        #qgsu.showUserAndLogMessage("", "Put to queue and start over" + repr(data), onlyLog=True)
                         queue.put(data)
                         data = line
                         metaFound = 1
@@ -184,22 +184,23 @@ class Splitter(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-#         if self.type is "ffmpeg":
-#             self.cmds.insert(0, ffmpeg_path)
-#         else:
-#             self.cmds.insert(0, ffprobe_path)
-# 
-#         qgsu.showUserAndLogMessage("", "starting Splitter on thread:" + str(threading.current_thread().ident), onlyLog=True)
-#         qgsu.showUserAndLogMessage("", "with args:" + ' '.join(self.cmds), onlyLog=True)
-# 
-#         # Hide shell windows that pops up on windows.
-#         if windows:
-#             startupinfo = subprocess.STARTUPINFO()
-#             startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-#             startupinfo.wShowWindow = subprocess.SW_HIDE
-# 
-#         self.p = subprocess.Popen(self.cmds, startupinfo=startupinfo, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE)
-        self.p = _spawn(self.cmds)
+        if self.type is "ffmpeg":
+            self.cmds.insert(0, ffmpeg_path)
+        else:
+            self.cmds.insert(0, ffprobe_path)
+ 
+        qgsu.showUserAndLogMessage("", "starting Splitter on thread:" + str(threading.current_thread().ident), onlyLog=True)
+        qgsu.showUserAndLogMessage("", "with args:" + ' '.join(self.cmds), onlyLog=True)
+ 
+         # Hide shell windows that pops up on windows.
+        if windows:
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = subprocess.SW_HIDE
+ 
+        self.p = subprocess.Popen(self.cmds, startupinfo=startupinfo, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE)
+        # Dont us _spawn here as it will DeadLock, and the splitter won't work
+        #self.p = _spawn(self.cmds)
         self.nbsr = NonBlockingStreamReader(self.p)
         self.nbsr._t.join()
         qgsu.showUserAndLogMessage("", "Splitter thread ended.", onlyLog=True)

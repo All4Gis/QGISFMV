@@ -1022,9 +1022,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.islocal = islocal
         self.klv_folder = klv_folder
         try:
-            self.fileName = videoPath
-            self.playlist = QMediaPlaylist()
-
             # Remove All Data
             self.RemoveAllData()
 
@@ -1032,18 +1029,21 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             root = QgsProject.instance().layerTreeRoot()
             node_group = QgsLayerTreeGroup(videoPath)
             root.addChildNode(node_group)
+            
+            if self.player.playlist() == None:
+                self.fileName = videoPath
+                self.playlist = QMediaPlaylist()
+                if self.isStreaming:
+                    # show video from splitter (port +1)
+                    oldPort = videoPath.split(":")[2]
+                    newPort = str(int(oldPort) + 10)
+                    url = QUrl(videoPath.replace(oldPort, newPort))
+                else:
+                    url = QUrl.fromLocalFile(videoPath)
+                qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
 
-            if self.isStreaming:
-                # show video from splitter (port +1)
-                oldPort = videoPath.split(":")[2]
-                newPort = str(int(oldPort) + 10)
-                url = QUrl(videoPath.replace(oldPort, newPort))
-            else:
-                url = QUrl.fromLocalFile(videoPath)
-            qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
-
-            self.playlist.addMedia(QMediaContent(url))
-            self.player.setPlaylist(self.playlist)
+                self.playlist.addMedia(QMediaContent(url))
+                self.player.setPlaylist(self.playlist)
 
             self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(videoPath))
@@ -1519,7 +1519,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             return
 
         self.stop()
-        self.parent._PlayerDlg = None
+        #Potential problem. If we create a new Player with the same stream
+        #adress and port, it will certainly be blocked.
+        #self.parent._PlayerDlg = None
         self.parent.ToggleActiveFromTitle()
 
         # Remove All Data

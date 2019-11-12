@@ -294,13 +294,15 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             else:
                 self.CreatePlayer(path, row)
         else:
-            if path != self._PlayerDlg.fileName:
-                self.ToggleActiveFromTitle()
-                if exist:
-                    self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
-                else:
-                    self._PlayerDlg.playFile(path)
-                return
+            #qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
+            #if path != self._PlayerDlg.fileName:
+            self.ToggleActiveFromTitle()
+            self._PlayerDlg.show()
+            self._PlayerDlg.activateWindow()
+            if exist:
+                self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
+            else:
+                self._PlayerDlg.playFile(path)
 
     def CreatePlayer(self, path, row, islocal=False, klv_folder=None):
         ''' Create Player '''
