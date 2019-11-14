@@ -188,16 +188,16 @@ class Splitter(threading.Thread):
             self.cmds.insert(0, ffmpeg_path)
         else:
             self.cmds.insert(0, ffprobe_path)
- 
+
         qgsu.showUserAndLogMessage("", "starting Splitter on thread:" + str(threading.current_thread().ident), onlyLog=True)
         qgsu.showUserAndLogMessage("", "with args:" + ' '.join(self.cmds), onlyLog=True)
- 
-         # Hide shell windows that pops up on windows.
+
+        # Hide shell windows that pops up on windows.
         if windows:
             startupinfo = subprocess.STARTUPINFO()
             startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
             startupinfo.wShowWindow = subprocess.SW_HIDE
- 
+
         self.p = subprocess.Popen(self.cmds, startupinfo=startupinfo, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE)
         # Dont us _spawn here as it will DeadLock, and the splitter won't work
         #self.p = _spawn(self.cmds)

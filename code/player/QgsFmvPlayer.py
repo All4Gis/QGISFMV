@@ -69,7 +69,7 @@ except Exception as e:
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     """ Video Player Class """
 
-    def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, isStreaming=False, islocal=False, klv_folder=None):
+    def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, islocal=False, klv_folder=None):
         """ Constructor """
 
         super().__init__(parent)
@@ -78,7 +78,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.iface = iface
         self.fileName = path
         self.meta_reader = meta_reader
-        self.isStreaming = isStreaming
+        self.isStreaming = False
         self.islocal = islocal
         self.klv_folder = klv_folder
         self.createingMosaic = False
@@ -1024,32 +1024,37 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         try:
             # Remove All Data
             self.RemoveAllData()
+            self.clearMetadata()
+            QApplication.processEvents()
 
             # Create Group
             root = QgsProject.instance().layerTreeRoot()
             node_group = QgsLayerTreeGroup(videoPath)
             root.addChildNode(node_group)
-            
-            if self.player.playlist() == None:
-                self.fileName = videoPath
-                self.playlist = QMediaPlaylist()
-                if self.isStreaming:
-                    # show video from splitter (port +1)
-                    oldPort = videoPath.split(":")[2]
-                    newPort = str(int(oldPort) + 10)
-                    url = QUrl(videoPath.replace(oldPort, newPort))
-                else:
-                    url = QUrl.fromLocalFile(videoPath)
-                qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
 
-                self.playlist.addMedia(QMediaContent(url))
-                self.player.setPlaylist(self.playlist)
+            self.fileName = videoPath
+            self.playlist = QMediaPlaylist()
+
+            self.isStreaming = False
+            if "://" in self.fileName:
+                self.isStreaming = True
+
+            if self.isStreaming:
+                # show video from splitter (port +1)
+                oldPort = videoPath.split(":")[2]
+                newPort = str(int(oldPort) + 10)
+                url = QUrl(videoPath.replace(oldPort, newPort))
+            else:
+                url = QUrl.fromLocalFile(videoPath)
+            qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
+
+            self.playlist.addMedia(QMediaContent(url))
+            self.player.setPlaylist(self.playlist)
 
             self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(videoPath))
 
             CreateVideoLayers(hasElevationModel(), videoPath)
-            self.clearMetadata()
 
             self.HasFileAudio = True
             if not self.HasAudio(videoPath):
@@ -1518,10 +1523,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             event.ignore()
             return
 
+        # Stop Video
         self.stop()
-        #Potential problem. If we create a new Player with the same stream
-        #adress and port, it will certainly be blocked.
-        #self.parent._PlayerDlg = None
+
+        # Close splitter
+        # If we don't close it and open a new video, the metadata shown are the old.
+        try:
+            self.meta_reader.dispose()
+        except Exception:
+            None
+        # Toggle Active flag in metadata dock
         self.parent.ToggleActiveFromTitle()
 
         # Remove All Data

@@ -145,6 +145,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
         self.islocal = islocal
         self.klv_folder = klv_folder
+        self.isStreaming = False
         w = QWidget()
         layout = QVBoxLayout()
         pbar = QProgressBar()
@@ -256,7 +257,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
-        self.isStreaming = False
         Exts = ast.literal_eval(parser.get("FILES", "Exts"))
         filename, _ = askForFiles(self, QCoreApplication.translate(
             "ManagerDock", "Open video"),
@@ -285,9 +285,11 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         klv_folder = os.path.join(folder, "klv")
         exist = os.path.exists(klv_folder)
         try:
-            self._PlayerDlg.close()
+            if self._PlayerDlg.isVisible():
+                self._PlayerDlg.close()
         except Exception:
             None
+        # First time we open the player
         if self._PlayerDlg is None:
             if exist:
                 self.CreatePlayer(path, row, islocal=True, klv_folder=klv_folder)
@@ -307,7 +309,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
     def CreatePlayer(self, path, row, islocal=False, klv_folder=None):
         ''' Create Player '''
         self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(
-            row)], pass_time=self.pass_time, isStreaming=self.isStreaming, islocal=islocal, klv_folder=klv_folder)
+            row)], pass_time=self.pass_time, islocal=islocal, klv_folder=klv_folder)
         self._PlayerDlg.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()
@@ -340,7 +342,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         FmvDock = qgis.utils.plugins[getNameSpace()]
         FmvDock._FMVManager = None
         try:
-            self._PlayerDlg.close()
+            if self._PlayerDlg.isVisible():
+                self._PlayerDlg.close()
         except Exception:
             None
         return
