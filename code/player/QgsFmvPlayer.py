@@ -1528,6 +1528,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         # Close splitter
         # If we don't close it and open a new video, the metadata shown are the old.
+        # TODO: NOT WORK
         try:
             self.meta_reader.dispose()
         except Exception:
