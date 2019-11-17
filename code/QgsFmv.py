@@ -99,22 +99,24 @@ class Fmv:
         if toggleState:
             self.createManagerWidget()
         else:
-            self.deleteManagerWidget()
+            self.hideManagerWidget()
 
     def createManagerWidget(self):
         ''' Create Manager Video QDockWidget '''
-        if not self.bottomBar and not self._FMVManager:
+        if not self.bottomBar:
             self.bottomBar = KadasBottomBar( self.iface.mapCanvas() )
             self.bottomBar.setLayout( QHBoxLayout() )
+            self.bottomBar.setSizePolicy( QSizePolicy.Expanding, QSizePolicy.Preferred )
+            
+        if not self._FMVManager:
             self._FMVManager = FmvManager(self.iface, self.actionFMV )
             self.bottomBar.layout().addWidget( self._FMVManager )
-            self.bottomBar.setSizePolicy( QSizePolicy.Expanding, QSizePolicy.Preferred )
-            self.bottomBar.adjustSize()
 
+        self.bottomBar.adjustSize()
         self.bottomBar.show()
+        self._FMVManager.show()
 
-    def deleteManagerWidget( self ):
-        del self._FMVManager
+    def hideManagerWidget( self ):
+        self._FMVManager.hide()
         self._FMVManager = None
-        del self.bottomBar
-        self.bottomBar = None
+        self.bottomBar.hide()
