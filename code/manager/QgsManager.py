@@ -52,6 +52,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         self.setupUi(self)
         self.mOpenMPEGButton.setDefaultAction( self.actionOpen_MPEG2_File )
         self.mActionCreateMISBButton.setDefaultAction( self.actionCreate_MISB_File )
+        self.fmvAction = action
         self.mCloseButton.clicked.connect( action.toggle )
         self.parent = parent
         self.iface = iface
@@ -267,6 +268,9 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         ''' Play video from manager dock.
             Manager row double clicked
         '''
+        
+        self.fmvAction.toggle()
+        
         # Don't enable Play if video doesn't have metadata
         row = model.row()
         if self.VManager.cellWidget(row, 5).findChild(QProgressBar).value() < 100:
