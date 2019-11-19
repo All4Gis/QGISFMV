@@ -181,6 +181,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # Defalut WGS 84/ World Mercator (3D)
         # QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(3395))
 
+    def setMetaReader(self, meta_reader):
+        self.meta_reader = meta_reader
+        
     def centerMapPlatform(self, checked):
         ''' Center map on Platform
         @param checked: Boolean if button is checked
@@ -1030,7 +1033,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             # Create Group
             root = QgsProject.instance().layerTreeRoot()
             node_group = QgsLayerTreeGroup(videoPath)
-            root.addChildNode(node_group)
+            #If you have a loaded project, insert the group
+            #on top of it.
+            root.insertChildNode(0, node_group)
 
             self.fileName = videoPath
             self.playlist = QMediaPlaylist()

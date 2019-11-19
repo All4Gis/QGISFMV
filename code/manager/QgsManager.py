@@ -116,8 +116,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # Remove folder if is local
         RemoveVideoFolder(row_text)
 
-        self.meta_reader[str(cr)].dispose()
-        self.meta_reader[str(cr)] = None
+        if self.meta_reader[str(cr)] != None:
+            self.meta_reader[str(cr)].dispose()
+            self.meta_reader[str(cr)] = None
 
         return
 
@@ -298,6 +299,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         else:
             #qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
             #if path != self._PlayerDlg.fileName:
+            self._PlayerDlg.setMetaReader(self.meta_reader[str(row)])
             self.ToggleActiveFromTitle()
             self._PlayerDlg.show()
             self._PlayerDlg.activateWindow()
