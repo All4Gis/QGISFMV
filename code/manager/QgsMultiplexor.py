@@ -44,22 +44,22 @@ _range5 = (0, 360)
 _key5 = b'\x05'
 
 # Platform Pitch Angle
-_domain6 = (-(2 ** 15 - 1), 2 ** 15 - 1)
+_domain6 = ((-2**15 - 1), 2**15 - 1)
 _range6 = (-20, 20)
 _key6 = b'\x06'
 
 # Platform Roll Angle
-_domain7 = (-(2 ** 15 - 1), 2 ** 15 - 1)
+_domain7 = ((-2**15 - 1), 2**15 - 1)
 _range7 = (-50, 50)
 _key7 = b'\x07'
 
 # Sensor Latitude
-_domain13 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain13 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range13 = (-90, 90)
 _key13 = b'\x0D'
 
 # Sensor Longitude
-_domain14 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain14 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range14 = (-180, 180)
 _key14 = b'\x0E'
 
@@ -84,7 +84,7 @@ _range18 = (0, 360)
 _key18 = b'\x12'
 
 # Sensor Relative Elevation Angle
-_domain19 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain19 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range19 = (-180, 180)
 _key19 = b'\x13'
 
@@ -104,12 +104,12 @@ _range22 = (0, +10e3)
 _key22 = b'\x16'
 
 # Frame Center Latitude
-_domain23 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain23 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range23 = (-90, 90)
 _key23 = b'\x17'
 
 # Frame Center Longitude
-_domain24 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain24 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range24 = (-180, 180)
 _key24 = b'\x18'
 
@@ -124,52 +124,52 @@ _range75 = (-900, 19000)
 _key75 = b'\x4B'
 
 # Corner Latitude Point 1 (Full)
-_domain82 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain82 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range82 = (-90, 90)
 _key82 = b'\x52'
 
 # Corner Longitude Point 1 (Full)
-_domain83 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain83 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range83 = (-180, 180)
 _key83 = b'\x53'
 
 # Corner Latitude Point 2 (Full)
-_domain84 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain84 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range84 = (-90, 90)
 _key84 = b'\x54'
 
 # Corner Longitude Point 2 (Full)
-_domain85 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain85 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range85 = (-180, 180)
 _key85 = b'\x55'
 
 # Corner Latitude Point 3 (Full)
-_domain86 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain86 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range86 = (-90, 90)
 _key86 = b'\x56'
 
 # Corner Longitude Point 3 (Full)
-_domain87 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain87 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range87 = (-180, 180)
 _key87 = b'\x57'
 
 # Corner Latitude Point 4 (Full)
-_domain88 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain88 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range88 = (-90, 90)
 _key88 = b'\x58'
 
 # Corner Longitude Point 4 (Full)
-_domain89 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain89 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range89 = (-180, 180)
 _key89 = b'\x59'
 
 # Platform Pitch Angle (Full)
-_domain90 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain90 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range90 = (-90, 90)
 _key90 = b'\x5A'
 
 # Platform Roll Angle (Full)
-_domain91 = (-(2 ** 31 - 1), 2 ** 31 - 1)
+_domain91 = ((-2 ** 31 - 1), 2 ** 31 - 1)
 _range91 = (-90, 90)
 _key91 = b'\x5B'
 
