@@ -39,45 +39,27 @@ DemGlobal = "http://www.gisandbeers.com/RRSS/Cartografia/DEM-Mundial.rar"
 def CheckDependencies():
     ''' complete windows installation '''
     if not IsLavFilters():
-        QMessageBox.warning(
-            iface.mainWindow(),
-            QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
-            QCoreApplication.translate("QgsFmvInstaller", "Missing Lav Filters"))
+        iface.messageBar().pushMessage(QCoreApplication.translate("QgsFmvInstaller", "FMV: Missing Lav Filters"), QGis.Critical, 10)
 
     if not IsFFMPEG():
-        QMessageBox.warning(
-            iface.mainWindow(),
-            QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
-            QCoreApplication.translate("QgsFmvInstaller", "Missing FFMPEG"))
+        iface.messageBar().pushMessage(QCoreApplication.translate("QgsFmvInstaller", "FMV: Missing FFMPEG"), QGis.Critical, 10)
 
     if not isDem():
-        QMessageBox.warning(
-            iface.mainWindow(),
-            QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
-            QCoreApplication.translate("QgsFmvInstaller", "DEM file is missing"))
+        iface.messageBar().pushMessage(QCoreApplication.translate("QgsFmvInstaller", "FMV: Missing DTM"), QGis.Critical, 10)
 
     try:
         import homography
     except ImportError:
-        QMessageBox.warning(
-            iface.mainWindow(),
-            QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
-            QCoreApplication.translate("QgsFmvInstaller", "Missing python-homography"))
+        iface.messageBar().pushMessage(QCoreApplication.translate("QgsFmvInstaller", "FMV: Missing python-homography"), QGis.Critical, 10)
     try:
         import cv2
     except ImportError:
-        QMessageBox.warning(
-            iface.mainWindow(),
-            QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
-            QCoreApplication.translate("QgsFmvInstaller", "Missing python-opencv"))
+        iface.messageBar().pushMessage(QCoreApplication.translate("QgsFmvInstaller", "FMV: Missing python-opencv"), QGis.Critical, 10)
 
     # try:
     #     import matplotlib
     # except ImportError:
-    #     QMessageBox.warning(
-    #         iface.mainWindow(),
-    #         QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
-    #         QCoreApplication.translate("QgsFmvInstaller", "Missing python-matplotlib"))
+    #     iface.messageBar().pushMessage(QCoreApplication.translate("QgsFmvInstaller", "FMV: Missing python-matplotlib"), QGis.Critical, 10)
     return
 
 
