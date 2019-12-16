@@ -50,7 +50,12 @@ Platform_lyr = parser['LAYERS']['Platform_lyr']
 Footprint_lyr = parser['LAYERS']['Footprint_lyr']
 FrameCenter_lyr = parser['LAYERS']['FrameCenter_lyr']
 dtm_buffer = int(parser['GENERAL']['DTM_buffer_size'])
-ffmpegConf = parser['GENERAL']['ffmpeg']
+
+windows = platform.system() == 'Windows'
+if windows:
+    ffmpegConf = os.path.join(QgsApplication.applicationDirPath(), '..', 'opt', 'ffmpeg')
+else:
+    ffmpegConf = '/usr/bin'
 
 try:
     from homography import from_points
