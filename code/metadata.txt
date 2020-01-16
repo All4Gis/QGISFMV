@@ -19,12 +19,14 @@ about= Plugin for QGIS which allows to analyze, visualize and process videos ins
 	   </a>
 	   <p>If this plugin is useful for you, consider to donate to the author.</p>
 
-version=1.8
+version=1.9
 author= Francisco Raga
 email=franka1986@gmail.com
 
 changelog=
     ** General **
+    1.9:
+		- Fix klv when out of range
     1.8:
 		- Add *.bats and *.sh for compile,deploy code etc, for a better contribution
 		- Working on linux (tested using Ubuntu 18.04.3 LTS)

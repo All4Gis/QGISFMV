@@ -95,6 +95,8 @@ class SetParser(Element):
         for key, value in KLVParser(self.value, self.key_length):
             try:
                 self.items[key] = self.parsers[key](value)
+            except (KeyError, TypeError, ValueError):
+                self.items[key] = self._unknown_element(key, value)
             except Exception:
                 # None
                 qgsu.showUserAndLogMessage("", "Value cannot be read for key: " + str(key.hex()), onlyLog=True)
@@ -464,11 +466,8 @@ class SetParser(Element):
 
     def structure(self):
         ''' Return metadata structure'''
-        # print(str(type(self)))
-
         def repeat(items, indent=1):
             for item in items:
-                # print(indent * "\t" + str(type(item)))
                 if hasattr(item, 'items'):
                     repeat(item.items.values(), indent + 1)
 
@@ -480,7 +479,10 @@ def str_dict(values):
 
     def per_item(value, indent=0):
         for item in value:
-            out.append(indent * "\t" + str(item))
+            if isinstance(item, Element):
+                out.append(indent * "\t" + str(item))
+            else:
+                out.append(indent * "\t" + str(item))
 
     per_item(values)
 
