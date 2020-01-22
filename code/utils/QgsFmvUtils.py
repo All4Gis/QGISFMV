@@ -20,8 +20,10 @@ from qgis.core import (QgsApplication,
                        QgsTask,
                        QgsRasterLayer,
                        Qgis as QGis)
-from subprocess import Popen, PIPE, check_output
+# from subprocess import Popen, PIPE, STARTF_USESHOWWINDOW, STARTUPINFO, check_output, DEVNULL
+import subprocess
 import threading
+from queue import Queue, Empty
 
 from osgeo import gdal, osr
 
@@ -112,6 +114,129 @@ if windows:
 else:
     ffmpeg_path = os.path.join(ffmpegConf, 'ffmpeg')
     ffprobe_path = os.path.join(ffmpegConf, 'ffprobe')
+
+
+class NonBlockingStreamReader:
+
+    def __init__(self, process):
+        self._p = process
+        self._q = Queue()
+        self.stopped = False
+
+        def _populateQueue(process, queue):
+            '''
+            Collect lines from metadata stream and put them in 'queue'.
+            '''
+            packetsPerQueueElement = 1
+            metaFound = 0
+            data = b''
+            while self._p.poll() is None and not self.stopped:
+                line = process.stdout.read(16)
+                if line:
+                    # find starting block for misb0601 or misbeg0104
+                    if line == b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00' or line == b'\x06\x0e+4\x02\x01\x01\x01\x0e\x01\x01\x02\x01\x01\x00\x00':
+                        #qgsu.showUserAndLogMessage("", "metaFound" + str(metaFound), onlyLog=True)
+                        metaFound = metaFound + 1
+
+                    # feed the current packet
+                    if metaFound <= packetsPerQueueElement:
+                        #qgsu.showUserAndLogMessage("", "feeding packet" + str(metaFound), onlyLog=True)
+                        data = data + line
+                    # add to queue and start a new one
+                    else:
+                        #qgsu.showUserAndLogMessage("", "Put to queue and start over" + repr(data), onlyLog=True)
+                        queue.put(data)
+                        data = line
+                        metaFound = 1
+
+                # End of stream
+                else:
+                    qgsu.showUserAndLogMessage("", "reader got end of stream.", onlyLog=True)
+                    break
+
+            if self.stopped:
+                qgsu.showUserAndLogMessage("", "NonBlockingStreamReader ended because stop signal received.", onlyLog=True)
+
+        self._t = threading.Thread(target=_populateQueue, args=(self._p, self._q))
+        self._t.daemon = True
+        self._t.start()  # start collecting lines from the stream
+
+    def readline(self, timeout=None):
+        try:
+            return self._q.get(block=timeout is not None,
+                               timeout=timeout)
+        except Empty:
+            return None
+            # return "---"
+
+
+# Splitter class for streaming.
+# Reads input stream and split AV to Port: (src + 10), and reads metadata from stdout to a Queue,
+# later passed to the metadata decoder.
+class Splitter(threading.Thread):
+
+    def __init__(self, cmds, type="ffmpeg"):
+        self.stdout = None
+        self.stderr = None
+        self.cmds = cmds
+        self.type = type
+        self.p = None
+        threading.Thread.__init__(self)
+
+    def run(self):
+        if self.type is "ffmpeg":
+            self.cmds.insert(0, ffmpeg_path)
+        else:
+            self.cmds.insert(0, ffprobe_path)
+
+        qgsu.showUserAndLogMessage("", "starting Splitter on thread:" + str(threading.current_thread().ident), onlyLog=True)
+        qgsu.showUserAndLogMessage("", "with args:" + ' '.join(self.cmds), onlyLog=True)
+
+        # Hide shell windows that pops up on windows.
+        if windows:
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = subprocess.SW_HIDE
+
+        self.p = subprocess.Popen(self.cmds, startupinfo=startupinfo, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE)
+        # Dont us _spawn here as it will DeadLock, and the splitter won't work
+        #self.p = _spawn(self.cmds)
+        self.nbsr = NonBlockingStreamReader(self.p)
+        self.nbsr._t.join()
+        qgsu.showUserAndLogMessage("", "Splitter thread ended.", onlyLog=True)
+
+
+class StreamMetaReader():
+
+    def __init__(self, video_path):
+        self.split = video_path.split(":")
+        self.srcProtocol = self.split[0]
+        self.srcHost = self.split[1]
+        self.srcPort = int(self.split[2])
+        self.destPort = self.srcPort + 10
+        self.connection = self.srcProtocol + ':' + self.srcHost + ':' + str(self.srcPort)
+        self.connectionDest = self.srcProtocol + ':' + self.srcHost + ':' + str(self.destPort)
+        self.splitter = Splitter(['-i', self.connection, '-c', 'copy', '-map', '0:v?', '-map', '0:a?', '-f', 'rtp_mpegts', self.connectionDest, '-map', '0:d?', '-f', 'data', '-'])
+        self.splitter.start()
+        qgsu.showUserAndLogMessage("", "Splitter started.", onlyLog=True)
+
+    def getSize(self):
+        return self.splitter.nbsr._q.qsize()
+
+    def get(self, _):
+        qgsu.showUserAndLogMessage("", "Get called on Streamreader.", onlyLog=True)
+        return self.splitter.nbsr.readline()
+
+    def dispose(self):
+        qgsu.showUserAndLogMessage("", "Dispose called on StreamMetaReader.", onlyLog=True)
+        self.splitter.nbsr.stopped = True
+        # kill the process if open, releases source port
+        try:
+            self.splitter.p.kill()
+            qgsu.showUserAndLogMessage("", "Splitter Popen process killed.", onlyLog=True)
+        except OSError:
+            # can't kill a dead proc
+            pass
 
 
 class BufferedMetaReader():
@@ -210,6 +335,9 @@ class BufferedMetaReader():
 
         return value
 
+    def dispose(self):
+        pass
+
 
 class callBackMetadataThread(threading.Thread):
     ''' CallBack metadata in other thread  '''
@@ -284,7 +412,8 @@ def setCenterMode(mode, interface):
     ''' Set map center mode '''
     global centerMode, iface
     centerMode = mode
-    iface = interface
+    iface = interface
+
 
 def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None):
     """ Get basic location info about the video """
@@ -522,7 +651,11 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
         np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize]]))
     dst = np.float64(
         np.array([cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]))
-    geotransform = from_points(src, dst)
+
+    try:
+        geotransform = from_points(src, dst)
+    except Exception:
+        pass
 
     if geotransform is None:
         qgsu.showUserAndLogMessage(
@@ -607,7 +740,7 @@ def _check_output(cmds, t="ffmpeg"):
     else:
         cmds.insert(0, ffprobe_path)
 
-    return check_output(cmds, shell=True, close_fds=(not windows))
+    return subprocess.check_output(cmds, shell=True, close_fds=(not windows))
 
 
 def _spawn(cmds, t="ffmpeg"):
@@ -621,9 +754,9 @@ def _spawn(cmds, t="ffmpeg"):
     cmds.insert(3, '-preset')
     cmds.insert(4, 'ultrafast')
 
-    return Popen(cmds, shell=windows, stdin=PIPE, stdout=PIPE, stderr=PIPE,
-                 bufsize=0,
-                 close_fds=(not windows))
+    return subprocess.Popen(cmds, shell=windows, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                            bufsize=0,
+                            close_fds=(not windows))
 
 
 def ResetData():

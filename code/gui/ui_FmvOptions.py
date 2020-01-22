@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/ui_FmvOptions.ui'
+# Form implementation generated from reading ui file 'ui\ui_FmvOptions.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_OptionsDialog(object):
-
     def setupUi(self, OptionsDialog):
         OptionsDialog.setObjectName("OptionsDialog")
         OptionsDialog.resize(461, 561)
@@ -101,7 +99,7 @@ class Ui_OptionsDialog(object):
         self.label_10 = QtWidgets.QLabel(self.groupBox)
         self.label_10.setObjectName("label_10")
         self.horizontalLayout_4.addWidget(self.label_10)
-        self.poly_pen = gui.QgsColorButton(self.groupBox)
+        self.poly_pen = QgsColorButton(self.groupBox)
         self.poly_pen.setColor(QtGui.QColor(252, 215, 108))
         self.poly_pen.setAllowOpacity(True)
         self.poly_pen.setDefaultColor(QtGui.QColor(252, 215, 108))
@@ -113,7 +111,7 @@ class Ui_OptionsDialog(object):
         self.label_11 = QtWidgets.QLabel(self.groupBox)
         self.label_11.setObjectName("label_11")
         self.horizontalLayout_3.addWidget(self.label_11)
-        self.poly_brush = gui.QgsColorButton(self.groupBox)
+        self.poly_brush = QgsColorButton(self.groupBox)
         self.poly_brush.setColor(QtGui.QColor(252, 215, 108, 100))
         self.poly_brush.setAllowOpacity(True)
         self.poly_brush.setDefaultColor(QtGui.QColor(252, 215, 108, 100))
@@ -143,7 +141,7 @@ class Ui_OptionsDialog(object):
         self.label_8 = QtWidgets.QLabel(self.groupBox_2)
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_7.addWidget(self.label_8)
-        self.point_pen = gui.QgsColorButton(self.groupBox_2)
+        self.point_pen = QgsColorButton(self.groupBox_2)
         self.point_pen.setColor(QtGui.QColor(220, 20, 60))
         self.point_pen.setAllowOpacity(True)
         self.point_pen.setDefaultColor(QtGui.QColor(220, 20, 60))
@@ -171,7 +169,7 @@ class Ui_OptionsDialog(object):
         self.label_12 = QtWidgets.QLabel(self.groupBox_3)
         self.label_12.setObjectName("label_12")
         self.horizontalLayout_8.addWidget(self.label_12)
-        self.lines_pen = gui.QgsColorButton(self.groupBox_3)
+        self.lines_pen = QgsColorButton(self.groupBox_3)
         self.lines_pen.setColor(QtGui.QColor(252, 215, 108))
         self.lines_pen.setAllowOpacity(True)
         self.lines_pen.setDefaultColor(QtGui.QColor(252, 215, 108))
@@ -203,7 +201,7 @@ class Ui_OptionsDialog(object):
         self.label_14 = QtWidgets.QLabel(self.groupBox_4)
         self.label_14.setObjectName("label_14")
         self.horizontalLayout_6.addWidget(self.label_14)
-        self.measures_pen = gui.QgsColorButton(self.groupBox_4)
+        self.measures_pen = QgsColorButton(self.groupBox_4)
         self.measures_pen.setColor(QtGui.QColor(185, 224, 175))
         self.measures_pen.setAllowOpacity(True)
         self.measures_pen.setDefaultColor(QtGui.QColor(185, 224, 175))
@@ -215,7 +213,7 @@ class Ui_OptionsDialog(object):
         self.label_13 = QtWidgets.QLabel(self.groupBox_4)
         self.label_13.setObjectName("label_13")
         self.horizontalLayout_5.addWidget(self.label_13)
-        self.measures_brush = gui.QgsColorButton(self.groupBox_4)
+        self.measures_brush = QgsColorButton(self.groupBox_4)
         self.measures_brush.setColor(QtGui.QColor(185, 224, 175, 100))
         self.measures_brush.setAllowOpacity(True)
         self.measures_brush.setDefaultColor(QtGui.QColor(185, 224, 175, 100))
@@ -271,6 +269,5 @@ class Ui_OptionsDialog(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("OptionsDialog", "Drawings"))
         self.pushButton.setText(_translate("OptionsDialog", "Accept"))
 
-
-from qgis import gui
+from qgscolorbutton import QgsColorButton
 from QGIS_FMV.gui import resources_rc

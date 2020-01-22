@@ -24,6 +24,7 @@ from QGIS_FMV.manager.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         BufferedMetaReader,
+                                        StreamMetaReader,
                                         initElevationModel,
                                         AddVideoToSettings,
                                         RemoveVideoToSettings,
@@ -57,7 +58,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.meta_reader = {}
         self.initialPt = {}
         self.pass_time = 250
-        self.actionOpen_Stream.setVisible(False)
 
         self.VManager.viewport().installEventFilter(self)
 
@@ -115,11 +115,15 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         RemoveVideoToSettings(row_id)
         # Remove folder if is local
         RemoveVideoFolder(row_text)
+
+        if self.meta_reader[str(cr)] != None:
+            self.meta_reader[str(cr)].dispose()
+            self.meta_reader[str(cr)] = None
+
         return
 
     def openStreamDialog(self):
         ''' Open Stream Dialog '''
-        self.isStreaming = True
         self.OpenStream = OpenStream(self.iface, parent=self)
         self.OpenStream.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self.OpenStream.exec_()
@@ -142,6 +146,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
         self.islocal = islocal
         self.klv_folder = klv_folder
+        self.isStreaming = False
         w = QWidget()
         layout = QVBoxLayout()
         pbar = QProgressBar()
@@ -176,20 +181,24 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.VManager.horizontalHeader().setStretchLastSection(True)
         self.VManager.setVisible(True)
 
-        # Disable row if not exist video file
-        if not os.path.exists(filename):
-            self.ToggleActiveRow(rowPosition, value="Missing source file")
-            for j in range(self.VManager.columnCount()):
-                try:
-                    self.VManager.item(rowPosition, j).setFlags(Qt.NoItemFlags | Qt.ItemIsEnabled)
-                    self.VManager.item(rowPosition, j).setBackground(QColor(211, 211, 211))
-                except Exception:
-                    self.VManager.cellWidget(rowPosition, j).setStyleSheet("background-color:rgb(211,211,211);")
-                    pass
-            return
+        # resolve if it is a stream
+        if "://" in filename:
+            self.isStreaming = True
 
-        pbar.setValue(30)
         if not self.isStreaming:
+            # Disable row if not exist video file
+            if not os.path.exists(filename):
+                self.ToggleActiveRow(rowPosition, value="Missing source file")
+                for j in range(self.VManager.columnCount()):
+                    try:
+                        self.VManager.item(rowPosition, j).setFlags(Qt.NoItemFlags | Qt.ItemIsEnabled)
+                        self.VManager.item(rowPosition, j).setBackground(QColor(211, 211, 211))
+                    except Exception:
+                        self.VManager.cellWidget(rowPosition, j).setStyleSheet("background-color:rgb(211,211,211);")
+                        pass
+                return
+
+            pbar.setValue(30)
             info = FFMpeg().probe(filename)
             if info is None:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -235,7 +244,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 except Exception:
                     None
         else:
-            self.meta_reader[str(rowPosition)] = None
+            self.meta_reader[str(rowPosition)] = StreamMetaReader(filename)
+            qgsu.showUserAndLogMessage("", "StreamMetaReader initialized.", onlyLog=True)
             self.initialPt[str(rowPosition)] = None
 
         pbar.setValue(100)
@@ -248,7 +258,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
-        self.isStreaming = False
         Exts = ast.literal_eval(parser.get("FILES", "Exts"))
         filename, _ = askForFiles(self, QCoreApplication.translate(
             "ManagerDock", "Open video"),
@@ -277,27 +286,32 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         klv_folder = os.path.join(folder, "klv")
         exist = os.path.exists(klv_folder)
         try:
-            self._PlayerDlg.close()
+            if self._PlayerDlg.isVisible():
+                self._PlayerDlg.close()
         except Exception:
             None
+        # First time we open the player
         if self._PlayerDlg is None:
             if exist:
                 self.CreatePlayer(path, row, islocal=True, klv_folder=klv_folder)
             else:
                 self.CreatePlayer(path, row)
         else:
-            if path != self._PlayerDlg.fileName:
-                self.ToggleActiveFromTitle()
-                if exist:
-                    self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
-                else:
-                    self._PlayerDlg.playFile(path)
-                return
+            #qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
+            #if path != self._PlayerDlg.fileName:
+            self._PlayerDlg.setMetaReader(self.meta_reader[str(row)])
+            self.ToggleActiveFromTitle()
+            self._PlayerDlg.show()
+            self._PlayerDlg.activateWindow()
+            if exist:
+                self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
+            else:
+                self._PlayerDlg.playFile(path)
 
     def CreatePlayer(self, path, row, islocal=False, klv_folder=None):
         ''' Create Player '''
         self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(
-            row)], pass_time=self.pass_time, isStreaming=self.isStreaming, islocal=islocal, klv_folder=klv_folder)
+            row)], pass_time=self.pass_time, islocal=islocal, klv_folder=klv_folder)
         self._PlayerDlg.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()
@@ -330,7 +344,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         FmvDock = qgis.utils.plugins[getNameSpace()]
         FmvDock._FMVManager = None
         try:
-            self._PlayerDlg.close()
+            if self._PlayerDlg.isVisible():
+                self._PlayerDlg.close()
         except Exception:
             None
         return

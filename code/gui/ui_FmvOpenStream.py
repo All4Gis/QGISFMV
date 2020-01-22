@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/ui_FmvOpenStream.ui'
+# Form implementation generated from reading ui file 'ui\ui_FmvOpenStream.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_FmvOpenStream(object):
-
     def setupUi(self, FmvOpenStream):
         FmvOpenStream.setObjectName("FmvOpenStream")
         FmvOpenStream.resize(355, 83)
@@ -26,8 +24,6 @@ class Ui_FmvOpenStream(object):
         self.cmb_protocol = QtWidgets.QComboBox(FmvOpenStream)
         self.cmb_protocol.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
         self.cmb_protocol.setObjectName("cmb_protocol")
-        self.cmb_protocol.addItem("")
-        self.cmb_protocol.addItem("")
         self.cmb_protocol.addItem("")
         self.horizontalLayout_2.addWidget(self.cmb_protocol)
         self.ln_host = QtWidgets.QLineEdit(FmvOpenStream)
@@ -56,11 +52,8 @@ class Ui_FmvOpenStream(object):
         _translate = QtCore.QCoreApplication.translate
         FmvOpenStream.setWindowTitle(_translate("FmvOpenStream", "Open Stream"))
         self.cmb_protocol.setItemText(0, _translate("FmvOpenStream", "RTP"))
-        self.cmb_protocol.setItemText(1, _translate("FmvOpenStream", "UDP"))
-        self.cmb_protocol.setItemText(2, _translate("FmvOpenStream", "TCP"))
         self.ln_host.setPlaceholderText(_translate("FmvOpenStream", "127.0.0.1"))
         self.ln_port.setPlaceholderText(_translate("FmvOpenStream", "5005"))
         self.btn_Open.setText(_translate("FmvOpenStream", "Accept"))
-
 
 from QGIS_FMV.gui import resources_rc

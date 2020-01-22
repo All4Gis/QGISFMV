@@ -1,4 +1,4 @@
-﻿# Original Code : https://github.com/zeroepoch/plotbitrate
+﻿  # Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QObject, QCoreApplication

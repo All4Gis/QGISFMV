@@ -69,7 +69,7 @@ except Exception as e:
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     """ Video Player Class """
 
-    def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, isStreaming=False, islocal=False, klv_folder=None):
+    def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, islocal=False, klv_folder=None):
         """ Constructor """
 
         super().__init__(parent)
@@ -78,7 +78,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.iface = iface
         self.fileName = path
         self.meta_reader = meta_reader
-        self.isStreaming = isStreaming
+        self.isStreaming = False
         self.islocal = islocal
         self.klv_folder = klv_folder
         self.createingMosaic = False
@@ -181,6 +181,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # Defalut WGS 84/ World Mercator (3D)
         # QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(3395))
 
+    def setMetaReader(self, meta_reader):
+        self.meta_reader = meta_reader
+        
     def centerMapPlatform(self, checked):
         ''' Center map on Platform
         @param checked: Boolean if button is checked
@@ -250,7 +253,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.actionAudio.setEnabled(False)
             self.actionSave_Audio.setEnabled(False)
 
-    def get_metadata_from_buffer(self, currentTime):
+    def get_metadata_from_buffer(self, currentTime=None):
         """Metadata CallBack
         @type currentTime: String
         @param currentTime: Current video timestamp
@@ -264,33 +267,35 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             # way (increase the buffer size if needed in QManager).
             if not self.islocal:
                 stdout_data = self.meta_reader.get(currentTime)
+                # debug
+                qgsu.showUserAndLogMessage("", "Buffer size:" + str(self.meta_reader.getSize()), onlyLog=True)
             else:
                 stdout_data = b'\x15'
             # qgsu.showUserAndLogMessage(
             #    "", "stdout_data: " + str(stdout_data) + " currentTime: " + str(currentTime), onlyLog=True)
             if stdout_data == 'NOT_READY':
-                qgsu.showUserAndLogMessage(
-                    "", "Buffer value read but is not ready, increase buffer size. : ", onlyLog=True)
+                qgsu.showUserAndLogMessage("", "Buffer value read but is not ready, increase buffer size:" + str(self.meta_reader.getSize()), onlyLog=True)
                 return
-
             # Values need to be read, pause the video a short while
             elif stdout_data == 'BUFFERING':
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvPlayer", "Buffering metadata..."), duration=4, level=QGis.Info)
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Buffering metadata..."), duration=4, level=QGis.Info)
                 self.player.pause()
                 QTimer.singleShot(2500, lambda: self.player.play())
                 return
-
+            elif stdout_data is None:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size:" + str(self.meta_reader.getSize())), level=QGis.Info)
+                # qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned None Type, check pass_time. : ", onlyLog=True)
+                return
             elif stdout_data == b'' or len(stdout_data) == 0:
-                qgsu.showUserAndLogMessage(
-                    "", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size:" + str(self.meta_reader.getSize())), level=QGis.Info)
+                # qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
                 return
 
             self.packetStreamParser(stdout_data)
 
         except Exception as inst:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst))
+            qgsu.showUserAndLogMessage("", "Metadata Buffer Failed! : " + str(inst), onlyLog=True)
+            # qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst))
 
     def packetStreamParser(self, stdout_data):
         '''Common packet process
@@ -967,10 +972,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             currentTimeInfo = _seconds_to_time_frac(currentInfo)
 
             if self.isStreaming:
-                qgsu.showUserAndLogMessage("", "Streaming on ", onlyLog=True)
-                nextTime = currentInfo + self.pass_time / 1000
-                nextTimeInfo = _seconds_to_time_frac(nextTime)
-                self.callBackMetadata(currentTimeInfo, nextTimeInfo)
+                # get last metadata available
+                self.get_metadata_from_buffer()
+                # qgsu.showUserAndLogMessage("", "Streaming on ", onlyLog=True)
+                # nextTime = currentInfo + self.pass_time / 1000
+                # nextTimeInfo = _seconds_to_time_frac(nextTime)
+                # self.callBackMetadata(currentTimeInfo, nextTimeInfo)
             elif self.islocal:
                 self.readLocal(currentInfo)
             else:
@@ -1018,31 +1025,30 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.islocal = islocal
         self.klv_folder = klv_folder
         try:
-#             if "udp://" in videoPath:
-#                 host, port = videoPath.split("://")[1].split(":")
-#                 receiver = UDPClient(host, int(port), type="udp")
-#                 receiver.show()
-#                 self.close()
-#                 return
-#             if "tcp://" in videoPath:
-#                 host, port = videoPath.split("://")[1].split(":")
-#                 receiver = UDPClient(host, port, type="tcp")
-#                 receiver.show()
-#                 self.close()
-#                 return
-            self.fileName = videoPath
-            self.playlist = QMediaPlaylist()
-
             # Remove All Data
             self.RemoveAllData()
+            self.clearMetadata()
+            QApplication.processEvents()
 
             # Create Group
             root = QgsProject.instance().layerTreeRoot()
             node_group = QgsLayerTreeGroup(videoPath)
-            root.addChildNode(node_group)
+            #If you have a loaded project, insert the group
+            #on top of it.
+            root.insertChildNode(0, node_group)
+
+            self.fileName = videoPath
+            self.playlist = QMediaPlaylist()
+
+            self.isStreaming = False
+            if "://" in self.fileName:
+                self.isStreaming = True
 
             if self.isStreaming:
-                url = QUrl(videoPath)
+                # show video from splitter (port +1)
+                oldPort = videoPath.split(":")[2]
+                newPort = str(int(oldPort) + 10)
+                url = QUrl(videoPath.replace(oldPort, newPort))
             else:
                 url = QUrl.fromLocalFile(videoPath)
             qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
@@ -1054,7 +1060,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(videoPath))
 
             CreateVideoLayers(hasElevationModel(), videoPath)
-            self.clearMetadata()
 
             self.HasFileAudio = True
             if not self.HasAudio(videoPath):
@@ -1523,8 +1528,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             event.ignore()
             return
 
+        # Stop Video
         self.stop()
-        self.parent._PlayerDlg = None
+
+        # Close splitter
+        # If we don't close it and open a new video, the metadata shown are the old.
+        # TODO: NOT WORK
+        try:
+            self.meta_reader.dispose()
+        except Exception:
+            None
+        # Toggle Active flag in metadata dock
         self.parent.ToggleActiveFromTitle()
 
         # Remove All Data

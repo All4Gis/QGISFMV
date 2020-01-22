@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/ui_FmvMetadata.ui'
+# Form implementation generated from reading ui file 'ui\ui_FmvMetadata.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_FmvMetadata(object):
-
     def setupUi(self, FmvMetadata):
         FmvMetadata.setObjectName("FmvMetadata")
         FmvMetadata.resize(345, 491)
@@ -121,6 +119,5 @@ class Ui_FmvMetadata(object):
         self.actionSave_as_PDF.setShortcut(_translate("FmvMetadata", "Ctrl+Shift+P"))
         self.actionSave_as_CSV.setText(_translate("FmvMetadata", "Save as CSV"))
         self.actionSave_as_CSV.setShortcut(_translate("FmvMetadata", "Ctrl+Shift+C"))
-
 
 from QGIS_FMV.gui import resources_rc

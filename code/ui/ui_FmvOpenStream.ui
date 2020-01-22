@@ -39,16 +39,6 @@
          <string>RTP</string>
         </property>
        </item>
-       <item>
-        <property name="text">
-         <string>UDP</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>TCP</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item>
