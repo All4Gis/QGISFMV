@@ -150,7 +150,7 @@ class Ui_ManagerWindow(object):
         item.setText(_translate("ManagerWindow", "Start Location"))
         item = self.VManager.horizontalHeaderItem(5)
         item.setText(_translate("ManagerWindow", "Progress"))
-        self.actionOpen_Stream.setText(_translate("ManagerWindow", "Open Stream"))
+        self.actionOpen_Stream.setText(_translate("ManagerWindow", "Open Stream (experimental)"))
         self.actionOpen_MPEG2_File.setText(_translate("ManagerWindow", "Open Video File"))
         self.actionCreate_MISB_File.setText(_translate("ManagerWindow", "Create MISB File"))
 

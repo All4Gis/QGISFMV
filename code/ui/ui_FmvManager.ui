@@ -196,7 +196,7 @@ color: rgb(56, 95, 107);
      <normaloff>:/imgFMV/images/stream.png</normaloff>:/imgFMV/images/stream.png</iconset>
    </property>
    <property name="text">
-    <string>Open Stream</string>
+    <string>Open Stream (experimental)</string>
    </property>
   </action>
   <action name="actionOpen_MPEG2_File">
