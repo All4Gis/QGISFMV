@@ -1,6 +1,6 @@
 @echo off
 REM ***************************************************************************
-REM    eclipse_QGIS_env.bat
+REM    QGIS_env_eclipse.bat
 REM    ---------------------
 REM    begin                : June 2017
 REM    copyright            : (C) 2017 by Fran Raga
