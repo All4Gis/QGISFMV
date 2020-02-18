@@ -7,7 +7,7 @@
 
 Plugin for **QGIS 3** which allows to analyze, visualize and process videos inside the QGIS environment. **QGIS FMV** accepts multiple video formats such as _mp4, ts, avi_, etc. It is also able to extract video frames, to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more. It also offers the possibility to create reports with video metadata.
 
-Standards supported:
+Standards supported: 
 
   - "UAS Datalink Local Set", [ST0601.11](http://www.gwg.nga.mil/misb/docs/standards/ST0601.11.pdf)
 
