@@ -1,22 +1,9 @@
 [general]
-name= QGIS Full Motion Video
+name= Kadas UAV Mapper
 qgisMinimumVersion=3.8
 qgisMaximumVersion=3.99
 description=<p>QGIS Full Motion Video.</p>
-about= Plugin for QGIS which allows to analyze, visualize and process videos inside the QGIS environment. 
-	   QGIS FMV accepts multiple video formats such as mp4, ts, avi, etc. It is also able to extract video frames, 
-	   to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more. 
-	   It also offers the possibility to create reports with video metadata.
-	   
-	   <strong>QGIS FMV is in the 'Plugins' toolbar !</strong>
-	   
-	   <a href="https://all4gis.github.io/QGISFMV/" target="_blank">Documentation</a>
-
-	   <p>Want to buy me a beer (or gadget)? Please use Paypal button.</p>
-	   <a href="https://goo.gl/jFCeCW" target="_blank">
-	   <img border="0" alt="Donate" src="https://goo.gl/6Fov75">
-	   </a>
-	   <p>If this plugin is useful for you, consider to donate to the author.</p>
+about= Plugin for Kadas which allows to view STANAG videos. Requires K-Lite Media Codec Pack.
 
 version=1.8.1
 author= Francisco Raga

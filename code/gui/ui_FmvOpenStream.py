@@ -25,8 +25,6 @@ class Ui_FmvOpenStream(object):
         self.cmb_protocol.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
         self.cmb_protocol.setObjectName("cmb_protocol")
         self.cmb_protocol.addItem("")
-        self.cmb_protocol.addItem("")
-        self.cmb_protocol.addItem("")
         self.horizontalLayout_2.addWidget(self.cmb_protocol)
         self.ln_host = QtWidgets.QLineEdit(FmvOpenStream)
         self.ln_host.setText("")
@@ -54,8 +52,6 @@ class Ui_FmvOpenStream(object):
         _translate = QtCore.QCoreApplication.translate
         FmvOpenStream.setWindowTitle(_translate("FmvOpenStream", "Open Stream"))
         self.cmb_protocol.setItemText(0, _translate("FmvOpenStream", "RTP"))
-        self.cmb_protocol.setItemText(1, _translate("FmvOpenStream", "UDP"))
-        self.cmb_protocol.setItemText(2, _translate("FmvOpenStream", "TCP"))
         self.ln_host.setPlaceholderText(_translate("FmvOpenStream", "127.0.0.1"))
         self.ln_port.setPlaceholderText(_translate("FmvOpenStream", "5005"))
         self.btn_Open.setText(_translate("FmvOpenStream", "Accept"))
