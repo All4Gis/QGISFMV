@@ -57,7 +57,8 @@ class QgsUtils(object):
                 root = QgsProject.instance().layerTreeRoot()
                 returnLayer = QgsProject.instance().mapLayersByName(layerName)
                 g = root.findGroup(group)
-                for child in returnLayer:
+                if g is not None:
+                    for child in returnLayer:
                     layer = g.findLayer(child.id())
                     if layer is not None:
                         returnLayer = child
