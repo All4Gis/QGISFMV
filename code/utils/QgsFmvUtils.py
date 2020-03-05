@@ -871,15 +871,18 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     # recenter map on platform
     if centerMode == 1:
         lyr = qgsu.selectLayerByName(Platform_lyr, groupName)
-        iface.mapCanvas().setExtent(lyr.extent())
+        if lyr is not None:
+            iface.mapCanvas().setExtent(lyr.extent())
     # recenter map on footprint
     elif centerMode == 2:
         lyr = qgsu.selectLayerByName(Footprint_lyr, groupName)
-        iface.mapCanvas().setExtent(lyr.extent())
+        if lyr is not None:
+            iface.mapCanvas().setExtent(lyr.extent())
     # recenter map on target
     elif centerMode == 3:
         lyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
-        iface.mapCanvas().setExtent(lyr.extent())
+        if lyr is not None:
+            iface.mapCanvas().setExtent(lyr.extent())
 
     iface.mapCanvas().refresh()
     return
