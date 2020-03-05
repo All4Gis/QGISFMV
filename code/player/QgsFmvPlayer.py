@@ -1082,8 +1082,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             if self.isStreaming:
                 # show video from splitter (port +1)
                 oldPort = videoPath.split(":")[2]
-                newPort = str(int(oldPort) + 10)
-                url = QUrl(videoPath.replace(oldPort, newPort))
+                newPort = str(int(oldPort) + 10)                
+                proto = videoPath.split(":")[0]
+                url = QUrl(proto + "://127.0.0.1:" + newPort)
             else:
                 url = QUrl.fromLocalFile(videoPath)
             qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)

@@ -97,7 +97,7 @@ class SetParser(Element):
                 self.items[key] = self.parsers[key](value)
             except Exception:
                 # None
-                qgsu.showUserAndLogMessage("", "Value cannot be read for key: " + str(key.hex()), onlyLog=True)
+                qgsu.showUserAndLogMessage("", "Value cannot be read for Tag: " + str(int.from_bytes(key, byteorder=sys.byteorder)) + " value: " + str(value), onlyLog=True)
 
     @classmethod
     def add_parser(cls, obj):
