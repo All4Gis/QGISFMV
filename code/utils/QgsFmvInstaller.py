@@ -42,14 +42,15 @@ except ImportError:
 
 windows = platform.system() == 'Windows'
 
-LavFilters = "https://github.com/Nevcairiel/LAVFilters/releases/download/0.73.1/LAVFilters-0.73.1-Installer.exe"
+# Download link
+LavFilters = "https://github.com/Nevcairiel/LAVFilters/releases/download/0.74.1/LAVFilters-0.74.1-Installer.exe"
 
 # 64 Bits
 if platform.machine().endswith('64'):
-    FFMPEG = "https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20190225-2e67f75-win64-static.zip"
+    FFMPEG = "https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20190502-7eba264-win64-static.zip"
 # 32 Bits
 else:
-    FFMPEG = "https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-20190225-2e67f75-win32-static.zip"
+    FFMPEG = "https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-20190502-7eba264-win32-static.zip"
 
 DemGlobal = "http://www.gisandbeers.com/RRSS/Cartografia/DEM-Mundial.rar"
 
@@ -59,7 +60,6 @@ progress.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 opener = build_opener()
 opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
 install_opener(opener)
-
 
 def reporthook(blocknum, blocksize, totalsize):
     ''' Url retrieve progress '''
@@ -107,7 +107,7 @@ def WindowsInstaller():
             urlretrieve(FFMPEG, filename, reporthook)
             zip_ref = zipfile.ZipFile(filename, 'r')
 
-            dest = os.path.join(os.getenv("SystemDrive"), "FFMPEG")
+            dest = os.path.join(os.getenv("SystemDrive"), os.sep, "FFMPEG")
             extensions = ('.exe')
 
             for zip_info in zip_ref.infolist():
