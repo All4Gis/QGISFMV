@@ -26,6 +26,11 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.9:
+    	- Fix layer can be null if the Player has been closed.
+    	- Avoid potential bug if layer already has been closed.
+    	- Fixed streaming issue, forward stream to local address: 127.0.0.1
+    	- Update setparser.py #72
+    	- Fix #70 FFMPEG download failed bug
     	- Fix klv when out of range
     	- Add RPT experimental protocol
     1.8:
