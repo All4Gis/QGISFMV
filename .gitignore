@@ -6,3 +6,4 @@ deploy/Output/
 deploy/generate_exe.bat
 deploy/generate_exe.sh
 deploy/plugin_exe.py
+.tx/.transifexrc
