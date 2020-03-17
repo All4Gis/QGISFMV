@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="es" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" sourcelanguage="" version="2.0">
 <context>
     <name>ColorDialog</name>
     <message>
@@ -38,7 +37,7 @@
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="34"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvAbout.ui" line="20"/>
@@ -104,17 +103,17 @@
     <message>
         <location filename="../ui/ui_FmvOpenStream.ui" line="39"/>
         <source>RTP</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvOpenStream.ui" line="50"/>
         <source>127.0.0.1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvOpenStream.ui" line="63"/>
         <source>5005</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvOpenStream.ui" line="77"/>
@@ -125,9 +124,19 @@
 <context>
     <name>ManagerDock</name>
     <message>
+        <location filename="../player/QgsManager.py" line="57"/>
+        <source>Remove the current selection&apos;s video</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../manager/QgsManager.py" line="262"/>
         <source>Open video</source>
         <translation>Abrir video</translation>
+    </message>
+    <message>
+        <location filename="../player/QgsManager.py" line="57"/>
+        <source>Remove</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../manager/QgsManager.py" line="229"/>
@@ -195,7 +204,7 @@
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="199"/>
         <source>Open Stream (experimental)</source>
-        <translation type="unfinished">Abir Stream</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvManager.ui" line="171"/>
@@ -344,7 +353,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="291"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="307"/>
@@ -354,12 +363,17 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="317"/>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="405"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capture current frame&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capturar el fotograma actual&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="343"/>
+        <source>Ctrl+Shift+Q</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="452"/>
@@ -409,7 +423,7 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="677"/>
         <source>Ctrl+U</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="687"/>
@@ -470,6 +484,11 @@
         <location filename="../ui/ui_FmvPlayer.ui" line="856"/>
         <source>Extract All Frames</source>
         <translation>Extraer todos los fotogramas</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvPlayer.ui" line="763"/>
+        <source>Ctrl+Shift+A</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="871"/>
@@ -664,52 +683,52 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="859"/>
         <source>Ctrl+A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="874"/>
         <source>Ctrl+T</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="477"/>
         <source>Ctrl+Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="500"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="526"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="549"/>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="572"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="601"/>
         <source>Ctrl+Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="624"/>
         <source>Ctrl+L</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="844"/>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1339"/>
@@ -730,12 +749,12 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="373"/>
         <source>WGS84</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="378"/>
         <source>MGRS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="1096"/>
@@ -943,12 +962,17 @@
         <translation>Mostrar metadatos</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1499"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1500"/>
         <source>Video Information : </source>
         <translation>Información del video:</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1387"/>
+        <location filename="../player/QgsFmvPlayer.py" line="296"/>
+        <source>Metadata Buffer Failed! : </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../player/QgsFmvPlayer.py" line="1388"/>
         <source>Save Current Frame</source>
         <translation>Guardar fotograma actual</translation>
     </message>
@@ -958,47 +982,47 @@
         <translation>Guardar Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1098"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1099"/>
         <source>Save video record</source>
         <translation>Guardar grabación</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1204"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1205"/>
         <source>Save Video as...</source>
         <translation>Guardar video como ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1349"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1350"/>
         <source>Save all Frames</source>
         <translation>Guardar todos los fotogramas</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1282"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1283"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>Guardar audio Bitrate</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1299"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1300"/>
         <source>Save Video Bitrate Plot</source>
         <translation>Guardar video Bitrate</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1417"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1418"/>
         <source>Save Current Georeferenced Frame</source>
         <translation>Guardar el frame georeferenciado actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1060"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1061"/>
         <source>Playing : </source>
         <translation>Reproduciendo : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1074"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1075"/>
         <source>Open Video File : </source>
         <translation>Abrir archivo de video : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1319"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1320"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
         <translation>Completado sin excepción y sin resultado (probablemente cancelado manualmente por el usuario)</translation>
     </message>
@@ -1008,12 +1032,12 @@
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1332"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1333"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1332"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1333"/>
         <source>Do you want to load the layer?</source>
         <translation>¿Quieres cargar la capa?</translation>
     </message>
@@ -1023,12 +1047,12 @@
         <translation>Buffering metadatos...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1524"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1525"/>
         <source>If you close or reopen the video all the information will be erased.</source>
         <translation>Si cierra o vuelve a abrir el vídeo, se borrará toda la información.</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1524"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1525"/>
         <source>Do you want to close or reopen it?</source>
         <translation>¿Quieres cerrarlo o reabrirlo?</translation>
     </message>

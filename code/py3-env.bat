@@ -27,3 +27,4 @@ call py3_env.bat
 path %OSGEO4W_ROOT%\apps\qgis\bin;%PATH%
 
 cd /d %~dp0
+::start cmd
