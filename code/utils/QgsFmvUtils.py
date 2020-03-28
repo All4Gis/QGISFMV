@@ -765,8 +765,8 @@ def ResetData():
 
     SetcrtSensorSrc()
     SetcrtPltTailNum()
-
-    #dtm_data = []
+    # TODO : FIXME : Check why when we use elevation, not draw and footprint is wrong. We shouldn't be cleaning up the list.
+    dtm_data = []
     tLastLon = 0.0
     tLastLat = 0.0
 

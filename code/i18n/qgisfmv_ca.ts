@@ -777,7 +777,7 @@
 <context>
     <name>QgsFmvInstaller</name>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="222"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="248"/>
         <source>Missing dependency</source>
         <translation>Falta la dependència</translation>
     </message>
@@ -787,99 +787,119 @@
         <translation>Voleu instal·lar Lav Filters?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="222"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="248"/>
         <source>Do you want install FFMPEG?</source>
         <translation>Voleu instal·lar FFMPEG?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="285"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="311"/>
         <source>Do you want install missing dependencies?</source>
         <translation>Voleu instal·lar dependències que falten?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="272"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="298"/>
         <source>Dem file not exist!</source>
         <translation>El fitxer MDE no existeix</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="303"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="329"/>
         <source>Python libraries installed correctly</source>
         <translation>Biblioteques Python instal·lades correctament</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="310"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="336"/>
         <source>Error installing the python libraries, use the requirements file!</source>
         <translation>S&apos;ha produït un error en instal·lar les biblioteques python, utilitzeu el fitxer de requisits!</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="157"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="183"/>
         <source>Do you want upgrade dependencies?</source>
         <translation>Vol actualitzar les dependències?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="162"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="188"/>
         <source>Python libraries updated correctly</source>
         <translation>Les biblioteques Python s’han actualitzat correctament</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="403"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="429"/>
         <source>No requirements file found in {}</source>
         <translation>No s&apos;ha trobat cap fitxer de requisits a {}</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="157"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="183"/>
         <source>Updates available</source>
         <translation>Actualitzacions disponibles</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="285"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="170"/>
         <source>Missing dependencies</source>
         <translation>Dependències faltants</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="194"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="220"/>
         <source>Do you want install GStreamer?</source>
         <translation>Voleu instal·lar GStreamer?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="207"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="233"/>
         <source>INSTALLATION FAILED: Failed to install GStreamer library.</source>
         <translation>INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar la biblioteca GStreamer.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="209"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="235"/>
         <source>INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.</source>
         <translation>INSTAL·LACIÓ CORRECTA: El paquet GStreamer instal·lat amb èxit.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="235"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="261"/>
         <source>Failed to install ffmpeg library, trying add-apt-repository.</source>
         <translation>No s&apos;ha pogut instal·lar la biblioteca ffmpeg, provant add-apt-repository.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="254"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="280"/>
         <source>INSTALLATION FAILED: Could not install ffmpeg package.</source>
         <translation>INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar el paquet ffmpeg.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="243"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="269"/>
         <source>GET REPO SUCCESSFUL: Successfully added trusty-media repo where ffmpeg is located</source>
         <translation>OBTENCIO CORRECTA: S&apos;ha afegit el repo on es troba el ffmpeg</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="248"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="274"/>
         <source>UPDATE FAILED: Failed to retrieve packages.</source>
         <translation>ACTUALITZACIÓ FALLIDA: No s&apos;ha pogut recuperar els paquets.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="250"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="276"/>
         <source>UPDATE SUCCESSFUL: Sucessfully retrived updated packages.</source>
         <translation>ACTUALIZACIO CORRECTA: S&apos;han recuperat els paquets actualitzats amb èxit.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="256"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="282"/>
         <source>INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.</source>
         <translation>INSTAL·LACIÓ CORRECTA: Paquet ffmpeg instal·lat amb èxit.</translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="96"/>
+        <source>&lt;b&gt;Missing dependency&lt;/b&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="132"/>
+        <source>&lt;b&gt;Dem file not exist!&lt;/b&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="132"/>
+        <source>Do you want download global DEM?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="311"/>
+        <source>&lt;b&gt;Missing dependencies&lt;/b&gt;</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
