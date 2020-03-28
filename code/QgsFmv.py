@@ -60,15 +60,17 @@ class Fmv:
 
         self.plugin_dir = os.path.dirname(__file__)
 
-        locale = QSettings().value("locale//userLocale")[0:2]
-        localePath = os.path.join(
-            self.plugin_dir, 'i18n', 'qgisfmv_{}.qm'.format(locale))
-        if os.path.exists(localePath):
-            self.translator = QTranslator()
-            self.translator.load(localePath)
+        localeSetting = QSettings().value("locale//userLocale")
+        if localeSetting:
+            locale = localeSetting[0:2]
+            localePath = os.path.join(
+                self.plugin_dir, 'i18n', 'qgisfmv_{}.qm'.format(locale))
+            if os.path.exists(localePath):
+                self.translator = QTranslator()
+                self.translator.load(localePath)
 
-            if qVersion() > '5.0.0':
-                QCoreApplication.installTranslator(self.translator)
+                if qVersion() > '5.0.0':
+                    QCoreApplication.installTranslator(self.translator)
 
         self._FMVManager = None
 

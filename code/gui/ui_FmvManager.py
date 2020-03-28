@@ -120,11 +120,18 @@ class Ui_ManagerWindow(object):
         icon3.addPixmap(QtGui.QPixmap(":/imgFMV/images/multiplexer.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionCreate_MISB_File.setIcon(icon3)
         self.actionCreate_MISB_File.setObjectName("actionCreate_MISB_File")
+        self.CloseButton = QtWidgets.QAction(ManagerWindow)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/imgFMV/images/close.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.CloseButton.setIcon(icon4)
+        self.CloseButton.setObjectName("CloseButton")
         self.menuFile.addAction(self.actionOpen_Stream)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionOpen_MPEG2_File)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionCreate_MISB_File)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.CloseButton)
         self.menubarwidget.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(ManagerWindow)
@@ -132,6 +139,7 @@ class Ui_ManagerWindow(object):
         self.VManager.doubleClicked['QModelIndex'].connect(ManagerWindow.PlayVideoFromManager)
         self.actionOpen_MPEG2_File.triggered.connect(ManagerWindow.openVideoFileDialog)
         self.actionCreate_MISB_File.triggered.connect(ManagerWindow.openMuiltiplexorDialog)
+        self.CloseButton.triggered.connect(ManagerWindow.CloseFMV)
         QtCore.QMetaObject.connectSlotsByName(ManagerWindow)
 
     def retranslateUi(self, ManagerWindow):
@@ -153,5 +161,6 @@ class Ui_ManagerWindow(object):
         self.actionOpen_Stream.setText(_translate("ManagerWindow", "Open Stream (experimental)"))
         self.actionOpen_MPEG2_File.setText(_translate("ManagerWindow", "Open Video File"))
         self.actionCreate_MISB_File.setText(_translate("ManagerWindow", "Create MISB File"))
+        self.CloseButton.setText(_translate("ManagerWindow", "Close"))
 
 from QGIS_FMV.gui import resources_rc

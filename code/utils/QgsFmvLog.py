@@ -9,6 +9,11 @@ import traceback
 from qgis.core import QgsApplication
 
 try:
+    from pydevd import *
+except ImportError:
+    None
+
+try:
     d = os.path.dirname(QgsApplication.qgisSettingsDirPath() + 'log/')
     if not os.path.exists(d):
         os.mkdir(d)
@@ -72,6 +77,7 @@ class log(object):
     @staticmethod
     def removeLogging():
         ''' Remove log handler '''
+        log.handler.close()
         logger = logging.getLogger(log.pluginId)
         logger.removeHandler(log.handler)
         del log.handler

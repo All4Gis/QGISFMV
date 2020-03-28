@@ -129,7 +129,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="262"/>
+        <location filename="../manager/QgsManager.py" line="272"/>
         <source>Open video</source>
         <translation>Abrir video</translation>
     </message>
@@ -139,22 +139,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="229"/>
+        <location filename="../manager/QgsManager.py" line="239"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation>Este vídeo no tiene Metadatos ! :</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="174"/>
+        <location filename="../manager/QgsManager.py" line="184"/>
         <source>Loading</source>
         <translation>Cargando</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="219"/>
+        <location filename="../manager/QgsManager.py" line="229"/>
         <source>Start location not available.</source>
         <translation>Ubicación de inicio no disponible.</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="204"/>
+        <location filename="../manager/QgsManager.py" line="214"/>
         <source>Failed loading FFMPEG ! </source>
         <translation>Error al cargar FFMPEG!</translation>
     </message>
@@ -164,7 +164,7 @@
         <translation>Eliminar del listado</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="143"/>
+        <location filename="../manager/QgsManager.py" line="153"/>
         <source>You must delete some video from the list before adding a new one</source>
         <translation>Debe eliminar algunos videos de la lista antes de agregar uno nuevo.</translation>
     </message>
@@ -182,49 +182,54 @@
         <translation>Archivo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="131"/>
+        <location filename="../ui/ui_FmvManager.ui" line="133"/>
         <source>Id</source>
         <translation>Id</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="141"/>
+        <location filename="../ui/ui_FmvManager.ui" line="143"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="151"/>
+        <location filename="../ui/ui_FmvManager.ui" line="153"/>
         <source>Status</source>
         <translation>Estado</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="161"/>
+        <location filename="../ui/ui_FmvManager.ui" line="163"/>
         <source>Source</source>
         <translation>Fuente</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="199"/>
+        <location filename="../ui/ui_FmvManager.ui" line="201"/>
         <source>Open Stream (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="171"/>
+        <location filename="../ui/ui_FmvManager.ui" line="173"/>
         <source>Start Location</source>
         <translation>Lugar de inicio</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="181"/>
+        <location filename="../ui/ui_FmvManager.ui" line="183"/>
         <source>Progress</source>
         <translation>Progreso</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="208"/>
+        <location filename="../ui/ui_FmvManager.ui" line="210"/>
         <source>Open Video File</source>
         <translation>Abrir archivo de video</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="217"/>
+        <location filename="../ui/ui_FmvManager.ui" line="219"/>
         <source>Create MISB File</source>
         <translation>Crear archivo MISB</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvManager.ui" line="228"/>
+        <source>Close</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -765,7 +770,7 @@
 <context>
     <name>QgsFmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="100"/>
+        <location filename="../QgsFmv.py" line="102"/>
         <source>Full Motion Video (FMV)</source>
         <translation>Full Motion Video (FMV)</translation>
     </message>

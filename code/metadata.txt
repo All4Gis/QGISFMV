@@ -26,6 +26,13 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.9:
+    	- Style changes
+    	- Download Global DEM (gisandbeers link)
+    	- Add close button to manager window
+    	- Fix display if canvas uses otf-projection
+    	- Insert fmv layer group on top
+    	- Add news DJI videos (QGIS Mexico, Luis Gallardo)
+    	- Bump python requirements
     	- Fix layer can be null if the Player has been closed.
     	- Avoid potential bug if layer already has been closed.
     	- Fixed streaming issue, forward stream to local address: 127.0.0.1
@@ -33,6 +40,8 @@ changelog=
     	- Fix #70 FFMPEG download failed bug
     	- Fix klv when out of range
     	- Add RPT experimental protocol
+    	- Update translations
+    	- Minor changes
     1.8:
     	- Add *.bats and *.sh for compile,deploy code etc, for a better contribution
     	- Working on linux (tested using Ubuntu 18.04.3 LTS)

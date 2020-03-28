@@ -130,7 +130,7 @@
         <translation type="obsolete">Remove the current selection&apos;s video</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="262"/>
+        <location filename="../manager/QgsManager.py" line="272"/>
         <source>Open video</source>
         <translation>Open video</translation>
     </message>
@@ -140,22 +140,22 @@
         <translation type="obsolete">Remove</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="229"/>
+        <location filename="../manager/QgsManager.py" line="239"/>
         <source>This video don&apos;t have Metadata ! </source>
         <translation type="unfinished">This video don&apos;t have Metadata ! :</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="174"/>
+        <location filename="../manager/QgsManager.py" line="184"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="219"/>
+        <location filename="../manager/QgsManager.py" line="229"/>
         <source>Start location not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="204"/>
+        <location filename="../manager/QgsManager.py" line="214"/>
         <source>Failed loading FFMPEG ! </source>
         <translation type="unfinished"></translation>
     </message>
@@ -165,7 +165,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="143"/>
+        <location filename="../manager/QgsManager.py" line="153"/>
         <source>You must delete some video from the list before adding a new one</source>
         <translation type="unfinished"></translation>
     </message>
@@ -183,48 +183,53 @@
         <translation type="unfinished">File</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="131"/>
+        <location filename="../ui/ui_FmvManager.ui" line="133"/>
         <source>Id</source>
         <translation type="unfinished">Id</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="141"/>
+        <location filename="../ui/ui_FmvManager.ui" line="143"/>
         <source>Name</source>
         <translation type="unfinished">Name</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="151"/>
+        <location filename="../ui/ui_FmvManager.ui" line="153"/>
         <source>Status</source>
         <translation type="unfinished">Status</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="161"/>
+        <location filename="../ui/ui_FmvManager.ui" line="163"/>
         <source>Source</source>
         <translation type="unfinished">Source</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="199"/>
+        <location filename="../ui/ui_FmvManager.ui" line="201"/>
         <source>Open Stream (experimental)</source>
         <translation type="unfinished">Open Stream</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="171"/>
+        <location filename="../ui/ui_FmvManager.ui" line="173"/>
         <source>Start Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="181"/>
+        <location filename="../ui/ui_FmvManager.ui" line="183"/>
         <source>Progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="208"/>
+        <location filename="../ui/ui_FmvManager.ui" line="210"/>
         <source>Open Video File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvManager.ui" line="217"/>
+        <location filename="../ui/ui_FmvManager.ui" line="219"/>
         <source>Create MISB File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_FmvManager.ui" line="228"/>
+        <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -765,7 +770,7 @@
 <context>
     <name>QgsFmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="100"/>
+        <location filename="../QgsFmv.py" line="102"/>
         <source>Full Motion Video (FMV)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -773,7 +778,7 @@
 <context>
     <name>QgsFmvInstaller</name>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="222"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="248"/>
         <source>Missing dependency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -783,98 +788,118 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="222"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="248"/>
         <source>Do you want install FFMPEG?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="285"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="311"/>
         <source>Do you want install missing dependencies?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="272"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="298"/>
         <source>Dem file not exist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="303"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="329"/>
         <source>Python libraries installed correctly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="310"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="336"/>
         <source>Error installing the python libraries, use the requirements file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="157"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="183"/>
         <source>Do you want upgrade dependencies?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="162"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="188"/>
         <source>Python libraries updated correctly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="403"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="429"/>
         <source>No requirements file found in {}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="157"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="183"/>
         <source>Updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="285"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="170"/>
         <source>Missing dependencies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="194"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="220"/>
         <source>Do you want install GStreamer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="207"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="233"/>
         <source>INSTALLATION FAILED: Failed to install GStreamer library.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="209"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="235"/>
         <source>INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="235"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="261"/>
         <source>Failed to install ffmpeg library, trying add-apt-repository.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="254"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="280"/>
         <source>INSTALLATION FAILED: Could not install ffmpeg package.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="243"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="269"/>
         <source>GET REPO SUCCESSFUL: Successfully added trusty-media repo where ffmpeg is located</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="248"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="274"/>
         <source>UPDATE FAILED: Failed to retrieve packages.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="250"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="276"/>
         <source>UPDATE SUCCESSFUL: Sucessfully retrived updated packages.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="256"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="282"/>
         <source>INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="96"/>
+        <source>&lt;b&gt;Missing dependency&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="132"/>
+        <source>&lt;b&gt;Dem file not exist!&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="132"/>
+        <source>Do you want download global DEM?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../utils/QgsFmvInstaller.py" line="311"/>
+        <source>&lt;b&gt;Missing dependencies&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -52,7 +52,7 @@ if platform.machine().endswith('64'):
 else:
     FFMPEG = "https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-20190502-7eba264-win32-static.zip"
 
-DemGlobal = "http://www.gisandbeers.com/RRSS/Cartografia/DEM-Mundial.rar"
+DemGlobal = "http://www.gisandbeers.com/RRSS/Cartografia/ETOPO1.zip"
 
 progress = QProgressBar()
 progress.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -74,7 +74,7 @@ def WindowsInstaller():
     if not IsLavFilters():
         ''' lAV Filters '''
         buttonReply = qgsu.CustomMessage("QGIS FMV",
-                                         QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
+                                         QCoreApplication.translate("QgsFmvInstaller", """<b>Missing dependency</b>"""),
                                          QCoreApplication.translate("QgsFmvInstaller", "Do you want install Lav Filters?"),
                                          icon="Information")
         if buttonReply == QMessageBox.Yes:
@@ -94,7 +94,7 @@ def WindowsInstaller():
     if not IsFFMPEG():
         ''' FFMPEG Lib '''
         buttonReply = qgsu.CustomMessage("QGIS FMV",
-                                         QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
+                                         QCoreApplication.translate("QgsFmvInstaller", """<b>Missing dependency</b>"""),
                                          QCoreApplication.translate("QgsFmvInstaller", "Do you want install FFMPEG?"),
                                          icon="Information")
         if buttonReply == QMessageBox.Yes:
@@ -123,19 +123,45 @@ def WindowsInstaller():
 
             with open(fileConfig, 'w') as configfile:
                 parser.write(configfile)
+            
             os.remove(filename)
             iface.messageBar().clearWidgets()
 
     if not isDem():
-        ''' DEM File '''
-        progressMessageBar = iface.messageBar().createMessage("QGIS FMV",
-                                                              QCoreApplication.translate("QgsFmvInstaller", "Dem file not exist!"))
-        iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
-        parser.set('GENERAL', 'DTM_file', "")
+        ''' DEM File '''        
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                 QCoreApplication.translate("QgsFmvInstaller","""<b>Dem file not exist!</b>"""),
+                                 QCoreApplication.translate("QgsFmvInstaller", "Do you want download global DEM?"),
+                                 icon="Information")
+        if buttonReply == QMessageBox.Yes:
+            progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading Global DEM...")
+            progressMessageBar.layout().addWidget(progress)
+            iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
+               
+            filename = 'DemGlobalFMV.zip'     
+            urlretrieve(DemGlobal,filename, reporthook)
+            zip_ref = zipfile.ZipFile(filename, 'r')
 
-        with open(fileConfig, 'w') as configfile:
-            parser.write(configfile)
-        iface.messageBar().clearWidgets()
+            dest = os.path.join(os.getenv("SystemDrive"), os.sep, "DemGlobalFMV")
+            extensions = ('.tif')
+
+            for zip_info in zip_ref.infolist():
+                if zip_info.filename[-1] == '/':
+                    continue
+                zip_info.filename = os.path.basename(zip_info.filename)
+                if zip_info.filename.endswith(extensions):
+                    zip_ref.extract(zip_info, dest)
+
+            zip_ref.close()
+
+            parser.set('GENERAL', 'DTM_file', os.getenv("SystemDrive") + os.sep + "DemGlobalFMV"+ os.sep +"ETOPO1.tif")
+
+            with open(fileConfig, 'w') as configfile:
+                parser.write(configfile)
+
+            os.remove(filename)
+            iface.messageBar().clearWidgets()
+        
 
     try:
         import homography, cv2, matplotlib  # noqa
@@ -281,7 +307,7 @@ def LinuxInstaller():
         import homography, cv2, matplotlib  # noqa
     except ImportError:
         try:
-            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing dependencies"),
+            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", """<b>Missing dependencies</b>"""),
                                              QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
                                              icon="Information")
             if buttonReply == QMessageBox.Yes:

@@ -56,6 +56,8 @@
        <addaction name="actionOpen_MPEG2_File"/>
        <addaction name="separator"/>
        <addaction name="actionCreate_MISB_File"/>
+       <addaction name="separator"/>
+       <addaction name="CloseButton"/>
       </widget>
       <addaction name="menuFile"/>
      </widget>
@@ -217,6 +219,15 @@ color: rgb(56, 95, 107);
     <string>Create MISB File</string>
    </property>
   </action>
+  <action name="CloseButton">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/close.png</normaloff>:/imgFMV/images/close.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="resources.qrc"/>
@@ -286,11 +297,28 @@ color: rgb(56, 95, 107);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>CloseButton</sender>
+   <signal>triggered()</signal>
+   <receiver>ManagerWindow</receiver>
+   <slot>CloseFMV()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>380</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openVideoFileDialog()</slot>
   <slot>PlayVideoFromManager()</slot>
   <slot>openStreamDialog()</slot>
   <slot>openMuiltiplexorDialog()</slot>
+  <slot>CloseFMV()</slot>
  </slots>
 </ui>
