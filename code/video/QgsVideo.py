@@ -8,7 +8,7 @@ from qgis.PyQt.QtGui import (QImage,
                              QBrush,
                              QCursor)
 from qgis.PyQt.QtWidgets import QRubberBand
-from qgis.core import QgsPointXY, QgsWkbTypes
+from qgis.core import QgsProject, QgsPointXY, QgsWkbTypes, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.gui import QgsRubberBand
 from qgis.utils import iface
 
@@ -743,12 +743,15 @@ class VideoWidget(QVideoWidget):
             Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                 event, self.surface)
 
+            tr = QgsCoordinateTransform( QgsCoordinateReferenceSystem( 'EPSG:4326' ), iface.mapCanvas().mapSettings().destinationCrs(), QgsProject.instance().transformContext() )
+            mapPt = tr.transform( QgsPointXY(Longitude, Latitude) )
+            
             vertices = self.Cursor_Canvas_RubberBand.numberOfVertices()
             if vertices > 0:
                 self.Cursor_Canvas_RubberBand.removePoint(0, True, 0)
-                self.Cursor_Canvas_RubberBand.movePoint(QgsPointXY(Longitude, Latitude), 0)
+                self.Cursor_Canvas_RubberBand.movePoint( mapPt, 0)
             else:
-                self.Cursor_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
+                self.Cursor_Canvas_RubberBand.addPoint( mapPt )
 
             if self._MGRS:
                 try:

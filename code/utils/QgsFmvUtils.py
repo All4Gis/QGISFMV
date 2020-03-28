@@ -766,7 +766,7 @@ def ResetData():
     SetcrtSensorSrc()
     SetcrtPltTailNum()
 
-    dtm_data = []
+    #dtm_data = []
     tLastLon = 0.0
     tLastLat = 0.0
 
@@ -797,7 +797,6 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
             "QgsFmvUtils", "There is no DTM for theses bounds. Check/increase DTM_buffer_size in settings.ini"), level=QGis.Warning)
     else:
         # qgsu.showUserAndLogMessage("UpdateLayers: ", " dtm_colLowerBound:"+str(dtm_colLowerBound)+" dtm_rowLowerBound:"+str(dtm_rowLowerBound)+" dtm_buffer:"+str(dtm_buffer), onlyLog=True)
-
         dtm_data = band.ReadAsArray(
             dtm_colLowerBound, dtm_rowLowerBound, 2 * dtm_buffer, 2 * dtm_buffer)
         if dtm_data is not None:
@@ -872,17 +871,17 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     if centerMode == 1:
         lyr = qgsu.selectLayerByName(Platform_lyr, groupName)
         if lyr is not None:
-            iface.mapCanvas().setExtent(lyr.extent())
+            iface.mapCanvas().setExtent( iface.mapCanvas().mapSettings().layerExtentToOutputExtent(lyr, lyr.extent() ) )
     # recenter map on footprint
     elif centerMode == 2:
         lyr = qgsu.selectLayerByName(Footprint_lyr, groupName)
         if lyr is not None:
-            iface.mapCanvas().setExtent(lyr.extent())
+            iface.mapCanvas().setExtent( iface.mapCanvas().mapSettings().layerExtentToOutputExtent(lyr, lyr.extent() ) )
     # recenter map on target
     elif centerMode == 3:
         lyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
         if lyr is not None:
-            iface.mapCanvas().setExtent(lyr.extent())
+            iface.mapCanvas().setExtent( iface.mapCanvas().mapSettings().layerExtentToOutputExtent(lyr, lyr.extent() ) )
 
     iface.mapCanvas().refresh()
     return

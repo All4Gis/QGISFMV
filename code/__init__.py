@@ -3,6 +3,7 @@ import sys
 from QGIS_FMV.utils.QgsFmvInstaller import WindowsInstaller, LinuxInstaller
 import platform
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.gui import resources_rc
 from qgis.PyQt.QtWidgets import QMessageBox
 from qgis.utils import iface
 from qgis.utils import reloadPlugin

@@ -121,6 +121,16 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self.meta_reader[str(cr)] = None
 
         return
+    
+    def CloseFMV(self):
+        ''' Close FMV '''
+        try:
+            self._PlayerDlg.close()
+        except Exception:
+            None
+        self.close()
+        return
+    
 
     def openStreamDialog(self):
         ''' Open Stream Dialog '''
