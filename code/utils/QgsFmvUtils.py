@@ -765,8 +765,8 @@ def ResetData():
 
     SetcrtSensorSrc()
     SetcrtPltTailNum()
-    # TODO : FIXME : Check why when we use elevation, not draw and footprint is wrong. We shouldn't be cleaning up the list.
-    dtm_data = []
+    # The DTM is not associated with every video.If we reset it, you won't see it when you change videos
+    # dtm_data = []
     tLastLon = 0.0
     tLastLat = 0.0
 
@@ -984,15 +984,15 @@ def CornerEstimationWithOffsets(packet):
         cornerPointLL = (OffsetLat4 + frameCenterLat,
                          OffsetLon4 + frameCenterLon)
 
-        if hasElevationModel():
-            cornerPointUL = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointUL)
-            cornerPointUR = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointUR)
-            cornerPointLR = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointLR)
-            cornerPointLL = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointLL)
+#         if hasElevationModel():
+#             cornerPointUL = GetLine3DIntersectionWithDEM(
+#                 GetSensor(), cornerPointUL)
+#             cornerPointUR = GetLine3DIntersectionWithDEM(
+#                 GetSensor(), cornerPointUR)
+#             cornerPointLR = GetLine3DIntersectionWithDEM(
+#                 GetSensor(), cornerPointLR)
+#             cornerPointLL = GetLine3DIntersectionWithDEM(
+#                 GetSensor(), cornerPointLL)
 
         UpdateFootPrintData(packet,
                             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
@@ -1129,15 +1129,15 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
         cornerPointLL = list(
             reversed(sphere.destination(destPoint, distance2, bearing)))
 
-        if hasElevationModel():
-            cornerPointUL = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointUL)
-            cornerPointUR = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointUR)
-            cornerPointLR = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointLR)
-            cornerPointLL = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointLL)
+#         if hasElevationModel():
+#             cornerPointUL = GetLine3DIntersectionWithDEM(
+#                 GetSensor(), cornerPointUL)
+#             cornerPointUR = GetLine3DIntersectionWithDEM(
+#                 GetSensor(), cornerPointUR)
+#             cornerPointLR = GetLine3DIntersectionWithDEM(
+#                 GetSensor(), cornerPointLR)
+#             cornerPointLL = GetLine3DIntersectionWithDEM(
+#                 GetSensor(), cornerPointLL)
 
         if sensor is not None:
             return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL

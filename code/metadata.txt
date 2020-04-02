@@ -19,12 +19,14 @@ about= Plugin for QGIS which allows to analyze, visualize and process videos ins
 	   </a>
 	   <p>If this plugin is useful for you, consider to donate to the author.</p>
 
-version=1.9
+version=1.10
 author= Francisco Raga
 email=franka1986@gmail.com
 
 changelog=
     ** General **
+    1.10:
+    	- Show elevation mouse position
     1.9:
     	- Style changes
     	- Download Global DEM (gisandbeers link)
