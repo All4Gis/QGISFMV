@@ -192,6 +192,23 @@ Contributions are welcome!
 * <a href="https://all4gis.github.io//" target="_blank">Fran Raga</a>
 
 
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/All4Gis"><img src="https://avatars0.githubusercontent.com/u/8123225?v=4" width="100px;" alt=""/><br /><sub><b>Fran Raga</b></sub></a><br /><a href="https://github.com/All4Gis/QGISFMV/commits?author=All4Gis" title="Code">💻</a><a href="https://github.com/All4Gis/QGISFMV/commits?author=All4Gis" title="Documentation">📖</a>
+    </td>	  
+    <td align="center"><a href="https://github.com/ltbam"><img src="https://avatars1.githubusercontent.com/u/11943224?v=4" width="100px;" alt=""/><br /><sub><b>ltbam</b></sub></a><br /><a href="https://github.com/All4Gis/QGISFMV/commits?author=ltbam" title="Code">💻</a>
+    </td>
+</tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+
 ## License
 
 GNU Public License (GPL) Version 3
