@@ -114,7 +114,17 @@ Windows automatically installs all, with user permission,If an error occurs, you
 
 Ubuntu automatically installs all the dependencies if the user wants, for this his password will be requested.
 
+If it does not install automatically, you should run:
+
+`sudo apt -y install python3-matplotlib`
+
+`sudo pip3 install matplotlib`
+
+`sudo pip3 install python-apt`
+
 The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for this reason you will have to install these dependencies using this [script](https://github.com/All4Gis/QGISFMV/tree/master/code/install-opencv.sh)
+
+`sh install-opencv.sh`
 
 ## Installation on Archlinux
 
