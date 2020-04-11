@@ -197,6 +197,8 @@ Contributions are welcome!
     </td>	  
     <td align="center"><a href="https://github.com/ltbam"><img src="https://avatars1.githubusercontent.com/u/11943224?v=4" width="100px;" alt=""/><br /><sub><b>ltbam</b></sub></a><br /><a href="https://github.com/All4Gis/QGISFMV/commits?author=ltbam" title="Code">💻</a>
     </td>
+	<td align="center"><a href="https://github.com/Eandelin"><img src="https://avatars1.githubusercontent.com/u/42190209?v=4" width="100px;" alt=""/><br /><sub><b>Eandelin</b></sub></a><br /><a href="https://github.com/All4Gis/QGISFMV/commits?author=Eandelin" title="Documentation">📖</a>
+    </td>
 </tr>
 </table>
 
