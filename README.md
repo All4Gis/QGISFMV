@@ -126,6 +126,8 @@ The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for
 
 `sh install-opencv.sh`
 
+You need to restart QGIS after this.
+
 ## Installation on Archlinux
 
 _Archlinux installation :_ 
