@@ -188,11 +188,7 @@ Contributions are welcome!
 
 ### Contributors List  
 
-* <a href="https://github.com/ltbam" target="_blank">ltbam</a>
-* <a href="https://all4gis.github.io//" target="_blank">Fran Raga</a>
-
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
@@ -206,7 +202,7 @@ Contributions are welcome!
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+<!-- CONTRIBUTORS-LIST:END -->
 
 
 ## License
