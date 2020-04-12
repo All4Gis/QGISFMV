@@ -116,7 +116,9 @@ Ubuntu automatically installs all the dependencies if the user wants, for this h
 
 If it does not install automatically, you should run:
 
-`sudo apt -y install python3-matplotlib`
+**Python dependencies**
+
+`sudo pip3 install homography`
 
 `sudo pip3 install matplotlib`
 
@@ -125,6 +127,14 @@ If it does not install automatically, you should run:
 The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for this reason you will have to install these dependencies using this [script](https://github.com/All4Gis/QGISFMV/tree/master/code/install-opencv.sh)
 
 `sh install-opencv.sh`
+
+**FFMPEG**
+
+`sudo apt-get -y install ffmpeg`
+
+**GStreamer**
+
+`sudo apt-get -y install python3-pyqt5.qtmultimedia gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio`
 
 You need to restart QGIS after this.
 
