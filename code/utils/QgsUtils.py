@@ -35,9 +35,9 @@ class QgsUtils(object):
     def CustomMessage(title, msg, informative="", icon="Critical"):
         ''' Custom Informative Message '''
         d = QMessageBox()
+        d.setTextFormat(Qt.RichText)
         d.setWindowTitle(title)
         d.setWindowIcon(QIcon(QPixmap(":/imgFMV/images/icon.png")))
-        d.setTextFormat(Qt.RichText)
         d.setText(msg)
         d.setInformativeText(informative)
         d.setIconPixmap(QgsUtils.GetIcon(icon))

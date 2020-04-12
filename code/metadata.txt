@@ -26,6 +26,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.10:
+    	- Fix some linux issues
     	- Show elevation mouse position
     1.9:
     	- Style changes

@@ -74,7 +74,7 @@ def WindowsInstaller():
     if not IsLavFilters():
         ''' lAV Filters '''
         buttonReply = qgsu.CustomMessage("QGIS FMV",
-                                         QCoreApplication.translate("QgsFmvInstaller", """<b>Missing dependency</b>"""),
+                                         QCoreApplication.translate("QgsFmvInstaller", """<b>Missing python dependency</b>"""),
                                          QCoreApplication.translate("QgsFmvInstaller", "Do you want install Lav Filters?"),
                                          icon="Information")
         if buttonReply == QMessageBox.Yes:
@@ -94,7 +94,7 @@ def WindowsInstaller():
     if not IsFFMPEG():
         ''' FFMPEG Lib '''
         buttonReply = qgsu.CustomMessage("QGIS FMV",
-                                         QCoreApplication.translate("QgsFmvInstaller", """<b>Missing dependency</b>"""),
+                                         QCoreApplication.translate("QgsFmvInstaller", """<b>Missing FFMPEG dependency</b>"""),
                                          QCoreApplication.translate("QgsFmvInstaller", "Do you want install FFMPEG?"),
                                          icon="Information")
         if buttonReply == QMessageBox.Yes:
@@ -167,7 +167,7 @@ def WindowsInstaller():
         import homography, cv2, matplotlib  # noqa
     except ImportError:
         try:
-            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing dependencies"),
+            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "<b>Missing dependencies</b>"),
                                              QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
                                              icon="Information")
             if buttonReply == QMessageBox.Yes:
@@ -180,7 +180,7 @@ def WindowsInstaller():
             import homography, cv2, matplotlib  # noqa
             # We update dependencies
             if matplotlib.__version__ < '3.1.0' or cv2.__version__ < '4.1.0':
-                buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Updates available"),
+                buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "<b>Updates available</b>"),
                                                  QCoreApplication.translate("QgsFmvInstaller", "Do you want upgrade dependencies?"),
                                                  icon="Information")
                 if buttonReply == QMessageBox.Yes:
@@ -202,31 +202,80 @@ def get_password():
         return password if ok else ''
 
 
-# Tested using QGIS 3.8 Zanzibar and Ubuntu 18.04
+# Tested using 3.12.1-București and Ubuntu 18.04
 def LinuxInstaller():
-    '''complete Linux installation '''
+    '''Complete Linux installation '''
     pwd = None
+    
+    try:
+        import homography, cv2, matplotlib, apt  # noqa
+    except ImportError:
+        try:
+
+            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing python dependencies"),
+                                             QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
+                                             icon="Information")
+            if buttonReply == QMessageBox.Yes:
+                
+                ''' Aditional dependencies'''
+                if pwd is None:
+                    ret = get_password()
+                    if ret == "":
+                        return
+        
+                    pwd = ret
+            
+                # Install matplotlib
+                cmd = 'sudo apt -y install matplotlib'
+                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+
+                # Install homography
+                cmd = 'sudo pip3 install homography'
+                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                
+                # Install apt
+                cmd = 'sudo pip3 install python-apt'
+                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+
+                # Install OpenCV
+#                 package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
+#                 opencv_file = os.path.join(package_dir, 'install-opencv.sh')
+#                 cmd = 'sh ' + opencv_file
+#                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
+        except ImportError:
+            None
+    finally:
+        try:
+            import homography, cv2, matplotlib,apt  # noqa
+        except ImportError:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
+                                       level=QGis.Critical)
+            
 
     if not IsLavFilters():
         ''' lAV Filters (GStreamer on Linux)'''
-        if pwd is None:
-            ret = get_password()
-            if ret == "":
-                return
-
-            pwd = ret
 
         buttonReply = qgsu.CustomMessage("QGIS FMV",
-                                         QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
+                                         QCoreApplication.translate("QgsFmvInstaller", "Missing GStreamer dependency"),
                                          QCoreApplication.translate("QgsFmvInstaller", "Do you want install GStreamer?"),
                                          icon="Information")
         if buttonReply == QMessageBox.Yes:
+            
+            if pwd is None:
+                ret = get_password()
+                if ret == "":
+                    return
+    
+                pwd = ret
+            
             # Install GStreamer
             progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading GStreamer...")
             progressMessageBar.layout().addWidget(progress)
             iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
 
-            cmd = 'sudo apt-get -y install python3-pyqt5.qtmultimedia gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio'
+            cmd = 'sudo apt-get -y install python3-pyqt5.qtmultimedia gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio libqt5gstreamer-1.0-0'
             gst_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
             if gst_rc != 0:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION FAILED: Failed to install GStreamer library.'), level=QGis.Critical)
@@ -237,18 +286,20 @@ def LinuxInstaller():
 
     if not IsFFMPEG():
         ''' FFMPEG Lib '''
-        if pwd is None:
-            ret = get_password()
-            if ret == "":
-                return
-
-            pwd = ret
 
         buttonReply = qgsu.CustomMessage("QGIS FMV",
-                                         QCoreApplication.translate("QgsFmvInstaller", "Missing dependency"),
+                                         QCoreApplication.translate("QgsFmvInstaller", "Missing FFMPEG dependency"),
                                          QCoreApplication.translate("QgsFmvInstaller", "Do you want install FFMPEG?"),
                                          icon="Information")
         if buttonReply == QMessageBox.Yes:
+            
+            if pwd is None:
+                ret = get_password()
+                if ret == "":
+                    return
+    
+                pwd = ret
+                
             # Download FFMPEG
             progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading FFMPEG...")
             progressMessageBar.layout().addWidget(progress)
@@ -303,38 +354,6 @@ def LinuxInstaller():
             parser.write(configfile)
         iface.messageBar().clearWidgets()
 
-    try:
-        import homography, cv2, matplotlib  # noqa
-    except ImportError:
-        try:
-            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", """<b>Missing dependencies</b>"""),
-                                             QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
-                                             icon="Information")
-            if buttonReply == QMessageBox.Yes:
-                # Install matplotlib
-                cmd = 'sudo apt -y install python3-matplotlib'
-                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
-
-                # Install matplotlib
-                cmd = 'sudo pip3 install matplotlib'
-                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
-
-#                 # Install OpenCV
-#                 package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
-#                 opencv_file = os.path.join(package_dir, 'install-opencv.sh')
-#                 cmd = 'sh ' + opencv_file
-#                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
-
-                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
-        except ImportError:
-            None
-    finally:
-        try:
-            import homography, cv2, matplotlib  # noqa
-        except ImportError:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
-                                       level=QGis.Critical)
-            raise
     return
 
 
@@ -363,7 +382,7 @@ def IsLavFilters():
         cache = apt.Cache()
         cache.open()
         try:
-            print("lav filters")
+            #print("lav filters")
             return cache["gst123"].is_installed
         except Exception:
             # does not exist
