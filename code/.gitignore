@@ -2,4 +2,5 @@
 .pydevproject
 *.pyc
 .settings/
+OpenCV/
 __pycache__/
