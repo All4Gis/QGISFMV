@@ -30,7 +30,7 @@ try:
     else:  # Linux Installer
         try:
             sys.path.append(
-                "/home/fran/.eclipse/360744294_linux_gtk_x86_64/plugins/org.python.pydev.core_7.3.0.201908161924/pysrc")
+                "/home/fragalop/.eclipse/org.eclipse.platform_4.14.0_1473617060_linux_gtk_x86_64/plugins/org.python.pydev.core_7.5.0.202001101138/pysrc")
             from pydevd import *
         except ImportError:
             None
