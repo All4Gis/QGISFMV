@@ -1517,6 +1517,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ResetData()
         # Remove Canvas RubberBands
         self.videoWidget.RemoveCanvasRubberbands()
+        # Remove Video objects
+        self.videoWidget.RemoveVideoDrawings()
 
     def closeEvent(self, event):
         """ Close Event """
