@@ -152,6 +152,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.durationChanged.connect(self.durationChanged)
         self.player.positionChanged.connect(self.positionChanged)
         self.player.mediaStatusChanged.connect(self.statusChanged)
+        self.player.playbackRateChanged.connect(self.rateChanged)
 
         self.player.stateChanged.connect(self.setCurrentState)
 
@@ -528,6 +529,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         menu.exec_(self.mapToGlobal(point))
 
+    def rateChanged(self, qreal):   
+        '''Signals the playbackRate has changed to rate.
+        @type value: qreal
+        @param value: rate value
+        '''
+        self.player.setPosition(self.sdv)
+        QApplication.processEvents()
+        return
+    
     def grayFilter(self, value):
         '''Gray Video Filter
         @type value: bool
@@ -537,6 +547,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetGray(value)
 
         if value and self.player.playbackRate() == self.playbackRateSlow:
+            self.sdv = self.player.position()
             self.player.setPlaybackRate(1.0)
             return
 
@@ -552,6 +563,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetMirrorH(value)
 
         if value and self.player.playbackRate() == self.playbackRateSlow:
+            self.sdv = self.player.position()
             self.player.setPlaybackRate(1.0)
             return
 
@@ -568,6 +580,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         # TODO : Temporarily we lower in rate. Player in other thread?
         if value and self.player.playbackRate() != self.playbackRateSlow:
+            self.sdv = self.player.position()
             self.player.setPlaybackRate(self.playbackRateSlow)
             return
 
@@ -585,6 +598,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         # TODO : Temporarily we lower in rate. Player in other thread?
         if value and self.player.playbackRate() != self.playbackRateSlow:
+            self.sdv = self.player.position()
             self.player.setPlaybackRate(self.playbackRateSlow)
             return
         # QApplication.processEvents()
@@ -600,6 +614,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetInvertColor(value)
 
         if value and self.player.playbackRate() == self.playbackRateSlow:
+            self.sdv = self.player.position()
             self.player.setPlaybackRate(1.0)
             return
 
@@ -616,6 +631,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetAutoContrastFilter(value)
         # TODO : Temporarily we lower in rate. Player in other thread?
         if value and self.player.playbackRate() != self.playbackRateSlow:
+            self.sdv = self.player.position()
             self.player.setPlaybackRate(self.playbackRateSlow)
             return
 
@@ -632,6 +648,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.SetMonoFilter(value)
 
         if value and self.player.playbackRate() == self.playbackRateSlow:
+            self.sdv = self.player.position()
             self.player.setPlaybackRate(1.0)
             return
 
@@ -697,8 +714,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.UncheckUtils(self.sender(), value)
         # TODO : Temporarily we lower in rate. Player in other thread?
-        if value and self.player.playbackRate() != self.playbackRateSlow:
+        if value and self.player.playbackRate() != self.playbackRateSlow: 
+            self.sdv = self.player.position()
             self.player.setPlaybackRate(self.playbackRateSlow)
+            
         QApplication.processEvents()
         self.videoWidget.SetObjectTracking(value)
         self.videoWidget.UpdateSurface()
@@ -789,7 +808,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.RestoreDrawer()
 
         if not value and self.player.playbackRate() == self.playbackRateSlow and sender.objectName() == "actionObject_Tracking" and not self.videoWidget._filterSatate.hasFiltersSlow():
+            self.sdv = self.player.position()
             self.player.setPlaybackRate(1.0)
+            
 
         QApplication.processEvents()
         sender.setChecked(value)
@@ -809,6 +830,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.videoWidget.RestoreFilters()
 
         if not value and self.player.playbackRate() == self.playbackRateSlow and not self.actionObject_Tracking.isChecked():
+            self.sdv = self.player.position()
             self.player.setPlaybackRate(1.0)
 
         QApplication.processEvents()
