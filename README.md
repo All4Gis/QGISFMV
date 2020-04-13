@@ -58,6 +58,8 @@ The plugin install automatically this requisites,but you can install it using on
 
 `python3 -m pip install -r requirements.txt`
 
+Here is a **settings.ini** sample [Linux]() configuration file  or [Windows]() sample
+
 &#8593; [Back to top](#table-of-contents)
 
 ## For show video
