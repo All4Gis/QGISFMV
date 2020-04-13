@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
-    <height>491</height>
+    <width>689</width>
+    <height>604</height>
    </rect>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
   <property name="windowTitle">
-   <string>Metadata</string>
+   <string>&amp;Metadata</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <property name="minimumSize">
@@ -82,7 +82,6 @@ margin: 1px;
 text-align: center;
 font-family: arial;
 font-weight: bold;
-font-size:12px;
 }
 
 QTableView
@@ -163,7 +162,7 @@ color: rgb(56, 95, 107);
      <normaloff>:/imgFMV/images/pdf.png</normaloff>:/imgFMV/images/pdf.png</iconset>
    </property>
    <property name="text">
-    <string>Save as PDF</string>
+    <string>&amp;Save as PDF</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+P</string>
@@ -175,7 +174,7 @@ color: rgb(56, 95, 107);
      <normaloff>:/imgFMV/images/csv.png</normaloff>:/imgFMV/images/csv.png</iconset>
    </property>
    <property name="text">
-    <string>Save as CSV</string>
+    <string>Save as &amp;CSV</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+C</string>

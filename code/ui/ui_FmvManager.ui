@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>761</width>
-    <height>281</height>
+    <width>1341</width>
+    <height>445</height>
    </rect>
   </property>
   <property name="windowIcon">
@@ -21,7 +21,7 @@
    <set>QDockWidget::AllDockWidgetFeatures</set>
   </property>
   <property name="windowTitle">
-   <string>Video Manager</string>
+   <string>Vi&amp;deo Manager</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -49,7 +49,7 @@
       </property>
       <widget class="QMenu" name="menuFile">
        <property name="title">
-        <string>File</string>
+        <string>Fi&amp;le</string>
        </property>
        <addaction name="actionOpen_Stream"/>
        <addaction name="separator"/>
@@ -92,7 +92,6 @@ border: 1px solid  rgb(147,176,35);
 margin: 0px;
 text-align: center;
 font-family: arial;
-font-size:12px;
 }
 
 QTableView
@@ -198,7 +197,7 @@ color: rgb(56, 95, 107);
      <normaloff>:/imgFMV/images/stream.png</normaloff>:/imgFMV/images/stream.png</iconset>
    </property>
    <property name="text">
-    <string>Open Stream (experimental)</string>
+    <string>&amp;Open Stream (experimental)</string>
    </property>
   </action>
   <action name="actionOpen_MPEG2_File">
@@ -207,7 +206,7 @@ color: rgb(56, 95, 107);
      <normaloff>:/imgFMV/images/misb-file.png</normaloff>:/imgFMV/images/misb-file.png</iconset>
    </property>
    <property name="text">
-    <string>Open Video File</string>
+    <string>Open &amp;Video File</string>
    </property>
   </action>
   <action name="actionCreate_MISB_File">
@@ -216,7 +215,7 @@ color: rgb(56, 95, 107);
      <normaloff>:/imgFMV/images/multiplexer.png</normaloff>:/imgFMV/images/multiplexer.png</iconset>
    </property>
    <property name="text">
-    <string>Create MISB File</string>
+    <string>&amp;Create MISB File</string>
    </property>
   </action>
   <action name="CloseButton">
@@ -225,7 +224,7 @@ color: rgb(56, 95, 107);
      <normaloff>:/imgFMV/images/close.png</normaloff>:/imgFMV/images/close.png</iconset>
    </property>
    <property name="text">
-    <string>Close</string>
+    <string>C&amp;lose</string>
    </property>
   </action>
  </widget>

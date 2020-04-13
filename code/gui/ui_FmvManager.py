@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui\ui_FmvManager.ui'
+# Form implementation generated from reading ui file 'ui/ui_FmvManager.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ManagerWindow(object):
     def setupUi(self, ManagerWindow):
         ManagerWindow.setObjectName("ManagerWindow")
-        ManagerWindow.resize(761, 281)
+        ManagerWindow.resize(1341, 445)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/manager.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         ManagerWindow.setWindowIcon(icon)
@@ -51,7 +51,6 @@ class Ui_ManagerWindow(object):
 "margin: 0px;\n"
 "text-align: center;\n"
 "font-family: arial;\n"
-"font-size:12px;\n"
 "}\n"
 "\n"
 "QTableView\n"
@@ -144,8 +143,8 @@ class Ui_ManagerWindow(object):
 
     def retranslateUi(self, ManagerWindow):
         _translate = QtCore.QCoreApplication.translate
-        ManagerWindow.setWindowTitle(_translate("ManagerWindow", "Video Manager"))
-        self.menuFile.setTitle(_translate("ManagerWindow", "File"))
+        ManagerWindow.setWindowTitle(_translate("ManagerWindow", "Vi&deo Manager"))
+        self.menuFile.setTitle(_translate("ManagerWindow", "Fi&le"))
         item = self.VManager.horizontalHeaderItem(0)
         item.setText(_translate("ManagerWindow", "Id"))
         item = self.VManager.horizontalHeaderItem(1)
@@ -158,9 +157,9 @@ class Ui_ManagerWindow(object):
         item.setText(_translate("ManagerWindow", "Start Location"))
         item = self.VManager.horizontalHeaderItem(5)
         item.setText(_translate("ManagerWindow", "Progress"))
-        self.actionOpen_Stream.setText(_translate("ManagerWindow", "Open Stream (experimental)"))
-        self.actionOpen_MPEG2_File.setText(_translate("ManagerWindow", "Open Video File"))
-        self.actionCreate_MISB_File.setText(_translate("ManagerWindow", "Create MISB File"))
-        self.CloseButton.setText(_translate("ManagerWindow", "Close"))
+        self.actionOpen_Stream.setText(_translate("ManagerWindow", "&Open Stream (experimental)"))
+        self.actionOpen_MPEG2_File.setText(_translate("ManagerWindow", "Open &Video File"))
+        self.actionCreate_MISB_File.setText(_translate("ManagerWindow", "&Create MISB File"))
+        self.CloseButton.setText(_translate("ManagerWindow", "C&lose"))
 
 from QGIS_FMV.gui import resources_rc
