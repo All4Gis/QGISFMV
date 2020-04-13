@@ -322,7 +322,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         ''' Create Player '''
         self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(
             row)], pass_time=self.pass_time, islocal=islocal, klv_folder=klv_folder)
-        self._PlayerDlg.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
+        self._PlayerDlg.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint)
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()
 
