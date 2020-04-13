@@ -599,6 +599,11 @@ class VideoWidget(QVideoWidget):
         self.poly_Canvas_RubberBand.reset()
         self.Track_Canvas_RubberBand.reset(QgsWkbTypes.LineGeometry)
         self.Cursor_Canvas_RubberBand.reset(QgsWkbTypes.PointGeometry)
+        
+    def RemoveVideoDrawings(self):
+        ''' Remove Video Drawings '''
+        self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawMeasureDistance, self.drawMeasureArea, self.drawPolygon = [], [], [], [], [], []
+        
 
     def paintEvent(self, event):
         """
