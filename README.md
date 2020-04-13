@@ -138,6 +138,11 @@ The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for
 
 You need to restart QGIS after this.
 
+**NOTE :** If you only see the videos with .mp4 extension, make sure you don't have it installed `gstreamer1.0-vaapi`. If you have it installed, you must delete it.
+
+`sudo apt-get remove gstreamer1.0-vaapi`
+
+
 ## Installation on Archlinux
 
 _Archlinux installation :_ 
