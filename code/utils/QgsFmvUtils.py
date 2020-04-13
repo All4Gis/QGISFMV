@@ -547,7 +547,8 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
     f = None
     if not isinstance(exts, list):
         exts = [exts]
-    extString = ";; ".join([" %s files (*.%s)" % (e.upper(), e)
+    #extString = ";; ".join([" %s files (*.%s)" % (e.upper(), e)
+    extString = ";; ".join([" %s files (%s)" % (e.upper(), e)
                             if e != "*" else "All files (*.*)" for e in exts])
 
     if allowMultiple:
