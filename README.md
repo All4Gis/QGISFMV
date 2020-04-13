@@ -58,6 +58,8 @@ The plugin install automatically this requisites,but you can install it using on
 
 `python3 -m pip install -r requirements.txt`
 
+Here is a **settings.ini** sample [Linux]() configuration file  or [Windows]() sample
+
 &#8593; [Back to top](#table-of-contents)
 
 ## For show video
@@ -138,6 +140,11 @@ The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for
 
 You need to restart QGIS after this.
 
+**NOTE :** If you only see the videos with .mp4 extension, make sure you don't have it installed `gstreamer1.0-vaapi`. If you have it installed, you must delete it.
+
+`sudo apt-get remove gstreamer1.0-vaapi`
+
+
 ## Installation on Archlinux
 
 _Archlinux installation :_ 
@@ -197,6 +204,27 @@ Follow these steps:
 	Send a pull request.
 	
 See before [FMV Coding Standards!](https://all4gis.github.io/QGISFMV/CodingStandards)
+
+**NOTE:** If you are use Linux need install pyuic5 and transifex client to compile the UI.
+
+https://command-not-found.com/pyuic5
+
+**Debian** `apt-get install pyqt5-dev-tools`
+
+**Ubuntu** `apt-get install pyqt5-dev-tools`
+
+**Arch Linux** `pacman -S python-pyqt5`
+
+**Kali Linux** `apt-get install pyqt5-dev-tools`
+
+**Fedora** `dnf install python2-qt5`
+
+**Raspbian** `apt-get install pyqt5-dev-tools`
+
+
+And transifex client:
+
+`pip3 install transifex-client`
 	
 And thanks for your code.
 
