@@ -221,6 +221,12 @@ https://command-not-found.com/pyuic5
 
 **Raspbian** `apt-get install pyqt5-dev-tools`
 
+For test stream feature you can simulate stream channel,like this:
+
+`ffmpeg -fflags +genpts -stream_loop -1 -re -i "C:\Users\Fran Raga\Desktop\video_test\Cheyenne.ts" -f rtp_mpegts -c copy -map 0:v -map 0:a -map 0:d rtp://127.0.0.1:8888`
+
+`ffmpeg -i rtp://127.0.0.1:8888 -c copy -map 0:v? -map 0:a? -f rtp_mpegts rtp://127.0.0.1:8898 -map 0:d? -f data -`
+
 
 And transifex client:
 
