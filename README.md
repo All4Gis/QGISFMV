@@ -58,7 +58,7 @@ The plugin install automatically this requisites,but you can install it using on
 
 `python3 -m pip install -r requirements.txt`
 
-Here is a **settings.ini** sample [Linux]() configuration file  or [Windows]() sample
+Here is a **settings.ini** sample [Linux](code/settings_linux_sample.ini) configuration file  or [Windows](code/settings_win_sample.ini) sample
 
 &#8593; [Back to top](#table-of-contents)
 
@@ -126,7 +126,7 @@ If it does not install automatically, you should run:
 
 `sudo pip3 install python-apt`
 
-The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for this reason you will have to install these dependencies using this [script](https://github.com/All4Gis/QGISFMV/tree/master/code/install-opencv.sh)
+The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for this reason you will have to install these dependencies using this [script](code/install-opencv.sh)
 
 `sh install-opencv.sh`
 
