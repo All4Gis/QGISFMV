@@ -50,7 +50,7 @@ for this reason, I decided to develop this open source project and, this way, of
 
 * [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib`
 
-* [Klvdata](https://github.com/paretech/klvdata) : customized version of this library.
+* [Klvdata](https://github.com/paretech/klvdata) : customized version of this library. (No need to install it)
 
 * [Homography](https://github.com/satellogic/homography) : `python3 -m pip install homography`
 
