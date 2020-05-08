@@ -121,11 +121,7 @@ If it does not install automatically, you should run:
 
 **Python dependencies**
 
-`sudo pip3 install homography`
-
-`sudo pip3 install matplotlib`
-
-`sudo pip3 install python-apt`
+`sudo pip3 install homography matplotlib python-apt`
 
 The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for this reason you will have to install these dependencies using this [script](code/install-opencv.sh)
 
