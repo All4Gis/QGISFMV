@@ -59,10 +59,10 @@ class QgsUtils(object):
                 g = root.findGroup(group)
                 if g is not None:
                     for child in returnLayer:
-                    layer = g.findLayer(child.id())
-                    if layer is not None:
-                        returnLayer = child
-                        return returnLayer
+                        layer = g.findLayer(child.id())
+                        if layer is not None:
+                            returnLayer = child
+                            return returnLayer
         except IndexError:
             return returnLayer
 
