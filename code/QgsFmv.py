@@ -117,6 +117,7 @@ class Fmv:
         self._FMVManager.show()
 
     def hideManagerWidget( self ):
-        self._FMVManager.hide()
-        self._FMVManager = None
+        if self._FMVManager:
+            self._FMVManager.hide()
+            self._FMVManager = None
         self.bottomBar.hide()

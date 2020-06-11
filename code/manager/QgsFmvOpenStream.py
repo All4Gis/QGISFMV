@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QRegExp
 from qgis.PyQt.QtGui import QIntValidator, QRegExpValidator
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog, QApplication
 from QGIS_FMV.gui.ui_FmvOpenStream import Ui_FmvOpenStream
 
 try:
     from pydevd import *
 except ImportError:
     None
-
-# TODO : Develop that functionality 
 
 
 class OpenStream(QDialog, Ui_FmvOpenStream):
@@ -41,3 +39,4 @@ class OpenStream(QDialog, Ui_FmvOpenStream):
         if host != "" and port != "":
             self.parent.AddFileRowToManager(v, v)
             self.close()
+            QApplication.restoreOverrideCursor()
