@@ -142,7 +142,7 @@ class ClassifyingCountry(StringElementParser):
     key = b'\x03'
     TAG = 3
     UDSKey = "-"
-    LDSName = "Classyfing Country"
+    LDSName = "Classifying Country"
     ESDName = ""
     UDSName = ""
 
@@ -301,7 +301,7 @@ class ClassifyingCountryAndReleasingInstructionCCMVD(StringElementParser):
     key = b'\x17'
     TAG = 23
     UDSKey = "-"
-    LDSName = 'Classifying Country And Releasing Instruction Courntry Coding Method Version Date'
+    LDSName = 'Classifying Country And Releasing Instruction Country Coding Method Version Date'
     ESDName = ""
     UDSName = ""
 
