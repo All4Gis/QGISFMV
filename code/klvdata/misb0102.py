@@ -91,7 +91,7 @@ class SecurityLocalMetadataSet(SetParser):
     LDSName = "Security Local Metadata Set"
     ESDName = ""
     UDSName = ""
-    
+
     parsers = {}
 
     _unknown_element = UnknownElement
@@ -111,7 +111,7 @@ class SecurityClassification(BytesElementParser):
     LDSName = "Security Classification"
     ESDName = ""
     UDSName = ""
-    
+
     _classification = {
         b'\x01': 'UNCLASSIFIED',
         b'\x02': 'RESTRICTED',
@@ -131,7 +131,7 @@ class ClassifyingCountryAndReleasingInstructionCCM(BytesElementParser):
     LDSName = "Classifying Country And Releasing Instruction Country Coding Method"
     ESDName = ""
     UDSName = ""
-    
+
     _classification = _classifying_country_coding
 
 
@@ -142,7 +142,7 @@ class ClassifyingCountry(StringElementParser):
     key = b'\x03'
     TAG = 3
     UDSKey = "-"
-    LDSName = "Classyfing Country"
+    LDSName = "Classifying Country"
     ESDName = ""
     UDSName = ""
 
@@ -254,7 +254,7 @@ class ObjectCountryCodingMethod(BytesElementParser):
     LDSName = 'Object Country Coding Method'
     ESDName = ""
     UDSName = ""
-    
+
     _classification = _object_country_coding
 
 
@@ -301,7 +301,7 @@ class ClassifyingCountryAndReleasingInstructionCCMVD(StringElementParser):
     key = b'\x17'
     TAG = 23
     UDSKey = "-"
-    LDSName = 'Classifying Country And Releasing Instruction Courntry Coding Method Version Date'
+    LDSName = 'Classifying Country And Releasing Instruction Country Coding Method Version Date'
     ESDName = ""
     UDSName = ""
 

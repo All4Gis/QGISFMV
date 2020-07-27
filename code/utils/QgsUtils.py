@@ -2,13 +2,13 @@
 import os
 import shutil
 
-from qgis.PyQt.QtGui import QPixmap
-from qgis.PyQt.QtWidgets import QMessageBox
+from qgis.PyQt.QtGui import QPixmap, QIcon
+from qgis.PyQt.QtWidgets import QMessageBox, QSpacerItem, QSizePolicy 
 from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.core import (QgsProject,
                        Qgis as QGis)
 from qgis.utils import iface
-from qgis.PyQt.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings, Qt
 
 try:
     from pydevd import *
@@ -35,13 +35,21 @@ class QgsUtils(object):
     def CustomMessage(title, msg, informative="", icon="Critical"):
         ''' Custom Informative Message '''
         d = QMessageBox()
+        d.setTextFormat(Qt.RichText)
         d.setWindowTitle(title)
+        d.setWindowIcon(QIcon(QPixmap(":/imgFMV/images/icon.png")))
         d.setText(msg)
         d.setInformativeText(informative)
         d.setIconPixmap(QgsUtils.GetIcon(icon))
         d.addButton(QMessageBox.Yes)
         d.addButton(QMessageBox.No)
         d.setDefaultButton(QMessageBox.No)
+       
+        # Trick resize QMessageBox
+        horizontalSpacer = QSpacerItem(500, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        layout = d.layout()
+        layout.addItem(horizontalSpacer, layout.rowCount(), 0, 1, layout.columnCount())
+        
         ret = d.exec_()
         return ret
 

@@ -79,7 +79,7 @@
         <file>../images/stamp/confidential.png</file>  
         <file>../images/zoom-rectangle.png</file> 
         <file>../images/opened-folder.png</file> 
-        <file>../images/multiplexer.png</file>
-        <file>../images/close.svg</file>
+        <file>../images/multiplexer.png</file> 
+        <file>../images/close.png</file> 
     </qresource>
 </RCC>

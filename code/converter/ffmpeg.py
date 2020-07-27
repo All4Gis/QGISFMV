@@ -289,8 +289,7 @@ class MediaInfo(object):
         First video stream, or None if there are no video streams.
         """
         for s in self.streams:
-            if s.type == 'video' and (self.posters_as_video
-                                      or not s.attached_pic):
+            if s.type == 'video' and (self.posters_as_video or not s.attached_pic):
                 return s
         return None
 

@@ -24,10 +24,10 @@
 import os.path
 
 from qgis.PyQt.QtCore import (QSettings,
-                          QCoreApplication,
-                          QTranslator,
-                          qVersion,
-                          QThread, Qt)
+                              QCoreApplication,
+                              QTranslator,
+                              qVersion,
+                              QThread, Qt)
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QHBoxLayout, QSizePolicy
 from QGIS_FMV.about.QgsFmvAbout import FmvAbout
@@ -49,7 +49,7 @@ class Fmv:
 
     def __init__(self, iface):
         """ Contructor """
-
+        self.run_once = False
         self.iface = KadasPluginInterface.cast( iface )
         log.initLogging()
         threadcount = QThread.idealThreadCount()
@@ -74,19 +74,39 @@ class Fmv:
                     QCoreApplication.installTranslator(self.translator)
 
         self._FMVManager = None
-        self.bottomBar = None
+        self.bottomBar = None                     
 
     def initGui(self):
         ''' FMV Action '''
-
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
                                  "UAV", self.iface.mainWindow(),
                                  toggled=self.run)
         self.actionFMV.setCheckable( True )
         self.iface.addAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Plugins")
-        
+        #self.iface.registerMainWindowAction(
+        #    self.actionFMV, qgsu.SetShortcutForPluginFMV(u"FMV"))
+        #self.iface.addToolBarIcon(self.actionFMV)
+        #self.iface.addPluginToMenu(QCoreApplication.translate(
+        #    "QgsFmv", "Full Motion Video (FMV)"), self.actionFMV)
+
+        #''' About Action '''
+        #self.actionAbout = QAction(QIcon(":/imgFMV/images/Information.png"),
+        #                           u"FMV About", self.iface.mainWindow(),
+        #                           triggered=self.About)
+        #self.iface.registerMainWindowAction(
+        #    self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About", "Alt+A"))
+        #self.iface.addPluginToMenu(QCoreApplication.translate(
+        #    "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
+
     def unload(self):
+        ''' Unload Plugin '''
         self.iface.removeAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Plugins")
+        #self.iface.removePluginMenu(QCoreApplication.translate(
+        #    "QgsFmv", "Full Motion Video (FMV)"), self.actionFMV)
+        #self.iface.removePluginMenu(QCoreApplication.translate(
+        #    "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
+        #self.iface.removeToolBarIcon(self.actionFMV)
+        log.removeLogging()
 
     def About(self):
         ''' Show About Dialog '''
@@ -94,6 +114,23 @@ class Fmv:
         self.About.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self.About.exec_()
 
+    #def run(self):
+    #    ''' Run method '''
+    #    if self._FMVManager is None:
+    #        self.CreateDockWidget()
+    #
+    #                              
+    #
+    #def CreateDockWidget(self):
+    #    ''' Create Manager Video QDockWidget '''
+    #                                                 
+    #                                                                                    
+    #        
+    #                            
+    #                                                                  
+    #                                                             
+    #    self._FMVManager = FmvManager(self.iface)
+    #    self.iface.addDockWidget(Qt.BottomDockWidgetArea, self._FMVManager)
     def run(self, toggleState ):
         ''' Run method '''
         if toggleState:
@@ -103,21 +140,25 @@ class Fmv:
 
     def createManagerWidget(self):
         ''' Create Manager Video QDockWidget '''
-        if not self.bottomBar:
-            self.bottomBar = KadasBottomBar( self.iface.mapCanvas() )
-            self.bottomBar.setLayout( QHBoxLayout() )
-            self.bottomBar.setSizePolicy( QSizePolicy.Expanding, QSizePolicy.Preferred )
-            
-        if not self._FMVManager:
-            self._FMVManager = FmvManager(self.iface, self.actionFMV )
-            self.bottomBar.layout().addWidget( self._FMVManager )
-
-        self.bottomBar.adjustSize()
-        self.bottomBar.show()
-        self._FMVManager.show()
+        
+        if not self.bottomBar or not self._FMVManager:
+            if not self.run_once:
+                self.run_once = True
+                self.bottomBar = KadasBottomBar( self.iface.mapCanvas() )
+                self.bottomBar.setLayout( QHBoxLayout() )
+                self.bottomBar.setSizePolicy( QSizePolicy.Expanding, QSizePolicy.Preferred )
+                self._FMVManager = FmvManager(self.iface, self.actionFMV)
+                self.bottomBar.layout().addWidget( self._FMVManager )
+                self.bottomBar.adjustSize()
+                self.bottomBar.show()
+                self._FMVManager.show()
+        else:    
+            self.bottomBar.show()
+            self._FMVManager.show()
+        
 
     def hideManagerWidget( self ):
         if self._FMVManager:
             self._FMVManager.hide()
-            self._FMVManager = None
+            #self._FMVManager = None
         self.bottomBar.hide()

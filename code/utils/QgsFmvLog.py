@@ -1,4 +1,4 @@
-﻿  # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import inspect
 import logging
 import logging.handlers
@@ -7,6 +7,11 @@ import sys
 import traceback
 
 from qgis.core import QgsApplication
+
+try:
+    from pydevd import *
+except ImportError:
+    None
 
 try:
     d = os.path.dirname(QgsApplication.qgisSettingsDirPath() + 'log/')
@@ -72,6 +77,7 @@ class log(object):
     @staticmethod
     def removeLogging():
         ''' Remove log handler '''
+        log.handler.close()
         logger = logging.getLogger(log.pluginId)
         logger.removeHandler(log.handler)
         del log.handler

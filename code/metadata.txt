@@ -1,17 +1,56 @@
 [general]
-name= Kadas UAV Mapper
+name= QGIS Full Motion Video
+internal_name = QGIS_FMV
 qgisMinimumVersion=3.8
 qgisMaximumVersion=3.99
 description=<p>QGIS Full Motion Video.</p>
-about= Plugin for Kadas which allows to view STANAG videos. Requires K-Lite Media Codec Pack.
+about= Plugin for QGIS which allows to analyze, visualize and process videos inside the QGIS environment. 
+	   QGIS FMV accepts multiple video formats such as mp4, ts, avi, etc. It is also able to extract video frames, 
+	   to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more. 
+	   It also offers the possibility to create reports with video metadata.
+	   
+	   <strong>QGIS FMV is in the 'Plugins' toolbar !</strong>
+	   
+	   <a href="https://all4gis.github.io/QGISFMV/" target="_blank">Documentation</a>
 
-version=1.8.1
+	   <p>Want to buy me a beer (or gadget)? Please use Paypal button.</p>
+	   <a href="https://goo.gl/jFCeCW" target="_blank">
+	   <img border="0" alt="Donate" src="https://goo.gl/6Fov75">
+	   </a>
+	   <p>If this plugin is useful for you, consider to donate to the author.</p>
+
+version=1.10
 author= Francisco Raga
 email=franka1986@gmail.com
 
 changelog=
     ** General **
+    1.10:
+    	- Update documentation and Ubuntu installation
+    	- Fix case sensitive linux file dialog
+    	- Fix linux installation
+    	- Fix linux compile
+    	- Show elevation mouse position
+    1.9:
+    	- Style changes
+    	- Download Global DEM (gisandbeers link)
+    	- Add close button to manager window
+    	- Fix display if canvas uses otf-projection
+    	- Insert fmv layer group on top
+    	- Add news DJI videos (QGIS Mexico, Luis Gallardo)
+    	- Bump python requirements
+    	- Fix layer can be null if the Player has been closed.
+    	- Avoid potential bug if layer already has been closed.
+    	- Fixed streaming issue, forward stream to local address: 127.0.0.1
+    	- Update setparser.py #72
+    	- Fix #70 FFMPEG download failed bug
+    	- Fix klv when out of range
+    	- Add RPT experimental protocol
+    	- Update translations
+    	- Minor changes
     1.8:
+    	- Add *.bats and *.sh for compile,deploy code etc, for a better contribution
+    	- Working on linux (tested using Ubuntu 18.04.3 LTS)
     	- Follow cursor video movement on canvas
     	- Fix csv enconding
     	- Group Video layers/rasters etc

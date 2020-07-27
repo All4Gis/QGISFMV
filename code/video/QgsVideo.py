@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize
 from qgis.PyQt.QtGui import (QImage,
-                         QPalette,
-                         QPainter,
-                         QPen,
-                         QColor,
-                         QBrush,
-                         QCursor)
+                             QPalette,
+                             QPainter,
+                             QPen,
+                             QColor,
+                             QBrush,
+                             QCursor)
 from qgis.PyQt.QtWidgets import QRubberBand
 from qgis.core import QgsProject, QgsPointXY, QgsWkbTypes, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.gui import QgsRubberBand
@@ -84,7 +84,7 @@ class FilterState(object):
     def clear(self):
         ''' Reset Filter variables '''
         self.__init__()
-        
+
     def hasFiltersSlow(self):
         ''' Check if video has Slow filters aplicated '''
         if True in (self.contrastFilter, self.edgeDetectionFilter, self.NDVI):
@@ -207,7 +207,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         if self.widget._filterSatate.edgeDetectionFilter:
             try:
                 self.image = filter.EdgeFilter(self.image)
-            except Exception as e:
+            except Exception:
                 None
         # TODO : Test in other thread
         if self.widget._filterSatate.contrastFilter:
@@ -235,14 +235,14 @@ class VideoWidget(QVideoWidget):
         super().__init__(parent)
         self.surface = VideoWidgetSurface(self)
         self.setAttribute(Qt.WA_OpaquePaintEvent)
-        
+
         self.Tracking_Video_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
         self.Censure_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
 
         color_blue = QColor(Qt.blue)
         color_black = QColor(Qt.black)
         color_amber = QColor(252, 215, 108)
-        
+
         pal_blue = QPalette()
         pal_blue.setBrush(QPalette.Highlight, QBrush(color_blue))
         self.Tracking_Video_RubberBand.setPalette(pal_blue)
@@ -269,18 +269,18 @@ class VideoWidget(QVideoWidget):
 
         # Tracking Canvas Rubberband
         self.Track_Canvas_RubberBand = QgsRubberBand(
-            iface.mapCanvas(), QgsWkbTypes.LineGeometry)                
+            iface.mapCanvas(), QgsWkbTypes.LineGeometry)
         # set rubber band style
         self.Track_Canvas_RubberBand.setColor(color_blue)
         self.Track_Canvas_RubberBand.setWidth(5)
-       
+
         # Cursor Canvas Rubberband
         self.Cursor_Canvas_RubberBand = QgsRubberBand(
             iface.mapCanvas(), QgsWkbTypes.PointGeometry)
         self.Cursor_Canvas_RubberBand.setWidth(4)
         self.Cursor_Canvas_RubberBand.setColor(QColor(255, 100, 100, 250))
         self.Cursor_Canvas_RubberBand.setIcon(QgsRubberBand.ICON_FULL_DIAMOND)
-        
+
         self.parent = parent.parent()
 
         palette = self.palette()
@@ -321,7 +321,7 @@ class VideoWidget(QVideoWidget):
         if self.drawLines:
             if self.drawLines[-1][0] is None:
                 del self.drawLines[-1]
-            
+
             del self.drawLines[-1]
             self.UpdateSurface()
             AddDrawLineOnMap(self.drawLines)
@@ -338,7 +338,7 @@ class VideoWidget(QVideoWidget):
     def ResetDrawMeasureDistance(self):
         ''' Resets Measure Distance List '''
         self.drawMeasureDistance = []
-        
+
     def ResetDrawMeasureArea(self):
         ''' Resets Measure Area List '''
         self.drawMeasureArea = []
@@ -395,15 +395,14 @@ class VideoWidget(QVideoWidget):
                         break
                 except Exception:
                     None
-            
+
             self.UpdateSurface()
             # remove last index layer
             RemoveLastDrawPolygonOnMap()
 
     def keyPressEvent(self, event):
-        ''' 
-        Exit fullscreen 
-        :type event: QKeyEvent 
+        '''Exit fullscreen
+        :type event: QKeyEvent
         :param event:
         :return:
         '''
@@ -430,24 +429,24 @@ class VideoWidget(QVideoWidget):
             return
 
         if self.gt is not None and self._interaction.lineDrawer:
-            self.drawLines.append([None, None, None])          
+            self.drawLines.append([None, None, None])
             return
-        
+
         if self.gt is not None and self._interaction.measureDistance:
             self.drawMeasureDistance.append([None, None, None])
             return
-        
+
         if self.gt is not None and self._interaction.measureArea:
             self.drawMeasureArea.append([None, None, None])
             return
-        
+
         if self.gt is not None and self._interaction.polygonDrawer:
-            
+
             ok = AddDrawPolygonOnMap(self.poly_coordinates)
             # Prevent invalid geometry (Polygon with 2 points)
             if not ok:
                 return
-            
+
             self.drawPolygon.append([None, None, None])
 
             # Empty RubberBand
@@ -456,7 +455,7 @@ class VideoWidget(QVideoWidget):
             # Empty List
             self.poly_coordinates = []
             return
-        
+
         self.UpdateSurface()
         self.setFullScreen(not self.isFullScreen())
         event.accept()
@@ -466,9 +465,9 @@ class VideoWidget(QVideoWidget):
         return self.surface
 
     def UpdateSurface(self):
-        ''' Update Video Surface only is is stopped or paused '''   
+        ''' Update Video Surface only is is stopped or paused '''
         if self.parent.playerState in (QMediaPlayer.StoppedState,
-                                QMediaPlayer.PausedState):
+                                       QMediaPlayer.PausedState):
             self.update()
         QApplication.processEvents()
 
@@ -481,117 +480,104 @@ class VideoWidget(QVideoWidget):
         return self.surface.image
 
     def SetInvertColor(self, value):
-        ''' 
-        Set Invert color filter 
-        @type value: bool 
+        '''Set Invert color filter
+        @type value: bool
         @param value:
         @return:
         '''
         self._filterSatate.invertColorFilter = value
 
     def SetObjectTracking(self, value):
-        ''' 
-        Set Object Tracking 
-        @type value: bool 
+        '''Set Object Tracking
+        @type value: bool
         @param value:
         @return:
         '''
         self._interaction.objectTracking = value
 
     def SetMeasureDistance(self, value):
-        ''' 
-        Set measure Distance 
-        @type value: bool 
+        '''Set measure Distance
+        @type value: bool
         @param value:
         @return:
         '''
         self._interaction.measureDistance = value
-        
+
     def SetMeasureArea(self, value):
-        ''' 
-        Set measure Area 
-        @type value: bool 
+        '''Set measure Area
+        @type value: bool
         @param value:
         @return:
         '''
         self._interaction.measureArea = value
 
     def SetHandDraw(self, value):
-        ''' 
-        Set Hand Draw 
-        @type value: bool 
+        '''Set Hand Draw
+        @type value: bool
         @param value:
         @return:
         '''
         self._interaction.HandDraw = value
 
     def SetCensure(self, value):
-        ''' 
-        Set Censure Video Parts 
-        @type value: bool 
+        '''Set Censure Video Parts
+        @type value: bool
         @param value:
         @return:
         '''
         self._interaction.censure = value
-        
+
     def SetMGRS(self, value):
-        ''' 
-        Set MGRS Cursor Coordinates 
-        @type value: bool 
+        '''Set MGRS Cursor Coordinates
+        @type value: bool
         @param value:
         @return:
         '''
         self._MGRS = value
 
     def SetGray(self, value):
-        ''' 
-        Set gray scale 
-        @type value: bool 
+        '''Set gray scale
+        @type value: bool
         @param value:
         @return:
         '''
         self._filterSatate.grayColorFilter = value
 
     def SetMirrorH(self, value):
-        ''' 
-        Set Horizontal Mirror 
-        @type value: bool 
+        '''Set Horizontal Mirror
+        @type value: bool
         @param value:
         @return:
         '''
         self._filterSatate.MirroredHFilter = value
 
     def SetNDVI(self, value):
-        ''' 
-        Set NDVI 
-        @type value: bool 
+        '''Set NDVI
+        @type value: bool
         @param value:
         @return:
         '''
         self._filterSatate.NDVI = value
 
     def SetEdgeDetection(self, value):
-        ''' 
-        Set Canny Edge filter 
-        @type value: bool 
+        '''Set Canny Edge filter
+        @type value: bool
         @param value:
         @return:
         '''
         self._filterSatate.edgeDetectionFilter = value
 
     def SetAutoContrastFilter(self, value):
-        ''' 
-        Set Automatic Contrast filter 
-        @type value: bool 
+        '''Set Automatic Contrast filter
+        @type value: bool
         @param value:
         @return:
         '''
         self._filterSatate.contrastFilter = value
 
     def SetMonoFilter(self, value):
-        ''' 
-        Set mono filter 
-        @type value: bool 
+        '''Set mono filter
+        @type value: bool
         @param value:
         @return:
         '''
@@ -607,46 +593,51 @@ class VideoWidget(QVideoWidget):
         # Magnifier Glass
         self.dragPos = QPoint()
         self.tapTimer.stop()
-        
+
     def RemoveCanvasRubberbands(self):
         ''' Remove Canvas Rubberbands '''
         self.poly_Canvas_RubberBand.reset()
-        self.Track_Canvas_RubberBand.reset(QgsWkbTypes.LineGeometry)   
+        self.Track_Canvas_RubberBand.reset(QgsWkbTypes.LineGeometry)
         self.Cursor_Canvas_RubberBand.reset(QgsWkbTypes.PointGeometry)
+        
+    def RemoveVideoDrawings(self):
+        ''' Remove Video Drawings '''
+        self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawMeasureDistance, self.drawMeasureArea, self.drawPolygon = [], [], [], [], [], []
+        
 
     def paintEvent(self, event):
         """
-        @type event: QPaintEvent 
+        @type event: QPaintEvent
         @param event:
         @return:
         """
         if not self.surface.isActive():
             return
-                
+
         self.painter = QPainter(self)
         self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
- 
+
         region = event.region()
-        self.painter.fillRect(region.boundingRect() , self.brush)  # Background painter color
- 
+        self.painter.fillRect(region.boundingRect(), self.brush)  # Background painter color
+
         try:
             self.surface.paint(self.painter)
             SetImageSize(self.currentFrame().width(),
-                     self.currentFrame().height())
+                         self.currentFrame().height())
         except Exception:
             None
-            
+
         # Prevent draw on video if not started or finished
         if self.parent.player.position() == 0:
             self.painter.end()
-            return          
-        
+            return
+
         self.gt = GetGCPGeoTransform()
-        
+
         # Draw On Video
         draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
                          self.drawMeasureDistance, self.drawMeasureArea, self.drawCesure, self.painter, self.surface, self.gt)
-        
+
         # Draw On Video Object tracking test
         if self._interaction.objectTracking and self._isinit:
             frame = convertQImageToMat(self.currentFrame())
@@ -662,7 +653,7 @@ class VideoWidget(QVideoWidget):
                 if vut.IsPointOnScreen(x, y, self.surface):
                     self.painter.setPen(self.blue_Pen)
                     self.painter.drawRect(x, y, bbox[2], bbox[3])
-                    
+
                     # Get Track object center
                     xc = x + (bbox[2] / 2)
                     yc = y + (bbox[3] / 2)
@@ -671,11 +662,11 @@ class VideoWidget(QVideoWidget):
                         p, self.surface)
                     # Draw Rubber Band on canvas
                     self.Track_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
-                    
+
             else:
                 self._isinit = False
                 del self.tracker
-                
+
         # Magnifier Glass
         if self._interaction.magnifier and not self.dragPos.isNull():
             draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
@@ -683,7 +674,7 @@ class VideoWidget(QVideoWidget):
         # Stamp On Video
         if self._interaction.stamp:
             draw.drawStampOnVideo(self, self.painter)
-            
+
         self.painter.end()
         return
 
@@ -699,23 +690,23 @@ class VideoWidget(QVideoWidget):
         if self._interaction.magnifier and not self.dragPos.isNull():
             draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
         # QApplication.processEvents()
-        
+
     def AddMoveEventValue(self, values, Longitude, Latitude, Altitude):
         """
         Remove and Add move value for fluid drawing
-        
+
         @type values: list
         @param values: Points list
 
         @type Longitude: float
         @param Longitude: Longitude value
-        
+
         @type Latitude: float
         @param Latitude: Latitude value
-        
+
         @type Altitude: float
-        @param Altitude: Altitude value                       
-        
+        @param Altitude: Altitude value
+
         """
         for idx, pt in enumerate(values):
             if pt[-1] == "mouseMoveEvent":
@@ -742,49 +733,49 @@ class VideoWidget(QVideoWidget):
             self.setCursor(QCursor(Qt.ArrowCursor))
             self.Cursor_Canvas_RubberBand.reset(QgsWkbTypes.PointGeometry)
             return
-        
+
         # Prevent draw on video if not started or finished
         if self.parent.player.position() == 0:
-            return  
+            return
 
         # Mouser cursor drawing
         if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.measureDistance or self._interaction.measureArea or self._interaction.censure or self._interaction.objectTracking:
             self.setCursor(QCursor(Qt.CrossCursor))
-            
+
         # Cursor Coordinates
         if self.gt is not None:
 
             Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                 event, self.surface)
-            
+
             tr = QgsCoordinateTransform( QgsCoordinateReferenceSystem( 'EPSG:4326' ), iface.mapCanvas().mapSettings().destinationCrs(), QgsProject.instance().transformContext() )
             mapPt = tr.transform( QgsPointXY(Longitude, Latitude) )
-
+            
             vertices = self.Cursor_Canvas_RubberBand.numberOfVertices()
             if vertices > 0:
                 self.Cursor_Canvas_RubberBand.removePoint(0, True, 0)
                 self.Cursor_Canvas_RubberBand.movePoint( mapPt, 0)
-            else:   
+            else:
                 self.Cursor_Canvas_RubberBand.addPoint( mapPt )
-            
-            if self._MGRS :
+
+            if self._MGRS:
                 try:
                     mgrsCoords = mgrs.toMgrs(Latitude, Longitude)
                 except Exception:
                     mgrsCoords = ""
-                
+
                 txt = "<span style='font-size:9pt; font-weight:normal;'>" + \
                     ("%s" % mgrsCoords) + "</span>"
-            
+
             else:
-                
+
                 txt = "<span style='font-size:10pt; font-weight:bold;'>Lon : </span>"
                 txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
                     ("%.3f" % Longitude) + "</span>"
                 txt += "<span style='font-size:10pt; font-weight:bold;'> Lat : </span>"
                 txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
                     ("%.3f" % Latitude) + "</span>"
-    
+
                 if hasElevationModel():
                     txt += "<span style='font-size:10pt; font-weight:bold;'> Alt : </span>"
                     txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
@@ -798,25 +789,25 @@ class VideoWidget(QVideoWidget):
             # Polygon drawer mouseMoveEvent
             if self._interaction.polygonDrawer:
                 self.AddMoveEventValue(self.drawPolygon, Longitude, Latitude, Altitude)
-                
+
             # Line drawer mouseMoveEvent
             if self._interaction.lineDrawer:
                 self.AddMoveEventValue(self.drawLines, Longitude, Latitude, Altitude)
-               
+
             # Measure Distance drawer mouseMoveEvent
             if self._interaction.measureDistance and self.drawMeasureDistance:
                 self.AddMoveEventValue(self.drawMeasureDistance, Longitude, Latitude, Altitude)
-            
+
             # Measure Area drawer mouseMoveEvent
             if self._interaction.measureArea and self.drawMeasureArea:
-                self.AddMoveEventValue(self.drawMeasureArea, Longitude, Latitude, Altitude)  
+                self.AddMoveEventValue(self.drawMeasureArea, Longitude, Latitude, Altitude)
 
         else:
-            self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" + 
-                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" + 
-                                                "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" + 
-                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" + 
-                                                "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" + 
+            self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" +
+                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
+                                                "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" +
+                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
+                                                "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" +
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>")
 
         if not event.buttons():
@@ -845,13 +836,13 @@ class VideoWidget(QVideoWidget):
         """
         if GetImageHeight() == 0:
             return
-        
+
         # Prevent draw on video if not started or finished
         if self.parent.player.position() == 0:
-            return  
+            return
 
         if event.button() == Qt.LeftButton:
-            
+
             # Magnifier Glass
             if self._interaction.magnifier:
                 self.dragPos = event.pos()
@@ -913,7 +904,7 @@ class VideoWidget(QVideoWidget):
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
                 self.drawMeasureArea.append([Longitude, Latitude, Altitude])
-                
+
             # if not called, the paint event is not triggered.
             self.UpdateSurface()
 
@@ -923,50 +914,45 @@ class VideoWidget(QVideoWidget):
         self.UpdateSurface()
 
     def SetMagnifier(self, value):
-        """ 
-        Set Magnifier Glass 
+        """Set Magnifier Glass
         @type value: bool
         @param value:
         """
         self._interaction.magnifier = value
         # We avoid that the second time we activate the tool, save the previous position.
-        # Always keep the same behavior of the tool    
+        # Always keep the same behavior of the tool
         if not value:
             self.dragPos = QPoint()
             self.tapTimer.stop()
-            
+
     def SetStamp(self, value):
-        """ 
-        Set Stamp 
+        """Set Stamp
         @type value: bool
         @param value:
         """
         self._interaction.stamp = value
 
     def SetPointDrawer(self, value):
-        """ 
-        Set Point Drawer 
+        """Set Point Drawer
         @type value: bool
         @param value:
         """
         self._interaction.pointDrawer = value
 
     def SetLineDrawer(self, value):
-        """ 
-        Set Line Drawer 
+        """Set Line Drawer
         @type value: bool
         @param value:
         """
         self._interaction.lineDrawer = value
 
     def SetPolygonDrawer(self, value):
-        """ 
-        Set Polygon Drawer 
+        """Set Polygon Drawer
         @type value: bool
         @param value:
         """
         self._interaction.polygonDrawer = value
-        
+
     def mouseReleaseEvent(self, _):
         """
         @type event: QMouseEvent
@@ -975,7 +961,7 @@ class VideoWidget(QVideoWidget):
         """
         # Prevent draw on video if not started or finished
         if self.parent.player.position() == 0:
-            return  
+            return
 
         # Censure Draw Interaction
         if self._interaction.censure:
@@ -993,7 +979,7 @@ class VideoWidget(QVideoWidget):
             # Remo rubberband on canvas and video
             self.Tracking_Video_RubberBand.hide()
             self.Track_Canvas_RubberBand.reset()
-            
+
             self.tracker = TrackerMOSSE_create()
             result = resize(frame, (offset.width(), offset.height()))
 

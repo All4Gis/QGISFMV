@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
-from qgis.PyQt.QtCore import QRegExp
+from qgis.PyQt.QtCore import QRegExp, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIntValidator, QRegExpValidator
 from qgis.PyQt.QtWidgets import QDialog, QApplication
 from QGIS_FMV.gui.ui_FmvOpenStream import Ui_FmvOpenStream
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from qgis.core import Qgis as QGis
 
 try:
     from pydevd import *
+except ImportError:
+    None
+
+try:
+    import cv2
 except ImportError:
     None
 
@@ -37,6 +44,18 @@ class OpenStream(QDialog, Ui_FmvOpenStream):
         port = self.ln_port.text()
         v = protocol + "://" + host + ":" + port
         if host != "" and port != "":
-            self.parent.AddFileRowToManager(v, v)
-            self.close()
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvOpenStream", "Checking connection!"))
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            QApplication.processEvents()
+            # Check if connection exist
+            cap = cv2.VideoCapture(v)
+            ret, _ = cap.read()
+            cap.release()
+            if ret:
+                self.parent.AddFileRowToManager(v, v)
+                self.close()
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvOpenStream", "There is no such connection!"), level=QGis.Warning)
             QApplication.restoreOverrideCursor()

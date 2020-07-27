@@ -23,7 +23,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import sys
 from abc import ABCMeta
 from abc import abstractmethod
 from collections import OrderedDict
@@ -96,6 +95,8 @@ class SetParser(Element):
         for key, value in KLVParser(self.value, self.key_length):
             try:
                 self.items[key] = self.parsers[key](value)
+            except (KeyError, TypeError, ValueError):
+                self.items[key] = self._unknown_element(key, value)
             except Exception:
                 # None
                 qgsu.showUserAndLogMessage("", "Value cannot be read for Tag: " + str(int.from_bytes(key, byteorder=sys.byteorder)) + " value: " + str(value), onlyLog=True)
@@ -144,8 +145,8 @@ class SetParser(Element):
             for item in items:
                 try:
                     if not hasattr(item.value, 'value'):
-                        continue  
-                    if not parentTAG :                                                        
+                        continue
+                    if not parentTAG:
                         metadata[item.TAG] = (item.LDSName, str(item.value.value))
                         if item.TAG == 4:
                             self.PlatformTailNumber = item.value.value
@@ -207,9 +208,9 @@ class SetParser(Element):
                             self.CornerLatitudePoint4Full = item.value.value
                         elif item.TAG == 89:
                             self.CornerLongitudePoint4Full = item.value.value
-                    else :
+                    else:
                         metadata[parentTAG][len(metadata[parentTAG]) - 1][item.TAG] = (item.LDSName, item.ESDName, item.UDSName, str(item.value.value))
-                
+
                 except Exception:
                     qgsu.showUserAndLogMessage("", "Value cannot be read: " + str(item.value.value), onlyLog=True)
                     continue
@@ -465,11 +466,8 @@ class SetParser(Element):
 
     def structure(self):
         ''' Return metadata structure'''
-        # print(str(type(self)))
-
         def repeat(items, indent=1):
             for item in items:
-                # print(indent * "\t" + str(type(item)))
                 if hasattr(item, 'items'):
                     repeat(item.items.values(), indent + 1)
 
@@ -481,7 +479,10 @@ def str_dict(values):
 
     def per_item(value, indent=0):
         for item in value:
-            out.append(indent * "\t" + str(item))
+            if isinstance(item, Element):
+                out.append(indent * "\t" + str(item))
+            else:
+                out.append(indent * "\t" + str(item))
 
     per_item(values)
 

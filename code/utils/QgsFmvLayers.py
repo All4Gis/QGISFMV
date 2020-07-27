@@ -1,4 +1,4 @@
-﻿  # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
 from os.path import dirname, abspath
 from qgis.PyQt.QtGui import QColor, QFont, QPolygonF
@@ -6,6 +6,46 @@ from qgis.PyQt.QtWidgets import QApplication
 from qgis.PyQt.QtCore import QCoreApplication, QPointF
 
 from configparser import ConfigParser
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from qgis.PyQt.QtCore import QVariant, QSettings
+from qgis.core import (QgsPalLayerSettings,
+                       QgsTextFormat,
+                       QgsTextBufferSettings,
+                       QgsVectorLayerSimpleLabeling,
+                       QgsMarkerSymbol,
+                       QgsLayerTreeLayer,
+                       QgsField,
+                       QgsFields,
+                       QgsVectorLayer,
+                       QgsVectorFileWriter,
+                       QgsFillSymbol,
+                       QgsLineSymbol,
+                       QgsSvgMarkerSymbolLayer,
+                       QgsSingleSymbolRenderer,
+                       QgsDistanceArea,
+                       QgsCoordinateReferenceSystem,
+                       QgsProject,
+                       QgsFeature,
+                       QgsGeometry,
+                       QgsPointXY,
+                       QgsPoint,
+                       QgsLineString
+                       )
+
+from qgis.utils import iface
+from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
+from itertools import groupby
+#from qgis._3d import (QgsPhongMaterialSettings,
+#                      QgsVectorLayer3DRenderer,
+#                      QgsLine3DSymbol,
+#                      QgsPoint3DSymbol,
+#                      QgsPolygon3DSymbol)
+
+try:
+    from pydevd import *
+except ImportError:
+    None
+
 parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 
@@ -23,47 +63,6 @@ epsg = parser['LAYERS']['epsg']
 groupName = None
 
 encoding = "utf-8"
-
-from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from qgis.PyQt.QtCore import QVariant, QSettings
-from qgis.core import (
-    QgsPalLayerSettings,
-    QgsTextFormat,
-    QgsTextBufferSettings,
-    QgsVectorLayerSimpleLabeling,
-    QgsMarkerSymbol,
-    QgsLayerTreeLayer,
-    QgsField,
-    QgsFields,
-    QgsVectorLayer,
-    QgsVectorFileWriter,
-    QgsFillSymbol,
-    QgsLineSymbol,
-    QgsSvgMarkerSymbolLayer,
-    QgsSingleSymbolRenderer,
-    QgsDistanceArea,
-    QgsCoordinateReferenceSystem,
-    QgsProject,
-    QgsFeature,
-    QgsGeometry,
-    QgsPointXY,
-    QgsPoint,
-    QgsLineString
-)
-
-from qgis.utils import iface
-from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
-from itertools import groupby
-'''from qgis._3d import (QgsPhongMaterialSettings,
-                      QgsVectorLayer3DRenderer,
-                      QgsLine3DSymbol,
-                      QgsPoint3DSymbol,
-                      QgsPolygon3DSymbol)'''
-
-try:
-    from pydevd import *
-except ImportError:
-    None
 
 _layerreg = QgsProject.instance()
 crtSensorSrc = crtSensorSrc2 = crtPltTailNum = 'DEFAULT'
@@ -302,7 +301,7 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
             CommonLayer(footprintLyr)
             # 3D Style
             if ele:
-                SetDefaultFootprint3DStyle(footprintLyr)
+                SetDefaultFootprintStyle(footprintLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -374,7 +373,7 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
             CommonLayer(beamsLyr)
             # 3D Style
             if ele:
-                SetDefaultBeams3DStyle(beamsLyr)
+                SetDefaultBeamsStyle(beamsLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -410,7 +409,7 @@ def UpdateTrajectoryData(packet, ele):
             CommonLayer(trajectoryLyr)
             # 3D Style
             if ele:
-                SetDefaultTrajectory3DStyle(trajectoryLyr)
+                SetDefaultTrajectoryStyle(trajectoryLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -453,7 +452,7 @@ def UpdateFrameAxisData(packet, ele):
             CommonLayer(frameaxisLyr)
             # 3D Style
             if ele:
-                SetDefaultFrameAxis3DStyle(frameaxisLyr)
+                SetDefaultFrameAxisStyle(frameaxisLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -466,9 +465,9 @@ def UpdateFrameCenterData(packet, ele):
     lat = packet.FrameCenterLatitude
     lon = packet.FrameCenterLongitude
     alt = packet.FrameCenterElevation
-    if packet.FrameCenterElevation == None:
+    if packet.FrameCenterElevation is None:
         alt = 0.0
-    
+
     global groupName
     frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
 
@@ -494,7 +493,7 @@ def UpdateFrameCenterData(packet, ele):
             CommonLayer(frameCenterLyr)
             # 3D Style
             if ele:
-                SetDefaultFrameCenter3DStyle(frameCenterLyr)
+                SetDefaultFrameCenterStyle(frameCenterLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -538,7 +537,7 @@ def UpdatePlatformData(packet, ele):
             CommonLayer(platformLyr)
             # 3D Style
             if ele:
-                SetDefaultPlatform3DStyle(platformLyr)
+                SetDefaultPlatformStyle(platformLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -604,7 +603,7 @@ def CreateVideoLayers(ele, name):
 
         # 3D Style
         if ele:
-            SetDefaultFootprint3DStyle(lyr_footprint)
+            SetDefaultFootprintStyle(lyr_footprint)
 
     if qgsu.selectLayerByName(Beams_lyr, groupName) is None:
         lyr_beams = newLinesLayer(
@@ -620,7 +619,7 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_beams, group=groupName)
         # 3D Style
         if ele:
-            SetDefaultBeams3DStyle(lyr_beams)
+            SetDefaultBeamsStyle(lyr_beams)
 
     if qgsu.selectLayerByName(Trajectory_lyr, groupName) is None:
         lyr_Trajectory = newLinesLayer(
@@ -630,7 +629,7 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_Trajectory, group=groupName)
         # 3D Style
         if ele:
-            SetDefaultTrajectory3DStyle(lyr_Trajectory)
+            SetDefaultTrajectoryStyle(lyr_Trajectory)
 
     if qgsu.selectLayerByName(FrameAxis_lyr, groupName) is None:
         lyr_frameaxis = newLinesLayer(
@@ -639,7 +638,7 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_frameaxis, group=groupName)
         # 3D Style
         if ele:
-            SetDefaultFrameAxis3DStyle(lyr_frameaxis)
+            SetDefaultFrameAxisStyle(lyr_frameaxis)
 
     if qgsu.selectLayerByName(Platform_lyr, groupName) is None:
         lyr_platform = newPointsLayer(
@@ -649,7 +648,7 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_platform, group=groupName)
         # 3D Style
         if ele:
-            SetDefaultPlatform3DStyle(lyr_platform)
+            SetDefaultPlatformStyle(lyr_platform)
 
     if qgsu.selectLayerByName(Point_lyr, groupName) is None:
         lyr_point = newPointsLayer(
@@ -664,7 +663,7 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_framecenter, group=groupName)
         # 3D Style
         if ele:
-            SetDefaultFrameCenter3DStyle(lyr_framecenter)
+            SetDefaultFrameCenterStyle(lyr_framecenter)
 
     if qgsu.selectLayerByName(Line_lyr, groupName) is None:
         #         lyr_line = newLinesLayer(
@@ -703,9 +702,9 @@ def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
     return
 
 
-''' def SetDefaultFootprint3DStyle(layer): '''
-''' Platform 3D Symbol '''
-'''    material = QgsPhongMaterialSettings()
+def SetDefaultFootprint3DStyle(layer):
+    ''' Platform 3D Symbol '''
+    material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(255, 0, 0))
     material.setAmbient(QColor(255, 0, 0))
     symbol = QgsPolygon3DSymbol()
@@ -716,7 +715,7 @@ def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return '''
+    return
 
 
 def SetDefaultTrajectoryStyle(layer):
@@ -932,47 +931,47 @@ def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
 #     pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
 #     if pointLyr is None:
 #         return
-#     
+#
 #     style = S.getDrawingPoint()
 #     LINE_COLOR = s.value(NameSpace + "/Options/drawings/points/pen")
-#     
+#
 #     symbol = QgsMarkerSymbol.createSimple(
 #         {'name': style["NAME"],
 #          'line_color': LINE_COLOR.name(),
 #          'line_width': s.value(NameSpace + "/Options/drawings/points/width"),
 #          'size': style["SIZE"]})
-#     
+#
 #     renderer = QgsSingleSymbolRenderer(symbol)
 #     pointLyr.setRenderer(renderer)
 #     CommonLayer(pointLyr)
-#         
+#
 #     linelyr = qgsu.selectLayerByName(Line_lyr, groupName)
 #     if linelyr is None:
 #         return
-#     
+#
 #     style = S.getDrawingLine()
 #     symbol = linelyr.renderer().symbol()
-#     
+#
 #     COLOR = s.value(NameSpace + "/Options/drawings/lines/pen")
-#     
+#
 #     symbol.setColor(COLOR.name())
 #     symbol.setWidth(s.value(NameSpace + "/Options/drawings/lines/width"))
 #     CommonLayer(linelyr)
-#         
+#
 #     polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
 #     if polyLyr is None:
 #         return
-#     
+#
 #     style = S.getDrawingPolygon()
-#     
+#
 #     OUTLINE_COLOR = s.value(NameSpace + "/Options/drawings/polygons/pen")
 #     COLOR = s.value(NameSpace + "/Options/drawings/polygons/brush")
-#     
+#
 #     fill_sym = QgsFillSymbol.createSimple({'color': COLOR.name(),
 #                                        'outline_color': OUTLINE_COLOR.name(),
 #                                        'outline_style': style['OUTLINE_STYLE'],
 #                                        'outline_width': s.value(NameSpace + "/Options/drawings/polygons/width")})
-#     
+#
 #     renderer = QgsSingleSymbolRenderer(fill_sym)
 #     polyLyr.setRenderer(renderer)
 #     CommonLayer(polyLyr)
@@ -991,17 +990,17 @@ def addLayer(layer, loadInLegend=True, group=None, isSubGroup=False):
     if not hasattr(layer, "__iter__"):
         layer = [layer]
     if group is not None:
-        _layerreg.addMapLayers(layer, False)  
+        _layerreg.addMapLayers(layer, False)
         root = _layerreg.layerTreeRoot()
         if isSubGroup:
             vg = root.findGroup(groupName)
             g = vg.findGroup(group)
             g.insertChildNode(0, QgsLayerTreeLayer(layer[0]))
-        else:  
+        else:
             g = root.findGroup(group)
             g.insertChildNode(0, QgsLayerTreeLayer(layer[0]))
     else:
-        _layerreg.addMapLayers(layer, loadInLegend)  
+        _layerreg.addMapLayers(layer, loadInLegend)
     return layer
 
 

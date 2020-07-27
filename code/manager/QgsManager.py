@@ -3,15 +3,15 @@ import ast
 from configparser import ConfigParser
 import os
 from os.path import dirname, abspath
-from qgis.PyQt.QtCore import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
+from qgis.PyQt.Qt  import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (QDockWidget,
-                             QTableWidgetItem,
-                             QAction,
-                             QMenu,
-                             QProgressBar,
-                             QVBoxLayout,
-                             QWidget)
+                                 QTableWidgetItem,
+                                 QAction,
+                                 QMenu,
+                                 QProgressBar,
+                                 QVBoxLayout,
+                                 QWidget)
 import qgis.utils
 
 from PyQt5.QtGui import QColor
@@ -24,7 +24,7 @@ from QGIS_FMV.manager.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         BufferedMetaReader,
-                                        StreamMetaReader,                 
+                                        StreamMetaReader,
                                         initElevationModel,
                                         AddVideoToSettings,
                                         RemoveVideoToSettings,
@@ -32,9 +32,10 @@ from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         getVideoFolder,
                                         getVideoManagerList,
                                         getNameSpace,
-                                        getKlvStreamIndex,
+                                        getKlvStreamIndex,                  
                                         getVideoLocationInfo)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsProject, QgsCoordinateTransform
 
 try:
     from pydevd import *
@@ -45,27 +46,21 @@ s = QSettings()
 parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 
-
 class FmvManager(QWidget, Ui_ManagerWindow):
     ''' Video Manager '''
 
     def __init__(self, iface, action, parent=None):
         super().__init__(parent)
         self.setupUi(self)
-        self.mOpenMPEGButton.setDefaultAction( self.actionOpen_MPEG2_File )
-        self.mActionCreateMISBButton.setDefaultAction( self.actionCreate_MISB_File )
-        self.mOpenStreamButton.setDefaultAction( self.actionOpen_Stream )                                                                 
-        self.fmvAction = action
-        self.mCloseButton.clicked.connect( action.toggle )
+                                                                           
+        self.mCloseButton.clicked.connect( action.toggle )                       
         self.parent = parent
         self.iface = iface
         self._PlayerDlg = None
         self.isStreaming = False
         self.meta_reader = {}
         self.initialPt = {}
-        self.pass_time = 500
-        self.intervall = 1000
-        self.notify_int = 3000
+        self.pass_time = 250
 
         self.VManager.viewport().installEventFilter(self)
 
@@ -76,13 +71,13 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                                  triggered=self.remove)
 
         self.VManager.setColumnWidth(1, 150)
-        self.VManager.setColumnWidth(2, 70)
-        self.VManager.setColumnWidth(3, 200)
-        self.VManager.setColumnWidth(4, 200)
-        self.VManager.setColumnWidth(5, 200)                                    
+        self.VManager.setColumnWidth(2, 60)
+        self.VManager.setColumnWidth(3, 250)
+        self.VManager.setColumnWidth(4, 150)
+        self.VManager.setColumnWidth(5, 130)                                    
         self.VManager.verticalHeader().setDefaultAlignment(Qt.AlignHCenter)
         self.VManager.hideColumn(0)
-        
+
         # Get Video Manager List
         VideoList = getVideoManagerList()
         for load_id in VideoList:
@@ -96,9 +91,9 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                 self.AddFileRowToManager(name, filename, load_id, exist, klv_folder)
             else:
                 self.AddFileRowToManager(name, filename, load_id)
-            
+
         draw.setValues()
-            
+
     def eventFilter(self, source, event):
         ''' Event Filter '''
         if (event.type() == QEvent.MouseButtonPress and source is self.VManager.viewport() and self.VManager.itemAt(event.pos()) is None):
@@ -124,11 +119,22 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         RemoveVideoToSettings(row_id)
         # Remove folder if is local
         RemoveVideoFolder(row_text)
-        
+
         if self.meta_reader[str(cr)] != None:
             self.meta_reader[str(cr)].dispose()
-            self.meta_reader[str(cr)] = None                           
+            self.meta_reader[str(cr)] = None
+
         return
+    
+    def CloseFMV(self):
+        ''' Close FMV '''
+        try:
+            self._PlayerDlg.close()
+        except Exception:
+            None
+        self.close()
+        return
+    
 
     def openStreamDialog(self):
         ''' Open Stream Dialog '''
@@ -149,35 +155,35 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         # We limit the number of videos due to the buffer
         if self.VManager.rowCount() > 5:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "ManagerDock", "You must delete some video from the list before adding a new one"))
+                "ManagerDock", "You must delete some video from the list before adding a new one"))
             return
-        
+
         self.islocal = islocal
         self.klv_folder = klv_folder
-        self.isStreaming = False                            
+        self.isStreaming = False
         w = QWidget()
         layout = QVBoxLayout()
         pbar = QProgressBar()
         layout.addWidget(pbar)
         w.setLayout(layout)
         rowPosition = self.VManager.rowCount()
-        
+
         pbar.setGeometry(0, 0, 300, 30)
         pbar.setValue(0)
         pbar.setMaximumHeight(30)
-        
+
         if load_id is None:
             row_id = 0
             if rowPosition != 0:
                 row_id = int(self.VManager.item(rowPosition - 1, 0).text()) + 1
         else:
-            row_id = load_id  
-        
+            row_id = load_id
+
         self.VManager.insertRow(rowPosition)
-        
+
         self.VManager.setItem(
             rowPosition, 0, QTableWidgetItem(str(row_id)))
-                
+
         self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
         self.VManager.setItem(rowPosition, 2, QTableWidgetItem(QCoreApplication.translate(
             "ManagerDock", "Loading")))
@@ -188,7 +194,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         self.VManager.setVisible(False)
         self.VManager.horizontalHeader().setStretchLastSection(True)
         self.VManager.setVisible(True)
-        
+
         # resolve if it is a stream
         if "://" in filename:
             self.isStreaming = True
@@ -212,19 +218,20 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "ManagerDock", "Failed loading FFMPEG ! "))
                 return
-            
             klvIdx = getKlvStreamIndex(filename, islocal)
-            qgsu.showUserAndLogMessage("", "klvIdx is:"+str(klvIdx), onlyLog=True)
+            qgsu.showUserAndLogMessage("", "klv index is:"+str(klvIdx), onlyLog=True)
+                        
             #info.format.duration
             # init non-blocking metadata buffered reader
-            self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, klv_index=klvIdx, pass_time=self.pass_time, intervall=self.intervall)
+            self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, klv_index=klvIdx, pass_time=self.pass_time)
             qgsu.showUserAndLogMessage(
                 "", "buffered non-blocking metadata reader initialized.", onlyLog=True)
 
             pbar.setValue(60)
             try:
                 # init point we can center the video on
-                self.initialPt[str(rowPosition)] = getVideoLocationInfo(filename, islocal, klv_folder, klvIdx)
+                self.initialPt[str(rowPosition)
+                               ] = getVideoLocationInfo(filename, islocal, klv_folder)
                 if not self.initialPt[str(rowPosition)]:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                         QCoreApplication.translate(
@@ -237,7 +244,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                         self.initialPt[str(rowPosition)][2]))
             except Exception:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "ManagerDock", "This video doesn't have Metadata ! "))
+                    "ManagerDock", "This video don't have Metadata ! "))
                 pbar.setValue(99)
                 self.ToggleActiveRow(rowPosition, value="Not MISB")
                 return
@@ -250,12 +257,13 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                     initElevationModel(self.initialPt[str(
                         rowPosition)][0], self.initialPt[str(rowPosition)][1], dtm_path)
                     qgsu.showUserAndLogMessage(
-                        "", "Elevation model initialized.", onlyLog=True)
-                except Exception:
+                    "", "Elevation model initialized.", onlyLog=True)
+                except Exception as e:
+                    qgsu.showUserAndLogMessage("", "Elevation model NOT initialized: "+str(e), onlyLog=True)
                     None
         else:
             self.meta_reader[str(rowPosition)] = StreamMetaReader(filename)
-            qgsu.showUserAndLogMessage("", "StreamMetaReader initialized.", onlyLog=True)                                                                             
+            qgsu.showUserAndLogMessage("", "StreamMetaReader initialized.", onlyLog=True)
             self.initialPt[str(rowPosition)] = None
 
         pbar.setValue(100)
@@ -283,9 +291,6 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         ''' Play video from manager dock.
             Manager row double clicked
         '''
-        
-        #self.fmvAction.toggle()
-        
         # Don't enable Play if video doesn't have metadata
         row = model.row()
         if self.VManager.cellWidget(row, 5).findChild(QProgressBar).value() < 100:
@@ -294,7 +299,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         path = self.VManager.item(row, 3).text()
         text = self.VManager.item(row, 1).text()
         self.ToggleActiveRow(row)
-        
+
         folder = getVideoFolder(text)
         klv_folder = os.path.join(folder, "klv")
         exist = os.path.exists(klv_folder)
@@ -303,12 +308,15 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                 self._PlayerDlg.close()
         except Exception:
             None
+        # First time we open the player
         if self._PlayerDlg is None:
             if exist:
                 self.CreatePlayer(path, row, islocal=True, klv_folder=klv_folder)
             else:
                 self.CreatePlayer(path, row)
         else:
+            #qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
+            #if path != self._PlayerDlg.fileName:
             self._PlayerDlg.setMetaReader(self.meta_reader[str(row)])
             self.ToggleActiveFromTitle()
             self._PlayerDlg.show()
@@ -317,12 +325,25 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                 self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
             else:
                 self._PlayerDlg.playFile(path)
+        #first zoom to map zone     
+        curAuthId =  self.iface.mapCanvas().mapSettings().destinationCrs().authid()
+        qgsu.showUserAndLogMessage("", "auth id:"+str(curAuthId), onlyLog=True)
+        
+        map_pos = QgsPointXY(self.initialPt[str(row)][1], self.initialPt[str(row)][0])
+        if curAuthId != "EPSG:4326":
+            trgCode=int(curAuthId.split(":")[1])
+            xform = QgsCoordinateTransform(QgsCoordinateReferenceSystem(4326), QgsCoordinateReferenceSystem(trgCode), QgsProject().instance())
+            map_pos = xform.transform(map_pos)
+            
+        self.iface.mapCanvas().setCenter(map_pos)
+        self.iface.mapCanvas().zoomScale(50000)
+            
 
     def CreatePlayer(self, path, row, islocal=False, klv_folder=None):
         ''' Create Player '''
         self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(
-            row)], pass_time=self.pass_time, islocal=islocal, klv_folder=klv_folder, notify_int=self.notify_int)
-        self._PlayerDlg.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
+            row)], pass_time=self.pass_time, islocal=islocal, klv_folder=klv_folder)
+        self._PlayerDlg.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint)
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()
 

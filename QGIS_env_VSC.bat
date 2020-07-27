@@ -1,6 +1,6 @@
 @echo off
 REM ***************************************************************************
-REM    pull-transifex-translations.bat
+REM    QGIS_env_VSC.bat
 REM    ---------------------
 REM    begin                : June 2017
 REM    copyright            : (C) 2017 by Fran Raga
@@ -14,23 +14,20 @@ REM *   (at your option) any later version.                                   *
 REM *                                                                         *
 REM ***************************************************************************
 
-:: Download data from Transifex
+:: QGIS development environment in Visual Studio Code for Windows
+
+set OSGEO4W_ROOT=D:\OSGeo4W64
+
+@echo off
+call %OSGEO4W_ROOT%\bin\o4w_env.bat
+call qt5_env.bat
+call py3_env.bat
+
+set QT_QPA_PLATFORM_PLUGIN_PATH=%OSGEO4W_ROOT%\apps\Qt5\plugins
+set PATH=%PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\bin
 
 cd /d %~dp0
 
-@ECHO ON
+SET VSCBIN=D:\Users\fran\AppData\Local\Programs\Microsoft VS Code
 
-call "code/py3-env.bat"
-
-tx pull -a -f --skip
-
-@ECHO OFF
-GOTO END
-
-:ERROR
-   echo "Failed!Download data from Transifex"
-   set ERRORLEVEL=%ERRORLEVEL%
-   pause
-   
-:END
-@ECHO OFF
+call "%VSCBIN%\Code.exe %*

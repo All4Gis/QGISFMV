@@ -35,7 +35,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="btn_openVideo">
        <property name="cursor">
         <cursorShape>PointingHandCursor</cursorShape>
        </property>
@@ -67,7 +67,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="btn_openCSV">
        <property name="cursor">
         <cursorShape>PointingHandCursor</cursorShape>
        </property>
@@ -187,8 +187,8 @@
    <slot>CreateMISB()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>234</x>
-     <y>452</y>
+     <x>245</x>
+     <y>390</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -197,14 +197,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>btn_openVideo</sender>
    <signal>clicked()</signal>
    <receiver>VideoMultiplexer</receiver>
    <slot>OpenVideoFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>402</x>
-     <y>73</y>
+     <x>412</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel">
      <x>384</x>
@@ -213,14 +213,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_2</sender>
+   <sender>btn_openCSV</sender>
    <signal>clicked()</signal>
    <receiver>VideoMultiplexer</receiver>
    <slot>OpenCsvFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>402</x>
-     <y>154</y>
+     <x>412</x>
+     <y>124</y>
     </hint>
     <hint type="destinationlabel">
      <x>384</x>
@@ -235,8 +235,8 @@
    <slot>CreateCSV()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>139</x>
-     <y>307</y>
+     <x>150</x>
+     <y>263</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>

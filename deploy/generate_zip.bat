@@ -1,6 +1,6 @@
 @echo off
 REM ***************************************************************************
-REM    pull-transifex-translations.bat
+REM    generate_zip.bat
 REM    ---------------------
 REM    begin                : June 2017
 REM    copyright            : (C) 2017 by Fran Raga
@@ -14,23 +14,24 @@ REM *   (at your option) any later version.                                   *
 REM *                                                                         *
 REM ***************************************************************************
 
-:: Download data from Transifex
+:: Generate Zip for upload to QGIS Repo
 
-cd /d %~dp0
 
-@ECHO ON
+cd /D %~dp0\..\\code\\
+call py3-env.bat
 
-call "code/py3-env.bat"
+cd /D %~dp0
 
-tx pull -a -f --skip
+call python3 plugin_zip.py
 
-@ECHO OFF
-GOTO END
-
+:CONTINUE
+   echo "Zip generated for QGIS version %QGIS_VERSION%"
+   set ERRORLEVEL=0
+   goto END
+   
 :ERROR
-   echo "Failed!Download data from Transifex"
+   echo "Error generating zip for QGIS version %QGIS_VERSION%"
    set ERRORLEVEL=%ERRORLEVEL%
    pause
-   
+
 :END
-@ECHO OFF

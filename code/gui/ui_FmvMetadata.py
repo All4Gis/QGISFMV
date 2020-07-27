@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_FmvMetadata(object):
     def setupUi(self, FmvMetadata):
         FmvMetadata.setObjectName("FmvMetadata")
-        FmvMetadata.resize(345, 491)
+        FmvMetadata.resize(689, 604)
         FmvMetadata.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.dockWidgetContents = QtWidgets.QWidget()
         self.dockWidgetContents.setMinimumSize(QtCore.QSize(300, 0))
@@ -46,7 +46,6 @@ class Ui_FmvMetadata(object):
 "text-align: center;\n"
 "font-family: arial;\n"
 "font-weight: bold;\n"
-"font-size:12px;\n"
 "}\n"
 "\n"
 "QTableView\n"
@@ -107,7 +106,7 @@ class Ui_FmvMetadata(object):
 
     def retranslateUi(self, FmvMetadata):
         _translate = QtCore.QCoreApplication.translate
-        FmvMetadata.setWindowTitle(_translate("FmvMetadata", "Metadata"))
+        FmvMetadata.setWindowTitle(_translate("FmvMetadata", "&Metadata"))
         self.menuSave.setTitle(_translate("FmvMetadata", "Save"))
         item = self.VManager.horizontalHeaderItem(0)
         item.setText(_translate("FmvMetadata", "Tag"))
@@ -115,9 +114,9 @@ class Ui_FmvMetadata(object):
         item.setText(_translate("FmvMetadata", "Key"))
         item = self.VManager.horizontalHeaderItem(2)
         item.setText(_translate("FmvMetadata", "Value"))
-        self.actionSave_as_PDF.setText(_translate("FmvMetadata", "Save as PDF"))
+        self.actionSave_as_PDF.setText(_translate("FmvMetadata", "&Save as PDF"))
         self.actionSave_as_PDF.setShortcut(_translate("FmvMetadata", "Ctrl+Shift+P"))
-        self.actionSave_as_CSV.setText(_translate("FmvMetadata", "Save as CSV"))
+        self.actionSave_as_CSV.setText(_translate("FmvMetadata", "Save as &CSV"))
         self.actionSave_as_CSV.setShortcut(_translate("FmvMetadata", "Ctrl+Shift+C"))
 
 from QGIS_FMV.gui import resources_rc

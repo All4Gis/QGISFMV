@@ -1,4 +1,4 @@
-# QGIS Full Motion Video (FMV)  [#QGISFMV](https://twitter.com/hashtag/qgisfmv)
+# QGIS Full Motion Video (FMV)  [#QGISFMV](https://twitter.com/hashtag/qgisfmv?f=live)
 
 [![Build Status](https://travis-ci.org/All4Gis/QGISFMV.svg?branch=master)](https://travis-ci.org/All4Gis/QGISFMV) 
 [![Project Stats](https://www.openhub.net/p/QGISFMV/widgets/project_thin_badge.gif)](https://www.openhub.net/p/QGISFMV)
@@ -7,7 +7,7 @@
 
 Plugin for **QGIS 3** which allows to analyze, visualize and process videos inside the QGIS environment. **QGIS FMV** accepts multiple video formats such as _mp4, ts, avi_, etc. It is also able to extract video frames, to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more. It also offers the possibility to create reports with video metadata.
 
-Standards supported: 
+Standards supported:
 
   - "UAS Datalink Local Set", [ST0601.11](http://www.gwg.nga.mil/misb/docs/standards/ST0601.11.pdf)
 
@@ -35,14 +35,14 @@ Standards supported:
 ## Motivation
 
 This development arises after observing that there was no free solution for the metadata extraction and video analysis in real time. All solutions are APIs or private tools such as
-[Esri](http://www.esri.com/products/arcgis-capabilities/imagery/full-motion-video),
+[Esri](http://www.esri.com/products/arcgis-capabilities/imagery/full-motion-video) or [ImpleoTv](https://impleotv.com/),
 for this reason, I decided to develop this open source project and, this way, offer this open source alternative to the QGIS community.
 
 &#8593; [Back to top](#table-of-contents)
 
 ## Dependencies
 
-* [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `settings.ini` with the corresponding path.For example D://FFMPEG
+* [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `settings.ini` with the corresponding path. For example `D://FFMPEG` or `/usr/bin/`
 
 * [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python`
 
@@ -50,13 +50,15 @@ for this reason, I decided to develop this open source project and, this way, of
 
 * [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib`
 
-* [Klvdata](https://github.com/paretech/klvdata) : customized version of this library.
+* [Klvdata](https://github.com/paretech/klvdata) : customized version of this library. (No need to install it)
 
 * [Homography](https://github.com/satellogic/homography) : `python3 -m pip install homography`
 
-The plugin install automatically this requisites,but you can install it using:
+The plugin install automatically this requisites,but you can install it using on Windows and Linux:
 
 `python3 -m pip install -r requirements.txt`
+
+Here is a **settings.ini** sample [Linux](code/settings_linux_sample.ini) configuration file  or [Windows](code/settings_win_sample.ini) sample
 
 &#8593; [Back to top](#table-of-contents)
 
@@ -90,6 +92,7 @@ For more information about the Unmanned Air System (UAS) metadata from STANAG 46
 
 ![a](images/demux.png)
 
+* <a href="https://gisgeography.com/full-motion-video-fmv/" target="_blank">What is Full Motion Video (FMV)?</a>
 * <a href="http://www.gwg.nga.mil/misb/faq.html" target="_blank">FAQ</a>
 * <a href="http://www.gwg.nga.mil/misb/docs/nato_docs/STANAG_4609_Ed3.pdf" target="_blank">STANAG_4609_Ed3</a>
 * <a href="http://www.gwg.nga.mil/misb/docs/standards/ST0601.13.pdf" target="_blank">ST0601.13</a>
@@ -99,7 +102,8 @@ For more information about the Unmanned Air System (UAS) metadata from STANAG 46
 
 ## Installation
 
-The installation can be done from the QGIS Python Plugins Repository or from the zip.
+The installation can be done from the QGIS Python Plugins Repository or from the [zip](https://github.com/All4Gis/QGISFMV/releases).
+
 
 &#8593; [Back to top](#table-of-contents)
 
@@ -112,6 +116,31 @@ Windows automatically installs all, with user permission,If an error occurs, you
 ## Installation on Ubuntu
 
 Ubuntu automatically installs all the dependencies if the user wants, for this his password will be requested.
+
+If it does not install automatically, you should run:
+
+**Python dependencies**
+
+`sudo pip3 install homography matplotlib python-apt`
+
+The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for this reason you will have to install these dependencies using this [script](code/install-opencv.sh)
+
+`sh install-opencv.sh`
+
+**FFMPEG**
+
+`sudo apt-get -y install ffmpeg`
+
+**GStreamer/QT5 Plugins**
+
+`sudo apt-get -y install python3-pyqt5.qtmultimedia gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio libqt5gstreamer-1.0-0 libqt5multimedia5-plugins`
+
+You need to restart QGIS after this.
+
+**NOTE :** If you only see the videos with .mp4 extension, make sure you don't have it installed `gstreamer1.0-vaapi`. If you have it installed, you must delete it.
+
+`sudo apt-get remove gstreamer1.0-vaapi`
+
 
 ## Installation on Archlinux
 
@@ -172,6 +201,33 @@ Follow these steps:
 	Send a pull request.
 	
 See before [FMV Coding Standards!](https://all4gis.github.io/QGISFMV/CodingStandards)
+
+**NOTE:** If you are use Linux need install pyuic5 and transifex client to compile the UI.
+
+https://command-not-found.com/pyuic5
+
+**Debian** `apt-get install pyqt5-dev-tools`
+
+**Ubuntu** `apt-get install pyqt5-dev-tools`
+
+**Arch Linux** `pacman -S python-pyqt5`
+
+**Kali Linux** `apt-get install pyqt5-dev-tools`
+
+**Fedora** `dnf install python2-qt5`
+
+**Raspbian** `apt-get install pyqt5-dev-tools`
+
+For test stream feature you can simulate stream channel,like this:
+
+`ffmpeg -fflags +genpts -stream_loop -1 -re -i "C:\Users\Fran Raga\Desktop\video_test\Cheyenne.ts" -f rtp_mpegts -c copy -map 0:v -map 0:a -map 0:d rtp://127.0.0.1:8888`
+
+`ffmpeg -i rtp://127.0.0.1:8888 -c copy -map 0:v? -map 0:a? -f rtp_mpegts rtp://127.0.0.1:8898 -map 0:d? -f data -`
+
+
+And transifex client:
+
+`pip3 install transifex-client`
 	
 And thanks for your code.
 
@@ -185,8 +241,23 @@ Contributions are welcome!
 
 ### Contributors List  
 
-* <a href="https://github.com/ltbam" target="_blank">ltbam</a>
-* <a href="https://all4gis.github.io//" target="_blank">Fran Raga</a>
+<!-- CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/All4Gis"><img src="https://avatars0.githubusercontent.com/u/8123225?v=4" width="100px;" alt=""/><br /><sub><b>Fran Raga</b></sub></a><br /><a href="https://github.com/All4Gis/QGISFMV/commits?author=All4Gis" title="Code">💻</a><a href="https://github.com/All4Gis/QGISFMV/commits?author=All4Gis" title="Documentation">📖</a>
+    </td>	  
+    <td align="center"><a href="https://github.com/ltbam"><img src="https://avatars1.githubusercontent.com/u/11943224?v=4" width="100px;" alt=""/><br /><sub><b>ltbam</b></sub></a><br /><a href="https://github.com/All4Gis/QGISFMV/commits?author=ltbam" title="Code">💻</a>
+    </td>
+	<td align="center"><a href="https://github.com/Eandelin"><img src="https://avatars1.githubusercontent.com/u/42190209?v=4" width="100px;" alt=""/><br /><sub><b>Eandelin</b></sub></a><br /><a href="https://github.com/All4Gis/QGISFMV/commits?author=Eandelin" title="Documentation">📖</a>
+    </td>
+</tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- CONTRIBUTORS-LIST:END -->
 
 
 ## License

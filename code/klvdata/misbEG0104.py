@@ -105,7 +105,7 @@ class PlatformPitchAngle(IEEE754ElementParser):
     LDSName = "Platform Pitch Angle"
     ESDName = "UAV Pitch (INS)"
     UDSName = "Platform Pitch Angle"
-    _domain = (-(2 ** 15 - 1), 2 ** 15 - 1)
+    _domain = ((-2**15 - 1), 2**15 - 1)
     _range = (-20, 20)
 
 
@@ -117,7 +117,7 @@ class PlatformRollAngle(IEEE754ElementParser):
     LDSName = "Platform Roll Angle"
     ESDName = "UAV Roll (INS)"
     UDSName = "Platform Roll Angle"
-    _domain = (-(2 ** 15 - 1), 2 ** 15 - 1)
+    _domain = ((-2**15 - 1), 2**15 - 1)
     _range = (-50, 50)
     units = 'degrees'
 
@@ -272,8 +272,8 @@ class SensorRelativeAzimuthAngle(IEEE754ElementParser):
     _range = (0, 360)
     units = 'degrees'
 
- 
-@UAVBasicUniversalMetadataSet.add_parser 
+
+@UAVBasicUniversalMetadataSet.add_parser
 class SensorRelativeElevationAngle(IEEE754ElementParser):
     key = hexstr_to_bytes("06 0e 2b 34 01 01 01 01 07 01 10 01 03 00 00 00")
     TAG = 19
@@ -285,7 +285,7 @@ class SensorRelativeElevationAngle(IEEE754ElementParser):
     _range = (-180, 180)
     units = 'degrees'
 
-    
+
 @UAVBasicUniversalMetadataSet.add_parser
 class SlantRange(IEEE754ElementParser):
     key = hexstr_to_bytes("06 0E 2B 34 01 01 01 01 07 01 08 01 01 00 00 00")
@@ -346,7 +346,7 @@ class OffsetCornerLatitudePoint1(IEEE754ElementParser):
     LDSName = "Offset Corner Latitude Point 1"
     ESDName = "SAR Latitude 4"
     UDSName = "Corner Latitude Point 1"
-    _domain = (-(2 ** 15 - 1), 2 ** 15 - 1)
+    _domain = ((-2**15 - 1), 2**15 - 1)
     _range = (-0.075, +0.075)
     units = 'degrees'
 
@@ -359,7 +359,7 @@ class OffsetCornerLongitudePoint1(IEEE754ElementParser):
     LDSName = "Offset Corner Longitude Point 1"
     ESDName = "SAR Longitude 4"
     UDSName = "Corner Longitude Point 1"
-    _domain = (-(2 ** 15 - 1), 2 ** 15 - 1)
+    _domain = ((-2**15 - 1), 2**15 - 1)
     _range = (-0.075, 0.075)
     units = 'degrees'
 
@@ -372,7 +372,7 @@ class OffsetCornerLatitudePoint2(IEEE754ElementParser):
     LDSName = "Offset Corner Latitude Point 2"
     ESDName = "SAR Latitude 1"
     UDSName = "Corner Latitude Point 2"
-    _domain = (-(2 ** 15 - 1), 2 ** 15 - 1)
+    _domain = ((-2**15 - 1), 2**15 - 1)
     _range = (-0.075, 0.075)
     units = 'degrees'
 
@@ -385,7 +385,7 @@ class OffsetCornerLongitudePoint2(IEEE754ElementParser):
     LDSName = "Offset Corner Longitude Point 2"
     ESDName = "SAR Longitude 1"
     UDSName = "Corner Longitude Point 2"
-    _domain = (-(2 ** 15 - 1), 2 ** 15 - 1)
+    _domain = ((-2**15 - 1), 2**15 - 1)
     _range = (-0.075, 0.075)
     units = 'degrees'
 
@@ -398,7 +398,7 @@ class OffsetCornerLatitudePoint3(IEEE754ElementParser):
     LDSName = "Offset Corner Latitude Point 3"
     ESDName = "SAR Latitude 2"
     UDSName = "Corner Latitude Point 3"
-    _domain = (-(2 ** 15 - 1), 2 ** 15 - 1)
+    _domain = ((-2**15 - 1), 2**15 - 1)
     _range = (-0.075, 0.075)
     units = 'degrees'
 
@@ -411,7 +411,7 @@ class OffsetCornerLongitudePoint3(IEEE754ElementParser):
     LDSName = "Offset Corner Longitude Point 3"
     ESDName = "SAR Longitude 2"
     UDSName = "Corner Longitude Point 3"
-    _domain = (-(2 ** 15 - 1), 2 ** 15 - 1)
+    _domain = ((-2**15 - 1), 2**15 - 1)
     _range = (-0.075, 0.075)
     units = 'degrees'
 
@@ -424,7 +424,7 @@ class OffsetCornerLatitudePoint4(IEEE754ElementParser):
     LDSName = "Offset Corner Latitude Point 4"
     ESDName = "SAR Latitude 3"
     UDSName = "Corner Latitude Point 4"
-    _domain = (-(2 ** 15 - 1), 2 ** 15 - 1)
+    _domain = ((-2**15 - 1), 2**15 - 1)
     _range = (-0.075, 0.075)
     units = 'degrees'
 
@@ -437,7 +437,7 @@ class OffsetCornerLongitudePoint4(IEEE754ElementParser):
     LDSName = "Offset Corner Longitude Point 4"
     ESDName = "SAR Longitude 3"
     UDSName = "Corner Longitude Point 4"
-    _domain = (-(2 ** 15 - 1), 2 ** 15 - 1)
+    _domain = ((-2**15 - 1), 2**15 - 1)
     _range = (-0.075, 0.075)
     units = 'degrees'
 
@@ -490,7 +490,7 @@ class CornerLatitudePoint1Full(IEEE754ElementParser):
     LDSName = "Corner Latitude Point 1 (Full)"
     ESDName = "SAR Latitude 4"
     UDSName = "Corner Latitude Point 1 (Decimal Degrees)"
-    _domain = (-(2 ** 31 - 1), 2 ** 31 - 1)
+    _domain = ((-2 ** 31 - 1), 2 ** 31 - 1)
     _range = (-90, 90)
     units = 'degrees'
 
@@ -503,7 +503,7 @@ class CornerLongitudePoint1Full(IEEE754ElementParser):
     LDSName = "Corner Longitude Point 1 (Full)"
     ESDName = "SAR Longitude 4"
     UDSName = "Corner Longitude Point 1 (Decimal Degrees)"
-    _domain = (-(2 ** 31 - 1), 2 ** 31 - 1)
+    _domain = ((-2 ** 31 - 1), 2 ** 31 - 1)
     _range = (-180, 180)
     units = 'degrees'
 
@@ -516,7 +516,7 @@ class CornerLatitudePoint2Full(IEEE754ElementParser):
     LDSName = "Corner Latitude Point 2 (Full)"
     ESDName = "SAR Latitude 1"
     UDSName = "Corner Latitude Point 2 (Decimal Degrees)"
-    _domain = (-(2 ** 31 - 1), 2 ** 31 - 1)
+    _domain = ((-2 ** 31 - 1), 2 ** 31 - 1)
     _range = (-90, 90)
     units = 'degrees'
 
@@ -529,7 +529,7 @@ class CornerLongitudePoint2Full(IEEE754ElementParser):
     LDSName = "Corner Longitude Point 2 (Full)"
     ESDName = "SAR Longitude 1"
     UDSName = "Corner Longitude Point 2 (Decimal Degrees)"
-    _domain = (-(2 ** 31 - 1), 2 ** 31 - 1)
+    _domain = ((-2 ** 31 - 1), 2 ** 31 - 1)
     _range = (-180, 180)
     units = 'degrees'
 
@@ -542,7 +542,7 @@ class CornerLatitudePoint3Full(IEEE754ElementParser):
     LDSName = "Corner Latitude Point 3 (Full)"
     ESDName = "SAR Latitude 2"
     UDSName = "Corner Latitude Point 3 (Decimal Degrees)"
-    _domain = (-(2 ** 31 - 1), 2 ** 31 - 1)
+    _domain = ((-2 ** 31 - 1), 2 ** 31 - 1)
     _range = (-90, 90)
     units = 'degrees'
 
@@ -555,7 +555,7 @@ class CornerLongitudePoint3Full(IEEE754ElementParser):
     LDSName = "Corner Longitude Point 3 (Full)"
     ESDName = "SAR Longitude 2"
     UDSName = "Corner Longitude Point 3 (Decimal Degrees)"
-    _domain = (-(2 ** 31 - 1), 2 ** 31 - 1)
+    _domain = ((-2 ** 31 - 1), 2 ** 31 - 1)
     _range = (-180, 180)
     units = 'degrees'
 
@@ -568,7 +568,7 @@ class CornerLatitudePoint4Full(IEEE754ElementParser):
     LDSName = "Corner Latitude Point 4 (Full)"
     ESDName = "SAR Latitude 3"
     UDSName = "Corner Latitude Point 4 (Decimal Degrees)"
-    _domain = (-(2 ** 31 - 1), 2 ** 31 - 1)
+    _domain = ((-2 ** 31 - 1), 2 ** 31 - 1)
     _range = (-90, 90)
     units = 'degrees'
 
@@ -581,7 +581,7 @@ class CornerLongitudePoint4Full(IEEE754ElementParser):
     LDSName = "Corner Longitude Point 4 (Full)"
     ESDName = "SAR Longitude 3"
     UDSName = "Corner Longitude Point 4 (Decimal Degrees)"
-    _domain = (-(2 ** 31 - 1), 2 ** 31 - 1)
+    _domain = ((-2 ** 31 - 1), 2 ** 31 - 1)
     _range = (-180, 180)
     units = 'degrees'
 
@@ -594,7 +594,7 @@ class PlatformPitchAngleFull(IEEE754ElementParser):
     LDSName = "Platform Pitch Angle (Full)"
     ESDName = "UAV Pitch (INS)"
     UDSName = "Platform Pitch Angle"
-    _domain = (-(2 ** 31 - 1), 2 ** 31 - 1)
+    _domain = ((-2 ** 31 - 1), 2 ** 31 - 1)
     _range = (-90, 90)
     units = 'degrees'
 
@@ -607,29 +607,29 @@ class PlatformRollAngleFull(IEEE754ElementParser):
     LDSName = "Platform Roll Angle (Full)"
     ESDName = "UAV Roll (INS)"
     UDSName = "Platform Roll Angle"
-    _domain = (-(2 ** 31 - 1), 2 ** 31 - 1)
+    _domain = ((-2 ** 31 - 1), 2 ** 31 - 1)
     _range = (-90, 90)
     units = 'degrees'
 
 
 @UAVBasicUniversalMetadataSet.add_parser
 class MIISCoreIdentifier(StringElementParser):
-     key = hexstr_to_bytes("06 0E 2B 34 01 01 01 01 0E 01 04 05 03 00 00 00")
-     TAG = 94
-     UDSKey = "06 0E 2B 34 01 01 01 01 0E 01 04 05 03 00 00 00"
-     LDSName = "MIIS Core Identifier"
-     ESDName = ""
-     UDSName = "Motion Imagery Identification System Core"
+    key = hexstr_to_bytes("06 0E 2B 34 01 01 01 01 0E 01 04 05 03 00 00 00")
+    TAG = 94
+    UDSKey = "06 0E 2B 34 01 01 01 01 0E 01 04 05 03 00 00 00"
+    LDSName = "MIIS Core Identifier"
+    ESDName = ""
+    UDSName = "Motion Imagery Identification System Core"
 
 
 @UAVBasicUniversalMetadataSet.add_parser
 class SARMotionImageryLocalSet(StringElementParser):
-     key = hexstr_to_bytes("06 0E 2B 34 02 0B 01 01 0E 01 03 03 0D 00 00 00")
-     TAG = 95
-     UDSKey = "06 0E 2B 34 02 0B 01 01 0E 01 03 03 0D 00 00 00"
-     LDSName = "SAR Motion Imagery Local Set"
-     ESDName = ""
-     UDSName = "SAR Motion Imagery Local Set"
+    key = hexstr_to_bytes("06 0E 2B 34 02 0B 01 01 0E 01 03 03 0D 00 00 00")
+    TAG = 95
+    UDSKey = "06 0E 2B 34 02 0B 01 01 0E 01 03 03 0D 00 00 00"
+    LDSName = "SAR Motion Imagery Local Set"
+    ESDName = ""
+    UDSName = "SAR Motion Imagery Local Set"
 
 
 @UAVBasicUniversalMetadataSet.add_parser
