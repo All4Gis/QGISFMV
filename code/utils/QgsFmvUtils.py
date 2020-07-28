@@ -241,7 +241,8 @@ class StreamMetaReader():
 
 class BufferedMetaReader():
     ''' Non-Blocking metadata reader with buffer  '''
-
+    # intervall = 250 is a good value, if we go higher the drawings may not be accurate.
+    # if we go lower, the buffer will shrink drastically and the video may hang.
     def __init__(self, video_path, klv_index=0, pass_time=250, intervall=250):
         ''' Constructor '''
         # don't go too low with pass_time or we won't catch any metadata at

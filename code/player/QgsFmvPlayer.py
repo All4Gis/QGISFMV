@@ -143,7 +143,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.pass_time = pass_time
-        self.player.setNotifyInterval(700)  # Metadata Callback Interval
+        self.player.setNotifyInterval(3000)  # Player update interval
         self.playlist = QMediaPlaylist()
 
         self.player.setVideoOutput(
@@ -453,7 +453,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.btn_play.setIcon(self.playIcon)
             elif state == QMediaPlayer.PausedState:
                 position = self.player.position()/1000
-                #qgsu.showUserAndLogMessage("", "Video paused now -> update Layers on position:"+str(position), onlyLog=True)
                 self.updateDurationInfo(position)
 
         return
