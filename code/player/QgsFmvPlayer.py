@@ -113,9 +113,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.DrawToolBar.addSeparator()
 
         # Censure QToolButton
-        self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
-        self.DrawToolBar.addWidget(self.toolBtn_Cesure)
-        self.DrawToolBar.addSeparator()
+        #self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
+        #self.DrawToolBar.addWidget(self.toolBtn_Cesure)
+        #self.DrawToolBar.addSeparator()
 
         #Dont show in Kadas
         # Stamp
