@@ -30,7 +30,7 @@ from QGIS_FMV.player.QgsFmvOptions import FmvOptions
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.player.QgsFmvMetadata import QgsFmvMetadata
-from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
+from QGIS_FMV.utils.KadasFmvLayers import (CreateVideoLayers,
                                          CreateGroupByName,
                                          RemoveGroupByName)
 from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
@@ -143,7 +143,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.pass_time = pass_time
-        self.player.setNotifyInterval(3000)  # Player update interval
+        self.player.setNotifyInterval(250)  # Player update interval
         self.playlist = QMediaPlaylist()
 
         self.player.setVideoOutput(

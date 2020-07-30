@@ -21,7 +21,7 @@ from PyQt5.QtWidgets import QApplication
 
 from QGIS_FMV.geo import mgrs
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
-from QGIS_FMV.utils.QgsFmvLayers import (AddDrawPointOnMap,
+from QGIS_FMV.utils.KadasFmvLayers import (AddDrawPointOnMap,
                                          AddDrawLineOnMap,
                                          AddDrawPolygonOnMap,
                                          RemoveLastDrawPolygonOnMap,

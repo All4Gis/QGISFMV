@@ -30,7 +30,7 @@ from osgeo import gdal, osr
 from QGIS_FMV.geo import sphere
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.streamparser import StreamParser
-from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
+from QGIS_FMV.utils.KadasFmvLayers import (addLayerNoCrsDialog,
                                          ExpandLayer,
                                          UpdateFootPrintData,
                                          UpdateTrajectoryData,
