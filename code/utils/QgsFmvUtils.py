@@ -39,7 +39,8 @@ from QGIS_FMV.utils.KadasFmvLayers import (addLayerNoCrsDialog,
                                          UpdateFrameCenterData,
                                          UpdateFrameAxisData,
                                          SetcrtSensorSrc,
-                                         SetcrtPltTailNum)
+                                         SetcrtPltTailNum,
+                                         RemoveAllDrawings)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 parser = ConfigParser()
@@ -243,7 +244,7 @@ class BufferedMetaReader():
     ''' Non-Blocking metadata reader with buffer  '''
     # intervall = 250 is a good value, if we go higher the drawings may not be accurate.
     # if we go lower, the buffer will shrink drastically and the video may hang.
-    def __init__(self, video_path, klv_index=0, pass_time=250, intervall=250):
+    def __init__(self, video_path, klv_index=0, pass_time=50, intervall=250):
         ''' Constructor '''
         # don't go too low with pass_time or we won't catch any metadata at
         # all.
@@ -350,7 +351,7 @@ class callBackMetadataThread(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        # qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
+        #qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
         self.p = _spawn(self.cmds)
         # print (self.cmds)
         self.stdout, _ = self.p.communicate()
@@ -804,13 +805,15 @@ def _spawn(cmds, t="ffmpeg"):
 def ResetData():
     ''' Reset Global Data '''
     global dtm_data, tLastLon, tLastLat
-
+    
+    
     SetcrtSensorSrc()
     SetcrtPltTailNum()
     # The DTM is not associated with every video.If we reset it, you won't see it when you change videos
     # dtm_data = []
     tLastLon = 0.0
     tLastLat = 0.0
+    RemoveAllDrawings()
 
 
 def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):

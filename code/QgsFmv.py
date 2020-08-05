@@ -37,6 +37,7 @@ from qgis.PyQt.QtCore import Qt
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import QgsApplication
 from kadas.kadasgui import *
+from QGIS_FMV.utils.KadasFmvLayers import RemoveAllDrawings
 
 try:
     from pydevd import *
@@ -100,6 +101,8 @@ class Fmv:
 
     def unload(self):
         ''' Unload Plugin '''
+        qgsu.showUserAndLogMessage("", "Unloading plugin.")
+        RemoveAllDrawings()
         self.iface.removeAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Plugins")
         #self.iface.removePluginMenu(QCoreApplication.translate(
         #    "QgsFmv", "Full Motion Video (FMV)"), self.actionFMV)

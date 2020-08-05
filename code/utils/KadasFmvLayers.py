@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
 from os.path import dirname, abspath
-from qgis.PyQt.QtGui import QColor, QFont, QPolygonF
+from qgis.PyQt.QtGui import QColor, QFont, QPolygonF, QPen, QPainter, QBrush, qRgba
 from qgis.PyQt.QtWidgets import QApplication
-from qgis.PyQt.QtCore import QCoreApplication, QPointF
+from qgis.PyQt.QtCore import QCoreApplication, QPointF, Qt
+
+#from qgis.PyQt.QtCore.Qt import *
 
 from configparser import ConfigParser
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
@@ -29,7 +31,8 @@ from qgis.core import (QgsPalLayerSettings,
                        QgsGeometry,
                        QgsPointXY,
                        QgsPoint,
-                       QgsLineString
+                       QgsLineString,
+                       QgsRenderContext
                        )
 
 from qgis.utils import iface
@@ -50,16 +53,17 @@ except ImportError:
 parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 
-Platform_lyr = parser['LAYERS']['Platform_lyr']
-Beams_lyr = parser['LAYERS']['Beams_lyr']
-Footprint_lyr = parser['LAYERS']['Footprint_lyr']
-FrameCenter_lyr = parser['LAYERS']['FrameCenter_lyr']
-FrameAxis_lyr = parser['LAYERS']['FrameAxis_lyr']
-Point_lyr = parser['LAYERS']['Point_lyr']
-Line_lyr = parser['LAYERS']['Line_lyr']
-Polygon_lyr = parser['LAYERS']['Polygon_lyr']
+#Platform_lyr = parser['LAYERS']['Platform_lyr']
+#Beams_lyr = parser['LAYERS']['Beams_lyr']
+#Footprint_lyr = parser['LAYERS']['Footprint_lyr']
+#FrameCenter_lyr = parser['LAYERS']['FrameCenter_lyr']
+#FrameAxis_lyr = parser['LAYERS']['FrameAxis_lyr']
+#Point_lyr = parser['LAYERS']['Point_lyr']
+#Line_lyr = parser['LAYERS']['Line_lyr']
+#Polygon_lyr = parser['LAYERS']['Polygon_lyr']
+#Trajectory_lyr = parser['LAYERS']['Trajectory_lyr']
+
 frames_g = parser['LAYERS']['frames_g']
-Trajectory_lyr = parser['LAYERS']['Trajectory_lyr']
 epsg = parser['LAYERS']['epsg']
 groupName = None
 
@@ -81,46 +85,45 @@ LineZ = 'LineStringZ'
 Line = 'LineString'
 Polygon = 'Polygon'
 
-platformMarker=None
-frameCenterMarker=None
-frameAxisMarker=None
-footprintMarker=None
-trajectoryMarker=None
-lastTrajectoryEle=None
-
-beamMarkerUR=None
-beamMarkerUL=None
-beamMarkerLL=None
-beamMarkerLR=None
+platformMarker=''
+frameCenterMarker=''
+frameAxisMarker=''
+footprintMarker=''
+trajectoryMarker=''
+lastTrajectoryEle=''
+linesEle=[]
+pointsEle=''
+polygonsEle=''
+beamMarkerUR=''
+beamMarkerUL=''
+beamMarkerLL=''
+beamMarkerLR=''
 
 
 
 def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
     '''  add pin point on the map '''
-    pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
-    if pointLyr is None:
-        return
-    pointLyr.startEditing()
-    feature = QgsFeature()
-    feature.setAttributes(
-        [pointIndex, Longitude, Latitude, Altitude])
-    p = QgsPointXY()
-    p.set(Longitude, Latitude)
-    feature.setGeometry(QgsGeometry.fromPointXY(p))
-    pointLyr.addFeatures([feature])
-    CommonLayer(pointLyr)
-    return
+    global pointsEle
+    
+    #RemoveAllDrawPointOnMap()
+    
+    p = KadasPointItem( QgsCoordinateReferenceSystem("EPSG:4326"), KadasPointItem.ICON_CROSS )
+    #mPosMarker->setIconFill( Qt::blue )
+    #setIconSize( 10 + 2 * size );
+    #mPosMarker->setIconOutline( QPen( Qt::blue ) )
+    p.setZIndex( 100 )
+    p.setPosition(KadasItemPos.fromPoint(QgsPointXY(Longitude, Latitude)))
+    KadasMapCanvasItemManager.addItem( p )
+    pointsEle.append(p)
+    
 
 
 def AddDrawLineOnMap(drawLines):
     '''  add Line on the map '''
-
+    global linesEle
+    
     RemoveAllDrawLineOnMap()
-    linelyr = qgsu.selectLayerByName(Line_lyr, groupName)
-    if linelyr is None:
-        return
-
-    linelyr.startEditing()
+    
     for k, v in groupby(drawLines, key=lambda x: x == [None, None, None]):
         points = []
         if k is False:
@@ -128,78 +131,88 @@ def AddDrawLineOnMap(drawLines):
             for i in range(0, len(list1)):
                 pt = QgsPointXY(list1[i][0], list1[i][1])
                 points.append(pt)
-            polyline = QgsGeometry.fromPolylineXY(points)
-            f = QgsFeature()
-            f.setGeometry(polyline)
-            linelyr.addFeatures([f])
-
-    CommonLayer(linelyr)
+            l = KadasLineItem(QgsCoordinateReferenceSystem("EPSG:4326"))
+            KadasMapCanvasItemManager.addItem( l )
+            l.setZIndex( 90 )
+            geom = QgsGeometry.fromPolylineXY(points)
+            l.addPartFromGeometry(geom.get())
+            linesEle.append(l)
     return
 
+def RemoveAllDrawings():
+
+    global platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR, linesEle, pointsEle, polygonsEle
+    qgsu.showUserAndLogMessage("", "Clearing all mapItems drawings.")
+    for ele in [platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR]:
+        if ele != '':
+            KadasMapCanvasItemManager.removeItem(ele)
+    
+    for ele in linesEle:
+        KadasMapCanvasItemManager.removeItem(ele)
+    
+    for ele in pointsEle:
+        KadasMapCanvasItemManager.removeItem(ele)
+        
+    for ele in polygonsEle:
+        KadasMapCanvasItemManager.removeItem(ele)
+    
+    platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR, linesEle, pointsEle, polygonsEle = '', '', '', '', '', '', '', '', '', [], [], []
 
 def RemoveAllDrawLineOnMap():
     ''' Remove all features on Line Layer '''
-    global trajectoryMarker, frameAxisMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR
+    global linesEle
     
-    for ele in [trajectoryMarker, frameAxisMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR]:
-        if ele != None:
-            KadasMapCanvasItemManager.removeItem(ele)
+    qgsu.showUserAndLogMessage("", "Deleting lines. trajectoryMarker:"+str(trajectoryMarker))
     
-    return
-
+    for ele in linesEle:
+        KadasMapCanvasItemManager.removeItem(ele)
+    
+    linesEle = []
+    
 
 def RemoveLastDrawPolygonOnMap():
     '''  Remove Last Feature on Polygon Layer '''
-    polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
-    if polyLyr is None:
-        return
-    polyLyr.startEditing()
-    listOfIds = [feat.id() for feat in polyLyr.getFeatures()]
-    if listOfIds:
-        polyLyr.deleteFeature(listOfIds[-1])
-        CommonLayer(polyLyr)
-    return
+    global polygonsEle
+    
+    if polygonsEle:
+        KadasMapCanvasItemManager.removeItem(polygonsEle.pop())
 
 
 def RemoveLastDrawPointOnMap():
     ''' Remove Last features on Point Layer '''
-    pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
-    if pointLyr is None:
-        return
-    pointLyr.startEditing()
-    listOfIds = [feat.id() for feat in pointLyr.getFeatures()]
-    if listOfIds:
-        pointLyr.deleteFeature(listOfIds[-1])
-        CommonLayer(pointLyr)
-    return
+    global pointsEle
+    
+    if pointsEle:
+        KadasMapCanvasItemManager.removeItem(pointsEle.pop())
 
 
 def RemoveAllDrawPointOnMap():
     ''' Remove all features on Point Layer '''
+    global pointsEle
+    qgsu.showUserAndLogMessage("", "Deleting points.")
     
-    for ele in [platformMarker, frameCenterMarker]:
-        if ele != None:
-            KadasMapCanvasItemManager.removeItem(ele)
+    for ele in pointsEle:
+        KadasMapCanvasItemManager.removeItem(ele)
     
-    return
+    pointsEle = []
+    
 
 
 def RemoveAllDrawPolygonOnMap():
     ''' Remove all features on Polygon Layer '''
+    global polygonsEle
+    for ele in polygonsEle:
+        KadasMapCanvasItemManager.removeItem(ele)
     
-    for ele in [footprintMarker]:
-        if ele != None:
-            KadasMapCanvasItemManager.removeItem(ele)
+    polygonsEle = []
     
-    return
-
 
 def AddDrawPolygonOnMap(poly_coordinates):
     ''' Add Polygon Layer '''
-    polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
-    if polyLyr is None:
-        return
-    polyLyr.startEditing()
+    global polygonsEle
+    
+    #RemoveAllDrawPolygonOnMap()
+    
     feature = QgsFeature()
     point = QPointF()
     # create  float polygon --> construcet out of 'point'
@@ -234,10 +247,12 @@ def AddDrawPolygonOnMap(poly_coordinates):
 
     feature.setAttributes([centroid.x(), centroid.y(
     ), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
-
-    polyLyr.addFeatures([feature])
-
-    CommonLayer(polyLyr)
+    
+    p = KadasPolygonItem(QgsCoordinateReferenceSystem("EPSG:4326"))
+    p.setZIndex(90)
+    p.addPartFromGeometry(geomP.get())
+    KadasMapCanvasItemManager.addItem(p)
+    polygonsEle.append(p)
     return True
 
 
@@ -260,10 +275,14 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
     
     if all(v is not None for v in [cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]) and all(v >= 2 for v in [len(cornerPointUL), len(cornerPointUR), len(cornerPointLR), len(cornerPointLL)]):
         
-        if footprintMarker == None:
-                footprintMarker = KadasPolygonItem(QgsCoordinateReferenceSystem("EPSG:4326"))
-                KadasMapCanvasItemManager.addItem( footprintMarker )
-                footprintMarker.setZIndex( 90 )
+        if footprintMarker == '':
+            footprintMarker = KadasPolygonItem(QgsCoordinateReferenceSystem("EPSG:4326"))
+            KadasMapCanvasItemManager.addItem( footprintMarker )
+            footprintMarker.setZIndex( 90 )
+        
+        if(imgSS != crtSensorSrc):
+            SetDefaultFootprintStyle(footprintMarker, imgSS)
+            crtSensorSrc = imgSS
             
         footprintMarker.clear()
         geom = QgsGeometry.fromPolygonXY([[
@@ -289,12 +308,12 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
     lat = packet.SensorLatitude
     lon = packet.SensorLongitude
     alt = packet.SensorTrueAltitude
-    
     if all(v is not None for v in [lat, lon, alt, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]) and all(v >= 2 for v in [len(cornerPointUL), len(cornerPointUR), len(cornerPointLR), len(cornerPointLL)]):
         
         #ul
-        if beamMarkerUL == None:
+        if beamMarkerUL == '':
             beamMarkerUL = KadasLineItem(QgsCoordinateReferenceSystem("EPSG:4326"))
+            SetDefaultBeamsStyle(beamMarkerUL)
             KadasMapCanvasItemManager.addItem( beamMarkerUL )
             beamMarkerUL.setZIndex( 80 )
         
@@ -303,8 +322,9 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
         beamMarkerUL.addPartFromGeometry(geom)
         
         #ur
-        if beamMarkerUR == None:
+        if beamMarkerUR == '':
             beamMarkerUR = KadasLineItem(QgsCoordinateReferenceSystem("EPSG:4326"))
+            SetDefaultBeamsStyle(beamMarkerUR)
             KadasMapCanvasItemManager.addItem( beamMarkerUR )
             beamMarkerUR.setZIndex( 80 )
         
@@ -313,8 +333,9 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
         beamMarkerUR.addPartFromGeometry(geom)
         
         #lr
-        if beamMarkerLR == None:
+        if beamMarkerLR == '':
             beamMarkerLR = KadasLineItem(QgsCoordinateReferenceSystem("EPSG:4326"))
+            SetDefaultBeamsStyle(beamMarkerLR)
             KadasMapCanvasItemManager.addItem( beamMarkerLR )
             beamMarkerLR.setZIndex( 80 )
         
@@ -323,8 +344,9 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
         beamMarkerLR.addPartFromGeometry(geom)
         
         #ll
-        if beamMarkerLL == None:
+        if beamMarkerLL == '':
             beamMarkerLL = KadasLineItem(QgsCoordinateReferenceSystem("EPSG:4326"))
+            SetDefaultBeamsStyle(beamMarkerLL)
             KadasMapCanvasItemManager.addItem( beamMarkerLL )
             beamMarkerLL.setZIndex( 80 )
         
@@ -341,13 +363,13 @@ def UpdateTrajectoryData(packet, ele):
     lat = packet.SensorLatitude
     lon = packet.SensorLongitude
     alt = packet.SensorTrueAltitude
-    
     if all(v is not None for v in [lat, lon, alt]):
     
-        if lastTrajectoryEle != None:
-            if trajectoryMarker == None:
+        if lastTrajectoryEle != '':
+            if trajectoryMarker == '':
                 trajectoryMarker = KadasLineItem(QgsCoordinateReferenceSystem("EPSG:4326"))
                 KadasMapCanvasItemManager.addItem( trajectoryMarker )
+                SetDefaultTrajectoryStyle(trajectoryMarker)
                 trajectoryMarker.setZIndex( 80 )
             
             geom = QgsLineString(QgsPoint(lastTrajectoryEle.SensorLongitude, lastTrajectoryEle.SensorLatitude, alt), QgsPoint(lon, lat, alt))
@@ -372,9 +394,10 @@ def UpdateFrameAxisData(packet, ele):
     
     if all(v is not None for v in [lat, lon, alt, fc_lat, fc_lon]):
     
-        if frameAxisMarker == None:
+        if frameAxisMarker == '':
             frameAxisMarker = KadasLineItem(QgsCoordinateReferenceSystem("EPSG:4326"))
             KadasMapCanvasItemManager.addItem( frameAxisMarker )
+            SetDefaultFrameAxisStyle(frameAxisMarker)
             frameAxisMarker.setZIndex( 80 )
         
         frameAxisMarker.clear()
@@ -395,8 +418,9 @@ def UpdateFrameCenterData(packet, ele):
     
     if all(v is not None for v in [lat, lon, alt]):
     
-        if frameCenterMarker == None:
-            frameCenterMarker = KadasPointItem( QgsCoordinateReferenceSystem("EPSG:4326"), KadasPointItem.ICON_CROSS )
+        if frameCenterMarker == '':
+            frameCenterMarker = KadasPointItem( QgsCoordinateReferenceSystem("EPSG:4326") )
+            SetDefaultFrameCenterStyle(frameCenterMarker)
             #mPosMarker->setIconFill( Qt::blue )
             #mPosMarker->setIconOutline( QPen( Qt::blue ) )
             frameCenterMarker.setZIndex( 100 )
@@ -419,12 +443,16 @@ def UpdatePlatformData(packet, ele):
     
     if all(v is not None for v in [lat, lon, alt, PlatformHeading]):
     
-        if platformMarker == None:
+        if platformMarker == '':
             platformMarker = KadasSymbolItem( QgsCoordinateReferenceSystem("EPSG:4326" ))
             platformMarker.setZIndex( 100 )
             platformMarker.setup( ":/imgFMV/images/platforms/platform_default.svg", 0.5, 0.5, 50, 50 )
             KadasMapCanvasItemManager.addItem( platformMarker )
-            
+        
+        if platformTailNumber != crtPltTailNum:
+            SetDefaultPlatformStyle(platformMarker, platformTailNumber)
+            crtPltTailNum = platformTailNumber
+                
         platformMarker.setPosition(KadasItemPos.fromPoint(QgsPointXY(lon,lat)))
         platformMarker.setAngle(-float(PlatformHeading))
 
@@ -432,6 +460,7 @@ def UpdatePlatformData(packet, ele):
 
 
 def CommonLayer(value):
+    return
     ''' Common commands Layers '''
     value.commitChanges()
     value.updateExtents()
@@ -470,103 +499,103 @@ def CreateVideoLayers(ele, name):
     global groupName
     groupName = name
     
-    return
-    
-    if qgsu.selectLayerByName(Footprint_lyr, groupName) is None:
-        lyr_footprint = newPolygonsLayer(
-            None,
-            ["Corner Longitude Point 1",
-             "Corner Latitude Point 1",
-             "Corner Longitude Point 2",
-             "Corner Latitude Point 2",
-             "Corner Longitude Point 3",
-             "Corner Latitude Point 3",
-             "Corner Longitude Point 4",
-             "Corner Latitude Point 4"],
-            epsg,
-            Footprint_lyr)
-        SetDefaultFootprintStyle(lyr_footprint)
-        addLayerNoCrsDialog(lyr_footprint, group=groupName)
-
-        # 3D Style
-        if ele:
-            SetDefaultFootprintStyle(lyr_footprint)
-
-    if qgsu.selectLayerByName(Beams_lyr, groupName) is None:
-        lyr_beams = newLinesLayer(
-            None,
-            ["longitude",
-             "latitude",
-             "altitude",
-             "Corner Longitude",
-             "Corner Latitude"],
-            epsg,
-            Beams_lyr, LineZ)
-        SetDefaultBeamsStyle(lyr_beams)
-        addLayerNoCrsDialog(lyr_beams, group=groupName)
-        # 3D Style
-        if ele:
-            SetDefaultBeamsStyle(lyr_beams)
-
-    if qgsu.selectLayerByName(Trajectory_lyr, groupName) is None:
-        lyr_Trajectory = newLinesLayer(
-            None,
-            ["longitude", "latitude", "altitude"], epsg, Trajectory_lyr, LineZ)
-        SetDefaultTrajectoryStyle(lyr_Trajectory)
-        addLayerNoCrsDialog(lyr_Trajectory, group=groupName)
-        # 3D Style
-        if ele:
-            SetDefaultTrajectoryStyle(lyr_Trajectory)
-
-    if qgsu.selectLayerByName(FrameAxis_lyr, groupName) is None:
-        lyr_frameaxis = newLinesLayer(
-            None, ["longitude", "latitude", "altitude", "Corner Longitude", "Corner Latitude", "Corner altitude"], epsg, FrameAxis_lyr, LineZ)
-        SetDefaultFrameAxisStyle(lyr_frameaxis)
-        addLayerNoCrsDialog(lyr_frameaxis, group=groupName)
-        # 3D Style
-        if ele:
-            SetDefaultFrameAxisStyle(lyr_frameaxis)
-
-    if qgsu.selectLayerByName(Platform_lyr, groupName) is None:
-        lyr_platform = newPointsLayer(
-            None,
-            ["longitude", "latitude", "altitude"], epsg, Platform_lyr, PointZ)
-        SetDefaultPlatformStyle(lyr_platform)
-        addLayerNoCrsDialog(lyr_platform, group=groupName)
-        # 3D Style
-        if ele:
-            SetDefaultPlatformStyle(lyr_platform)
-
-    if qgsu.selectLayerByName(Point_lyr, groupName) is None:
-        lyr_point = newPointsLayer(
-            None, ["number", "longitude", "latitude", "altitude"], epsg, Point_lyr)
-        SetDefaultPointStyle(lyr_point)
-        addLayerNoCrsDialog(lyr_point, group=groupName)
-
-    if qgsu.selectLayerByName(FrameCenter_lyr, groupName) is None:
-        lyr_framecenter = newPointsLayer(
-            None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr)
-        SetDefaultFrameCenterStyle(lyr_framecenter)
-        addLayerNoCrsDialog(lyr_framecenter, group=groupName)
-        # 3D Style
-        if ele:
-            SetDefaultFrameCenterStyle(lyr_framecenter)
-
-    if qgsu.selectLayerByName(Line_lyr, groupName) is None:
-        #         lyr_line = newLinesLayer(
-        # None, ["longitude", "latitude", "altitude"], epsg, Line_lyr)
-        lyr_line = newLinesLayer(None, [], epsg, Line_lyr)
-        SetDefaultLineStyle(lyr_line)
-        addLayerNoCrsDialog(lyr_line, group=groupName)
-
-    if qgsu.selectLayerByName(Polygon_lyr, groupName) is None:
-        lyr_polygon = newPolygonsLayer(
-            None, ["Centroid_longitude", "Centroid_latitude", "Centroid_altitude", "Area"], epsg, Polygon_lyr)
-        SetDefaultPolygonStyle(lyr_polygon)
-        addLayerNoCrsDialog(lyr_polygon, group=groupName)
-
-    QApplication.processEvents()
-    return
+    #return
+    #
+    #if qgsu.selectLayerByName(Footprint_lyr, groupName) is None:
+    #    lyr_footprint = newPolygonsLayer(
+    #        None,
+    #        ["Corner Longitude Point 1",
+    #         "Corner Latitude Point 1",
+    #         "Corner Longitude Point 2",
+    #         "Corner Latitude Point 2",
+    #         "Corner Longitude Point 3",
+    #         "Corner Latitude Point 3",
+    #         "Corner Longitude Point 4",
+    #         "Corner Latitude Point 4"],
+    #        epsg,
+    #        Footprint_lyr)
+    #    SetDefaultFootprintStyle(lyr_footprint)
+    #    addLayerNoCrsDialog(lyr_footprint, group=groupName)
+    #
+    #    # 3D Style
+    #    if ele:
+    #        SetDefaultFootprintStyle(lyr_footprint)
+    #
+    #if qgsu.selectLayerByName(Beams_lyr, groupName) is None:
+    #    lyr_beams = newLinesLayer(
+    #        None,
+    #        ["longitude",
+    #         "latitude",
+    #         "altitude",
+    #         "Corner Longitude",
+    #         "Corner Latitude"],
+    #        epsg,
+    #        Beams_lyr, LineZ)
+    #    SetDefaultBeamsStyle(lyr_beams)
+    #    addLayerNoCrsDialog(lyr_beams, group=groupName)
+    #    # 3D Style
+    #    if ele:
+    #        SetDefaultBeamsStyle(lyr_beams)
+    #
+    #if qgsu.selectLayerByName(Trajectory_lyr, groupName) is None:
+    #    lyr_Trajectory = newLinesLayer(
+    #        None,
+    #        ["longitude", "latitude", "altitude"], epsg, Trajectory_lyr, LineZ)
+    #    SetDefaultTrajectoryStyle(lyr_Trajectory)
+    #    addLayerNoCrsDialog(lyr_Trajectory, group=groupName)
+    #    # 3D Style
+    #    if ele:
+    #        SetDefaultTrajectoryStyle(lyr_Trajectory)
+    #
+    #if qgsu.selectLayerByName(FrameAxis_lyr, groupName) is None:
+    #    lyr_frameaxis = newLinesLayer(
+    #        None, ["longitude", "latitude", "altitude", "Corner Longitude", "Corner Latitude", "Corner altitude"], epsg, FrameAxis_lyr, LineZ)
+    #    SetDefaultFrameAxisStyle(lyr_frameaxis)
+    #    addLayerNoCrsDialog(lyr_frameaxis, group=groupName)
+    #    # 3D Style
+    #    if ele:
+    #        SetDefaultFrameAxisStyle(lyr_frameaxis)
+    #
+    #if qgsu.selectLayerByName(Platform_lyr, groupName) is None:
+    #    lyr_platform = newPointsLayer(
+    #        None,
+    #        ["longitude", "latitude", "altitude"], epsg, Platform_lyr, PointZ)
+    #    SetDefaultPlatformStyle(lyr_platform)
+    #    addLayerNoCrsDialog(lyr_platform, group=groupName)
+    #    # 3D Style
+    #    if ele:
+    #        SetDefaultPlatformStyle(lyr_platform)
+    #
+    #if qgsu.selectLayerByName(Point_lyr, groupName) is None:
+    #    lyr_point = newPointsLayer(
+    #        None, ["number", "longitude", "latitude", "altitude"], epsg, Point_lyr)
+    #    SetDefaultPointStyle(lyr_point)
+    #    addLayerNoCrsDialog(lyr_point, group=groupName)
+    #
+    #if qgsu.selectLayerByName(FrameCenter_lyr, groupName) is None:
+    #    lyr_framecenter = newPointsLayer(
+    #        None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr)
+    #    SetDefaultFrameCenterStyle(lyr_framecenter)
+    #    addLayerNoCrsDialog(lyr_framecenter, group=groupName)
+    #    # 3D Style
+    #    if ele:
+    #        SetDefaultFrameCenterStyle(lyr_framecenter)
+    #
+    #if qgsu.selectLayerByName(Line_lyr, groupName) is None:
+    #    #         lyr_line = newLinesLayer(
+    #    # None, ["longitude", "latitude", "altitude"], epsg, Line_lyr)
+    #    lyr_line = newLinesLayer(None, [], epsg, Line_lyr)
+    #    SetDefaultLineStyle(lyr_line)
+    #    addLayerNoCrsDialog(lyr_line, group=groupName)
+    #
+    #if qgsu.selectLayerByName(Polygon_lyr, groupName) is None:
+    #    lyr_polygon = newPolygonsLayer(
+    #        None, ["Centroid_longitude", "Centroid_latitude", "Centroid_altitude", "Area"], epsg, Polygon_lyr)
+    #    SetDefaultPolygonStyle(lyr_polygon)
+    #    addLayerNoCrsDialog(lyr_polygon, group=groupName)
+    #
+    #QApplication.processEvents()
+    #return
 
 
 def ExpandLayer(layer, value=True):
@@ -577,16 +606,23 @@ def ExpandLayer(layer, value=True):
     return
 
 
-def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
+def SetDefaultFootprintStyle(mapItem, sensor='DEFAULT'):
     ''' Footprint Symbol '''
     style = S.getSensor(sensor)
-    fill_sym = QgsFillSymbol.createSimple({'color': style['COLOR'],
-                                           'outline_color': style['OUTLINE_COLOR'],
-                                           'outline_style': style['OUTLINE_STYLE'],
-                                           'outline_width': style['OUTLINE_WIDTH']})
-    renderer = QgsSingleSymbolRenderer(fill_sym)
-    layer.setRenderer(renderer)
-    return
+    
+    mPen = QPen()
+    mPen.setColor(QColor(style['OUTLINE_COLOR']))
+    mPen.setWidth(int(style['OUTLINE_WIDTH']))
+    mapItem.setOutline( mPen )
+    
+    b = QBrush()
+    tmp = style['COLOR'].split(',')
+
+    c = qRgba(int(tmp[0]), int(tmp[1]), int(tmp[2]), int(tmp[3]))
+    b.setColor(QColor.fromRgba(c))
+    b.setStyle(Qt.SolidPattern)
+    mapItem.setFill(b)
+    
 
 
 def SetDefaultFootprint3DStyle(layer):
@@ -605,30 +641,22 @@ def SetDefaultFootprint3DStyle(layer):
     return
 
 
-def SetDefaultTrajectoryStyle(layer):
+def SetDefaultTrajectoryStyle(mapItem):
     ''' Trajectory Symbol '''
     style = S.getTrajectory('DEFAULT')
-    fill_sym = QgsLineSymbol.createSimple({'color': style['COLOR'],
-                                           'width': style['WIDTH'],
-                                           'customdash': style['customdash'],
-                                           'use_custom_dash': style['use_custom_dash']})
-    renderer = QgsSingleSymbolRenderer(fill_sym)
-    layer.setRenderer(renderer)
-    return
+    
+    mPen = QPen()
+    mPen.setColor(QColor(style['COLOR']))
+    mPen.setWidth(int(style['WIDTH']))
+    mPen.setStyle(Qt.DashDotLine)
 
+    mapItem.setOutline( mPen )
+    
 
-def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
+def SetDefaultPlatformStyle(mapItem, platform='DEFAULT'):
     ''' Platform Symbol '''
     style = S.getPlatform(platform)
-
-    svgStyle = {}
-    svgStyle['name'] = style["NAME"]
-    svgStyle['outline'] = style["OUTLINE"]
-    svgStyle['outline-width'] = style["OUTLINE_WIDTH"]
-    svgStyle['size'] = style["SIZE"]
-
-    symbol_layer = QgsSvgMarkerSymbolLayer.create(svgStyle)
-    layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
+    mapItem.setup(style["NAME"], 0.5, 0.5, 80, 80 )
     return
 
 
@@ -706,15 +734,19 @@ def SetDefaultBeams3DStyle(layer):
     return
 
 
-def SetDefaultFrameCenterStyle(layer):
+def SetDefaultFrameCenterStyle(mapItem):
     ''' Frame Center Symbol '''
     style = S.getFrameCenterPoint()
-    symbol = QgsMarkerSymbol.createSimple(
-        {'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size': style["SIZE"]})
-    renderer = QgsSingleSymbolRenderer(symbol)
-    layer.setRenderer(renderer)
-    return
-
+    
+    if style['NAME'] == 'cross':
+        mapItem.setIconType(KadasPointItem.ICON_CROSS)
+    
+    mPen = QPen()
+    mPen.setColor(QColor(style['LINE_COLOR']))
+    mPen.setWidth(int(style['LINE_WIDTH']))
+    
+    mapItem.setIconOutline(mPen)
+    mapItem.setIconSize(int(style['SIZE']))
 
 def SetDefaultFrameCenter3DStyle(layer):
     ''' Frame Center 3D Symbol '''
@@ -736,16 +768,17 @@ def SetDefaultFrameCenter3DStyle(layer):
     return
 
 
-def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
+def SetDefaultFrameAxisStyle(mapItem, sensor='DEFAULT'):
     ''' Line Symbol '''
     sensor_style = S.getSensor(sensor)
     style = S.getFrameAxis()
-    fill_sym = QgsLineSymbol.createSimple({'color': sensor_style['OUTLINE_COLOR'],
-                                           'width': sensor_style['OUTLINE_WIDTH'],
-                                           'outline_style': style['OUTLINE_STYLE']})
-    renderer = QgsSingleSymbolRenderer(fill_sym)
-    layer.setRenderer(renderer)
-    return
+
+    mPen = QPen()
+    mPen.setColor(QColor(sensor_style['OUTLINE_COLOR']))
+    mPen.setWidth(int(style['OUTLINE_WIDTH']))
+    mPen.setStyle(Qt.DashLine)
+
+    mapItem.setOutline( mPen );
 
 
 def SetDefaultPointStyle(layer):
@@ -804,11 +837,13 @@ def SetDefaultPolygonStyle(layer):
     return
 
 
-def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
+def SetDefaultBeamsStyle(mapItem, beam='DEFAULT'):
     ''' Beams Symbol'''
     style = S.getBeam(beam)
-    symbol = layer.renderer().symbol()
-    symbol.setColor(QColor.fromRgba(style['COLOR']))
+    
+    mPen = QPen( QColor.fromRgba(style['COLOR']), 1)
+    #mapItem.setFill( QBrush( color ) )
+    mapItem.setOutline( mPen );
     return
 
 # TODO : Update layer symbology if draw color change?

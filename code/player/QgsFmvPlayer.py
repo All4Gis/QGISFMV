@@ -86,7 +86,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.data = None
         self.staticDraw = False
         self.playbackRateSlow = 0.7
-
+        self.closing = False
         # Create Draw Toolbar
         self.DrawToolBar.addAction(self.actionMagnifying_glass)
         self.DrawToolBar.addSeparator()
@@ -318,6 +318,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 #Exit when the first correct packet has been drawn successfully.
             res = UpdateLayers(packet, parent=self, mosaic=self.createingMosaic, group=self.fileName)
             if res:
+                qgsu.showUserAndLogMessage("", "Updating layer for Precision Time Stamp:"+ str(self.data[2]))
+                #for key, value in self.data.items():
+                #    qgsu.showUserAndLogMessage("", "key:"+ str(key) + " value:" +  str(value))
                 QApplication.processEvents()
                 break
             #skip this packet
@@ -334,29 +337,38 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type nextTime: String
         @param nextTime: Next timestamp
         '''
-        try:
-
+        #try:
+            
+        fName = self.fileName
+        if self.isStreaming:
             port = int(self.fileName.split(':')[2])
-            t = callBackMetadataThread(cmds=['-i', self.fileName.replace(str(port), str(port + 1)),
-                                             '-ss', currentTime,
-                                             '-to', nextTime,
-                                             '-map', '0:d',
-                                             '-preset', 'ultrafast',
-                                             '-f', 'data', '-'])
-            t.start()
-            t.join(1)
-            if t.is_alive():
-                t.p.terminate()
-                t.join()
+            fName = self.fileName.replace(str(port), str(port + 1))
+        
+        t = callBackMetadataThread(cmds=['-i', fName ,
+                                         '-ss', currentTime,
+                                         '-to', nextTime,
+                                         '-map', '0:d',
+                                         '-preset', 'ultrafast',
+                                         '-f', 'data', '-'])
+                               
+        qgsu.showUserAndLogMessage("", "current time:"+currentTime + " nexttime:"+nextTime)
+        
+        t.start()
+        t.join(1)
+        if t.is_alive():
+            t.p.terminate()
+            t.join()
+        
+        qgsu.showUserAndLogMessage("", "content: "   + str(t.stdout))
+        
+        if t.stdout == b'':
+            return
 
-            if t.stdout == b'':
-                return
+        self.packetStreamParser(t.stdout)
 
-            self.packetStreamParser(t.stdout)
-
-        except Exception as e:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e))
+        #except Exception as e:
+        #    qgsu.showUserAndLogMessage(QCoreApplication.translate(
+        #        "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e))
 
     def readLocal(self, currentInfo):
         ''' Read Local Metadata ,klv files'''
@@ -453,7 +465,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.btn_play.setIcon(self.playIcon)
             elif state == QMediaPlayer.PausedState:
                 position = self.player.position()/1000
-                self.updateDurationInfo(position)
+                qgsu.showUserAndLogMessage("", "updateDurationInfo PRECISE at:"+str(position), onlyLog=True)
+                self.updateDurationInfo(position, True)
+
 
         return
 
@@ -983,10 +997,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         if not self.sliderDuration.isSliderDown():
             self.sliderDuration.setValue(progress)
-               
-        self.updateDurationInfo(progress)
+        
+        if not self.closing:
+            self.updateDurationInfo(progress)
 
-    def updateDurationInfo(self, currentInfo):
+    def updateDurationInfo(self, currentInfo, isPrecise=False):
         '''Update labels duration Info and CallBack Metadata
         @type currentInfo: String
         @param currentInfo: Current time value
@@ -1009,6 +1024,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 # self.callBackMetadata(currentTimeInfo, nextTimeInfo)
             elif self.islocal:
                 self.readLocal(currentInfo)
+            elif isPrecise:
+                nextTime = currentInfo + self.pass_time / 1000
+                nextTimeInfo = _seconds_to_time_frac(nextTime)
+                qgsu.showUserAndLogMessage("", "Getting precise time info", onlyLog=True)
+                self.callBackMetadata(currentTimeInfo, nextTimeInfo)
             else:
                 # Get Metadata from buffer
                 self.get_metadata_from_buffer(currentTimeInfo)
@@ -1051,6 +1071,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @param islocal: Check if video is local,created using multiplexor or is MISB
         @param klv_folder: klv folder if video is created using multiplexor
         '''
+        self.closing=False
         self.islocal = islocal
         self.klv_folder = klv_folder
         try:
@@ -1060,11 +1081,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             QApplication.processEvents()
 
             # Create Group
-            root = QgsProject.instance().layerTreeRoot()
-            node_group = QgsLayerTreeGroup(videoPath)
+            #root = QgsProject.instance().layerTreeRoot()
+            #node_group = QgsLayerTreeGroup(videoPath)
             #If you have a loaded project, insert the group
             #on top of it.
-            root.insertChildNode(0, node_group)
+            #root.insertChildNode(0, node_group)
 
             self.fileName = videoPath
             self.playlist = QMediaPlaylist()
@@ -1556,6 +1577,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                                          QCoreApplication.translate("QgsFmvPlayer", "If you close or reopen the video all the information will be erased."),
                                          QCoreApplication.translate("QgsFmvPlayer", "Do you want to close or reopen it?"),
                                          icon="Information")
+        self.closing = True
         if buttonReply == QMessageBox.No:
             event.ignore()
             return
