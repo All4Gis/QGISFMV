@@ -92,8 +92,9 @@ footprintMarker=''
 trajectoryMarker=''
 lastTrajectoryEle=''
 linesEle=[]
-pointsEle=''
-polygonsEle=''
+pointsEle=[]
+pointsLblEle=[]
+polygonsEle=[]
 beamMarkerUR=''
 beamMarkerUL=''
 beamMarkerLL=''
@@ -104,17 +105,26 @@ beamMarkerLR=''
 def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
     '''  add pin point on the map '''
     global pointsEle
+    global pointsLblEle
     
     #RemoveAllDrawPointOnMap()
     
     p = KadasPointItem( QgsCoordinateReferenceSystem("EPSG:4326"), KadasPointItem.ICON_CROSS )
-    #mPosMarker->setIconFill( Qt::blue )
-    #setIconSize( 10 + 2 * size );
-    #mPosMarker->setIconOutline( QPen( Qt::blue ) )
     p.setZIndex( 100 )
     p.setPosition(KadasItemPos.fromPoint(QgsPointXY(Longitude, Latitude)))
     KadasMapCanvasItemManager.addItem( p )
     pointsEle.append(p)
+
+    textItem = KadasTextItem( QgsCoordinateReferenceSystem("EPSG:4326") )
+    textItem.setText( str(pointIndex) );
+    textItem.setPosition( KadasItemPos.fromPoint(QgsPointXY(Longitude, Latitude)) )
+    textItem.setAnchorX( 0 )
+    textItem.setAnchorY( 1.0 )
+    KadasMapCanvasItemManager.addItem( textItem )
+    pointsLblEle.append(textItem)
+    
+    SetDefaultPointStyle(p, textItem)
+    
     
 
 
@@ -132,6 +142,7 @@ def AddDrawLineOnMap(drawLines):
                 pt = QgsPointXY(list1[i][0], list1[i][1])
                 points.append(pt)
             l = KadasLineItem(QgsCoordinateReferenceSystem("EPSG:4326"))
+            SetDefaultLineStyle(l)
             KadasMapCanvasItemManager.addItem( l )
             l.setZIndex( 90 )
             geom = QgsGeometry.fromPolylineXY(points)
@@ -139,9 +150,19 @@ def AddDrawLineOnMap(drawLines):
             linesEle.append(l)
     return
 
+def GetMapItems():
+    global platformMarker, frameCenterMarker, footprintMarker
+    
+    return {
+        "platform": platformMarker,
+        "framecenter": frameCenterMarker,
+        "footprint": footprintMarker
+    }
+    
+
 def RemoveAllDrawings():
 
-    global platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR, linesEle, pointsEle, polygonsEle
+    global platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR, linesEle, pointsEle, pointsLblEle, polygonsEle
     qgsu.showUserAndLogMessage("", "Clearing all mapItems drawings.")
     for ele in [platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR]:
         if ele != '':
@@ -152,11 +173,14 @@ def RemoveAllDrawings():
     
     for ele in pointsEle:
         KadasMapCanvasItemManager.removeItem(ele)
-        
+    
+    for ele in pointsLblEle:
+        KadasMapCanvasItemManager.removeItem(ele)
+    
     for ele in polygonsEle:
         KadasMapCanvasItemManager.removeItem(ele)
     
-    platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR, linesEle, pointsEle, polygonsEle = '', '', '', '', '', '', '', '', '', [], [], []
+    platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR, linesEle, pointsEle, pointsLblEle, polygonsEle = '', '', '', '', '', '', '', '', '', [], [], [], []
 
 def RemoveAllDrawLineOnMap():
     ''' Remove all features on Line Layer '''
@@ -180,21 +204,28 @@ def RemoveLastDrawPolygonOnMap():
 
 def RemoveLastDrawPointOnMap():
     ''' Remove Last features on Point Layer '''
-    global pointsEle
+    global pointsEle, pointsLblEle
     
     if pointsEle:
         KadasMapCanvasItemManager.removeItem(pointsEle.pop())
+        
+    if pointsLblEle:
+        KadasMapCanvasItemManager.removeItem(pointsLblEle.pop())
 
 
 def RemoveAllDrawPointOnMap():
     ''' Remove all features on Point Layer '''
-    global pointsEle
-    qgsu.showUserAndLogMessage("", "Deleting points.")
+    global pointsEle, pointsLblEle
+    qgsu.showUserAndLogMessage("", "Deleting points and labels.")
     
     for ele in pointsEle:
         KadasMapCanvasItemManager.removeItem(ele)
+        
+    for ele in pointsLblEle:
+        KadasMapCanvasItemManager.removeItem(ele)
     
     pointsEle = []
+    pointsLblEle = []
     
 
 
@@ -249,6 +280,7 @@ def AddDrawPolygonOnMap(poly_coordinates):
     ), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
     
     p = KadasPolygonItem(QgsCoordinateReferenceSystem("EPSG:4326"))
+    SetDefaultPolygonStyle(p)
     p.setZIndex(90)
     p.addPartFromGeometry(geomP.get())
     KadasMapCanvasItemManager.addItem(p)
@@ -781,61 +813,53 @@ def SetDefaultFrameAxisStyle(mapItem, sensor='DEFAULT'):
     mapItem.setOutline( mPen );
 
 
-def SetDefaultPointStyle(layer):
+def SetDefaultPointStyle(mapItem, textItem):
     ''' Point Symbol '''
     style = S.getDrawingPoint()
-    symbol = QgsMarkerSymbol.createSimple(
-        {'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size': style["SIZE"]})
-
-    renderer = QgsSingleSymbolRenderer(symbol)
-    layer.setRenderer(renderer)
-
-    layer_settings = QgsPalLayerSettings()
-    text_format = QgsTextFormat()
-
-    text_format.setFont(QFont(style["LABEL_FONT"], style["LABEL_FONT_SIZE"]))
-    text_format.setColor(QColor(style["LABEL_FONT_COLOR"]))
-    text_format.setSize(style["LABEL_SIZE"])
-
-    buffer_settings = QgsTextBufferSettings()
-    buffer_settings.setEnabled(True)
-    buffer_settings.setSize(1)
-    buffer_settings.setColor(QColor(style["LABEL_BUFFER_COLOR"]))
-
-    text_format.setBuffer(buffer_settings)
-    layer_settings.setFormat(text_format)
-
-    layer_settings.fieldName = "number"
-    layer_settings.placement = 2
-    layer_settings.enabled = True
-
-    layer_settings = QgsVectorLayerSimpleLabeling(layer_settings)
-    layer.setLabelsEnabled(True)
-    layer.setLabeling(layer_settings)
-
+    
+    mPen = QPen()
+    mPen.setColor(QColor(style['LINE_COLOR']))
+    mPen.setWidth(int(style['LINE_WIDTH']))
+    
+    mapItem.setIconOutline(mPen)
+    mapItem.setIconSize(int(style['SIZE']))
+    
+    textItem.setOutlineColor(QColor(style['LABEL_FONT_COLOR']))
+    textItem.setFillColor( QColor(style['LABEL_FONT_COLOR']) )
+    
+    font = QFont()
+    font.setFamily( style['LABEL_FONT'] )
+    font.setPointSize( style['LABEL_FONT_SIZE'] )
+    textItem.setFont( font )
+    
     return
 
 
-def SetDefaultLineStyle(layer):
+def SetDefaultLineStyle(mapItem):
     ''' Line Symbol '''
     style = S.getDrawingLine()
-    symbol = layer.renderer().symbol()
-    symbol.setColor(style['COLOR'])
-    symbol.setWidth(style['WIDTH'])
-    return
+    mPen = QPen()
+    mPen.setColor(style['COLOR'])
+    mPen.setWidth(style['WIDTH'])
+    mapItem.setOutline( mPen )
+    
 
-
-def SetDefaultPolygonStyle(layer):
+def SetDefaultPolygonStyle(mapItem):
     ''' Polygon Symbol '''
     style = S.getDrawingPolygon()
-    fill_sym = QgsFillSymbol.createSimple({'color': style['COLOR'],
-                                           'outline_color': style['OUTLINE_COLOR'],
-                                           'outline_style': style['OUTLINE_STYLE'],
-                                           'outline_width': style['OUTLINE_WIDTH']})
-    renderer = QgsSingleSymbolRenderer(fill_sym)
-    layer.setRenderer(renderer)
-    return
+        
+    mPen = QPen()
+    mPen.setColor(QColor(style['OUTLINE_COLOR']))
+    mPen.setWidth(int(style['OUTLINE_WIDTH']))
+    mapItem.setOutline( mPen )
+    
+    b = QBrush()
+    tmp = style['COLOR'].split(',')
 
+    c = qRgba(int(tmp[0]), int(tmp[1]), int(tmp[2]), int(tmp[3]))
+    b.setColor(QColor.fromRgba(c))
+    b.setStyle(Qt.SolidPattern)
+    mapItem.setFill(b)
 
 def SetDefaultBeamsStyle(mapItem, beam='DEFAULT'):
     ''' Beams Symbol'''

@@ -544,7 +544,6 @@ class Ui_PlayerWindow(object):
         self.actionCenter_on_Footprint.setObjectName("actionCenter_on_Footprint")
         self.actionCenter_Target = QtWidgets.QAction(PlayerWindow)
         self.actionCenter_Target.setCheckable(True)
-        #self.actionCenter_Target.setChecked(True)
         icon47 = QtGui.QIcon()
         icon47.addPixmap(QtGui.QPixmap(":/imgFMV/images/center_target.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionCenter_Target.setIcon(icon47)

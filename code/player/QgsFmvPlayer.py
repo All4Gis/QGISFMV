@@ -189,13 +189,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         ''' Center map on Platform
         @param checked: Boolean if button is checked
         '''
-        
+                
         if checked:
             self.actionCenter_on_Footprint.setChecked(False)
             self.actionCenter_Target.setChecked(False)
             setCenterMode(1, self.iface)
         else:
             setCenterMode(0, self.iface)
+            
 
     def centerMapFootprint(self, checked):
         '''Center Map on Footprint
@@ -318,7 +319,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 #Exit when the first correct packet has been drawn successfully.
             res = UpdateLayers(packet, parent=self, mosaic=self.createingMosaic, group=self.fileName)
             if res:
-                qgsu.showUserAndLogMessage("", "Updating layer for Precision Time Stamp:"+ str(self.data[2]))
+                #qgsu.showUserAndLogMessage("", "Updating layer for Precision Time Stamp:"+ str(self.data[2]))
                 #for key, value in self.data.items():
                 #    qgsu.showUserAndLogMessage("", "key:"+ str(key) + " value:" +  str(value))
                 QApplication.processEvents()
@@ -329,7 +330,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             #except Exception as e:
             #    qgsu.showUserAndLogMessage("", "QgsFmvPlayer packetStreamParser failed! : " + str(e), onlyLog=True)
 
-    def callBackMetadata(self, currentTime, nextTime):
+    def callBackMetadata(self, currentTime, nextTime, klv_index=0):
         '''Metadata CallBack Streaming
         @type currentTime: String
         @param currentTime: Current timestamp
@@ -347,11 +348,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         t = callBackMetadataThread(cmds=['-i', fName ,
                                          '-ss', currentTime,
                                          '-to', nextTime,
-                                         '-map', '0:d',
+                                         '-map', '0:d'+str(klv_index),
                                          '-preset', 'ultrafast',
                                          '-f', 'data', '-'])
                                
-        qgsu.showUserAndLogMessage("", "current time:"+currentTime + " nexttime:"+nextTime)
+        qgsu.showUserAndLogMessage("", "Precise info using current time:"+currentTime + " nexttime:"+nextTime)
         
         t.start()
         t.join(1)
@@ -1028,7 +1029,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 nextTime = currentInfo + self.pass_time / 1000
                 nextTimeInfo = _seconds_to_time_frac(nextTime)
                 qgsu.showUserAndLogMessage("", "Getting precise time info", onlyLog=True)
-                self.callBackMetadata(currentTimeInfo, nextTimeInfo)
+                self.callBackMetadata(currentTimeInfo, nextTimeInfo, self.meta_reader.klv_index)
             else:
                 # Get Metadata from buffer
                 self.get_metadata_from_buffer(currentTimeInfo)

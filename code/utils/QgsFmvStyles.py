@@ -168,7 +168,7 @@ class FmvLayerStyles(object):
     DP['DEFAULT']['NAME'] = 'cross'
     DP['DEFAULT']['LINE_COLOR'] = '#DC143C'
     DP['DEFAULT']['LINE_WIDTH'] = '1'
-    DP['DEFAULT']['SIZE'] = '4'
+    DP['DEFAULT']['SIZE'] = '10'
     DP['DEFAULT']['LABEL_FONT'] = 'Arial'
     DP['DEFAULT']['LABEL_FONT_SIZE'] = 12
     DP['DEFAULT']['LABEL_FONT_COLOR'] = '#DC143C'
