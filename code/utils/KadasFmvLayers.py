@@ -163,7 +163,7 @@ def GetMapItems():
 def RemoveAllDrawings():
 
     global platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR, linesEle, pointsEle, pointsLblEle, polygonsEle
-    qgsu.showUserAndLogMessage("", "Clearing all mapItems drawings.")
+    #qgsu.showUserAndLogMessage("", "Clearing all mapItems drawings.")
     for ele in [platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR]:
         if ele != '':
             KadasMapCanvasItemManager.removeItem(ele)
@@ -185,9 +185,7 @@ def RemoveAllDrawings():
 def RemoveAllDrawLineOnMap():
     ''' Remove all features on Line Layer '''
     global linesEle
-    
-    qgsu.showUserAndLogMessage("", "Deleting lines. trajectoryMarker:"+str(trajectoryMarker))
-    
+        
     for ele in linesEle:
         KadasMapCanvasItemManager.removeItem(ele)
     
@@ -216,7 +214,6 @@ def RemoveLastDrawPointOnMap():
 def RemoveAllDrawPointOnMap():
     ''' Remove all features on Point Layer '''
     global pointsEle, pointsLblEle
-    qgsu.showUserAndLogMessage("", "Deleting points and labels.")
     
     for ele in pointsEle:
         KadasMapCanvasItemManager.removeItem(ele)
@@ -273,7 +270,6 @@ def AddDrawPolygonOnMap(poly_coordinates):
     try:
         centroid = feature.geometry().centroid().asPoint()
     except Exception:
-        iface.vectorLayerTools().stopEditing(polyLyr, False)
         return False
 
     feature.setAttributes([centroid.x(), centroid.y(

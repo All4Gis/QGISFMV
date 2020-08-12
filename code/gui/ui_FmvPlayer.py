@@ -598,11 +598,11 @@ class Ui_PlayerWindow(object):
         self.menuMap.addAction(self.actionCenter_on_Footprint)
         self.menuMap.addAction(self.actionCenter_Target)
         self.menubarwidget.addAction(self.menuFile.menuAction())
-        self.menubarwidget.addAction(self.menuFrames.menuAction())
+        #self.menubarwidget.addAction(self.menuFrames.menuAction())
         self.menubarwidget.addAction(self.menuMetadata.menuAction())
-        self.menubarwidget.addAction(self.menuConverter.menuAction())
+        #self.menubarwidget.addAction(self.menuConverter.menuAction())
         self.menubarwidget.addAction(self.menuInfo.menuAction())
-        self.menubarwidget.addAction(self.menuPlot_Bitrate.menuAction())
+        #self.menubarwidget.addAction(self.menuPlot_Bitrate.menuAction())
         self.menubarwidget.addAction(self.menuMap.menuAction())
 
         self.retranslateUi(PlayerWindow)
@@ -670,7 +670,7 @@ class Ui_PlayerWindow(object):
     def retranslateUi(self, PlayerWindow):
         _translate = QtCore.QCoreApplication.translate
         PlayerWindow.setWindowTitle(_translate("PlayerWindow", "Player"))
-        self.groupBox.setTitle(_translate("PlayerWindow", "Video Tools"))
+        self.groupBox.setTitle(_translate("PlayerWindow", ""))
         self.btn_Color.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Color dialog</p></body></html>"))
         self.btn_Color.setShortcut(_translate("PlayerWindow", "Ctrl+C"))
         self.btn_Rec.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Record</p></body></html>"))

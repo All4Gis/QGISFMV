@@ -124,9 +124,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # Object Tracking
         #self.DrawToolBar.addAction(self.actionObject_Tracking)
         
+        
         # Hide Color Button
         self.btn_Color.hide()
-
+        self.btn_Rec.hide()
+        self.cmb_cursorCoord.hide()
+        self.btn_CaptureFrame.hide()
+        
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
         self.playIcon = QIcon(":/imgFMV/images/play-arrow.png")
         self.pauseIcon = QIcon(":/imgFMV/images/pause.png")
@@ -143,7 +147,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.pass_time = pass_time
-        self.player.setNotifyInterval(250)  # Player update interval
+        self.player.setNotifyInterval(1000)  # Player update interval
         self.playlist = QMediaPlaylist()
 
         self.player.setVideoOutput(
@@ -160,7 +164,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.playFile(path, self.islocal, self.klv_folder)
 
         self.sliderDuration.setRange(0, self.player.duration() / 1000)
-
+        self.sliderDuration.sliderReleased.connect(self.sliderDurationReleased)
         self.volumeSlider.setValue(self.player.volume())
         self.volumeSlider.enterEvent = self.showVolumeTip
 
@@ -282,8 +286,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             # Values need to be read, pause the video a short while
             elif stdout_data == 'BUFFERING':
                 qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Buffering metadata..."), duration=4, level=QGis.Info)
+                oldState = self.playerState
                 self.player.pause()
-                QTimer.singleShot(2500, lambda: self.player.play())
+                #lambda x: True if x % 2 == 0 else False
+                QTimer.singleShot(2500, lambda: self.resumePlay(oldState))
                 return
             elif stdout_data is None:
                 #qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size:" + str(self.meta_reader.getSize())), level=QGis.Info)
@@ -299,7 +305,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         except Exception as inst:
             qgsu.showUserAndLogMessage("", "Metadata Buffer Failed! : " + str(inst), onlyLog=True)
             # qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Metadata Buffer Failed! : "), str(inst))
-
+    
+    def resumePlay(self, state):
+        if state == QMediaPlayer.PlayingState: 
+            self.player.play()
+        
     def packetStreamParser(self, stdout_data):
         '''Common packet process
         @type stdout_data: String
@@ -338,38 +348,38 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type nextTime: String
         @param nextTime: Next timestamp
         '''
-        #try:
+        try:
             
-        fName = self.fileName
-        if self.isStreaming:
-            port = int(self.fileName.split(':')[2])
-            fName = self.fileName.replace(str(port), str(port + 1))
-        
-        t = callBackMetadataThread(cmds=['-i', fName ,
-                                         '-ss', currentTime,
-                                         '-to', nextTime,
-                                         '-map', '0:d'+str(klv_index),
-                                         '-preset', 'ultrafast',
-                                         '-f', 'data', '-'])
-                               
-        qgsu.showUserAndLogMessage("", "Precise info using current time:"+currentTime + " nexttime:"+nextTime)
-        
-        t.start()
-        t.join(1)
-        if t.is_alive():
-            t.p.terminate()
-            t.join()
-        
-        qgsu.showUserAndLogMessage("", "content: "   + str(t.stdout))
-        
-        if t.stdout == b'':
-            return
+            fName = self.fileName
+            if self.isStreaming:
+                port = int(self.fileName.split(':')[2])
+                fName = self.fileName.replace(str(port), str(port + 1))
+            
+            t = callBackMetadataThread(cmds=['-i', fName ,
+                                             '-ss', currentTime,
+                                             '-to', nextTime,
+                                             '-map', '0:d'+str(klv_index),
+                                             '-preset', 'ultrafast',
+                                             '-f', 'data', '-'])
+                                   
+            qgsu.showUserAndLogMessage("", "Precise info using current time:"+currentTime + " nexttime:"+nextTime, onlyLog=True)
+            
+            t.start()
+            t.join(1)
+            if t.is_alive():
+                t.p.terminate()
+                t.join()
+            
+            qgsu.showUserAndLogMessage("", "content: "   + str(t.stdout), onlyLog=True)
+            
+            if t.stdout == b'':
+                return
 
-        self.packetStreamParser(t.stdout)
+            self.packetStreamParser(t.stdout)
 
-        #except Exception as e:
-        #    qgsu.showUserAndLogMessage(QCoreApplication.translate(
-        #        "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e))
+        except Exception as e:
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e))
 
     def readLocal(self, currentInfo):
         ''' Read Local Metadata ,klv files'''
@@ -1000,8 +1010,19 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.sliderDuration.setValue(progress)
         
         if not self.closing:
-            self.updateDurationInfo(progress)
-
+            #show precise info if player is paused
+            if self.playerState == QMediaPlayer.PausedState:
+                if not self.sliderDuration.isSliderDown():
+                    self.updateDurationInfo(progress, True)
+            else:
+                self.updateDurationInfo(progress)
+            
+            
+    def sliderDurationReleased(self):
+        if self.playerState == QMediaPlayer.PausedState:
+            qgsu.showUserAndLogMessage("", "Slider Released at: "+str(self.sliderDuration.value()), onlyLog=True)
+            self.updateDurationInfo(self.sliderDuration.value(), True)
+    
     def updateDurationInfo(self, currentInfo, isPrecise=False):
         '''Update labels duration Info and CallBack Metadata
         @type currentInfo: String
