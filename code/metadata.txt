@@ -26,6 +26,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
     1.10:
+    	- fix default config
     	- Update documentation and Ubuntu installation
     	- Fix case sensitive linux file dialog
     	- Fix linux installation
