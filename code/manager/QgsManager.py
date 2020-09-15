@@ -57,7 +57,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.isStreaming = False
         self.meta_reader = {}
         self.initialPt = {}
-        self.pass_time = 250
+        self.pass_time = 500
+        #self.intervall = 1000
+        #self.notify_int = 3000
 
         self.VManager.viewport().installEventFilter(self)
 
