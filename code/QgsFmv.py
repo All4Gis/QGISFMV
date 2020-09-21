@@ -75,7 +75,9 @@ class Fmv:
                     QCoreApplication.installTranslator(self.translator)
 
         self._FMVManager = None
-        self.bottomBar = None                     
+        self.bottomBar = None
+
+        self.iface.projectWillBeClosed.connect(RemoveAllDrawings)
 
     def initGui(self):
         ''' FMV Action '''
