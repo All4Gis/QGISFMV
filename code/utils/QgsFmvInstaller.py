@@ -42,6 +42,13 @@ except ImportError:
 
 windows = platform.system() == 'Windows'
 
+if windows:
+    ffmpegConf = os.path.join(QgsApplication.applicationDirPath(), '..', 'opt', 'ffmpeg')
+else:
+    ffmpegConf = '/usr/bin'
+
+qgsu.showUserAndLogMessage(ffmpegConf, ffmpegConf)
+
 # Download link
 LavFilters = "https://github.com/Nevcairiel/LAVFilters/releases/download/0.74.1/LAVFilters-0.74.1-Installer.exe"
 

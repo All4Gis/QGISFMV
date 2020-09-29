@@ -61,6 +61,13 @@ FrameCenter_lyr = parser['LAYERS']['FrameCenter_lyr']
 dtm_buffer = int(parser['GENERAL']['DTM_buffer_size'])
 ffmpegConf = parser['GENERAL']['ffmpeg']
 
+windows = platform.system() == 'Windows'
+
+if windows:
+    ffmpegConf = os.path.join(QgsApplication.applicationDirPath(), '..', 'opt', 'ffmpeg')
+else:
+    ffmpegConf = '/usr/bin'
+
 try:
     from homography import from_points
 except ImportError:
@@ -466,7 +473,7 @@ def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None, klv_index=0)
                         '-f', 'data', '-'])
 
             stdout_data, _ = p.communicate()
-        #qgsu.showUserAndLogMessage(stdout_data, stdout_data, onlyLog=True)
+            qgsu.showUserAndLogMessage("Video Loc info raw result", stdout_data, onlyLog=True)
         if stdout_data == b'':
             #qgsu.showUserAndLogMessage("Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)                                                                                                                                    
             return
@@ -803,6 +810,8 @@ def _spawn(cmds, t="ffmpeg"):
     cmds.insert(3, '-preset')
     cmds.insert(4, 'ultrafast')
 
+    qgsu.showUserAndLogMessage("", "Command:" + str(cmds), onlyLog=True)
+    
     return subprocess.Popen(cmds, shell=windows, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             bufsize=0,
                             close_fds=(not windows))

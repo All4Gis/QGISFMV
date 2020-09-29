@@ -1,7 +1,7 @@
 # PyQt5 Video player
 #!/usr/bin/env python
 
-from PyQt5.QtCore import QDir, Qt, QUrl
+from PyQt5.QtCore import QDir, Qt, QUrl, QFile, QBuffer, QIODevice
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
@@ -11,7 +11,7 @@ from PyQt5.QtGui import QIcon
 import sys
 
 class VideoWindow(QMainWindow):
-
+    
     def __init__(self, parent=None):
         super(VideoWindow, self).__init__(parent)
         self.setWindowTitle("PyQt Video Player Widget Example - pythonprogramminglanguage.com") 
@@ -79,12 +79,12 @@ class VideoWindow(QMainWindow):
     def openFile(self):
         fileName, _ = QFileDialog.getOpenFileName(self, "Open Movie",
                 QDir.homePath())
-
         if fileName != '':
-            self.mediaPlayer.setMedia(
-                    QMediaContent(QUrl.fromLocalFile(fileName)))
+            self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(fileName)) )
+            #self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(fileName)))
             self.playButton.setEnabled(True)
 
+            
     def exitCall(self):
         sys.exit(app.exec_())
 

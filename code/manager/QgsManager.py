@@ -277,6 +277,9 @@ class FmvManager(QWidget, Ui_ManagerWindow):
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
         Exts = ast.literal_eval(parser.get("FILES", "Exts"))
+        
+        qgsu.showUserAndLogMessage("","Exts:" + parser.get("FILES", "Exts"), onlyLog=True)
+                
         filename, _ = askForFiles(self, QCoreApplication.translate(
             "ManagerDock", "Open video"),
             exts=Exts)
