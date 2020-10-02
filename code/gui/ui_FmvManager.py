@@ -19,6 +19,11 @@ class Ui_ManagerWindow(object):
         self.mOpenMPEGButton.setText("")
         self.mOpenMPEGButton.setObjectName("mOpenMPEGButton")
         self.gridLayout.addWidget(self.mOpenMPEGButton, 0, 0, 1, 1)
+
+        self.versionLabel = QtWidgets.QLabel(ManagerWindow)
+        self.versionLabel.setText("v 1.10")
+        self.versionLabel.setStyleSheet("QLabel { color : grey; }");
+        self.gridLayout.addWidget(self.versionLabel, 0, 1, 1, 1)
         
         #deactivate for 1.0 Version
         #self.mActionCreateMISBButton = QtWidgets.QToolButton(ManagerWindow)

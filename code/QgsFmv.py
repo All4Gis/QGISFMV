@@ -77,7 +77,10 @@ class Fmv:
         self._FMVManager = None
         self.bottomBar = None
 
-        self.iface.projectWillBeClosed.connect(RemoveAllDrawings)
+        try:
+            self.iface.projectWillBeClosed.connect(RemoveAllDrawings)
+        except:
+            pass
 
     def initGui(self):
         ''' FMV Action '''
