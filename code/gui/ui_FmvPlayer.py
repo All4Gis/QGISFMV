@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from QGIS_FMV.utils.QgsFmvSlider import QgsFmvSlider
 
 class Ui_PlayerWindow(object):
     def setupUi(self, PlayerWindow):
@@ -90,7 +91,7 @@ class Ui_PlayerWindow(object):
         self.verticalLayout.addWidget(self.videoWidget)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.sliderDuration = QtWidgets.QSlider(self.centralwidget)
+        self.sliderDuration = QgsFmvSlider(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

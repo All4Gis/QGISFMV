@@ -165,6 +165,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.sliderDuration.setRange(0, self.player.duration() / 1000)
         self.sliderDuration.sliderReleased.connect(self.sliderDurationReleased)
+        
+        self.sliderDuration.mousePressed.connect(self.sliderDurationPressed)
+
+        
         self.volumeSlider.setValue(self.player.volume())
         self.volumeSlider.enterEvent = self.showVolumeTip
 
@@ -1001,6 +1005,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type progress: qint64
         @param progress: Slide video duration current value
         '''
+        qgsu.showUserAndLogMessage("", "Position changed at: "+str(progress), onlyLog=True)
+
         progress /= 1000
         # Remove measure if slider position change
         if self.staticDraw:
@@ -1016,7 +1022,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     self.updateDurationInfo(progress, True)
             else:
                 self.updateDurationInfo(progress)
-            
+
+    def sliderDurationPressed(self, value):
+        #qgsu.showUserAndLogMessage("Slider Pressed at: "+str(self.sliderDuration.value())+" val:" + str(value), "Slider Pressed at: "+str(self.sliderDuration.value()), onlyLog=True)
+        self.seek(value)
             
     def sliderDurationReleased(self):
         if self.playerState == QMediaPlayer.PausedState:
