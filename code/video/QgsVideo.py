@@ -434,10 +434,12 @@ class VideoWidget(QVideoWidget):
 
         if self.gt is not None and self._interaction.measureDistance:
             self.drawMeasureDistance.append([None, None, None])
+            self.parent.actionMeasureDistance.toggle()
             return
 
         if self.gt is not None and self._interaction.measureArea:
             self.drawMeasureArea.append([None, None, None])
+            self.parent.actionMeasureArea.toggle()
             return
 
         if self.gt is not None and self._interaction.polygonDrawer:
@@ -457,6 +459,8 @@ class VideoWidget(QVideoWidget):
             return
 
         self.UpdateSurface()
+        scr = QApplication.desktop().screenNumber(self)
+        self.setGeometry(QApplication.desktop().screenGeometry(scr))
         self.setFullScreen(not self.isFullScreen())
         event.accept()
 
@@ -611,6 +615,7 @@ class VideoWidget(QVideoWidget):
         @param event:
         @return:
         """
+        
         if not self.surface.isActive():
             return
 
@@ -628,9 +633,9 @@ class VideoWidget(QVideoWidget):
             None
 
         # Prevent draw on video if not started or finished
-        if self.parent.player.position() == 0:
-            self.painter.end()
-            return
+        #if self.parent.player.position() == 0:
+        #    self.painter.end()
+        #    return
 
         self.gt = GetGCPGeoTransform()
 
@@ -735,8 +740,8 @@ class VideoWidget(QVideoWidget):
             return
 
         # Prevent draw on video if not started or finished
-        if self.parent.player.position() == 0:
-            return
+        #if self.parent.player.position() == 0:
+        #    return
 
         # Mouser cursor drawing
         if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.measureDistance or self._interaction.measureArea or self._interaction.censure or self._interaction.objectTracking:
@@ -751,6 +756,9 @@ class VideoWidget(QVideoWidget):
             tr = QgsCoordinateTransform( QgsCoordinateReferenceSystem( 'EPSG:4326' ), iface.mapCanvas().mapSettings().destinationCrs(), QgsProject.instance().transformContext() )
             mapPt = tr.transform( QgsPointXY(Longitude, Latitude) )
             
+            qgsu.showUserAndLogMessage("", "Lon:" + str(Longitude) + "Lat:" + str(Latitude), onlyLog=True)
+            qgsu.showUserAndLogMessage("", "mapPt Lon:" + str(mapPt.x()) + "Lat:" + str(mapPt.y()), onlyLog=True)
+
             vertices = self.Cursor_Canvas_RubberBand.numberOfVertices()
             if vertices > 0:
                 self.Cursor_Canvas_RubberBand.removePoint(0, True, 0)
@@ -838,8 +846,8 @@ class VideoWidget(QVideoWidget):
             return
 
         # Prevent draw on video if not started or finished
-        if self.parent.player.position() == 0:
-            return
+        #if self.parent.player.position() == 0:
+        #    return
 
         if event.button() == Qt.LeftButton:
 
@@ -960,8 +968,8 @@ class VideoWidget(QVideoWidget):
         @return:
         """
         # Prevent draw on video if not started or finished
-        if self.parent.player.position() == 0:
-            return
+        #if self.parent.player.position() == 0:
+        #    return
 
         # Censure Draw Interaction
         if self._interaction.censure:

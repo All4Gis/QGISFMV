@@ -4,7 +4,8 @@ from qgis.PyQt.QtCore import (QUrl,
                               QPoint,
                               QCoreApplication,
                               Qt,
-                              QTimer)
+                              QTimer,
+                              pyqtSignal)
 from qgis.PyQt.QtGui import QIcon, QMovie
 from qgis.PyQt.QtWidgets import (QToolTip,
                                  QMessageBox,
@@ -68,7 +69,7 @@ except Exception as e:
 
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     """ Video Player Class """
-
+        
     def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, islocal=False, klv_folder=None):
         """ Constructor """
 
@@ -90,6 +91,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # Create Draw Toolbar
         self.DrawToolBar.addAction(self.actionMagnifying_glass)
         self.DrawToolBar.addSeparator()
+        self.btn_stop.setEnabled(False)
 
         # Draw Polygon QToolButton
         self.toolBtn_DPolygon.setDefaultAction(self.actionDraw_Polygon)
@@ -189,7 +191,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         # Defalut WGS 84/ World Mercator (3D)
         # QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(3395))
-
+        
+    
     def setMetaReader(self, meta_reader):
         self.meta_reader = meta_reader
         
@@ -473,11 +476,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         '''Set Current State
         @type state: QMediaPlayer::State
         @param state: Current video state (play/pause ...)
-        '''
+        '''          
+        
         if state != self.playerState:
             self.playerState = state
             if state == QMediaPlayer.StoppedState:
                 self.btn_play.setIcon(self.playIcon)
+                self.btn_stop.setEnabled(False)
             elif state == QMediaPlayer.PausedState:
                 position = self.player.position()/1000
                 qgsu.showUserAndLogMessage("", "updateDurationInfo PRECISE at:"+str(position), onlyLog=True)
@@ -569,6 +574,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type value: qreal
         @param value: rate value
         '''
+        qgsu.showUserAndLogMessage("", "RateChanged", onlyLog=True)
         self.player.setPosition(self.sdv)
         QApplication.processEvents()
         return
@@ -894,9 +900,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         # Prevent Error in a Video Utils.Disable Magnifier
         if self.actionMagnifying_glass.isChecked():
             self.actionMagnifying_glass.trigger()
-        # Stop Video
-        self.player.stop()
-        #self.fakeStop()
+        
+        # Stop Video        
+        self.fakeStop()
+        
         return
 
     def volume(self):
@@ -920,7 +927,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.btn_volume.setIcon(QIcon(":/imgFMV/images/volume_off.png"))
 
     def EndMedia(self):
-        ''' Button end video position '''
+        ''' Button end video position '''       
         if self.player.isVideoAvailable():
             self.player.setPosition(self.player.duration())
             self.videoWidget.update()
@@ -929,6 +936,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def StartMedia(self):
         ''' Button start video position '''
         if self.player.isVideoAvailable():
+            qgsu.showUserAndLogMessage("", "StartMedia", onlyLog=True)
             self.player.setPosition(0)
             self.videoWidget.update()
         return
@@ -938,6 +946,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         forwardTime = int(self.player.position()) + 10 * 1000
         if forwardTime > int(self.player.duration()):
             forwardTime = int(self.player.duration())
+        qgsu.showUserAndLogMessage("", "ForwardMedia", onlyLog=True)
         self.player.setPosition(forwardTime)
 
     def rewindMedia(self):
@@ -945,6 +954,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         rewindTime = int(self.player.position()) - 10 * 1000
         if rewindTime < 0:
             rewindTime = 0
+        qgsu.showUserAndLogMessage("", "RewindMedia", onlyLog=True)
         self.player.setPosition(rewindTime)
 
     def AutoRepeat(self, checked):
@@ -1005,8 +1015,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type progress: qint64
         @param progress: Slide video duration current value
         '''
-        qgsu.showUserAndLogMessage("", "Position changed at: "+str(progress), onlyLog=True)
-
         progress /= 1000
         # Remove measure if slider position change
         if self.staticDraw:
@@ -1086,6 +1094,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type status: QMediaPlayer::MediaStatus
         @param status: Video status
         '''
+        qgsu.showUserAndLogMessage("", "StatusChanged" + str(status), onlyLog=True)
         self.handleCursor(status)
         if status is QMediaPlayer.LoadingMedia or status is QMediaPlayer.StalledMedia or status is QMediaPlayer.InvalidMedia:
             self.videoAvailableChanged(False)
@@ -1093,6 +1102,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", self.player.errorString()), level=QGis.Warning)
             self.videoAvailableChanged(False)
+        elif status == QMediaPlayer.EndOfMedia:
+            qgsu.showUserAndLogMessage("", "EndOfMedia entred", onlyLog=True)
+            self.videoAvailableChanged(True)
+            self.fakeStop()
         else:
             self.videoAvailableChanged(True)
 
@@ -1236,11 +1249,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         else:
             sender.setFixedHeight(15)
 
-    #def fakeStop(self):
-    #    '''self.player.stop() make a black screen and not reproduce it again'''
-    #    self.player.pause()
-    #    self.StartMedia()
-    #    self.btn_play.setIcon(self.playIcon)
+    def fakeStop(self):
+        '''self.player.stop() make a black screen and not reproduce it again'''
+        self.player.pause()
+        self.StartMedia()
+        self.btn_play.setIcon(self.playIcon)
+        self.btn_stop.setEnabled(False)
 
     def RemoveMeasures(self):
         ''' Remove video measurements '''
@@ -1261,6 +1275,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if self.playerState in (QMediaPlayer.StoppedState,
                                 QMediaPlayer.PausedState):
             self.btn_play.setIcon(self.pauseIcon)
+            self.btn_stop.setEnabled(True)
 
             if self.staticDraw:
                 self.RemoveMeasures()
@@ -1277,6 +1292,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         Slider Move
         @type seconds:  String
         '''
+        qgsu.showUserAndLogMessage("", "Seek", onlyLog=True)
         self.player.setPosition(seconds * 1000)
         self.showMoveTip(seconds)
 

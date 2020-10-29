@@ -147,8 +147,8 @@ class VideoUtils(object):
         transf = VideoUtils.GetTransf(event, surface)
         targetAlt = GetFrameCenter()[2]
 
-        Longitude = float(round(transf[1], 5))
-        Latitude = float(round(transf[0], 5))
+        Longitude = float(round(transf[1], 7))
+        Latitude = float(round(transf[0], 7))
         Altitude = float(round(targetAlt, 0))
 
         if hasElevationModel():
@@ -156,7 +156,7 @@ class VideoUtils(object):
             target = [transf[0], transf[1], targetAlt]
             projPt = GetLine3DIntersectionWithDEM(sensor, target)
             if projPt:
-                Longitude = float(round(projPt[1], 5))
-                Latitude = float(round(projPt[0], 5))
+                Longitude = float(round(projPt[1], 7))
+                Latitude = float(round(projPt[0], 7))
                 Altitude = float(round(projPt[2], 0))
         return Longitude, Latitude, Altitude
