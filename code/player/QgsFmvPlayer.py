@@ -92,6 +92,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.DrawToolBar.addAction(self.actionMagnifying_glass)
         self.DrawToolBar.addSeparator()
         self.btn_stop.setEnabled(False)
+        self.PrecisionTimeStamp = ""
 
         # Draw Polygon QToolButton
         self.toolBtn_DPolygon.setDefaultAction(self.actionDraw_Polygon)
@@ -339,6 +340,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 #qgsu.showUserAndLogMessage("", "Updating layer for Precision Time Stamp:"+ str(self.data[2]))
                 #for key, value in self.data.items():
                 #    qgsu.showUserAndLogMessage("", "key:"+ str(key) + " value:" +  str(value))
+                for key in sorted(data.keys()):
+                    #qgsu.showUserAndLogMessage("", "key:"+ str(key) + " value:" +  str(data[key][0]))
+                    if str(data[key][0]) == "Precision Time Stamp":
+                        self.PrecisionTimeStamp = str(data[key][1].split(".")[0])
                 QApplication.processEvents()
                 break
             #skip this packet
@@ -1047,6 +1052,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         '''
         duration = self.duration
         self.currentInfo = currentInfo
+        
+        if self.PrecisionTimeStamp != "":
+            self.lb_prec_ts.setText(self.PrecisionTimeStamp)
+            qgsu.showUserAndLogMessage("", "Duration Info Precision Time Stampet:"+ self.PrecisionTimeStamp)
+        
         if currentInfo or duration:
 
             totalTime = _seconds_to_time(duration)

@@ -77,6 +77,8 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         self.VManager.setColumnWidth(5, 130)                                    
         self.VManager.verticalHeader().setDefaultAlignment(Qt.AlignHCenter)
         self.VManager.hideColumn(0)
+        
+        self.videoPlayable = []
 
         # Get Video Manager List
         VideoList = getVideoManagerList()
@@ -167,7 +169,11 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         layout.addWidget(pbar)
         w.setLayout(layout)
         rowPosition = self.VManager.rowCount()
-
+        
+        qgsu.showUserAndLogMessage("", "Filling :"+str(rowPosition), onlyLog=True)
+        
+        self.videoPlayable.append(False)
+        
         pbar.setGeometry(0, 0, 300, 30)
         pbar.setValue(0)
         pbar.setMaximumHeight(30)
@@ -237,7 +243,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                         QCoreApplication.translate(
                             "ManagerDock", "Start location not available.")))
                     self.ToggleActiveRow(rowPosition, value="Not MISB")
-                    pbar.setValue(99)
+                    pbar.setValue(100)
                     return
                 else:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
@@ -245,7 +251,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             except Exception:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "ManagerDock", "This video don't have Metadata ! "))
-                pbar.setValue(99)
+                pbar.setValue(100)
                 self.ToggleActiveRow(rowPosition, value="Not MISB")
                 return
 
@@ -265,7 +271,8 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             self.meta_reader[str(rowPosition)] = StreamMetaReader(filename)
             qgsu.showUserAndLogMessage("", "StreamMetaReader initialized.", onlyLog=True)
             self.initialPt[str(rowPosition)] = None
-
+        
+        self.videoPlayable[rowPosition] = True
         pbar.setValue(100)
         if islocal:
             self.ToggleActiveRow(rowPosition, value="Ready Local")
@@ -296,7 +303,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         '''
         # Don't enable Play if video doesn't have metadata
         row = model.row()
-        if self.VManager.cellWidget(row, 5).findChild(QProgressBar).value() < 100:
+        if not self.videoPlayable[row]:
             return
 
         path = self.VManager.item(row, 3).text()
