@@ -5,6 +5,7 @@ import os
 from os.path import dirname, abspath
 from qgis.PyQt.Qt  import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
 from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtCore import QUrl
 from qgis.PyQt.QtWidgets import (QDockWidget,
                                  QTableWidgetItem,
                                  QAction,
@@ -21,7 +22,7 @@ from QGIS_FMV.converter.ffmpeg import FFMpeg
 from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
 from QGIS_FMV.manager.QgsMultiplexor import Multiplexor
 from QGIS_FMV.manager.QgsFmvOpenStream import OpenStream
-from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
+from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer, QMediaContent
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         BufferedMetaReader,
                                         StreamMetaReader,
@@ -36,6 +37,8 @@ from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         getVideoLocationInfo)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsProject, QgsCoordinateTransform
+from PyQt5.QtMultimedia import QMediaPlaylist
+
 
 try:
     from pydevd import *
@@ -57,11 +60,11 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         self.parent = parent
         self.iface = iface
         self._PlayerDlg = None
-        self.isStreaming = False
         self.meta_reader = {}
         self.initialPt = {}
         self.pass_time = 250
-
+        
+        self.playlist = QMediaPlaylist()
         self.VManager.viewport().installEventFilter(self)
 
         # Context Menu
@@ -79,6 +82,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         self.VManager.hideColumn(0)
         
         self.videoPlayable = []
+        self.videoIsStreaming = []
 
         # Get Video Manager List
         VideoList = getVideoManagerList()
@@ -117,6 +121,10 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         row_id = self.VManager.item(cr, 0).text()
         row_text = self.VManager.item(cr, 1).text()
         self.VManager.removeRow(cr)
+        del self.videoPlayable[cr]
+        del self.videoIsStreaming[cr]
+        self.playlist.removeMedia(cr)
+                
         # Remove video to Settings List
         RemoveVideoToSettings(row_id)
         # Remove folder if is local
@@ -162,7 +170,6 @@ class FmvManager(QWidget, Ui_ManagerWindow):
 
         self.islocal = islocal
         self.klv_folder = klv_folder
-        self.isStreaming = False
         w = QWidget()
         layout = QVBoxLayout()
         pbar = QProgressBar()
@@ -203,9 +210,11 @@ class FmvManager(QWidget, Ui_ManagerWindow):
 
         # resolve if it is a stream
         if "://" in filename:
-            self.isStreaming = True
+            self.videoIsStreaming.append(True)
+        else:
+            self.videoIsStreaming.append(False)
 
-        if not self.isStreaming:
+        if not self.videoIsStreaming[-1]:
             # Disable row if not exist video file
             if not os.path.exists(filename):
                 self.ToggleActiveRow(rowPosition, value="Missing source file")
@@ -273,6 +282,21 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             self.initialPt[str(rowPosition)] = None
         
         self.videoPlayable[rowPosition] = True
+
+        url = ""
+        if self.videoIsStreaming[-1]:
+            # show video from splitter (port +1)
+            oldPort = filename.split(":")[2]
+            newPort = str(int(oldPort) + 10)                
+            proto = filename.split(":")[0]
+            url = QUrl(proto + "://127.0.0.1:" + newPort)
+        else:
+            url = QUrl.fromLocalFile(filename)
+            
+        qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
+        
+        self.playlist.addMedia(QMediaContent(url))
+        
         pbar.setValue(100)
         if islocal:
             self.ToggleActiveRow(rowPosition, value="Ready Local")
@@ -296,13 +320,16 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             self.AddFileRowToManager(name, filename)
 
         return
-
-    def PlayVideoFromManager(self, model):
+    
+    
+    def PlayVideoFromManager(self, model, row=None):
         ''' Play video from manager dock.
             Manager row double clicked
         '''
         # Don't enable Play if video doesn't have metadata
-        row = model.row()
+        if row is None:
+            row = model.row()
+        
         if not self.videoPlayable[row]:
             return
 
@@ -318,26 +345,30 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                 self._PlayerDlg.close()
         except Exception:
             None
+        
         # First time we open the player
         if self._PlayerDlg is None:
             if exist:
                 self.CreatePlayer(path, row, islocal=True, klv_folder=klv_folder)
             else:
                 self.CreatePlayer(path, row)
+        
+        qgsu.showUserAndLogMessage("", "set current index:"+str(row), onlyLog=True)
+        self.playlist.setCurrentIndex(row)
+        
+        #qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
+        #if path != self._PlayerDlg.fileName:
+        self._PlayerDlg.setMetaReader(self.meta_reader[str(row)])
+        self.ToggleActiveFromTitle()
+        self._PlayerDlg.show()
+        self._PlayerDlg.activateWindow()
+        if exist:
+            self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
         else:
-            #qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
-            #if path != self._PlayerDlg.fileName:
-            self._PlayerDlg.setMetaReader(self.meta_reader[str(row)])
-            self.ToggleActiveFromTitle()
-            self._PlayerDlg.show()
-            self._PlayerDlg.activateWindow()
-            if exist:
-                self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
-            else:
-                self._PlayerDlg.playFile(path)
+            self._PlayerDlg.playFile(path)
+            
         #first zoom to map zone     
         curAuthId =  self.iface.mapCanvas().mapSettings().destinationCrs().authid()
-        qgsu.showUserAndLogMessage("", "auth id:"+str(curAuthId), onlyLog=True)
         
         map_pos = QgsPointXY(self.initialPt[str(row)][1], self.initialPt[str(row)][0])
         if curAuthId != "EPSG:4326":
@@ -353,6 +384,8 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         ''' Create Player '''
         self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[str(
             row)], pass_time=self.pass_time, islocal=islocal, klv_folder=klv_folder)
+                    
+        self._PlayerDlg.player.setPlaylist(self.playlist)
         self._PlayerDlg.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint)
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()

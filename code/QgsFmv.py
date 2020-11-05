@@ -106,7 +106,6 @@ class Fmv:
 
     def unload(self):
         ''' Unload Plugin '''
-        qgsu.showUserAndLogMessage("", "Unloading plugin.")
         RemoveAllDrawings()
         self.iface.removeAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Plugins")
         #self.iface.removePluginMenu(QCoreApplication.translate(

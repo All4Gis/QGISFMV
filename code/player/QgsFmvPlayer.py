@@ -23,7 +23,7 @@ from qgis.PyQt.QtWidgets import (QToolTip,
                                  QToolBar)
 from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject, QgsLayerTreeGroup
 
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist, QMediaContent
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 
 from QGIS_FMV.converter.Converter import Converter
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
@@ -151,7 +151,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.pass_time = pass_time
         self.player.setNotifyInterval(1000)  # Player update interval
-        self.playlist = QMediaPlaylist()
+        
 
         self.player.setVideoOutput(
             self.videoWidget.videoSurface())  # Abstract Surface
@@ -160,11 +160,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.positionChanged.connect(self.positionChanged)
         self.player.mediaStatusChanged.connect(self.statusChanged)
         self.player.playbackRateChanged.connect(self.rateChanged)
+        
+        self.player.currentMediaChanged.connect(self.currentMediaChanged)
+        
 
         self.player.stateChanged.connect(self.setCurrentState)
 
         self.playerState = QMediaPlayer.LoadingMedia
-        self.playFile(path, self.islocal, self.klv_folder)
+        
+        #self.playFile(path, self.islocal, self.klv_folder)
 
         self.sliderDuration.setRange(0, self.player.duration() / 1000)
         self.sliderDuration.sliderReleased.connect(self.sliderDurationReleased)
@@ -573,7 +577,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         actionOptions.triggered.connect(self.OpenOptions)
 
         menu.exec_(self.mapToGlobal(point))
-
+    
+    def currentMediaChanged(self, media):
+        qgsu.showUserAndLogMessage("", "mediaChanged:"+media.canonicalUrl().toString(), onlyLog=True)
+        #self.parent.ToggleActiveRow(1)
+        self.setWindowTitle(QCoreApplication.translate(
+                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))
+                
+                
+                
+        
+    
     def rateChanged(self, qreal):   
         '''Signals the playbackRate has changed to rate.
         @type value: qreal
@@ -967,9 +981,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @param checked: Button checked state
         '''
         if checked:
-            self.playlist.setPlaybackMode(QMediaPlaylist.Loop)
+            self.player.playlist.setPlaybackMode(QMediaPlaylist.Loop)
         else:
-            self.playlist.setPlaybackMode(QMediaPlaylist.Sequential)
+            self.player.playlist.setPlaybackMode(QMediaPlaylist.Sequential)
         return
 
     def showVolumeTip(self, _):
@@ -1055,7 +1069,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         
         if self.PrecisionTimeStamp != "":
             self.lb_prec_ts.setText(self.PrecisionTimeStamp)
-            qgsu.showUserAndLogMessage("", "Duration Info Precision Time Stampet:"+ self.PrecisionTimeStamp)
         
         if currentInfo or duration:
 
@@ -1077,7 +1090,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 nextTime = currentInfo + self.pass_time / 1000
                 nextTimeInfo = _seconds_to_time_frac(nextTime)
                 qgsu.showUserAndLogMessage("", "Getting precise time info", onlyLog=True)
-                self.callBackMetadata(currentTimeInfo, nextTimeInfo, self.meta_reader.klv_index)
+                if self.meta_reader is not None:
+                    self.callBackMetadata(currentTimeInfo, nextTimeInfo, self.meta_reader.klv_index)
             else:
                 # Get Metadata from buffer
                 self.get_metadata_from_buffer(currentTimeInfo)
@@ -1104,7 +1118,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type status: QMediaPlayer::MediaStatus
         @param status: Video status
         '''
-        qgsu.showUserAndLogMessage("", "StatusChanged" + str(status), onlyLog=True)
         self.handleCursor(status)
         if status is QMediaPlayer.LoadingMedia or status is QMediaPlayer.StalledMedia or status is QMediaPlayer.InvalidMedia:
             self.videoAvailableChanged(False)
@@ -1115,7 +1128,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         elif status == QMediaPlayer.EndOfMedia:
             qgsu.showUserAndLogMessage("", "EndOfMedia entred", onlyLog=True)
             self.videoAvailableChanged(True)
-            self.fakeStop()
         else:
             self.videoAvailableChanged(True)
 
@@ -1141,25 +1153,24 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             #on top of it.
             #root.insertChildNode(0, node_group)
 
-            self.fileName = videoPath
-            self.playlist = QMediaPlaylist()
+            #self.fileName = videoPath
+            #
+            #self.isStreaming = False
+            #if "://" in self.fileName:
+            #    self.isStreaming = True
+            #
+            #if self.isStreaming:
+            #    # show video from splitter (port +1)
+            #    oldPort = videoPath.split(":")[2]
+            #    newPort = str(int(oldPort) + 10)                
+            #    proto = videoPath.split(":")[0]
+            #    url = QUrl(proto + "://127.0.0.1:" + newPort)
+            #else:
+            #    url = QUrl.fromLocalFile(videoPath)
+            #qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
 
-            self.isStreaming = False
-            if "://" in self.fileName:
-                self.isStreaming = True
-
-            if self.isStreaming:
-                # show video from splitter (port +1)
-                oldPort = videoPath.split(":")[2]
-                newPort = str(int(oldPort) + 10)                
-                proto = videoPath.split(":")[0]
-                url = QUrl(proto + "://127.0.0.1:" + newPort)
-            else:
-                url = QUrl.fromLocalFile(videoPath)
-            qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
-
-            self.playlist.addMedia(QMediaContent(url))
-            self.player.setPlaylist(self.playlist)
+            #self.playlist.addMedia(QMediaContent(url))
+            #self.player.setPlaylist(self.playlist)
 
             self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(videoPath))
