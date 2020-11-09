@@ -203,8 +203,8 @@ class Splitter(threading.Thread):
         else:
             self.cmds.insert(0, ffprobe_path)
 
-        qgsu.showUserAndLogMessage("", "starting Splitter on thread:" + str(threading.current_thread().ident), onlyLog=True)
-        qgsu.showUserAndLogMessage("", "with args:" + ' '.join(self.cmds), onlyLog=True)
+        #qgsu.showUserAndLogMessage("", "starting Splitter on thread:" + str(threading.current_thread().ident), onlyLog=True)
+        #qgsu.showUserAndLogMessage("", "with args:" + ' '.join(self.cmds), onlyLog=True)
 
         # Hide shell windows that pops up on windows.
         if windows:
@@ -238,11 +238,11 @@ class StreamMetaReader():
         return self.splitter.nbsr._q.qsize()
 
     def get(self, _):
-        qgsu.showUserAndLogMessage("", "Get called on Streamreader.", onlyLog=True)
+        #qgsu.showUserAndLogMessage("", "Get called on Streamreader.", onlyLog=True)
         return self.splitter.nbsr.readline()
 
     def dispose(self):
-        qgsu.showUserAndLogMessage("", "Dispose called on StreamMetaReader.", onlyLog=True)
+        #qgsu.showUserAndLogMessage("", "Dispose called on StreamMetaReader.", onlyLog=True)
         self.splitter.nbsr.stopped = True
         # kill the process if open, releases source port
         try:

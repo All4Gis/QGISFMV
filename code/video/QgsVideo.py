@@ -755,9 +755,6 @@ class VideoWidget(QVideoWidget):
 
             tr = QgsCoordinateTransform( QgsCoordinateReferenceSystem( 'EPSG:4326' ), iface.mapCanvas().mapSettings().destinationCrs(), QgsProject.instance().transformContext() )
             mapPt = tr.transform( QgsPointXY(Longitude, Latitude) )
-            
-            qgsu.showUserAndLogMessage("", "Lon:" + str(Longitude) + "Lat:" + str(Latitude), onlyLog=True)
-            qgsu.showUserAndLogMessage("", "mapPt Lon:" + str(mapPt.x()) + "Lat:" + str(mapPt.y()), onlyLog=True)
 
             vertices = self.Cursor_Canvas_RubberBand.numberOfVertices()
             if vertices > 0:

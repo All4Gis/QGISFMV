@@ -176,9 +176,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         layout.addWidget(pbar)
         w.setLayout(layout)
         rowPosition = self.VManager.rowCount()
-        
-        qgsu.showUserAndLogMessage("", "Filling :"+str(rowPosition), onlyLog=True)
-        
+                
         self.videoPlayable.append(False)
         
         pbar.setGeometry(0, 0, 300, 30)
@@ -234,9 +232,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                     "ManagerDock", "Failed loading FFMPEG ! "))
                 return
             klvIdx = getKlvStreamIndex(filename, islocal)
-            qgsu.showUserAndLogMessage("", "klv index is:"+str(klvIdx), onlyLog=True)
                         
-            #info.format.duration
             # init non-blocking metadata buffered reader
             self.meta_reader[str(rowPosition)] = BufferedMetaReader(filename, klv_index=klvIdx, pass_time=self.pass_time)
             qgsu.showUserAndLogMessage(
@@ -245,8 +241,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             pbar.setValue(60)
             try:
                 # init point we can center the video on
-                self.initialPt[str(rowPosition)
-                               ] = getVideoLocationInfo(filename, islocal, klv_folder)
+                self.initialPt[str(rowPosition)] = getVideoLocationInfo(filename, islocal, klv_folder)
                 if not self.initialPt[str(rowPosition)]:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                         QCoreApplication.translate(
@@ -259,7 +254,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                         self.initialPt[str(rowPosition)][2]))
             except Exception:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "ManagerDock", "This video don't have Metadata ! "))
+                    "ManagerDock", "This video doesn't have Metadata ! "))
                 pbar.setValue(100)
                 self.ToggleActiveRow(rowPosition, value="Not MISB")
                 return
@@ -292,9 +287,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             url = QUrl(proto + "://127.0.0.1:" + newPort)
         else:
             url = QUrl.fromLocalFile(filename)
-            
-        qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
-        
+                
         self.playlist.addMedia(QMediaContent(url))
         
         pbar.setValue(100)
@@ -308,9 +301,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
         Exts = ast.literal_eval(parser.get("FILES", "Exts"))
-        
-        qgsu.showUserAndLogMessage("","Exts:" + parser.get("FILES", "Exts"), onlyLog=True)
-                
+                        
         filename, _ = askForFiles(self, QCoreApplication.translate(
             "ManagerDock", "Open video"),
             exts=Exts)
@@ -353,7 +344,6 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             else:
                 self.CreatePlayer(path, row)
         
-        qgsu.showUserAndLogMessage("", "set current index:"+str(row), onlyLog=True)
         self.playlist.setCurrentIndex(row)
         
         #qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")

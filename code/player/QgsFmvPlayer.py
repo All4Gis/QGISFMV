@@ -378,16 +378,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                                              '-preset', 'ultrafast',
                                              '-f', 'data', '-'])
                                    
-            qgsu.showUserAndLogMessage("", "Precise info using current time:"+currentTime + " nexttime:"+nextTime, onlyLog=True)
+            #qgsu.showUserAndLogMessage("", "Precise info using current time:"+currentTime + " nexttime:"+nextTime, onlyLog=True)
             
             t.start()
             t.join(1)
             if t.is_alive():
                 t.p.terminate()
                 t.join()
-            
-            qgsu.showUserAndLogMessage("", "content: "   + str(t.stdout), onlyLog=True)
-            
+                        
             if t.stdout == b'':
                 return
 
@@ -578,22 +576,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         menu.exec_(self.mapToGlobal(point))
     
-    def currentMediaChanged(self, media):
-        qgsu.showUserAndLogMessage("", "mediaChanged:"+media.canonicalUrl().toString(), onlyLog=True)
-        #self.parent.ToggleActiveRow(1)
+    def currentMediaChanged(self, media):   
+        self.parent.VManager.selectRow(self.parent.playlist.currentIndex())
         self.setWindowTitle(QCoreApplication.translate(
-                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))
-                
-                
-                
-        
+                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))     
     
     def rateChanged(self, qreal):   
         '''Signals the playbackRate has changed to rate.
         @type value: qreal
         @param value: rate value
         '''
-        qgsu.showUserAndLogMessage("", "RateChanged", onlyLog=True)
         self.player.setPosition(self.sdv)
         QApplication.processEvents()
         return
@@ -955,7 +947,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def StartMedia(self):
         ''' Button start video position '''
         if self.player.isVideoAvailable():
-            qgsu.showUserAndLogMessage("", "StartMedia", onlyLog=True)
             self.player.setPosition(0)
             self.videoWidget.update()
         return
@@ -965,7 +956,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         forwardTime = int(self.player.position()) + 10 * 1000
         if forwardTime > int(self.player.duration()):
             forwardTime = int(self.player.duration())
-        qgsu.showUserAndLogMessage("", "ForwardMedia", onlyLog=True)
         self.player.setPosition(forwardTime)
 
     def rewindMedia(self):
@@ -973,7 +963,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         rewindTime = int(self.player.position()) - 10 * 1000
         if rewindTime < 0:
             rewindTime = 0
-        qgsu.showUserAndLogMessage("", "RewindMedia", onlyLog=True)
         self.player.setPosition(rewindTime)
 
     def AutoRepeat(self, checked):
@@ -1051,12 +1040,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.updateDurationInfo(progress)
 
     def sliderDurationPressed(self, value):
-        #qgsu.showUserAndLogMessage("Slider Pressed at: "+str(self.sliderDuration.value())+" val:" + str(value), "Slider Pressed at: "+str(self.sliderDuration.value()), onlyLog=True)
         self.seek(value)
             
     def sliderDurationReleased(self):
         if self.playerState == QMediaPlayer.PausedState:
-            qgsu.showUserAndLogMessage("", "Slider Released at: "+str(self.sliderDuration.value()), onlyLog=True)
             self.updateDurationInfo(self.sliderDuration.value(), True)
     
     def updateDurationInfo(self, currentInfo, isPrecise=False):
@@ -1125,9 +1112,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", self.player.errorString()), level=QGis.Warning)
             self.videoAvailableChanged(False)
-        elif status == QMediaPlayer.EndOfMedia:
-            qgsu.showUserAndLogMessage("", "EndOfMedia entred", onlyLog=True)
-            self.videoAvailableChanged(True)
+        elif status == QMediaPlayer.EndOfMedia and self.parent.playlist.nextIndex() == -1:
+            qgsu.showUserAndLogMessage("", "EndOfMedia and playlist end entred", onlyLog=False)
+            self.videoAvailableChanged(False)
+            self.fakeStop()
         else:
             self.videoAvailableChanged(True)
 
@@ -1145,32 +1133,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.RemoveAllData()
             self.clearMetadata()
             QApplication.processEvents()
-
-            # Create Group
-            #root = QgsProject.instance().layerTreeRoot()
-            #node_group = QgsLayerTreeGroup(videoPath)
-            #If you have a loaded project, insert the group
-            #on top of it.
-            #root.insertChildNode(0, node_group)
-
-            #self.fileName = videoPath
-            #
-            #self.isStreaming = False
-            #if "://" in self.fileName:
-            #    self.isStreaming = True
-            #
-            #if self.isStreaming:
-            #    # show video from splitter (port +1)
-            #    oldPort = videoPath.split(":")[2]
-            #    newPort = str(int(oldPort) + 10)                
-            #    proto = videoPath.split(":")[0]
-            #    url = QUrl(proto + "://127.0.0.1:" + newPort)
-            #else:
-            #    url = QUrl.fromLocalFile(videoPath)
-            #qgsu.showUserAndLogMessage("", "Added: " + str(url), onlyLog=True)
-
-            #self.playlist.addMedia(QMediaContent(url))
-            #self.player.setPlaylist(self.playlist)
 
             self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(videoPath))
@@ -1313,7 +1275,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         Slider Move
         @type seconds:  String
         '''
-        qgsu.showUserAndLogMessage("", "Seek", onlyLog=True)
         self.player.setPosition(seconds * 1000)
         self.showMoveTip(seconds)
 

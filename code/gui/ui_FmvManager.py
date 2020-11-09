@@ -21,7 +21,7 @@ class Ui_ManagerWindow(object):
         self.gridLayout.addWidget(self.mOpenMPEGButton, 0, 0, 1, 1)
 
         self.versionLabel = QtWidgets.QLabel(ManagerWindow)
-        self.versionLabel.setText("v 1.11")
+        self.versionLabel.setText("v 1.12")
         self.versionLabel.setStyleSheet("QLabel { color : grey; }");
         self.gridLayout.addWidget(self.versionLabel, 0, 1, 1, 1)
         
