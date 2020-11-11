@@ -492,7 +492,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.btn_stop.setEnabled(False)
             elif state == QMediaPlayer.PausedState:
                 position = self.player.position()/1000
-                qgsu.showUserAndLogMessage("", "updateDurationInfo PRECISE at:"+str(position), onlyLog=True)
+                #qgsu.showUserAndLogMessage("", "updateDurationInfo PRECISE at:"+str(position), onlyLog=True)
                 self.updateDurationInfo(position, True)
 
 
@@ -578,6 +578,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     
     def currentMediaChanged(self, media):   
         self.parent.VManager.selectRow(self.parent.playlist.currentIndex())
+        if self.parent.playlist.currentIndex() != -1:
+            self.setMetaReader(self.parent.meta_reader[str(self.parent.playlist.currentIndex())])
         self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))     
     
@@ -1076,7 +1078,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             elif isPrecise:
                 nextTime = currentInfo + self.pass_time / 1000
                 nextTimeInfo = _seconds_to_time_frac(nextTime)
-                qgsu.showUserAndLogMessage("", "Getting precise time info", onlyLog=True)
+                #qgsu.showUserAndLogMessage("", "Getting precise time info", onlyLog=True)
                 if self.meta_reader is not None:
                     self.callBackMetadata(currentTimeInfo, nextTimeInfo, self.meta_reader.klv_index)
             else:
@@ -1111,9 +1113,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         elif status == QMediaPlayer.InvalidMedia:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "QgsFmvPlayer", self.player.errorString()), level=QGis.Warning)
+            qgsu.showUserAndLogMessage("", "invalid media", onlyLog=True)    
             self.videoAvailableChanged(False)
         elif status == QMediaPlayer.EndOfMedia and self.parent.playlist.nextIndex() == -1:
-            qgsu.showUserAndLogMessage("", "EndOfMedia and playlist end entred", onlyLog=False)
+            #qgsu.showUserAndLogMessage("", "EndOfMedia and playlist end entred", onlyLog=False)
             self.videoAvailableChanged(False)
             self.fakeStop()
         else:
@@ -1234,8 +1237,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def fakeStop(self):
         '''self.player.stop() make a black screen and not reproduce it again'''
-        self.player.pause()
         self.StartMedia()
+        self.player.pause()
         self.btn_play.setIcon(self.playIcon)
         self.btn_stop.setEnabled(False)
 
@@ -1602,14 +1605,14 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def closeEvent(self, event):
         """ Close Event """
         # Ask when the player is closed
-        buttonReply = qgsu.CustomMessage("QGIS FMV",
-                                         QCoreApplication.translate("QgsFmvPlayer", "If you close or reopen the video all the information will be erased."),
-                                         QCoreApplication.translate("QgsFmvPlayer", "Do you want to close or reopen it?"),
-                                         icon="Information")
-        self.closing = True
-        if buttonReply == QMessageBox.No:
-            event.ignore()
-            return
+        #buttonReply = qgsu.CustomMessage("QGIS FMV",
+        #                                 QCoreApplication.translate("QgsFmvPlayer", "If you close or reopen the video all the information will be erased."),
+        #                                 QCoreApplication.translate("QgsFmvPlayer", "Do you want to close or reopen it?"),
+        #                                 icon="Information")
+        #self.closing = True
+        #if buttonReply == QMessageBox.No:
+        #    event.ignore()
+        #    return
 
         # Stop Video
         self.stop()

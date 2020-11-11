@@ -124,7 +124,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         del self.videoPlayable[cr]
         del self.videoIsStreaming[cr]
         self.playlist.removeMedia(cr)
-                
+        
         # Remove video to Settings List
         RemoveVideoToSettings(row_id)
         # Remove folder if is local
@@ -133,7 +133,10 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         if self.meta_reader[str(cr)] != None:
             self.meta_reader[str(cr)].dispose()
             self.meta_reader[str(cr)] = None
-
+        
+        if self.playlist.isEmpty() and self._PlayerDlg is not None:
+            self._PlayerDlg.close()
+            
         return
     
     def CloseFMV(self):
@@ -307,11 +310,25 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             exts=Exts)
 
         if filename:
-            _, name = os.path.split(filename)
-            self.AddFileRowToManager(name, filename)
-
+            if not self.isFileInPlaylist(filename):
+                _, name = os.path.split(filename)
+                self.AddFileRowToManager(name, filename)
+            else:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "ManagerDock", "File is already loaded in playlist: " + filename))
+        
         return
     
+    
+    def isFileInPlaylist(self, filename):
+        mcount = self.playlist.mediaCount()
+        qgsu.showUserAndLogMessage("", "Filename: "+filename, onlyLog=True)
+        for x in range(mcount):
+            qgsu.showUserAndLogMessage("", "contained in : " + self.playlist.media(x).canonicalUrl().toString(), onlyLog=True)
+            if filename in self.playlist.media(x).canonicalUrl().toString():
+                return True
+        return False
+        
     
     def PlayVideoFromManager(self, model, row=None):
         ''' Play video from manager dock.
