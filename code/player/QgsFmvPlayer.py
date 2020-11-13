@@ -356,8 +356,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             #except Exception as e:
             #    qgsu.showUserAndLogMessage("", "QgsFmvPlayer packetStreamParser failed! : " + str(e), onlyLog=True)
 
-    def callBackMetadata(self, currentTime, nextTime, klv_index=0):
-        '''Metadata CallBack Streaming
+    def callMetadataSync(self, currentTime, nextTime, klv_index=0):
+        '''Metadata Sync Call
         @type currentTime: String
         @param currentTime: Current timestamp
 
@@ -365,35 +365,28 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @param nextTime: Next timestamp
         '''
         try:
-            
             fName = self.fileName
             if self.isStreaming:
                 port = int(self.fileName.split(':')[2])
                 fName = self.fileName.replace(str(port), str(port + 1))
             
-            t = callBackMetadataThread(cmds=['-i', fName ,
+            p = _spawn(cmds=['-i', fName ,
                                              '-ss', currentTime,
                                              '-to', nextTime,
-                                             '-map', '0:d'+str(klv_index),
+                                             '-map', '0:d:'+str(klv_index),
                                              '-preset', 'ultrafast',
                                              '-f', 'data', '-'])
-                                   
-            #qgsu.showUserAndLogMessage("", "Precise info using current time:"+currentTime + " nexttime:"+nextTime, onlyLog=True)
-            
-            t.start()
-            t.join(1)
-            if t.is_alive():
-                t.p.terminate()
-                t.join()
-                        
-            if t.stdout == b'':
-                return
+            stdout_data, _ = p.communicate()
 
-            self.packetStreamParser(t.stdout)
+            if stdout_data == b'':
+                qgsu.showUserAndLogMessage("", "CallMetadataSync returned no data for precise positioning.", onlyLog=True)
+                return
+            
+            self.packetStreamParser(stdout_data)
 
         except Exception as e:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Metadata Callback Failed! : "), str(e))
+                "QgsFmvPlayer", "Metadata Sync Call Failed : "), str(e))
 
     def readLocal(self, currentInfo):
         ''' Read Local Metadata ,klv files'''
@@ -492,7 +485,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.btn_stop.setEnabled(False)
             elif state == QMediaPlayer.PausedState:
                 position = self.player.position()/1000
-                #qgsu.showUserAndLogMessage("", "updateDurationInfo PRECISE at:"+str(position), onlyLog=True)
                 self.updateDurationInfo(position, True)
 
 
@@ -825,8 +817,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         '''
         if value:
             if self.playerState == QMediaPlayer.PlayingState:
-                self.player.pause()
+                self.pauseAt(self.player.position())
                 self.btn_play.setIcon(self.playIcon)
+                self.videoWidget.update()
         else:
             if self.playerState in (QMediaPlayer.StoppedState,
                                     QMediaPlayer.PausedState):
@@ -1069,18 +1062,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             if self.isStreaming:
                 # get last metadata available
                 self.get_metadata_from_buffer()
-                # qgsu.showUserAndLogMessage("", "Streaming on ", onlyLog=True)
-                # nextTime = currentInfo + self.pass_time / 1000
-                # nextTimeInfo = _seconds_to_time_frac(nextTime)
-                # self.callBackMetadata(currentTimeInfo, nextTimeInfo)
             elif self.islocal:
                 self.readLocal(currentInfo)
             elif isPrecise:
                 nextTime = currentInfo + self.pass_time / 1000
                 nextTimeInfo = _seconds_to_time_frac(nextTime)
-                #qgsu.showUserAndLogMessage("", "Getting precise time info", onlyLog=True)
                 if self.meta_reader is not None:
-                    self.callBackMetadata(currentTimeInfo, nextTimeInfo, self.meta_reader.klv_index)
+                    self.callMetadataSync(currentTimeInfo, nextTimeInfo, self.meta_reader.klv_index)
             else:
                 # Get Metadata from buffer
                 self.get_metadata_from_buffer(currentTimeInfo)
@@ -1234,14 +1222,25 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             sender.setFixedHeight(sender.sizeHint().height())
         else:
             sender.setFixedHeight(15)
-
-    def fakeStop(self):
-        '''self.player.stop() make a black screen and not reproduce it again'''
-        self.StartMedia()
+    
+    def pauseAt(self, pos): 
+        self.player.setPosition(pos)
+        #self.updateDurationInfo(self.sliderDuration.value(), True)          
+        #QTimer.singleShot(100, lambda: self.player.pause())
         self.player.pause()
         self.btn_play.setIcon(self.playIcon)
         self.btn_stop.setEnabled(False)
-
+        self.videoWidget.update()
+ 
+    def fakeStop(self):
+        '''self.player.stop() make a black screen and not reproduce it again'''
+       
+        if self.playerState == QMediaPlayer.PausedState:
+            self.player.play()
+            self.btn_play.setIcon(self.pauseIcon)
+        
+        self.pauseAt(0)
+        
     def RemoveMeasures(self):
         ''' Remove video measurements '''
         # Remove Measure when video is playing
@@ -1270,7 +1269,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.player.play()
         elif self.playerState == QMediaPlayer.PlayingState:
             self.btn_play.setIcon(self.playIcon)
-            self.player.pause()
+            self.pauseAt(self.player.position())
         QApplication.processEvents()
 
     def seek(self, seconds):

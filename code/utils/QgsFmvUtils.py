@@ -362,14 +362,14 @@ class callBackMetadataThread(threading.Thread):
         self.cmds = cmds
         self.p = None
         threading.Thread.__init__(self)
-
+        
     def run(self):
-        #qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
         self.p = _spawn(self.cmds)
-        # print (self.cmds)
+        print (self.cmds)
         self.stdout, _ = self.p.communicate()
-        # print (self.stdout)
-        # print (_)
+        print ("_:" + _)
+        print ("stdout:" + self.stdout)
+        
 
 
 def AddVideoToSettings(row_id, path):
@@ -809,6 +809,7 @@ def _spawn(cmds, t="ffmpeg"):
 
     cmds.insert(3, '-preset')
     cmds.insert(4, 'ultrafast')
+    
     return subprocess.Popen(cmds, shell=windows, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             bufsize=0,
                             close_fds=(not windows))
