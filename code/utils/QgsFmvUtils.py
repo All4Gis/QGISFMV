@@ -473,7 +473,7 @@ def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None, klv_index=0)
                         '-f', 'data', '-'])
 
             stdout_data, _ = p.communicate()
-            qgsu.showUserAndLogMessage("Video Loc info raw result", stdout_data, onlyLog=True)
+            #qgsu.showUserAndLogMessage("Video Loc info raw result", stdout_data, onlyLog=True)
         if stdout_data == b'':
             #qgsu.showUserAndLogMessage("Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)                                                                                                                                    
             return
@@ -664,14 +664,7 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     gcps = []
 
     global gcornerPointUL, gcornerPointUR, gcornerPointLR, gcornerPointLL, gframeCenterLat, gframeCenterLon, geotransform_affine, geotransform
-
-    # TEMP FIX : If have elevation the geotransform is wrong
-    if ele:
-        del cornerPointUL[-1]
-        del cornerPointUR[-1]
-        del cornerPointLR[-1]
-        del cornerPointLL[-1]
-        
+         
     gcornerPointUL = cornerPointUL
     gcornerPointUR = cornerPointUR
     gcornerPointLR = cornerPointLR
@@ -703,7 +696,7 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     src = np.float64(
         np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize]]))
     dst = np.float64(
-        np.array([cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]))
+        np.array([[cornerPointUL[0], cornerPointUL[1]], [cornerPointUR[0], cornerPointUR[1]], [cornerPointLR[0], cornerPointLR[1]], [cornerPointLL[0], cornerPointLL[1]]]))
 
     try:
         geotransform = from_points(src, dst)
@@ -809,6 +802,8 @@ def _spawn(cmds, t="ffmpeg"):
 
     cmds.insert(3, '-preset')
     cmds.insert(4, 'ultrafast')
+    
+    #qgsu.showUserAndLogMessage("", "spawned : " + " ".join(cmds), onlyLog=True)
     
     return subprocess.Popen(cmds, shell=windows, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             bufsize=0,
@@ -1262,6 +1257,23 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
 
     return True
 
+def GetDemAltAt(lon, lat):
+    alt = 0
+   
+    xOrigin = dtm_transform[0]
+    yOrigin = dtm_transform[3]
+    pixelWidth = dtm_transform[1]
+    pixelHeight = -dtm_transform[5]
+    
+    col = int((lon - xOrigin) / pixelWidth)
+    row = int((yOrigin - lat) / pixelHeight)
+    try:
+        alt = dtm_data[row - dtm_rowLowerBound][col - dtm_colLowerBound]
+    except:
+        qgsu.showUserAndLogMessage(
+                "", "GetDemAltAt: Point is out of DEM.", onlyLog=True)
+        
+    return alt
 
 def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
     ''' Obtain height for points,intersecting with DEM '''

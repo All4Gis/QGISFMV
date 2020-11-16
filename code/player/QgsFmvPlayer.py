@@ -366,6 +366,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         '''
         try:
             fName = self.fileName
+            
             if self.isStreaming:
                 port = int(self.fileName.split(':')[2])
                 fName = self.fileName.replace(str(port), str(port + 1))
@@ -572,6 +573,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.parent.VManager.selectRow(self.parent.playlist.currentIndex())
         if self.parent.playlist.currentIndex() != -1:
             self.setMetaReader(self.parent.meta_reader[str(self.parent.playlist.currentIndex())])
+            self.fileName = self.parent.VManager.item(self.parent.playlist.currentIndex(), 3).text()
         self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))     
     

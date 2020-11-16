@@ -3,9 +3,12 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetImageWidth,
                                         GetImageHeight,
                                         GetSensor,
                                         GetLine3DIntersectionWithDEM,
+                                        GetDemAltAt,
                                         GetFrameCenter,
                                         hasElevationModel,
                                         GetGCPGeoTransform)
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+
 try:
     from pydevd import *
 except ImportError:
@@ -150,13 +153,11 @@ class VideoUtils(object):
         Longitude = float(round(transf[1], 7))
         Latitude = float(round(transf[0], 7))
         Altitude = float(round(targetAlt, 0))
-
+        
         if hasElevationModel():
-            sensor = GetSensor()
             target = [transf[0], transf[1], targetAlt]
-            projPt = GetLine3DIntersectionWithDEM(sensor, target)
-            if projPt:
-                Longitude = float(round(projPt[1], 7))
-                Latitude = float(round(projPt[0], 7))
-                Altitude = float(round(projPt[2], 0))
+            alt = GetDemAltAt(transf[1], transf[0])
+            if alt > 0:
+                Altitude = round(alt, 0)            
+
         return Longitude, Latitude, Altitude
