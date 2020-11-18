@@ -292,7 +292,7 @@ class Ui_PlayerWindow(object):
         self.btn_volume.setFlat(True)
         self.btn_volume.setObjectName("btn_volume")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.btn_volume)
-        self.volumeSlider = QtWidgets.QSlider(self.gb_PlayerControls)
+        self.volumeSlider = QgsFmvSlider(self.gb_PlayerControls)
         self.volumeSlider.setMaximum(100)
         self.volumeSlider.setProperty("value", 100)
         self.volumeSlider.setOrientation(QtCore.Qt.Horizontal)

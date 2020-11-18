@@ -175,7 +175,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.sliderDuration.sliderReleased.connect(self.sliderDurationReleased)
         
         self.sliderDuration.mousePressed.connect(self.sliderDurationPressed)
-
+        self.volumeSlider.mousePressed.connect(self.setVolume)
         
         self.volumeSlider.setValue(self.player.volume())
         self.volumeSlider.enterEvent = self.showVolumeTip
@@ -1052,7 +1052,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
     def sliderDurationPressed(self, value):
         self.seek(value)
-            
+                    
     def sliderDurationReleased(self):
         if self.playerState == QMediaPlayer.PausedState:
             self.updateDurationInfo(self.sliderDuration.value(), True)
