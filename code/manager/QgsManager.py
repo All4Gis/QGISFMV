@@ -74,7 +74,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                                  triggered=self.remove)
 
         self.VManager.setColumnWidth(1, 150)
-        self.VManager.setColumnWidth(2, 60)
+        self.VManager.setColumnWidth(2, 140)
         self.VManager.setColumnWidth(3, 250)
         self.VManager.setColumnWidth(4, 150)
         self.VManager.setColumnWidth(5, 130)                                    
@@ -83,7 +83,9 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         
         self.videoPlayable = []
         self.videoIsStreaming = []
-
+        
+        self.dtm_path = parser['GENERAL']['DTM_file']
+        
         # Get Video Manager List
         VideoList = getVideoManagerList()
         for load_id in VideoList:
@@ -249,7 +251,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                         QCoreApplication.translate(
                             "ManagerDock", "Start location not available.")))
-                    self.ToggleActiveRow(rowPosition, value="Not MISB")
+                    self.ToggleActiveRow(rowPosition, value="Video not applicable")
                     pbar.setValue(100)
                     return
                 else:
@@ -259,21 +261,11 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "ManagerDock", "This video doesn't have Metadata ! "))
                 pbar.setValue(100)
-                self.ToggleActiveRow(rowPosition, value="Not MISB")
+                self.ToggleActiveRow(rowPosition, value="Video not applicable")
                 return
 
             pbar.setValue(90)
-
-            dtm_path = parser['GENERAL']['DTM_file']
-            if self.initialPt[str(rowPosition)] and dtm_path != '':
-                try:
-                    initElevationModel(self.initialPt[str(
-                        rowPosition)][0], self.initialPt[str(rowPosition)][1], dtm_path)
-                    qgsu.showUserAndLogMessage(
-                    "", "Elevation model initialized.", onlyLog=True)
-                except Exception as e:
-                    qgsu.showUserAndLogMessage("", "Elevation model NOT initialized: "+str(e), onlyLog=True)
-                    None
+            
         else:
             self.meta_reader[str(rowPosition)] = StreamMetaReader(filename)
             qgsu.showUserAndLogMessage("", "StreamMetaReader initialized.", onlyLog=True)

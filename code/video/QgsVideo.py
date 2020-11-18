@@ -776,10 +776,10 @@ class VideoWidget(QVideoWidget):
 
                 txt = "<span style='font-size:10pt; font-weight:bold;'>Lon : </span>"
                 txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
-                    ("%.3f" % Longitude) + "</span>"
+                    ("%.5f" % Longitude) + "</span>"
                 txt += "<span style='font-size:10pt; font-weight:bold;'> Lat : </span>"
                 txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
-                    ("%.3f" % Latitude) + "</span>"
+                    ("%.5f" % Latitude) + "</span>"
 
                 if hasElevationModel():
                     txt += "<span style='font-size:10pt; font-weight:bold;'> Alt : </span>"

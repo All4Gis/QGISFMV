@@ -35,6 +35,7 @@ from QGIS_FMV.utils.KadasFmvLayers import (CreateVideoLayers,
                                          CreateGroupByName,
                                          RemoveGroupByName)
 from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
+                                        initElevationModel,
                                         ResetData,
                                         getVideoFolder,
                                         BurnDrawingsImage,
@@ -547,10 +548,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         actionMute.triggered.connect(self.setMuted)
 
         menu.addSeparator()
-        actionAllFrames = menu.addAction(QIcon(":/imgFMV/images/capture_all_frames.png"),
-                                         QCoreApplication.translate("QgsFmvPlayer", "Extract All Frames"))
+        #actionAllFrames = menu.addAction(QIcon(":/imgFMV/images/capture_all_frames.png"),
+        #                                 QCoreApplication.translate("QgsFmvPlayer", "Extract All Frames"))
 
-        actionAllFrames.triggered.connect(self.ExtractAllFrames)
+        #actionAllFrames.triggered.connect(self.ExtractAllFrames)
 
         actionCurrentFrames = menu.addAction(QIcon(":/imgFMV/images/screenshot.png"),
                                              QCoreApplication.translate("QgsFmvPlayer",
@@ -562,18 +563,31 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                                             QCoreApplication.translate("QgsFmvPlayer", "Show Metadata"))
         actionShowMetadata.triggered.connect(self.OpenQgsFmvMetadata)
 
-        menu.addSeparator()
-        actionOptions = menu.addAction(QIcon(":/imgFMV/images/custom-options.png"),
-                                       QCoreApplication.translate("QgsFmvPlayer", "Options"))
-        actionOptions.triggered.connect(self.OpenOptions)
+        #menu.addSeparator()
+        #actionOptions = menu.addAction(QIcon(":/imgFMV/images/custom-options.png"),
+        #                               QCoreApplication.translate("QgsFmvPlayer", "Options"))
+        #actionOptions.triggered.connect(self.OpenOptions)
 
         menu.exec_(self.mapToGlobal(point))
     
     def currentMediaChanged(self, media):   
         self.parent.VManager.selectRow(self.parent.playlist.currentIndex())
-        if self.parent.playlist.currentIndex() != -1:
-            self.setMetaReader(self.parent.meta_reader[str(self.parent.playlist.currentIndex())])
-            self.fileName = self.parent.VManager.item(self.parent.playlist.currentIndex(), 3).text()
+        idx = self.parent.playlist.currentIndex()
+        if idx != -1:
+            if self.parent.initialPt[str(idx)] and self.parent.dtm_path != '':
+                #init elevation model
+                try:
+                    initElevationModel(self.parent.initialPt[str(idx)][0], self.parent.initialPt[str(idx)][1], self.parent.dtm_path)
+                    qgsu.showUserAndLogMessage(
+                    "", "Elevation model initialized.", onlyLog=True)
+                except Exception as e:
+                    qgsu.showUserAndLogMessage("", "Elevation model NOT initialized: "+str(e), onlyLog=True)
+                    None
+            
+            #change meta reader
+            self.setMetaReader(self.parent.meta_reader[str(idx)])
+            
+            self.fileName = self.parent.VManager.item(idx, 3).text()
         self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))     
     
@@ -1464,7 +1478,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         """ Extract Current Frame Task
             The drawings are saved by default
         """
-        # image = self.videoWidget.currentFrame()   # without drawings
+        #image = self.videoWidget.currentFrame()   # without drawings
         image = BurnDrawingsImage(self.videoWidget.currentFrame(), self.videoWidget.grab(self.videoWidget.surface.videoRect()).toImage())
 
         output, _ = askForFiles(self, QCoreApplication.translate(

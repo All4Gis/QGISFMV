@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ManagerWindow(object):
     def setupUi(self, ManagerWindow):
         ManagerWindow.setObjectName("ManagerWindow")
-        ManagerWindow.resize(600, 353)
+        ManagerWindow.resize(700, 353)
         self.gridLayout = QtWidgets.QGridLayout(ManagerWindow)
         self.gridLayout.setMargin(0);
         self.gridLayout.setObjectName("gridLayout")
@@ -35,7 +35,7 @@ class Ui_ManagerWindow(object):
         #self.mOpenStreamButton.setObjectName("mOpenStreamButton")
         #self.gridLayout.addWidget(self.mOpenStreamButton, 0, 2, 1, 1)
         
-        spacerItem = QtWidgets.QSpacerItem(600, 10, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(700, 10, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 0, 1, 1, 1)
         self.mCloseButton = QtWidgets.QToolButton(ManagerWindow)
         self.mCloseButton.setText("")

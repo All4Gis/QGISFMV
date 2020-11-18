@@ -1435,7 +1435,8 @@ def BurnDrawingsImage(source, overlay):
     p = QPainter()
     p.setRenderHint(QPainter.HighQualityAntialiasing)
     p.begin(base)
-    p.setCompositionMode(QPainter.CompositionMode_SourceOut)
+    #with CompositionMode_SourceOut we have a black image at the end.
+    p.setCompositionMode(QPainter.CompositionMode_SourceOver)
     p.drawImage(0, 0, overlay)
     p.end()
 

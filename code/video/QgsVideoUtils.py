@@ -157,7 +157,6 @@ class VideoUtils(object):
         if hasElevationModel():
             target = [transf[0], transf[1], targetAlt]
             alt = GetDemAltAt(transf[1], transf[0])
-            if alt > 0:
-                Altitude = round(alt, 0)            
+            Altitude = round(alt, 0)            
 
         return Longitude, Latitude, Altitude

@@ -683,8 +683,8 @@ def SetDefaultTrajectoryStyle(mapItem):
 
 def SetDefaultPlatformStyle(mapItem, platform='DEFAULT'):
     ''' Platform Symbol '''
-    style = S.getPlatform(platform)
-    mapItem.setup(style["NAME"], 0.5, 0.5, 80, 80 )
+    style = S.getPlatform(platform)    
+    mapItem.setup(style["NAME"], 0.5, 0.5, 110, 110 )
     return
 
 
