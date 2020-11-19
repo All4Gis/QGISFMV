@@ -52,6 +52,7 @@ from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
+from QGIS_FMV.utils.KadasFmvLayers import RemoveAllDrawings
 
 try:
     from pydevd import *
@@ -312,7 +313,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 #qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size:" + str(self.meta_reader.getSize())), level=QGis.Info)
                 # qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
                 return
-
+            
+            
             self.packetStreamParser(stdout_data)
 
         except Exception as inst:
@@ -339,7 +341,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             if self.metadataDlg.isVisible():  # Only add metadata to table if this QDockWidget is visible (speed plugin)
                 self.addMetadata(data)
             #try:
-                #Exit when the first correct packet has been drawn successfully.
+            #Exit when the first correct packet has been drawn successfully.
             res = UpdateLayers(packet, parent=self, mosaic=self.createingMosaic, group=self.fileName)
             if res:
                 #qgsu.showUserAndLogMessage("", "Updating layer for Precision Time Stamp:"+ str(self.data[2]))
@@ -587,7 +589,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             #change meta reader
             self.setMetaReader(self.parent.meta_reader[str(idx)])
             
+            #update filename
             self.fileName = self.parent.VManager.item(idx, 3).text()
+            
+            #remove drawings
+            RemoveAllDrawings()
+            
         self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))     
     
@@ -1624,14 +1631,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         #                                 QCoreApplication.translate("QgsFmvPlayer", "If you close or reopen the video all the information will be erased."),
         #                                 QCoreApplication.translate("QgsFmvPlayer", "Do you want to close or reopen it?"),
         #                                 icon="Information")
-        #self.closing = True
+        
+        self.closing = True
+        
         #if buttonReply == QMessageBox.No:
         #    event.ignore()
         #    return
-
-        # Stop Video
-        self.stop()
-
+        
         # Close splitter
         # If we don't close it and open a new video, the metadata shown are the old.
         # TODO: NOT WORK
@@ -1639,6 +1645,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.meta_reader.dispose()
         except Exception:
             None
+        
+        # Stop Video
+        self.stop()
+        
+        #QTimer.singleShot(2500, lambda: self.resumePlay(oldState))    
+            
         # Toggle Active flag in metadata dock
         self.parent.ToggleActiveFromTitle()
 
@@ -1671,3 +1683,5 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         # Restore Filters State
         self.videoWidget.RestoreFilters()
+        
+        

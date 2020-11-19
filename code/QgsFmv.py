@@ -51,7 +51,7 @@ class Fmv:
     def __init__(self, iface):
         """ Contructor """
         self.run_once = False
-        self.iface = KadasPluginInterface.cast( iface )
+        self.iface = KadasPluginInterface.cast( iface )        
         log.initLogging()
         threadcount = QThread.idealThreadCount()
         # use all available cores and parallel rendering
@@ -121,23 +121,6 @@ class Fmv:
         self.About.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self.About.exec_()
 
-    #def run(self):
-    #    ''' Run method '''
-    #    if self._FMVManager is None:
-    #        self.CreateDockWidget()
-    #
-    #                              
-    #
-    #def CreateDockWidget(self):
-    #    ''' Create Manager Video QDockWidget '''
-    #                                                 
-    #                                                                                    
-    #        
-    #                            
-    #                                                                  
-    #                                                             
-    #    self._FMVManager = FmvManager(self.iface)
-    #    self.iface.addDockWidget(Qt.BottomDockWidgetArea, self._FMVManager)
     def run(self, toggleState ):
         ''' Run method '''
         if toggleState:
@@ -166,6 +149,6 @@ class Fmv:
 
     def hideManagerWidget( self ):
         if self._FMVManager:
-            self._FMVManager.hide()
-            #self._FMVManager = None
+            self._FMVManager.CloseFMV()
+            
         self.bottomBar.hide()

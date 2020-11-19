@@ -101,6 +101,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                 self.AddFileRowToManager(name, filename, load_id)
 
         draw.setValues()
+        self.setAcceptDrops(True)
 
     def eventFilter(self, source, event):
         ''' Event Filter '''
@@ -118,36 +119,44 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         menu.exec_(self.VManager.mapToGlobal(position))
 
     def remove(self):
-        ''' Remove current row '''
-        cr = self.VManager.currentRow()
-        row_id = self.VManager.item(cr, 0).text()
-        row_text = self.VManager.item(cr, 1).text()
-        self.VManager.removeRow(cr)
-        del self.videoPlayable[cr]
-        del self.videoIsStreaming[cr]
-        self.playlist.removeMedia(cr)
-        
-        # Remove video to Settings List
-        RemoveVideoToSettings(row_id)
-        # Remove folder if is local
-        RemoveVideoFolder(row_text)
-
-        if self.meta_reader[str(cr)] != None:
-            self.meta_reader[str(cr)].dispose()
-            self.meta_reader[str(cr)] = None
-        
-        if self.playlist.isEmpty() and self._PlayerDlg is not None:
-            self._PlayerDlg.close()
+        ''' Remove current row '''         
+        for cr in self.VManager.selectedItems():
+            idx = 0
+            #we browse cells but we need lines, so ignore already deleted rows
+            try:
+                idx = cr.row()
+            except:
+                continue
             
-        return
-    
+            row_id = self.VManager.item(idx, 0).text()
+            row_text = self.VManager.item(idx, 1).text()
+            
+            self.VManager.removeRow(idx)
+            
+            del self.videoPlayable[idx]
+            del self.videoIsStreaming[idx]
+            self.playlist.removeMedia(idx)
+            
+            # Remove video to Settings List
+            RemoveVideoToSettings(row_id)
+            # Remove folder if is local
+            RemoveVideoFolder(row_text)
+
+            if self.meta_reader[str(idx)] != None:
+                self.meta_reader[str(idx)].dispose()
+                self.meta_reader[str(idx)] = None
+            
+            if self.playlist.isEmpty() and self._PlayerDlg is not None:
+                self._PlayerDlg.close()
+                
+                    
     def CloseFMV(self):
         ''' Close FMV '''
         try:
             self._PlayerDlg.close()
         except Exception:
             None
-        self.close()
+        self.hide()
         return
     
 
@@ -314,9 +323,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
     
     def isFileInPlaylist(self, filename):
         mcount = self.playlist.mediaCount()
-        qgsu.showUserAndLogMessage("", "Filename: "+filename, onlyLog=True)
         for x in range(mcount):
-            qgsu.showUserAndLogMessage("", "contained in : " + self.playlist.media(x).canonicalUrl().toString(), onlyLog=True)
             if filename in self.playlist.media(x).canonicalUrl().toString():
                 return True
         return False
@@ -422,3 +429,30 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         except Exception:
             None
         return
+    
+    def dragEnterEvent(self, e):
+        check = True
+        Exts = ast.literal_eval(parser.get("FILES", "Exts"))
+        if e.mimeData().hasUrls():
+            for url in e.mimeData().urls():
+                fileIsOk = False
+                for ext in Exts:
+                    if url.fileName().lower().endswith(ext):
+                       if not self.isFileInPlaylist(url.toString()[8:]):
+                           fileIsOk = True
+                           break
+                if not fileIsOk:
+                    check = False
+                    break
+        
+        #Only accept if all files match a required extension       
+        if check:    
+            e.acceptProposedAction()
+        #Ignore and stop propagation
+        else:
+            e.setDropAction(Qt.IgnoreAction)
+            e.accept()
+
+    def dropEvent(self, e):
+        for url in e.mimeData().urls():
+            self.AddFileRowToManager(url.fileName(), url.toString()[8:])

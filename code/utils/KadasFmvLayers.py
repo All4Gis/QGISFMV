@@ -162,7 +162,7 @@ def GetMapItems():
 
 def RemoveAllDrawings():
 
-    global platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR, linesEle, pointsEle, pointsLblEle, polygonsEle
+    global platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR, linesEle, pointsEle, pointsLblEle, polygonsEle, lastTrajectoryEle
     #qgsu.showUserAndLogMessage("", "Clearing all mapItems drawings.")
     for ele in [platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR]:
         if ele != '':
@@ -180,7 +180,8 @@ def RemoveAllDrawings():
     for ele in polygonsEle:
         KadasMapCanvasItemManager.removeItem(ele)
     
-    platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR, linesEle, pointsEle, pointsLblEle, polygonsEle = '', '', '', '', '', '', '', '', '', [], [], [], []
+    lastTrajectoryEle, platformMarker, frameCenterMarker, trajectoryMarker, frameAxisMarker, footprintMarker, beamMarkerUR, beamMarkerUL, beamMarkerLL, beamMarkerLR = '', '', '', '', '', '', '', '', '', ''
+    linesEle, pointsEle, pointsLblEle, polygonsEle = [], [], [], []
 
 def RemoveAllDrawLineOnMap():
     ''' Remove all features on Line Layer '''
