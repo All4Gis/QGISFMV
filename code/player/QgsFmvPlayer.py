@@ -572,22 +572,29 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         menu.exec_(self.mapToGlobal(point))
     
-    def currentMediaChanged(self, media):   
-        self.parent.VManager.selectRow(self.parent.playlist.currentIndex())
+    def currentMediaChanged(self, media):
+   
         idx = self.parent.playlist.currentIndex()
+        
+        if not self.parent.videoPlayable[idx]:
+            qgsu.showUserAndLogMessage("", "Video not playable. "+str(idx), onlyLog=True)
+            QTimer.singleShot(300, lambda: self.player.setPosition(self.player.duration()))
+            return
+
+        self.parent.VManager.selectRow(idx)
+        #qgsu.showUserAndLogMessage("", "Media changed, index: "+str(idx), onlyLog=True)
         if idx != -1:
-            if self.parent.initialPt[str(idx)] and self.parent.dtm_path != '':
+            if self.parent.initialPt[idx] and self.parent.dtm_path != '':
                 #init elevation model
                 try:
-                    initElevationModel(self.parent.initialPt[str(idx)][0], self.parent.initialPt[str(idx)][1], self.parent.dtm_path)
-                    qgsu.showUserAndLogMessage(
-                    "", "Elevation model initialized.", onlyLog=True)
+                    initElevationModel(self.parent.initialPt[idx][0], self.parent.initialPt[idx][1], self.parent.dtm_path)
+                    qgsu.showUserAndLogMessage("", "Elevation model initialized.", onlyLog=True)
                 except Exception as e:
                     qgsu.showUserAndLogMessage("", "Elevation model NOT initialized: "+str(e), onlyLog=True)
                     None
             
             #change meta reader
-            self.setMetaReader(self.parent.meta_reader[str(idx)])
+            self.setMetaReader(self.parent.meta_reader[idx])
             
             #update filename
             self.fileName = self.parent.VManager.item(idx, 3).text()
