@@ -85,7 +85,7 @@ class Fmv:
     def initGui(self):
         ''' FMV Action '''
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
-                                 "UAV", self.iface.mainWindow(),
+                                 "FMV", self.iface.mainWindow(),
                                  toggled=self.run)
         self.actionFMV.setCheckable( True )
         self.iface.addAction(self.actionFMV, self.iface.PLUGIN_MENU, self.iface.CUSTOM_TAB, "&Plugins")

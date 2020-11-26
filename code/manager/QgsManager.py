@@ -5,7 +5,7 @@ import os
 from os.path import dirname, abspath
 from qgis.PyQt.Qt  import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtCore import QUrl
+from qgis.PyQt.QtCore import QUrl, QTimer
 from qgis.PyQt.QtWidgets import (QDockWidget,
                                  QTableWidgetItem,
                                  QAction,
@@ -39,7 +39,6 @@ from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsProject, QgsCoordinateTransform
 from PyQt5.QtMultimedia import QMediaPlaylist
 
-
 try:
     from pydevd import *
 except ImportError:
@@ -64,6 +63,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         self.initialPt = []
         self.pass_time = 250
         
+        self.loading = False
         self.playlist = QMediaPlaylist()
         self.VManager.viewport().installEventFilter(self)
 
@@ -179,9 +179,11 @@ class FmvManager(QWidget, Ui_ManagerWindow):
     def AddFileRowToManager(self, name, filename, load_id=None, islocal=False, klv_folder=None):
         ''' Add file Video to new Row '''
         # We limit the number of videos due to the buffer
+        self.loading = True
         if self.VManager.rowCount() > 5:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
                 "ManagerDock", "You must delete some video from the list before adding a new one"))
+            self.loading = False
             return
 
         self.islocal = islocal
@@ -239,6 +241,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                     except Exception:
                         self.VManager.cellWidget(rowPosition, j).setStyleSheet("background-color:rgb(211,211,211);")
                         pass
+                self.loading = False
                 return
 
             pbar.setValue(30)
@@ -246,12 +249,12 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             if info is None:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "ManagerDock", "Failed loading FFMPEG ! "))
-                
+            
             klvIdx = getKlvStreamIndex(filename, islocal)
                         
             # init non-blocking metadata buffered reader
             self.meta_reader.append(BufferedMetaReader(filename, klv_index=klvIdx, pass_time=self.pass_time))
-
+                                        
             pbar.setValue(60)
             try:
                 # init point we can center the video on
@@ -274,7 +277,6 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                 pbar.setValue(100)
                 self.ToggleActiveRow(rowPosition, value="Video not applicable")
                 
- 
         else:
             self.meta_reader.append(StreamMetaReader(filename))
             qgsu.showUserAndLogMessage("", "StreamMetaReader initialized.", onlyLog=True)
@@ -301,9 +303,14 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                 self.ToggleActiveRow(rowPosition, value="Ready")
             # Add video to settings list
             AddVideoToSettings(str(row_id), filename)
-
+        
+        self.loading = False
+            
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
+        if self.loading:
+            return
+        
         Exts = ast.literal_eval(parser.get("FILES", "Exts"))
                         
         filename, _ = askForFiles(self, QCoreApplication.translate(
@@ -327,38 +334,50 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             if filename in self.playlist.media(x).canonicalUrl().toString():
                 return True
         return False
-        
     
-    def PlayVideoFromManager(self, model, row=None):
+    def PlayVideoFromManager(self, model):
         ''' Play video from manager dock.
             Manager row double clicked
         '''
         # Don't enable Play if video doesn't have metadata
-        if row is None:
-            row = model.row()
-        
-        if not self.videoPlayable[row]:
+        if not self.videoPlayable[model.row()]:
             return
-
-        path = self.VManager.item(row, 3).text()
-        text = self.VManager.item(row, 1).text()
-        self.ToggleActiveRow(row)
-
-        folder = getVideoFolder(text)
-        klv_folder = os.path.join(folder, "klv")
-        exist = os.path.exists(klv_folder)
+        
+        # why????
         try:
             if self._PlayerDlg.isVisible():
                 self._PlayerDlg.close()
         except Exception:
             None
+
+        path = self.VManager.item(model.row(), 3).text()
+        text = self.VManager.item(model.row(), 1).text()
+        
+        folder = getVideoFolder(text)
+        klv_folder = os.path.join(folder, "klv")
+        exist = os.path.exists(klv_folder)
         
         # First time we open the player
         if self._PlayerDlg is None:
             if exist:
-                self.CreatePlayer(path, row, islocal=True, klv_folder=klv_folder)
+                self.CreatePlayer(path, model.row(), islocal=True, klv_folder=klv_folder)
             else:
-                self.CreatePlayer(path, row)
+                self.CreatePlayer(path, model.row())  
+        
+        if exist:
+            self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
+        else:
+            self._PlayerDlg.playFile(path)              
+        
+        
+        self.SetupPlayer(model.row())
+    
+    
+    def SetupPlayer(self, row):
+        ''' Play video from manager dock.
+            Manager row double clicked
+        '''       
+        self.ToggleActiveRow(row)
         
         self.playlist.setCurrentIndex(row)
         
@@ -368,12 +387,8 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         self.ToggleActiveFromTitle()
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()
-        if exist:
-            self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
-        else:
-            self._PlayerDlg.playFile(path)
-            
-        #first zoom to map zone     
+                    
+        #zoom to map zone     
         curAuthId =  self.iface.mapCanvas().mapSettings().destinationCrs().authid()
         
         map_pos = QgsPointXY(self.initialPt[row][1], self.initialPt[row][0])

@@ -280,7 +280,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @param currentTime: Current video timestamp
         """
         try:
-
             # There is no way to spawn a thread and call after join() without blocking the video UI thread.
             # callBackMetadata can be as fast as possible, it will always create a small video lag every time meta are read.
             # To get rid of this, we fill a buffer (BufferedMetaReader) in the QManager with some Metadata in advance,
@@ -367,9 +366,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type nextTime: String
         @param nextTime: Next timestamp
         '''
+       
         try:
             fName = self.fileName
-            
+                        
             if self.isStreaming:
                 port = int(self.fileName.split(':')[2])
                 fName = self.fileName.replace(str(port), str(port + 1))
@@ -380,6 +380,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                                              '-map', '0:d:'+str(klv_index),
                                              '-preset', 'ultrafast',
                                              '-f', 'data', '-'])
+                                             
             stdout_data, _ = p.communicate()
 
             if stdout_data == b'':
@@ -575,15 +576,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def currentMediaChanged(self, media):
    
         idx = self.parent.playlist.currentIndex()
-        
-        if not self.parent.videoPlayable[idx]:
-            qgsu.showUserAndLogMessage("", "Video not playable. "+str(idx), onlyLog=True)
-            QTimer.singleShot(300, lambda: self.player.setPosition(self.player.duration()))
-            return
-
-        self.parent.VManager.selectRow(idx)
-        #qgsu.showUserAndLogMessage("", "Media changed, index: "+str(idx), onlyLog=True)
+                
         if idx != -1:
+            self.parent.VManager.selectRow(idx)
+            
+            if not self.parent.videoPlayable[idx]:
+                qgsu.showUserAndLogMessage("", "Video not playable. "+str(idx), onlyLog=True)
+                QTimer.singleShot(300, lambda: self.player.setPosition(self.player.duration()))
+                return
+            
             if self.parent.initialPt[idx] and self.parent.dtm_path != '':
                 #init elevation model
                 try:
@@ -593,17 +594,27 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     qgsu.showUserAndLogMessage("", "Elevation model NOT initialized: "+str(e), onlyLog=True)
                     None
             
-            #change meta reader
-            self.setMetaReader(self.parent.meta_reader[idx])
-            
             #update filename
             self.fileName = self.parent.VManager.item(idx, 3).text()
             
-            #remove drawings
-            RemoveAllDrawings()
+            self.setWindowTitle(QCoreApplication.translate(
+                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))
+
+            self.parent.SetupPlayer(idx)
             
-        self.setWindowTitle(QCoreApplication.translate(
-                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))     
+            RemoveAllDrawings()
+#            
+#            #change meta reader
+#            self.setMetaReader(self.parent.meta_reader[idx])
+#            
+#            #update filename
+#            self.fileName = self.parent.VManager.item(idx, 3).text()
+#            
+#            #remove drawings
+#            RemoveAllDrawings()
+#            
+#        self.setWindowTitle(QCoreApplication.translate(
+#                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))     
     
     def rateChanged(self, qreal):   
         '''Signals the playbackRate has changed to rate.
@@ -845,6 +856,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type value: bool
         @param value: Button checked state
         '''
+        qgsu.showUserAndLogMessage("", "CommonPauseTool:" + str(value), onlyLog=True)
         if value:
             if self.playerState == QMediaPlayer.PlayingState:
                 self.pauseAt(self.player.position())
@@ -1049,6 +1061,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @param progress: Slide video duration current value
         '''
         progress /= 1000
+               
         # Remove measure if slider position change
         if self.staticDraw:
             self.RemoveMeasures()
@@ -1056,11 +1069,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if not self.sliderDuration.isSliderDown():
             self.sliderDuration.setValue(progress)
         
-        if not self.closing:
+        if not self.closing and not self.sliderDuration.isSliderDown():
             #show precise info if player is paused
             if self.playerState == QMediaPlayer.PausedState:
-                if not self.sliderDuration.isSliderDown():
-                    self.updateDurationInfo(progress, True)
+                self.updateDurationInfo(progress, True)
             else:
                 self.updateDurationInfo(progress)
 
@@ -1129,8 +1141,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if status is QMediaPlayer.LoadingMedia or status is QMediaPlayer.StalledMedia or status is QMediaPlayer.InvalidMedia:
             self.videoAvailableChanged(False)
         elif status == QMediaPlayer.InvalidMedia:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", self.player.errorString()), level=QGis.Warning)
+            if len(self.player.errorString()) > 0:
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvPlayer", "Player error: " + self.player.errorString()), level=QGis.Warning)
             qgsu.showUserAndLogMessage("", "invalid media", onlyLog=True)    
             self.videoAvailableChanged(False)
         elif status == QMediaPlayer.EndOfMedia and self.parent.playlist.nextIndex() == -1:
@@ -1285,7 +1298,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.staticDraw = False
 
-    def playClicked(self, _):
+    def playClicked(self, _):       
         ''' Stop and Play video '''
         if self.playerState in (QMediaPlayer.StoppedState,
                                 QMediaPlayer.PausedState):
@@ -1300,6 +1313,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         elif self.playerState == QMediaPlayer.PlayingState:
             self.btn_play.setIcon(self.playIcon)
             self.pauseAt(self.player.position())
+            
         QApplication.processEvents()
 
     def seek(self, seconds):
