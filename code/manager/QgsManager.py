@@ -229,7 +229,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             self.videoIsStreaming.append(True)
         else:
             self.videoIsStreaming.append(False)
-
+                
         if not self.videoIsStreaming[-1]:
             # Disable row if not exist video file
             if not os.path.exists(filename):
@@ -470,4 +470,9 @@ class FmvManager(QWidget, Ui_ManagerWindow):
 
     def dropEvent(self, e):
         for url in e.mimeData().urls():
-            self.AddFileRowToManager(url.fileName(), url.toString()[8:])
+            #local files
+            if "file:///" in url.toString():
+                self.AddFileRowToManager(url.fileName(), url.toString()[8:])
+            #network drives
+            else:
+                self.AddFileRowToManager(url.fileName(), url.toString()[5:])
