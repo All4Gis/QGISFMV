@@ -95,10 +95,12 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             folder = getVideoFolder(filename)
             klv_folder = os.path.join(folder, "klv")
             exist = os.path.exists(klv_folder)
+                        
             if exist:
                 self.AddFileRowToManager(name, filename, load_id, exist, klv_folder)
             else:
-                self.AddFileRowToManager(name, filename, load_id)
+                if os.path.isfile(filename):
+                    self.AddFileRowToManager(name, filename, load_id)
 
         draw.setValues()
         self.setAcceptDrops(True)

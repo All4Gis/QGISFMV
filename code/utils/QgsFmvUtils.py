@@ -68,15 +68,16 @@ if windows:
 else:
     ffmpegConf = '/usr/bin'
 
-try:
-    from homography import from_points
-except ImportError:
-    None
+#try:
+#    from homography import from_points
+#except ImportError:
+#    None
 
 try:
     from cv2 import (COLOR_BGR2RGB,
                      cvtColor,
-                     COLOR_GRAY2RGB)
+                     COLOR_GRAY2RGB,
+                     findHomography)
     import numpy as np
 except ImportError:
     None
@@ -692,14 +693,18 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
     gcps.append(gcp)
 
     geotransform_affine = gdal.GCPsToGeoTransform(gcps)
+    
 
     src = np.float64(
-        np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize]]))
+        np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize], [xSize / 2.0, ySize / 2.0]]))
     dst = np.float64(
-        np.array([[cornerPointUL[0], cornerPointUL[1]], [cornerPointUR[0], cornerPointUR[1]], [cornerPointLR[0], cornerPointLR[1]], [cornerPointLL[0], cornerPointLL[1]]]))
+        np.array([[cornerPointUL[0], cornerPointUL[1]], [cornerPointUR[0], cornerPointUR[1]], [cornerPointLR[0], cornerPointLR[1]], [cornerPointLL[0], cornerPointLL[1]], [frameCenterLat, frameCenterLon]]))
 
     try:
-        geotransform = from_points(src, dst)
+    
+        #geotransform = from_points(src, dst)
+        geotransform, status = findHomography(src, dst)
+
     except Exception:
         pass
 
@@ -753,7 +758,6 @@ def GetcornerPointLL():
 def GetGCPGeoTransform():
     ''' Return Geotransform '''
     return geotransform
-
 
 def hasElevationModel():
     ''' Check if DEM is loaded '''
@@ -873,9 +877,14 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
 
     UpdatePlatformData(packet, hasElevationModel())
     UpdateTrajectoryData(packet, hasElevationModel())
-    UpdateFrameCenterData(packet, hasElevationModel())
-    UpdateFrameAxisData(packet, hasElevationModel())
+     
+    frameCenterPoint = [packet.FrameCenterLatitude, packet.FrameCenterLongitude, packet.FrameCenterElevation]
+    if hasElevationModel():
+        frameCenterPoint = GetLine3DIntersectionWithDEM(GetSensor(), frameCenterPoint)
 
+    UpdateFrameCenterData(frameCenterPoint, hasElevationModel())
+    UpdateFrameAxisData(packet.ImageSourceSensor, GetSensor(), frameCenterPoint, hasElevationModel())
+    
     if OffsetLat1 is not None and LatitudePoint1Full is None:
         CornerEstimationWithOffsets(packet)
         if mosaic:
@@ -926,7 +935,7 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
                         cornerPointLR, cornerPointLL, hasElevationModel())
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
-                              cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat, hasElevationModel())
+                              cornerPointLR, cornerPointLL, frameCenterPoint[1], frameCenterPoint[0], hasElevationModel())
 
         if mosaic:
             georeferencingVideo(parent)
@@ -1080,7 +1089,9 @@ def CornerEstimationWithOffsets(packet):
                          OffsetLon3 + frameCenterLon)
         cornerPointLL = (OffsetLat4 + frameCenterLat,
                          OffsetLon4 + frameCenterLon)
-
+         
+        frameCenterPoint = [packet.FrameCenterLatitude, packet.FrameCenterLongitude, packet.FrameCenterElevation]
+        
         if hasElevationModel():
             cornerPointUL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointUL)
@@ -1090,6 +1101,8 @@ def CornerEstimationWithOffsets(packet):
                 GetSensor(), cornerPointLR)
             cornerPointLL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointLL)
+            frameCenterPoint = GetLine3DIntersectionWithDEM(
+                GetSensor(), frameCenterPoint)
 
         UpdateFootPrintData(packet,
                             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
@@ -1098,7 +1111,7 @@ def CornerEstimationWithOffsets(packet):
                         cornerPointLR, cornerPointLL, hasElevationModel())
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
-                              cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat, hasElevationModel())
+                              cornerPointLR, cornerPointLL, frameCenterPoint[1], frameCenterPoint[0], hasElevationModel())
 
     except Exception:
         return False
@@ -1226,7 +1239,8 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
         bearing = (value2 + 180.0 + value20) % 360.0
         cornerPointLL = list(
             reversed(sphere.destination(destPoint, distance2, bearing)))
-
+        
+        frameCenterPoint = [packet.FrameCenterLatitude, packet.FrameCenterLongitude, packet.FrameCenterElevation]
         if hasElevationModel():
             cornerPointUL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointUL)
@@ -1236,6 +1250,9 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
                 GetSensor(), cornerPointLR)
             cornerPointLL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointLL)
+            frameCenterPoint = GetLine3DIntersectionWithDEM(
+                GetSensor(), frameCenterPoint)
+
 
         if sensor is not None:
             return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL
@@ -1248,7 +1265,7 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL,
-                              frameCenterLon, frameCenterLat, hasElevationModel())
+                              frameCenterPoint[1], frameCenterPoint[0], hasElevationModel())
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(

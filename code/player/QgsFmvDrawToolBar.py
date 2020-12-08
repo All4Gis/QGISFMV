@@ -17,7 +17,10 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
                                         GetFrameCenter,
                                         hasElevationModel,
                                         getNameSpace)
+                                        
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
+
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 try:
     from pydevd import *
@@ -270,13 +273,14 @@ class DrawToolBar(object):
     @staticmethod
     def drawPointOnVideo(number, pt, painter, surface, gt):
         ''' Draw Points on Video '''
-#         if hasElevationModel():
-#             pt = GetLine3DIntersectionWithPlane(
-#                 GetSensor(), pt, GetFrameCenter()[2])
-
+               
+        #if hasElevationModel():
+        #    pt = GetLine3DIntersectionWithPlane(
+        #        GetSensor(), pt, GetFrameCenter()[2])
+        
         scr_x, scr_y = vut.GetInverseMatrix(
             pt[1], pt[0], gt, surface)
-
+                
         # don't draw something outside the screen.
         if scr_x < vut.GetXBlackZone(surface) or scr_y < vut.GetYBlackZone(surface):
             return

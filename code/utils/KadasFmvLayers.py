@@ -4,7 +4,6 @@ from os.path import dirname, abspath
 from qgis.PyQt.QtGui import QColor, QFont, QPolygonF, QPen, QPainter, QBrush, qRgba
 from qgis.PyQt.QtWidgets import QApplication
 from qgis.PyQt.QtCore import QCoreApplication, QPointF, Qt
-
 #from qgis.PyQt.QtCore.Qt import *
 
 from configparser import ConfigParser
@@ -409,17 +408,17 @@ def UpdateTrajectoryData(packet, ele):
     return
 
 
-def UpdateFrameAxisData(packet, ele):
+#def UpdateFrameAxisData(packet, ele):
+def UpdateFrameAxisData(imgSS, sensor, framecenter, ele):
     ''' Update Frame Axis Values '''
     global crtSensorSrc2, groupName, frameAxisMarker
 
-    imgSS = packet.ImageSourceSensor
-    lat = packet.SensorLatitude
-    lon = packet.SensorLongitude
-    alt = packet.SensorTrueAltitude
-    fc_lat = packet.FrameCenterLatitude
-    fc_lon = packet.FrameCenterLongitude
-    fc_alt = packet.FrameCenterElevation
+    lat = sensor[0]
+    lon = sensor[1]
+    alt = sensor[2]
+    fc_lat = framecenter[0]
+    fc_lon = framecenter[1]
+    fc_alt = framecenter[2]
     
     if all(v is not None for v in [lat, lon, alt, fc_lat, fc_lon]):
     
@@ -436,13 +435,14 @@ def UpdateFrameAxisData(packet, ele):
     return
 
 
-def UpdateFrameCenterData(packet, ele):
+def UpdateFrameCenterData(pt, ele):
     global frameCenterMarker
     ''' Update FrameCenter Values '''
-    lat = packet.FrameCenterLatitude
-    lon = packet.FrameCenterLongitude
-    alt = packet.FrameCenterElevation
-    if packet.FrameCenterElevation is None:
+    lat = pt[0]
+    lon = pt[1]
+    alt = pt[2]
+    
+    if alt is None:
         alt = 0.0
     
     if all(v is not None for v in [lat, lon, alt]):
