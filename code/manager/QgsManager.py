@@ -51,11 +51,14 @@ parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 class FmvManager(QWidget, Ui_ManagerWindow):
     ''' Video Manager '''
 
-    def __init__(self, iface, action, parent=None):
+    def __init__(self, iface, action, actionShowHide, parent=None):
         super().__init__(parent)
         self.setupUi(self)
                                                                            
-        self.mCloseButton.clicked.connect( action.toggle )                       
+        self.mCloseButton.clicked.connect( action.toggle )
+        
+        self.mLowerButton.setDefaultAction(actionShowHide )
+        
         self.parent = parent
         self.iface = iface
         self._PlayerDlg = None
@@ -160,7 +163,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             self._PlayerDlg.close()
         except Exception:
             None
-        self.hide()
+        self.close()
         return
     
 

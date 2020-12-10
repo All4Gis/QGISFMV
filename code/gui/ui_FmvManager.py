@@ -34,16 +34,27 @@ class Ui_ManagerWindow(object):
         #self.mOpenStreamButton.setText("")
         #self.mOpenStreamButton.setObjectName("mOpenStreamButton")
         #self.gridLayout.addWidget(self.mOpenStreamButton, 0, 2, 1, 1)
-        
         spacerItem = QtWidgets.QSpacerItem(700, 10, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 0, 1, 1, 1)
+        
+        self.mLowerButton = QtWidgets.QToolButton(ManagerWindow)
+        self.mLowerButton.setText("")
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap(":/imgFMV/images/lower.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.mLowerButton.setIcon(icon5)
+        self.mLowerButton.setObjectName("mLowerButton")
+        self.gridLayout.addWidget(self.mLowerButton, 0, 2, 1, 1)
+        
+        
         self.mCloseButton = QtWidgets.QToolButton(ManagerWindow)
         self.mCloseButton.setText("")
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap(":/imgFMV/images/close.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.mCloseButton.setIcon(icon4)
         self.mCloseButton.setObjectName("mCloseButton")
-        self.gridLayout.addWidget(self.mCloseButton, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.mCloseButton, 0, 3, 1, 1)
+        
+        
         self.VManager = QtWidgets.QTableWidget(ManagerWindow)
         self.VManager.setAcceptDrops(True)
         self.VManager.setProperty("showDropIndicator", True)
