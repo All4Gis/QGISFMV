@@ -27,6 +27,7 @@ from datetime import datetime
 from datetime import timezone
 from struct import pack
 from struct import unpack
+from math import log, ceil, floor
 
 try:
     from pydevd import *
@@ -82,13 +83,16 @@ def ber_encode(value):
         return int_to_bytes(byte_length + 128) + int_to_bytes(value, length=byte_length)
 
 
-def bytes_to_str(value):
-    """Return UTF-8 formatted string from bytes object."""
-    return bytes(value).decode('UTF-8')
+def bytes_to_str(value, encoding='UTF-8'):
+    """Return string from bytes object."""
+    if isinstance(value, str):
+        return value
+    else:
+        return bytes(value).decode(encoding)
 
 
-def str_to_bytes(value):
-    """Return bytes object from UTF-8 formatted string."""
+def str_to_bytes(value, encoding='UTF-8'):
+    """Return bytes object from string."""
     return bytes(str(value), 'UTF-8')
 
 
@@ -157,6 +161,36 @@ def float_to_bytes(value, _domain, _range):
     dst_value = linear_map(value, src_domain=src_domain, dst_range=dst_range)
     return round(dst_value).to_bytes(length, byteorder='big', signed=(dst_min < 0))
 
+def float_to_imapb(value, _length, _range):
+    _min, _max = _range
+    if value < _min or value > _max:
+        return b''
+
+    bPow = ceil(log(_max - _min, 2))
+    dPow = 8 * _length - 1
+    sF = 2**(dPow - bPow)
+    zOffset = 0.0
+    if _min < 0 and _max > 0:
+        zOffset = sF * _min - floor(sF * _min)
+
+    y = int(sF * (value - _min) + zOffset)
+
+    return int_to_bytes(y, _length, signed=True)
+
+def imapb_to_float(value, _range):
+    _min, _max = _range
+    length = len(value)
+
+    bPow = ceil(log(_max - _min, 2))
+    dPow = 8 * length - 1
+    sF = 2**(dPow - bPow)
+    sR = 2**(bPow - dPow)
+    zOffset = 0.0
+    if _min < 0 and _max > 0:
+        zOffset = sF * _min - floor(sF * _min)
+
+    y = bytes_to_int(value, signed=True)
+    return sR * (y - zOffset) + _min
 
 def packet_checksum(data):
     """Return two byte checksum from a SMPTE ST 336 KLV structured bytes object."""

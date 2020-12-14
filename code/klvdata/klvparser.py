@@ -25,8 +25,11 @@
 
 from io import BytesIO
 from io import IOBase
+from sys import maxsize
 
 from QGIS_FMV.klvdata.common import bytes_to_int
+from QGIS_FMV.klvdata.common import bytes_to_hexstr
+
 try:
     from pydevd import *
 except ImportError:
@@ -70,15 +73,19 @@ class KLVParser(object):
 #         except OverflowError:
 #             value = self.__read(0)
 
-        value = self.__read(length)
-
+        try:
+            value = self.__read(length)
+        except OverflowError:
+            return key, None
+        
         return key, value
 
     def __read(self, size):
+        if size < 0 or size > maxsize:
+            raise OverflowError
+
         if size == 0:
             return b''
-
-        assert size > 0
 
         data = self.source.read(size)
 
