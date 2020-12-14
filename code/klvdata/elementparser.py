@@ -36,6 +36,9 @@ from QGIS_FMV.klvdata.common import (bytes_to_datetime,
                                      str_to_bytes,
                                      ieee754_bytes_to_fp)
 from QGIS_FMV.klvdata.element import Element
+from QGIS_FMV.klvdata.common import imapb_to_float
+from QGIS_FMV.klvdata.common import int_to_bytes
+from QGIS_FMV.klvdata.common import float_to_imapb
 
 try:
     from pydevd import *
@@ -151,7 +154,39 @@ class StringValue(BaseValue):
             return str(self.value)
         return ""
 
+class IntegerElementParser(ElementParser, metaclass=ABCMeta):
+    def __init__(self, value):
+        super().__init__(IntegerValue(value, self._size, self._signed))
 
+    @property
+    @classmethod
+    @abstractmethod
+    def _signed(cls):
+        pass
+
+    @property
+    @classmethod
+    @abstractmethod
+    def _size(cls):
+        pass
+
+class IntegerValue(BaseValue):
+    def __init__(self, value, _size, _signed):
+        self._size = _size
+        self._signed = _signed
+        if isinstance(value, int):
+            self.value = value
+        else:
+            try:
+                self.value = bytes_to_int(value, _signed)
+            except TypeError:
+                self.value = value
+
+    def __bytes__(self):
+        return int_to_bytes(self.value, self._size, self._signed)
+
+    def __str__(self):
+        return str(self.value)
 class MappedElementParser(ElementParser):
     __metaclass__ = ABCMeta
 
@@ -194,7 +229,73 @@ class MappedValue(BaseValue):
     def __float__(self):
         return self.value
 
+class EnumElementParser(ElementParser, metaclass=ABCMeta):
+    def __init__(self, value):
+        super().__init__(EnumValue(value, self._enum))
 
+    @property
+    @classmethod
+    @abstractmethod
+    def _enum(cls):
+        pass
+
+class EnumValue(BaseValue):
+    def __init__(self, value, _enum):
+        if isinstance(value, bytes):
+            self.value = bytes_to_int(value)
+        else:
+            self.value = value
+        self._enum = _enum
+
+    def __bytes__(self):
+        return int_to_bytes(self.value)
+
+    def __str__(self):
+        try:
+            return self._enum[self.value]
+        except KeyError:
+            return str(self.value)
+
+class IMAPBElementParser(ElementParser, metaclass=ABCMeta):
+    def __init__(self, value):
+        super().__init__(IMAPBValue(value, self._range))
+
+    @property
+    @classmethod
+    @abstractmethod
+    def _range(cls):
+        pass
+
+class IMAPBValue(BaseValue):
+    def __init__(self, value, _range):
+        self._range = _range
+        self._length = len(value)
+        self.value = imapb_to_float(value, self._range)
+
+    def __bytes__(self):
+        return float_to_imapb(self.value, self._length, self._range)
+
+    def __str__(self):
+        return str(self.value)
+
+class LocationElementParser(ElementParser, metaclass=ABCMeta):
+    def __init__(self, value):
+        super().__init__(LocationValue(value))
+
+class LocationValue(BaseValue):
+    def __init__(self, value):
+        self.value = (imapb_to_float(value[0:4], (-90, 90)), 
+                    imapb_to_float(value[4:8], (-180, 180)),
+                    imapb_to_float(value[8:10], (-900, 19000)))
+
+    def __bytes__(self):
+        lat, long, alt = self.value
+        return (float_to_imapb(lat, 4, (-90, 90)) + 
+                float_to_imapb(long, 4, (-180, 180)) + 
+                float_to_imapb(alt, 2, (-900, 19000)))
+
+    def __str__(self):
+        return str(self.value) 
 class IEEE754ElementParser(ElementParser):
     __metaclass__ = ABCMeta
 
