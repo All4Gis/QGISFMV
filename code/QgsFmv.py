@@ -158,6 +158,7 @@ class Fmv:
                 self.bottomBar.adjustSize()
                 self.bottomBar.show()
                 self._FMVManager.show()
+                self._FMVManager.loadVideosFromSettings()
         else:    
             self.bottomBar.show()
             self._FMVManager.show()

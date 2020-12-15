@@ -5,7 +5,9 @@ from qgis.PyQt.QtCore import (QUrl,
                               QCoreApplication,
                               Qt,
                               QTimer,
-                              pyqtSignal)
+                              pyqtSignal,
+                              QEvent,
+                              QObject)
 from qgis.PyQt.QtGui import QIcon, QMovie
 from qgis.PyQt.QtWidgets import (QToolTip,
                                  QMessageBox,
@@ -68,7 +70,6 @@ except Exception as e:
     qgsu.showUserAndLogMessage(QCoreApplication.translate(
         "VideoProcessor", "Error: Missing OpenCV packages"))
 
-
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     """ Video Player Class """
         
@@ -116,7 +117,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.toolBtn_Measure.setDefaultAction(self.actionMeasureDistance)
         self.DrawToolBar.addWidget(self.toolBtn_Measure)
         self.DrawToolBar.addSeparator()
-
+                
         # Censure QToolButton
         #self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
         #self.DrawToolBar.addWidget(self.toolBtn_Cesure)
@@ -128,7 +129,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         #self.DrawToolBar.addSeparator()
         # Object Tracking
         #self.DrawToolBar.addAction(self.actionObject_Tracking)
-        
         
         # Hide Color Button
         self.btn_Color.hide()
@@ -195,11 +195,15 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             setCenterMode(2, self.iface)
         elif self.actionCenter_Target.isChecked():
             setCenterMode(3, self.iface)
-
+        
+        #disable context menu
+        self.menubarwidget.setContextMenuPolicy(Qt.NoContextMenu)
+        #disable toolbar floating around main window
+        self.DrawToolBar.setFloatable(False) 
+        
         # Defalut WGS 84/ World Mercator (3D)
         # QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(3395))
-        
-    
+      
     def setMetaReader(self, meta_reader):
         self.meta_reader = meta_reader
         

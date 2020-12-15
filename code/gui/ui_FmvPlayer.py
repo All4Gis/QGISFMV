@@ -331,6 +331,7 @@ class Ui_PlayerWindow(object):
         self.statusbar.setObjectName("statusbar")
         PlayerWindow.setStatusBar(self.statusbar)
         self.DrawToolBar = QtWidgets.QToolBar(PlayerWindow)
+        self.DrawToolBar.setContextMenuPolicy(QtCore.Qt.PreventContextMenu)
         self.DrawToolBar.setObjectName("DrawToolBar")
         PlayerWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.DrawToolBar)
         self.actionGray = QtWidgets.QAction(PlayerWindow)

@@ -36,7 +36,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         getKlvStreamIndex,                  
                                         getVideoLocationInfo)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsProject, QgsCoordinateTransform
+from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsProject, QgsCoordinateTransform, Qgis as QGis
 from PyQt5.QtMultimedia import QMediaPlaylist
 
 try:
@@ -88,6 +88,12 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         self.videoIsStreaming = []
         
         self.dtm_path = parser['GENERAL']['DTM_file']
+
+        draw.setValues()
+        self.setAcceptDrops(True)            
+    
+    
+    def loadVideosFromSettings(self):
         
         # Get Video Manager List
         VideoList = getVideoManagerList()
@@ -104,10 +110,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
             else:
                 if os.path.isfile(filename):
                     self.AddFileRowToManager(name, filename, load_id)
-
-        draw.setValues()
-        self.setAcceptDrops(True)
-
+    
     def eventFilter(self, source, event):
         ''' Event Filter '''
         if (event.type() == QEvent.MouseButtonPress and source is self.VManager.viewport() and self.VManager.itemAt(event.pos()) is None):
@@ -187,7 +190,7 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         self.loading = True
         if self.VManager.rowCount() > 5:
             qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "ManagerDock", "You must delete some video from the list before adding a new one"))
+                "ManagerDock", "You must delete some video from the list before adding a new one"), level=QGis.Warning)
             self.loading = False
             return
 
