@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from qgis.PyQt.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize
+from qgis.PyQt.QtCore import Qt, QRect, QPoint, QEvent, QBasicTimer, QSize
 from qgis.PyQt.QtGui import (QImage,
                              QPalette,
                              QPainter,
                              QPen,
                              QColor,
                              QBrush,
-                             QCursor)
+                             QCursor,
+                             QMouseEvent)
 from qgis.PyQt.QtWidgets import QRubberBand
 from qgis.core import QgsProject, QgsPointXY, QgsWkbTypes, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.gui import QgsRubberBand
@@ -48,7 +49,7 @@ try:
 except ImportError:
     None
 
-
+    
 class InteractionState(object):
     """ Interaction Video Player Class """
 
@@ -227,7 +228,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         self._currentFrame.unmap()
         return
 
-
 class VideoWidget(QVideoWidget):
 
     def __init__(self, parent=None):
@@ -291,6 +291,10 @@ class VideoWidget(QVideoWidget):
         self.tapTimer = QBasicTimer()
         self.brush = QBrush(color_black)
         self.blue_Pen = QPen(color_blue, 3)
+        
+        self.lastMouseX = -1
+        self.lastMouseY = -1
+        
 
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
@@ -720,20 +724,29 @@ class VideoWidget(QVideoWidget):
 
         self.UpdateSurface()
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event, useLast=False):
         """
         @type event: QMouseEvent
         @param event:
         @return:
         """
-        # Magnifier mouseMoveEvent
+        if event != None:
+            self.lastMouseX = event.x()
+            self.lastMouseY = event.y()
+
+        if useLast and self.lastMouseX == -1 and self.lastMouseY == -1:
+            return
+        else:
+            #generates an event that simulates a mouse move, because even if mouse is still, video is running and mouse lat/lon must be updated.
+            event = QMouseEvent(QEvent.MouseMove, QPoint(self.lastMouseX, self.lastMouseY), Qt.NoButton, Qt.NoButton, Qt.NoModifier)        
+    
         # Magnifier can move on black screen for show image borders
         if self._interaction.magnifier:
             if event.buttons():
                 self.dragPos = event.pos()
                 self.UpdateSurface()
 
-        # check if the point  is on picture (not in black borders)
+        # check if the point is on picture (not in black borders)
         if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
             self.setCursor(QCursor(Qt.ArrowCursor))
             self.Cursor_Canvas_RubberBand.reset(QgsWkbTypes.PointGeometry)
@@ -743,13 +756,12 @@ class VideoWidget(QVideoWidget):
         #if self.parent.player.position() == 0:
         #    return
 
-        # Mouser cursor drawing
+        # Mouse cursor drawing
         if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.measureDistance or self._interaction.measureArea or self._interaction.censure or self._interaction.objectTracking:
             self.setCursor(QCursor(Qt.CrossCursor))
 
         # Cursor Coordinates
         if self.gt is not None:
-
             Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                 event, self.surface)
 
