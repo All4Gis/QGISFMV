@@ -574,8 +574,12 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         #actionOptions = menu.addAction(QIcon(":/imgFMV/images/custom-options.png"),
         #                               QCoreApplication.translate("QgsFmvPlayer", "Options"))
         #actionOptions.triggered.connect(self.OpenOptions)
-
-        menu.exec_(self.mapToGlobal(point))
+        
+        if not self.videoWidget.isFullScreen():
+            menu.exec_(self.mapToGlobal(point))
+        else:
+            scr = QApplication.desktop().screenNumber(self)
+            menu.exec_(QPoint(point.x() + scr * QApplication.desktop().screenGeometry(scr).width(), point.y()))
     
     def currentMediaChanged(self, media):
    

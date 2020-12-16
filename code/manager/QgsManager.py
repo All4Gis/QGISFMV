@@ -461,9 +461,8 @@ class FmvManager(QWidget, Ui_ManagerWindow):
                 fileIsOk = False
                 for ext in Exts:
                     if url.fileName().lower().endswith(ext):
-                       if not self.isFileInPlaylist(url.toString()[8:]):
-                           fileIsOk = True
-                           break
+                       fileIsOk = True
+                       break
                 if not fileIsOk:
                     check = False
                     break
@@ -480,7 +479,9 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         for url in e.mimeData().urls():
             #local files
             if "file:///" in url.toString():
-                self.AddFileRowToManager(url.fileName(), url.toString()[8:])
+                if not self.isFileInPlaylist(url.toString()[8:]):
+                    self.AddFileRowToManager(url.fileName(), url.toString()[8:])
             #network drives
             else:
-                self.AddFileRowToManager(url.fileName(), url.toString()[5:])
+                if not self.isFileInPlaylist(url.toString()[5:]):
+                    self.AddFileRowToManager(url.fileName(), url.toString()[5:])
