@@ -35,7 +35,7 @@ from osgeo import gdal, osr
 from QGIS_FMV.geo import sphere
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.streamparser import StreamParser
-from QGIS_FMV.utils.KadasFmvLayers import (addLayerNoCrsDialog,
+from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          ExpandLayer,
                                          UpdateFootPrintData,
                                          UpdateTrajectoryData,
@@ -44,9 +44,7 @@ from QGIS_FMV.utils.KadasFmvLayers import (addLayerNoCrsDialog,
                                          UpdateFrameCenterData,
                                          UpdateFrameAxisData,
                                          SetcrtSensorSrc,
-                                         SetcrtPltTailNum,
-                                         RemoveAllDrawings,
-                                         GetMapItems)
+                                         SetcrtPltTailNum)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 parser = ConfigParser()
@@ -818,7 +816,6 @@ def ResetData():
     # dtm_data = []
     tLastLon = 0.0
     tLastLat = 0.0
-    RemoveAllDrawings()
 
 
 def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
@@ -963,50 +960,50 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     #p_lyr = qgsu.selectLayerByName(Platform_lyr, groupName)
     #t_lyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
     
-    items = GetMapItems()
-    
-    #if f_lyr != None and p_lyr != None and t_lyr != None:
-    if items["footprint"] and items["platform"] and items["framecenter"]:        
-        #f_lyr_out_extent = parent.iface.mapCanvas().mapSettings().layerExtentToOutputExtent(f_lyr, f_lyr.extent())
-        #p_lyr_out_extent = parent.iface.mapCanvas().mapSettings().layerExtentToOutputExtent(p_lyr, p_lyr.extent())
-        #t_lyr_out_extent = parent.iface.mapCanvas().mapSettings().layerExtentToOutputExtent(t_lyr, t_lyr.extent())
-        
-        curAuthId =  parent.iface.mapCanvas().mapSettings().destinationCrs().authid()
-        trgCode = int(curAuthId.split(":")[1])
-        xform = QgsCoordinateTransform(QgsCoordinateReferenceSystem(4326), QgsCoordinateReferenceSystem(trgCode), QgsProject().instance())
-        transP = xform.transform(QgsPointXY(items["platform"].position().x(), items["platform"].position().y()))
-        transT = xform.transform(QgsPointXY(items["framecenter"].position().x(), items["framecenter"].position().y()))
-        
-        rect = items["footprint"].geometry().boundingBox()
-        rectLL = xform.transform(QgsPointXY(rect.xMinimum(),rect.yMinimum()))
-        rectUR = xform.transform(QgsPointXY(rect.xMaximum(),rect.yMaximum()))
-        
-        f_lyr_out_extent = QgsRectangle(rectLL, rectUR)
-        t_lyr_out_extent = QgsRectangle(transT.x(), transT.y(), transT.x(), transT.y())
-        p_lyr_out_extent = QgsRectangle(transP.x(), transP.y(), transP.x(), transP.y())
-        
-        
-        bValue = parent.iface.mapCanvas().extent().xMaximum() - parent.iface.mapCanvas().center().x()
-        
-        #create a detection buffer 
-        map_detec_buffer = parent.iface.mapCanvas().extent().buffered(bValue * -0.7)
-        
-        #qgsu.showUserAndLogMessage("", "map Max X:"+str(parent.iface.mapCanvas().extent().xMaximum()), onlyLog=True)
-        #qgsu.showUserAndLogMessage("", "map_detec_buffer Max X:"+str(map_detec_buffer.xMaximum()), onlyLog=True)
-        
-        # recenter map on platform
-        if not map_detec_buffer.contains(p_lyr_out_extent) and centerMode == 1:
-            # recenter map on platform
-            parent.iface.mapCanvas().setExtent(p_lyr_out_extent)
-            
-        # recenter map on footprint
-        elif not map_detec_buffer.contains(f_lyr_out_extent) and centerMode == 2:
-            #zoom a bit wider than the footprint itself
-            parent.iface.mapCanvas().setExtent( f_lyr_out_extent.buffered(f_lyr_out_extent.width()*0.5))
-        # recenter map on target
-        elif not map_detec_buffer.contains(t_lyr_out_extent) and centerMode == 3:
-            parent.iface.mapCanvas().setExtent(t_lyr_out_extent)
-        parent.iface.mapCanvas().refresh()
+#####    items = GetMapItems()
+#####    
+#####    #if f_lyr != None and p_lyr != None and t_lyr != None:
+#####    if items["footprint"] and items["platform"] and items["framecenter"]:        
+#####        #f_lyr_out_extent = parent.iface.mapCanvas().mapSettings().layerExtentToOutputExtent(f_lyr, f_lyr.extent())
+#####        #p_lyr_out_extent = parent.iface.mapCanvas().mapSettings().layerExtentToOutputExtent(p_lyr, p_lyr.extent())
+#####        #t_lyr_out_extent = parent.iface.mapCanvas().mapSettings().layerExtentToOutputExtent(t_lyr, t_lyr.extent())
+#####        
+#####        curAuthId =  parent.iface.mapCanvas().mapSettings().destinationCrs().authid()
+#####        trgCode = int(curAuthId.split(":")[1])
+#####        xform = QgsCoordinateTransform(QgsCoordinateReferenceSystem(4326), QgsCoordinateReferenceSystem(trgCode), QgsProject().instance())
+#####        transP = xform.transform(QgsPointXY(items["platform"].position().x(), items["platform"].position().y()))
+#####        transT = xform.transform(QgsPointXY(items["framecenter"].position().x(), items["framecenter"].position().y()))
+#####        
+#####        rect = items["footprint"].geometry().boundingBox()
+#####        rectLL = xform.transform(QgsPointXY(rect.xMinimum(),rect.yMinimum()))
+#####        rectUR = xform.transform(QgsPointXY(rect.xMaximum(),rect.yMaximum()))
+#####        
+#####        f_lyr_out_extent = QgsRectangle(rectLL, rectUR)
+#####        t_lyr_out_extent = QgsRectangle(transT.x(), transT.y(), transT.x(), transT.y())
+#####        p_lyr_out_extent = QgsRectangle(transP.x(), transP.y(), transP.x(), transP.y())
+#####        
+#####        
+#####        bValue = parent.iface.mapCanvas().extent().xMaximum() - parent.iface.mapCanvas().center().x()
+#####        
+#####        #create a detection buffer 
+#####        map_detec_buffer = parent.iface.mapCanvas().extent().buffered(bValue * -0.7)
+#####        
+#####        #qgsu.showUserAndLogMessage("", "map Max X:"+str(parent.iface.mapCanvas().extent().xMaximum()), onlyLog=True)
+#####        #qgsu.showUserAndLogMessage("", "map_detec_buffer Max X:"+str(map_detec_buffer.xMaximum()), onlyLog=True)
+#####        
+#####        # recenter map on platform
+#####        if not map_detec_buffer.contains(p_lyr_out_extent) and centerMode == 1:
+#####            # recenter map on platform
+#####            parent.iface.mapCanvas().setExtent(p_lyr_out_extent)
+#####            
+#####        # recenter map on footprint
+#####        elif not map_detec_buffer.contains(f_lyr_out_extent) and centerMode == 2:
+#####            #zoom a bit wider than the footprint itself
+#####            parent.iface.mapCanvas().setExtent( f_lyr_out_extent.buffered(f_lyr_out_extent.width()*0.5))
+#####        # recenter map on target
+#####        elif not map_detec_buffer.contains(t_lyr_out_extent) and centerMode == 3:
+#####            parent.iface.mapCanvas().setExtent(t_lyr_out_extent)
+#####        parent.iface.mapCanvas().refresh()
                 
     return True
 

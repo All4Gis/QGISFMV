@@ -33,7 +33,7 @@ from QGIS_FMV.player.QgsFmvOptions import FmvOptions
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.player.QgsFmvMetadata import QgsFmvMetadata
-from QGIS_FMV.utils.KadasFmvLayers import (CreateVideoLayers,
+from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          CreateGroupByName,
                                          RemoveGroupByName)
 from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
@@ -54,7 +54,6 @@ from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
-from QGIS_FMV.utils.KadasFmvLayers import RemoveAllDrawings
 
 try:
     from pydevd import *
@@ -152,13 +151,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.pass_time = pass_time
-<<<<<<< HEAD
 
         self.player.setNotifyInterval(1000)  # Player update interval
-=======
-        self.player.setNotifyInterval(250)  # Player update interval
-        self.playlist = QMediaPlaylist()
->>>>>>> af96cf0dab06155e492c1ef50cb46f7d8001bcd5
 
         self.player.setVideoOutput(
             self.videoWidget.videoSurface())  # Abstract Surface
@@ -614,7 +608,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
             self.parent.SetupPlayer(idx)
             
-            RemoveAllDrawings()
 #            
 #            #change meta reader
 #            self.setMetaReader(self.parent.meta_reader[idx])
@@ -623,7 +616,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 #            self.fileName = self.parent.VManager.item(idx, 3).text()
 #            
 #            #remove drawings
-#            RemoveAllDrawings()
 #            
 #        self.setWindowTitle(QCoreApplication.translate(
 #                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))     

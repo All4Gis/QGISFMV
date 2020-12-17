@@ -48,30 +48,16 @@ s = QSettings()
 parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 
-class FmvManager(QWidget, Ui_ManagerWindow):
+class FmvManager(QDockWidget, Ui_ManagerWindow):
     ''' Video Manager '''
 
-    def __init__(self, iface, action, actionShowHide, parent=None):
+    def __init__(self, iface, parent=None):
         super().__init__(parent)
         self.setupUi(self)
-                                                                           
-        self.mCloseButton.clicked.connect( action.toggle )
-        
-        self.mLowerButton.setDefaultAction(actionShowHide )
-        
+
         self.parent = parent
         self.iface = iface
         self._PlayerDlg = None
-<<<<<<< HEAD
-=======
-        self.isStreaming = False
-        self.meta_reader = {}
-        self.initialPt = {}
-        self.pass_time = 500
-        self.intervall = 1000
-        self.notify_int = 3000
->>>>>>> af96cf0dab06155e492c1ef50cb46f7d8001bcd5
-
         self.meta_reader = []
         self.initialPt = []
         self.pass_time = 250
