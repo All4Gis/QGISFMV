@@ -37,59 +37,59 @@ class FmvLayerStyles(object):
 
     # Default
     S['DEFAULT'] = {}
-    S['DEFAULT']['COLOR'] = '126, 217, 255, 60'
+    S['DEFAULT']['COLOR'] = '126,217,255,60'
     S['DEFAULT']['OUTLINE_COLOR'] = '#5392fa'
     S['DEFAULT']['OUTLINE_STYLE'] = 'solid'
-    S['DEFAULT']['OUTLINE_WIDTH'] = '1'
+    S['DEFAULT']['OUTLINE_WIDTH'] = '2'
 
     # IR sensor
     S['IR'] = {}
     S['IR']['COLOR'] = '234, 135, 8, 60'
     S['IR']['OUTLINE_COLOR'] = '#ba340f'
     S['IR']['OUTLINE_STYLE'] = 'solid'
-    S['IR']['OUTLINE_WIDTH'] = '1'
+    S['IR']['OUTLINE_WIDTH'] = '2'
 
     # EOW sensor
     S['EOW'] = {}
     S['EOW']['COLOR'] = '126, 217, 255, 60'
     S['EOW']['OUTLINE_COLOR'] = '#5392fa'
     S['EOW']['OUTLINE_STYLE'] = 'solid'
-    S['EOW']['OUTLINE_WIDTH'] = '1'
+    S['EOW']['OUTLINE_WIDTH'] = '2'
 
     # BLEND sensor
     S['BLEND'] = {}
     S['BLEND']['COLOR'] = '255, 255, 255, 60'
     S['BLEND']['OUTLINE_COLOR'] = '#a7a7a7'
     S['BLEND']['OUTLINE_STYLE'] = 'solid'
-    S['BLEND']['OUTLINE_WIDTH'] = '1'
+    S['BLEND']['OUTLINE_WIDTH'] = '2'
 
     # Short Wave Infra Red sensor
     S['EON_SWIR'] = {}
     S['EON_SWIR']['COLOR'] = '234, 135, 8, 60'
     S['EON_SWIR']['OUTLINE_COLOR'] = '#ba340f'
     S['EON_SWIR']['OUTLINE_STYLE'] = 'solid'
-    S['EON_SWIR']['OUTLINE_WIDTH'] = '1'
+    S['EON_SWIR']['OUTLINE_WIDTH'] = '2'
 
     # EON sensor
     S['EON'] = {}
     S['EON']['COLOR'] = '249, 167, 62, 60'
     S['EON']['OUTLINE_COLOR'] = '#ba340f'
     S['EON']['OUTLINE_STYLE'] = 'solid'
-    S['EON']['OUTLINE_WIDTH'] = '1'
+    S['EON']['OUTLINE_WIDTH'] = '2'
 
     # FLIR SS380-HD HDIR sensor
     S['FLIR SS380-HD HDIR'] = {}
     S['FLIR SS380-HD HDIR']['COLOR'] = '234, 135, 8, 60'
     S['FLIR SS380-HD HDIR']['OUTLINE_COLOR'] = '#ba340f'
     S['FLIR SS380-HD HDIR']['OUTLINE_STYLE'] = 'solid'
-    S['FLIR SS380-HD HDIR']['OUTLINE_WIDTH'] = '1'
+    S['FLIR SS380-HD HDIR']['OUTLINE_WIDTH'] = '2'
 
     # SP sensor
     S['SP'] = {}
     S['SP']['COLOR'] = '219, 204, 0, 60'
     S['SP']['OUTLINE_COLOR'] = '#9E9300'
     S['SP']['OUTLINE_STYLE'] = 'solid'
-    S['SP']['OUTLINE_WIDTH'] = '1'
+    S['SP']['OUTLINE_WIDTH'] = '2'
     #
     # PLATFORM STYLES (based on meta attribute platform)
     #
@@ -136,12 +136,13 @@ class FmvLayerStyles(object):
     F['DEFAULT']['NAME'] = 'cross'
     F['DEFAULT']['LINE_COLOR'] = '#000000'
     F['DEFAULT']['LINE_WIDTH'] = '0'
-    F['DEFAULT']['SIZE'] = '3'
+    F['DEFAULT']['SIZE'] = '10'
 
     #
     # FRAME AXIS STYLES
     #
     FA['DEFAULT'] = {}
+    FA['DEFAULT']['OUTLINE_WIDTH'] = '2'
     FA['DEFAULT']['OUTLINE_STYLE'] = 'dash'
 
     #
@@ -150,7 +151,7 @@ class FmvLayerStyles(object):
     T['DEFAULT'] = {}
     T['DEFAULT']['NAME'] = 'dash blue'
     T['DEFAULT']['COLOR'] = '#0000ff'
-    T['DEFAULT']['WIDTH'] = '0.5'
+    T['DEFAULT']['WIDTH'] = '2'
     T['DEFAULT']['customdash'] = '3;2'
     T['DEFAULT']['use_custom_dash'] = '1'
 
@@ -167,7 +168,7 @@ class FmvLayerStyles(object):
     DP['DEFAULT']['NAME'] = 'cross'
     DP['DEFAULT']['LINE_COLOR'] = '#DC143C'
     DP['DEFAULT']['LINE_WIDTH'] = '1'
-    DP['DEFAULT']['SIZE'] = '4'
+    DP['DEFAULT']['SIZE'] = '10'
     DP['DEFAULT']['LABEL_FONT'] = 'Arial'
     DP['DEFAULT']['LABEL_FONT_SIZE'] = 12
     DP['DEFAULT']['LABEL_FONT_COLOR'] = '#DC143C'

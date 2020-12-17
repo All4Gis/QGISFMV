@@ -18,4 +18,4 @@ if len(sys.argv) == 2:
             continue
         data = packet.MetadataList()
         print("First Precision Time Stamp:"+ str(data[2]))
-        #break
+

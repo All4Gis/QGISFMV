@@ -301,7 +301,7 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
             CommonLayer(footprintLyr)
             # 3D Style
             if ele:
-                SetDefaultFootprint3DStyle(footprintLyr)
+                SetDefaultFootprintStyle(footprintLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -373,7 +373,7 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
             CommonLayer(beamsLyr)
             # 3D Style
             if ele:
-                SetDefaultBeams3DStyle(beamsLyr)
+                SetDefaultBeamsStyle(beamsLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -409,7 +409,7 @@ def UpdateTrajectoryData(packet, ele):
             CommonLayer(trajectoryLyr)
             # 3D Style
             if ele:
-                SetDefaultTrajectory3DStyle(trajectoryLyr)
+                SetDefaultTrajectoryStyle(trajectoryLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -452,7 +452,7 @@ def UpdateFrameAxisData(packet, ele):
             CommonLayer(frameaxisLyr)
             # 3D Style
             if ele:
-                SetDefaultFrameAxis3DStyle(frameaxisLyr)
+                SetDefaultFrameAxisStyle(frameaxisLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -493,7 +493,7 @@ def UpdateFrameCenterData(packet, ele):
             CommonLayer(frameCenterLyr)
             # 3D Style
             if ele:
-                SetDefaultFrameCenter3DStyle(frameCenterLyr)
+                SetDefaultFrameCenterStyle(frameCenterLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -537,7 +537,7 @@ def UpdatePlatformData(packet, ele):
             CommonLayer(platformLyr)
             # 3D Style
             if ele:
-                SetDefaultPlatform3DStyle(platformLyr)
+                SetDefaultPlatformStyle(platformLyr)
 
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
@@ -603,7 +603,7 @@ def CreateVideoLayers(ele, name):
 
         # 3D Style
         if ele:
-            SetDefaultFootprint3DStyle(lyr_footprint)
+            SetDefaultFootprintStyle(lyr_footprint)
 
     if qgsu.selectLayerByName(Beams_lyr, groupName) is None:
         lyr_beams = newLinesLayer(
@@ -619,7 +619,7 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_beams, group=groupName)
         # 3D Style
         if ele:
-            SetDefaultBeams3DStyle(lyr_beams)
+            SetDefaultBeamsStyle(lyr_beams)
 
     if qgsu.selectLayerByName(Trajectory_lyr, groupName) is None:
         lyr_Trajectory = newLinesLayer(
@@ -629,7 +629,7 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_Trajectory, group=groupName)
         # 3D Style
         if ele:
-            SetDefaultTrajectory3DStyle(lyr_Trajectory)
+            SetDefaultTrajectoryStyle(lyr_Trajectory)
 
     if qgsu.selectLayerByName(FrameAxis_lyr, groupName) is None:
         lyr_frameaxis = newLinesLayer(
@@ -638,7 +638,7 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_frameaxis, group=groupName)
         # 3D Style
         if ele:
-            SetDefaultFrameAxis3DStyle(lyr_frameaxis)
+            SetDefaultFrameAxisStyle(lyr_frameaxis)
 
     if qgsu.selectLayerByName(Platform_lyr, groupName) is None:
         lyr_platform = newPointsLayer(
@@ -648,7 +648,7 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_platform, group=groupName)
         # 3D Style
         if ele:
-            SetDefaultPlatform3DStyle(lyr_platform)
+            SetDefaultPlatformStyle(lyr_platform)
 
     if qgsu.selectLayerByName(Point_lyr, groupName) is None:
         lyr_point = newPointsLayer(
@@ -663,7 +663,7 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_framecenter, group=groupName)
         # 3D Style
         if ele:
-            SetDefaultFrameCenter3DStyle(lyr_framecenter)
+            SetDefaultFrameCenterStyle(lyr_framecenter)
 
     if qgsu.selectLayerByName(Line_lyr, groupName) is None:
         #         lyr_line = newLinesLayer(
