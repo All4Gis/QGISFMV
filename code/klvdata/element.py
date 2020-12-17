@@ -25,7 +25,7 @@
 
 from abc import ABCMeta
 from abc import abstractmethod
-from QGIS_FMV.klvdata.common import int_to_bytes
+
 from QGIS_FMV.klvdata.common import ber_encode
 try:
     from pydevd import *
@@ -76,8 +76,6 @@ class Element():
         """Return the byte length of self.value."""
         if self.value is None:
             return 0
-        if isinstance(self.value, int):
-            return len(int_to_bytes(self.value))
         return len(bytes(self.value))
 
     @abstractmethod

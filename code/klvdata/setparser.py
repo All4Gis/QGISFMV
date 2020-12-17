@@ -478,11 +478,11 @@ def str_dict(values):
     out = []
 
     def per_item(value, indent=0):
-        for key in value:
-            item = value[key]
-            out.append(indent * "\t" + str(item))
-            if hasattr(item, 'items'):
-                per_item(item.items, indent + 1)
+        for item in value:
+            if isinstance(item, Element):
+                out.append(indent * "\t" + str(item))
+            else:
+                out.append(indent * "\t" + str(item))
 
     per_item(values)
 
