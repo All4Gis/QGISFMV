@@ -49,6 +49,7 @@ class Fmv:
     def __init__(self, iface):
         """ Contructor """
 
+        self.run_once = False
         self.iface = iface
         log.initLogging()
         threadcount = QThread.idealThreadCount()
