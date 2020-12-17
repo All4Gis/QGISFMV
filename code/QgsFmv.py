@@ -52,11 +52,17 @@ class Fmv:
 
     def __init__(self, iface):
         """ Contructor """
+<<<<<<< HEAD
         self.run_once = False
         self.minimised = False
         self.lowerIcon = QIcon(":/imgFMV/images/lower.png")
         self.raiseIcon = QIcon(":/imgFMV/images/raise.png")
         self.iface = KadasPluginInterface.cast( iface )        
+=======
+
+        self.run_once = False
+        self.iface = iface
+>>>>>>> af96cf0dab06155e492c1ef50cb46f7d8001bcd5
         log.initLogging()
         threadcount = QThread.idealThreadCount()
         # use all available cores and parallel rendering

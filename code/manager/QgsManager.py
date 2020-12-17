@@ -62,6 +62,15 @@ class FmvManager(QWidget, Ui_ManagerWindow):
         self.parent = parent
         self.iface = iface
         self._PlayerDlg = None
+<<<<<<< HEAD
+=======
+        self.isStreaming = False
+        self.meta_reader = {}
+        self.initialPt = {}
+        self.pass_time = 500
+        self.intervall = 1000
+        self.notify_int = 3000
+>>>>>>> af96cf0dab06155e492c1ef50cb46f7d8001bcd5
 
         self.meta_reader = []
         self.initialPt = []

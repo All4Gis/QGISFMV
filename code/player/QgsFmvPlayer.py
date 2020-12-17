@@ -152,8 +152,13 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.pass_time = pass_time
+<<<<<<< HEAD
 
         self.player.setNotifyInterval(1000)  # Player update interval
+=======
+        self.player.setNotifyInterval(250)  # Player update interval
+        self.playlist = QMediaPlaylist()
+>>>>>>> af96cf0dab06155e492c1ef50cb46f7d8001bcd5
 
         self.player.setVideoOutput(
             self.videoWidget.videoSurface())  # Abstract Surface
