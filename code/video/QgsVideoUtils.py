@@ -3,9 +3,14 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetImageWidth,
                                         GetImageHeight,
                                         GetSensor,
                                         GetLine3DIntersectionWithDEM,
+                                        GetDemAltAt,
                                         GetFrameCenter,
                                         hasElevationModel,
-                                        GetGCPGeoTransform)
+                                        GetGCPGeoTransform,
+                                        GetGeotransform_affine)
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from osgeo import gdal
+import numpy as np
 try:
     from pydevd import *
 except ImportError:
@@ -30,12 +35,25 @@ class VideoUtils(object):
     @staticmethod
     def GetInverseMatrix(x, y, gt, surface):
         ''' inverse matrix transformation (lon-lat to video units x,y) '''
-        transf = (~gt)([x, y])
-        scr_x = (transf[0] / VideoUtils.GetXRatio(surface)) + \
+        gt = GetGCPGeoTransform()
+        #return gt([(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)])
+        #worldpoint = [(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface), 1]
+        imagepoint = np.array(np.dot(np.linalg.inv(gt), [x, y, 1]))
+        scalar = imagepoint[2]
+        ximage = imagepoint[0]/scalar
+        yimage = imagepoint[1]/scalar
+        scr_x = (ximage / VideoUtils.GetXRatio(surface)) + \
             VideoUtils.GetXBlackZone(surface)
-        scr_y = (transf[1] / VideoUtils.GetYRatio(surface)) + \
+        scr_y = (yimage / VideoUtils.GetYRatio(surface)) + \
             VideoUtils.GetYBlackZone(surface)
         return scr_x, scr_y
+        
+        #transf = (~gt)([x, y])
+        #scr_x = (transf[0] / VideoUtils.GetXRatio(surface)) + \
+        #    VideoUtils.GetXBlackZone(surface)
+        #scr_y = (transf[1] / VideoUtils.GetYRatio(surface)) + \
+        #    VideoUtils.GetYBlackZone(surface)
+        #return scr_x, scr_y
 
     @staticmethod
     def GetXRatio(surface):
@@ -132,7 +150,31 @@ class VideoUtils(object):
         @return:
         '''
         gt = GetGCPGeoTransform()
-        return gt([(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)])
+        #return gt([(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)])
+        imagepoint = [(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface), 1]
+        worldpoint = np.array(np.dot(gt, imagepoint))
+        scalar = worldpoint[2]
+        xworld = worldpoint[0]/scalar
+        yworld = worldpoint[1]/scalar
+                
+        return xworld, yworld
+
+    @staticmethod
+    def GetAffineTransf(event, surface):
+        '''Return video coordinates to map coordinates
+        @type event: QMouseEvent
+        @param event:
+
+        @type surface: QAbstractVideoSurface
+        @param surface: Abstract video surface
+        @return:
+        '''
+        
+        gt = GetGeotransform_affine()
+        x=(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface)
+        y=(event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)
+        x1, y1 = gdal.ApplyGeoTransform(gt, x, y)
+        return [y1, x1]
 
     @staticmethod
     def GetPointCommonCoords(event, surface):
@@ -145,18 +187,16 @@ class VideoUtils(object):
         @return:
         '''
         transf = VideoUtils.GetTransf(event, surface)
+               
         targetAlt = GetFrameCenter()[2]
 
-        Longitude = float(round(transf[1], 5))
-        Latitude = float(round(transf[0], 5))
+        Longitude = float(round(transf[1], 7))
+        Latitude = float(round(transf[0], 7))
         Altitude = float(round(targetAlt, 0))
-
+        
         if hasElevationModel():
-            sensor = GetSensor()
             target = [transf[0], transf[1], targetAlt]
-            projPt = GetLine3DIntersectionWithDEM(sensor, target)
-            if projPt:
-                Longitude = float(round(projPt[1], 5))
-                Latitude = float(round(projPt[0], 5))
-                Altitude = float(round(projPt[2], 0))
+            alt = GetDemAltAt(transf[1], transf[0])
+            Altitude = round(alt, 0)            
+
         return Longitude, Latitude, Altitude

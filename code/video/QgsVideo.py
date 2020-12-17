@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from qgis.PyQt.QtCore import Qt, QRect, QPoint, QBasicTimer, QSize
+from qgis.PyQt.QtCore import Qt, QRect, QPoint, QEvent, QBasicTimer, QSize
 from qgis.PyQt.QtGui import (QImage,
                              QPalette,
                              QPainter,
                              QPen,
                              QColor,
                              QBrush,
-                             QCursor)
+                             QCursor,
+                             QMouseEvent)
 from qgis.PyQt.QtWidgets import QRubberBand
 from qgis.core import QgsProject, QgsPointXY, QgsWkbTypes, QgsCoordinateReferenceSystem, QgsCoordinateTransform
 from qgis.gui import QgsRubberBand
@@ -21,7 +22,7 @@ from PyQt5.QtWidgets import QApplication
 
 from QGIS_FMV.geo import mgrs
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
-from QGIS_FMV.utils.QgsFmvLayers import (AddDrawPointOnMap,
+from QGIS_FMV.utils.KadasFmvLayers import (AddDrawPointOnMap,
                                          AddDrawLineOnMap,
                                          AddDrawPolygonOnMap,
                                          RemoveLastDrawPolygonOnMap,
@@ -48,7 +49,7 @@ try:
 except ImportError:
     None
 
-
+    
 class InteractionState(object):
     """ Interaction Video Player Class """
 
@@ -227,7 +228,6 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         self._currentFrame.unmap()
         return
 
-
 class VideoWidget(QVideoWidget):
 
     def __init__(self, parent=None):
@@ -291,6 +291,10 @@ class VideoWidget(QVideoWidget):
         self.tapTimer = QBasicTimer()
         self.brush = QBrush(color_black)
         self.blue_Pen = QPen(color_blue, 3)
+        
+        self.lastMouseX = -1
+        self.lastMouseY = -1
+        
 
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
@@ -434,10 +438,12 @@ class VideoWidget(QVideoWidget):
 
         if self.gt is not None and self._interaction.measureDistance:
             self.drawMeasureDistance.append([None, None, None])
+            self.parent.actionMeasureDistance.toggle()
             return
 
         if self.gt is not None and self._interaction.measureArea:
             self.drawMeasureArea.append([None, None, None])
+            self.parent.actionMeasureArea.toggle()
             return
 
         if self.gt is not None and self._interaction.polygonDrawer:
@@ -457,6 +463,8 @@ class VideoWidget(QVideoWidget):
             return
 
         self.UpdateSurface()
+        scr = QApplication.desktop().screenNumber(self)
+        self.setGeometry(QApplication.desktop().screenGeometry(scr))
         self.setFullScreen(not self.isFullScreen())
         event.accept()
 
@@ -611,6 +619,7 @@ class VideoWidget(QVideoWidget):
         @param event:
         @return:
         """
+        
         if not self.surface.isActive():
             return
 
@@ -628,10 +637,10 @@ class VideoWidget(QVideoWidget):
             None
 
         # Prevent draw on video if not started or finished
-        if self.parent.player.position() == 0:
-            self.painter.end()
-            return
-
+        # if self.parent.player.position() == 0:
+        #    self.painter.end()
+        #    return
+        
         self.gt = GetGCPGeoTransform()
 
         # Draw On Video
@@ -715,36 +724,44 @@ class VideoWidget(QVideoWidget):
 
         self.UpdateSurface()
 
-    def mouseMoveEvent(self, event):
+    def mouseMoveEvent(self, event, useLast=False):
         """
         @type event: QMouseEvent
         @param event:
         @return:
         """
-        # Magnifier mouseMoveEvent
+        if event != None:
+            self.lastMouseX = event.x()
+            self.lastMouseY = event.y()
+
+        if useLast and self.lastMouseX == -1 and self.lastMouseY == -1:
+            return
+        else:
+            #generates an event that simulates a mouse move, because even if mouse is still, video is running and mouse lat/lon must be updated.
+            event = QMouseEvent(QEvent.MouseMove, QPoint(self.lastMouseX, self.lastMouseY), Qt.NoButton, Qt.NoButton, Qt.NoModifier)        
+    
         # Magnifier can move on black screen for show image borders
         if self._interaction.magnifier:
             if event.buttons():
                 self.dragPos = event.pos()
                 self.UpdateSurface()
 
-        # check if the point  is on picture (not in black borders)
+        # check if the point is on picture (not in black borders)
         if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
             self.setCursor(QCursor(Qt.ArrowCursor))
             self.Cursor_Canvas_RubberBand.reset(QgsWkbTypes.PointGeometry)
             return
 
         # Prevent draw on video if not started or finished
-        if self.parent.player.position() == 0:
-            return
+        #if self.parent.player.position() == 0:
+        #    return
 
-        # Mouser cursor drawing
+        # Mouse cursor drawing
         if self._interaction.pointDrawer or self._interaction.polygonDrawer or self._interaction.lineDrawer or self._interaction.measureDistance or self._interaction.measureArea or self._interaction.censure or self._interaction.objectTracking:
             self.setCursor(QCursor(Qt.CrossCursor))
 
         # Cursor Coordinates
         if self.gt is not None:
-
             Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                 event, self.surface)
 
@@ -771,11 +788,11 @@ class VideoWidget(QVideoWidget):
 
                 txt = "<span style='font-size:10pt; font-weight:bold;'>Lon : </span>"
                 txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
-                    ("%.3f" % Longitude) + "</span>"
+                    ("%.5f" % Longitude) + "</span>"
                 txt += "<span style='font-size:10pt; font-weight:bold;'> Lat : </span>"
                 txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
-                    ("%.3f" % Latitude) + "</span>"
-
+                    ("%.5f" % Latitude) + "</span>"
+                    
                 if hasElevationModel():
                     txt += "<span style='font-size:10pt; font-weight:bold;'> Alt : </span>"
                     txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
@@ -838,8 +855,8 @@ class VideoWidget(QVideoWidget):
             return
 
         # Prevent draw on video if not started or finished
-        if self.parent.player.position() == 0:
-            return
+        # if self.parent.player.position() == 0:
+        #    return
 
         if event.button() == Qt.LeftButton:
 
@@ -960,8 +977,8 @@ class VideoWidget(QVideoWidget):
         @return:
         """
         # Prevent draw on video if not started or finished
-        if self.parent.player.position() == 0:
-            return
+        # if self.parent.player.position() == 0:
+        #    return
 
         # Censure Draw Interaction
         if self._interaction.censure:

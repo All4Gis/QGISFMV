@@ -17,7 +17,10 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
                                         GetFrameCenter,
                                         hasElevationModel,
                                         getNameSpace)
+                                        
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
+
+from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 try:
     from pydevd import *
@@ -270,13 +273,10 @@ class DrawToolBar(object):
     @staticmethod
     def drawPointOnVideo(number, pt, painter, surface, gt):
         ''' Draw Points on Video '''
-#         if hasElevationModel():
-#             pt = GetLine3DIntersectionWithPlane(
-#                 GetSensor(), pt, GetFrameCenter()[2])
 
         scr_x, scr_y = vut.GetInverseMatrix(
             pt[1], pt[0], gt, surface)
-
+                
         # don't draw something outside the screen.
         if scr_x < vut.GetXBlackZone(surface) or scr_y < vut.GetYBlackZone(surface):
             return
@@ -295,10 +295,6 @@ class DrawToolBar(object):
     @staticmethod
     def drawLinesOnVideo(pt, idx, painter, surface, gt, drawLines):
         ''' Draw Lines on Video '''
-#         if hasElevationModel():
-#             pt = GetLine3DIntersectionWithPlane(
-#                 GetSensor(), pt, GetFrameCenter()[2])
-
         scr_x, scr_y = vut.GetInverseMatrix(
             pt[1], pt[0], gt, surface)
 
@@ -309,9 +305,6 @@ class DrawToolBar(object):
         if len(drawLines) > 1:
             try:
                 pt = drawLines[idx + 1]
-#                 if hasElevationModel():
-#                     pt = GetLine3DIntersectionWithPlane(
-#                         GetSensor(), pt, GetFrameCenter()[2])
                 scr_x, scr_y = vut.GetInverseMatrix(
                     pt[1], pt[0], gt, surface)
                 end = QPoint(scr_x, scr_y)
@@ -330,9 +323,6 @@ class DrawToolBar(object):
         ''' Draw Polygons on Video '''
         poly = []
         for pt in values:
-#             if hasElevationModel():
-#                 pt = GetLine3DIntersectionWithPlane(
-#                     GetSensor(), pt, GetFrameCenter()[2])
             scr_x, scr_y = vut.GetInverseMatrix(
                 pt[1], pt[0], gt, surface)
             center = QPoint(scr_x, scr_y)
@@ -358,10 +348,6 @@ class DrawToolBar(object):
     @staticmethod
     def drawMeasureDistanceOnVideo(pt, idx, painter, surface, gt, drawMDistance):
         ''' Draw Measure Distance on Video '''
-#         if hasElevationModel():
-#             pt = GetLine3DIntersectionWithPlane(
-#                 GetSensor(), pt, GetFrameCenter()[2])
-
         scr_x, scr_y = vut.GetInverseMatrix(
             pt[1], pt[0], gt, surface)
 
@@ -373,9 +359,6 @@ class DrawToolBar(object):
 
                 end_pt = drawMDistance[idx + 1]
 
-#                 if hasElevationModel():
-#                     end_pt = GetLine3DIntersectionWithPlane(
-#                         GetSensor(), end_pt, GetFrameCenter()[2])
                 scr_x, scr_y = vut.GetInverseMatrix(
                     end_pt[1], end_pt[0], gt, surface)
                 end = QPoint(scr_x, scr_y)
@@ -415,9 +398,6 @@ class DrawToolBar(object):
         lat = []
         long = []
         for pt in values:
-#             if hasElevationModel():
-#                 pt = GetLine3DIntersectionWithPlane(
-#                     GetSensor(), pt, GetFrameCenter()[2])
             scr_x, scr_y = vut.GetInverseMatrix(
                 pt[1], pt[0], gt, surface)
             center = QPoint(scr_x, scr_y)
