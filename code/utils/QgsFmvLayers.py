@@ -417,17 +417,16 @@ def UpdateTrajectoryData(packet, ele):
     return
 
 
-def UpdateFrameAxisData(packet, ele):
+def UpdateFrameAxisData(imgSS, sensor, framecenter, ele):
     ''' Update Frame Axis Values '''
-    global crtSensorSrc2, groupName
+    global crtSensorSrc2, groupName, frameAxisMarker
 
-    imgSS = packet.ImageSourceSensor
-    lat = packet.SensorLatitude
-    lon = packet.SensorLongitude
-    alt = packet.SensorTrueAltitude
-    fc_lat = packet.FrameCenterLatitude
-    fc_lon = packet.FrameCenterLongitude
-    fc_alt = packet.FrameCenterElevation
+    lat = sensor[0]
+    lon = sensor[1]
+    alt = sensor[2]
+    fc_lat = framecenter[0]
+    fc_lon = framecenter[1]
+    fc_alt = framecenter[2]
 
     frameaxisLyr = qgsu.selectLayerByName(FrameAxis_lyr, groupName)
 
@@ -462,10 +461,11 @@ def UpdateFrameAxisData(packet, ele):
 
 def UpdateFrameCenterData(packet, ele):
     ''' Update FrameCenter Values '''
-    lat = packet.FrameCenterLatitude
-    lon = packet.FrameCenterLongitude
-    alt = packet.FrameCenterElevation
-    if packet.FrameCenterElevation is None:
+    lat = packet[0]
+    lon = packet[1]
+    alt = packet[2]
+    
+    if alt is None:
         alt = 0.0
 
     global groupName

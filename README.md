@@ -52,8 +52,6 @@ for this reason, I decided to develop this open source project and, this way, of
 
 * [Klvdata](https://github.com/paretech/klvdata) : customized version of this library. (No need to install it)
 
-* [Homography](https://github.com/satellogic/homography) : `python3 -m pip install homography`
-
 The plugin install automatically this requisites,but you can install it using on Windows and Linux:
 
 `python3 -m pip install -r requirements.txt`
@@ -121,7 +119,7 @@ If it does not install automatically, you should run:
 
 **Python dependencies**
 
-`sudo pip3 install homography matplotlib python-apt`
+`sudo pip3 install matplotlib python-apt`
 
 The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for this reason you will have to install these dependencies using this [script](code/install-opencv.sh)
 
@@ -147,7 +145,6 @@ You need to restart QGIS after this.
 _Archlinux installation :_ 
 ```
 pacman -S qgis python-matplotlib opencv ffmpeg 
-pip install homography
 ```
 
 _FFmpeg path_
