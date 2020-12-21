@@ -873,7 +873,7 @@ class VideoWidget(QVideoWidget):
             if self.gt is not None and self._interaction.pointDrawer:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
-
+                               
                 pointIndex = len(self.drawPtPos) + 1
                 AddDrawPointOnMap(pointIndex, Longitude,
                                   Latitude, Altitude)

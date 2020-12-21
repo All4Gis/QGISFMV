@@ -82,6 +82,9 @@
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
+      <property name="acceptDrops">
+       <bool>true</bool>
+      </property>
       <property name="styleSheet">
        <string notr="true">QHeaderView::section
 {
@@ -107,13 +110,13 @@ color: rgb(56, 95, 107);
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
       <property name="dragDropMode">
-       <enum>QAbstractItemView::NoDragDrop</enum>
+       <enum>QAbstractItemView::DropOnly</enum>
       </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
       </property>
       <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
+       <enum>QAbstractItemView::ExtendedSelection</enum>
       </property>
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>

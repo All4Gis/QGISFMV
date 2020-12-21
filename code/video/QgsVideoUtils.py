@@ -3,9 +3,11 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetImageWidth,
                                         GetImageHeight,
                                         GetSensor,
                                         GetLine3DIntersectionWithDEM,
+                                        GetDemAltAt,            
                                         GetFrameCenter,
                                         hasElevationModel,
-                                        GetGCPGeoTransform)
+                                        GetGCPGeoTransform,
+                                        GetGeotransform_affine)
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from osgeo import gdal
@@ -149,6 +151,23 @@ class VideoUtils(object):
         return xworld, yworld
     
     @staticmethod
+    def GetAffineTransf(event, surface):
+        '''Return video coordinates to map coordinates
+        @type event: QMouseEvent
+        @param event:
+
+        @type surface: QAbstractVideoSurface
+        @param surface: Abstract video surface
+        @return:
+        '''
+        
+        gt = GetGeotransform_affine()
+        x=(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface)
+        y=(event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)
+        x1, y1 = gdal.ApplyGeoTransform(gt, x, y)
+        return [y1, x1]
+
+    @staticmethod
     def GetPointCommonCoords(event, surface):
         ''' Common functon for get coordinates on mousepressed
         @type event: QMouseEvent
@@ -159,18 +178,16 @@ class VideoUtils(object):
         @return:
         '''
         transf = VideoUtils.GetTransf(event, surface)
+               
         targetAlt = GetFrameCenter()[2]
 
-        Longitude = float(round(transf[1], 5))
-        Latitude = float(round(transf[0], 5))
+        Longitude = float(round(transf[1], 7))
+        Latitude = float(round(transf[0], 7))
         Altitude = float(round(targetAlt, 0))
-
+        
         if hasElevationModel():
-            sensor = GetSensor()
             target = [transf[0], transf[1], targetAlt]
-            projPt = GetLine3DIntersectionWithDEM(sensor, target)
-            if projPt:
-                Longitude = float(round(projPt[1], 5))
-                Latitude = float(round(projPt[0], 5))
-                Altitude = float(round(projPt[2], 0))
+            alt = GetDemAltAt(transf[1], transf[0])
+            Altitude = round(alt, 0)            
+
         return Longitude, Latitude, Altitude

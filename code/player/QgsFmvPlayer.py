@@ -117,23 +117,18 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.DrawToolBar.addSeparator()
                 
         # Censure QToolButton
-        #self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
-        #self.DrawToolBar.addWidget(self.toolBtn_Cesure)
-        #self.DrawToolBar.addSeparator()
-
-        #Dont show in Kadas
+        self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
+        self.DrawToolBar.addWidget(self.toolBtn_Cesure)
+        self.DrawToolBar.addSeparator()
+        
         # Stamp
-        #self.DrawToolBar.addAction(self.actionStamp)
-        #self.DrawToolBar.addSeparator()
+        self.DrawToolBar.addAction(self.actionStamp)
+        self.DrawToolBar.addSeparator()
         # Object Tracking
-
-        #self.DrawToolBar.addAction(self.actionObject_Tracking)
+        self.DrawToolBar.addAction(self.actionObject_Tracking)
         
         # Hide Color Button
         self.btn_Color.hide()
-        self.btn_Rec.hide()
-        self.cmb_cursorCoord.hide()
-        self.btn_CaptureFrame.hide()
         
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
         self.playIcon = QIcon(":/imgFMV/images/play-arrow.png")
@@ -151,6 +146,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.pass_time = pass_time
+                
 
         self.player.setNotifyInterval(1000)  # Player update interval
 
@@ -162,23 +158,24 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player.mediaStatusChanged.connect(self.statusChanged)
         self.player.playbackRateChanged.connect(self.rateChanged)
         
-        self.player.currentMediaChanged.connect(self.currentMediaChanged)       
-
+        self.player.currentMediaChanged.connect(self.currentMediaChanged)
+        
         self.player.stateChanged.connect(self.setCurrentState)
 
         self.playerState = QMediaPlayer.LoadingMedia
         
-        #self.playFile(path, self.islocal, self.klv_folder)
-
         self.sliderDuration.setRange(0, self.player.duration() / 1000)
+                
         self.sliderDuration.sliderReleased.connect(self.sliderDurationReleased)
         
-        self.sliderDuration.mousePressed.connect(self.sliderDurationPressed)
-        self.volumeSlider.mousePressed.connect(self.setVolume)
+        #self.sliderDuration.mousePressed.connect(self.sliderDurationPressed)
+        #self.volumeSlider.mousePressed.connect(self.setVolume)
         
         self.volumeSlider.setValue(self.player.volume())
         self.volumeSlider.enterEvent = self.showVolumeTip
 
+        
+        
         self.metadataDlg = QgsFmvMetadata(player=self)
         self.addDockWidget(Qt.RightDockWidgetArea, self.metadataDlg)
         self.metadataDlg.setMinimumWidth(500)
@@ -199,6 +196,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         #disable toolbar floating around main window
         self.DrawToolBar.setFloatable(False) 
         
+        
+
         # Defalut WGS 84/ World Mercator (3D)
         # QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(3395))
 
@@ -579,17 +578,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             menu.exec_(QPoint(point.x() + scr * QApplication.desktop().screenGeometry(scr).width(), point.y()))
     
     def currentMediaChanged(self, media):
-   
+        
         idx = self.parent.playlist.currentIndex()
                 
         if idx != -1:
             self.parent.VManager.selectRow(idx)
-            
+
             if not self.parent.videoPlayable[idx]:
                 qgsu.showUserAndLogMessage("", "Video not playable. "+str(idx), onlyLog=True)
                 QTimer.singleShot(300, lambda: self.player.setPosition(self.player.duration()))
                 return
-            
             if self.parent.initialPt[idx] and self.parent.dtm_path != '':
                 #init elevation model
                 try:
@@ -598,14 +596,11 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 except Exception as e:
                     qgsu.showUserAndLogMessage("", "Elevation model NOT initialized: "+str(e), onlyLog=True)
                     None
-            
             #update filename
             self.fileName = self.parent.VManager.item(idx, 3).text()
             
             self.setWindowTitle(QCoreApplication.translate(
-                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))
-
-
+                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))            
             self.parent.SetupPlayer(idx)
             
 #            
@@ -1175,7 +1170,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.RemoveAllData()
             self.clearMetadata()
             QApplication.processEvents()
-
+       
             self.setWindowTitle(QCoreApplication.translate(
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(videoPath))
 

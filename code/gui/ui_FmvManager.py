@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/ui_FmvManager.ui'
+# Form implementation generated from reading ui file 'ui\ui_FmvManager.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -11,55 +11,27 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ManagerWindow(object):
     def setupUi(self, ManagerWindow):
         ManagerWindow.setObjectName("ManagerWindow")
-        ManagerWindow.resize(700, 353)
-        self.gridLayout = QtWidgets.QGridLayout(ManagerWindow)
-        self.gridLayout.setMargin(0);
-        self.gridLayout.setObjectName("gridLayout")
-        self.mOpenMPEGButton = QtWidgets.QToolButton(ManagerWindow)
-        self.mOpenMPEGButton.setText("")
-        self.mOpenMPEGButton.setObjectName("mOpenMPEGButton")
-        self.gridLayout.addWidget(self.mOpenMPEGButton, 0, 0, 1, 1)
-
-        self.versionLabel = QtWidgets.QLabel(ManagerWindow)
-        self.versionLabel.setText("v 1.14")
-        self.versionLabel.setStyleSheet("QLabel { color : grey; }");
-        self.gridLayout.addWidget(self.versionLabel, 0, 1, 1, 1)
-        
-        #deactivate for 1.0 Version
-        #self.mActionCreateMISBButton = QtWidgets.QToolButton(ManagerWindow)
-        #self.mActionCreateMISBButton.setText("")
-        #self.mActionCreateMISBButton.setObjectName("mActionCreateMISBButton")
-        #self.gridLayout.addWidget(self.mActionCreateMISBButton, 0, 1, 1, 1)
-        #self.mOpenStreamButton = QtWidgets.QToolButton(ManagerWindow)
-        #self.mOpenStreamButton.setText("")
-        #self.mOpenStreamButton.setObjectName("mOpenStreamButton")
-        #self.gridLayout.addWidget(self.mOpenStreamButton, 0, 2, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(700, 10, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem, 0, 1, 1, 1)
-        
-        self.mLowerButton = QtWidgets.QToolButton(ManagerWindow)
-        self.mLowerButton.setText("")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/imgFMV/images/lower.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.mLowerButton.setIcon(icon5)
-        self.mLowerButton.setObjectName("mLowerButton")
-        self.gridLayout.addWidget(self.mLowerButton, 0, 2, 1, 1)
-        
-        
-        self.mCloseButton = QtWidgets.QToolButton(ManagerWindow)
-        self.mCloseButton.setText("")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/imgFMV/images/close.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.mCloseButton.setIcon(icon4)
-        self.mCloseButton.setObjectName("mCloseButton")
-        self.gridLayout.addWidget(self.mCloseButton, 0, 3, 1, 1)
-        
-        
-        self.VManager = QtWidgets.QTableWidget(ManagerWindow)
-        self.VManager.setAcceptDrops(True)
-        self.VManager.setProperty("showDropIndicator", True)
-        self.VManager.setDragDropMode(QtWidgets.QAbstractItemView.DropOnly)
-        self.VManager.setMinimumSize(QtCore.QSize(0, 150))
+        ManagerWindow.resize(1341, 445)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/manager.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        ManagerWindow.setWindowIcon(icon)
+        ManagerWindow.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
+        ManagerWindow.setFeatures(QtWidgets.QDockWidget.AllDockWidgetFeatures)
+        self.dockWidgetContents = QtWidgets.QWidget()
+        self.dockWidgetContents.setObjectName("dockWidgetContents")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.dockWidgetContents)
+        self.verticalLayout.setContentsMargins(5, 7, 5, 7)
+        self.verticalLayout.setSpacing(5)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.menubarwidget = QtWidgets.QMenuBar(self.dockWidgetContents)
+        self.menubarwidget.setStyleSheet("QMenuBar {\n"
+"    background-color: transparent;\n"
+"}")
+        self.menubarwidget.setObjectName("menubarwidget")
+        self.menuFile = QtWidgets.QMenu(self.menubarwidget)
+        self.menuFile.setObjectName("menuFile")
+        self.verticalLayout.addWidget(self.menubarwidget)
+        self.VManager = QtWidgets.QTableWidget(self.dockWidgetContents)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -70,6 +42,7 @@ class Ui_ManagerWindow(object):
         self.VManager.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.VManager.setFocusPolicy(QtCore.Qt.NoFocus)
         self.VManager.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.VManager.setAcceptDrops(True)
         self.VManager.setStyleSheet("QHeaderView::section\n"
 "{\n"
 "spacing: 10px;\n"
@@ -79,7 +52,6 @@ class Ui_ManagerWindow(object):
 "margin: 0px;\n"
 "text-align: center;\n"
 "font-family: arial;\n"
-"font-size:12px;\n"                   
 "}\n"
 "\n"
 "QTableView\n"
@@ -90,11 +62,8 @@ class Ui_ManagerWindow(object):
 "color: rgb(56, 95, 107);\n"
 " }\n"
 "")
-        self.VManager.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.VManager.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.VManager.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)                                                                               
         self.VManager.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.VManager.setDragDropMode(QtWidgets.QAbstractItemView.NoDragDrop)
+        self.VManager.setDragDropMode(QtWidgets.QAbstractItemView.DropOnly)
         self.VManager.setAlternatingRowColors(True)
         self.VManager.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.VManager.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
@@ -134,7 +103,8 @@ class Ui_ManagerWindow(object):
         self.VManager.setHorizontalHeaderItem(5, item)
         self.VManager.horizontalHeader().setStretchLastSection(True)
         self.VManager.verticalHeader().setVisible(False)
-        self.gridLayout.addWidget(self.VManager, 1, 0, 1, 4)
+        self.verticalLayout.addWidget(self.VManager)
+        ManagerWindow.setWidget(self.dockWidgetContents)
         self.actionOpen_Stream = QtWidgets.QAction(ManagerWindow)
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/imgFMV/images/stream.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -150,22 +120,32 @@ class Ui_ManagerWindow(object):
         icon3.addPixmap(QtGui.QPixmap(":/imgFMV/images/multiplexer.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionCreate_MISB_File.setIcon(icon3)
         self.actionCreate_MISB_File.setObjectName("actionCreate_MISB_File")
+        self.CloseButton = QtWidgets.QAction(ManagerWindow)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/imgFMV/images/close.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.CloseButton.setIcon(icon4)
+        self.CloseButton.setObjectName("CloseButton")
+        self.menuFile.addAction(self.actionOpen_Stream)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionOpen_MPEG2_File)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionCreate_MISB_File)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.CloseButton)
+        self.menubarwidget.addAction(self.menuFile.menuAction())
+
         self.retranslateUi(ManagerWindow)
         self.actionOpen_Stream.triggered.connect(ManagerWindow.openStreamDialog)
         self.VManager.doubleClicked['QModelIndex'].connect(ManagerWindow.PlayVideoFromManager)
         self.actionOpen_MPEG2_File.triggered.connect(ManagerWindow.openVideoFileDialog)
         self.actionCreate_MISB_File.triggered.connect(ManagerWindow.openMuiltiplexorDialog)
-        #self.CloseButton.triggered.connect(ManagerWindow.CloseFMV)
-        self.mOpenMPEGButton.setDefaultAction( self.actionOpen_MPEG2_File )
-        
-        #Deactivate for 1.0 Version
-        #self.mActionCreateMISBButton.setDefaultAction( self.actionCreate_MISB_File )
-        #self.mOpenStreamButton.setDefaultAction( self.actionOpen_Stream )
+        self.CloseButton.triggered.connect(ManagerWindow.CloseFMV)
         QtCore.QMetaObject.connectSlotsByName(ManagerWindow)
 
     def retranslateUi(self, ManagerWindow):
         _translate = QtCore.QCoreApplication.translate
         ManagerWindow.setWindowTitle(_translate("ManagerWindow", "Vi&deo Manager"))
+        self.menuFile.setTitle(_translate("ManagerWindow", "Fi&le"))
         item = self.VManager.horizontalHeaderItem(0)
         item.setText(_translate("ManagerWindow", "Id"))
         item = self.VManager.horizontalHeaderItem(1)
@@ -181,5 +161,6 @@ class Ui_ManagerWindow(object):
         self.actionOpen_Stream.setText(_translate("ManagerWindow", "&Open Stream (experimental)"))
         self.actionOpen_MPEG2_File.setText(_translate("ManagerWindow", "Open &Video File"))
         self.actionCreate_MISB_File.setText(_translate("ManagerWindow", "&Create MISB File"))
+        self.CloseButton.setText(_translate("ManagerWindow", "C&lose"))
 
 from QGIS_FMV.gui import resources_rc

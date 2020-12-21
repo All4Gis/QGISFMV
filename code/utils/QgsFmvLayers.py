@@ -10,6 +10,7 @@ from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QVariant, QSettings
 from qgis.core import (QgsPalLayerSettings,
                        QgsTextFormat,
+                       QgsLayerTreeGroup,
                        QgsTextBufferSettings,
                        QgsVectorLayerSimpleLabeling,
                        QgsMarkerSymbol,
@@ -90,6 +91,7 @@ def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
     feature = QgsFeature()
     feature.setAttributes(
         [pointIndex, Longitude, Latitude, Altitude])
+    
     p = QgsPointXY()
     p.set(Longitude, Latitude)
     feature.setGeometry(QgsGeometry.fromPointXY(p))
@@ -986,19 +988,34 @@ def addLayer(layer, loadInLegend=True, group=None, isSubGroup=False):
     @param loadInLegend: True if this layer should be added to the legend.
     :return: The added layer
     """
+    
     global groupName
+    
     if not hasattr(layer, "__iter__"):
         layer = [layer]
     if group is not None:
         _layerreg.addMapLayers(layer, False)
         root = _layerreg.layerTreeRoot()
+        
         if isSubGroup:
             vg = root.findGroup(groupName)
             g = vg.findGroup(group)
-            g.insertChildNode(0, QgsLayerTreeLayer(layer[0]))
         else:
             g = root.findGroup(group)
-            g.insertChildNode(0, QgsLayerTreeLayer(layer[0]))
+            
+        if g == None:
+            # Create Group
+            node_group = QgsLayerTreeGroup(group)
+            root.insertChildNode(0, node_group)       
+        
+        if isSubGroup:
+            vg = root.findGroup(groupName)
+            g = vg.findGroup(group)
+        else:
+            g = root.findGroup(group)
+        
+        g.insertChildNode(0, QgsLayerTreeLayer(layer[0]))
+        
     else:
         _layerreg.addMapLayers(layer, loadInLegend)
     return layer
@@ -1010,6 +1027,7 @@ def addLayerNoCrsDialog(layer, loadInLegend=True, group=None, isSubGroup=False):
     Same as the addLayer method, but it does not ask for CRS, regardless of current
     configuration in QGIS settings
     '''
+    
     settings = QSettings()
     prjSetting3 = settings.value('/Projections/defaultBehavior')
     settings.setValue('/Projections/defaultBehavior', '')

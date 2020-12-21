@@ -234,6 +234,16 @@
      </layout>
     </item>
     <item>
+     <widget class="QLabel" name="lb_prec_ts">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
        <string>Video Tools</string>
@@ -720,7 +730,7 @@
      <x>0</x>
      <y>0</y>
      <width>748</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="contextMenuPolicy">

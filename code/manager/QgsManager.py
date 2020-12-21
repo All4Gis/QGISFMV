@@ -189,7 +189,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
         self.islocal = islocal
         self.klv_folder = klv_folder
-        self.isStreaming = False
         w = QWidget()
         layout = QVBoxLayout()
         pbar = QProgressBar()
@@ -356,14 +355,14 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         folder = getVideoFolder(text)
         klv_folder = os.path.join(folder, "klv")
         exist = os.path.exists(klv_folder)
-        
+          
         # First time we open the player
         if self._PlayerDlg is None:
             if exist:
                 self.CreatePlayer(path, model.row(), islocal=True, klv_folder=klv_folder)
             else:
                 self.CreatePlayer(path, model.row())  
-        
+                
         if exist:
             self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
         else:
@@ -379,7 +378,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         '''       
         self.ToggleActiveRow(row)
         
-        self.playlist.setCurrentIndex(row)
+        if row != self.playlist.currentIndex():
+            self.playlist.setCurrentIndex(row)
         
         #qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
         #if path != self._PlayerDlg.fileName:
