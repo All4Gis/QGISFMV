@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from QGIS_FMV.utils.QgsFmvSlider import QgsFmvSlider
 
 class Ui_PlayerWindow(object):
     def setupUi(self, PlayerWindow):
@@ -90,7 +91,7 @@ class Ui_PlayerWindow(object):
         self.verticalLayout.addWidget(self.videoWidget)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.sliderDuration = QtWidgets.QSlider(self.centralwidget)
+        self.sliderDuration = QgsFmvSlider(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -285,7 +286,7 @@ class Ui_PlayerWindow(object):
         self.btn_volume.setFlat(True)
         self.btn_volume.setObjectName("btn_volume")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.btn_volume)
-        self.volumeSlider = QtWidgets.QSlider(self.gb_PlayerControls)
+        self.volumeSlider = QgsFmvSlider(self.gb_PlayerControls)
         self.volumeSlider.setMaximum(100)
         self.volumeSlider.setProperty("value", 100)
         self.volumeSlider.setOrientation(QtCore.Qt.Horizontal)
