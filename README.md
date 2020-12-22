@@ -275,3 +275,4 @@ If this plugin is useful for you, consider to donate to the author.
 &#8593; [Back to top](#table-of-contents)
 
 [© All4gis 2018]
+

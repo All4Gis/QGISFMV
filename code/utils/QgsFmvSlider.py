@@ -1,24 +1,24 @@
-from PyQt5 import QtCore, QtWidgets
 from qgis.PyQt.QtCore import Qt, QObject, pyqtSignal
+from qgis.PyQt.QtWidgets import QSlider , QStyleOptionSlider, QStyle
 
-class QgsFmvSlider(QtWidgets.QSlider):
+class QgsFmvSlider(QSlider):
 
     mousePressed = pyqtSignal(int)
          
     def mousePressEvent(self, event):
         super(QgsFmvSlider, self).mousePressEvent(event)
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == Qt.LeftButton:
             val = self.pixelPosToRangeValue(event.pos())
             self.setValue(val)
             self.mousePressed.emit(val)
             
     def pixelPosToRangeValue(self, pos):
-        opt = QtWidgets.QStyleOptionSlider()
+        opt = QStyleOptionSlider()
         self.initStyleOption(opt)
-        gr = self.style().subControlRect(QtWidgets.QStyle.CC_Slider, opt, QtWidgets.QStyle.SC_SliderGroove, self)
-        sr = self.style().subControlRect(QtWidgets.QStyle.CC_Slider, opt, QtWidgets.QStyle.SC_SliderHandle, self)
+        gr = self.style().subControlRect(QStyle.CC_Slider, opt, QStyle.SC_SliderGroove, self)
+        sr = self.style().subControlRect(QStyle.CC_Slider, opt, QStyle.SC_SliderHandle, self)
 
-        if self.orientation() == QtCore.Qt.Horizontal:
+        if self.orientation() == Qt.Horizontal:
             sliderLength = sr.width()
             sliderMin = gr.x()
             sliderMax = gr.right() - sliderLength + 1
@@ -27,6 +27,6 @@ class QgsFmvSlider(QtWidgets.QSlider):
             sliderMin = gr.y()
             sliderMax = gr.bottom() - sliderLength + 1;
         pr = pos - sr.center() + sr.topLeft()
-        p = pr.x() if self.orientation() == QtCore.Qt.Horizontal else pr.y()
-        return QtWidgets.QStyle.sliderValueFromPosition(self.minimum(), self.maximum(), p - sliderMin,
+        p = pr.x() if self.orientation() == Qt.Horizontal else pr.y()
+        return QStyle.sliderValueFromPosition(self.minimum(), self.maximum(), p - sliderMin,
                                                sliderMax - sliderMin, opt.upsideDown)
