@@ -150,10 +150,10 @@ pacman -S qgis python-matplotlib opencv ffmpeg
 pip install homography
 ```
 
-_FFmpeg path_
+_ Set FFmpeg path in $HOME/.local/share/QGIS/QGIS3/profiles/[profile_name]/python/plugins/QGIS_FMV/settings.ini _
 ```
-ffmpeg = "/usr/bin/"
-ffprobe = "/usr/bin/"
+ffmpeg : "/usr/bin/"
+ffprobe : "/usr/bin/"
 ```
 
 ## Slides
