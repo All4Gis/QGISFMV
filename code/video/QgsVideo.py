@@ -256,8 +256,7 @@ class VideoWidget(QVideoWidget):
 
         self._isinit = False
         self._MGRS = False
-        self.gt = None
-
+        
         self.drawCesure = []
         self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawMeasureDistance, self.drawMeasureArea, self.drawPolygon = [], [], [], [], [], []
         # Draw Polygon Canvas Rubberband
@@ -432,21 +431,21 @@ class VideoWidget(QVideoWidget):
         if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
             return
 
-        if self.gt is not None and self._interaction.lineDrawer:
+        if GetGCPGeoTransform() is not None and self._interaction.lineDrawer:
             self.drawLines.append([None, None, None])
             return
 
-        if self.gt is not None and self._interaction.measureDistance:
+        if GetGCPGeoTransform() is not None and self._interaction.measureDistance:
             self.drawMeasureDistance.append([None, None, None])
             self.parent.actionMeasureDistance.toggle()
             return
 
-        if self.gt is not None and self._interaction.measureArea:
+        if GetGCPGeoTransform() is not None and self._interaction.measureArea:
             self.drawMeasureArea.append([None, None, None])
             self.parent.actionMeasureArea.toggle()
             return
 
-        if self.gt is not None and self._interaction.polygonDrawer:
+        if GetGCPGeoTransform() is not None and self._interaction.polygonDrawer:
 
             ok = AddDrawPolygonOnMap(self.poly_coordinates)
             # Prevent invalid geometry (Polygon with 2 points)
@@ -641,11 +640,9 @@ class VideoWidget(QVideoWidget):
         #    self.painter.end()
         #    return
         
-        self.gt = GetGCPGeoTransform()
-
         # Draw On Video
         draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
-                         self.drawMeasureDistance, self.drawMeasureArea, self.drawCesure, self.painter, self.surface, self.gt)
+                         self.drawMeasureDistance, self.drawMeasureArea, self.drawCesure, self.painter, self.surface, GetGCPGeoTransform())
 
         # Draw On Video Object tracking test
         if self._interaction.objectTracking and self._isinit:
@@ -761,7 +758,7 @@ class VideoWidget(QVideoWidget):
             self.setCursor(QCursor(Qt.CrossCursor))
 
         # Cursor Coordinates
-        if self.gt is not None:
+        if GetGCPGeoTransform() is not None:
             Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                 event, self.surface)
 
@@ -870,7 +867,7 @@ class VideoWidget(QVideoWidget):
                 return
 
             # point drawer
-            if self.gt is not None and self._interaction.pointDrawer:
+            if GetGCPGeoTransform() is not None and self._interaction.pointDrawer:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
                                
@@ -881,7 +878,7 @@ class VideoWidget(QVideoWidget):
                 self.drawPtPos.append([Longitude, Latitude, Altitude])
 
             # polygon drawer
-            if self.gt is not None and self._interaction.polygonDrawer:
+            if GetGCPGeoTransform() is not None and self._interaction.polygonDrawer:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
                 self.poly_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
@@ -889,7 +886,7 @@ class VideoWidget(QVideoWidget):
                 self.drawPolygon.append([Longitude, Latitude, Altitude])
 
             # line drawer
-            if self.gt is not None and self._interaction.lineDrawer:
+            if GetGCPGeoTransform() is not None and self._interaction.lineDrawer:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
 
@@ -911,13 +908,13 @@ class VideoWidget(QVideoWidget):
                 self.Censure_RubberBand.show()
 
             # Measure Distance drawer
-            if self.gt is not None and self._interaction.measureDistance:
+            if GetGCPGeoTransform() is not None and self._interaction.measureDistance:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
                 self.drawMeasureDistance.append([Longitude, Latitude, Altitude])
 
             # Measure Distance drawer
-            if self.gt is not None and self._interaction.measureArea:
+            if GetGCPGeoTransform() is not None and self._interaction.measureArea:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
                 self.drawMeasureArea.append([Longitude, Latitude, Altitude])

@@ -139,7 +139,7 @@ class Ui_ManagerWindow(object):
         self.VManager.doubleClicked['QModelIndex'].connect(ManagerWindow.PlayVideoFromManager)
         self.actionOpen_MPEG2_File.triggered.connect(ManagerWindow.openVideoFileDialog)
         self.actionCreate_MISB_File.triggered.connect(ManagerWindow.openMuiltiplexorDialog)
-        self.CloseButton.triggered.connect(ManagerWindow.CloseFMV)
+        self.CloseButton.triggered.connect(ManagerWindow.closeFMV)
         QtCore.QMetaObject.connectSlotsByName(ManagerWindow)
 
     def retranslateUi(self, ManagerWindow):

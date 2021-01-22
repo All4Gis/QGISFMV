@@ -303,7 +303,7 @@ color: rgb(56, 95, 107);
    <sender>CloseButton</sender>
    <signal>triggered()</signal>
    <receiver>ManagerWindow</receiver>
-   <slot>CloseFMV()</slot>
+   <slot>closeFMV()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -321,6 +321,6 @@ color: rgb(56, 95, 107);
   <slot>PlayVideoFromManager()</slot>
   <slot>openStreamDialog()</slot>
   <slot>openMuiltiplexorDialog()</slot>
-  <slot>CloseFMV()</slot>
+  <slot>closeFMV()</slot>
  </slots>
 </ui>

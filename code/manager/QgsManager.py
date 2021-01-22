@@ -26,7 +26,6 @@ from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer, QMediaContent
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         BufferedMetaReader,
                                         StreamMetaReader,
-                                        initElevationModel,
                                         AddVideoToSettings,
                                         RemoveVideoToSettings,
                                         RemoveVideoFolder,
@@ -60,8 +59,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self._PlayerDlg = None
         self.meta_reader = []
         self.initialPt = []
-        self.pass_time = 250
-        
+        self.pass_time = 250              
+        self.buf_interval = 2000
+        self.update_interval = 2000                           
         self.loading = False
         self.playlist = QMediaPlaylist()
         self.VManager.viewport().installEventFilter(self)
@@ -121,6 +121,12 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def remove(self):
         ''' Remove current row '''         
+        if self.loading:
+            return
+        
+        # close video player (safer because it changes playlist internals)
+        if self._PlayerDlg is not None:
+            self._PlayerDlg.close()               
         for cr in self.VManager.selectedItems():
             idx = 0
             #we browse cells but we need lines, so ignore already deleted rows
@@ -137,7 +143,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self.videoPlayable.pop(idx)
             self.videoIsStreaming.pop(idx)
             self.initialPt.pop(idx)
-            self.playlist.removeMedia(idx)
+            
             
             # Remove video to Settings List
             RemoveVideoToSettings(row_id)
@@ -149,11 +155,19 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             
             self.meta_reader.pop(idx)
             
-            if self.playlist.isEmpty() and self._PlayerDlg is not None:
-                self._PlayerDlg.close()
+            #remove from playlist
+            self.playlist.removeMedia(idx)
                 
+    def closePlayer(self):
+        ''' Close FMV '''
+        try:
+            self._PlayerDlg.close()
+        except Exception:
+            None
+        
+        return       
                     
-    def CloseFMV(self):
+    def closeFMV(self):
         ''' Close FMV '''
         try:
             self._PlayerDlg.close()
@@ -253,7 +267,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             klvIdx = getKlvStreamIndex(filename, islocal)
                         
             # init non-blocking metadata buffered reader
-            self.meta_reader.append(BufferedMetaReader(filename, klv_index=klvIdx, pass_time=self.pass_time))
+            self.meta_reader.append(BufferedMetaReader(filename, klv_index=klvIdx, pass_time=self.pass_time, interval=self.buf_interval))
                                         
             pbar.setValue(60)
             try:
@@ -359,18 +373,16 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # First time we open the player
         if self._PlayerDlg is None:
             if exist:
-                self.CreatePlayer(path, model.row(), islocal=True, klv_folder=klv_folder)
+                self.CreatePlayer(path, self.update_interval, model.row(), islocal=True, klv_folder=klv_folder)
             else:
-                self.CreatePlayer(path, model.row())  
+                self.CreatePlayer(path, self.update_interval, model.row())  
                 
+        self.SetupPlayer(model.row())                             
         if exist:
             self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
         else:
             self._PlayerDlg.playFile(path)              
         
-        
-        self.SetupPlayer(model.row())
-    
     
     def SetupPlayer(self, row):
         ''' Play video from manager dock.
@@ -378,8 +390,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         '''       
         self.ToggleActiveRow(row)
         
-        if row != self.playlist.currentIndex():
-            self.playlist.setCurrentIndex(row)
+        self.playlist.setCurrentIndex(row)
         
         #qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
         #if path != self._PlayerDlg.fileName:
@@ -391,19 +402,20 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         #zoom to map zone     
         curAuthId =  self.iface.mapCanvas().mapSettings().destinationCrs().authid()
         
-        map_pos = QgsPointXY(self.initialPt[row][1], self.initialPt[row][0])
-        if curAuthId != "EPSG:4326":
-            trgCode=int(curAuthId.split(":")[1])
-            xform = QgsCoordinateTransform(QgsCoordinateReferenceSystem(4326), QgsCoordinateReferenceSystem(trgCode), QgsProject().instance())
-            map_pos = xform.transform(map_pos)
-            
-        self.iface.mapCanvas().setCenter(map_pos)
+        if self.initialPt[row][1] != None and self.initialPt[row][0] != None:                                                                     
+            map_pos = QgsPointXY(self.initialPt[row][1], self.initialPt[row][0])
+            if curAuthId != "EPSG:4326":
+                trgCode=int(curAuthId.split(":")[1])
+                xform = QgsCoordinateTransform(QgsCoordinateReferenceSystem(4326), QgsCoordinateReferenceSystem(trgCode), QgsProject().instance())
+                map_pos = xform.transform(map_pos)
+                
+            self.iface.mapCanvas().setCenter(map_pos)
+                
         self.iface.mapCanvas().zoomScale(50000)
-            
-
-    def CreatePlayer(self, path, row, islocal=False, klv_folder=None):
+    
+    def CreatePlayer(self, path, interval, row, islocal=False, klv_folder=None):
         ''' Create Player '''
-        self._PlayerDlg = QgsFmvPlayer(self.iface, path, parent=self, meta_reader=self.meta_reader[
+        self._PlayerDlg = QgsFmvPlayer(self.iface, path, interval, parent=self, meta_reader=self.meta_reader[
             row], pass_time=self.pass_time, islocal=islocal, klv_folder=klv_folder)
                     
         self._PlayerDlg.player.setPlaylist(self.playlist)

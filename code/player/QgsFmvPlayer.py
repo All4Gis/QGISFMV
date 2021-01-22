@@ -71,10 +71,10 @@ except Exception as e:
 
 class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     """ Video Player Class """
-    def __init__(self, iface, path, parent=None, meta_reader=None, pass_time=None, islocal=False, klv_folder=None):
-        """ Constructor """
-
+    def __init__(self, iface, path, interval, parent=None, meta_reader=None, pass_time=None, islocal=False, klv_folder=None):
+        """ Constructor """        
         super().__init__(parent)
+        
         self.setupUi(self)
         self.parent = parent
         self.iface = iface
@@ -147,18 +147,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
         self.pass_time = pass_time
                 
-
-        self.player.setNotifyInterval(1000)  # Player update interval
+        self.player.setNotifyInterval(interval)  # Player update interval
 
         self.player.setVideoOutput(
             self.videoWidget.videoSurface())  # Abstract Surface
-
         self.player.durationChanged.connect(self.durationChanged)
         self.player.positionChanged.connect(self.positionChanged)
         self.player.mediaStatusChanged.connect(self.statusChanged)
         self.player.playbackRateChanged.connect(self.rateChanged)
         
-        self.player.currentMediaChanged.connect(self.currentMediaChanged)
+        #self.player.currentMediaChanged.connect(self.currentMediaChanged)
         
         self.player.stateChanged.connect(self.setCurrentState)
 
@@ -200,6 +198,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         # Defalut WGS 84/ World Mercator (3D)
         # QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(3395))
+        
 
     def setMetaReader(self, meta_reader):
         self.meta_reader = meta_reader
@@ -288,29 +287,33 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             # way (increase the buffer size if needed in QManager).
             if not self.islocal:
                 stdout_data = self.meta_reader.get(currentTime)
-                #qgsu.showUserAndLogMessage("", "Buffer size:" + str(self.meta_reader.getSize()), onlyLog=True)
+                # debug
             else:
                 stdout_data = b'\x15'
             # qgsu.showUserAndLogMessage(
             #    "", "stdout_data: " + str(stdout_data) + " currentTime: " + str(currentTime), onlyLog=True)
             if stdout_data == 'NOT_READY':
-                qgsu.showUserAndLogMessage("", "Buffer value read but is not ready, increase buffer size:" + str(self.meta_reader.getSize()), onlyLog=True)
+                qgsu.showUserAndLogMessage("", "Buffer value read but is not ready, increase buffer size.", onlyLog=True)
                 return
             # Values need to be read, pause the video a short while
             elif stdout_data == 'BUFFERING':
-                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Buffering metadata..."), duration=4, level=QGis.Info)
-                oldState = self.playerState
-                self.player.pause()
-                #lambda x: True if x % 2 == 0 else False
-                QTimer.singleShot(2500, lambda: self.resumePlay(oldState))
-                return
+                # If the notify interval is low, we need to pause the video to wait for the metadata
+                # buffer to fill in. With higher values we may miss 1 or 2 Metadata but the buffer will
+                # then catch up.
+                if self.player.notifyInterval() <= 1000:
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Metadata Buffering..."), duration=2, level=QGis.Info)
+                    oldState = self.playerState
+                    self.player.pause()
+                    lambda x: True if x % 2 == 0 else False
+                    QTimer.singleShot(2000, lambda: self.resumePlay(oldState))
+                    return
             elif stdout_data is None:
-                #qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size:" + str(self.meta_reader.getSize())), level=QGis.Info)
-                #qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned None Type, check pass_time. : ", onlyLog=True)
+                #qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size."), level=QGis.Info)
+                # qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned None Type, check pass_time. : ", onlyLog=True)
                 return
             elif stdout_data == b'' or len(stdout_data) == 0:
-                #qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size:" + str(self.meta_reader.getSize())), level=QGis.Info)
-                #qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
+                #qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "No metadata to show, buffer size."), level=QGis.Info)
+                # qgsu.showUserAndLogMessage("No metadata to show.", "Buffer returned empty metadata, check pass_time. : ", onlyLog=True)
                 return
             
             self.packetStreamParser(stdout_data)
@@ -366,31 +369,31 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @param nextTime: Next timestamp
         '''
        
-        try:
-            fName = self.fileName
-                        
-            if self.isStreaming:
-                port = int(self.fileName.split(':')[2])
-                fName = self.fileName.replace(str(port), str(port + 1))
-            
-            p = _spawn(cmds=['-i', fName,
-               '-ss', currentTime,
-               '-to', nextTime,
-               '-map', '0:d:'+str(klv_index),
-               '-preset', 'ultrafast',
-               '-f', 'data', '-'])
-                                             
-            stdout_data, _ = p.communicate()
+        #try:
+        fName = self.fileName
+                    
+        if self.isStreaming:
+            port = int(self.fileName.split(':')[2])
+            fName = self.fileName.replace(str(port), str(port + 1))
+        
+        p = _spawn(cmds=['-i', fName ,
+                                         '-ss', currentTime,
+                                         '-to', nextTime,
+                                         '-map', '0:d:'+str(klv_index),
+                                         '-preset', 'ultrafast',
+                                         '-f', 'data', '-'])
+                                         
+        stdout_data, _ = p.communicate()
 
-            if stdout_data == b'':
-                qgsu.showUserAndLogMessage("", "CallMetadataSync returned no data for precise positioning.", onlyLog=True)
-                return
-            
-            self.packetStreamParser(stdout_data)
+        if stdout_data == b'':
+            qgsu.showUserAndLogMessage("", "CallMetadataSync returned no data for precise positioning.", onlyLog=True)
+            return
+        
+        self.packetStreamParser(stdout_data)
 
-        except Exception as e:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvPlayer", "Metadata Sync Call Failed : "), str(e))
+        #except Exception as e:
+        #    qgsu.showUserAndLogMessage(QCoreApplication.translate(
+        #        "QgsFmvPlayer", "Metadata Sync Call Failed : "), str(e))
 
     def readLocal(self, currentInfo):
         ''' Read Local Metadata ,klv files'''
@@ -580,7 +583,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def currentMediaChanged(self, media):
         
         idx = self.parent.playlist.currentIndex()
-                
         if idx != -1:
             self.parent.VManager.selectRow(idx)
 
@@ -600,20 +602,8 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             self.fileName = self.parent.VManager.item(idx, 3).text()
             
             self.setWindowTitle(QCoreApplication.translate(
-                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))            
+                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))
             self.parent.SetupPlayer(idx)
-            
-#            
-#            #change meta reader
-#            self.setMetaReader(self.parent.meta_reader[idx])
-#            
-#            #update filename
-#            self.fileName = self.parent.VManager.item(idx, 3).text()
-#            
-#            #remove drawings
-#            
-#        self.setWindowTitle(QCoreApplication.translate(
-#                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))     
     
     def rateChanged(self, qreal):   
         '''Signals the playbackRate has changed to rate.
