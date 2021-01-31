@@ -111,7 +111,7 @@ The installation can be done from the QGIS Python Plugins Repository or from the
 
 Windows automatically installs all, with user permission,If an error occurs, you should perform some checks.
 
-[![Watch the video (Spanish)](https://i.imgur.com/vXpMJhS.png)](https://youtu.be/9C973pz5i6k "Como usa QGISFMV en windows")
+[![Watch the video (Spanish)](https://i.imgur.com/pI35XoNl.png)](https://youtu.be/9C973pz5i6k "Como usa QGISFMV en windows")
 
 ## Installation on Ubuntu
 
