@@ -58,7 +58,8 @@ The plugin install automatically this requisites,but you can install it using on
 
 `python3 -m pip install -r requirements.txt`
 
-Here is a **settings.ini** sample [Linux](code/settings_linux_sample.ini) configuration file  or [Windows](code/settings_win_sample.ini) sample
+Here is a **settings.ini** sample [Linux](code/settings_linux_sample.ini) configuration file  or [Windows](code/settings_win_sample.ini) sample.
+On windows you can find the **settings.ini** file at **C:\Users\<user name>\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\QGIS_FMV**.
 
 &#8593; [Back to top](#table-of-contents)
 
