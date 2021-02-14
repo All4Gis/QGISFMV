@@ -739,9 +739,8 @@ class VideoWidget(QVideoWidget):
     
         # Magnifier can move on black screen for show image borders
         if self._interaction.magnifier:
-            if event.buttons():
-                self.dragPos = event.pos()
-                self.UpdateSurface()
+            self.dragPos = event.pos()
+            self.UpdateSurface()
 
         # check if the point is on picture (not in black borders)
         if(not vut.IsPointOnScreen(event.x(), event.y(), self.surface)):
