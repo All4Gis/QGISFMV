@@ -25,7 +25,7 @@ from qgis.PyQt.QtWidgets import (QToolTip,
                                  QToolBar)
 from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject, QgsLayerTreeGroup
 
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent,QMediaPlaylist
 
 from QGIS_FMV.converter.Converter import Converter
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
@@ -182,6 +182,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.converter = Converter()
         self.BitratePlot = CreatePlotsBitrate()
 
+        settrace()
         if self.actionCenter_on_Platform.isChecked():
             setCenterMode(1, self.iface)
         elif self.actionCenter_on_Footprint.isChecked():
@@ -557,7 +558,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         actionAllFrames = menu.addAction(QIcon(":/imgFMV/images/capture_all_frames.png"),
                                          QCoreApplication.translate("QgsFmvPlayer", "Extract All Frames"))
 
-        #actionAllFrames.triggered.connect(self.ExtractAllFrames)
+        actionAllFrames.triggered.connect(self.ExtractAllFrames)
 
         actionCurrentFrames = menu.addAction(QIcon(":/imgFMV/images/screenshot.png"),
                                              QCoreApplication.translate("QgsFmvPlayer",
@@ -605,7 +606,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))
             self.parent.SetupPlayer(idx)
     
-    def rateChanged(self, qreal):   
+    def rateChanged(self, _qreal):   
         '''Signals the playbackRate has changed to rate.
         @type value: qreal
         @param value: rate value
@@ -1452,9 +1453,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                         QCoreApplication.translate("QgsFmvPlayer", "Do you want to load the layer?"),
                         icon="Information")
                     if buttonReply == QMessageBox.Yes:
-                        file = result['file']
-                        root, _ = os.path.splitext(file)
-                        layer = QgsRasterLayer(file, root)
+                        _file = result['file']
+                        root, _ = os.path.splitext(_file)
+                        layer = QgsRasterLayer(_file, root)
                         QgsProject.instance().addMapLayer(layer)
                     return
         else:

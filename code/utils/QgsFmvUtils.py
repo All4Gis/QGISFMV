@@ -885,8 +885,8 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     global frameCenterElevation, sensorLatitude, sensorLongitude, sensorTrueAltitude, groupName, geotransform
 
     groupName = group
-    frameCenterLat = packet.FrameCenterLatitude
-    frameCenterLon = packet.FrameCenterLongitude
+    #frameCenterLat = packet.FrameCenterLatitude
+    #frameCenterLon = packet.FrameCenterLongitude
     frameCenterElevation = packet.FrameCenterElevation
     sensorLatitude = packet.SensorLatitude
     sensorLongitude = packet.SensorLongitude
@@ -976,42 +976,48 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     
 
     if f_lyr != None and p_lyr != None and t_lyr != None:
-        f_lyr_out_extent = parent.iface.mapCanvas().mapSettings().layerExtentToOutputExtent(f_lyr, f_lyr.extent())
-        p_lyr_out_extent = parent.iface.mapCanvas().mapSettings().layerExtentToOutputExtent(p_lyr, p_lyr.extent())
-        t_lyr_out_extent = parent.iface.mapCanvas().mapSettings().layerExtentToOutputExtent(t_lyr, t_lyr.extent())
+        f_lyr_out_extent = f_lyr.extent()
+        p_lyr_out_extent = p_lyr.extent()
+        t_lyr_out_extent = t_lyr.extent()
         
-        curAuthId =  parent.iface.mapCanvas().mapSettings().destinationCrs().authid()
-        trgCode = int(curAuthId.split(":")[1])
-        xform = QgsCoordinateTransform(QgsCoordinateReferenceSystem(4326), QgsCoordinateReferenceSystem(trgCode), QgsProject().instance())
+        # Default EPSG is 4326, f_lyr.crs().authid ()
+        # Disable transform if we have the same projection wit layers anf canvas
+        epsg4326 = "EPSG:4326"
+        curAuthId =  iface.mapCanvas().mapSettings().destinationCrs().authid()
         
-        transP = xform.transform(QgsPointXY(list(p_lyr.getFeatures())[0].geometry().asPoint().x(), list(p_lyr.getFeatures())[0].geometry().asPoint().y()))
-        transT = xform.transform(QgsPointXY(list(t_lyr.getFeatures())[0].geometry().asPoint().x(), list(t_lyr.getFeatures())[0].geometry().asPoint().y()))
+        if(curAuthId != epsg4326):
+            xform = QgsCoordinateTransform(QgsCoordinateReferenceSystem(epsg4326), QgsCoordinateReferenceSystem(curAuthId), QgsProject().instance())
         
-        rect = list(f_lyr.getFeatures())[0].geometry().boundingBox()
-        rectLL = xform.transform(QgsPointXY(rect.xMinimum(),rect.yMinimum()))
-        rectUR = xform.transform(QgsPointXY(rect.xMaximum(),rect.yMaximum()))
+            transP = xform.transform(QgsPointXY(list(p_lyr.getFeatures())[0].geometry().asPoint().x(), list(p_lyr.getFeatures())[0].geometry().asPoint().y()))
+            transT = xform.transform(QgsPointXY(list(t_lyr.getFeatures())[0].geometry().asPoint().x(), list(t_lyr.getFeatures())[0].geometry().asPoint().y()))
         
-        f_lyr_out_extent = QgsRectangle(rectLL, rectUR)
-        t_lyr_out_extent = QgsRectangle(transT.x(), transT.y(), transT.x(), transT.y())
-        p_lyr_out_extent = QgsRectangle(transP.x(), transP.y(), transP.x(), transP.y())
+            rect = list(f_lyr.getFeatures())[0].geometry().boundingBox()
+            rectLL = xform.transform(QgsPointXY(rect.xMinimum(),rect.yMinimum()))
+            rectUR = xform.transform(QgsPointXY(rect.xMaximum(),rect.yMaximum()))
+        
+            f_lyr_out_extent = QgsRectangle(rectLL, rectUR)
+            t_lyr_out_extent = QgsRectangle(transT.x(), transT.y(), transT.x(), transT.y())
+            p_lyr_out_extent = QgsRectangle(transP.x(), transP.y(), transP.x(), transP.y())
 
-        bValue = parent.iface.mapCanvas().extent().xMaximum() - parent.iface.mapCanvas().center().x()
+        bValue = iface.mapCanvas().extent().xMaximum() - iface.mapCanvas().center().x()
         
         #create a detection buffer 
-        map_detec_buffer = parent.iface.mapCanvas().extent().buffered(bValue * -0.7)
+        map_detec_buffer = iface.mapCanvas().extent().buffered(bValue * -0.7)
         
         # recenter map on platform
         if not map_detec_buffer.contains(p_lyr_out_extent) and centerMode == 1:
             # recenter map on platform
-            parent.iface.mapCanvas().setExtent(p_lyr_out_extent)
+            iface.mapCanvas().setExtent(p_lyr_out_extent)
         # recenter map on footprint
         elif not map_detec_buffer.contains(f_lyr_out_extent) and centerMode == 2:
             #zoom a bit wider than the footprint itself
-            parent.iface.mapCanvas().setExtent( f_lyr_out_extent.buffered(f_lyr_out_extent.width()*0.5))
+            iface.mapCanvas().setExtent( f_lyr_out_extent.buffered(f_lyr_out_extent.width()*0.5))
         # recenter map on target
         elif not map_detec_buffer.contains(t_lyr_out_extent) and centerMode == 3:
-            parent.iface.mapCanvas().setExtent(t_lyr_out_extent)
-        parent.iface.mapCanvas().refresh()
+            iface.mapCanvas().setExtent(t_lyr_out_extent)
+        
+        # Refresh Canvas
+        iface.mapCanvas().refresh()
 
         return True
 
