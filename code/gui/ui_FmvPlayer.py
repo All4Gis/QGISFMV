@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\U80831903\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\QGIS_FMV\ui\ui_FmvPlayer.ui'
+# Form implementation generated from reading ui file 'ui/ui_FmvPlayer.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from QGIS_FMV.utils.QgsFmvSlider import QgsFmvSlider
 
 class Ui_PlayerWindow(object):
     def setupUi(self, PlayerWindow):
         PlayerWindow.setObjectName("PlayerWindow")
-        PlayerWindow.resize(748, 652)
+        PlayerWindow.resize(1111, 987)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -91,7 +90,7 @@ class Ui_PlayerWindow(object):
         self.verticalLayout.addWidget(self.videoWidget)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.sliderDuration = QgsFmvSlider(self.centralwidget)
+        self.sliderDuration = QtWidgets.QSlider(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -286,7 +285,7 @@ class Ui_PlayerWindow(object):
         self.btn_volume.setFlat(True)
         self.btn_volume.setObjectName("btn_volume")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.btn_volume)
-        self.volumeSlider = QgsFmvSlider(self.gb_PlayerControls)
+        self.volumeSlider = QtWidgets.QSlider(self.gb_PlayerControls)
         self.volumeSlider.setMaximum(100)
         self.volumeSlider.setProperty("value", 100)
         self.volumeSlider.setOrientation(QtCore.Qt.Horizontal)
@@ -300,7 +299,7 @@ class Ui_PlayerWindow(object):
         self.verticalLayout.addWidget(self.gb_PlayerControls)
         PlayerWindow.setCentralWidget(self.centralwidget)
         self.menubarwidget = QtWidgets.QMenuBar(PlayerWindow)
-        self.menubarwidget.setGeometry(QtCore.QRect(0, 0, 748, 21))
+        self.menubarwidget.setGeometry(QtCore.QRect(0, 0, 1111, 39))
         self.menubarwidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.menubarwidget.setStyleSheet("QMenuBar {\n"
 "    background-color: transparent;\n"
@@ -544,13 +543,14 @@ class Ui_PlayerWindow(object):
         self.actionCenter_on_Platform.setObjectName("actionCenter_on_Platform")
         self.actionCenter_on_Footprint = QtWidgets.QAction(PlayerWindow)
         self.actionCenter_on_Footprint.setCheckable(True)
+        self.actionCenter_on_Footprint.setChecked(True)
         icon46 = QtGui.QIcon()
         icon46.addPixmap(QtGui.QPixmap(":/imgFMV/images/center_footprint.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionCenter_on_Footprint.setIcon(icon46)
         self.actionCenter_on_Footprint.setObjectName("actionCenter_on_Footprint")
         self.actionCenter_Target = QtWidgets.QAction(PlayerWindow)
         self.actionCenter_Target.setCheckable(True)
-        self.actionCenter_Target.setChecked(True)
+        self.actionCenter_Target.setChecked(False)
         icon47 = QtGui.QIcon()
         icon47.addPixmap(QtGui.QPixmap(":/imgFMV/images/center_target.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionCenter_Target.setIcon(icon47)
