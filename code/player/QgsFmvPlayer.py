@@ -182,7 +182,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.converter = Converter()
         self.BitratePlot = CreatePlotsBitrate()
 
-        settrace()
         if self.actionCenter_on_Platform.isChecked():
             setCenterMode(1, self.iface)
         elif self.actionCenter_on_Footprint.isChecked():
