@@ -56,7 +56,8 @@ The plugin install automatically this requisites,but you can install it using on
 
 `python3 -m pip install -r requirements.txt`
 
-Here is a **settings.ini** sample [Linux](code/settings_linux_sample.ini) configuration file  or [Windows](code/settings_win_sample.ini) sample
+Here is a **settings.ini** sample [Linux](code/settings_linux_sample.ini) configuration file  or [Windows](code/settings_win_sample.ini) sample.
+On windows you can find the **settings.ini** file at **C:\Users\<user name>\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\QGIS_FMV**.
 
 &#8593; [Back to top](#table-of-contents)
 
@@ -109,7 +110,7 @@ The installation can be done from the QGIS Python Plugins Repository or from the
 
 Windows automatically installs all, with user permission,If an error occurs, you should perform some checks.
 
-[![Watch the video (Spanish)](https://i.imgur.com/vXpMJhS.png)](https://youtu.be/9C973pz5i6k "Como usa QGISFMV en windows")
+[![Watch the video (Spanish)](https://i.imgur.com/eHhh2GPl.png)](https://youtu.be/9C973pz5i6k "Como usa QGISFMV en windows")
 
 ## Installation on Ubuntu
 
@@ -147,10 +148,10 @@ _Archlinux installation :_
 pacman -S qgis python-matplotlib opencv ffmpeg 
 ```
 
-_FFmpeg path_
+_ Set FFmpeg path in $HOME/.local/share/QGIS/QGIS3/profiles/[profile_name]/python/plugins/QGIS_FMV/settings.ini _
 ```
-ffmpeg = "/usr/bin/"
-ffprobe = "/usr/bin/"
+ffmpeg : "/usr/bin/"
+ffprobe : "/usr/bin/"
 ```
 
 ## Slides
