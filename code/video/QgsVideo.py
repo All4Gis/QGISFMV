@@ -823,9 +823,6 @@ class VideoWidget(QVideoWidget):
                                                 "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" +
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>")
 
-        if not event.buttons():
-            return
-
         # Object tracking rubberband
         if not self.Tracking_Video_RubberBand.isHidden():
             self.Tracking_Video_RubberBand.setGeometry(
