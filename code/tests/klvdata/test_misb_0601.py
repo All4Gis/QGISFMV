@@ -86,7 +86,6 @@ class ParserSingleShort(unittest.TestCase):
     def test_PlatformHeadingAngle(self):
 
         # See MISB ST0601.9
-        # FIXME: Limit display precision and add units as per example.
         interpretation = "159.97436484321355"
         tlv_hex_bytes = hexstr_to_bytes('05 02 71 C2')
         value = tlv_hex_bytes[2:]
@@ -98,7 +97,6 @@ class ParserSingleShort(unittest.TestCase):
 
     def test_PlatformPitchAngle(self):
         # See MISB ST0601.9
-        # FIXME: Limit display precision and add units as per example.
         interpretation = "-0.4315317239905987"
         tlv_hex_bytes = hexstr_to_bytes('06 02 FD 3D')
         value = tlv_hex_bytes[2:]
