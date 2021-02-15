@@ -1,0 +1,7 @@
+__pycache__
+ui
+tests
+*.sh
+settings_linux_sample.ini
+settings_win_sample.ini
+*.bat
