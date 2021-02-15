@@ -1617,7 +1617,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         view.expandAll()
         view.header().setSectionResizeMode(QHeaderView.ResizeToContents)
 
-        self.VideoInfoDialog.resize(500, 400)
+        self.VideoInfoDialog.resize(900, 800)
         self.VideoInfoDialog.show()
 
     def RemoveAllData(self):
