@@ -38,6 +38,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
+from QGIS_FMV.video.QgsVideoState import InteractionState,FilterState
 
 try:
     from pydevd import *
@@ -48,49 +49,6 @@ try:
     from cv2 import TrackerMOSSE_create, resize
 except ImportError:
     None
-
-    
-class InteractionState(object):
-    """ Interaction Video Player Class """
-
-    def __init__(self):
-        self.pointDrawer = False
-        self.measureDistance = False
-        self.measureArea = False
-        self.lineDrawer = False
-        self.polygonDrawer = False
-        self.magnifier = False
-        self.stamp = False
-        self.objectTracking = False
-        self.censure = False
-        self.HandDraw = False
-
-    def clear(self):
-        ''' Reset Interaction variables '''
-        self.__init__()
-
-
-class FilterState(object):
-    """ Filters State Video Player Class """
-
-    def __init__(self):
-        self.contrastFilter = False
-        self.monoFilter = False
-        self.MirroredHFilter = False
-        self.edgeDetectionFilter = False
-        self.grayColorFilter = False
-        self.invertColorFilter = False
-        self.NDVI = False
-
-    def clear(self):
-        ''' Reset Filter variables '''
-        self.__init__()
-
-    def hasFiltersSlow(self):
-        ''' Check if video has Slow filters aplicated '''
-        if True in (self.contrastFilter, self.edgeDetectionFilter, self.NDVI):
-            return True
-        return False
 
 
 class VideoWidgetSurface(QAbstractVideoSurface):

@@ -24,8 +24,7 @@ from QGIS_FMV.manager.QgsMultiplexor import Multiplexor
 from QGIS_FMV.manager.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer, QMediaContent
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
-                                        BufferedMetaReader,
-                                        StreamMetaReader,
+                                        
                                         AddVideoToSettings,
                                         RemoveVideoToSettings,
                                         RemoveVideoFolder,
@@ -37,6 +36,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsProject, QgsCoordinateTransform, Qgis as QGis
 from PyQt5.QtMultimedia import QMediaPlaylist
+from QGIS_FMV.utils.QgsFmvKlvReader import StreamMetaReader,BufferedMetaReader
 
 try:
     from pydevd import *
@@ -463,8 +463,8 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 fileIsOk = False
                 for ext in Exts:
                     if url.fileName().lower().endswith(ext):
-                       fileIsOk = True
-                       break
+                        fileIsOk = True
+                        break
                 if not fileIsOk:
                     check = False
                     break

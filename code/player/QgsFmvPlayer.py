@@ -36,8 +36,7 @@ from QGIS_FMV.player.QgsFmvMetadata import QgsFmvMetadata
 from QGIS_FMV.utils.QgsFmvLayers import (CreateVideoLayers,
                                          CreateGroupByName,
                                          RemoveGroupByName)
-from QGIS_FMV.utils.QgsFmvUtils import (callBackMetadataThread,
-                                        initElevationModel,
+from QGIS_FMV.utils.QgsFmvUtils import (initElevationModel,
                                         ResetData,
                                         getVideoFolder,
                                         BurnDrawingsImage,
@@ -54,6 +53,7 @@ from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsColor import ColorDialog
+from QGIS_FMV.utils.QgsFmvKlvReader import StreamMetaReader
 
 try:
     from pydevd import *
