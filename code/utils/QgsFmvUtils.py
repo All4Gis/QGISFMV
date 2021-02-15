@@ -30,6 +30,7 @@ import subprocess
 import threading
 import collections                  
 from queue import Queue, Empty
+from qgis.utils import iface as defIface
 
 from osgeo import gdal, osr
 
@@ -47,6 +48,7 @@ from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          SetcrtSensorSrc,
                                          SetcrtPltTailNum)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from pickle import NONE
 
 parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
@@ -75,29 +77,13 @@ except ImportError:
 
 settings = QSettings()
 tm = QgsApplication.taskManager()
-groupName = None
 windows = platform.system() == 'Windows'
 
-xSize = 0
-ySize = 0
 
 defaultTargetWidth = 200.0
 
-iface, \
-geotransform , \
-geotransform_affine, \
-gcornerPointUL, \
-gcornerPointUR, \
-gcornerPointLR, \
-gcornerPointLL, \
-gframeCenterLon, \
-gframeCenterLat, \
-frameCenterElevation, \
-sensorLatitude, \
-sensorLongitude, \
-sensorTrueAltitude = [None] * 13
-
-centerMode = 0
+gv = None
+groupName = None
 
 dtm_data = []
 dtm_transform = None
@@ -115,6 +101,106 @@ if windows:
 else:
     ffmpeg_path = os.path.join(ffmpegConf, 'ffmpeg')
     ffprobe_path = os.path.join(ffmpegConf, 'ffprobe')
+    
+
+class globalVariables:
+    def __init__(self):
+        self.iface = defIface
+        self.centerMode = 2
+        self.gcornerPointUL= None
+        self.gcornerPointUR = None
+        self.gcornerPointLR= None
+        self.gcornerPointLL= None
+        self.gframeCenterLat= None
+        self.gframeCenterLon= None
+        self.geotransform_affine= None
+        self.geotransform= None
+        self.affineT = None
+        self.transform = None
+        
+        self.frameCenterElevation= None
+        self.sensorLatitude= None
+        self.sensorLongitude= None
+        self.sensorTrueAltitude = [None] * 13
+        self.xSize = 0
+        self.ySize = 0
+        
+    def setFrameCenterElevation(self,fe):
+        self.frameCenterElevation = fe
+    def getFrameCenterElevation(self):
+        return self.frameCenterElevation
+
+    def setSensorLatitude(self,sl):
+        self.sensorLatitude = sl
+    def getSensorLatitude(self):
+        return self.sensorLatitude
+    
+    def setSensorLongitude(self,sl):
+        self.sensorLongitude = sl
+    def getSensorLongitude(self):
+        return self.sensorLongitude
+
+    def setSensorTrueAltitude(self,ta):
+        self.sensorTrueAltitude = ta
+    def getSensorTrueAltitude(self):
+        return self.sensorTrueAltitude
+            
+    def setIface(self,iface):
+        self.iface = iface
+    def getIface(self):
+        return self.iface
+    def setCenterMode(self,mode):
+        self.centerMode = mode
+    def getCenterMode(self):
+        return self.centerMode
+    
+    def setCornerUL(self,cornerPointUL):
+        self.gcornerPointUL=cornerPointUL
+    def getCornerUL(self):
+        return self.gcornerPointUL
+    
+    def setCornerUR(self,cornerPointUR):
+        self.gcornerPointUR=cornerPointUR
+    def getCornerUR(self):
+        return self.gcornerPointUR
+    def setCornerLR(self,cornerPointLR):
+        self.gcornerPointLR=cornerPointLR
+    def getCornerLR(self):
+        return self.gcornerPointLR
+    def setCornerLL(self,cornerPointLL):
+        self.gcornerPointLL=cornerPointLL
+    def getCornerLL(self):
+        return self.gcornerPointLL
+    def setFrameCenter(self, frameCenterLat,frameCenterLon):
+        self.gframeCenterLat= frameCenterLat
+        self.gframeCenterLon= frameCenterLon
+    
+    def getFrameCenterLat(self):
+        return self.gframeCenterLat
+    
+    def getFrameCenterLon(self):
+        return self.gframeCenterLon
+        
+    def setAffineTransform(self, at):
+        self.affineT=at
+    def getAffineTransform(self):
+        return self.affineT
+    
+    def setTransform(self, t):
+        self.transform=t
+    def getTransform(self):
+        return self.transform
+    
+    def setXSize(self, xs):
+        self.xSize = xs
+    def getXSize(self):
+        return self.xSize
+        
+    def setYSize(self,ys):
+        self.ySize=ys
+    def getYSize(self):
+        return self.ySize
+    
 
 
 class NonBlockingStreamReader:
@@ -320,7 +406,7 @@ class BufferedMetaReader():
             milis = int(s[1][:-1])
             
             if self.interval > 1000:
-               inte = 1000
+                inte = 1000
                
             r_milis = round(milis / inte) * inte
             if r_milis != 1000:
@@ -357,9 +443,9 @@ class BufferedMetaReader():
                 qgsu.showUserAndLogMessage(
                     "", "Meta reader -> get: " + t + " cache: " + new_t + " values ready but empty.", onlyLog=True)
 
-            bSize = self.getSize(t)            
-            self._check_buffer(new_t)
-            #debug            
+                      
+            self._check_buffer(new_t)   
+            # bSize = self.getSize(t)   
             #qgsu.showUserAndLogMessage("Buffer size:" + str(bSize), "Buffer size:" + str(bSize), onlyLog=False)            
         except Exception as e:
             qgsu.showUserAndLogMessage(
@@ -430,8 +516,8 @@ def getVideoFolder(video_file):
 
 def RemoveVideoFolder(filename):
     ''' Remove video temporal folder if exist '''
-    file, _ = os.path.splitext(filename)
-    folder = getVideoFolder(file)
+    videoFile, _ = os.path.splitext(filename)
+    folder = getVideoFolder(videoFile)
     try:
         shutil.rmtree(folder, ignore_errors=True)
     except Exception:
@@ -447,9 +533,10 @@ def getNameSpace():
 
 def setCenterMode(mode, interface):
     ''' Set map center mode '''
-    global centerMode, iface
-    centerMode = mode
-    iface = interface
+    global gv
+    gv = globalVariables()
+    gv.setCenterMode(mode)
+    gv.setIface(interface)
 
 def getKlvStreamIndex(videoPath, islocal=False):
     if islocal:
@@ -685,18 +772,16 @@ def convertMatToQImage(img, t=QImage.Format_RGB888):
 
 def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, frameCenterLon, frameCenterLat, ele):
     ''' Make Geotranform from pixel to lon lat coordinates '''
-    gcps = []
-
-    global gcornerPointUL, gcornerPointUR, gcornerPointLR, gcornerPointLL, gframeCenterLat, gframeCenterLon, geotransform_affine, geotransform
-        
-    gcornerPointUL = cornerPointUL
-    gcornerPointUR = cornerPointUR
-    gcornerPointLR = cornerPointLR
-    gcornerPointLL = cornerPointLL
+    gcps = []  
+    gv.setCornerUL(cornerPointUL)  
+    gv.setCornerUR(cornerPointUR)
+    gv.setCornerLR(cornerPointLR)
+    gv.setCornerLL(cornerPointLL)
+    gv.setFrameCenter(frameCenterLat,frameCenterLon)
     
-    gframeCenterLat = frameCenterLat
-    gframeCenterLon = frameCenterLon
-
+    xSize = gv.getXSize()
+    ySize = gv.getYSize()
+    
     Height = GetFrameCenter()[2]
 
     gcp = gdal.GCP(cornerPointUL[1], cornerPointUL[0],
@@ -715,7 +800,8 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
                    xSize / 2, ySize / 2, "Center", "5")
     gcps.append(gcp)
 
-    geotransform_affine = gdal.GCPsToGeoTransform(gcps)
+    at = gdal.GCPsToGeoTransform(gcps)
+    gv.setAffineTransform(at)
 
     src = np.float64(
         np.array([[0.0, 0.0], [xSize, 0.0], [xSize, ySize], [0.0, ySize], [xSize / 2.0, ySize / 2.0]]))
@@ -724,7 +810,8 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
 
 
     try:
-        geotransform, status = findHomography(src, dst)
+        geotransform, _ = findHomography(src, dst)
+        gv.setTransform(geotransform)
     except Exception:
         pass
 
@@ -737,47 +824,45 @@ def SetGCPsToGeoTransform(cornerPointUL, cornerPointUR, cornerPointLR, cornerPoi
 
 def GetSensor():
     ''' Get Sensor values '''
-    return [sensorLatitude, sensorLongitude, sensorTrueAltitude]
+    return [gv.getSensorLatitude(), gv.getSensorLongitude(), gv.getSensorTrueAltitude()]
 
 
 def GetFrameCenter():
     ''' Get Frame Center values '''
-    global sensorTrueAltitude
-    global frameCenterElevation
-    global gframeCenterLat
-    global gframeCenterLon
+    sensorTrueAltitude = gv.getSensorTrueAltitude()
     # if sensor height is null, compute it from sensor altitude.
-    if(frameCenterElevation is None):                                   
+    if(gv.getFrameCenterElevation() is None):                                   
         if sensorTrueAltitude is not None:
-            frameCenterElevation = sensorTrueAltitude - 500
+            gv.setFrameCenterElevation(sensorTrueAltitude - 500)
         else:
-            frameCenterElevation = 0
-    return [gframeCenterLat, gframeCenterLon, frameCenterElevation]
+            gv.setFrameCenterElevation(0)
+    
+    return [gv.getFrameCenterLat(), gv.getFrameCenterLon(), gv.getFrameCenterElevation()]
 
 
 def GetcornerPointUL():
     ''' Get Corner upper Left values '''
-    return gcornerPointUL
+    return gv.getCornerUL()
 
 
 def GetcornerPointUR():
     ''' Get Corner upper Right values '''
-    return gcornerPointUR
+    return gv.getCornerUR()
 
 
 def GetcornerPointLR():
     ''' Get Corner lower Right values '''
-    return gcornerPointLR
+    return gv.getCornerLR()
 
 
 def GetcornerPointLL():
     ''' Get Corner lower left values '''
-    return gcornerPointLL
+    return gv.getCornerLL()
 
 
 def GetGCPGeoTransform():
     ''' Return Geotransform '''
-    return geotransform
+    return gv.getTransform()
 
 
 def hasElevationModel():
@@ -790,20 +875,19 @@ def hasElevationModel():
 
 def SetImageSize(w, h):
     ''' Set Image Size '''
-    global xSize, ySize
-    xSize = w
-    ySize = h
+    gv.setXSize(w)
+    gv.setYSize(h)
     return
 
 
 def GetImageWidth():
     ''' Get Image Width '''
-    return xSize
+    return gv.getXSize()
 
 
 def GetImageHeight():
     ''' Get Image Height '''
-    return ySize
+    return gv.getYSize()
 
 
 def _check_output(cmds, t="ffmpeg"):
@@ -881,15 +965,18 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
 
 def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     ''' Update Layers Values '''
-    global frameCenterElevation, sensorLatitude, sensorLongitude, sensorTrueAltitude, groupName, geotransform
+    global groupName
 
     groupName = group
     #frameCenterLat = packet.FrameCenterLatitude
     #frameCenterLon = packet.FrameCenterLongitude
-    frameCenterElevation = packet.FrameCenterElevation
-    sensorLatitude = packet.SensorLatitude
-    sensorLongitude = packet.SensorLongitude
+    gv.setFrameCenterElevation(packet.FrameCenterElevation)
+    gv.setSensorLatitude(packet.SensorLatitude)
+    gv.setSensorLongitude(packet.SensorLongitude)
+    
+    
     sensorTrueAltitude = packet.SensorTrueAltitude
+    gv.setSensorTrueAltitude(sensorTrueAltitude)
     sensorRelativeElevationAngle = packet.SensorRelativeElevationAngle
     slantRange = packet.SlantRange
     OffsetLat1 = packet.OffsetCornerLatitudePoint1
@@ -902,7 +989,7 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     
     #If no framcenter (f.i. horizontal target) don't comptute footprint, beams and frame center
     if (frameCenterPoint[0] is None and frameCenterPoint[1] is None):
-        geotransform = None
+        gv.setTransform(None)
         return True
     
     #No framecenter altitude
@@ -973,6 +1060,8 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     p_lyr = qgsu.selectLayerByName(Platform_lyr, groupName)
     t_lyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
     
+    iface = gv.getIface()
+    centerMode = gv.getCenterMode()
 
     if f_lyr is not None and p_lyr is not None and t_lyr is not None:
         f_lyr_out_extent = f_lyr.extent()
@@ -1071,6 +1160,7 @@ def GeoreferenceFrame(task, image, output, p):
     # Set projection
     dst_ds.SetProjection(srs.ExportToWkt())
 
+    geotransform_affine = gv.getAffineTransform()
     # Set location
     dst_ds.SetGeoTransform(geotransform_affine)
     dst_ds.GetRasterBand(1).SetNoDataValue(0)
@@ -1089,14 +1179,13 @@ def GeoreferenceFrame(task, image, output, p):
 
 def GetGeotransform_affine():
     ''' Get current frame affine transformation '''
-    return geotransform_affine
+    return gv.getAffineTransform()
 
 
 def CornerEstimationWithOffsets(packet):
     ''' Corner estimation using Offsets
     :param packet: Metada packet
     '''
-    global geotransform
     try:
 
         OffsetLat1 = packet.OffsetCornerLatitudePoint1
@@ -1124,7 +1213,7 @@ def CornerEstimationWithOffsets(packet):
 
         #If no framcenter (f.i. horizontal target) don't comptute footprint, beams and frame center
         if (frameCenterPoint[0] is None and frameCenterPoint[1] is None):
-            geotransform = None
+            gv.setTransform(None)
             return True
         if hasElevationModel():
             cornerPointUL = GetLine3DIntersectionWithDEM(
@@ -1155,7 +1244,6 @@ def CornerEstimationWithOffsets(packet):
 
 def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, FOV=None, others=None):
     ''' Corner estimation without Offsets '''
-    global geotransform
     try:
         if packet is not None:
             sensorLatitude = packet.SensorLatitude
@@ -1279,7 +1367,7 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
 
         #If no framcenter (f.i. horizontal target) don't comptute footprint, beams and frame center
         if (frameCenterPoint[0] is None and frameCenterPoint[1] is None):
-            geotransform = None
+            gv.setTransform(None)
             return True
         if hasElevationModel():
             cornerPointUL = GetLine3DIntersectionWithDEM(
