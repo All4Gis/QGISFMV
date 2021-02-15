@@ -42,6 +42,7 @@ class Ui_ManagerWindow(object):
         self.VManager.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.VManager.setFocusPolicy(QtCore.Qt.NoFocus)
         self.VManager.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.VManager.setAcceptDrops(True)
         self.VManager.setStyleSheet("QHeaderView::section\n"
 "{\n"
 "spacing: 10px;\n"
@@ -62,9 +63,9 @@ class Ui_ManagerWindow(object):
 " }\n"
 "")
         self.VManager.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.VManager.setDragDropMode(QtWidgets.QAbstractItemView.NoDragDrop)
+        self.VManager.setDragDropMode(QtWidgets.QAbstractItemView.DropOnly)
         self.VManager.setAlternatingRowColors(True)
-        self.VManager.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.VManager.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.VManager.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.VManager.setGridStyle(QtCore.Qt.SolidLine)
         self.VManager.setObjectName("VManager")
@@ -138,7 +139,7 @@ class Ui_ManagerWindow(object):
         self.VManager.doubleClicked['QModelIndex'].connect(ManagerWindow.PlayVideoFromManager)
         self.actionOpen_MPEG2_File.triggered.connect(ManagerWindow.openVideoFileDialog)
         self.actionCreate_MISB_File.triggered.connect(ManagerWindow.openMuiltiplexorDialog)
-        self.CloseButton.triggered.connect(ManagerWindow.CloseFMV)
+        self.CloseButton.triggered.connect(ManagerWindow.closeFMV)
         QtCore.QMetaObject.connectSlotsByName(ManagerWindow)
 
     def retranslateUi(self, ManagerWindow):

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>748</width>
-    <height>652</height>
+    <width>1111</width>
+    <height>987</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -232,6 +232,16 @@
        </widget>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="lb_prec_ts">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QGroupBox" name="groupBox">
@@ -719,8 +729,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>748</width>
-     <height>26</height>
+     <width>1111</width>
+     <height>39</height>
     </rect>
    </property>
    <property name="contextMenuPolicy">
@@ -1304,6 +1314,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/imgFMV/images/center_footprint.png</normaloff>:/imgFMV/images/center_footprint.png</iconset>
@@ -1317,7 +1330,7 @@
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">

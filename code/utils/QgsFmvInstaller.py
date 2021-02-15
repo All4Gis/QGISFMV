@@ -164,7 +164,7 @@ def WindowsInstaller():
         
 
     try:
-        import homography, cv2, matplotlib  # noqa
+        import cv2, matplotlib  # noqa
     except ImportError:
         try:
             buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "<b>Missing dependencies</b>"),
@@ -177,7 +177,7 @@ def WindowsInstaller():
             None
     finally:
         try:
-            import homography, cv2, matplotlib  # noqa
+            import cv2, matplotlib  # noqa
             # We update dependencies
             if matplotlib.__version__ < '3.1.0' or cv2.__version__ < '4.1.0':
                 buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "<b>Updates available</b>"),
@@ -208,7 +208,7 @@ def LinuxInstaller():
     pwd = None
     
     try:
-        import homography, cv2, matplotlib, apt  # noqa
+        import cv2, matplotlib, apt  # noqa
     except ImportError:
         try:
 
@@ -228,10 +228,6 @@ def LinuxInstaller():
                 # Install matplotlib
                 cmd = 'sudo apt -y install matplotlib'
                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
-
-                # Install homography
-                cmd = 'sudo pip3 install homography'
-                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
                 
                 # Install apt
                 cmd = 'sudo pip3 install python-apt'
@@ -248,7 +244,7 @@ def LinuxInstaller():
             None
     finally:
         try:
-            import homography, cv2, matplotlib,apt  # noqa
+            import cv2, matplotlib,apt  # noqa
         except ImportError:
             qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
                                        level=QGis.Critical)

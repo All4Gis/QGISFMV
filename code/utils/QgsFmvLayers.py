@@ -10,6 +10,7 @@ from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QVariant, QSettings
 from qgis.core import (QgsPalLayerSettings,
                        QgsTextFormat,
+                       QgsLayerTreeGroup,
                        QgsTextBufferSettings,
                        QgsVectorLayerSimpleLabeling,
                        QgsMarkerSymbol,
@@ -90,6 +91,7 @@ def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
     feature = QgsFeature()
     feature.setAttributes(
         [pointIndex, Longitude, Latitude, Altitude])
+    
     p = QgsPointXY()
     p.set(Longitude, Latitude)
     feature.setGeometry(QgsGeometry.fromPointXY(p))
@@ -306,7 +308,7 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvLayers", "Failed Update FootPrint Layer! : "), str(e))
-    return
+
 
 
 def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, ele):
@@ -378,7 +380,6 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Beams Layer! : "), str(e))
-    return
 
 
 def UpdateTrajectoryData(packet, ele):
@@ -414,20 +415,18 @@ def UpdateTrajectoryData(packet, ele):
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
-    return
 
 
-def UpdateFrameAxisData(packet, ele):
+def UpdateFrameAxisData(imgSS, sensor, framecenter, ele):
     ''' Update Frame Axis Values '''
-    global crtSensorSrc2, groupName
+    global crtSensorSrc2, groupName, frameAxisMarker
 
-    imgSS = packet.ImageSourceSensor
-    lat = packet.SensorLatitude
-    lon = packet.SensorLongitude
-    alt = packet.SensorTrueAltitude
-    fc_lat = packet.FrameCenterLatitude
-    fc_lon = packet.FrameCenterLongitude
-    fc_alt = packet.FrameCenterElevation
+    lat = sensor[0]
+    lon = sensor[1]
+    alt = sensor[2]
+    fc_lat = framecenter[0]
+    fc_lon = framecenter[1]
+    fc_alt = framecenter[2]
 
     frameaxisLyr = qgsu.selectLayerByName(FrameAxis_lyr, groupName)
 
@@ -457,15 +456,15 @@ def UpdateFrameAxisData(packet, ele):
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Frame axis Layer! : "), str(e))
-    return
 
 
 def UpdateFrameCenterData(packet, ele):
     ''' Update FrameCenter Values '''
-    lat = packet.FrameCenterLatitude
-    lon = packet.FrameCenterLongitude
-    alt = packet.FrameCenterElevation
-    if packet.FrameCenterElevation is None:
+    lat = packet[0]
+    lon = packet[1]
+    alt = packet[2]
+    
+    if alt is None:
         alt = 0.0
 
     global groupName
@@ -499,7 +498,6 @@ def UpdateFrameCenterData(packet, ele):
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Frame Center Layer! : "), str(e))
 
-    return
 
 
 def UpdatePlatformData(packet, ele):
@@ -543,7 +541,6 @@ def UpdatePlatformData(packet, ele):
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Platform Layer! : "), str(e))
 
-    return
 
 
 def CommonLayer(value):
@@ -565,7 +562,6 @@ def CreateGroupByName(name=frames_g):
         # Unchecked visibility
         group.setItemVisibilityCheckedRecursive(False)
         group.setExpanded(False)
-    return
 
 
 def RemoveGroupByName(name=frames_g):
@@ -577,7 +573,6 @@ def RemoveGroupByName(name=frames_g):
             dump = child.name()
             _layerreg.removeMapLayer(dump.split("=")[-1].strip())
         root.removeChildNode(group)
-    return
 
 
 def CreateVideoLayers(ele, name):
@@ -679,7 +674,6 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_polygon, group=groupName)
 
     QApplication.processEvents()
-    return
 
 
 def ExpandLayer(layer, value=True):
@@ -687,7 +681,6 @@ def ExpandLayer(layer, value=True):
     ltl = _layerreg.layerTreeRoot().findLayer(layer.id())
     ltl.setExpanded(value)
     QApplication.processEvents()
-    return
 
 
 def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
@@ -699,7 +692,6 @@ def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
                                            'outline_width': style['OUTLINE_WIDTH']})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
-    return
 
 
 def SetDefaultFootprint3DStyle(layer):
@@ -715,7 +707,6 @@ def SetDefaultFootprint3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultTrajectoryStyle(layer):
@@ -727,7 +718,6 @@ def SetDefaultTrajectoryStyle(layer):
                                            'use_custom_dash': style['use_custom_dash']})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
-    return
 
 
 def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
@@ -742,7 +732,6 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
 
     symbol_layer = QgsSvgMarkerSymbolLayer.create(svgStyle)
     layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
-    return
 
 
 def SetDefaultPlatform3DStyle(layer):
@@ -762,7 +751,6 @@ def SetDefaultPlatform3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultTrajectory3DStyle(layer):
@@ -780,7 +768,6 @@ def SetDefaultTrajectory3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultFrameAxis3DStyle(layer):
@@ -798,7 +785,6 @@ def SetDefaultFrameAxis3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultBeams3DStyle(layer):
@@ -816,7 +802,6 @@ def SetDefaultBeams3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultFrameCenterStyle(layer):
@@ -826,7 +811,6 @@ def SetDefaultFrameCenterStyle(layer):
         {'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size': style["SIZE"]})
     renderer = QgsSingleSymbolRenderer(symbol)
     layer.setRenderer(renderer)
-    return
 
 
 def SetDefaultFrameCenter3DStyle(layer):
@@ -846,7 +830,6 @@ def SetDefaultFrameCenter3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
@@ -858,7 +841,6 @@ def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
                                            'outline_style': style['OUTLINE_STYLE']})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
-    return
 
 
 def SetDefaultPointStyle(layer):
@@ -893,8 +875,6 @@ def SetDefaultPointStyle(layer):
     layer.setLabelsEnabled(True)
     layer.setLabeling(layer_settings)
 
-    return
-
 
 def SetDefaultLineStyle(layer):
     ''' Line Symbol '''
@@ -902,7 +882,6 @@ def SetDefaultLineStyle(layer):
     symbol = layer.renderer().symbol()
     symbol.setColor(style['COLOR'])
     symbol.setWidth(style['WIDTH'])
-    return
 
 
 def SetDefaultPolygonStyle(layer):
@@ -914,7 +893,6 @@ def SetDefaultPolygonStyle(layer):
                                            'outline_width': style['OUTLINE_WIDTH']})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
-    return
 
 
 def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
@@ -922,7 +900,6 @@ def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
     style = S.getBeam(beam)
     symbol = layer.renderer().symbol()
     symbol.setColor(QColor.fromRgba(style['COLOR']))
-    return
 
 # TODO : Update layer symbology if draw color change?
 # def UpdateStylesDrawLayers(NameSpace):
@@ -986,19 +963,34 @@ def addLayer(layer, loadInLegend=True, group=None, isSubGroup=False):
     @param loadInLegend: True if this layer should be added to the legend.
     :return: The added layer
     """
+    
     global groupName
+    
     if not hasattr(layer, "__iter__"):
         layer = [layer]
     if group is not None:
         _layerreg.addMapLayers(layer, False)
         root = _layerreg.layerTreeRoot()
+        
         if isSubGroup:
             vg = root.findGroup(groupName)
             g = vg.findGroup(group)
-            g.insertChildNode(0, QgsLayerTreeLayer(layer[0]))
         else:
             g = root.findGroup(group)
-            g.insertChildNode(0, QgsLayerTreeLayer(layer[0]))
+            
+        if g is None:
+            # Create Group
+            node_group = QgsLayerTreeGroup(group)
+            root.insertChildNode(0, node_group)       
+        
+        if isSubGroup:
+            vg = root.findGroup(groupName)
+            g = vg.findGroup(group)
+        else:
+            g = root.findGroup(group)
+        
+        g.insertChildNode(0, QgsLayerTreeLayer(layer[0]))
+        
     else:
         _layerreg.addMapLayers(layer, loadInLegend)
     return layer
@@ -1010,6 +1002,7 @@ def addLayerNoCrsDialog(layer, loadInLegend=True, group=None, isSubGroup=False):
     Same as the addLayer method, but it does not ask for CRS, regardless of current
     configuration in QGIS settings
     '''
+    
     settings = QSettings()
     prjSetting3 = settings.value('/Projections/defaultBehavior')
     settings.setValue('/Projections/defaultBehavior', '')

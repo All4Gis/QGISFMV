@@ -54,6 +54,11 @@ class QgsUtils(object):
         return ret
 
     @staticmethod
+    def getLayerExtent(layer=None):
+        ''' Get Layer extent '''
+        return iface.mapCanvas().mapSettings().layerExtentToOutputExtent(layer, layer.extent())
+
+    @staticmethod
     def selectLayerByName(layerName, group=None):
         ''' Select Layer by Name '''
         returnLayer = None

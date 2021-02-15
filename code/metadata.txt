@@ -1,7 +1,7 @@
 [general]
 name= QGIS Full Motion Video
 internal_name = QGIS_FMV
-qgisMinimumVersion=3.8
+qgisMinimumVersion=3.4
 qgisMaximumVersion=3.99
 description=<p>QGIS Full Motion Video.</p>
 about= Plugin for QGIS which allows to analyze, visualize and process videos inside the QGIS environment. 
@@ -19,12 +19,31 @@ about= Plugin for QGIS which allows to analyze, visualize and process videos ins
 	   </a>
 	   <p>If this plugin is useful for you, consider to donate to the author.</p>
 
-version=1.10
+
+version=1.14
 author= Francisco Raga
 email=franka1986@gmail.com
 
 changelog=
     ** General **
+    1.14:
+      - Implemented playlist in manager.
+      - Added Timestamp label below duration slider.
+      - Enhanced zoom on platform/target/framecenter, only recenter if the object goes out the map.
+      - Fixed framecenter and drawings calculation.
+      - Playlist drag & Drop + multiple removals.
+      - Fixed lon/lat video mouseover not updating if mouse not moving.
+      - Fixed lon/lat precision to 7 for drawings/measure (lower resolution causes tool to "jump" on video overlay).
+      - Fixed extract frames (they came all black).
+      - Fixed navigation mit slider.
+      - Removed Python Homography lib, using directly cv2.
+      - Fixed video (.ts) freezing/sound/size problem on windows using haali splitter.
+        https://haali.su/mkv/MatroskaSplitter.exe
+      - Fixed manager: Appears first on ui and then loads saved videos.
+      - Fixed problem with full screen mode: wrong monitor and wrong context menu location.
+      - fixed drawing mode if video stopped.
+      - Added clickable slider.
+      
     1.10:
     	- fix default config
     	- Update documentation and Ubuntu installation

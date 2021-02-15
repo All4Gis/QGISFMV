@@ -22,7 +22,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
+import sys
 from abc import ABCMeta
 from abc import abstractmethod
 from collections import OrderedDict
@@ -58,6 +58,7 @@ class SetParser(Element):
         self._targetWidth = None
         self._slantRange = None
         self._SensorRelativeAzimuthAngle = None
+        self._SensorRelativeElevationAngle = None                                                                                  
         self._OffsetCornerLatitudePoint1 = None
         self._OffsetCornerLongitudePoint1 = None
         self._OffsetCornerLatitudePoint2 = None
@@ -166,6 +167,8 @@ class SetParser(Element):
                             self.SensorVerticalFieldOfView = item.value.value
                         elif item.TAG == 18:
                             self.SensorRelativeAzimuthAngle = item.value.value
+                        elif item.TAG == 19:
+                            self.SensorRelativeElevationAngle = item.value.value                    
                         elif item.TAG == 21:
                             self.SlantRange = item.value.value
                         elif item.TAG == 22:
@@ -293,7 +296,15 @@ class SetParser(Element):
     @SensorRelativeAzimuthAngle.setter
     def SensorRelativeAzimuthAngle(self, value):
         self._SensorRelativeAzimuthAngle = float(value)
+        
+    @property
+    def SensorRelativeElevationAngle(self):
+        return self._SensorRelativeElevationAngle
 
+    @SensorRelativeElevationAngle.setter
+    def SensorRelativeElevationAngle(self, value):
+        self._SensorRelativeElevationAngle = float(value)
+        
     @property
     def SlantRange(self):
         return self._slantRange

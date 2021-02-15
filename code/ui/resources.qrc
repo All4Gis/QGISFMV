@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="imgFMV">
         <file>../images/icon.png</file>
+        <file>../images/raise.png</file>
+        <file>../images/lower.png</file>
         <file>../images/Critical.png</file>
         <file>../images/Information.png</file>
         <file>../images/Question.png</file>

@@ -27,13 +27,13 @@ from qgis.PyQt.QtCore import (QSettings,
                               QCoreApplication,
                               QTranslator,
                               qVersion,
-                              QThread)
+                              QThread,
+                              Qt)
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QHBoxLayout, QSizePolicy
 from QGIS_FMV.about.QgsFmvAbout import FmvAbout
 from QGIS_FMV.manager.QgsManager import FmvManager
 from QGIS_FMV.utils.QgsFmvLog import log
-from qgis.PyQt.QtCore import Qt
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import QgsApplication
 
@@ -48,7 +48,7 @@ class Fmv:
 
     def __init__(self, iface):
         """ Contructor """
-
+        self.run_once = False
         self.iface = iface
         log.initLogging()
         threadcount = QThread.idealThreadCount()
@@ -73,13 +73,13 @@ class Fmv:
                     QCoreApplication.installTranslator(self.translator)
 
         self._FMVManager = None
-
+        
     def initGui(self):
         ''' FMV Action '''
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
-                                 u"FMV", self.iface.mainWindow(),
+                                 "FMV", self.iface.mainWindow(),
                                  triggered=self.run)
-
+        
         self.iface.registerMainWindowAction(
             self.actionFMV, qgsu.SetShortcutForPluginFMV(u"FMV"))
         self.iface.addToolBarIcon(self.actionFMV)
@@ -112,10 +112,11 @@ class Fmv:
 
     def run(self):
         ''' Run method '''
-        if self._FMVManager is None:
+        if self._FMVManager is None and not self.run_once:
+            self.run_once = True
             self.CreateDockWidget()
-
+    
     def CreateDockWidget(self):
-        ''' Create Manager Video QDockWidget '''
+        ''' Create Manager Video QDockWidget '''                 
         self._FMVManager = FmvManager(self.iface)
         self.iface.addDockWidget(Qt.BottomDockWidgetArea, self._FMVManager)
