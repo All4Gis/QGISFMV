@@ -38,7 +38,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (SetImageSize,
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.QgsVideoFilters import VideoFilters as filter
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
-from QGIS_FMV.video.QgsVideoState import InteractionState,FilterState
+from QGIS_FMV.video.QgsVideoState import InteractionState, FilterState
 
 try:
     from pydevd import *
@@ -186,6 +186,7 @@ class VideoWidgetSurface(QAbstractVideoSurface):
         self._currentFrame.unmap()
         return
 
+
 class VideoWidget(QVideoWidget):
 
     def __init__(self, parent=None):
@@ -251,7 +252,6 @@ class VideoWidget(QVideoWidget):
         
         self.lastMouseX = -1
         self.lastMouseY = -1
-        
 
     def removeLastLine(self):
         ''' Remove Last Line Objects '''
@@ -568,7 +568,6 @@ class VideoWidget(QVideoWidget):
     def RemoveVideoDrawings(self):
         ''' Remove Video Drawings '''
         self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawMeasureDistance, self.drawMeasureArea, self.drawPolygon = [], [], [], [], [], []
-        
 
     def paintEvent(self, event):
         """
@@ -691,7 +690,7 @@ class VideoWidget(QVideoWidget):
             self.lastMouseY = event.y()
 
         if useLast is False and self.lastMouseX != -1 and self.lastMouseY != -1:
-            #generates an event that simulates a mouse move, because even if mouse is still, video is running and mouse lat/lon must be updated.
+            # generates an event that simulates a mouse move, because even if mouse is still, video is running and mouse lat/lon must be updated.
             event = QMouseEvent(QEvent.MouseMove, QPoint(self.lastMouseX, self.lastMouseY), Qt.NoButton, Qt.NoButton, Qt.NoModifier) 
         else:
             return
@@ -708,7 +707,7 @@ class VideoWidget(QVideoWidget):
             return
 
         # Prevent draw on video if not started or finished
-        #if self.parent.player.position() == 0:
+        # if self.parent.player.position() == 0:
         #    return
 
         # Mouse cursor drawing
@@ -720,15 +719,15 @@ class VideoWidget(QVideoWidget):
             Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                 event, self.surface)
 
-            tr = QgsCoordinateTransform( QgsCoordinateReferenceSystem( 'EPSG:4326' ), iface.mapCanvas().mapSettings().destinationCrs(), QgsProject.instance().transformContext() )
-            mapPt = tr.transform( QgsPointXY(Longitude, Latitude) )
+            tr = QgsCoordinateTransform(QgsCoordinateReferenceSystem('EPSG:4326'), iface.mapCanvas().mapSettings().destinationCrs(), QgsProject.instance().transformContext())
+            mapPt = tr.transform(QgsPointXY(Longitude, Latitude))
             
             vertices = self.Cursor_Canvas_RubberBand.numberOfVertices()
             if vertices > 0:
                 self.Cursor_Canvas_RubberBand.removePoint(0, True, 0)
-                self.Cursor_Canvas_RubberBand.movePoint( mapPt, 0)
+                self.Cursor_Canvas_RubberBand.movePoint(mapPt, 0)
             else:
-                self.Cursor_Canvas_RubberBand.addPoint( mapPt )
+                self.Cursor_Canvas_RubberBand.addPoint(mapPt)
 
             if self._MGRS:
                 try:
@@ -775,11 +774,11 @@ class VideoWidget(QVideoWidget):
                 self.AddMoveEventValue(self.drawMeasureArea, Longitude, Latitude, Altitude)
 
         else:
-            self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" +
-                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
-                                                "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" +
-                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
-                                                "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" +
+            self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" + 
+                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" + 
+                                                "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" + 
+                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" + 
+                                                "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" + 
                                                 "<span style='font-size:9pt; font-weight:normal;'>-</span>")
 
         # Object tracking rubberband

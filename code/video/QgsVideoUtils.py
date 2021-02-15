@@ -3,7 +3,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetImageWidth,
                                         GetImageHeight,
                                         GetSensor,
                                         GetLine3DIntersectionWithDEM,
-                                        GetDemAltAt,            
+                                        GetDemAltAt,
                                         GetFrameCenter,
                                         hasElevationModel,
                                         GetGCPGeoTransform,
@@ -39,8 +39,8 @@ class VideoUtils(object):
         gt = GetGCPGeoTransform()
         imagepoint = np.array(np.dot(np.linalg.inv(gt), [x, y, 1]))
         scalar = imagepoint[2]
-        ximage = imagepoint[0]/scalar
-        yimage = imagepoint[1]/scalar
+        ximage = imagepoint[0] / scalar
+        yimage = imagepoint[1] / scalar
         scr_x = (ximage / VideoUtils.GetXRatio(surface)) + \
             VideoUtils.GetXBlackZone(surface)
         scr_y = (yimage / VideoUtils.GetYRatio(surface)) + \
@@ -141,12 +141,12 @@ class VideoUtils(object):
         @return:
         '''
         gt = GetGCPGeoTransform()
-        #return gt([(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)])
+        # return gt([(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)])
         imagepoint = [(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface), 1]
         worldpoint = np.array(np.dot(gt, imagepoint))
         scalar = worldpoint[2]
-        xworld = worldpoint[0]/scalar
-        yworld = worldpoint[1]/scalar
+        xworld = worldpoint[0] / scalar
+        yworld = worldpoint[1] / scalar
                 
         return xworld, yworld
     
@@ -162,8 +162,8 @@ class VideoUtils(object):
         '''
         
         gt = GetGeotransform_affine()
-        x=(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface)
-        y=(event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)
+        x = (event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface)
+        y = (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)
         x1, y1 = gdal.ApplyGeoTransform(gt, x, y)
         return [y1, x1]
 

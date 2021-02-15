@@ -31,12 +31,12 @@ from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         getVideoFolder,
                                         getVideoManagerList,
                                         getNameSpace,
-                                        getKlvStreamIndex,                  
+                                        getKlvStreamIndex,
                                         getVideoLocationInfo)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsProject, QgsCoordinateTransform, Qgis as QGis
 from PyQt5.QtMultimedia import QMediaPlaylist
-from QGIS_FMV.utils.QgsFmvKlvReader import StreamMetaReader,BufferedMetaReader
+from QGIS_FMV.utils.QgsFmvKlvReader import StreamMetaReader, BufferedMetaReader
 
 try:
     from pydevd import *
@@ -46,6 +46,7 @@ except ImportError:
 s = QSettings()
 parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
+
 
 class FmvManager(QDockWidget, Ui_ManagerWindow):
     ''' Video Manager '''
@@ -129,7 +130,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self._PlayerDlg.close()               
         for cr in self.VManager.selectedItems():
             idx = 0
-            #we browse cells but we need lines, so ignore already deleted rows
+            # we browse cells but we need lines, so ignore already deleted rows
             try:
                 idx = cr.row()
             except Exception:
@@ -144,7 +145,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self.videoIsStreaming.pop(idx)
             self.initialPt.pop(idx)
             
-            
             # Remove video to Settings List
             RemoveVideoToSettings(row_id)
             # Remove folder if is local
@@ -155,7 +155,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             
             self.meta_reader.pop(idx)
             
-            #remove from playlist
+            # remove from playlist
             self.playlist.removeMedia(idx)
                 
     def closePlayer(self):
@@ -173,7 +173,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             None
         self.close()
         return
-    
 
     def openStreamDialog(self):
         ''' Open Stream Dialog '''
@@ -339,7 +338,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         
         return
     
-    
     def isFileInPlaylist(self, filename):
         mcount = self.playlist.mediaCount()
         for x in range(mcount):
@@ -380,7 +378,6 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
         else:
             self._PlayerDlg.playFile(path)              
-        
     
     def SetupPlayer(self, row):
         ''' Play video from manager dock.
@@ -390,20 +387,20 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         
         self.playlist.setCurrentIndex(row)
         
-        #qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
-        #if path != self._PlayerDlg.fileName:
+        # qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
+        # if path != self._PlayerDlg.fileName:
         self._PlayerDlg.setMetaReader(self.meta_reader[row])
         self.ToggleActiveFromTitle()
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()
                     
-        #zoom to map zone     
-        curAuthId =  self.iface.mapCanvas().mapSettings().destinationCrs().authid()
+        # zoom to map zone     
+        curAuthId = self.iface.mapCanvas().mapSettings().destinationCrs().authid()
         
-        if self.initialPt[row][1] is not None and self.initialPt[row][0] is not None:                                                                     
+        if self.initialPt[row][1] is not None and self.initialPt[row][0] is not None: 
             map_pos = QgsPointXY(self.initialPt[row][1], self.initialPt[row][0])
             if curAuthId != "EPSG:4326":
-                trgCode=int(curAuthId.split(":")[1])
+                trgCode = int(curAuthId.split(":")[1])
                 xform = QgsCoordinateTransform(QgsCoordinateReferenceSystem(4326), QgsCoordinateReferenceSystem(trgCode), QgsProject().instance())
                 map_pos = xform.transform(map_pos)
                 
@@ -469,21 +466,21 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                     check = False
                     break
         
-        #Only accept if all files match a required extension       
-        if check:    
+        # Only accept if all files match a required extension       
+        if check: 
             e.acceptProposedAction()
-        #Ignore and stop propagation
+        # Ignore and stop propagation
         else:
             e.setDropAction(Qt.IgnoreAction)
             e.accept()
 
     def dropEvent(self, e):
         for url in e.mimeData().urls():
-            #local files
+            # local files
             if "file:///" in url.toString():
                 if not self.isFileInPlaylist(url.toString()[8:]):
                     self.AddFileRowToManager(url.fileName(), url.toString()[8:])
-            #network drives
+            # network drives
             else:
                 if not self.isFileInPlaylist(url.toString()[5:]):
                     self.AddFileRowToManager(url.fileName(), url.toString()[5:])

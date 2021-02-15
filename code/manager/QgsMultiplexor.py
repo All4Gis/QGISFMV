@@ -44,12 +44,12 @@ _range5 = (0, 360)
 _key5 = b'\x05'
 
 # Platform Pitch Angle
-_domain6 = ((-2**15 - 1), 2**15 - 1)
+_domain6 = ((-2 ** 15 - 1), 2 ** 15 - 1)
 _range6 = (-20, 20)
 _key6 = b'\x06'
 
 # Platform Roll Angle
-_domain7 = ((-2**15 - 1), 2**15 - 1)
+_domain7 = ((-2 ** 15 - 1), 2 ** 15 - 1)
 _range7 = (-50, 50)
 _key7 = b'\x07'
 
