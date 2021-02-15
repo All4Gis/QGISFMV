@@ -575,30 +575,30 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
             scr = QApplication.desktop().screenNumber(self)
             menu.exec_(QPoint(point.x() + scr * QApplication.desktop().screenGeometry(scr).width(), point.y()))
     
-    def currentMediaChanged(self, media):
-        
-        idx = self.parent.playlist.currentIndex()
-        if idx != -1:
-            self.parent.VManager.selectRow(idx)
-
-            if not self.parent.videoPlayable[idx]:
-                qgsu.showUserAndLogMessage("", "Video not playable. " + str(idx), onlyLog=True)
-                QTimer.singleShot(300, lambda: self.player.setPosition(self.player.duration()))
-                return
-            if self.parent.initialPt[idx] and self.parent.dtm_path != '':
-                # init elevation model
-                try:
-                    initElevationModel(self.parent.initialPt[idx][0], self.parent.initialPt[idx][1], self.parent.dtm_path)
-                    qgsu.showUserAndLogMessage("", "Elevation model initialized.", onlyLog=True)
-                except Exception as e:
-                    qgsu.showUserAndLogMessage("", "Elevation model NOT initialized: " + str(e), onlyLog=True)
-                    None
-            # update filename
-            self.fileName = self.parent.VManager.item(idx, 3).text()
-            
-            self.setWindowTitle(QCoreApplication.translate(
-                "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))
-            self.parent.SetupPlayer(idx)
+#     def currentMediaChanged(self, media):
+#         
+#         idx = self.parent.playlist.currentIndex()
+#         if idx != -1:
+#             self.parent.VManager.selectRow(idx)
+# 
+#             if not self.parent.videoPlayable[idx]:
+#                 qgsu.showUserAndLogMessage("", "Video not playable. " + str(idx), onlyLog=True)
+#                 QTimer.singleShot(300, lambda: self.player.setPosition(self.player.duration()))
+#                 return
+#             if self.parent.initialPt[idx] and self.parent.dtm_path != '':
+#                 # init elevation model
+#                 try:
+#                     initElevationModel(self.parent.initialPt[idx][0], self.parent.initialPt[idx][1], self.parent.dtm_path)
+#                     qgsu.showUserAndLogMessage("", "Elevation model initialized.", onlyLog=True)
+#                 except Exception as e:
+#                     qgsu.showUserAndLogMessage("", "Elevation model NOT initialized: " + str(e), onlyLog=True)
+#                     None
+#             # update filename
+#             self.fileName = self.parent.VManager.item(idx, 3).text()
+#             
+#             self.setWindowTitle(QCoreApplication.translate(
+#                 "QgsFmvPlayer", 'Playing : ') + os.path.basename(media.canonicalUrl().toString()))
+#             self.parent.SetupPlayer(idx)
     
     def rateChanged(self, _qreal): 
         '''Signals the playbackRate has changed to rate.
@@ -1145,6 +1145,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @param islocal: Check if video is local,created using multiplexor or is MISB
         @param klv_folder: klv folder if video is created using multiplexor
         '''
+        self.fileName = videoPath
         self.closing = False
         self.islocal = islocal
         self.klv_folder = klv_folder
