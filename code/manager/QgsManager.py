@@ -73,10 +73,10 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                                  QCoreApplication.translate("ManagerDock", "Remove from list"), self,
                                  triggered=self.remove)
 
-        self.VManager.setColumnWidth(1, 150)
+        self.VManager.setColumnWidth(1, 250)
         self.VManager.setColumnWidth(2, 140)
-        self.VManager.setColumnWidth(3, 250)
-        self.VManager.setColumnWidth(4, 150)
+        self.VManager.setColumnWidth(3, 600)
+        self.VManager.setColumnWidth(4, 600)
         self.VManager.setColumnWidth(5, 130)                                    
         self.VManager.verticalHeader().setDefaultAlignment(Qt.AlignHCenter)
         self.VManager.hideColumn(0)
