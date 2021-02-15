@@ -25,7 +25,7 @@ class QgsFmvSlider(QSlider):
         else:
             sliderLength = sr.height()
             sliderMin = gr.y()
-            sliderMax = gr.bottom() - sliderLength + 1;
+            sliderMax = gr.bottom() - sliderLength + 1
         pr = pos - sr.center() + sr.topLeft()
         p = pr.x() if self.orientation() == Qt.Horizontal else pr.y()
         return QStyle.sliderValueFromPosition(self.minimum(), self.maximum(), p - sliderMin,

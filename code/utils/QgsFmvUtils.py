@@ -273,7 +273,7 @@ class BufferedMetaReader():
         od = collections.OrderedDict(sorted(self._meta.items()))
         for ele in od.keys():       
             c_date = datetime.strptime(ele, '%H:%M:%S.%f')
-            if last_date == None:
+            if last_date is None:
                 last_date = c_date
                 continue
 
@@ -454,29 +454,28 @@ def setCenterMode(mode, interface):
 def getKlvStreamIndex(videoPath, islocal=False):
     if islocal:
         return 0
-    else:
-        #search for klv data in 5 streams
-        for i in range(6):
-            p = _spawn(['-i', videoPath,
-                        '-ss', '00:00:00',
-                        '-to', '00:00:01',
-                        '-map', '0:d:'+str(i),
-                        '-f', 'data', '-'])
+    #search for klv data in 5 streams
+    for i in range(6):
+        p = _spawn(['-i', videoPath,
+                    '-ss', '00:00:00',
+                    '-to', '00:00:01',
+                    '-map', '0:d:'+str(i),
+                    '-f', 'data', '-'])
 
-            stdout_data, _ = p.communicate()
-            
-            if stdout_data == b'':
-                continue
+        stdout_data, _ = p.communicate()
+        
+        if stdout_data == b'':
+            continue
+        else:
+            #look if stream has valid klv data
+            if b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00' in stdout_data or b'\x06\x0e+4\x02\x01\x01\x01\x0e\x01\x01\x02\x01\x01\x00\x00' in stdout_data:
+                return i
             else:
-                #look if stream has valid klv data
-                if b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00' in stdout_data or b'\x06\x0e+4\x02\x01\x01\x01\x0e\x01\x01\x02\x01\x01\x00\x00' in stdout_data:
-                    return i
-                else:
-                    qgsu.showUserAndLogMessage("", "skipping stream " + str(i) + " not a klv stream.", onlyLog=True)
-                    continue
-                
-        qgsu.showUserAndLogMessage("Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)
-        return 0
+                qgsu.showUserAndLogMessage("", "skipping stream " + str(i) + " not a klv stream.", onlyLog=True)
+                continue
+            
+    qgsu.showUserAndLogMessage("Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)
+    return 0
 
 def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None, klv_index=0):
     """ Get basic location info about the video """
@@ -507,7 +506,7 @@ def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None, klv_index=0)
             centerLat = packet.FrameCenterLatitude
             centerLon = packet.FrameCenterLongitude
             #Target maybe unavailable because of horizontal view
-            if centerLat == None and centerLon == None:
+            if centerLat is None and centerLon is None:
                 centerLat = packet.SensorLatitude
                 centerLon = packet.SensorLongitude
             loc = "-"
@@ -902,13 +901,13 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     frameCenterPoint = [packet.FrameCenterLatitude, packet.FrameCenterLongitude, packet.FrameCenterElevation]
     
     #If no framcenter (f.i. horizontal target) don't comptute footprint, beams and frame center
-    if (frameCenterPoint[0]==None and frameCenterPoint[1]==None):
+    if (frameCenterPoint[0] is None and frameCenterPoint[1] is None):
         geotransform = None
         return True
     
     #No framecenter altitude
-    if(frameCenterPoint[2]==None):
-        if(sensorRelativeElevationAngle != None and slantRange != None):
+    if(frameCenterPoint[2] is None):
+        if(sensorRelativeElevationAngle is not None and slantRange is not None):
             frameCenterPoint[2] = sensorTrueAltitude - sin(sensorRelativeElevationAngle) * slantRange
         else:
             frameCenterPoint[2] = 0.0
@@ -975,7 +974,7 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     t_lyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
     
 
-    if f_lyr != None and p_lyr != None and t_lyr != None:
+    if f_lyr is not None and p_lyr is not None and t_lyr is not None:
         f_lyr_out_extent = f_lyr.extent()
         p_lyr_out_extent = p_lyr.extent()
         t_lyr_out_extent = t_lyr.extent()
@@ -1124,7 +1123,7 @@ def CornerEstimationWithOffsets(packet):
         frameCenterPoint = [packet.FrameCenterLatitude, packet.FrameCenterLongitude, packet.FrameCenterElevation]
 
         #If no framcenter (f.i. horizontal target) don't comptute footprint, beams and frame center
-        if (frameCenterPoint[0]==None and frameCenterPoint[1]==None):
+        if (frameCenterPoint[0] is None and frameCenterPoint[1] is None):
             geotransform = None
             return True
         if hasElevationModel():
@@ -1279,7 +1278,7 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
         frameCenterPoint = [packet.FrameCenterLatitude, packet.FrameCenterLongitude, packet.FrameCenterElevation]
 
         #If no framcenter (f.i. horizontal target) don't comptute footprint, beams and frame center
-        if (frameCenterPoint[0]==None and frameCenterPoint[1]==None):
+        if (frameCenterPoint[0] is None and frameCenterPoint[1] is None):
             geotransform = None
             return True
         if hasElevationModel():
@@ -1327,7 +1326,7 @@ def GetDemAltAt(lon, lat):
     row = int((yOrigin - lat) / pixelHeight)
     try:
         alt = dtm_data[row - dtm_rowLowerBound][col - dtm_colLowerBound]
-    except:
+    except IndexError:
         pass
         #qgsu.showUserAndLogMessage(
         #        "", "GetDemAltAt: Point is out of DEM.", onlyLog=True)

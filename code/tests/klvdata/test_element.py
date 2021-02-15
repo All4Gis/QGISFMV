@@ -23,7 +23,7 @@
 # SOFTWARE.
 
 import unittest
-
+import ast
 
 class ElementTLV(unittest.TestCase):
     def test_key(self):
@@ -66,7 +66,7 @@ class ElementTLV(unittest.TestCase):
     def test_repr(self):
         from QGIS_FMV.klvdata.element import UnknownElement
         self.assertIsInstance(
-            eval(repr(UnknownElement(b'\x02', b'\x00\x04\x60\x50\x58\x4E\x01\x80'))),
+            ast.literal_eval(repr(UnknownElement(b'\x02', b'\x00\x04\x60\x50\x58\x4E\x01\x80'))),
             UnknownElement)
 
 

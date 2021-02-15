@@ -304,7 +304,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                     qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvPlayer", "Metadata Buffering..."), duration=2, level=QGis.Info)
                     oldState = self.playerState
                     self.player.pause()
-                    lambda x: True if x % 2 == 0 else False
+                    #lambda x: True if x % 2 == 0 else False
                     QTimer.singleShot(2000, lambda: self.resumePlay(oldState))
                     return
             elif stdout_data is None:
@@ -612,7 +612,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         '''
         self.player.setPosition(self.sdv)
         QApplication.processEvents()
-        return
     
     def grayFilter(self, value):
         '''Gray Video Filter

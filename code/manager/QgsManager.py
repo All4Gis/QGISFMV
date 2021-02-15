@@ -132,7 +132,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             #we browse cells but we need lines, so ignore already deleted rows
             try:
                 idx = cr.row()
-            except:
+            except Exception:
                 continue
             
             row_id = self.VManager.item(idx, 0).text()
@@ -150,7 +150,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             # Remove folder if is local
             RemoveVideoFolder(row_text)
 
-            if self.meta_reader[idx] != None:
+            if self.meta_reader[idx] is not None:
                 self.meta_reader[idx].dispose()
             
             self.meta_reader.pop(idx)
@@ -163,9 +163,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         try:
             self._PlayerDlg.close()
         except Exception:
-            None
-        
-        return       
+            None       
                     
     def closeFMV(self):
         ''' Close FMV '''
@@ -402,7 +400,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         #zoom to map zone     
         curAuthId =  self.iface.mapCanvas().mapSettings().destinationCrs().authid()
         
-        if self.initialPt[row][1] != None and self.initialPt[row][0] != None:                                                                     
+        if self.initialPt[row][1] is not None and self.initialPt[row][0] is not None:                                                                     
             map_pos = QgsPointXY(self.initialPt[row][1], self.initialPt[row][0])
             if curAuthId != "EPSG:4326":
                 trgCode=int(curAuthId.split(":")[1])

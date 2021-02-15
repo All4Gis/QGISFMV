@@ -308,7 +308,7 @@ def UpdateFootPrintData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cor
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvLayers", "Failed Update FootPrint Layer! : "), str(e))
-    return
+
 
 
 def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, ele):
@@ -380,7 +380,6 @@ def UpdateBeamsData(packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerP
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Beams Layer! : "), str(e))
-    return
 
 
 def UpdateTrajectoryData(packet, ele):
@@ -416,7 +415,6 @@ def UpdateTrajectoryData(packet, ele):
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
-    return
 
 
 def UpdateFrameAxisData(imgSS, sensor, framecenter, ele):
@@ -458,7 +456,6 @@ def UpdateFrameAxisData(imgSS, sensor, framecenter, ele):
     except Exception as e:
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Frame axis Layer! : "), str(e))
-    return
 
 
 def UpdateFrameCenterData(packet, ele):
@@ -501,7 +498,6 @@ def UpdateFrameCenterData(packet, ele):
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Frame Center Layer! : "), str(e))
 
-    return
 
 
 def UpdatePlatformData(packet, ele):
@@ -545,7 +541,6 @@ def UpdatePlatformData(packet, ele):
         qgsu.showUserAndLogMessage(QCoreApplication.translate(
             "QgsFmvUtils", "Failed Update Platform Layer! : "), str(e))
 
-    return
 
 
 def CommonLayer(value):
@@ -567,7 +562,6 @@ def CreateGroupByName(name=frames_g):
         # Unchecked visibility
         group.setItemVisibilityCheckedRecursive(False)
         group.setExpanded(False)
-    return
 
 
 def RemoveGroupByName(name=frames_g):
@@ -579,7 +573,6 @@ def RemoveGroupByName(name=frames_g):
             dump = child.name()
             _layerreg.removeMapLayer(dump.split("=")[-1].strip())
         root.removeChildNode(group)
-    return
 
 
 def CreateVideoLayers(ele, name):
@@ -681,7 +674,6 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_polygon, group=groupName)
 
     QApplication.processEvents()
-    return
 
 
 def ExpandLayer(layer, value=True):
@@ -689,7 +681,6 @@ def ExpandLayer(layer, value=True):
     ltl = _layerreg.layerTreeRoot().findLayer(layer.id())
     ltl.setExpanded(value)
     QApplication.processEvents()
-    return
 
 
 def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
@@ -701,7 +692,6 @@ def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
                                            'outline_width': style['OUTLINE_WIDTH']})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
-    return
 
 
 def SetDefaultFootprint3DStyle(layer):
@@ -717,7 +707,6 @@ def SetDefaultFootprint3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultTrajectoryStyle(layer):
@@ -729,7 +718,6 @@ def SetDefaultTrajectoryStyle(layer):
                                            'use_custom_dash': style['use_custom_dash']})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
-    return
 
 
 def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
@@ -744,7 +732,6 @@ def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
 
     symbol_layer = QgsSvgMarkerSymbolLayer.create(svgStyle)
     layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
-    return
 
 
 def SetDefaultPlatform3DStyle(layer):
@@ -764,7 +751,6 @@ def SetDefaultPlatform3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultTrajectory3DStyle(layer):
@@ -782,7 +768,6 @@ def SetDefaultTrajectory3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultFrameAxis3DStyle(layer):
@@ -800,7 +785,6 @@ def SetDefaultFrameAxis3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultBeams3DStyle(layer):
@@ -818,7 +802,6 @@ def SetDefaultBeams3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultFrameCenterStyle(layer):
@@ -828,7 +811,6 @@ def SetDefaultFrameCenterStyle(layer):
         {'name': style["NAME"], 'line_color': style["LINE_COLOR"], 'line_width': style["LINE_WIDTH"], 'size': style["SIZE"]})
     renderer = QgsSingleSymbolRenderer(symbol)
     layer.setRenderer(renderer)
-    return
 
 
 def SetDefaultFrameCenter3DStyle(layer):
@@ -848,7 +830,6 @@ def SetDefaultFrameCenter3DStyle(layer):
     renderer.setLayer(layer)
     renderer.setSymbol(symbol)
     layer.setRenderer3D(renderer)
-    return
 
 
 def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
@@ -860,7 +841,6 @@ def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
                                            'outline_style': style['OUTLINE_STYLE']})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
-    return
 
 
 def SetDefaultPointStyle(layer):
@@ -895,8 +875,6 @@ def SetDefaultPointStyle(layer):
     layer.setLabelsEnabled(True)
     layer.setLabeling(layer_settings)
 
-    return
-
 
 def SetDefaultLineStyle(layer):
     ''' Line Symbol '''
@@ -904,7 +882,6 @@ def SetDefaultLineStyle(layer):
     symbol = layer.renderer().symbol()
     symbol.setColor(style['COLOR'])
     symbol.setWidth(style['WIDTH'])
-    return
 
 
 def SetDefaultPolygonStyle(layer):
@@ -916,7 +893,6 @@ def SetDefaultPolygonStyle(layer):
                                            'outline_width': style['OUTLINE_WIDTH']})
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
-    return
 
 
 def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
@@ -924,7 +900,6 @@ def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
     style = S.getBeam(beam)
     symbol = layer.renderer().symbol()
     symbol.setColor(QColor.fromRgba(style['COLOR']))
-    return
 
 # TODO : Update layer symbology if draw color change?
 # def UpdateStylesDrawLayers(NameSpace):
@@ -1003,7 +978,7 @@ def addLayer(layer, loadInLegend=True, group=None, isSubGroup=False):
         else:
             g = root.findGroup(group)
             
-        if g == None:
+        if g is None:
             # Create Group
             node_group = QgsLayerTreeGroup(group)
             root.insertChildNode(0, node_group)       

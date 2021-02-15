@@ -52,7 +52,6 @@ class ParserSingleShort(unittest.TestCase):
         tlv_hex_bytes = hexstr_to_bytes('02 08 00 04 59 F4 A6 AA 4A A8')
         value = tlv_hex_bytes[2:]
 
-        from QGIS_FMV.klvdata.misb0601 import PrecisionTimeStamp
         self.assertEqual(str(PrecisionTimeStamp(value).value), interpretation)
         self.assertEqual(bytes(PrecisionTimeStamp(value)), tlv_hex_bytes)
 
@@ -71,7 +70,6 @@ class ParserSingleShort(unittest.TestCase):
         tlv_hex_bytes = hexstr_to_bytes('03 09 4D 49 53 53 49 4F 4E 30 31')
         value = tlv_hex_bytes[2:]
 
-        from QGIS_FMV.klvdata.misb0601 import MissionID
         self.assertEqual(str(MissionID(value).value), interpretation)
         self.assertEqual(bytes(MissionID(value)), tlv_hex_bytes)
 
@@ -88,7 +86,7 @@ class ParserSingleShort(unittest.TestCase):
     def test_PlatformHeadingAngle(self):
 
         # See MISB ST0601.9
-        # @TODO: Limit display precision and add units as per example.
+        # FIXME: Limit display precision and add units as per example.
         interpretation = "159.97436484321355"
         tlv_hex_bytes = hexstr_to_bytes('05 02 71 C2')
         value = tlv_hex_bytes[2:]
@@ -100,7 +98,7 @@ class ParserSingleShort(unittest.TestCase):
 
     def test_PlatformPitchAngle(self):
         # See MISB ST0601.9
-        # @TODO: Limit display precision and add units as per example.
+        # FIXME: Limit display precision and add units as per example.
         interpretation = "-0.4315317239905987"
         tlv_hex_bytes = hexstr_to_bytes('06 02 FD 3D')
         value = tlv_hex_bytes[2:]
@@ -876,8 +874,6 @@ class ParserSingleShort(unittest.TestCase):
     # Tag 94 (0x5E) MIIS Core Identifier (MISB ST 1204)
 
     # Tag 95 (0x5F) SAR Motion Imagery (MISB ST 1206) Local Set
-
-    # TODO : MAKE IMAPB CONVERSION
     
 #     def test_TargetWidthExtended(self):
 #         # Example value and packet per MISB ST 0601.11, Section 8 "Conversions and Mappings of Metadata Types".
@@ -900,7 +896,6 @@ class ParserSingleShort(unittest.TestCase):
 
     # Tag 102 (0x66) SDCC-FLP (MISB ST 1010)
 
-#     TODO : MAKE IMAPB CONVERSION
 #     def test_DensityAltitudeExtended(self):
 #         # Example value and packet per MISB ST 0601.11, Section 8 "Conversions and Mappings of Metadata Types".
 #         example_value = 23456.24
@@ -909,7 +904,7 @@ class ParserSingleShort(unittest.TestCase):
 #         from QGIS_FMV.klvdata.misb0601 import DensityAltitudeExtended
 #         self.assertEqual(bytes(DensityAltitudeExtended(example_value)), example_ls_packet)
 #         self.assertEqual(bytes(DensityAltitudeExtended(example_ls_packet[2:])), example_ls_packet)
-#     TODO : MAKE IMAPB CONVERSION
+
 #     def test_SensorEllipsoidHeightExtended(self):
 #         # Example value and packet per MISB ST 0601.11, Section 8 "Conversions and Mappings of Metadata Types".
 #         example_value = 23456.24
@@ -918,7 +913,7 @@ class ParserSingleShort(unittest.TestCase):
 #         from QGIS_FMV.klvdata.misb0601 import SensorEllipsoidHeightExtended
 #         self.assertEqual(bytes(SensorEllipsoidHeightExtended(example_value)), example_ls_packet)
 #         self.assertEqual(bytes(SensorEllipsoidHeightExtended(example_ls_packet[2:])), example_ls_packet)
-#     TODO : MAKE IMAPB CONVERSION
+
 #     def test_AlternatePlatformEllipsoidHeightExtended(self):
 #         # Example value and packet per MISB ST 0601.11, Section 8 "Conversions and Mappings of Metadata Types".
 #         example_value = 23456.24

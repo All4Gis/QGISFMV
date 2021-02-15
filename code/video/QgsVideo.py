@@ -658,7 +658,7 @@ class VideoWidget(QVideoWidget):
                 y = bbox[1] + offset.y()
                 if vut.IsPointOnScreen(x, y, self.surface):
                     self.painter.setPen(self.blue_Pen)
-                    self.painter.setBrush(Qt.transparent);
+                    self.painter.setBrush(Qt.transparent)
                     self.painter.drawRect(x, y, bbox[2], bbox[3])
 
                     # Get Track object center
@@ -728,15 +728,15 @@ class VideoWidget(QVideoWidget):
         @param event:
         @return:
         """
-        if event != None:
+        if event is not None:
             self.lastMouseX = event.x()
             self.lastMouseY = event.y()
 
-        if useLast and self.lastMouseX == -1 and self.lastMouseY == -1:
-            return
-        else:
+        if useLast is False and self.lastMouseX != -1 and self.lastMouseY != -1:
             #generates an event that simulates a mouse move, because even if mouse is still, video is running and mouse lat/lon must be updated.
-            event = QMouseEvent(QEvent.MouseMove, QPoint(self.lastMouseX, self.lastMouseY), Qt.NoButton, Qt.NoButton, Qt.NoModifier)        
+            event = QMouseEvent(QEvent.MouseMove, QPoint(self.lastMouseX, self.lastMouseY), Qt.NoButton, Qt.NoButton, Qt.NoModifier) 
+        else:
+            return
     
         # Magnifier can move on black screen for show image borders
         if self._interaction.magnifier:
