@@ -644,7 +644,7 @@ class VideoWidget(QVideoWidget):
         draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
                          self.drawMeasureDistance, self.drawMeasureArea, self.drawCesure, self.painter, self.surface, GetGCPGeoTransform())
 
-        # Draw On Video Object tracking test
+        # Draw On Video Object tracking Object
         if self._interaction.objectTracking and self._isinit:
             frame = convertQImageToMat(self.currentFrame())
             offset = self.surface.videoRect()
@@ -658,6 +658,7 @@ class VideoWidget(QVideoWidget):
                 y = bbox[1] + offset.y()
                 if vut.IsPointOnScreen(x, y, self.surface):
                     self.painter.setPen(self.blue_Pen)
+                    self.painter.setBrush(Qt.transparent);
                     self.painter.drawRect(x, y, bbox[2], bbox[3])
 
                     # Get Track object center
