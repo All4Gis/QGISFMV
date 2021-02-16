@@ -35,7 +35,7 @@ def copyProjectStructure():
             os.system('robocopy %s %s /E /V /XD ".settings" "sql" "__pycache__" "tests" "ui" ".git" /XF *.bat *.sh *.pro *.ts .gitignore *.docx *.bak *.yml *.pyc *.ps1 *.project *.pydevproject' % (basePath, destPath))
         else:
             basePath_linux = os.path.join(directory, os.path.realpath('../code/*'))
-            exclude = os.path.join(os.path.dirname(directory),'exclude-file.txt')
+            exclude = os.path.join(os.path.dirname(directory), 'exclude-file.txt')
             cmd = 'rsync -avi --progress --exclude-from="%s" %s %s' % (exclude, basePath_linux, destPath)
             os.system(cmd)
 
