@@ -223,9 +223,19 @@ For test stream feature you can simulate stream channel,like this:
 `ffmpeg -i rtp://127.0.0.1:8888 -c copy -map 0:v? -map 0:a? -f rtp_mpegts rtp://127.0.0.1:8898 -map 0:d? -f data -`
 
 
-And transifex client:
+And **transifex** client:
 
 `pip3 install transifex-client`
+
+**Code Format**
+
+    pip install coveralls
+    pip install pycodestyle
+    
+    autopep8 --in-place --aggressive  --aggressive -v --recursive deploy/*.py --exclude="*gui/*"
+   
+    pycodestyle --ignore=E501 code/*.py --statistics --exclude=code/gui/*.py
+    pycodestyle --ignore=E501,W504 deploy/*.py --statistics
 	
 And thanks for your code.
 
