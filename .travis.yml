@@ -27,4 +27,4 @@ install:
 script:
   - python code/tests/test.py
   - pycodestyle --ignore=E501 code/*.py --statistics --exclude=code/gui/*.py
-  - pycodestyle --ignore=E501 deploy/*.py --statistics
+  - pycodestyle --ignore=E501,W504 deploy/*.py --statistics
