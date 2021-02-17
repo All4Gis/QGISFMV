@@ -78,14 +78,16 @@ class VideoFilters():
 
         # First, make containers
         oldHeight, oldWidth = original[:, :, 0].shape
-        ndviImage = np.zeros((oldHeight, oldWidth, 3), np.uint8)  # make a blank RGB image
+        ndviImage = np.zeros((oldHeight, oldWidth, 3),
+                             np.uint8)  # make a blank RGB image
 
         red = (original[:, :, 2]).astype('float')
         blue = (original[:, :, 0]).astype('float')
 
         # Perform NDVI calculation
         summ = red + blue
-        summ[summ < lowerLimit] = lowerLimit  # do some saturation to prevent low intensity noise
+        # do some saturation to prevent low intensity noise
+        summ[summ < lowerLimit] = lowerLimit
 
         ndvi = (((red - blue) / (summ) + 1) * 127).astype('uint8')  # the index
 

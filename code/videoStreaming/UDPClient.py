@@ -5,7 +5,7 @@ from qgis.PyQt.QtCore import QByteArray
 from qgis.PyQt.QtGui import QPixmap, QImage
 from qgis.PyQt.QtNetwork import QUdpSocket, QHostAddress
 from qgis.PyQt.QtWidgets import (QApplication, QDialog, QHBoxLayout, QLabel,
-                             QPushButton, QVBoxLayout)
+                                 QPushButton, QVBoxLayout)
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.core import QgsMessageLog
 try:

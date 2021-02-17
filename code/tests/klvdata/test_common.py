@@ -31,7 +31,8 @@ class DateTime(unittest.TestCase):
         from QGIS_FMV.klvdata.common import bytes_to_datetime
 
         self.assertEqual(
-            datetime_to_bytes(bytes_to_datetime(b'\x00\x04\x60\x50\x58\x4E\x01\x80')),
+            datetime_to_bytes(
+                bytes_to_datetime(b'\x00\x04\x60\x50\x58\x4E\x01\x80')),
             b'\x00\x04\x60\x50\x58\x4E\x01\x80')
 
 
@@ -49,8 +50,14 @@ class BERLength(unittest.TestCase):
         # BER Long Form
         self.assertEqual(ber_encode(ber_decode(b'\x81\x80')), b'\x81\x80')
         self.assertEqual(ber_encode(ber_decode(b'\x81\xFF')), b'\x81\xFF')
-        self.assertEqual(ber_encode(ber_decode(b'\x82\xFF\xFF')), b'\x82\xFF\xFF')
-        self.assertEqual(ber_encode(ber_decode(b'\x83\xFF\xFF\xFF')), b'\x83\xFF\xFF\xFF')
+        self.assertEqual(
+            ber_encode(
+                ber_decode(b'\x82\xFF\xFF')),
+            b'\x82\xFF\xFF')
+        self.assertEqual(
+            ber_encode(
+                ber_decode(b'\x83\xFF\xFF\xFF')),
+            b'\x83\xFF\xFF\xFF')
 
         # BER encode using the fewest possible bytes
         self.assertEqual(ber_encode(ber_decode(b'\x80')), b'\x00')
@@ -110,11 +117,13 @@ class HexStrings(unittest.TestCase):
         from QGIS_FMV.klvdata.common import hexstr_to_bytes
 
         self.assertEqual(
-            hexstr_to_bytes(bytes_to_hexstr(b'\x50\x72\x65\x64\x61\x74\x6F\x72')),
+            hexstr_to_bytes(
+                bytes_to_hexstr(b'\x50\x72\x65\x64\x61\x74\x6F\x72')),
             b'\x50\x72\x65\x64\x61\x74\x6F\x72')
 
         self.assertEqual(
-            bytes_to_hexstr(hexstr_to_bytes('06 0E 2B 34 - 02 0B 01 01 – 0E 01 03 01 - 01 00 00 00')),
+            bytes_to_hexstr(
+                hexstr_to_bytes('06 0E 2B 34 - 02 0B 01 01 – 0E 01 03 01 - 01 00 00 00')),
             '06 0E 2B 34 02 0B 01 01 0E 01 03 01 01 00 00 00')
 
 
@@ -122,40 +131,59 @@ class FixedPoint(unittest.TestCase):
     def test_bytes_unsigned(self):
         from QGIS_FMV.klvdata.common import bytes_to_float
         self.assertAlmostEqual(
-            bytes_to_float(b'\x00\x00', _domain=(0, 2 ** 16 - 1), _range=(0, 360)),
+            bytes_to_float(
+                b'\x00\x00',
+                _domain=(
+                    0,
+                    2 ** 16 - 1),
+                _range=(
+                    0,
+                    360)),
             0.0)
 
         self.assertAlmostEqual(
-            bytes_to_float(b'\x71\xC2', _domain=(0, 2 ** 16 - 1), _range=(0, 360)),
-            159.974, 3)
+            bytes_to_float(
+                b'\x71\xC2',
+                _domain=(
+                    0,
+                    2 ** 16 - 1),
+                _range=(
+                    0,
+                    360)),
+            159.974,
+            3)
 
         self.assertAlmostEqual(
-            bytes_to_float(b'\xFF\xFF', _domain=(0, 2 ** 16 - 1), _range=(0, 360)),
+            bytes_to_float(
+                b'\xFF\xFF',
+                _domain=(
+                    0,
+                    2 ** 16 - 1),
+                _range=(
+                    0,
+                    360)),
             360.0)
 
     def test_bytes_signed(self):
         from QGIS_FMV.klvdata.common import bytes_to_float
-        self.assertAlmostEqual(
-            bytes_to_float(b'\x80\x01', _domain=(-(2**15-1), 2**15-1), _range=(-20, 20)),
-            -20.0)
+        self.assertAlmostEqual(bytes_to_float(
+            b'\x80\x01', _domain=(-(2**15 - 1), 2**15 - 1), _range=(-20, 20)), -20.0)
 
-        self.assertAlmostEqual(
-            bytes_to_float(b'\x00\x00', _domain=(-(2**15-1), 2**15-1), _range=(-20, 20)),
-            0.0)
+        self.assertAlmostEqual(bytes_to_float(
+            b'\x00\x00', _domain=(-(2**15 - 1), 2**15 - 1), _range=(-20, 20)), 0.0)
 
-        self.assertAlmostEqual(
-            bytes_to_float(b'\xFD\x3D', _domain=(-(2**15-1), 2**15-1), _range=(-20, 20)), -0.4315,
-            3)
+        self.assertAlmostEqual(bytes_to_float(
+            b'\xFD\x3D', _domain=(-(2**15 - 1), 2**15 - 1), _range=(-20, 20)), -0.4315, 3)
 
-        self.assertAlmostEqual(
-            bytes_to_float(b'\x7F\xFF', _domain=(-(2**15-1), 2**15-1), _range=(-20, 20)),
-            20.0, 7)
+        self.assertAlmostEqual(bytes_to_float(
+            b'\x7F\xFF', _domain=(-(2**15 - 1), 2**15 - 1), _range=(-20, 20)), 20.0, 7)
 
     def test_bytes_error(self):
         from QGIS_FMV.klvdata.common import bytes_to_float
 
         with self.assertRaises(ValueError):
-            bytes_to_float(b'\x7F\xFF\xFF', _domain=(-(2 ** 15 - 1), 2 ** 15 - 1), _range=(-20, 20))
+            bytes_to_float(
+                b'\x7F\xFF\xFF', _domain=(-(2 ** 15 - 1), 2 ** 15 - 1), _range=(-20, 20))
 
     def test_float_unsigned(self):
         from QGIS_FMV.klvdata.common import float_to_bytes
@@ -167,12 +195,26 @@ class FixedPoint(unittest.TestCase):
 
         with self.subTest("Unsigned 159.974"):
             self.assertEqual(
-                float_to_bytes(159.974, _domain=(0, 2 ** 16 - 1), _range=(0, 360)),
+                float_to_bytes(
+                    159.974,
+                    _domain=(
+                        0,
+                        2 ** 16 - 1),
+                    _range=(
+                        0,
+                        360)),
                 b'\x71\xC2')
 
         with self.subTest("Unsigned 360.0"):
             self.assertEqual(
-                float_to_bytes(360.0, _domain=(0, 2 ** 16 - 1), _range=(0, 360)),
+                float_to_bytes(
+                    360.0,
+                    _domain=(
+                        0,
+                        2 ** 16 - 1),
+                    _range=(
+                        0,
+                        360)),
                 b'\xFF\xFF')
 
     def test_float_signed(self):
@@ -180,22 +222,22 @@ class FixedPoint(unittest.TestCase):
 
         with self.subTest("Signed -20.0"):
             self.assertEqual(
-                float_to_bytes(-20.0, _domain=(-(2**15-1), 2**15-1), _range=(-20, 20)),
+                float_to_bytes(-20.0, _domain=(-(2**15 - 1), 2**15 - 1), _range=(-20, 20)),
                 b'\x80\x01')
 
         with self.subTest("Signed 0.0"):
             self.assertEqual(
-                float_to_bytes(0.0, _domain=(-(2**15-1), 2**15-1), _range=(-20, 20)),
+                float_to_bytes(0.0, _domain=(-(2**15 - 1), 2**15 - 1), _range=(-20, 20)),
                 b'\x00\x00')
 
         with self.subTest("Signed -0.4315"):
             self.assertEqual(
-                float_to_bytes(-0.4315, _domain=(-(2**15-1), 2**15-1), _range=(-20, 20)),
+                float_to_bytes(-0.4315, _domain=(-(2**15 - 1), 2**15 - 1), _range=(-20, 20)),
                 b'\xFD\x3D')
 
         with self.subTest("Signed 20.0"):
             self.assertEqual(
-                float_to_bytes(20.0, _domain=(-(2**15-1), 2**15-1), _range=(-20, 20)),
+                float_to_bytes(20.0, _domain=(-(2**15 - 1), 2**15 - 1), _range=(-20, 20)),
                 b'\x7F\xFF')
 
 
@@ -204,7 +246,8 @@ class Checksum(unittest.TestCase):
         # Sample data from MISB ST 0902.5. DynamicConstantMISMMSPacketData not used
         # because there was an error in ST 0902.5 example such that checksum would
         # not validate as written. DynamicConstantMISMMSPacketData included in the
-        # samples directory of this module's test is patched to correct the value.
+        # samples directory of this module's test is patched to correct the
+        # value.
         with open('./data/DynamicOnlyMISMMSPacketData.bin', 'rb') as f:
             packet = f.read()
 

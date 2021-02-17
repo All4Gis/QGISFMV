@@ -55,7 +55,12 @@ class log(object):
         ''' Last exception log text '''
         exc_type, exc_value, exc_traceback = sys.exc_info()
         log.error(
-            msg + '\n  '.join(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+            msg +
+            '\n  '.join(
+                traceback.format_exception(
+                    exc_type,
+                    exc_value,
+                    exc_traceback)))
 
     @staticmethod
     def initLogging():

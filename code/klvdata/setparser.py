@@ -58,7 +58,7 @@ class SetParser(Element):
         self._targetWidth = None
         self._slantRange = None
         self._SensorRelativeAzimuthAngle = None
-        self._SensorRelativeElevationAngle = None                                                                                  
+        self._SensorRelativeElevationAngle = None
         self._OffsetCornerLatitudePoint1 = None
         self._OffsetCornerLongitudePoint1 = None
         self._OffsetCornerLatitudePoint2 = None
@@ -100,7 +100,16 @@ class SetParser(Element):
                 self.items[key] = self._unknown_element(key, value)
             except Exception:
                 # None
-                qgsu.showUserAndLogMessage("", "Value cannot be read for Tag: " + str(int.from_bytes(key, byteorder=sys.byteorder)) + " value: " + str(value), onlyLog=True)
+                qgsu.showUserAndLogMessage(
+                    "",
+                    "Value cannot be read for Tag: " +
+                    str(
+                        int.from_bytes(
+                            key,
+                            byteorder=sys.byteorder)) +
+                    " value: " +
+                    str(value),
+                    onlyLog=True)
 
     @classmethod
     def add_parser(cls, obj):
@@ -148,7 +157,8 @@ class SetParser(Element):
                     if not hasattr(item.value, 'value'):
                         continue
                     if not parentTAG:
-                        metadata[item.TAG] = (item.LDSName, str(item.value.value))
+                        metadata[item.TAG] = (
+                            item.LDSName, str(item.value.value))
                         if item.TAG == 4:
                             self.PlatformTailNumber = item.value.value
                         elif item.TAG == 5:
@@ -168,7 +178,7 @@ class SetParser(Element):
                         elif item.TAG == 18:
                             self.SensorRelativeAzimuthAngle = item.value.value
                         elif item.TAG == 19:
-                            self.SensorRelativeElevationAngle = item.value.value                    
+                            self.SensorRelativeElevationAngle = item.value.value
                         elif item.TAG == 21:
                             self.SlantRange = item.value.value
                         elif item.TAG == 22:
@@ -212,13 +222,16 @@ class SetParser(Element):
                         elif item.TAG == 89:
                             self.CornerLongitudePoint4Full = item.value.value
                     else:
-                        metadata[parentTAG][len(metadata[parentTAG]) - 1][item.TAG] = (item.LDSName, item.ESDName, item.UDSName, str(item.value.value))
+                        metadata[parentTAG][len(metadata[parentTAG]) - 1][item.TAG] = (
+                            item.LDSName, item.ESDName, item.UDSName, str(item.value.value))
 
                 except Exception:
-                    qgsu.showUserAndLogMessage("", "Value cannot be read: " + str(item.value.value), onlyLog=True)
+                    qgsu.showUserAndLogMessage(
+                        "", "Value cannot be read: " + str(item.value.value), onlyLog=True)
                     continue
                 if hasattr(item, 'items'):
-                    metadata[item.TAG] = (item.LDSName, item.ESDName, item.UDSName, {})
+                    metadata[item.TAG] = (
+                        item.LDSName, item.ESDName, item.UDSName, {})
                     repeat(item.items.values(), indent + 1, item.TAG)
 
         repeat(self.items.values())
@@ -296,7 +309,7 @@ class SetParser(Element):
     @SensorRelativeAzimuthAngle.setter
     def SensorRelativeAzimuthAngle(self, value):
         self._SensorRelativeAzimuthAngle = float(value)
-        
+
     @property
     def SensorRelativeElevationAngle(self):
         return self._SensorRelativeElevationAngle
@@ -304,7 +317,7 @@ class SetParser(Element):
     @SensorRelativeElevationAngle.setter
     def SensorRelativeElevationAngle(self, value):
         self._SensorRelativeElevationAngle = float(value)
-        
+
     @property
     def SlantRange(self):
         return self._slantRange

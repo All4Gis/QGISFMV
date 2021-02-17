@@ -83,7 +83,8 @@ class Element():
         pass
 
     def __str__(self):
-        return "{}: ({}, {}, {})".format(self.name, self.key, len(self), self.value)
+        return "{}: ({}, {}, {})".format(
+            self.name, self.key, len(self), self.value)
 
 
 class UnknownElement(Element):

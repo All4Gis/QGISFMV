@@ -195,7 +195,8 @@ class VideoWidget(QVideoWidget):
         self.surface = VideoWidgetSurface(self)
         self.setAttribute(Qt.WA_OpaquePaintEvent)
 
-        self.Tracking_Video_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
+        self.Tracking_Video_RubberBand = QRubberBand(
+            QRubberBand.Rectangle, self)
         self.Censure_RubberBand = QRubberBand(QRubberBand.Rectangle, self)
 
         color_blue = QColor(Qt.blue)
@@ -215,7 +216,7 @@ class VideoWidget(QVideoWidget):
 
         self._isinit = False
         self._MGRS = False
-        
+
         self.drawCesure = []
         self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawMeasureDistance, self.drawMeasureArea, self.drawPolygon = [], [], [], [], [], []
         # Draw Polygon Canvas Rubberband
@@ -249,7 +250,7 @@ class VideoWidget(QVideoWidget):
         self.tapTimer = QBasicTimer()
         self.brush = QBrush(color_black)
         self.blue_Pen = QPen(color_blue, 3)
-        
+
         self.lastMouseX = -1
         self.lastMouseY = -1
 
@@ -564,7 +565,7 @@ class VideoWidget(QVideoWidget):
         self.poly_Canvas_RubberBand.reset()
         self.Track_Canvas_RubberBand.reset(QgsWkbTypes.LineGeometry)
         self.Cursor_Canvas_RubberBand.reset(QgsWkbTypes.PointGeometry)
-        
+
     def RemoveVideoDrawings(self):
         ''' Remove Video Drawings '''
         self.poly_coordinates, self.drawPtPos, self.drawLines, self.drawMeasureDistance, self.drawMeasureArea, self.drawPolygon = [], [], [], [], [], []
@@ -575,7 +576,7 @@ class VideoWidget(QVideoWidget):
         @param event:
         @return:
         """
-        
+
         if not self.surface.isActive():
             return
 
@@ -583,7 +584,9 @@ class VideoWidget(QVideoWidget):
         self.painter.setRenderHint(QPainter.HighQualityAntialiasing)
 
         region = event.region()
-        self.painter.fillRect(region.boundingRect(), self.brush)  # Background painter color
+        self.painter.fillRect(
+            region.boundingRect(),
+            self.brush)  # Background painter color
 
         try:
             self.surface.paint(self.painter)
@@ -596,10 +599,18 @@ class VideoWidget(QVideoWidget):
         # if self.parent.player.position() == 0:
         #    self.painter.end()
         #    return
-        
+
         # Draw On Video
-        draw.drawOnVideo(self.drawPtPos, self.drawLines, self.drawPolygon,
-                         self.drawMeasureDistance, self.drawMeasureArea, self.drawCesure, self.painter, self.surface, GetGCPGeoTransform())
+        draw.drawOnVideo(
+            self.drawPtPos,
+            self.drawLines,
+            self.drawPolygon,
+            self.drawMeasureDistance,
+            self.drawMeasureArea,
+            self.drawCesure,
+            self.painter,
+            self.surface,
+            GetGCPGeoTransform())
 
         # Draw On Video Object tracking Object
         if self._interaction.objectTracking and self._isinit:
@@ -625,7 +636,8 @@ class VideoWidget(QVideoWidget):
                     Longitude, Latitude, _ = vut.GetPointCommonCoords(
                         p, self.surface)
                     # Draw Rubber Band on canvas
-                    self.Track_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
+                    self.Track_Canvas_RubberBand.addPoint(
+                        QgsPointXY(Longitude, Latitude))
 
             else:
                 self._isinit = False
@@ -633,7 +645,8 @@ class VideoWidget(QVideoWidget):
 
         # Magnifier Glass
         if self._interaction.magnifier and not self.dragPos.isNull():
-            draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
+            draw.drawMagnifierOnVideo(
+                self, self.dragPos, self.currentFrame(), self.painter)
 
         # Stamp On Video
         if self._interaction.stamp:
@@ -652,7 +665,8 @@ class VideoWidget(QVideoWidget):
         self.update()
         # Magnifier Glass
         if self._interaction.magnifier and not self.dragPos.isNull():
-            draw.drawMagnifierOnVideo(self, self.dragPos, self.currentFrame(), self.painter)
+            draw.drawMagnifierOnVideo(
+                self, self.dragPos, self.currentFrame(), self.painter)
         # QApplication.processEvents()
 
     def AddMoveEventValue(self, values, Longitude, Latitude, Altitude):
@@ -690,11 +704,20 @@ class VideoWidget(QVideoWidget):
             self.lastMouseY = event.y()
 
         if useLast is False and self.lastMouseX != -1 and self.lastMouseY != -1:
-            # generates an event that simulates a mouse move, because even if mouse is still, video is running and mouse lat/lon must be updated.
-            event = QMouseEvent(QEvent.MouseMove, QPoint(self.lastMouseX, self.lastMouseY), Qt.NoButton, Qt.NoButton, Qt.NoModifier) 
+            # generates an event that simulates a mouse move, because even if
+            # mouse is still, video is running and mouse lat/lon must be
+            # updated.
+            event = QMouseEvent(
+                QEvent.MouseMove,
+                QPoint(
+                    self.lastMouseX,
+                    self.lastMouseY),
+                Qt.NoButton,
+                Qt.NoButton,
+                Qt.NoModifier)
         else:
             return
-    
+
         # Magnifier can move on black screen for show image borders
         if self._interaction.magnifier:
             self.dragPos = event.pos()
@@ -719,9 +742,12 @@ class VideoWidget(QVideoWidget):
             Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                 event, self.surface)
 
-            tr = QgsCoordinateTransform(QgsCoordinateReferenceSystem('EPSG:4326'), iface.mapCanvas().mapSettings().destinationCrs(), QgsProject.instance().transformContext())
+            tr = QgsCoordinateTransform(
+                QgsCoordinateReferenceSystem('EPSG:4326'),
+                iface.mapCanvas().mapSettings().destinationCrs(),
+                QgsProject.instance().transformContext())
             mapPt = tr.transform(QgsPointXY(Longitude, Latitude))
-            
+
             vertices = self.Cursor_Canvas_RubberBand.numberOfVertices()
             if vertices > 0:
                 self.Cursor_Canvas_RubberBand.removePoint(0, True, 0)
@@ -746,7 +772,7 @@ class VideoWidget(QVideoWidget):
                 txt += "<span style='font-size:10pt; font-weight:bold;'> Lat : </span>"
                 txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
                     ("%.5f" % Latitude) + "</span>"
-                    
+
                 if hasElevationModel():
                     txt += "<span style='font-size:10pt; font-weight:bold;'> Alt : </span>"
                     txt += "<span style='font-size:9pt; font-weight:normal;'>" + \
@@ -759,27 +785,32 @@ class VideoWidget(QVideoWidget):
 
             # Polygon drawer mouseMoveEvent
             if self._interaction.polygonDrawer:
-                self.AddMoveEventValue(self.drawPolygon, Longitude, Latitude, Altitude)
+                self.AddMoveEventValue(
+                    self.drawPolygon, Longitude, Latitude, Altitude)
 
             # Line drawer mouseMoveEvent
             if self._interaction.lineDrawer:
-                self.AddMoveEventValue(self.drawLines, Longitude, Latitude, Altitude)
+                self.AddMoveEventValue(
+                    self.drawLines, Longitude, Latitude, Altitude)
 
             # Measure Distance drawer mouseMoveEvent
             if self._interaction.measureDistance and self.drawMeasureDistance:
-                self.AddMoveEventValue(self.drawMeasureDistance, Longitude, Latitude, Altitude)
+                self.AddMoveEventValue(
+                    self.drawMeasureDistance, Longitude, Latitude, Altitude)
 
             # Measure Area drawer mouseMoveEvent
             if self._interaction.measureArea and self.drawMeasureArea:
-                self.AddMoveEventValue(self.drawMeasureArea, Longitude, Latitude, Altitude)
+                self.AddMoveEventValue(
+                    self.drawMeasureArea, Longitude, Latitude, Altitude)
 
         else:
-            self.parent.lb_cursor_coord.setText("<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" + 
-                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" + 
-                                                "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" + 
-                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>" + 
-                                                "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" + 
-                                                "<span style='font-size:9pt; font-weight:normal;'>-</span>")
+            self.parent.lb_cursor_coord.setText(
+                "<span style='font-size:10pt; font-weight:bold;'>Lon :</span>" +
+                "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
+                "<span style='font-size:10pt; font-weight:bold;'> Lat :</span>" +
+                "<span style='font-size:9pt; font-weight:normal;'>-</span>" +
+                "<span style='font-size:10pt; font-weight:bold;'> Alt :</span>" +
+                "<span style='font-size:9pt; font-weight:normal;'>-</span>")
 
         # Object tracking rubberband
         if not self.Tracking_Video_RubberBand.isHidden():
@@ -824,7 +855,7 @@ class VideoWidget(QVideoWidget):
             if GetGCPGeoTransform() is not None and self._interaction.pointDrawer:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
-                               
+
                 pointIndex = len(self.drawPtPos) + 1
                 AddDrawPointOnMap(pointIndex, Longitude,
                                   Latitude, Altitude)
@@ -835,7 +866,8 @@ class VideoWidget(QVideoWidget):
             if GetGCPGeoTransform() is not None and self._interaction.polygonDrawer:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
-                self.poly_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
+                self.poly_Canvas_RubberBand.addPoint(
+                    QgsPointXY(Longitude, Latitude))
                 self.poly_coordinates.extend(QgsPointXY(Longitude, Latitude))
                 self.drawPolygon.append([Longitude, Latitude, Altitude])
 
@@ -865,7 +897,8 @@ class VideoWidget(QVideoWidget):
             if GetGCPGeoTransform() is not None and self._interaction.measureDistance:
                 Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
                     event, self.surface)
-                self.drawMeasureDistance.append([Longitude, Latitude, Altitude])
+                self.drawMeasureDistance.append(
+                    [Longitude, Latitude, Altitude])
 
             # Measure Distance drawer
             if GetGCPGeoTransform() is not None and self._interaction.measureArea:
@@ -941,7 +974,13 @@ class VideoWidget(QVideoWidget):
         if self._interaction.objectTracking:
             geom = self.Tracking_Video_RubberBand.geometry()
             offset = self.surface.videoRect()
-            bbox = (geom.x() - offset.x(), geom.y() - offset.y(), geom.width(), geom.height())
+            bbox = (
+                geom.x() -
+                offset.x(),
+                geom.y() -
+                offset.y(),
+                geom.width(),
+                geom.height())
             img = self.currentFrame()
             frame = convertQImageToMat(img)
             # Remo rubberband on canvas and video
@@ -964,7 +1003,8 @@ class VideoWidget(QVideoWidget):
                 Longitude, Latitude, _ = vut.GetPointCommonCoords(
                     p, self.surface)
                 # Draw Rubber Band on canvas
-                self.Track_Canvas_RubberBand.addPoint(QgsPointXY(Longitude, Latitude))
+                self.Track_Canvas_RubberBand.addPoint(
+                    QgsPointXY(Longitude, Latitude))
             else:
                 self._isinit = False
 

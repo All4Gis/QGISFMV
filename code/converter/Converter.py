@@ -1,4 +1,4 @@
-﻿  # Original Code : https://github.com/senko/python-video-converter
+﻿# Original Code : https://github.com/senko/python-video-converter
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QObject
@@ -90,7 +90,8 @@ class Converter(QObject):
             opt_subtitle = {'codec': None}
         else:
             opt_subtitle = opt['subtitle']
-            if not isinstance(opt_subtitle, dict) or 'codec' not in opt_subtitle:
+            if not isinstance(opt_subtitle,
+                              dict) or 'codec' not in opt_subtitle:
                 log.error('Invalid subtitle codec specification')
 
         c = opt_subtitle['codec']
@@ -139,17 +140,20 @@ class Converter(QObject):
 
                 if twopass:
                     optlist1 = self.parse_options(options, 1)
-                    for timecode in self.ffmpeg.convert(infile, outfile, optlist1, task):
+                    for timecode in self.ffmpeg.convert(
+                            infile, outfile, optlist1, task):
                         task.setProgress(
                             int((50.0 * timecode) / info.format.duration))
 
                     optlist2 = self.parse_options(options, 2)
-                    for timecode in self.ffmpeg.convert(infile, outfile, optlist2, task):
+                    for timecode in self.ffmpeg.convert(
+                            infile, outfile, optlist2, task):
                         task.setProgress(
                             int(50.0 + (50.0 * timecode) / info.format.duration))
                 else:
                     optlist = self.parse_options(options, twopass)
-                    for timecode in self.ffmpeg.convert(infile, outfile, optlist, task):
+                    for timecode in self.ffmpeg.convert(
+                            infile, outfile, optlist, task):
                         task.setProgress(
                             int((100.0 * timecode) / info.format.duration))
                 task.setProgress(100)

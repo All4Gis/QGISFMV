@@ -73,13 +73,13 @@ class Fmv:
                     QCoreApplication.installTranslator(self.translator)
 
         self._FMVManager = None
-        
+
     def initGui(self):
         ''' FMV Action '''
         self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
                                  "FMV", self.iface.mainWindow(),
                                  triggered=self.run)
-        
+
         self.iface.registerMainWindowAction(
             self.actionFMV, qgsu.SetShortcutForPluginFMV(u"FMV"))
         self.iface.addToolBarIcon(self.actionFMV)
@@ -91,7 +91,8 @@ class Fmv:
                                    u"FMV About", self.iface.mainWindow(),
                                    triggered=self.About)
         self.iface.registerMainWindowAction(
-            self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About", "Alt+A"))
+            self.actionAbout, qgsu.SetShortcutForPluginFMV(
+                u"FMV About", "Alt+A"))
         self.iface.addPluginToMenu(QCoreApplication.translate(
             "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
 
@@ -115,8 +116,8 @@ class Fmv:
         if self._FMVManager is None and not self.run_once:
             self.run_once = True
             self.CreateDockWidget()
-    
+
     def CreateDockWidget(self):
-        ''' Create Manager Video QDockWidget '''                 
+        ''' Create Manager Video QDockWidget '''
         self._FMVManager = FmvManager(self.iface)
         self.iface.addDockWidget(Qt.BottomDockWidgetArea, self._FMVManager)

@@ -38,15 +38,21 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         """ Common finish task function """
         if e is None:
             if result is None:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvMetadata", 'Completed with no exception and no result '
-                    '(probably manually canceled by the user)'), level=QGis.Warning)
+                qgsu.showUserAndLogMessage(
+                    QCoreApplication.translate(
+                        "QgsFmvMetadata",
+                        'Completed with no exception and no result '
+                        '(probably manually canceled by the user)'),
+                    level=QGis.Warning)
             else:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "QgsFmvMetadata", "Succesfully " + result['task'] + "!"))
         else:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvMetadata", "Failed " + result['task'] + "!"), level=QGis.Warning)
+            qgsu.showUserAndLogMessage(
+                QCoreApplication.translate(
+                    "QgsFmvMetadata",
+                    "Failed " + result['task'] + "!"),
+                level=QGis.Warning)
             raise e
 
     def SaveAsPDF(self):
@@ -56,7 +62,10 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         timestamp = _seconds_to_time(self.player.currentInfo)
 
         # Frame save drawings
-        frame = BurnDrawingsImage(self.player.videoWidget.currentFrame(), self.player.videoWidget.grab(self.player.videoWidget.surface.videoRect()).toImage())
+        frame = BurnDrawingsImage(
+            self.player.videoWidget.currentFrame(),
+            self.player.videoWidget.grab(
+                self.player.videoWidget.surface.videoRect()).toImage())
 
         data = self.player.GetPacketData()
         rows = self.VManager.rowCount()
@@ -86,7 +95,8 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         QgsApplication.taskManager().addTask(task)
         return
 
-    def CreatePDF(self, task, out, timestamp, data, frame, rows, columns, fileName, VManager):
+    def CreatePDF(self, task, out, timestamp, data, frame,
+                  rows, columns, fileName, VManager):
         ''' Create PDF QgsTask '''
 
         font_normal = QFont("Helvetica", 8, QFont.Normal)
@@ -157,9 +167,11 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
 
         cursor.movePosition(QTextCursor.End)
 
-        current_t = QCoreApplication.translate("QgsFmvMetadata", "Current Frame")
+        current_t = QCoreApplication.translate(
+            "QgsFmvMetadata", "Current Frame")
 
-        self.TextBlockCenter(cursor, TextFormat=QTextFormat.PageBreak_AlwaysBefore)
+        self.TextBlockCenter(
+            cursor, TextFormat=QTextFormat.PageBreak_AlwaysBefore)
 
         cursor.insertHtml("""
                           <br><p style='text-align: center;'><strong>""" + current_t + """</strong></p><br>

@@ -18,20 +18,20 @@ class globalVariablesState:
         self.affineT = None
         self.transform = None
         self.groupName = None
-        
+
         self.frameCenterElevation = None
         self.sensorLatitude = None
         self.sensorLongitude = None
         self.sensorTrueAltitude = [None] * 13
         self.xSize = 0
         self.ySize = 0
-        
+
     def setGroupName(self, name):
         self.groupName = name
-        
+
     def getGroupName(self):
         return self.groupName
-    
+
     def setFrameCenterElevation(self, fe):
         self.frameCenterElevation = fe
 
@@ -43,7 +43,7 @@ class globalVariablesState:
 
     def getSensorLatitude(self):
         return self.sensorLatitude
-    
+
     def setSensorLongitude(self, sl):
         self.sensorLongitude = sl
 
@@ -55,7 +55,7 @@ class globalVariablesState:
 
     def getSensorTrueAltitude(self):
         return self.sensorTrueAltitude
-            
+
     def setIface(self, iface):
         self.iface = iface
 
@@ -67,13 +67,13 @@ class globalVariablesState:
 
     def getCenterMode(self):
         return self.centerMode
-    
+
     def setCornerUL(self, cornerPointUL):
         self.gcornerPointUL = cornerPointUL
 
     def getCornerUL(self):
         return self.gcornerPointUL
-    
+
     def setCornerUR(self, cornerPointUR):
         self.gcornerPointUR = cornerPointUR
 
@@ -95,31 +95,31 @@ class globalVariablesState:
     def setFrameCenter(self, frameCenterLat, frameCenterLon):
         self.gframeCenterLat = frameCenterLat
         self.gframeCenterLon = frameCenterLon
-    
+
     def getFrameCenterLat(self):
         return self.gframeCenterLat
-    
+
     def getFrameCenterLon(self):
         return self.gframeCenterLon
-        
+
     def setAffineTransform(self, at):
         self.affineT = at
 
     def getAffineTransform(self):
         return self.affineT
-    
+
     def setTransform(self, t):
         self.transform = t
 
     def getTransform(self):
         return self.transform
-    
+
     def setXSize(self, xs):
         self.xSize = xs
 
     def getXSize(self):
         return self.xSize
-        
+
     def setYSize(self, ys):
         self.ySize = ys
 

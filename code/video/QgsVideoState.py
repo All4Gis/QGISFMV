@@ -19,7 +19,7 @@ class InteractionState(object):
     def clear(self):
         ''' Reset Interaction variables '''
         self.__init__()
-        
+
 
 class FilterState(object):
     """ Filters State Video Player Class """

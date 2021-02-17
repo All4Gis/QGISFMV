@@ -79,7 +79,8 @@ def ber_encode(value):
         # BER Long Form
         byte_length = ((value.bit_length() - 1) // 8) + 1
 
-        return int_to_bytes(byte_length + 128) + int_to_bytes(value, length=byte_length)
+        return int_to_bytes(byte_length + 128) + \
+            int_to_bytes(value, length=byte_length)
 
 
 def bytes_to_str(value):
@@ -155,7 +156,9 @@ def float_to_bytes(value, _domain, _range):
     src_min, src_max, dst_min, dst_max = src_domain + dst_range
     length = int((dst_max - dst_min - 1).bit_length() / 8)
     dst_value = linear_map(value, src_domain=src_domain, dst_range=dst_range)
-    return round(dst_value).to_bytes(length, byteorder='big', signed=(dst_min < 0))
+    return round(dst_value).to_bytes(
+        length, byteorder='big', signed=(
+            dst_min < 0))
 
 
 def packet_checksum(data):

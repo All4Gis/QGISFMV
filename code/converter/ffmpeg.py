@@ -1,4 +1,4 @@
-﻿  # -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import locale
 import os
 import os.path
@@ -45,7 +45,7 @@ class FFMpegConvertError(Exception):
 
     def __repr__(self):
         error = self.details if self.details else self.message
-        return ('<FFMpegConvertError error="%s", pid=%s, cmd="%s">' % 
+        return ('<FFMpegConvertError error="%s", pid=%s, cmd="%s">' %
                 (error, self.pid, self.cmd))
 
     def __str__(self):
@@ -211,10 +211,8 @@ class MediaStreamInfo(object):
         metadata_str = ', '.join(metadata_str)
 
         if self.type == 'audio':
-            d = 'type=%s, codec=%s, channels=%d, rate=%.0f' % (self.type,
-                                                               self.codec,
-                                                               self.audio_channels,
-                                                               self.audio_samplerate)
+            d = 'type=%s, codec=%s, channels=%d, rate=%.0f' % (
+                self.type, self.codec, self.audio_channels, self.audio_samplerate)
         elif self.type == 'video':
             d = 'type=%s, codec=%s, width=%d, height=%d, fps=%.1f' % (
                 self.type, self.codec, self.video_width, self.video_height,
@@ -289,7 +287,8 @@ class MediaInfo(object):
         First video stream, or None if there are no video streams.
         """
         for s in self.streams:
-            if s.type == 'video' and (self.posters_as_video or not s.attached_pic):
+            if s.type == 'video' and (
+                    self.posters_as_video or not s.attached_pic):
                 return s
         return None
 

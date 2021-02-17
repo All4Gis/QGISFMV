@@ -25,6 +25,7 @@
 import unittest
 import ast
 
+
 class ElementTLV(unittest.TestCase):
     def test_key(self):
         from QGIS_FMV.klvdata.element import UnknownElement
@@ -35,7 +36,9 @@ class ElementTLV(unittest.TestCase):
     def test_length(self):
         from QGIS_FMV.klvdata.element import UnknownElement
         self.assertEqual(
-            UnknownElement(b'\x02', b'\x00\x04\x60\x50\x58\x4E\x01\x80').length,
+            UnknownElement(
+                b'\x02',
+                b'\x00\x04\x60\x50\x58\x4E\x01\x80').length,
             b'\x08')
 
     def test_value(self):
@@ -47,7 +50,10 @@ class ElementTLV(unittest.TestCase):
     def test_packet(self):
         from QGIS_FMV.klvdata.element import UnknownElement
         self.assertEqual(
-            bytes(UnknownElement(b'\x02', b'\x00\x04\x60\x50\x58\x4E\x01\x80')),
+            bytes(
+                UnknownElement(
+                    b'\x02',
+                    b'\x00\x04\x60\x50\x58\x4E\x01\x80')),
             b'\x02\x08\x00\x04\x60\x50\x58\x4E\x01\x80')
 
     def test_name(self):
@@ -66,7 +72,11 @@ class ElementTLV(unittest.TestCase):
     def test_repr(self):
         from QGIS_FMV.klvdata.element import UnknownElement
         self.assertIsInstance(
-            ast.literal_eval(repr(UnknownElement(b'\x02', b'\x00\x04\x60\x50\x58\x4E\x01\x80'))),
+            ast.literal_eval(
+                repr(
+                    UnknownElement(
+                        b'\x02',
+                        b'\x00\x04\x60\x50\x58\x4E\x01\x80'))),
             UnknownElement)
 
 

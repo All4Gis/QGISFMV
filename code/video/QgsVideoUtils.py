@@ -54,7 +54,8 @@ class VideoUtils(object):
         @param surface: Abstract video surface
         @return: double
         '''
-        return GetImageWidth() / (surface.widget.width() - (2 * VideoUtils.GetXBlackZone(surface)))
+        return GetImageWidth() / (surface.widget.width() -
+                                  (2 * VideoUtils.GetXBlackZone(surface)))
 
     @staticmethod
     def GetYRatio(surface):
@@ -63,7 +64,8 @@ class VideoUtils(object):
         @param surface: Abstract video surface
         @return: double
         '''
-        return GetImageHeight() / (surface.widget.height() - (2 * VideoUtils.GetYBlackZone(surface)))
+        return GetImageHeight() / (surface.widget.height() -
+                                   (2 * VideoUtils.GetYBlackZone(surface)))
 
     @staticmethod
     def GetXBlackZone(surface):
@@ -74,8 +76,9 @@ class VideoUtils(object):
         '''
         x = 0.0
         try:
-            if (surface.widget.width() / surface.widget.height()) > (GetImageWidth() / GetImageHeight()):
-                x = (surface.widget.width() - 
+            if (surface.widget.width() / surface.widget.height()
+                ) > (GetImageWidth() / GetImageHeight()):
+                x = (surface.widget.width() -
                      (VideoUtils.GetNormalizedWidth(surface))) / 2.0
         except ZeroDivisionError:
             None
@@ -100,8 +103,9 @@ class VideoUtils(object):
         '''
         y = 0.0
         try:
-            if (surface.widget.width() / surface.widget.height()) < (GetImageWidth() / GetImageHeight()):
-                y = (surface.widget.height() - 
+            if (surface.widget.width() / surface.widget.height()
+                ) < (GetImageWidth() / GetImageHeight()):
+                y = (surface.widget.height() -
                      (VideoUtils.GetNormalizedHeight(surface))) / 2.0
         except ZeroDivisionError:
             None
@@ -123,9 +127,13 @@ class VideoUtils(object):
          '''
         res = True
         try:
-            if x > (VideoUtils.GetNormalizedWidth(surface) + VideoUtils.GetXBlackZone(surface)) or x < VideoUtils.GetXBlackZone(surface):
+            if x > (
+                    VideoUtils.GetNormalizedWidth(surface) +
+                    VideoUtils.GetXBlackZone(surface)) or x < VideoUtils.GetXBlackZone(surface):
                 res = False
-            if y > (VideoUtils.GetNormalizedHeight(surface) + VideoUtils.GetYBlackZone(surface)) or y < VideoUtils.GetYBlackZone(surface):
+            if y > (
+                    VideoUtils.GetNormalizedHeight(surface) +
+                    VideoUtils.GetYBlackZone(surface)) or y < VideoUtils.GetYBlackZone(surface):
                 res = False
         except ZeroDivisionError:
             None
@@ -141,15 +149,24 @@ class VideoUtils(object):
         @return:
         '''
         gt = GetGCPGeoTransform()
-        # return gt([(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)])
-        imagepoint = [(event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface), (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface), 1]
+        # return gt([(event.x() - VideoUtils.GetXBlackZone(surface)) *
+        # VideoUtils.GetXRatio(surface), (event.y() -
+        # VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)])
+        imagepoint = [
+            (event.x() -
+             VideoUtils.GetXBlackZone(surface)) *
+            VideoUtils.GetXRatio(surface),
+            (event.y() -
+             VideoUtils.GetYBlackZone(surface)) *
+            VideoUtils.GetYRatio(surface),
+            1]
         worldpoint = np.array(np.dot(gt, imagepoint))
         scalar = worldpoint[2]
         xworld = worldpoint[0] / scalar
         yworld = worldpoint[1] / scalar
-                
+
         return xworld, yworld
-    
+
     @staticmethod
     def GetAffineTransf(event, surface):
         '''Return video coordinates to map coordinates
@@ -160,10 +177,12 @@ class VideoUtils(object):
         @param surface: Abstract video surface
         @return:
         '''
-        
+
         gt = GetGeotransform_affine()
-        x = (event.x() - VideoUtils.GetXBlackZone(surface)) * VideoUtils.GetXRatio(surface)
-        y = (event.y() - VideoUtils.GetYBlackZone(surface)) * VideoUtils.GetYRatio(surface)
+        x = (event.x() - VideoUtils.GetXBlackZone(surface)) * \
+            VideoUtils.GetXRatio(surface)
+        y = (event.y() - VideoUtils.GetYBlackZone(surface)) * \
+            VideoUtils.GetYRatio(surface)
         x1, y1 = gdal.ApplyGeoTransform(gt, x, y)
         return [y1, x1]
 
@@ -178,16 +197,16 @@ class VideoUtils(object):
         @return:
         '''
         transf = VideoUtils.GetTransf(event, surface)
-               
+
         targetAlt = GetFrameCenter()[2]
 
         Longitude = float(round(transf[1], 7))
         Latitude = float(round(transf[0], 7))
         Altitude = float(round(targetAlt, 0))
-        
+
         if hasElevationModel():
             target = [transf[0], transf[1], targetAlt]
             alt = GetDemAltAt(transf[1], transf[0])
-            Altitude = round(alt, 0)            
+            Altitude = round(alt, 0)
 
         return Longitude, Latitude, Altitude

@@ -1,9 +1,9 @@
-﻿  # -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import os
 import shutil
 
 from qgis.PyQt.QtGui import QPixmap, QIcon
-from qgis.PyQt.QtWidgets import QMessageBox, QSpacerItem, QSizePolicy 
+from qgis.PyQt.QtWidgets import QMessageBox, QSpacerItem, QSizePolicy
 from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.core import (QgsProject,
                        Qgis as QGis)
@@ -44,12 +44,18 @@ class QgsUtils(object):
         d.addButton(QMessageBox.Yes)
         d.addButton(QMessageBox.No)
         d.setDefaultButton(QMessageBox.No)
-       
+
         # Trick resize QMessageBox
-        horizontalSpacer = QSpacerItem(500, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        horizontalSpacer = QSpacerItem(
+            500, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
         layout = d.layout()
-        layout.addItem(horizontalSpacer, layout.rowCount(), 0, 1, layout.columnCount())
-        
+        layout.addItem(
+            horizontalSpacer,
+            layout.rowCount(),
+            0,
+            1,
+            layout.columnCount())
+
         ret = d.exec_()
         return ret
 
@@ -64,7 +70,8 @@ class QgsUtils(object):
         returnLayer = None
         try:
             if group is None:
-                returnLayer = QgsProject.instance().mapLayersByName(layerName)[0]
+                returnLayer = QgsProject.instance(
+                ).mapLayersByName(layerName)[0]
                 return returnLayer
             else:
                 root = QgsProject.instance().layerTreeRoot()
@@ -90,7 +97,12 @@ class QgsUtils(object):
             None
 
     @staticmethod
-    def showUserAndLogMessage(before, text="", level=QGis.Info, duration=3, onlyLog=False):
+    def showUserAndLogMessage(
+            before,
+            text="",
+            level=QGis.Info,
+            duration=3,
+            onlyLog=False):
         ''' Show user & log info/warning/error messages '''
         if not onlyLog:
             iface.messageBar().popWidget()

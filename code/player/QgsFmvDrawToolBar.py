@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QSize, QPointF, Qt, QPoint, QSettings
 from qgis.PyQt.QtGui import (QPainter,
-                         QPainterPath,
-                         QColor,
-                         QFont,
-                         QPixmap,
-                         QPen,
-                         QBrush,
-                         QPolygonF)
+                             QPainterPath,
+                             QColor,
+                             QFont,
+                             QPixmap,
+                             QPen,
+                             QBrush,
+                             QPolygonF)
 
 from PyQt5.QtGui import QImage
 
@@ -17,7 +17,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
                                         GetFrameCenter,
                                         hasElevationModel,
                                         getNameSpace)
-                                        
+
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
 
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
@@ -47,7 +47,14 @@ LinePen = QPen(QColor(252, 215, 108), LineWidth)
 
 # Measure Draw
 MeasureWidth = 3
-MeasurePen = QPen(QColor(185, 224, 175), MeasureWidth, cap=Qt.RoundCap, join=Qt.RoundJoin)
+MeasurePen = QPen(
+    QColor(
+        185,
+        224,
+        175),
+    MeasureWidth,
+    cap=Qt.RoundCap,
+    join=Qt.RoundJoin)
 MeasureBrush = QBrush(QColor(185, 224, 175, 100))
 
 
@@ -71,7 +78,8 @@ class DrawToolBar(object):
     bold_12 = QFont("Arial", 12, QFont.Bold)
 
     # Stamp Image
-    confidential = QPixmap.fromImage(QImage(":/imgFMV/images/stamp/confidential.png"))
+    confidential = QPixmap.fromImage(
+        QImage(":/imgFMV/images/stamp/confidential.png"))
 
     @staticmethod
     def setValues(options=None):
@@ -80,7 +88,9 @@ class DrawToolBar(object):
 
         # Magnifier Glass #
 
-        shape_type = s.value(DrawToolBar.NameSpace + "/Options/magnifier/shape")
+        shape_type = s.value(
+            DrawToolBar.NameSpace +
+            "/Options/magnifier/shape")
         if shape_type is not None:
             global TYPE_MAGNIFIER
             TYPE_MAGNIFIER = shape_type
@@ -108,14 +118,18 @@ class DrawToolBar(object):
 
         # Drawings #
 
-        poly_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/width")
+        poly_w = s.value(
+            DrawToolBar.NameSpace +
+            "/Options/drawings/polygons/width")
         if poly_w is not None:
             global PolyWidth
             PolyWidth = int(poly_w)
             if options is not None:
                 options.poly_width.setValue(PolyWidth)
 
-        poly_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/pen")
+        poly_p = s.value(
+            DrawToolBar.NameSpace +
+            "/Options/drawings/polygons/pen")
         if poly_p is not None:
             global PolyPen
             PolyPen = QPen(QColor(poly_p))
@@ -124,21 +138,27 @@ class DrawToolBar(object):
             if options is not None:
                 options.poly_pen.setColor(QColor(poly_p))
 
-        poly_b = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/brush")
+        poly_b = s.value(
+            DrawToolBar.NameSpace +
+            "/Options/drawings/polygons/brush")
         if poly_b is not None:
             global PolyBrush
             PolyBrush = QBrush(QColor(poly_b))
             if options is not None:
                 options.poly_brush.setColor(QColor(poly_b))
 
-        point_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/points/width")
+        point_w = s.value(
+            DrawToolBar.NameSpace +
+            "/Options/drawings/points/width")
         if point_w is not None:
             global PointWidth
             PointWidth = int(point_w)
             if options is not None:
                 options.point_width.setValue(PointWidth)
 
-        point_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/points/pen")
+        point_p = s.value(
+            DrawToolBar.NameSpace +
+            "/Options/drawings/points/pen")
         if point_p is not None:
             global PointPen
             PointPen = QPen(QColor(point_p))
@@ -147,7 +167,9 @@ class DrawToolBar(object):
             if options is not None:
                 options.point_pen.setColor(QColor(point_p))
 
-        line_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/lines/width")
+        line_w = s.value(
+            DrawToolBar.NameSpace +
+            "/Options/drawings/lines/width")
         if line_w is not None:
             global LineWidth
             LineWidth = int(line_w)
@@ -163,14 +185,18 @@ class DrawToolBar(object):
             if options is not None:
                 options.lines_pen.setColor(QColor(line_p))
 
-        measure_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/width")
+        measure_w = s.value(
+            DrawToolBar.NameSpace +
+            "/Options/drawings/measures/width")
         if measure_w is not None:
             global MeasureWidth
             MeasureWidth = int(measure_w)
             if options is not None:
                 options.measures_width.setValue(MeasureWidth)
 
-        measure_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/pen")
+        measure_p = s.value(
+            DrawToolBar.NameSpace +
+            "/Options/drawings/measures/pen")
         if measure_p is not None:
             global MeasurePen
             MeasurePen = QPen(QColor(measure_p))
@@ -179,7 +205,9 @@ class DrawToolBar(object):
             if options is not None:
                 options.measures_pen.setColor(QColor(measure_p))
 
-        measure_b = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/brush")
+        measure_b = s.value(
+            DrawToolBar.NameSpace +
+            "/Options/drawings/measures/brush")
         if measure_b is not None:
             global MeasureBrush
             MeasureBrush = QBrush(QColor(measure_b))
@@ -189,11 +217,13 @@ class DrawToolBar(object):
         return
 
     @staticmethod
-    def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawMDistance, drawMArea, drawCesure, painter, surface, gt):
+    def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawMDistance,
+                    drawMArea, drawCesure, painter, surface, gt):
         ''' Function to paint over the video '''
         # Draw clicked points on video
         for position, pt in enumerate(drawPtPos):
-            DrawToolBar.drawPointOnVideo(position + 1, pt, painter, surface, gt)
+            DrawToolBar.drawPointOnVideo(
+                position + 1, pt, painter, surface, gt)
 
         # Draw clicked lines on video
         if len(drawLines) > 1:
@@ -276,12 +306,14 @@ class DrawToolBar(object):
 
         scr_x, scr_y = vut.GetInverseMatrix(
             pt[1], pt[0], gt, surface)
-                
+
         # don't draw something outside the screen.
-        if scr_x < vut.GetXBlackZone(surface) or scr_y < vut.GetYBlackZone(surface):
+        if scr_x < vut.GetXBlackZone(
+                surface) or scr_y < vut.GetYBlackZone(surface):
             return
 
-        if scr_x > vut.GetXBlackZone(surface) + vut.GetNormalizedWidth(surface) or scr_y > vut.GetYBlackZone(surface) + vut.GetNormalizedHeight(surface):
+        if scr_x > vut.GetXBlackZone(surface) + vut.GetNormalizedWidth(
+                surface) or scr_y > vut.GetYBlackZone(surface) + vut.GetNormalizedHeight(surface):
             return
 
         center = QPoint(scr_x, scr_y)
@@ -346,7 +378,8 @@ class DrawToolBar(object):
         RulerTotalMeasure = 0.0
 
     @staticmethod
-    def drawMeasureDistanceOnVideo(pt, idx, painter, surface, gt, drawMDistance):
+    def drawMeasureDistanceOnVideo(
+            pt, idx, painter, surface, gt, drawMDistance):
         ''' Draw Measure Distance on Video '''
         scr_x, scr_y = vut.GetInverseMatrix(
             pt[1], pt[0], gt, surface)
@@ -431,7 +464,10 @@ class DrawToolBar(object):
 
         # Area
         if a_value >= 10000:
-            painter.drawText(centroid, str(round(a_value / 1000000, 2)) + " km²")
+            painter.drawText(
+                centroid, str(
+                    round(
+                        a_value / 1000000, 2)) + " km²")
         else:
             painter.drawText(centroid, str(round(a_value, 2)) + " m²")
         return
@@ -477,7 +513,10 @@ class DrawToolBar(object):
         painter_p.setRenderHint(QPainter.HighQualityAntialiasing)
         painter_p.translate(-xy)
         painter_p.scale(MAX_FACTOR, MAX_FACTOR)
-        painter_p.drawImage(widget.surface.videoRect(), source, widget.surface.sourceRect())
+        painter_p.drawImage(
+            widget.surface.videoRect(),
+            source,
+            widget.surface.sourceRect())
 
         painter_p.end()
 
@@ -487,7 +526,11 @@ class DrawToolBar(object):
         # Shape Type
         if TYPE_MAGNIFIER == 0:
             # Square
-            clipPath.addRect(center.x(), center.y(), magnifierSize, magnifierSize)
+            clipPath.addRect(
+                center.x(),
+                center.y(),
+                magnifierSize,
+                magnifierSize)
             clipPath.translate(-radius, -radius)
         else:
             # Circle
@@ -502,5 +545,7 @@ class DrawToolBar(object):
     @staticmethod
     def drawStampOnVideo(widget, painter):
         ''' Draw Stamp Confidential on Video '''
-        painter.drawPixmap(widget.surface.videoRect(), DrawToolBar.confidential, widget.surface.sourceRect())
-
+        painter.drawPixmap(
+            widget.surface.videoRect(),
+            DrawToolBar.confidential,
+            widget.surface.sourceRect())

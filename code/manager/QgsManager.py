@@ -3,7 +3,7 @@ import ast
 from configparser import ConfigParser
 import os
 from os.path import dirname, abspath
-from qgis.PyQt.Qt  import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
+from qgis.PyQt.Qt import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtCore import QUrl, QTimer
 from qgis.PyQt.QtWidgets import (QDockWidget,
@@ -24,7 +24,7 @@ from QGIS_FMV.manager.QgsMultiplexor import Multiplexor
 from QGIS_FMV.manager.QgsFmvOpenStream import OpenStream
 from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer, QMediaContent
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
-                                        
+
                                         AddVideoToSettings,
                                         RemoveVideoToSettings,
                                         RemoveVideoFolder,
@@ -60,24 +60,28 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self._PlayerDlg = None
         self.meta_reader = []
         self.initialPt = []
-        self.pass_time = 250              
+        self.pass_time = 250
         self.buf_interval = 2000
-        self.update_interval = 2000                           
+        self.update_interval = 2000
         self.loading = False
         self.playlist = QMediaPlaylist()
         self.VManager.viewport().installEventFilter(self)
 
         # Context Menu
         self.VManager.customContextMenuRequested.connect(self.__context_menu)
-        self.removeAct = QAction(QIcon(":/imgFMV/images/mActionDeleteSelected.svg"),
-                                 QCoreApplication.translate("ManagerDock", "Remove from list"), self,
-                                 triggered=self.remove)
+        self.removeAct = QAction(
+            QIcon(":/imgFMV/images/mActionDeleteSelected.svg"),
+            QCoreApplication.translate(
+                "ManagerDock",
+                "Remove from list"),
+            self,
+            triggered=self.remove)
 
         self.VManager.setColumnWidth(1, 250)
         self.VManager.setColumnWidth(2, 140)
         self.VManager.setColumnWidth(3, 600)
         self.VManager.setColumnWidth(4, 600)
-        self.VManager.setColumnWidth(5, 130)                                    
+        self.VManager.setColumnWidth(5, 130)
         self.VManager.verticalHeader().setDefaultAlignment(Qt.AlignHCenter)
         self.VManager.hideColumn(0)
 
@@ -86,9 +90,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         self.dtm_path = parser['GENERAL']['DTM_file']
         draw.setValues()
         self.setAcceptDrops(True)
-    
+
     def loadVideosFromSettings(self):
-        
+
         # Get Video Manager List
         VideoList = getVideoManagerList()
         for load_id in VideoList:
@@ -98,16 +102,18 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             folder = getVideoFolder(filename)
             klv_folder = os.path.join(folder, "klv")
             exist = os.path.exists(klv_folder)
-                        
+
             if exist:
-                self.AddFileRowToManager(name, filename, load_id, exist, klv_folder)
+                self.AddFileRowToManager(
+                    name, filename, load_id, exist, klv_folder)
             else:
                 if os.path.isfile(filename):
                     self.AddFileRowToManager(name, filename, load_id)
-    
+
     def eventFilter(self, source, event):
         ''' Event Filter '''
-        if (event.type() == QEvent.MouseButtonPress and source is self.VManager.viewport() and self.VManager.itemAt(event.pos()) is None):
+        if (event.type() == QEvent.MouseButtonPress and source is self.VManager.viewport(
+        ) and self.VManager.itemAt(event.pos()) is None):
             self.VManager.clearSelection()
         return QDockWidget.eventFilter(self, source, event)
 
@@ -121,13 +127,13 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         menu.exec_(self.VManager.mapToGlobal(position))
 
     def remove(self):
-        ''' Remove current row '''         
+        ''' Remove current row '''
         if self.loading:
             return
-        
+
         # close video player (safer because it changes playlist internals)
         if self._PlayerDlg is not None:
-            self._PlayerDlg.close()               
+            self._PlayerDlg.close()
         for cr in self.VManager.selectedItems():
             idx = 0
             # we browse cells but we need lines, so ignore already deleted rows
@@ -135,16 +141,16 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 idx = cr.row()
             except Exception:
                 continue
-            
+
             row_id = self.VManager.item(idx, 0).text()
             row_text = self.VManager.item(idx, 1).text()
-            
+
             self.VManager.removeRow(idx)
-            
+
             self.videoPlayable.pop(idx)
             self.videoIsStreaming.pop(idx)
             self.initialPt.pop(idx)
-            
+
             # Remove video to Settings List
             RemoveVideoToSettings(row_id)
             # Remove folder if is local
@@ -152,19 +158,19 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
             if self.meta_reader[idx] is not None:
                 self.meta_reader[idx].dispose()
-            
+
             self.meta_reader.pop(idx)
-            
+
             # remove from playlist
             self.playlist.removeMedia(idx)
-                
+
     def closePlayer(self):
         ''' Close FMV '''
         try:
             self._PlayerDlg.close()
         except Exception:
-            None       
-                    
+            None
+
     def closeFMV(self):
         ''' Close FMV '''
         try:
@@ -183,18 +189,33 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def openMuiltiplexorDialog(self):
         ''' Open Multiplexor Dialog '''
-        self.Muiltiplexor = Multiplexor(self.iface, parent=self, Exts=ast.literal_eval(parser.get("FILES", "Exts")))
+        self.Muiltiplexor = Multiplexor(
+            self.iface,
+            parent=self,
+            Exts=ast.literal_eval(
+                parser.get(
+                    "FILES",
+                    "Exts")))
         self.Muiltiplexor.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self.Muiltiplexor.exec_()
         return
 
-    def AddFileRowToManager(self, name, filename, load_id=None, islocal=False, klv_folder=None):
+    def AddFileRowToManager(
+            self,
+            name,
+            filename,
+            load_id=None,
+            islocal=False,
+            klv_folder=None):
         ''' Add file Video to new Row '''
         # We limit the number of videos due to the buffer
         self.loading = True
         if self.VManager.rowCount() > 5:
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "ManagerDock", "You must delete some video from the list before adding a new one"), level=QGis.Warning)
+            qgsu.showUserAndLogMessage(
+                QCoreApplication.translate(
+                    "ManagerDock",
+                    "You must delete some video from the list before adding a new one"),
+                level=QGis.Warning)
             self.loading = False
             return
 
@@ -205,9 +226,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         pbar = QProgressBar()
         layout.addWidget(pbar)
         w.setLayout(layout)
-        rowPosition = self.VManager.rowCount()               
+        rowPosition = self.VManager.rowCount()
         self.videoPlayable.append(False)
-        
+
         pbar.setGeometry(0, 0, 300, 30)
         pbar.setValue(0)
         pbar.setMaximumHeight(30)
@@ -225,8 +246,10 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             rowPosition, 0, QTableWidgetItem(str(row_id)))
 
         self.VManager.setItem(rowPosition, 1, QTableWidgetItem(name))
-        self.VManager.setItem(rowPosition, 2, QTableWidgetItem(QCoreApplication.translate(
-            "ManagerDock", "Loading")))
+        self.VManager.setItem(
+            rowPosition, 2, QTableWidgetItem(
+                QCoreApplication.translate(
+                    "ManagerDock", "Loading")))
         self.VManager.setItem(rowPosition, 3, QTableWidgetItem(filename))
         self.VManager.setItem(rowPosition, 4, QTableWidgetItem("-"))
         self.VManager.setCellWidget(rowPosition, 5, w)
@@ -240,17 +263,23 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self.videoIsStreaming.append(True)
         else:
             self.videoIsStreaming.append(False)
-                
+
         if not self.videoIsStreaming[-1]:
             # Disable row if not exist video file
             if not os.path.exists(filename):
                 self.ToggleActiveRow(rowPosition, value="Missing source file")
                 for j in range(self.VManager.columnCount()):
                     try:
-                        self.VManager.item(rowPosition, j).setFlags(Qt.NoItemFlags | Qt.ItemIsEnabled)
-                        self.VManager.item(rowPosition, j).setBackground(QColor(211, 211, 211))
+                        self.VManager.item(
+                            rowPosition, j).setFlags(
+                            Qt.NoItemFlags | Qt.ItemIsEnabled)
+                        self.VManager.item(
+                            rowPosition, j).setBackground(
+                            QColor(
+                                211, 211, 211))
                     except Exception:
-                        self.VManager.cellWidget(rowPosition, j).setStyleSheet("background-color:rgb(211,211,211);")
+                        self.VManager.cellWidget(rowPosition, j).setStyleSheet(
+                            "background-color:rgb(211,211,211);")
                         pass
                 self.loading = False
                 return
@@ -260,23 +289,31 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             if info is None:
                 qgsu.showUserAndLogMessage(QCoreApplication.translate(
                     "ManagerDock", "Failed loading FFMPEG ! "))
-            
+
             klvIdx = getKlvStreamIndex(filename, islocal)
-                        
+
             # init non-blocking metadata buffered reader
-            self.meta_reader.append(BufferedMetaReader(filename, klv_index=klvIdx, pass_time=self.pass_time, interval=self.buf_interval))
-                                        
+            self.meta_reader.append(
+                BufferedMetaReader(
+                    filename,
+                    klv_index=klvIdx,
+                    pass_time=self.pass_time,
+                    interval=self.buf_interval))
+
             pbar.setValue(60)
             try:
                 # init point we can center the video on
-                self.initialPt.append(getVideoLocationInfo(filename, islocal, klv_folder))
+                self.initialPt.append(
+                    getVideoLocationInfo(
+                        filename, islocal, klv_folder))
                 if not self.initialPt[rowPosition]:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                         QCoreApplication.translate(
                             "ManagerDock", "Start location not available.")))
-                    self.ToggleActiveRow(rowPosition, value="Video not applicable")
+                    self.ToggleActiveRow(
+                        rowPosition, value="Video not applicable")
                     pbar.setValue(100)
-                    
+
                 else:
                     self.VManager.setItem(rowPosition, 4, QTableWidgetItem(
                         self.initialPt[rowPosition][2]))
@@ -287,25 +324,26 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                     "ManagerDock", "This video doesn't have Metadata ! "))
                 pbar.setValue(100)
                 self.ToggleActiveRow(rowPosition, value="Video not applicable")
-                
+
         else:
             self.meta_reader.append(StreamMetaReader(filename))
-            qgsu.showUserAndLogMessage("", "StreamMetaReader initialized.", onlyLog=True)
+            qgsu.showUserAndLogMessage(
+                "", "StreamMetaReader initialized.", onlyLog=True)
             self.initialPt.append(None)
             self.videoPlayable[rowPosition] = True
-        
+
         url = ""
         if self.videoIsStreaming[-1]:
             # show video from splitter (port +1)
             oldPort = filename.split(":")[2]
-            newPort = str(int(oldPort) + 10)                
+            newPort = str(int(oldPort) + 10)
             proto = filename.split(":")[0]
             url = QUrl(proto + "://127.0.0.1:" + newPort)
         else:
             url = QUrl.fromLocalFile(filename)
-        
+
         self.playlist.addMedia(QMediaContent(url))
-        
+
         if self.videoPlayable[rowPosition]:
             pbar.setValue(100)
             if islocal:
@@ -314,16 +352,16 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 self.ToggleActiveRow(rowPosition, value="Ready")
             # Add video to settings list
             AddVideoToSettings(str(row_id), filename)
-        
+
         self.loading = False
-            
+
     def openVideoFileDialog(self):
         ''' Open video file dialog '''
         if self.loading:
             return
-        
+
         Exts = ast.literal_eval(parser.get("FILES", "Exts"))
-                        
+
         filename, _ = askForFiles(self, QCoreApplication.translate(
             "ManagerDock", "Open video"),
             exts=Exts)
@@ -333,18 +371,21 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 _, name = os.path.split(filename)
                 self.AddFileRowToManager(name, filename)
             else:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "ManagerDock", "File is already loaded in playlist: " + filename))
-        
+                qgsu.showUserAndLogMessage(
+                    QCoreApplication.translate(
+                        "ManagerDock",
+                        "File is already loaded in playlist: " +
+                        filename))
+
         return
-    
+
     def isFileInPlaylist(self, filename):
         mcount = self.playlist.mediaCount()
         for x in range(mcount):
             if filename in self.playlist.media(x).canonicalUrl().toString():
                 return True
         return False
-    
+
     def PlayVideoFromManager(self, model):
         ''' Play video from manager dock.
             Manager row double clicked
@@ -352,7 +393,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # Don't enable Play if video doesn't have metadata
         if not self.videoPlayable[model.row()]:
             return
-        
+
         try:
             if self._PlayerDlg.isVisible():
                 self._PlayerDlg.close()
@@ -361,58 +402,81 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
         path = self.VManager.item(model.row(), 3).text()
         text = self.VManager.item(model.row(), 1).text()
-        
+
         folder = getVideoFolder(text)
         klv_folder = os.path.join(folder, "klv")
         exist = os.path.exists(klv_folder)
-          
+
         # First time we open the player
         if self._PlayerDlg is None:
             if exist:
-                self.CreatePlayer(path, self.update_interval, model.row(), islocal=True, klv_folder=klv_folder)
+                self.CreatePlayer(
+                    path,
+                    self.update_interval,
+                    model.row(),
+                    islocal=True,
+                    klv_folder=klv_folder)
             else:
-                self.CreatePlayer(path, self.update_interval, model.row())  
-                
-        self.SetupPlayer(model.row())                             
+                self.CreatePlayer(path, self.update_interval, model.row())
+
+        self.SetupPlayer(model.row())
         if exist:
             self._PlayerDlg.playFile(path, islocal=True, klv_folder=klv_folder)
         else:
-            self._PlayerDlg.playFile(path)              
-    
+            self._PlayerDlg.playFile(path)
+
     def SetupPlayer(self, row):
         ''' Play video from manager dock.
             Manager row double clicked
-        '''       
+        '''
         self.ToggleActiveRow(row)
-        
+
         self.playlist.setCurrentIndex(row)
-        
+
         # qgsu.CustomMessage("QGIS FMV", path, self._PlayerDlg.fileName, icon="Information")
         # if path != self._PlayerDlg.fileName:
         self._PlayerDlg.setMetaReader(self.meta_reader[row])
         self.ToggleActiveFromTitle()
         self._PlayerDlg.show()
         self._PlayerDlg.activateWindow()
-                    
-        # zoom to map zone     
+
+        # zoom to map zone
         curAuthId = self.iface.mapCanvas().mapSettings().destinationCrs().authid()
-        
-        if self.initialPt[row][1] is not None and self.initialPt[row][0] is not None: 
-            map_pos = QgsPointXY(self.initialPt[row][1], self.initialPt[row][0])
+
+        if self.initialPt[row][1] is not None and self.initialPt[row][0] is not None:
+            map_pos = QgsPointXY(
+                self.initialPt[row][1],
+                self.initialPt[row][0])
             if curAuthId != "EPSG:4326":
                 trgCode = int(curAuthId.split(":")[1])
-                xform = QgsCoordinateTransform(QgsCoordinateReferenceSystem(4326), QgsCoordinateReferenceSystem(trgCode), QgsProject().instance())
+                xform = QgsCoordinateTransform(
+                    QgsCoordinateReferenceSystem(4326),
+                    QgsCoordinateReferenceSystem(trgCode),
+                    QgsProject().instance())
                 map_pos = xform.transform(map_pos)
-                
+
             self.iface.mapCanvas().setCenter(map_pos)
-                
+
         self.iface.mapCanvas().zoomScale(50000)
-    
-    def CreatePlayer(self, path, interval, row, islocal=False, klv_folder=None):
+
+    def CreatePlayer(
+            self,
+            path,
+            interval,
+            row,
+            islocal=False,
+            klv_folder=None):
         ''' Create Player '''
-        self._PlayerDlg = QgsFmvPlayer(self.iface, path, interval, parent=self, meta_reader=self.meta_reader[
-            row], pass_time=self.pass_time, islocal=islocal, klv_folder=klv_folder)
-                    
+        self._PlayerDlg = QgsFmvPlayer(
+            self.iface,
+            path,
+            interval,
+            parent=self,
+            meta_reader=self.meta_reader[row],
+            pass_time=self.pass_time,
+            islocal=islocal,
+            klv_folder=klv_folder)
+
         self._PlayerDlg.player.setPlaylist(self.playlist)
         self._PlayerDlg.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint)
         self._PlayerDlg.show()
@@ -437,8 +501,10 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
     def ToggleActiveRow(self, row, value="Playing"):
         ''' Toggle Active row manager video status '''
-        self.VManager.setItem(row, 2, QTableWidgetItem(QCoreApplication.translate(
-            "ManagerDock", value)))
+        self.VManager.setItem(
+            row, 2, QTableWidgetItem(
+                QCoreApplication.translate(
+                    "ManagerDock", value)))
         return
 
     def closeEvent(self, _):
@@ -451,7 +517,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         except Exception:
             None
         return
-    
+
     def dragEnterEvent(self, e):
         check = True
         Exts = ast.literal_eval(parser.get("FILES", "Exts"))
@@ -465,9 +531,9 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 if not fileIsOk:
                     check = False
                     break
-        
-        # Only accept if all files match a required extension       
-        if check: 
+
+        # Only accept if all files match a required extension
+        if check:
             e.acceptProposedAction()
         # Ignore and stop propagation
         else:
@@ -479,8 +545,10 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             # local files
             if "file:///" in url.toString():
                 if not self.isFileInPlaylist(url.toString()[8:]):
-                    self.AddFileRowToManager(url.fileName(), url.toString()[8:])
+                    self.AddFileRowToManager(
+                        url.fileName(), url.toString()[8:])
             # network drives
             else:
                 if not self.isFileInPlaylist(url.toString()[5:]):
-                    self.AddFileRowToManager(url.fileName(), url.toString()[5:])
+                    self.AddFileRowToManager(
+                        url.fileName(), url.toString()[5:])

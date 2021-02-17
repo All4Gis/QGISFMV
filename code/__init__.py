@@ -37,10 +37,18 @@ try:
         LinuxInstaller()
 
     reloadPlugin('QGIS_FMV')
-    iface.messageBar().pushMessage("QGIS FMV", "QGIS Full Motion Video installed correctly!", QGis.Info, 3)
+    iface.messageBar().pushMessage(
+        "QGIS FMV",
+        "QGIS Full Motion Video installed correctly!",
+        QGis.Info,
+        3)
     QApplication.restoreOverrideCursor()
 except Exception as e:
-    iface.messageBar().pushMessage("QGIS FMV", "Ooops! QGIS Full Motion Video instalation failed!", QGis.Warning, 3)
+    iface.messageBar().pushMessage(
+        "QGIS FMV",
+        "Ooops! QGIS Full Motion Video instalation failed!",
+        QGis.Warning,
+        3)
     QApplication.restoreOverrideCursor()
     None
 

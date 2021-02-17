@@ -1,4 +1,4 @@
-﻿  # 2017 by Gregor Engberding , MIT License
+﻿# 2017 by Gregor Engberding , MIT License
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import (QJsonDocument,
@@ -137,7 +137,8 @@ class QJsonModel(QAbstractItemModel):
 
             return True
 
-        qgsu.showUserAndLogMessage("", "QJsonModel: error loading Json", onlyLog=True)
+        qgsu.showUserAndLogMessage(
+            "", "QJsonModel: error loading Json", onlyLog=True)
         return False
 
     def data(self, index, role):

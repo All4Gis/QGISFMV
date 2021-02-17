@@ -44,7 +44,8 @@ class UAVBasicUniversalMetadataSet(SetParser):
     """
 
     # key = hexstr_to_bytes('06 0E 2B 34 - 01 01 01 01 – 02 01 03 00 - 00 00 00 00')
-    key = hexstr_to_bytes('06 0E 2B 34 - 02 01 01 01 – 0E 01 01 02 - 01 01 00 00')
+    key = hexstr_to_bytes(
+        '06 0E 2B 34 - 02 01 01 01 – 0E 01 01 02 - 01 01 00 00')
     name = 'UAV Basic Universal Metadata Set'
     key_length = 16
     parsers = {}
@@ -682,4 +683,3 @@ class AlternatePlatformEllipsoidHeightExtended(IEEE754ElementParser):
     _domain = (0, 2 ** 16 - 1)
     _range = (-900, 40000)
     units = 'meters'
-

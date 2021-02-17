@@ -28,7 +28,8 @@ from QGIS_FMV.klvdata.common import bytes_to_hexstr
 
 class ParserSingleShort(unittest.TestCase):
     def test_st0102(self):
-        # Test parameters from MISB ST0902.5 Annex C for "Dynamic and Constant" MISMMS Packet Data
+        # Test parameters from MISB ST0902.5 Annex C for "Dynamic and Constant"
+        # MISMMS Packet Data
         key = b'\x30'
         length = b'\x1c'
         value = b'\x01\x01\x01\x02\x01\x07\x03\x05//USA\x0c\x01\x07\r\x06\x00U\x00S\x00A\x16\x02\x00\n'
@@ -47,7 +48,8 @@ class ParserSingleShort(unittest.TestCase):
 
     def test_st0601_1(self):
         # This test vector from MISB ST0902.5. Some errors may have been hand corrected.
-        # Annex C for "Dynamic and Constant" MISMMS Packet Data.  Sample data from MISB ST 0902.5
+        # Annex C for "Dynamic and Constant" MISMMS Packet Data.  Sample data
+        # from MISB ST 0902.5
         klv = bytes()
 
         with open('./data/DynamicConstantMISMMSPacketData.bin', 'rb') as f:
@@ -98,11 +100,16 @@ class ParserSingleShort(unittest.TestCase):
         # Basic Properties
         self.assertEqual(PrecisionTimeStamp(value).key, key)
         self.assertEqual(PrecisionTimeStamp(value).length, length)
-        self.assertEqual(bytes_to_hexstr(bytes(PrecisionTimeStamp(value).value)), bytes_to_hexstr(value))
+        self.assertEqual(
+            bytes_to_hexstr(
+                bytes(
+                    PrecisionTimeStamp(value).value)),
+            bytes_to_hexstr(value))
         self.assertEqual(bytes(PrecisionTimeStamp(value)), klv)
 
         # Check __str__
-        self.assertEqual(str(PrecisionTimeStamp(value)), "PrecisionTimeStamp: (b'\\x02', 8, 2009-01-12 22:08:22+00:00)")
+        self.assertEqual(str(PrecisionTimeStamp(value)),
+                         "PrecisionTimeStamp: (b'\\x02', 8, 2009-01-12 22:08:22+00:00)")
 
     # def test_st0601_mission(self):
     #     with open('./samples/DynamicConstantMISMMSPacketData.bin', 'rb') as f:
@@ -117,6 +124,7 @@ class ParserSingleShort(unittest.TestCase):
     #     from misb0601 import ST0601
     #
     #     # print(ST0601(value).items)
+
 
 if __name__ == '__main__':
     unittest.main()

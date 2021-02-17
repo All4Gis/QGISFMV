@@ -56,6 +56,9 @@ class OpenStream(QDialog, Ui_FmvOpenStream):
                 self.parent.AddFileRowToManager(v, v)
                 self.close()
             else:
-                qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                    "QgsFmvOpenStream", "There is no such connection!"), level=QGis.Warning)
+                qgsu.showUserAndLogMessage(
+                    QCoreApplication.translate(
+                        "QgsFmvOpenStream",
+                        "There is no such connection!"),
+                    level=QGis.Warning)
             QApplication.restoreOverrideCursor()

@@ -1,4 +1,4 @@
-﻿  # Original Code : https://github.com/zeroepoch/plotbitrate
+﻿# Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QObject, QCoreApplication
@@ -76,8 +76,13 @@ def ShowPlot(bitrate_data, frame_count, fileName, output=None):
 
     # draw peak as think black line w/ text
     matplot.axhline(global_peak_bitrate, linewidth=2, color='black')
-    matplot.text(peak_text_x, peak_text_y, peak_text,
-                 horizontalalignment='center', fontweight='bold', color='black')
+    matplot.text(
+        peak_text_x,
+        peak_text_y,
+        peak_text,
+        horizontalalignment='center',
+        fontweight='bold',
+        color='black')
 
     # calculate mean line position (right 85%, above line)
     mean_text_x = matplot.xlim()[1] * 0.85
@@ -171,7 +176,8 @@ class CreatePlotsBitrate(QObject):
                                     # compute frame rate from ratio
                                     frame_rate_ratio = stream_elem.get(
                                         'avg_frame_rate')
-                                    (dividend, divisor) = frame_rate_ratio.split('/')
+                                    (dividend,
+                                     divisor) = frame_rate_ratio.split('/')
                                     frame_rate = float(
                                         dividend) / float(divisor)
 
@@ -186,7 +192,9 @@ class CreatePlotsBitrate(QObject):
                                 if self.frame_count > 1:
                                     frame_time += float(node.get('pkt_duration_time'))
 
-                        frame_bitrate = (float(node.get('pkt_size')) * 8 / 1000) * frame_rate
+                        frame_bitrate = (
+                            float(
+                                node.get('pkt_size')) * 8 / 1000) * frame_rate
                         frame = (frame_time, frame_bitrate)
 
                         # create new frame list if new type

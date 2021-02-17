@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from queue import Queue, Empty
 import threading
-import collections  
+import collections
 import platform
 import os
 from configparser import ConfigParser
@@ -24,7 +24,7 @@ if windows:
 else:
     ffmpeg_path = os.path.join(ffmpegConf, 'ffmpeg')
     ffprobe_path = os.path.join(ffmpegConf, 'ffprobe')
-    
+
 
 class NonBlockingStreamReader:
 
@@ -61,13 +61,17 @@ class NonBlockingStreamReader:
 
                 # End of stream
                 else:
-                    qgsu.showUserAndLogMessage("", "reader got end of stream.", onlyLog=True)
+                    qgsu.showUserAndLogMessage(
+                        "", "reader got end of stream.", onlyLog=True)
                     break
 
             if self.stopped:
-                qgsu.showUserAndLogMessage("", "NonBlockingStreamReader ended because stop signal received.", onlyLog=True)
+                qgsu.showUserAndLogMessage(
+                    "", "NonBlockingStreamReader ended because stop signal received.", onlyLog=True)
 
-        self._t = threading.Thread(target=_populateQueue, args=(self._p, self._q))
+        self._t = threading.Thread(
+            target=_populateQueue, args=(
+                self._p, self._q))
         self._t.daemon = True
         self._t.start()  # start collecting lines from the stream
 
@@ -108,7 +112,11 @@ class Splitter(threading.Thread):
             startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
             startupinfo.wShowWindow = subprocess.SW_HIDE
 
-        self.p = subprocess.Popen(self.cmds, startupinfo=startupinfo, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE)
+        self.p = subprocess.Popen(
+            self.cmds,
+            startupinfo=startupinfo,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE)
         # Dont us _spawn here as it will DeadLock, and the splitter won't work
         # self.p = _spawn(self.cmds)
         self.nbsr = NonBlockingStreamReader(self.p)
@@ -124,9 +132,26 @@ class StreamMetaReader():
         self.srcHost = self.split[1]
         self.srcPort = int(self.split[2])
         self.destPort = self.srcPort + 10
-        self.connection = self.srcProtocol + ':' + self.srcHost + ':' + str(self.srcPort)
-        self.connectionDest = self.srcProtocol + '://127.0.0.1:' + str(self.destPort)
-        self.splitter = Splitter(['-i', self.connection, '-c', 'copy', '-map', '0:v?', '-map', '0:a?', '-f', 'rtp_mpegts', self.connectionDest, '-map', '0:d?', '-f', 'data', '-'])
+        self.connection = self.srcProtocol + ':' + \
+            self.srcHost + ':' + str(self.srcPort)
+        self.connectionDest = self.srcProtocol + \
+            '://127.0.0.1:' + str(self.destPort)
+        self.splitter = Splitter(['-i',
+                                  self.connection,
+                                  '-c',
+                                  'copy',
+                                  '-map',
+                                  '0:v?',
+                                  '-map',
+                                  '0:a?',
+                                  '-f',
+                                  'rtp_mpegts',
+                                  self.connectionDest,
+                                  '-map',
+                                  '0:d?',
+                                  '-f',
+                                  'data',
+                                  '-'])
         self.splitter.start()
         qgsu.showUserAndLogMessage("", "Splitter started.", onlyLog=True)
 
@@ -143,7 +168,8 @@ class StreamMetaReader():
         # kill the process if open, releases source port
         try:
             self.splitter.p.kill()
-            qgsu.showUserAndLogMessage("", "Splitter Popen process killed.", onlyLog=True)
+            qgsu.showUserAndLogMessage(
+                "", "Splitter Popen process killed.", onlyLog=True)
         except OSError:
             # can't kill a dead proc
             pass
@@ -152,8 +178,9 @@ class StreamMetaReader():
 class BufferedMetaReader():
     ''' Non-Blocking metadata reader with buffer  '''
 
-    # if we go lower, the buffer will shrink drastically and the video may hang.
-    
+    # if we go lower, the buffer will shrink drastically and the video may
+    # hang.
+
     def __init__(self, video_path, klv_index=0, pass_time=250, interval=1000):
         ''' Constructor '''
         # don't go too low with pass_time or we won't catch any metadata at
@@ -178,9 +205,10 @@ class BufferedMetaReader():
         size = 0
         s_date = datetime.strptime(t, '%H:%M:%S.%f')
         last_date = None
-        # calculate buffer size ahead of supplied time (contiguous values only).       
+        # calculate buffer size ahead of supplied time (contiguous values
+        # only).
         od = collections.OrderedDict(sorted(self._meta.items()))
-        for ele in od.keys(): 
+        for ele in od.keys():
             c_date = datetime.strptime(ele, '%H:%M:%S.%f')
             if last_date is None:
                 last_date = c_date
@@ -189,7 +217,8 @@ class BufferedMetaReader():
             if c_date > s_date:
                 # qgsu.showUserAndLogMessage("", "Comparing: ele:" + ele + " greater than t (as date):" + t + " : yes", onlyLog=True)
                 # qgsu.showUserAndLogMessage("", "c_date:" + c_date.strftime('%H:%M:%S.%f') + " last_date:" + last_date.strftime('%H:%M:%S.%f'), onlyLog=True)
-                delta_millisec = (c_date - last_date).microseconds / 1000 + (c_date - last_date).seconds * 1000
+                delta_millisec = (c_date - last_date).microseconds / \
+                    1000 + (c_date - last_date).seconds * 1000
                 # qgsu.showUserAndLogMessage("", "delta: " + str(delta_millisec), onlyLog=True)
                 if delta_millisec <= self.interval:
                     size += 1
@@ -197,27 +226,36 @@ class BufferedMetaReader():
                 else:
                     # qgsu.showUserAndLogMessage("", "Greater than pass_time:" + str(delta_millisec), onlyLog=True)
                     break
-            
-            last_date = c_date            
-            
+
+            last_date = c_date
+
         return size
 
     def bufferParalell(self, start, size):
         start_sec = _time_to_seconds(start)
         start_milisec = int(start_sec * 1000)
 
-        for k in range(start_milisec, start_milisec + (size * self.interval), self.interval):
+        for k in range(start_milisec, start_milisec +
+                       (size * self.interval), self.interval):
             cTime = k / 1000.0
             nTime = (k + self.pass_time) / 1000.0
             new_key = _seconds_to_time_frac(cTime)
             if new_key not in self._meta:
                 # qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
-                self._meta[new_key] = callBackMetadataThread(cmds=['-i', self.video_path,
-                                                                   '-ss', new_key,
-                                                                   '-to', _seconds_to_time_frac(
-                                                                       nTime),
-                                                                   '-map', '0:d:' + str(self.klv_index),
-                                                                   '-f', 'data', '-'])
+                self._meta[new_key] = callBackMetadataThread(
+                    cmds=[
+                        '-i',
+                        self.video_path,
+                        '-ss',
+                        new_key,
+                        '-to',
+                        _seconds_to_time_frac(nTime),
+                        '-map',
+                        '0:d:' + str(
+                            self.klv_index),
+                        '-f',
+                        'data',
+                        '-'])
                 self._meta[new_key].start()
 
     def get(self, t):
@@ -228,10 +266,10 @@ class BufferedMetaReader():
         new_t = ''
         try:
             milis = int(s[1][:-1])
-            
+
             if self.interval > 1000:
                 inte = 1000
-               
+
             r_milis = round(milis / inte) * inte
             if r_milis != 1000:
                 if r_milis < 1000:
@@ -250,29 +288,60 @@ class BufferedMetaReader():
             # after skip, buffer may not have been initialized
             if new_t not in self._meta:
                 qgsu.showUserAndLogMessage(
-                    "", "Meta reader -> get: " + t + " cache: " + new_t + " values have not been init yet.", onlyLog=True)
+                    "",
+                    "Meta reader -> get: " +
+                    t +
+                    " cache: " +
+                    new_t +
+                    " values have not been init yet.",
+                    onlyLog=True)
                 self._check_buffer(new_t)
                 value = 'BUFFERING'
             elif self._meta[new_t].p is None:
                 value = 'NOT_READY'
                 qgsu.showUserAndLogMessage(
-                    "", "Meta reader -> get: " + t + " cache: " + new_t + " values not ready yet.", onlyLog=True)
+                    "",
+                    "Meta reader -> get: " +
+                    t +
+                    " cache: " +
+                    new_t +
+                    " values not ready yet.",
+                    onlyLog=True)
             elif self._meta[new_t].p.returncode is None:
                 value = 'NOT_READY'
                 qgsu.showUserAndLogMessage(
-                    "", "Meta reader -> get: " + t + " cache: " + new_t + " values not ready yet.", onlyLog=True)
+                    "",
+                    "Meta reader -> get: " +
+                    t +
+                    " cache: " +
+                    new_t +
+                    " values not ready yet.",
+                    onlyLog=True)
             elif self._meta[new_t].stdout:
                 value = self._meta[new_t].stdout
             else:
                 qgsu.showUserAndLogMessage(
-                    "", "Meta reader -> get: " + t + " cache: " + new_t + " values ready but empty.", onlyLog=True)
-                      
-            self._check_buffer(new_t)   
-            # bSize = self.getSize(t)   
-            # qgsu.showUserAndLogMessage("Buffer size:" + str(bSize), "Buffer size:" + str(bSize), onlyLog=False)            
+                    "",
+                    "Meta reader -> get: " +
+                    t +
+                    " cache: " +
+                    new_t +
+                    " values ready but empty.",
+                    onlyLog=True)
+
+            self._check_buffer(new_t)
+            # bSize = self.getSize(t)
+            # qgsu.showUserAndLogMessage("Buffer size:" + str(bSize), "Buffer size:" + str(bSize), onlyLog=False)
         except Exception as e:
             qgsu.showUserAndLogMessage(
-                "", "No value found for: " + t + " rounded: " + new_t + " e:" + str(e), onlyLog=True)
+                "",
+                "No value found for: " +
+                t +
+                " rounded: " +
+                new_t +
+                " e:" +
+                str(e),
+                onlyLog=True)
 
         # qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " return code: "+ str(self._meta[new_t].p.returncode), onlyLog=True)
         # qgsu.showUserAndLogMessage("QgsFmvUtils", "meta_reader -> get: " + t + " cache: "+ new_t +" len: " + str(len(value)), onlyLog=True)
@@ -292,10 +361,10 @@ class callBackMetadataThread(threading.Thread):
         threading.Thread.__init__(self)
 
     def setCmds(self, cmds):
-        self.cmds = cmds                      
+        self.cmds = cmds
 
     def run(self):
-        # qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)                                        
+        # qgsu.showUserAndLogMessage("", "callBackMetadataThread run: commands:" + str(self.cmds), onlyLog=True)
         self.p = _spawn(self.cmds)
         # print (self.cmds)
         self.stdout, _ = self.p.communicate()
