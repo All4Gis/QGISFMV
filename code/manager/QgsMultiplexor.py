@@ -16,12 +16,6 @@ from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.geo import sphere
 from qgis.core import Qgis as QGis
 from io import StringIO
-import matplotlib.pyplot as plt
-import sys
-import gi
-import json
-gi.require_version('Gst', '1.0')
-from gi.repository import Gst, GObject
 
 try:
     from pydevd import *
@@ -180,112 +174,6 @@ _range91 = (-90, 90)
 _key91 = b'\x5B'
 
 
-# Pipeline
-
-vid_frames_folder = "/home/fragalop/SamplesFMV/multiplex/frames"
-vid_frame_rate = 30
-vid_width = 3840
-vid_height = 2160
-out_file = "/home/fragalop/SamplesFMV/multiplex/test.mp4"
-
-GObject.threads_init()
-Gst.init(None)
-
-# video source elements
-vsrc = Gst.ElementFactory.make("appsrc", "vidsrc")
-vqueue = Gst.ElementFactory.make("queue")
-vtee = Gst.ElementFactory.make("tee")
-
-# klv source elements
-appsrc = Gst.ElementFactory.make("appsrc")
-queue_klv = Gst.ElementFactory.make("queue")
-
-# display elements
-#queue_display = Gst.ElementFactory.make("queue")
-#vcvt = Gst.ElementFactory.make("videoconvert", "vidcvt")
-#vsink = Gst.ElementFactory.make("autovideosink", "vidsink")
-
-# recording elements
-queue_record = Gst.ElementFactory.make("queue")
-vcvt_encoder = Gst.ElementFactory.make("videoconvert")
-encoder = Gst.ElementFactory.make("x264enc")
-muxer = Gst.ElementFactory.make("mpegtsmux")
-filesink = Gst.ElementFactory.make("filesink")
-
-# configure video element
-caps_str = "video/x-raw"
-caps_str += ",format=(string)RGB,width={},height={}".format(vid_width,vid_height)
-caps_str += ",framerate={}/1".format(int(vid_frame_rate))
-vcaps = Gst.Caps.from_string(caps_str)
-vsrc.set_property("caps", vcaps);
-vsrc.set_property("format", Gst.Format.TIME)
-
-# configure appsrc element
-caps_str = "meta/x-klv"
-caps_str += ",parsed=True"
-caps = Gst.Caps.from_string(caps_str)
-appsrc.set_property("caps", caps)
-# appsrc.connect("need-data", klv_need_data)
-appsrc.set_property("format", Gst.Format.TIME)
-
-# configure encoder
-encoder.set_property("noise-reduction", 1000)
-encoder.set_property("threads", 4)
-encoder.set_property("bitrate", 1755)
-
-# configure filesink
-filesink.set_property("location", out_file)
-filesink.set_property("async", 0)
-
-pipeline = Gst.Pipeline()
-pipeline.add(vsrc)
-pipeline.add(vqueue)
-pipeline.add(vtee)
-pipeline.add(appsrc)
-pipeline.add(queue_klv)
-#pipeline.add(queue_display)
-#pipeline.add(vcvt)
-#pipeline.add(vsink)
-pipeline.add(queue_record)
-pipeline.add(vcvt_encoder)
-pipeline.add(encoder)
-pipeline.add(muxer)
-pipeline.add(filesink)
-
-# link video elements
-vsrc.link(vqueue)
-vqueue.link(vtee)
-
-# link display elements
-#vtee.link(queue_display)
-#queue_display.link(vcvt)
-#vcvt.link(vsink)
-
-# link recording elements
-vtee.link(queue_record)
-queue_record.link(vcvt_encoder)
-vcvt_encoder.link(encoder)
-encoder.link(muxer)
-muxer.link(filesink)
-
-# link klv elements
-appsrc.link(queue_klv)
-queue_klv.link(muxer)
-
-pipeline.set_state(Gst.State.PLAYING)
-
-timestamp = 0
-
-klv_done = False
-vid_done = False
-vid_frame_counter = 0
-klv_frame_counter = 0
-
-t = 0
-last_klv_t = 0
-last_vid_t = 0
-
-
 class Multiplexor(QDialog, Ui_VideoMultiplexer):
     """ About Dialog """
 
@@ -366,9 +254,6 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         progress.setMaximum(rowCount)
 
         d = {}
-        end_path = self.klv_folder + "/all.klv"
-        f_write = open(end_path, "wb+")
-
         with open(out_record, encoding=encoding) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
@@ -517,7 +402,8 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                 try:
                     # Diference time
                     td = date_end - date_start
- 
+                    end_path = self.klv_folder + \
+                        "/%.1f.klv" % (round(td.total_seconds(), 1))
 
                     # CheckSum
                     v = abs(hash(end_path)) % (10 ** 4)
@@ -617,6 +503,70 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
+                    # TODO : If we save the corners in the klv have a overflow
+#                     # CALCULATE CORNERS COORDINATES
+#                     sensor = (OSD_longitude, OSD_latitude, OSD_altitude)
+#                     frameCenter = (destPoint[0], destPoint[1], frameCenterElevation)
+#                     FOV = (VFOV, HFOV)
+#                     others = (OSD_yaw, GIMBAL_yaw, targetWidth, slantRange)
+#                     cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL = CornerEstimationWithoutOffsets(sensor=sensor, frameCenter=frameCenter, FOV=FOV, others=others)
+#
+#                     # Corner Latitude Point 1 (Full)
+#                     _bytes = float_to_bytes(round(cornerPointUL[0],4), _domain82, _range82)
+#                     _len = int_to_bytes(len(_bytes))
+#                     _bytes = _key82 + _len + _bytes
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#
+#                     # Corner Longitude Point 1 (Full)
+#                     _bytes = float_to_bytes(round(cornerPointUL[1],4), _domain83, _range83)
+#                     _len = int_to_bytes(len(_bytes))
+#                     _bytes = _key83 + _len + _bytes
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#
+#                     # Corner Latitude Point 2 (Full)
+#                     _bytes = float_to_bytes(round(cornerPointUR[0],4), _domain84, _range84)
+#                     _len = int_to_bytes(len(_bytes))
+#                     _bytes = _key84 + _len + _bytes
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#
+#                     # Corner Longitude Point 2 (Full)
+#                     _bytes = float_to_bytes(round(cornerPointUR[1],4), _domain85, _range85)
+#                     _len = int_to_bytes(len(_bytes))
+#                     _bytes = _key85 + _len + _bytes
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#
+#                     # Corner Latitude Point 3 (Full)
+#                     _bytes = float_to_bytes(round(cornerPointLR[0],4), _domain86, _range86)
+#                     _len = int_to_bytes(len(_bytes))
+#                     _bytes = _key86 + _len + _bytes
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#
+#                     # Corner Longitude Point 3 (Full)
+#                     _bytes = float_to_bytes(round(cornerPointLR[1],4), _domain87, _range87)
+#                     _len = int_to_bytes(len(_bytes))
+#                     _bytes = _key87 + _len + _bytes
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#
+#                     # Corner Latitude Point 4 (Full)
+#                     _bytes = float_to_bytes(round(cornerPointLL[0],4), _domain88, _range88)
+#                     _len = int_to_bytes(len(_bytes))
+#                     _bytes = _key88 + _len + _bytes
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#
+#                     # Corner Longitude Point 4 (Full)
+#                     _bytes = float_to_bytes(round(cornerPointLL[1],4), _domain89, _range89)
+#                     _len = int_to_bytes(len(_bytes))
+#                     _bytes = _key89 + _len + _bytes
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+
                     # Platform Pitch Angle (Full)
                     _bytes = float_to_bytes(
                         round(OSD_pitch, 4), _domain90, _range90)
@@ -635,11 +585,15 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
 
                     # set packet header
                     writeData = cle
+                    print(int_to_bytes(sizeTotal))
+                    print(sizeTotal)
                     writeData += int_to_bytes(sizeTotal)
                     writeData += bufferData
 
                     # Write packet
+                    f_write = open(end_path, "wb+")
                     f_write.write(writeData)
+                    f_write.close()
 
                     cnt += 1
 
@@ -647,8 +601,6 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
 
                 except Exception as e:
                     print("Multiplexer error : " + str(e))
-
-        f_write.close()
 
         QApplication.restoreOverrideCursor()
         QApplication.processEvents()
