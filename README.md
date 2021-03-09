@@ -160,7 +160,7 @@ ffprobe : "/usr/bin/"
 
 **Mentions** 
 
-* [Beyond imagery and Video](https://docs.google.com/presentation/d/e/2PACX-1vTKcb4AV71yapX2hrOCIUCCvdP0FIOUqO1OvfEG4cHKvo0wvVM9pmIA0vMuzLXVANmhySRlFOgTAHGf/pub?start=true&loop=false&delayms=10000&slide=id.p1)
+* [Beyond imagery and Video](https://docs.google.com/presentation/d/1b9FVFcThSJJLq4Q31C9Yx3pEsconY3QxKPZ4sifIAu4/edit?usp=sharing)
 
 * [MXF Experimentation, Lessons Learned, *UK DSTL*]( https://drive.google.com/file/d/1bjLKzBc73wCrFiMkGFQDx2-w_JHf0fyf/view?usp=sharing)
 
