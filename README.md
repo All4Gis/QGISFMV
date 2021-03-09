@@ -157,7 +157,14 @@ ffprobe : "/usr/bin/"
 ## Slides
 
 * [Official presentation](https://slides.com/franraga/qgis-fmv/fullscreen)
+
+**Mentions** 
+
 * [Beyond imagery and Video](https://docs.google.com/presentation/d/e/2PACX-1vTKcb4AV71yapX2hrOCIUCCvdP0FIOUqO1OvfEG4cHKvo0wvVM9pmIA0vMuzLXVANmhySRlFOgTAHGf/pub?start=true&loop=false&delayms=10000&slide=id.p1)
+
+* [MXF Experimentation, Lessons Learned, *UK DSTL*]( https://drive.google.com/file/d/1bjLKzBc73wCrFiMkGFQDx2-w_JHf0fyf/view?usp=sharing)
+
+If you want to add your presentation simply upload it or send me an email
 
 &#8593; [Back to top](#table-of-contents)
 
