@@ -157,6 +157,7 @@ ffprobe : "/usr/bin/"
 ## Slides
 
 * [Official presentation](https://slides.com/franraga/qgis-fmv/fullscreen)
+* [SIG libre 2020](https://slides.com/franraga/sig-libre-2020/fullscreen)
 
 **Mentions** 
 
