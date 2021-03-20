@@ -23,6 +23,7 @@ Standards supported:
     - [Installation on Ubuntu](#installation-on-ubuntu)
     - [Installation on Archlinux](#installation-on-archlinux)
 - [Slides](#slides)
+- [Mentions](#mentions)
 - [Screenshots](#screenshots)
 - [Features](#features)
 - [Contributing](#contributing)
@@ -159,13 +160,15 @@ ffprobe : "/usr/bin/"
 * [Official presentation](https://slides.com/franraga/qgis-fmv/fullscreen)
 * [SIG libre 2021 WorkShop](https://slides.com/franraga/sig-libre-2021/fullscreen)
 
-**Mentions** 
+&#8593; [Back to top](#table-of-contents)
+
+## Mentions
 
 * [Beyond imagery and Video](https://docs.google.com/presentation/d/1b9FVFcThSJJLq4Q31C9Yx3pEsconY3QxKPZ4sifIAu4/edit?usp=sharing)
 
 * [MXF Experimentation, Lessons Learned, *UK DSTL*]( https://drive.google.com/file/d/1bjLKzBc73wCrFiMkGFQDx2-w_JHf0fyf/view?usp=sharing)
 
-* [QGIS Mexico, FMV, Luis Gallardo)](https://youtu.be/edk6sbNgiAw)
+* [QGIS Mexico, FMV, Luis Gallardo](https://youtu.be/edk6sbNgiAw)
 
 If you want to add your presentation simply upload it or send me an email
 
