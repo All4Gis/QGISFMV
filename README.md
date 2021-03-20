@@ -165,6 +165,8 @@ ffprobe : "/usr/bin/"
 
 * [MXF Experimentation, Lessons Learned, *UK DSTL*]( https://drive.google.com/file/d/1bjLKzBc73wCrFiMkGFQDx2-w_JHf0fyf/view?usp=sharing)
 
+* [QGIS Mexico, FMV, Luis Gallardo)](https://youtu.be/edk6sbNgiAw)
+
 If you want to add your presentation simply upload it or send me an email
 
 &#8593; [Back to top](#table-of-contents)
