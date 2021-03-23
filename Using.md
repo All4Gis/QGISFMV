@@ -30,6 +30,8 @@ If your video is not MISB compliant, you will have to create it via the **Multip
 
 Convert it to **.csv** using the [CsvView tool](https://datfile.net/CsvView/downloads.html) Simply open the telemetry file in CsvView and save it out as a .csv file. 
 
+Other way to create it is, go to [DJI Flight Log Viewer](https://www.phantomhelp.com/logviewer/upload/) site, import the **.txt** and click in the **Download Verbose CSV** option.
+
 Once this is done you can use the **Multiplexor** to create a MISB compliant video.  
 
 From the manager simpy click on **File -> Create MISB File**, select the video and the corresponding telemetry file. 

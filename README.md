@@ -9,7 +9,7 @@ Plugin for **QGIS 3** which allows to analyze, visualize and process videos insi
 
 Standards supported:
 
-  - "UAS Datalink Local Set", [ST0601.11](http://www.gwg.nga.mil/misb/docs/standards/ST0601.11.pdf)
+  - "UAS Datalink Local Set", [ST0601.17](http://www.gwg.nga.mil/misb/docs/standards/ST0601.17.pdf)
 
 ## Table of Contents
 
@@ -23,6 +23,7 @@ Standards supported:
     - [Installation on Ubuntu](#installation-on-ubuntu)
     - [Installation on Archlinux](#installation-on-archlinux)
 - [Slides](#slides)
+- [Mentions](#mentions)
 - [Screenshots](#screenshots)
 - [Features](#features)
 - [Contributing](#contributing)
@@ -157,7 +158,19 @@ ffprobe : "/usr/bin/"
 ## Slides
 
 * [Official presentation](https://slides.com/franraga/qgis-fmv/fullscreen)
-* [Beyond imagery and Video](https://docs.google.com/presentation/d/e/2PACX-1vTKcb4AV71yapX2hrOCIUCCvdP0FIOUqO1OvfEG4cHKvo0wvVM9pmIA0vMuzLXVANmhySRlFOgTAHGf/pub?start=true&loop=false&delayms=10000&slide=id.p1)
+* [SIG libre 2021 WorkShop](https://slides.com/franraga/sig-libre-2021/fullscreen)
+
+&#8593; [Back to top](#table-of-contents)
+
+## Mentions
+
+* [Beyond imagery and Video](https://docs.google.com/presentation/d/1b9FVFcThSJJLq4Q31C9Yx3pEsconY3QxKPZ4sifIAu4/edit?usp=sharing)
+
+* [MXF Experimentation, Lessons Learned, *UK DSTL*]( https://drive.google.com/file/d/1bjLKzBc73wCrFiMkGFQDx2-w_JHf0fyf/view?usp=sharing)
+
+* [QGIS Mexico, FMV, Luis Gallardo](https://youtu.be/edk6sbNgiAw)
+
+If you want to add your presentation simply upload it or send me an email
 
 &#8593; [Back to top](#table-of-contents)
 
@@ -223,9 +236,19 @@ For test stream feature you can simulate stream channel,like this:
 `ffmpeg -i rtp://127.0.0.1:8888 -c copy -map 0:v? -map 0:a? -f rtp_mpegts rtp://127.0.0.1:8898 -map 0:d? -f data -`
 
 
-And transifex client:
+And **transifex** client:
 
 `pip3 install transifex-client`
+
+**Code Format**
+
+    pip install coveralls
+    pip install pycodestyle
+    
+    autopep8 --in-place --aggressive  --aggressive -v --recursive deploy/*.py --exclude="*gui/*"
+   
+    pycodestyle --ignore=E501 code/*.py --statistics --exclude=code/gui/*.py
+    pycodestyle --ignore=E501,W504 deploy/*.py --statistics
 	
 And thanks for your code.
 
