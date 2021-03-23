@@ -9,7 +9,7 @@ Plugin for **QGIS 3** which allows to analyze, visualize and process videos insi
 
 Standards supported:
 
-  - "UAS Datalink Local Set", [ST0601.11](http://www.gwg.nga.mil/misb/docs/standards/ST0601.11.pdf)
+  - "UAS Datalink Local Set", [ST0601.17](http://www.gwg.nga.mil/misb/docs/standards/ST0601.17.pdf)
 
 ## Table of Contents
 
