@@ -51,11 +51,12 @@ windows = platform.system() == 'Windows'
 class FmvManager(QDockWidget, Ui_ManagerWindow):
     ''' Video Manager '''
 
-    def __init__(self, iface, parent=None):
+    def __init__(self, iface, parent=None, fmv=None):
         super().__init__(parent)
         self.setupUi(self)
 
         self.parent = parent
+        self.fmv = fmv
         self.iface = iface
         self._PlayerDlg = None
         self.meta_reader = []
@@ -177,6 +178,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self._PlayerDlg.close()
         except Exception:
             None
+        self.fmv.closeManager()
         self.close()
         return
 

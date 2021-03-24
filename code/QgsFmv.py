@@ -110,6 +110,11 @@ class Fmv:
         self.About = FmvAbout()
         self.About.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
         self.About.exec_()
+        
+    def closeManager(self):
+        ''' Reset Manager status (Close Button) '''
+        self._FMVManager = None
+        self.run_once = False
 
     def run(self):
         ''' Run method '''
@@ -119,5 +124,5 @@ class Fmv:
 
     def CreateDockWidget(self):
         ''' Create Manager Video QDockWidget '''
-        self._FMVManager = FmvManager(self.iface)
+        self._FMVManager = FmvManager(self.iface, fmv=self)
         self.iface.addDockWidget(Qt.BottomDockWidgetArea, self._FMVManager)
