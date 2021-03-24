@@ -14,7 +14,7 @@ from qgis.PyQt.QtWidgets import (QDockWidget,
                                  QVBoxLayout,
                                  QWidget)
 import qgis.utils
-
+import platform
 from PyQt5.QtGui import QColor
 
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
@@ -46,7 +46,7 @@ except ImportError:
 s = QSettings()
 parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
-
+windows = platform.system() == 'Windows'
 
 class FmvManager(QDockWidget, Ui_ManagerWindow):
     ''' Video Manager '''
@@ -544,9 +544,15 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         for url in e.mimeData().urls():
             # local files
             if "file:///" in url.toString():
-                if not self.isFileInPlaylist(url.toString()[8:]):
-                    self.AddFileRowToManager(
-                        url.fileName(), url.toString()[8:])
+                if windows:
+                    if not self.isFileInPlaylist(url.toString()[8:]):
+                        self.AddFileRowToManager(
+                            url.fileName(), url.toString()[8:])
+                else:
+                    # In linux need /home/.. the firts slash
+                    if not self.isFileInPlaylist(url.toString()[7:]):
+                        self.AddFileRowToManager(
+                            url.fileName(), url.toString()[7:])     
             # network drives
             else:
                 if not self.isFileInPlaylist(url.toString()[5:]):
