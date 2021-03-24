@@ -361,7 +361,7 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
             if ret[0] != "":
                 name, ext = os.path.splitext(ret[0])
                 if not ext:
-                    ret[0] += "." + exts[0]  # Default extension
+                    ret[0] + "." + exts[0]  # Default extension
         else:
             ret = dlg.getOpenFileName(
                 parent, msg, path, extString) or None
