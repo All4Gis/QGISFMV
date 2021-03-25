@@ -37,6 +37,8 @@ Once this is done you can use the **Multiplexor** to create a MISB compliant vid
 From the manager simpy click on **File -> Create MISB File**, select the video and the corresponding telemetry file. 
 There is an option to modify the Horizontal and Vertical Fields of View if necessary. 
 
+**Note:** The FOV are crucial for correct corner points calculation, so have a look at your DJI manual to get the correct numbers.
+
 **Note:** If you have more than one video recorded in a flight, the Multiplxor tool needs to identify each recodring event. Simply select **Extract Recordings** Then select the corresponsing recording to the video as it was captured. Ex: If you started and stopped the video 3 times over the course of one flight and want to use the second one. The Multiplexor tool will find three Recordings. Chose the matching one, the second one. 
 
 Once all information has been provided select the **Create MISB button**. It will load the new file into the Video Manager. 
