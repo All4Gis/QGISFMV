@@ -618,6 +618,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
     def ReadCSVRecordings(self, csv_raw):
         ''' Read the csv for each recording '''
         rows_list = []
+        time_list = []
         with open(csv_raw, encoding=encoding) as csvfile:
             # Prevent “_csv.Error: line contains NULL byte�?
             data = csvfile.read()
@@ -636,15 +637,19 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                                 rows = []
                         else:
                             rows.append(index)
+                    if k == "CUSTOM.updateTime":
+                        # Used to set the csv name using Update Time
+                        t = row[k].split(" ")[1].split(":")
+                        time_list.append(t[0] + "_"+ t[1] + "_" + t[2])
                 index += 1
 
         if not rows_list:
             rows_list.append(rows)
         # Create csv
-        self.CreateDJICsv(rows_list, csv_raw)
+        self.CreateDJICsv(rows_list, csv_raw, time_list)
         return
 
-    def CreateDJICsv(self, rows_list, csv_raw):
+    def CreateDJICsv(self, rows_list, csv_raw, time_list):
         ''' DJI Drone: Create csv result files for each record '''
         QApplication.setOverrideCursor(Qt.WaitCursor)
         QApplication.processEvents()
@@ -657,20 +662,19 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         self.klv_folder = os.path.join(folder, "klv")
         out_csv = os.path.join(folder, "csv")
 
-        for values in rows_list:
-            timestamp = int(time.time() * 1000.0)
-            filename = "_".join(["recording", str(timestamp)])
+        for idx, val in enumerate(rows_list):
+            filename = "_".join(["recording", time_list[idx]])
             out_record = os.path.join(out_csv, filename + ".csv")
             # The column that corresponds to the stop is also removed
             with open(csv_raw, 'r', encoding=encoding) as f_input, open(out_record, 'w', newline='', encoding="ISO-8859-1") as f_output:
-                # Prevent “_csv.Error: line contains NULL byte�?
+                # Prevent “_csv.Error: line contains NULL byte
                 data = f_input.read()
                 data = data.replace('\x00', '?')
                 csv_input = csv.reader(StringIO(data))
                 csv.writer(f_output).writerows(
                     itertools.islice(csv_input, 0, 1))
                 csv.writer(f_output).writerows(itertools.islice(
-                    csv_input, int(values[0]), int(values[-1])))
+                    csv_input, int(val[0]), int(val[-1])))
 
             self.cmb_telemetry.addItem(filename, out_record)
 
