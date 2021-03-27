@@ -518,6 +518,10 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 self._PlayerDlg.close()
         except Exception:
             None
+        try:
+            self.fmv.closeManager()
+        except Exception:
+            None
         return
 
     def dragEnterEvent(self, e):

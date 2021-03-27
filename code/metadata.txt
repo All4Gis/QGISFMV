@@ -26,6 +26,10 @@ email=franka1986@gmail.com
 
 changelog=
     ** General **
+     1.16:
+      - Create csv with UpdateTime in the multiplexor tool.
+      - fix close manager.
+      - fix dran&drop manager video in linux
      1.15:
       - Slider made clickable.
       - Fixed drawings position when elevation model used.

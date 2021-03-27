@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from QGIS_FMV.utils.QgsFmvUtils import (GetImageWidth,
                                         GetImageHeight,
-                                        GetSensor,
-                                        GetLine3DIntersectionWithDEM,
                                         GetDemAltAt,
                                         GetFrameCenter,
                                         hasElevationModel,
@@ -205,7 +203,6 @@ class VideoUtils(object):
         Altitude = float(round(targetAlt, 0))
 
         if hasElevationModel():
-            target = [transf[0], transf[1], targetAlt]
             alt = GetDemAltAt(transf[1], transf[0])
             Altitude = round(alt, 0)
 

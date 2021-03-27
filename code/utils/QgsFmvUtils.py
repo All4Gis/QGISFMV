@@ -30,7 +30,6 @@ from qgis.core import (QgsApplication,
                        QgsPointXY,
                        QgsCoordinateReferenceSystem,
                        Qgis as QGis)
-# from subprocess import Popen, PIPE, STARTF_USESHOWWINDOW, STARTUPINFO, check_output, DEVNULL
 import subprocess
 
 from QGIS_FMV.utils.QgsFmvUtilsState import globalVariablesState
@@ -587,21 +586,20 @@ def _spawn(cmds, t="ffmpeg"):
 
 def ResetData():
     ''' Reset Global Data '''
-    #global dtm_data
     #global tLastLon, tLastLat
 
     SetcrtSensorSrc()
-    SetcrtPltTailNum()
-    # The DTM is not associated with every video.If we reset it, you won't see it when you change videos
-    # dtm_data = []
+    SetcrtPltTailNum()    
     #tLastLon = 0.0
     #tLastLat = 0.0
 
-
+# TODO : Study other way to save or get DTM values, withou settings value
 def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
     ''' Start DEM transformation and extract data for set Z value in points '''
     global dtm_data, dtm_transform, dtm_colLowerBound, dtm_rowLowerBound
-
+    
+    # Reset global DTM data when change video
+    dtm_data = []
     # Initialize the dtm once, based on a zone arouind the target
     qgsu.showUserAndLogMessage("", "Initializing DTM.", onlyLog=True)
     dataset = gdal.Open(dtm_path)
@@ -1169,6 +1167,7 @@ def CornerEstimationWithoutOffsets(
 
 
 def GetDemAltAt(lon, lat):
+    ''' Obtain height for Point,intersecting with DEM '''
     alt = 0
 
     xOrigin = dtm_transform[0]
@@ -1249,26 +1248,26 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
     return pt
 
 
-def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
-    ''' Get Altitude from DEM '''
-    sensorLat = sensorPt[0]
-    sensorLon = sensorPt[1]
-    sensorAlt = sensorPt[2]
-    demPtLat = demPt[1]
-    demPtLon = demPt[0]
-    demPtAlt = demPt[2]
-
-    distance = sphere.distance([sensorLat, sensorLon], [demPtLat, demPtLon])
-    distance = sqrt(distance ** 2 + (demPtAlt - demPtAlt) ** 2)
-    dLat = (demPtLat - sensorLat) / distance
-    dLon = (demPtLon - sensorLon) / distance
-    dAlt = (demPtAlt - sensorAlt) / distance
-
-    k = ((demPtAlt - planeHeight) / (sensorAlt - demPtAlt)) * distance
-    pt = [sensorLon + (distance + k) * dLon, sensorLat +
-          (distance + k) * dLat, sensorAlt + (distance + k) * dAlt]
-
-    return pt
+# def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
+#     ''' Get Altitude from DEM '''
+#     sensorLat = sensorPt[0]
+#     sensorLon = sensorPt[1]
+#     sensorAlt = sensorPt[2]
+#     demPtLat = demPt[1]
+#     demPtLon = demPt[0]
+#     demPtAlt = demPt[2]
+# 
+#     distance = sphere.distance([sensorLat, sensorLon], [demPtLat, demPtLon])
+#     distance = sqrt(distance ** 2 + (demPtAlt - demPtAlt) ** 2)
+#     dLat = (demPtLat - sensorLat) / distance
+#     dLon = (demPtLon - sensorLon) / distance
+#     dAlt = (demPtAlt - sensorAlt) / distance
+# 
+#     k = ((demPtAlt - planeHeight) / (sensorAlt - demPtAlt)) * distance
+#     pt = [sensorLon + (distance + k) * dLon, sensorLat +
+#           (distance + k) * dLat, sensorAlt + (distance + k) * dAlt]
+# 
+#     return pt
 
 
 def _convert_timestamp(ts):

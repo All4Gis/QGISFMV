@@ -12,11 +12,7 @@ from qgis.PyQt.QtGui import (QPainter,
 from PyQt5.QtGui import QImage
 
 from QGIS_FMV.geo import sphere
-from QGIS_FMV.utils.QgsFmvUtils import (GetSensor,
-                                        GetLine3DIntersectionWithPlane,
-                                        GetFrameCenter,
-                                        hasElevationModel,
-                                        getNameSpace)
+from QGIS_FMV.utils.QgsFmvUtils import getNameSpace
 
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
 
@@ -27,7 +23,7 @@ try:
 except ImportError:
     None
 
-RulerTotalMeasure = 0.0
+# Magnifier
 MAX_MAGNIFIER = 250
 MAX_FACTOR = 2
 TYPE_MAGNIFIER = 1
@@ -46,6 +42,7 @@ LineWidth = 3
 LinePen = QPen(QColor(252, 215, 108), LineWidth)
 
 # Measure Draw
+RulerTotalMeasure = 0.0
 MeasureWidth = 3
 MeasurePen = QPen(
     QColor(
