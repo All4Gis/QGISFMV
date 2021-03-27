@@ -30,7 +30,6 @@ from qgis.core import (QgsApplication,
                        QgsPointXY,
                        QgsCoordinateReferenceSystem,
                        Qgis as QGis)
-# from subprocess import Popen, PIPE, STARTF_USESHOWWINDOW, STARTUPINFO, check_output, DEVNULL
 import subprocess
 
 from QGIS_FMV.utils.QgsFmvUtilsState import globalVariablesState
@@ -587,7 +586,6 @@ def _spawn(cmds, t="ffmpeg"):
 
 def ResetData():
     ''' Reset Global Data '''
-    #global dtm_data
     #global tLastLon, tLastLat
 
     SetcrtSensorSrc()
@@ -595,7 +593,7 @@ def ResetData():
     #tLastLon = 0.0
     #tLastLat = 0.0
 
-
+# TODO : Study other way to save or get DTM values, withou settings value
 def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
     ''' Start DEM transformation and extract data for set Z value in points '''
     global dtm_data, dtm_transform, dtm_colLowerBound, dtm_rowLowerBound
@@ -1169,6 +1167,7 @@ def CornerEstimationWithoutOffsets(
 
 
 def GetDemAltAt(lon, lat):
+    ''' Obtain height for Point,intersecting with DEM '''
     alt = 0
 
     xOrigin = dtm_transform[0]
