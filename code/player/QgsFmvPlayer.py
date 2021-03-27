@@ -1225,6 +1225,17 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.actionSave_Audio.setEnabled(False)
                 self.HasFileAudio = False
 
+            # Check if has terrain
+            if self.parent.dtm_path != '':
+                # init elevation model
+                try:
+                    idx = self.parent.playlist.currentIndex()
+                    initElevationModel(self.parent.initialPt[idx][0], self.parent.initialPt[idx][1], self.parent.dtm_path)
+                    #qgsu.showUserAndLogMessage("", "Elevation model initialized.", onlyLog=True)
+                except Exception as e:
+                    #qgsu.showUserAndLogMessage("", "Elevation model NOT initialized: " + str(e), onlyLog=True)
+                    None
+
             self.playClicked(True)
 
         except Exception as e:

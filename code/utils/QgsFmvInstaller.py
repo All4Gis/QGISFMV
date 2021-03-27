@@ -13,7 +13,6 @@ from subprocess import Popen, PIPE
 from urllib.request import urlretrieve, build_opener, install_opener
 import zipfile
 
-import requests
 import subprocess
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
