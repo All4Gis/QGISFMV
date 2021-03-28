@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import Qt, QRect, QPoint, QEvent, QBasicTimer, QSize
 from qgis.PyQt.QtGui import (QImage,
                              QPalette,
@@ -20,7 +19,7 @@ from PyQt5.QtMultimedia import (QAbstractVideoBuffer,
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtWidgets import QApplication
 
-from QGIS_FMV.geo import mgrs
+from QGIS_FMV.geo import QgsMgrs
 from QGIS_FMV.player.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.utils.QgsFmvLayers import (AddDrawPointOnMap,
                                          AddDrawLineOnMap,

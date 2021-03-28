@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import csv
 from qgis.PyQt.QtCore import Qt, QCoreApplication
 from qgis.PyQt.QtGui import (QFont,

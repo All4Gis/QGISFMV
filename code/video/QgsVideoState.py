@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 class InteractionState(object):
     """ Interaction Video Player Class """
 

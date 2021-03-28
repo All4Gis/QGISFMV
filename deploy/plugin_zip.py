@@ -45,7 +45,7 @@ def copyProjectStructure():
             exclude = os.path.join(
                 os.path.dirname(directory),
                 'exclude-file.txt')
-            cmd = 'rsync -avi --progress --exclude-from="%s" %s %s' % (
+            cmd = 'rsync -avi --progress --exclude-from="{}" {} {}'.format(
                 exclude, basePath_linux, destPath)
             os.system(cmd)
 

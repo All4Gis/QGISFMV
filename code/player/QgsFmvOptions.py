@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from qgis.PyQt.QtCore import QUrl, Qt, QSettings, QPoint
+from qgis.PyQt.QtCore import QSettings, QPoint
 from qgis.PyQt.QtWidgets import QDialog, QStyleOptionSlider, QToolTip
 
 from QGIS_FMV.gui.ui_FmvOptions import Ui_OptionsDialog

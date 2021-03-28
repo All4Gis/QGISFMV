@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import numpy as np
 from cv2 import (COLOR_BGR2RGB,
                  cvtColor,
@@ -28,14 +27,16 @@ from qgis.core import (QgsApplication,
                        QgsProject,
                        QgsCoordinateTransform,
                        QgsPointXY,
+                       QgsDistanceArea,
                        QgsCoordinateReferenceSystem,
                        Qgis as QGis)
 import subprocess
 
 from QGIS_FMV.utils.QgsFmvUtilsState import globalVariablesState
 from osgeo import gdal, osr
+from QGIS_FMV.geo.QgsGeoUtils import WGS84String
 
-from QGIS_FMV.geo import sphere
+from QGIS_FMV.geo import QgsGeoUtils
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.streamparser import StreamParser
 from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
@@ -49,6 +50,7 @@ from QGIS_FMV.utils.QgsFmvLayers import (addLayerNoCrsDialog,
                                          SetcrtSensorSrc,
                                          SetcrtPltTailNum)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+from ldap3 import NONE
 
 parser = ConfigParser()
 parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
@@ -342,7 +344,7 @@ def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
     f = None
     if not isinstance(exts, list):
         exts = [exts]
-    extString = ";; ".join([" %s files (*.%s *.%s)" % (e.upper(), e, e.upper())
+    extString = ";; ".join([" {} files (*.{} *.{})".format(e.upper(), e, e.upper())
                             if e != "*" else "All files (*.*)" for e in exts])
 
     dlg = QFileDialog()
@@ -553,7 +555,7 @@ def GetImageHeight():
 def _check_output(cmds, t="ffmpeg"):
     ''' Check Output Commands in Python '''
 
-    if t is "ffmpeg":
+    if t == "ffmpeg":
         cmds.insert(0, ffmpeg_path)
     else:
         cmds.insert(0, ffprobe_path)
@@ -564,7 +566,7 @@ def _check_output(cmds, t="ffmpeg"):
 def _spawn(cmds, t="ffmpeg"):
     ''' Subprocess and Shell Commands in Python '''
 
-    if t is "ffmpeg":
+    if t == "ffmpeg":
         cmds.insert(0, ffmpeg_path)
     else:
         cmds.insert(0, ffprobe_path)
@@ -633,14 +635,13 @@ def initElevationModel(frameCenterLat, frameCenterLon, dtm_path):
         if dtm_data is not None:
             qgsu.showUserAndLogMessage(
                 "", "DTM successfully initialized, len: " + str(len(dtm_data)), onlyLog=True)
+    dataset = None
 
 
 def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     ''' Update Layers Values '''
     gv.setGroupName(group)
     groupName = group
-    # frameCenterLat = packet.FrameCenterLatitude
-    # frameCenterLon = packet.FrameCenterLongitude
     gv.setFrameCenterElevation(packet.FrameCenterElevation)
     gv.setSensorLatitude(packet.SensorLatitude)
     gv.setSensorLongitude(packet.SensorLongitude)
@@ -1050,14 +1051,18 @@ def CornerEstimationWithoutOffsets(
         if sensorLongitude is None or sensorLatitude is None:
             return False
 
-        initialPoint = (sensorLongitude, sensorLatitude)
 
         if frameCenterLon is None or frameCenterLat is None:
             return False
 
-        destPoint = (frameCenterLon, frameCenterLat)
 
-        distance = sphere.distance(initialPoint, destPoint)
+        initialPoint = QgsPointXY(sensorLongitude, sensorLatitude)
+        destPoint = QgsPointXY(frameCenterLon, frameCenterLat)
+        
+        da = QgsDistanceArea()
+        da.setEllipsoid(WGS84String)
+        distance = da.measureLine(initialPoint, destPoint)
+
         if distance == 0:
             return False
 
@@ -1093,22 +1098,22 @@ def CornerEstimationWithoutOffsets(
         # CP Up Left
         bearing = (value2 + 360.0 - value21) % 360.0
         cornerPointUL = list(
-            reversed(sphere.destination(destPoint, value19, bearing)))
+            reversed(QgsGeoUtils.destination(destPoint, value19, bearing)))
 
         # CP Up Right
         bearing = (value2 + value21) % 360.0
         cornerPointUR = list(
-            reversed(sphere.destination(destPoint, value19, bearing)))
+            reversed(QgsGeoUtils.destination(destPoint, value19, bearing)))
 
         # CP Low Right
         bearing = (value2 + 180.0 - value20) % 360.0
         cornerPointLR = list(
-            reversed(sphere.destination(destPoint, distance2, bearing)))
+            reversed(QgsGeoUtils.destination(destPoint, distance2, bearing)))
 
         # CP Low Left
         bearing = (value2 + 180.0 + value20) % 360.0
         cornerPointLL = list(
-            reversed(sphere.destination(destPoint, distance2, bearing)))
+            reversed(QgsGeoUtils.destination(destPoint, distance2, bearing)))
 
         frameCenterPoint = [
             packet.FrameCenterLatitude,
@@ -1200,9 +1205,15 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
         targetAlt = targetPt[2]
     except Exception:
         targetAlt = GetFrameCenter()[2]
+        
+    initialPoint = QgsPointXY(sensorLon, sensorLat)
+    destPoint = QgsPointXY(targetLon, targetLat)
+    
+    da = QgsDistanceArea()
+    da.setEllipsoid(WGS84String)
+    dist = da.measureLine(initialPoint, destPoint)
 
-    distance = sphere.distance([sensorLat, sensorLon], [targetLat, targetLon])
-    distance = sqrt(distance ** 2 + (targetAlt - sensorAlt) ** 2)
+    distance = sqrt(dist ** 2 + (targetAlt - sensorAlt) ** 2)
     dLat = (targetLat - sensorLat) / distance
     dLon = (targetLon - sensorLon) / distance
     dAlt = (targetAlt - sensorAlt) / distance

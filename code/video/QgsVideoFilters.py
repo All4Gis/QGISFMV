@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtGui import QImage
 from QGIS_FMV.utils.QgsFmvUtils import convertMatToQImage, convertQImageToMat
 import numpy as np

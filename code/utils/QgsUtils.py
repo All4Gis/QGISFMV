@@ -1,7 +1,4 @@
-﻿# -*- coding: utf-8 -*-
 import os
-import shutil
-
 from qgis.PyQt.QtGui import QPixmap, QIcon
 from qgis.PyQt.QtWidgets import QMessageBox, QSpacerItem, QSizePolicy
 from QGIS_FMV.utils.QgsFmvLog import log

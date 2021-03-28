@@ -27,9 +27,14 @@ email=franka1986@gmail.com
 changelog=
     ** General **
      1.16:
+      - Update plot bitrate code.
+      - Measures now use QGIS functions.
+      - Important clean code.
+      - Remove geo-py https://github.com/gojuno/geo-py code.
+      - Updated included mgrspy to fix issues with proj 6 versions mainly on Windows.
       - Create csv with UpdateTime in the multiplexor tool.
       - fix close manager.
-      - fix dran&drop manager video in linux
+      - fix dran&drop manager video in linux.
      1.15:
       - Slider made clickable.
       - Fixed drawings position when elevation model used.

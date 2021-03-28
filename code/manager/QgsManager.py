@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 import ast
 from configparser import ConfigParser
 import os
 from os.path import dirname, abspath
 from qgis.PyQt.Qt import QSettings, pyqtSlot, QEvent, Qt, QCoreApplication, QPoint
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtCore import QUrl, QTimer
+from qgis.PyQt.QtCore import QUrl
 from qgis.PyQt.QtWidgets import (QDockWidget,
                                  QTableWidgetItem,
                                  QAction,
@@ -22,9 +21,8 @@ from QGIS_FMV.converter.ffmpeg import FFMpeg
 from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
 from QGIS_FMV.manager.QgsMultiplexor import Multiplexor
 from QGIS_FMV.manager.QgsFmvOpenStream import OpenStream
-from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer, QMediaContent
+from QGIS_FMV.player.QgsFmvPlayer import QgsFmvPlayer
 from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
-
                                         AddVideoToSettings,
                                         RemoveVideoToSettings,
                                         RemoveVideoFolder,
@@ -35,7 +33,7 @@ from QGIS_FMV.utils.QgsFmvUtils import (askForFiles,
                                         getVideoLocationInfo)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import QgsPointXY, QgsCoordinateReferenceSystem, QgsProject, QgsCoordinateTransform, Qgis as QGis
-from PyQt5.QtMultimedia import QMediaPlaylist
+from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent
 from QGIS_FMV.utils.QgsFmvKlvReader import StreamMetaReader, BufferedMetaReader
 
 try:

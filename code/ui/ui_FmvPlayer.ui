@@ -250,38 +250,6 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QPushButton" name="btn_Color">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Color dialog&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/color_picker.png</normaloff>:/imgFMV/images/color_picker.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+C</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="btn_Rec">
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
@@ -1477,22 +1445,6 @@
     <hint type="destinationlabel">
      <x>-1</x>
      <y>442</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>btn_Color</sender>
-   <signal>clicked()</signal>
-   <receiver>PlayerWindow</receiver>
-   <slot>showColorDialog()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>55</x>
-     <y>527</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>3</x>
-     <y>497</y>
     </hint>
    </hints>
   </connection>
