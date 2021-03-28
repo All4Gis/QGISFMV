@@ -1,4 +1,3 @@
-﻿# -*- coding: utf-8 -*-
 from qgis.PyQt.QtGui import QColor, qRgba
 
 

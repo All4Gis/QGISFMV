@@ -87,7 +87,7 @@ class MediaFormatInfo(object):
     def __repr__(self):
         if self.duration is None:
             return 'MediaFormatInfo(format=%s)' % self.format
-        return 'MediaFormatInfo(format=%s, duration=%.2f)' % (self.format,
+        return 'MediaFormatInfo(format={}, duration={:.2f})'.format(self.format,
                                                               self.duration)
 
 
@@ -206,7 +206,7 @@ class MediaStreamInfo(object):
 
     def __repr__(self):
         d = ''
-        metadata_str = ['%s=%s' % (key, value) for key, value
+        metadata_str = ['{}={}'.format(key, value) for key, value
                         in self.metadata.items()]
         metadata_str = ', '.join(metadata_str)
 
@@ -218,12 +218,12 @@ class MediaStreamInfo(object):
                 self.type, self.codec, self.video_width, self.video_height,
                 self.video_fps)
         elif self.type == 'subtitle':
-            d = 'type=%s, codec=%s' % (self.type, self.codec)
+            d = 'type={}, codec={}'.format(self.type, self.codec)
         if self.bitrate is not None:
             d += ', bitrate=%d' % self.bitrate
 
         if self.metadata:
-            value = 'MediaStreamInfo(%s, %s)' % (d, metadata_str)
+            value = 'MediaStreamInfo({}, {})'.format(d, metadata_str)
         else:
             value = 'MediaStreamInfo(%s)' % d
 
@@ -278,7 +278,7 @@ class MediaInfo(object):
                     self.format.parse_ffprobe(k, v)
 
     def __repr__(self):
-        return 'MediaInfo(format=%s, streams=%s)' % (repr(self.format),
+        return 'MediaInfo(format={}, streams={})'.format(repr(self.format),
                                                      repr(self.streams))
 
     @property

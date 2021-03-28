@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QUrl, Qt
 from qgis.PyQt.QtWidgets import QDialog
 from QGIS_FMV.gui.ui_FmvAbout import Ui_FmvAbout
 
-try:
-    from pydevd import *
-except ImportError:
-    None
+# try:
+#     from pydevd import *
+# except ImportError:
+#     None
 
 
 class FmvAbout(QDialog, Ui_FmvAbout):

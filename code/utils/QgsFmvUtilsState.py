@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from qgis.utils import iface as defIface
 
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from queue import Queue, Empty
 import threading
 import collections
@@ -98,7 +97,7 @@ class Splitter(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        if self.type is "ffmpeg":
+        if self.type == "ffmpeg":
             self.cmds.insert(0, ffmpeg_path)
         else:
             self.cmds.insert(0, ffprobe_path)

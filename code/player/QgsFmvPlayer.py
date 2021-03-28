@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 import os.path
-from qgis.PyQt.QtCore import (QUrl,
-                              QPoint,
+from qgis.PyQt.QtCore import (QPoint,
                               QCoreApplication,
                               Qt,
-                              QTimer,
-                              pyqtSignal,
-                              QEvent,
-                              QObject)
+                              QTimer)
 from qgis.PyQt.QtGui import QIcon, QMovie
 from qgis.PyQt.QtWidgets import (QToolTip,
                                  QMessageBox,
@@ -23,9 +19,9 @@ from qgis.PyQt.QtWidgets import (QToolTip,
                                  QApplication,
                                  QTableWidgetItem,
                                  QToolBar)
-from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject, QgsLayerTreeGroup
+from qgis.core import Qgis as QGis, QgsTask, QgsApplication, QgsRasterLayer, QgsProject
 
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaPlaylist
 
 from QGIS_FMV.converter.Converter import Converter
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow

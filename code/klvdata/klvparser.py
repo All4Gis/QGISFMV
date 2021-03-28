@@ -32,6 +32,9 @@ try:
 except ImportError:
     None
 
+UASLocalMetadataSet = b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00'
+KlvHeaderKey= b'\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01'
+
 
 class KLVParser(object):
     """Return key, value pairs parsed from an SMPTE ST 336 source."""
@@ -53,8 +56,8 @@ class KLVParser(object):
         # in some videos the header not follow the correct pattern
         # Sample key:
         # b'\xdc\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01'
-        if (key.find(b'\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01') > 0):
-            key = b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00'
+        if (key.find(KlvHeaderKey) > 0):
+            key = UASLocalMetadataSet
             byte_length = bytes_to_int(self.__read(4))
         else:
             byte_length = bytes_to_int(self.__read(1))

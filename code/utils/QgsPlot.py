@@ -1,6 +1,5 @@
 ﻿# Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QObject, QCoreApplication
 from QGIS_FMV.utils.QgsFmvUtils import _spawn
 
@@ -13,30 +12,55 @@ import xml.etree.ElementTree as etree
 
 try:
     import numpy
+    import matplotlib
+    matplotlib.use('Qt5Agg')
     import matplotlib.pyplot as matplot
 except ImportError:
     None
 
+from enum import Enum
 
-def ShowPlot(bitrate_data, frame_count, fileName, output=None):
-    ''' Show plot,because show not work using threading '''
+
+# TODO : Update with original repo changes
+
+
+class Color(Enum):
+    I = "red"
+    P = "green"
+    B = "blue"
+    AUDIO = "C2"
+    FRAME = "C0"
+    
+def draw_horizontal_line_with_text(
+        pos_y: int,
+        pos_h_percent: float,
+        text: str
+) -> None:
+    # calculate line position (above line)
+    text_x = matplot.xlim()[1] * pos_h_percent
+    text_y = pos_y + ((matplot.ylim()[1] - matplot.ylim()[0]) * 0.015)
+
+    # draw as think black line with text
+    matplot.axhline(pos_y, linewidth=1.5, color="black")
+    matplot.text(
+        text_x, text_y, text,
+        horizontalalignment="center", fontweight="bold", color="black"
+    )
+
+def prepare_matplot(fileName):
     matplot.figure().canvas.set_window_title(fileName)
     matplot.title(QCoreApplication.translate(
-        "QgsFmvPlayer", "Stream Bitrate vs Time"))
+        "QgsFmvPlayer", "Stream Bitrate over Time"))
     matplot.xlabel(QCoreApplication.translate(
-        "QgsFmvPlayer", "Time (sec)"))
+        "QgsFmvPlayer", "Time"))
     matplot.ylabel(QCoreApplication.translate(
-        "QgsFmvPlayer", "Frame Bitrate (kbit/s)"))
-    matplot.grid(True)
-    # map frame type to color
-    frame_type_color = {
-        # audio
-        'A': 'yellow',
-        # video
-        'I': 'red',
-        'P': 'green',
-        'B': 'blue'
-    }
+        "QgsFmvPlayer", "Bitrate (kbit/s)"))
+    matplot.grid(True, axis="y")
+    
+def ShowPlot(bitrate_data, frame_count, fileName, output=None):
+    ''' Show plot,because show not work using threading '''
+
+    prepare_matplot(fileName)
 
     global_peak_bitrate = 0.0
     global_mean_bitrate = 0.0
@@ -65,36 +89,20 @@ def ShowPlot(bitrate_data, frame_count, fileName, output=None):
         # plot chart using gnuplot-like impulses
         matplot.vlines(
             frame_array[:, 0], [0], frame_array[:, 1],
-            color=frame_type_color[frame_type],
+            color = Color[frame_type].value if frame_type in dir(Color) \
+            else Color.FRAME.value,
             label="{} Frames".format(frame_type))
 
-    # calculate peak line position (left 15%, above line)
-    peak_text_x = matplot.xlim()[1] * 0.15
-    peak_text_y = global_peak_bitrate + \
-        ((matplot.ylim()[1] - matplot.ylim()[0]) * 0.015)
-    peak_text = "peak ({:.0f})".format(global_peak_bitrate)
-
-    # draw peak as think black line w/ text
-    matplot.axhline(global_peak_bitrate, linewidth=2, color='black')
-    matplot.text(
-        peak_text_x,
-        peak_text_y,
-        peak_text,
-        horizontalalignment='center',
-        fontweight='bold',
-        color='black')
-
-    # calculate mean line position (right 85%, above line)
-    mean_text_x = matplot.xlim()[1] * 0.85
-    mean_text_y = global_mean_bitrate + \
-        ((matplot.ylim()[1] - matplot.ylim()[0]) * 0.015)
-    mean_text = "mean ({:.0f})".format(global_mean_bitrate)
-
-    # draw mean as think black line w/ text
-    matplot.axhline(global_mean_bitrate, linewidth=2, color='black')
-    matplot.text(mean_text_x, mean_text_y, mean_text,
-                 horizontalalignment='center', fontweight='bold',
-                 color='black')
+    draw_horizontal_line_with_text(
+        pos_y=global_peak_bitrate,
+        pos_h_percent=0.08,
+        text="peak ({:,})".format(global_peak_bitrate)
+    )
+    draw_horizontal_line_with_text(
+        pos_y=global_mean_bitrate,
+        pos_h_percent=0.92,
+        text="mean ({:,})".format(global_mean_bitrate)
+    )
 
     matplot.legend()
     if output is not None:

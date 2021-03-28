@@ -1,6 +1,5 @@
 ﻿# 2017 by Gregor Engberding , MIT License
 # Modificated for work in QGIS FMV Plugin
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import (QJsonDocument,
                               QAbstractItemModel,
                               QModelIndex,

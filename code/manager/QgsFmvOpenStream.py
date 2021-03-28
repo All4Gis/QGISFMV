@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QRegExp, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIntValidator, QRegExpValidator
 from qgis.PyQt.QtWidgets import QDialog, QApplication

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QSize, QPointF, Qt, QPoint, QSettings
 from qgis.PyQt.QtGui import (QPainter,
                              QPainterPath,
@@ -11,11 +10,11 @@ from qgis.PyQt.QtGui import (QPainter,
 
 from PyQt5.QtGui import QImage
 
-from QGIS_FMV.geo import sphere
+from QGIS_FMV.geo.QgsGeoUtils import WGS84String
 from QGIS_FMV.utils.QgsFmvUtils import getNameSpace
 
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
-
+from qgis.core import QgsDistanceArea, QgsPointXY, QgsGeometry, QgsUnitTypes
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 try:
@@ -378,6 +377,8 @@ class DrawToolBar(object):
     def drawMeasureDistanceOnVideo(
             pt, idx, painter, surface, gt, drawMDistance):
         ''' Draw Measure Distance on Video '''
+        global RulerTotalMeasure
+        
         scr_x, scr_y = vut.GetInverseMatrix(
             pt[1], pt[0], gt, surface)
 
@@ -396,11 +397,16 @@ class DrawToolBar(object):
 
                 painter.setFont(DrawToolBar.bold_12)
 
-                distance = round(sphere.distance(
-                    (pt[0], pt[1]), (end_pt[0], end_pt[1])), 2)
+                initialPoint = QgsPointXY(pt[0], pt[1])
+                destPoint = QgsPointXY(end_pt[0], end_pt[1])
 
+                da = QgsDistanceArea()
+                da.setEllipsoid(WGS84String)
+                m = da.measureLine(initialPoint, destPoint)
+                distance = round(m, 2)
                 text = str(distance) + " m"
-                global RulerTotalMeasure
+                
+                # Sum values to total distance
                 RulerTotalMeasure += distance
 
                 # Line lenght
@@ -422,32 +428,24 @@ class DrawToolBar(object):
     @staticmethod
     def drawMeasureAreaOnVideo(values, painter, surface, gt):
         ''' Draw Measure Area on Video '''
-        a_value = sphere.polygon_area([values])
-
+        
+        da = QgsDistanceArea()
+        da.setEllipsoid(WGS84String)
+                
+        points = []
         poly = []
-        lat = []
-        long = []
+
         for pt in values:
             scr_x, scr_y = vut.GetInverseMatrix(
                 pt[1], pt[0], gt, surface)
             center = QPoint(scr_x, scr_y)
             poly.append(center)
+            points.append(QgsPointXY(pt[1], pt[0]))
 
-            lat.append(pt[0])
-            long.append(pt[1])
 
-        lat = list(dict.fromkeys(lat))
-        long = list(dict.fromkeys(long))
-
-        # Calculate Centroid Position
-        scr_x, scr_y = vut.GetInverseMatrix(
-            sum(long) / len(long), sum(lat) / len(lat), gt, surface)
-
-        centroid = QPoint(scr_x, scr_y)
-
-        # Create Poligon
+        # Create Video Polygon
         polygon = QPolygonF(poly)
-
+        
         path = QPainterPath()
         path.addPolygon(polygon)
 
@@ -458,15 +456,32 @@ class DrawToolBar(object):
         painter.fillPath(path, MeasureBrush)
         painter.setPen(DrawToolBar.white_pen)
         painter.drawPoints(polygon)
+        
+        # Create QGIS Polygon
+        mapPolygon = QgsGeometry.fromPolygonXY(
+            [points]
+        )
+        
+        # Calculate polygon area
+        area = da.measureArea(mapPolygon)
+        
+        try:
+            ctr = mapPolygon.centroid().asPoint()
+            # Calculate Centroid Position
+            scr_x, scr_y = vut.GetInverseMatrix(ctr.x(), ctr.y(), gt, surface)
+            centroid = QPoint(scr_x, scr_y)
+               
+            # Area
+            if area >= 10000:
+                painter.drawText(
+                    centroid, str(
+                        round(
+                            da.convertAreaMeasurement(area, 1), 2)) + " km²")
+            else:
+                painter.drawText(centroid, str(round(area, 2)) + " m²")
+        except Exception:
+            None
 
-        # Area
-        if a_value >= 10000:
-            painter.drawText(
-                centroid, str(
-                    round(
-                        a_value / 1000000, 2)) + " km²")
-        else:
-            painter.drawText(centroid, str(round(a_value, 2)) + " m²")
         return
 
     @staticmethod

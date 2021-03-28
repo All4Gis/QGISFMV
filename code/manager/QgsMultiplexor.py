@@ -1,19 +1,16 @@
-# -*- coding: utf-8 -*-
 import os
 from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtWidgets import QDialog, QApplication, QProgressBar
 
 from QGIS_FMV.gui.ui_FmvMultiplexer import Ui_VideoMultiplexer
-from QGIS_FMV.utils.QgsFmvUtils import askForFiles, _spawn, getVideoFolder, CornerEstimationWithoutOffsets
-from QGIS_FMV.klvdata.common import datetime_to_bytes, int_to_bytes, float_to_bytes, bytes_to_str
+from QGIS_FMV.utils.QgsFmvUtils import askForFiles, getVideoFolder, CornerEstimationWithoutOffsets
+from QGIS_FMV.klvdata.common import datetime_to_bytes, int_to_bytes, float_to_bytes
 import csv
-import time
 import itertools
 from datetime import datetime
 from math import tan, radians, cos, pi, sin
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
-from QGIS_FMV.geo import sphere
 from qgis.core import Qgis as QGis
 from io import StringIO
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtWidgets import QDialog, QApplication
 from QGIS_FMV.gui.ui_ColorDialog import Ui_ColorDialog
 
