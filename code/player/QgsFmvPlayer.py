@@ -48,7 +48,6 @@ from QGIS_FMV.utils.QgsFmvUtils import (initElevationModel,
 from QGIS_FMV.utils.QgsJsonModel import QJsonModel
 from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from QGIS_FMV.video.QgsColor import ColorDialog
 from QGIS_FMV.utils.QgsFmvKlvReader import StreamMetaReader
 
 try:
@@ -133,9 +132,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.DrawToolBar.addSeparator()
         # Object Tracking
         self.DrawToolBar.addAction(self.actionObject_Tracking)
-
-        # Hide Color Button
-        self.btn_Color.hide()
 
         self.RecGIF = QMovie(":/imgFMV/images/record.gif")
         self.playIcon = QIcon(":/imgFMV/images/play-arrow.png")
@@ -520,19 +516,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         return
 
-    def showColorDialog(self):
-        ''' Show Color dialog '''
-        self.ColorDialog = ColorDialog(parent=self)
-        self.ColorDialog.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
-        # Fail if not uncheked
-        self.actionMagnifying_glass.setChecked(False)
-        self.ColorDialog.exec_()
-        QApplication.processEvents()
-        self.ColorDialog.contrastSlider.setValue(80)
-        self.ColorDialog.contrastSlider.triggerAction(
-            QAbstractSlider.SliderMove)
-        return
-
     def createMosaic(self, value):
         ''' Function for create Video Mosaic '''
         folder = getVideoFolder(self.fileName)
@@ -566,10 +549,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
     def contextMenuRequested(self, point):
         ''' Context Menu Video '''
         menu = QMenu('Video')
-
-#         actionColors = menu.addAction(
-#             QCoreApplication.translate("QgsFmvPlayer", "Color Options"))
-#         actionColors.triggered.connect(self.showColorDialog)
 
         actionMute = menu.addAction(
             QIcon(":/imgFMV/images/volume_up.png"),
@@ -1308,7 +1287,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         '''Buttons for video available
         @type available: bool
         '''
-        # self.btn_Color.setEnabled(available)
         self.btn_CaptureFrame.setEnabled(available)
         self.gb_PlayerControls.setEnabled(available)
         return

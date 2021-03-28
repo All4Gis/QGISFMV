@@ -21,7 +21,6 @@ call py3-env.bat
 @ECHO ON
 
 ::Ui Compilation
-call pyuic5 --import-from QGIS_FMV.gui ui\ui_ColorDialog.ui -o gui\ui_ColorDialog.py  
 call pyuic5 --import-from QGIS_FMV.gui ui\ui_FmvAbout.ui -o gui\ui_FmvAbout.py  
 call pyuic5 --import-from QGIS_FMV.gui ui\ui_FmvManager.ui -o gui\ui_FmvManager.py  
 call pyuic5 --import-from QGIS_FMV.gui ui\ui_FmvMetadata.ui -o gui\ui_FmvMetadata.py  

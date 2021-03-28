@@ -1,4 +1,5 @@
 ﻿# 2017 by Gregor Engberding , MIT License
+# Original code https://github.com/GrxE/PyQJsonModel
 # Modificated for work in QGIS FMV Plugin
 from qgis.PyQt.QtCore import (QJsonDocument,
                               QAbstractItemModel,
