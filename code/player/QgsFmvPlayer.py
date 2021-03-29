@@ -48,10 +48,10 @@ from QGIS_FMV.utils.QgsFmvUtils import (
     setCenterMode,
     GetGeotransform_affine,
 )
-from QGIS_FMV.utils.QgsJsonModel import QJsonModel
-from QGIS_FMV.utils.QgsPlot import CreatePlotsBitrate, ShowPlot
+from QGIS_FMV.reports.QgsJsonModel import QJsonModel
+from QGIS_FMV.reports.QgsPlot import CreatePlotsBitrate, ShowPlot
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from QGIS_FMV.utils.QgsFmvKlvReader import StreamMetaReader
+from QGIS_FMV.klvdata.QgsFmvKlvReader import StreamMetaReader
 
 try:
     from pydevd import *
@@ -118,7 +118,6 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.toolBtn_DLine.setDefaultAction(self.actionDraw_Line)
         self.DrawToolBar.addWidget(self.toolBtn_DLine)
 
-        #         self.DrawToolBar.addSeparator()
         #         self.DrawToolBar.addAction(self.actionHandDraw)
         self.DrawToolBar.addSeparator()
 

@@ -41,7 +41,7 @@ from qgis.core import (
     Qgis as QGis,
 )
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaContent
-from QGIS_FMV.utils.QgsFmvKlvReader import StreamMetaReader, BufferedMetaReader
+from QGIS_FMV.klvdata.QgsFmvKlvReader import StreamMetaReader, BufferedMetaReader
 from QGIS_FMV.QgsFmvConstants import isWindows, parser
 
 try:
