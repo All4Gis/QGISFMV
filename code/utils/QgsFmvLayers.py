@@ -60,11 +60,10 @@ from QGIS_FMV.QgsFmvConstants import (
     Trajectory_lyr,
     epsg,
 )
-
+from QGIS_FMV.QgsFmvConstants import encoding
 
 groupName = None
 
-encoding = "utf-8"
 
 _layerreg = QgsProject.instance()
 crtSensorSrc = crtSensorSrc2 = crtPltTailNum = "DEFAULT"
