@@ -36,6 +36,7 @@ except ImportError:
 
 class SetParser(Element):
     """Parsable Element. Not intended to be used directly. Always as super class."""
+
     __metaclass__ = ABCMeta
 
     def __init__(self, value, key_length=1):
@@ -99,14 +100,12 @@ class SetParser(Element):
                 # None
                 qgsu.showUserAndLogMessage(
                     "",
-                    "Value cannot be read for Tag: " +
-                    str(
-                        int.from_bytes(
-                            key,
-                            byteorder=sys.byteorder)) +
-                    " value: " +
-                    str(value),
-                    onlyLog=True)
+                    "Value cannot be read for Tag: "
+                    + str(int.from_bytes(key, byteorder=sys.byteorder))
+                    + " value: "
+                    + str(value),
+                    onlyLog=True,
+                )
 
     @classmethod
     def add_parser(cls, obj):
@@ -145,17 +144,16 @@ class SetParser(Element):
         return str_dict(self.items)
 
     def MetadataList(self):
-        ''' Return metadata dictionary'''
+        """ Return metadata dictionary"""
         metadata = {}
 
         def repeat(items, indent=1, parentTAG=0):
             for item in items:
                 try:
-                    if not hasattr(item.value, 'value'):
+                    if not hasattr(item.value, "value"):
                         continue
                     if not parentTAG:
-                        metadata[item.TAG] = (
-                            item.LDSName, str(item.value.value))
+                        metadata[item.TAG] = (item.LDSName, str(item.value.value))
                         if item.TAG == 4:
                             self.PlatformTailNumber = item.value.value
                         elif item.TAG == 5:
@@ -220,15 +218,21 @@ class SetParser(Element):
                             self.CornerLongitudePoint4Full = item.value.value
                     else:
                         metadata[parentTAG][len(metadata[parentTAG]) - 1][item.TAG] = (
-                            item.LDSName, item.ESDName, item.UDSName, str(item.value.value))
+                            item.LDSName,
+                            item.ESDName,
+                            item.UDSName,
+                            str(item.value.value),
+                        )
 
                 except Exception:
                     qgsu.showUserAndLogMessage(
-                        "", "Value cannot be read: " + str(item.value.value), onlyLog=True)
+                        "",
+                        "Value cannot be read: " + str(item.value.value),
+                        onlyLog=True,
+                    )
                     continue
-                if hasattr(item, 'items'):
-                    metadata[item.TAG] = (
-                        item.LDSName, item.ESDName, item.UDSName, {})
+                if hasattr(item, "items"):
+                    metadata[item.TAG] = (item.LDSName, item.ESDName, item.UDSName, {})
                     repeat(item.items.values(), indent + 1, item.TAG)
 
         repeat(self.items.values())
@@ -486,10 +490,11 @@ class SetParser(Element):
     # ------------ END Setters/Getters ------------
 
     def structure(self):
-        ''' Return metadata structure'''
+        """ Return metadata structure"""
+
         def repeat(items, indent=1):
             for item in items:
-                if hasattr(item, 'items'):
+                if hasattr(item, "items"):
                     repeat(item.items.values(), indent + 1)
 
         repeat(self.items.values())
@@ -507,4 +512,4 @@ def str_dict(values):
 
     per_item(values)
 
-    return '\n'.join(out)
+    return "\n".join(out)

@@ -29,41 +29,41 @@ from QGIS_FMV.klvdata.setparser import SetParser
 from QGIS_FMV.klvdata.streamparser import StreamParser
 
 _classifying_country_coding = {
-    b'\x01': 'ISO-3166 Two Letter',
-    b'\x02': 'ISO-3166 Three Letter',
-    b'\x03': 'FIPS 10-4 Two Letter',
-    b'\x04': 'FIPS 10-4 Four Letter',
-    b'\x05': 'ISO-3166 Numeric',
-    b'\x06': '1059 Two Letter',
-    b'\x07': '1059 Three Letter',
-    b'\x08': 'Omitted Value',
-    b'\x09': 'Omitted Value',
-    b'\x0A': 'FIPS 10-4 Mixed',
-    b'\x0B': 'ISO 3166 Mixed',
-    b'\x0C': 'STANAG 1059 Mixed',
-    b'\x0D': 'GENC Two Letter',
-    b'\x0E': 'GENC Three Letter',
-    b'\x0F': 'GENC Numeric',
-    b'\x10': 'GENC Mixed',
+    b"\x01": "ISO-3166 Two Letter",
+    b"\x02": "ISO-3166 Three Letter",
+    b"\x03": "FIPS 10-4 Two Letter",
+    b"\x04": "FIPS 10-4 Four Letter",
+    b"\x05": "ISO-3166 Numeric",
+    b"\x06": "1059 Two Letter",
+    b"\x07": "1059 Three Letter",
+    b"\x08": "Omitted Value",
+    b"\x09": "Omitted Value",
+    b"\x0A": "FIPS 10-4 Mixed",
+    b"\x0B": "ISO 3166 Mixed",
+    b"\x0C": "STANAG 1059 Mixed",
+    b"\x0D": "GENC Two Letter",
+    b"\x0E": "GENC Three Letter",
+    b"\x0F": "GENC Numeric",
+    b"\x10": "GENC Mixed",
 }
 
 _object_country_coding = {
-    b'\x01': 'ISO-3166 Two Letter',
-    b'\x02': 'ISO-3166 Three Letter',
-    b'\x03': 'ISO-3166 Numeric',
-    b'\x04': 'FIPS 10-4 Two Letter',
-    b'\x05': 'FIPS 10-4 Four Letter',
-    b'\x06': '1059 Two Letter',
-    b'\x07': '1059 Three Letter',
-    b'\x08': 'Omitted Value',
-    b'\x09': 'Omitted Value',
-    b'\x0A': 'Omitted Value',
-    b'\x0B': 'Omitted Value',
-    b'\x0C': 'Omitted Value',
-    b'\x0D': 'GENC Two Letter',
-    b'\x0E': 'GENC Three Letter',
-    b'\x0F': 'GENC Numeric',
-    b'\x40': 'GENC AdminSub',
+    b"\x01": "ISO-3166 Two Letter",
+    b"\x02": "ISO-3166 Three Letter",
+    b"\x03": "ISO-3166 Numeric",
+    b"\x04": "FIPS 10-4 Two Letter",
+    b"\x05": "FIPS 10-4 Four Letter",
+    b"\x06": "1059 Two Letter",
+    b"\x07": "1059 Three Letter",
+    b"\x08": "Omitted Value",
+    b"\x09": "Omitted Value",
+    b"\x0A": "Omitted Value",
+    b"\x0B": "Omitted Value",
+    b"\x0C": "Omitted Value",
+    b"\x0D": "GENC Two Letter",
+    b"\x0E": "GENC Three Letter",
+    b"\x0F": "GENC Numeric",
+    b"\x40": "GENC AdminSub",
 }
 
 
@@ -81,11 +81,11 @@ class SecurityLocalMetadataSet(SetParser):
 
     Must be a subclass of Element or duck type Element.
     """
-    key, name = b'\x30', "Security Local Metadata Set"
+
+    key, name = b"\x30", "Security Local Metadata Set"
     key_length = 1
     TAG = 48
-    UDSKey = hexstr_to_bytes(
-        '06 0E 2B 34 - 02 03 01 01 – 0E 01 03 03 - 02 00 00 00')
+    UDSKey = hexstr_to_bytes("06 0E 2B 34 - 02 03 01 01 – 0E 01 03 03 - 02 00 00 00")
     LDSName = "Security Local Metadata Set"
     ESDName = ""
     UDSName = ""
@@ -103,7 +103,8 @@ class SecurityClassification(BytesElementParser):
     representing the entire security classification of the file in
     accordance with U.S. and NATO classification guidance.
     """
-    key = b'\x01'
+
+    key = b"\x01"
     TAG = 1
     UDSKey = "-"
     LDSName = "Security Classification"
@@ -111,19 +112,19 @@ class SecurityClassification(BytesElementParser):
     UDSName = ""
 
     _classification = {
-        b'\x01': 'UNCLASSIFIED',
-        b'\x02': 'RESTRICTED',
-        b'\x03': 'CONFIDENTIAL',
-        b'\x04': 'SECRET',
-        b'\x05': 'TOP SECRET',
+        b"\x01": "UNCLASSIFIED",
+        b"\x02": "RESTRICTED",
+        b"\x03": "CONFIDENTIAL",
+        b"\x04": "SECRET",
+        b"\x05": "TOP SECRET",
     }
 
 
 @SecurityLocalMetadataSet.add_parser
 class ClassifyingCountryAndReleasingInstructionCCM(BytesElementParser):
-    """
-    """
-    key = b'\x02'
+    """"""
+
+    key = b"\x02"
     TAG = 2
     UDSKey = "-"
     LDSName = "Classifying Country And Releasing Instruction Country Coding Method"
@@ -135,9 +136,9 @@ class ClassifyingCountryAndReleasingInstructionCCM(BytesElementParser):
 
 @SecurityLocalMetadataSet.add_parser
 class ClassifyingCountry(StringElementParser):
-    """
-    """
-    key = b'\x03'
+    """"""
+
+    key = b"\x03"
     TAG = 3
     UDSKey = "-"
     LDSName = "Classifying Country"
@@ -147,84 +148,84 @@ class ClassifyingCountry(StringElementParser):
 
 @SecurityLocalMetadataSet.add_parser
 class SecuritySCISHIInformation(StringElementParser):
-    """
-    """
-    key = b'\x04'
+    """"""
+
+    key = b"\x04"
     TAG = 4
     UDSKey = "-"
-    LDSName = 'Security-SCI/SHI Information'
+    LDSName = "Security-SCI/SHI Information"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class Caveats(StringElementParser):
-    """
-    """
-    key = b'\x05'
+    """"""
+
+    key = b"\x05"
     TAG = 5
     UDSKey = "-"
-    LDSName = 'Caveats'
+    LDSName = "Caveats"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class ReleasingInstructions(StringElementParser):
-    """
-    """
-    key = b'\x06'
+    """"""
+
+    key = b"\x06"
     TAG = 6
     UDSKey = "-"
-    LDSName = 'Releasing Instructions'
+    LDSName = "Releasing Instructions"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class ClassifiedBy(StringElementParser):
-    """
-    """
-    key = b'\x07'
+    """"""
+
+    key = b"\x07"
     TAG = 7
     UDSKey = "-"
-    LDSName = 'Classified By'
+    LDSName = "Classified By"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class DerivedFrom(StringElementParser):
-    """
-    """
-    key = b'\x08'
+    """"""
+
+    key = b"\x08"
     TAG = 8
     UDSKey = "-"
-    LDSName = 'Derived From'
+    LDSName = "Derived From"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class ClassificationReason(StringElementParser):
-    """
-    """
-    key = b'\x09'
+    """"""
+
+    key = b"\x09"
     TAG = 9
     UDSKey = "-"
-    LDSName = 'Classification Reason'
+    LDSName = "Classification Reason"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class DeclassificationDate(StringElementParser):
-    """
-    """
-    key = b'\x0A'
+    """"""
+
+    key = b"\x0A"
     TAG = 10
     UDSKey = "-"
-    LDSName = 'Declassification Date'
+    LDSName = "Declassification Date"
     ESDName = ""
     UDSName = ""
     min_length, max_length = 8, 8
@@ -232,24 +233,24 @@ class DeclassificationDate(StringElementParser):
 
 @SecurityLocalMetadataSet.add_parser
 class ClassificationAndMarkingSystem(StringElementParser):
-    """
-    """
-    key = b'\x0B'
+    """"""
+
+    key = b"\x0B"
     TAG = 11
     UDSKey = "-"
-    LDSName = 'Classification And Marking System'
+    LDSName = "Classification And Marking System"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class ObjectCountryCodingMethod(BytesElementParser):
-    """
-    """
-    key = b'\x0C'
+    """"""
+
+    key = b"\x0C"
     TAG = 12
     UDSKey = "-"
-    LDSName = 'Object Country Coding Method'
+    LDSName = "Object Country Coding Method"
     ESDName = ""
     UDSName = ""
 
@@ -258,59 +259,59 @@ class ObjectCountryCodingMethod(BytesElementParser):
 
 @SecurityLocalMetadataSet.add_parser
 class ObjectCountryCodes(StringElementParser):
-    """
-    """
-    key = b'\x0D'
+    """"""
+
+    key = b"\x0D"
     TAG = 13
     UDSKey = "-"
-    LDSName = 'Object Country Codes'
+    LDSName = "Object Country Codes"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class ClassificationComments(StringElementParser):
-    """
-    """
-    key = b'\x0E'
+    """"""
+
+    key = b"\x0E"
     TAG = 14
     UDSKey = "-"
-    LDSName = 'Classification Comments'
+    LDSName = "Classification Comments"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class Version(BytesElementParser):
-    """
-    """
-    key = b'\x16'
+    """"""
+
+    key = b"\x16"
     TAG = 22
     UDSKey = "-"
-    LDSName = 'Version'
+    LDSName = "Version"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class ClassifyingCountryAndReleasingInstructionCCMVD(StringElementParser):
-    """
-    """
-    key = b'\x17'
+    """"""
+
+    key = b"\x17"
     TAG = 23
     UDSKey = "-"
-    LDSName = 'Classifying Country And Releasing Instruction Country Coding Method Version Date'
+    LDSName = "Classifying Country And Releasing Instruction Country Coding Method Version Date"
     ESDName = ""
     UDSName = ""
 
 
 @SecurityLocalMetadataSet.add_parser
 class ClassifyingCountryCodeMethodVersionDate(StringElementParser):
-    """
-    """
-    key = b'\x18'
+    """"""
+
+    key = b"\x18"
     TAG = 24
     UDSKey = "-"
-    LDSName = 'Classifying Country Code Method Version Date'
+    LDSName = "Classifying Country Code Method Version Date"
     ESDName = ""
     UDSName = ""

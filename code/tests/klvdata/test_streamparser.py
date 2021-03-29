@@ -28,7 +28,7 @@ class ParserSingleLong(unittest.TestCase):
     def test_singlepacket(self):
 
         # Example from MISB ST 0902.5
-        with open('./data/DynamicConstantMISMMSPacketData.bin', 'rb') as f:
+        with open("./data/DynamicConstantMISMMSPacketData.bin", "rb") as f:
             packet = f.read()
 
         from QGIS_FMV.klvdata.streamparser import StreamParser

@@ -30,13 +30,14 @@ class ParserTestCase(unittest.TestCase):
 
 class ParserSingleShort(ParserTestCase):
     def setUp(self):
-        self.key = b'\x02'
-        self.length = b'\x08'
-        self.value = b'\x00\x04\x60\x50\x58\x4E\x01\x80'
+        self.key = b"\x02"
+        self.length = b"\x08"
+        self.value = b"\x00\x04\x60\x50\x58\x4E\x01\x80"
 
         self.packet = self.key + self.length + self.value
 
         from QGIS_FMV.klvdata.klvparser import KLVParser
+
         self.parser = KLVParser(self.packet, key_length=1)
 
     def test_key(self):
@@ -53,7 +54,7 @@ class ParserSingleLong(ParserTestCase):
         self.packet = bytes()
 
         # Sample data from MISB ST 0902.5
-        with open('./data/DynamicConstantMISMMSPacketData.bin', 'rb') as f:
+        with open("./data/DynamicConstantMISMMSPacketData.bin", "rb") as f:
             self.packet = f.read()
 
         self.key = self.packet[0:16]
@@ -63,6 +64,7 @@ class ParserSingleLong(ParserTestCase):
         self.value = self.packet[18:]
 
         from QGIS_FMV.klvdata.klvparser import KLVParser
+
         self.parser = KLVParser(self.packet, key_length=16)
 
     def test_key(self):

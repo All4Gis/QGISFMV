@@ -8,15 +8,22 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_FmvAbout(object):
     def setupUi(self, FmvAbout):
         FmvAbout.setObjectName("FmvAbout")
         FmvAbout.resize(643, 559)
         FmvAbout.setMinimumSize(QtCore.QSize(200, 250))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/Information.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/Information.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         FmvAbout.setWindowIcon(icon)
-        FmvAbout.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
+        FmvAbout.setLocale(
+            QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates)
+        )
         self.verticalLayout = QtWidgets.QVBoxLayout(FmvAbout)
         self.verticalLayout.setObjectName("verticalLayout")
         self.webView = QtWebKitWidgets.QWebView(FmvAbout)
@@ -30,6 +37,7 @@ class Ui_FmvAbout(object):
     def retranslateUi(self, FmvAbout):
         _translate = QtCore.QCoreApplication.translate
         FmvAbout.setWindowTitle(_translate("FmvAbout", "About"))
+
 
 from PyQt5 import QtWebKitWidgets
 from QGIS_FMV.gui import resources_rc

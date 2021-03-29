@@ -27,6 +27,7 @@ from abc import ABCMeta
 from abc import abstractmethod
 
 from QGIS_FMV.klvdata.common import ber_encode
+
 try:
     from pydevd import *
 except ImportError:
@@ -35,7 +36,7 @@ except ImportError:
 # Proposed alternate names, "BaseElement" of modules "bases".
 
 
-class Element():
+class Element:
     """Construct a key, length, value tuplet.
 
     Elements provide the basic mechanisms to constitute the basic encoding
@@ -51,6 +52,7 @@ class Element():
         name: If name is set return name, else return class name.
         length: Length is calculated based off value.
     """
+
     __metaclass__ = ABCMeta
 
     def __init__(self, key, value):
@@ -83,13 +85,11 @@ class Element():
         pass
 
     def __str__(self):
-        return "{}: ({}, {}, {})".format(
-            self.name, self.key, len(self), self.value)
+        return "{}: ({}, {}, {})".format(self.name, self.key, len(self), self.value)
 
 
 class UnknownElement(Element):
-
     def __repr__(self):
         """Return as-code string used to re-create the object."""
-        args = ', '.join(map(repr, (bytes(self.key), bytes(self.value))))
-        return '{}({})'.format(self.__class__.__name__, args)
+        args = ", ".join(map(repr, (bytes(self.key), bytes(self.value))))
+        return "{}({})".format(self.__class__.__name__, args)

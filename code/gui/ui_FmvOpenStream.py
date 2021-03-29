@@ -8,15 +8,22 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_FmvOpenStream(object):
     def setupUi(self, FmvOpenStream):
         FmvOpenStream.setObjectName("FmvOpenStream")
         FmvOpenStream.resize(355, 83)
         FmvOpenStream.setMinimumSize(QtCore.QSize(0, 0))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/stream.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/stream.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         FmvOpenStream.setWindowIcon(icon)
-        FmvOpenStream.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
+        FmvOpenStream.setLocale(
+            QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates)
+        )
         self.verticalLayout = QtWidgets.QVBoxLayout(FmvOpenStream)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -45,7 +52,7 @@ class Ui_FmvOpenStream(object):
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
         self.retranslateUi(FmvOpenStream)
-        self.btn_Open.clicked['bool'].connect(FmvOpenStream.OpenStream)
+        self.btn_Open.clicked["bool"].connect(FmvOpenStream.OpenStream)
         QtCore.QMetaObject.connectSlotsByName(FmvOpenStream)
 
     def retranslateUi(self, FmvOpenStream):
@@ -55,5 +62,6 @@ class Ui_FmvOpenStream(object):
         self.ln_host.setPlaceholderText(_translate("FmvOpenStream", "127.0.0.1"))
         self.ln_port.setPlaceholderText(_translate("FmvOpenStream", "5005"))
         self.btn_Open.setText(_translate("FmvOpenStream", "Accept"))
+
 
 from QGIS_FMV.gui import resources_rc

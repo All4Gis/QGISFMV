@@ -8,12 +8,17 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_VideoMultiplexer(object):
     def setupUi(self, VideoMultiplexer):
         VideoMultiplexer.setObjectName("VideoMultiplexer")
         VideoMultiplexer.resize(740, 761)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/multiplexer.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/multiplexer.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         VideoMultiplexer.setWindowIcon(icon)
         self.verticalLayout = QtWidgets.QVBoxLayout(VideoMultiplexer)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -30,7 +35,11 @@ class Ui_VideoMultiplexer(object):
         self.btn_openVideo.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_openVideo.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/imgFMV/images/opened-folder.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/opened-folder.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_openVideo.setIcon(icon1)
         self.btn_openVideo.setObjectName("btn_openVideo")
         self.horizontalLayout_4.addWidget(self.btn_openVideo)
@@ -89,7 +98,9 @@ class Ui_VideoMultiplexer(object):
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.gb_telemetry)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.label_6 = QtWidgets.QLabel(self.gb_telemetry)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
@@ -100,10 +111,14 @@ class Ui_VideoMultiplexer(object):
         self.label_6.setObjectName("label_6")
         self.verticalLayout_3.addWidget(self.label_6)
         self.cmb_telemetry = QtWidgets.QComboBox(self.gb_telemetry)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.cmb_telemetry.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.cmb_telemetry.sizePolicy().hasHeightForWidth()
+        )
         self.cmb_telemetry.setSizePolicy(sizePolicy)
         self.cmb_telemetry.setObjectName("cmb_telemetry")
         self.verticalLayout_3.addWidget(self.cmb_telemetry)
@@ -123,16 +138,32 @@ class Ui_VideoMultiplexer(object):
 
     def retranslateUi(self, VideoMultiplexer):
         _translate = QtCore.QCoreApplication.translate
-        VideoMultiplexer.setWindowTitle(_translate("VideoMultiplexer", "Video Multiplexer"))
-        self.label.setText(_translate("VideoMultiplexer", "Input Video File (e.g video.ts)"))
-        self.label_2.setText(_translate("VideoMultiplexer", "Input Metadata File (e.g video_metadata.csv)"))
+        VideoMultiplexer.setWindowTitle(
+            _translate("VideoMultiplexer", "Video Multiplexer")
+        )
+        self.label.setText(
+            _translate("VideoMultiplexer", "Input Video File (e.g video.ts)")
+        )
+        self.label_2.setText(
+            _translate(
+                "VideoMultiplexer", "Input Metadata File (e.g video_metadata.csv)"
+            )
+        )
         self.label_3.setText(_translate("VideoMultiplexer", "Select drone"))
         self.cmb_drone.setItemText(0, _translate("VideoMultiplexer", "DJI Mavic Pro"))
         self.label_4.setText(_translate("VideoMultiplexer", "Horizontal FOV"))
         self.label_5.setText(_translate("VideoMultiplexer", "Vertical FOV"))
         self.bt_createCSV.setText(_translate("VideoMultiplexer", "Extract Recordings"))
-        self.gb_telemetry.setTitle(_translate("VideoMultiplexer", "Available telemetry"))
-        self.label_6.setText(_translate("VideoMultiplexer", "Select the correct one if there is more than one (file name use CUSTOM.updateTime)"))
+        self.gb_telemetry.setTitle(
+            _translate("VideoMultiplexer", "Available telemetry")
+        )
+        self.label_6.setText(
+            _translate(
+                "VideoMultiplexer",
+                "Select the correct one if there is more than one (file name use CUSTOM.updateTime)",
+            )
+        )
         self.bt_createMISB.setText(_translate("VideoMultiplexer", "Create MISB"))
+
 
 from QGIS_FMV.gui import resources_rc
