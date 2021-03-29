@@ -1,14 +1,17 @@
 ﻿# 2017 by Gregor Engberding , MIT License
 # Original code https://github.com/GrxE/PyQJsonModel
 # Modificated for work in QGIS FMV Plugin
-from qgis.PyQt.QtCore import (QJsonDocument,
-                              QAbstractItemModel,
-                              QModelIndex,
-                              Qt,
-                              QVariant,
-                              QCoreApplication,
-                              QJsonParseError)
+from qgis.PyQt.QtCore import (
+    QJsonDocument,
+    QAbstractItemModel,
+    QModelIndex,
+    Qt,
+    QVariant,
+    QCoreApplication,
+    QJsonParseError,
+)
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+
 try:
     from pydevd import *
 except ImportError:
@@ -113,7 +116,7 @@ class QJsonTreeItem(object):
 
 
 class QJsonModel(QAbstractItemModel):
-    ''' Json Abstract Item Model '''
+    """ Json Abstract Item Model """
 
     def __init__(self):
         super().__init__()
@@ -123,7 +126,7 @@ class QJsonModel(QAbstractItemModel):
         self.mHeaders = [key, value]
 
     def loadJsonFromConsole(self, value):
-        ''' Load Json from console output '''
+        """ Load Json from console output """
         error = QJsonParseError()
         self.mDocument = QJsonDocument.fromJson(value, error)
 
@@ -137,8 +140,7 @@ class QJsonModel(QAbstractItemModel):
 
             return True
 
-        qgsu.showUserAndLogMessage(
-            "", "QJsonModel: error loading Json", onlyLog=True)
+        qgsu.showUserAndLogMessage("", "QJsonModel: error loading Json", onlyLog=True)
         return False
 
     def data(self, index, role):

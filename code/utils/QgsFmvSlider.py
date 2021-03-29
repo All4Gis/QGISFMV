@@ -1,4 +1,4 @@
-from qgis.PyQt.QtCore import Qt, QObject, pyqtSignal
+from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtWidgets import QSlider, QStyleOptionSlider, QStyle
 
 
@@ -17,9 +17,11 @@ class QgsFmvSlider(QSlider):
         opt = QStyleOptionSlider()
         self.initStyleOption(opt)
         gr = self.style().subControlRect(
-            QStyle.CC_Slider, opt, QStyle.SC_SliderGroove, self)
+            QStyle.CC_Slider, opt, QStyle.SC_SliderGroove, self
+        )
         sr = self.style().subControlRect(
-            QStyle.CC_Slider, opt, QStyle.SC_SliderHandle, self)
+            QStyle.CC_Slider, opt, QStyle.SC_SliderHandle, self
+        )
 
         if self.orientation() == Qt.Horizontal:
             sliderLength = sr.width()
@@ -36,4 +38,5 @@ class QgsFmvSlider(QSlider):
             self.maximum(),
             p - sliderMin,
             sliderMax - sliderMin,
-            opt.upsideDown)
+            opt.upsideDown,
+        )

@@ -29,55 +29,59 @@ import ast
 class ElementTLV(unittest.TestCase):
     def test_key(self):
         from QGIS_FMV.klvdata.element import UnknownElement
+
         self.assertEqual(
-            UnknownElement(b'\x02', b'\x00\x04\x60\x50\x58\x4E\x01\x80').key,
-            b'\x02')
+            UnknownElement(b"\x02", b"\x00\x04\x60\x50\x58\x4E\x01\x80").key, b"\x02"
+        )
 
     def test_length(self):
         from QGIS_FMV.klvdata.element import UnknownElement
+
         self.assertEqual(
-            UnknownElement(
-                b'\x02',
-                b'\x00\x04\x60\x50\x58\x4E\x01\x80').length,
-            b'\x08')
+            UnknownElement(b"\x02", b"\x00\x04\x60\x50\x58\x4E\x01\x80").length, b"\x08"
+        )
 
     def test_value(self):
         from QGIS_FMV.klvdata.element import UnknownElement
+
         self.assertEqual(
-            UnknownElement(b'\x02', b'\x00\x04\x60\x50\x58\x4E\x01\x80').value,
-            b'\x00\x04\x60\x50\x58\x4E\x01\x80')
+            UnknownElement(b"\x02", b"\x00\x04\x60\x50\x58\x4E\x01\x80").value,
+            b"\x00\x04\x60\x50\x58\x4E\x01\x80",
+        )
 
     def test_packet(self):
         from QGIS_FMV.klvdata.element import UnknownElement
+
         self.assertEqual(
-            bytes(
-                UnknownElement(
-                    b'\x02',
-                    b'\x00\x04\x60\x50\x58\x4E\x01\x80')),
-            b'\x02\x08\x00\x04\x60\x50\x58\x4E\x01\x80')
+            bytes(UnknownElement(b"\x02", b"\x00\x04\x60\x50\x58\x4E\x01\x80")),
+            b"\x02\x08\x00\x04\x60\x50\x58\x4E\x01\x80",
+        )
 
     def test_name(self):
         from QGIS_FMV.klvdata.element import UnknownElement
+
         self.assertEqual(
-            UnknownElement(b'\x02', b'\x00\x04\x60\x50\x58\x4E\x01\x80').name,
-            "UnknownElement")
+            UnknownElement(b"\x02", b"\x00\x04\x60\x50\x58\x4E\x01\x80").name,
+            "UnknownElement",
+        )
 
     def test_str(self):
         from QGIS_FMV.klvdata.element import UnknownElement
 
         self.assertEqual(
-            str(UnknownElement(b'\x02', b'\x00\x04\x60\x50\x58\x4E\x01\x80')),
-            "UnknownElement: (b'\\x02', 8, b'\\x00\\x04`PXN\\x01\\x80')")
+            str(UnknownElement(b"\x02", b"\x00\x04\x60\x50\x58\x4E\x01\x80")),
+            "UnknownElement: (b'\\x02', 8, b'\\x00\\x04`PXN\\x01\\x80')",
+        )
 
     def test_repr(self):
         from QGIS_FMV.klvdata.element import UnknownElement
+
         self.assertIsInstance(
             ast.literal_eval(
-                repr(
-                    UnknownElement(
-                        b'\x02',
-                        b'\x00\x04\x60\x50\x58\x4E\x01\x80'))),
-            UnknownElement)
+                repr(UnknownElement(b"\x02", b"\x00\x04\x60\x50\x58\x4E\x01\x80"))
+            ),
+            UnknownElement,
+        )
 
 
 if __name__ == "__main__":

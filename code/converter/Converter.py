@@ -2,9 +2,11 @@
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QObject
-from QGIS_FMV.converter.avcodecs import (video_codec_list,
-                                         audio_codec_list,
-                                         subtitle_codec_list)
+from QGIS_FMV.converter.avcodecs import (
+    video_codec_list,
+    audio_codec_list,
+    subtitle_codec_list,
+)
 from QGIS_FMV.converter.ffmpeg import FFMpeg
 from QGIS_FMV.converter.formats import format_list
 from QGIS_FMV.utils.QgsFmvLog import log
@@ -20,6 +22,7 @@ class Converter(QObject):
     """
     Converter Video Class
     """
+
     video_codecs = {}
     audio_codecs = {}
     subtitle_codecs = {}
@@ -46,70 +49,68 @@ class Converter(QObject):
         """
         Parse Options
         """
-        f = opt['format']
+        f = opt["format"]
         if f not in self.formats:
-            log.error('Requested unknown format: ' + str(f))
+            log.error("Requested unknown format: " + str(f))
 
         format_options = self.formats[f]().parse_options(opt)
         if format_options is None:
-            log.error('Unknown container format error')
+            log.error("Unknown container format error")
 
-        ''' audio options'''
-        if 'audio' not in opt or twopass == 1:
-            opt_audio = {'codec': None}
+        """ audio options"""
+        if "audio" not in opt or twopass == 1:
+            opt_audio = {"codec": None}
         else:
-            opt_audio = opt['audio']
-            if not isinstance(opt_audio, dict) or 'codec' not in opt_audio:
-                log.error('Invalid audio codec specification')
+            opt_audio = opt["audio"]
+            if not isinstance(opt_audio, dict) or "codec" not in opt_audio:
+                log.error("Invalid audio codec specification")
 
-        c = opt_audio['codec']
+        c = opt_audio["codec"]
         if c not in self.audio_codecs:
-            log.error('Requested unknown audio codec ' + str(c))
+            log.error("Requested unknown audio codec " + str(c))
 
         audio_options = self.audio_codecs[c]().parse_options(opt_audio)
         if audio_options is None:
-            log.error('Unknown audio codec error')
+            log.error("Unknown audio codec error")
 
-        ''' video options'''
-        if 'video' not in opt:
-            opt_video = {'codec': None}
+        """ video options"""
+        if "video" not in opt:
+            opt_video = {"codec": None}
         else:
-            opt_video = opt['video']
-            if not isinstance(opt_video, dict) or 'codec' not in opt_video:
-                log.error('Invalid video codec specification')
+            opt_video = opt["video"]
+            if not isinstance(opt_video, dict) or "codec" not in opt_video:
+                log.error("Invalid video codec specification")
 
-        c = opt_video['codec']
+        c = opt_video["codec"]
         if c not in self.video_codecs:
-            log.error('Requested unknown video codec ' + str(c))
+            log.error("Requested unknown video codec " + str(c))
 
         video_options = self.video_codecs[c]().parse_options(opt_video)
         if video_options is None:
-            log.error('Unknown video codec error')
+            log.error("Unknown video codec error")
 
-        if 'subtitle' not in opt:
-            opt_subtitle = {'codec': None}
+        if "subtitle" not in opt:
+            opt_subtitle = {"codec": None}
         else:
-            opt_subtitle = opt['subtitle']
-            if not isinstance(opt_subtitle,
-                              dict) or 'codec' not in opt_subtitle:
-                log.error('Invalid subtitle codec specification')
+            opt_subtitle = opt["subtitle"]
+            if not isinstance(opt_subtitle, dict) or "codec" not in opt_subtitle:
+                log.error("Invalid subtitle codec specification")
 
-        c = opt_subtitle['codec']
+        c = opt_subtitle["codec"]
         if c not in self.subtitle_codecs:
-            log.error('Requested unknown subtitle codec ' + str(c))
+            log.error("Requested unknown subtitle codec " + str(c))
 
-        subtitle_options = self.subtitle_codecs[c](
-        ).parse_options(opt_subtitle)
+        subtitle_options = self.subtitle_codecs[c]().parse_options(opt_subtitle)
         if subtitle_options is None:
-            log.error('Unknown subtitle codec error')
+            log.error("Unknown subtitle codec error")
 
-        ''' aggregate all options'''
+        """ aggregate all options"""
         optlist = audio_options + video_options + subtitle_options + format_options
 
         if twopass == 1:
-            optlist.extend(['-pass', '1'])
+            optlist.extend(["-pass", "1"])
         elif twopass == 2:
-            optlist.extend(['-pass', '2'])
+            optlist.extend(["-pass", "2"])
 
         return optlist
 
@@ -126,38 +127,38 @@ class Converter(QObject):
 
                 if not info.video and not info.audio:
                     task.cancel()
-                    return 'Source file has no audio or video streams'
+                    return "Source file has no audio or video streams"
 
-                if info.video and 'video' in options:
+                if info.video and "video" in options:
                     options = options.copy()
-                    v = options['video'] = options['video'].copy()
-                    v['src_width'] = info.video.video_width
-                    v['src_height'] = info.video.video_height
+                    v = options["video"] = options["video"].copy()
+                    v["src_width"] = info.video.video_width
+                    v["src_height"] = info.video.video_height
 
                 if info.format.duration < 0.01:
                     task.cancel()
-                    return 'Zero-length media'
+                    return "Zero-length media"
 
                 if twopass:
                     optlist1 = self.parse_options(options, 1)
                     for timecode in self.ffmpeg.convert(
-                            infile, outfile, optlist1, task):
-                        task.setProgress(
-                            int((50.0 * timecode) / info.format.duration))
+                        infile, outfile, optlist1, task
+                    ):
+                        task.setProgress(int((50.0 * timecode) / info.format.duration))
 
                     optlist2 = self.parse_options(options, 2)
                     for timecode in self.ffmpeg.convert(
-                            infile, outfile, optlist2, task):
+                        infile, outfile, optlist2, task
+                    ):
                         task.setProgress(
-                            int(50.0 + (50.0 * timecode) / info.format.duration))
+                            int(50.0 + (50.0 * timecode) / info.format.duration)
+                        )
                 else:
                     optlist = self.parse_options(options, twopass)
-                    for timecode in self.ffmpeg.convert(
-                            infile, outfile, optlist, task):
-                        task.setProgress(
-                            int((100.0 * timecode) / info.format.duration))
+                    for timecode in self.ffmpeg.convert(infile, outfile, optlist, task):
+                        task.setProgress(int((100.0 * timecode) / info.format.duration))
                 task.setProgress(100)
-                return {'task': task.description()}
+                return {"task": task.description()}
             if task.isCanceled():
                 return None
         except Exception:
@@ -171,7 +172,7 @@ class Converter(QObject):
             self.ffmpeg.probeToJson(fname, output)
             if task.isCanceled():
                 return None
-            return {'task': task.description()}
+            return {"task": task.description()}
         except Exception:
             return None
 
@@ -183,7 +184,7 @@ class Converter(QObject):
             self.bytes_value = self.ffmpeg.probeGetJson(fname)
             if task.isCanceled():
                 return None
-            return {'task': task.description()}
+            return {"task": task.description()}
         except Exception:
             return None
 

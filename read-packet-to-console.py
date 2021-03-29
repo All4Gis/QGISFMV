@@ -2,15 +2,16 @@ from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.streamparser import StreamParser
 import sys
 from qgis.PyQt.QtWidgets import QApplication
+
 app = QApplication([""])
 
 
-print ('Number of arguments:', len(sys.argv), 'arguments.')
+print("Number of arguments:", len(sys.argv), "arguments.")
 
 if len(sys.argv) == 2:
 
-    print ("data: " + sys.argv[1])
-    stdout_data = open(sys.argv[1], 'rb').read()
+    print("data: " + sys.argv[1])
+    stdout_data = open(sys.argv[1], "rb").read()
 
     for packet in StreamParser(stdout_data):
         if isinstance(packet, UnknownElement):

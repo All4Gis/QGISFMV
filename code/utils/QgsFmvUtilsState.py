@@ -2,7 +2,6 @@ from qgis.utils import iface as defIface
 
 
 class globalVariablesState:
-
     def __init__(self):
         self.iface = defIface
         self.centerMode = 2

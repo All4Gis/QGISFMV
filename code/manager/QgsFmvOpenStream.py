@@ -33,7 +33,8 @@ class OpenStream(QDialog, Ui_FmvOpenStream):
         # IP Validator
         v = QRegExpValidator(self)
         rx = QRegExp(
-            "((1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})\\.){3,3}(1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})")
+            "((1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})\\.){3,3}(1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})"
+        )
         v.setRegExp(rx)
         self.ln_host.setValidator(v)
 
@@ -43,8 +44,9 @@ class OpenStream(QDialog, Ui_FmvOpenStream):
         port = self.ln_port.text()
         v = protocol + "://" + host + ":" + port
         if host != "" and port != "":
-            qgsu.showUserAndLogMessage(QCoreApplication.translate(
-                "QgsFmvOpenStream", "Checking connection!"))
+            qgsu.showUserAndLogMessage(
+                QCoreApplication.translate("QgsFmvOpenStream", "Checking connection!")
+            )
             QApplication.setOverrideCursor(Qt.WaitCursor)
             QApplication.processEvents()
             # Check if connection exist
@@ -57,7 +59,8 @@ class OpenStream(QDialog, Ui_FmvOpenStream):
             else:
                 qgsu.showUserAndLogMessage(
                     QCoreApplication.translate(
-                        "QgsFmvOpenStream",
-                        "There is no such connection!"),
-                    level=QGis.Warning)
+                        "QgsFmvOpenStream", "There is no such connection!"
+                    ),
+                    level=QGis.Warning,
+                )
             QApplication.restoreOverrideCursor()

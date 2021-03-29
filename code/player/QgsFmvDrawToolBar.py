@@ -1,20 +1,22 @@
 from qgis.PyQt.QtCore import QSize, QPointF, Qt, QPoint, QSettings
-from qgis.PyQt.QtGui import (QPainter,
-                             QPainterPath,
-                             QColor,
-                             QFont,
-                             QPixmap,
-                             QPen,
-                             QBrush,
-                             QPolygonF)
+from qgis.PyQt.QtGui import (
+    QPainter,
+    QPainterPath,
+    QColor,
+    QFont,
+    QPixmap,
+    QPen,
+    QBrush,
+    QPolygonF,
+)
 
 from PyQt5.QtGui import QImage
 
-from QGIS_FMV.geo.QgsGeoUtils import WGS84String
+from QGIS_FMV.QgsFmvConstants import WGS84String
 from QGIS_FMV.utils.QgsFmvUtils import getNameSpace
 
 from QGIS_FMV.video.QgsVideoUtils import VideoUtils as vut
-from qgis.core import QgsDistanceArea, QgsPointXY, QgsGeometry, QgsUnitTypes
+from qgis.core import QgsDistanceArea, QgsPointXY, QgsGeometry
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 try:
@@ -44,13 +46,8 @@ LinePen = QPen(QColor(252, 215, 108), LineWidth)
 RulerTotalMeasure = 0.0
 MeasureWidth = 3
 MeasurePen = QPen(
-    QColor(
-        185,
-        224,
-        175),
-    MeasureWidth,
-    cap=Qt.RoundCap,
-    join=Qt.RoundJoin)
+    QColor(185, 224, 175), MeasureWidth, cap=Qt.RoundCap, join=Qt.RoundJoin
+)
 MeasureBrush = QBrush(QColor(185, 224, 175, 100))
 
 
@@ -74,19 +71,16 @@ class DrawToolBar(object):
     bold_12 = QFont("Arial", 12, QFont.Bold)
 
     # Stamp Image
-    confidential = QPixmap.fromImage(
-        QImage(":/imgFMV/images/stamp/confidential.png"))
+    confidential = QPixmap.fromImage(QImage(":/imgFMV/images/stamp/confidential.png"))
 
     @staticmethod
     def setValues(options=None):
-        ''' Function to set Drawing Values '''
+        """ Function to set Drawing Values """
         s = QSettings()
 
         # Magnifier Glass #
 
-        shape_type = s.value(
-            DrawToolBar.NameSpace +
-            "/Options/magnifier/shape")
+        shape_type = s.value(DrawToolBar.NameSpace + "/Options/magnifier/shape")
         if shape_type is not None:
             global TYPE_MAGNIFIER
             TYPE_MAGNIFIER = shape_type
@@ -114,18 +108,14 @@ class DrawToolBar(object):
 
         # Drawings #
 
-        poly_w = s.value(
-            DrawToolBar.NameSpace +
-            "/Options/drawings/polygons/width")
+        poly_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/width")
         if poly_w is not None:
             global PolyWidth
             PolyWidth = int(poly_w)
             if options is not None:
                 options.poly_width.setValue(PolyWidth)
 
-        poly_p = s.value(
-            DrawToolBar.NameSpace +
-            "/Options/drawings/polygons/pen")
+        poly_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/pen")
         if poly_p is not None:
             global PolyPen
             PolyPen = QPen(QColor(poly_p))
@@ -134,27 +124,21 @@ class DrawToolBar(object):
             if options is not None:
                 options.poly_pen.setColor(QColor(poly_p))
 
-        poly_b = s.value(
-            DrawToolBar.NameSpace +
-            "/Options/drawings/polygons/brush")
+        poly_b = s.value(DrawToolBar.NameSpace + "/Options/drawings/polygons/brush")
         if poly_b is not None:
             global PolyBrush
             PolyBrush = QBrush(QColor(poly_b))
             if options is not None:
                 options.poly_brush.setColor(QColor(poly_b))
 
-        point_w = s.value(
-            DrawToolBar.NameSpace +
-            "/Options/drawings/points/width")
+        point_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/points/width")
         if point_w is not None:
             global PointWidth
             PointWidth = int(point_w)
             if options is not None:
                 options.point_width.setValue(PointWidth)
 
-        point_p = s.value(
-            DrawToolBar.NameSpace +
-            "/Options/drawings/points/pen")
+        point_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/points/pen")
         if point_p is not None:
             global PointPen
             PointPen = QPen(QColor(point_p))
@@ -163,9 +147,7 @@ class DrawToolBar(object):
             if options is not None:
                 options.point_pen.setColor(QColor(point_p))
 
-        line_w = s.value(
-            DrawToolBar.NameSpace +
-            "/Options/drawings/lines/width")
+        line_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/lines/width")
         if line_w is not None:
             global LineWidth
             LineWidth = int(line_w)
@@ -181,18 +163,14 @@ class DrawToolBar(object):
             if options is not None:
                 options.lines_pen.setColor(QColor(line_p))
 
-        measure_w = s.value(
-            DrawToolBar.NameSpace +
-            "/Options/drawings/measures/width")
+        measure_w = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/width")
         if measure_w is not None:
             global MeasureWidth
             MeasureWidth = int(measure_w)
             if options is not None:
                 options.measures_width.setValue(MeasureWidth)
 
-        measure_p = s.value(
-            DrawToolBar.NameSpace +
-            "/Options/drawings/measures/pen")
+        measure_p = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/pen")
         if measure_p is not None:
             global MeasurePen
             MeasurePen = QPen(QColor(measure_p))
@@ -201,9 +179,7 @@ class DrawToolBar(object):
             if options is not None:
                 options.measures_pen.setColor(QColor(measure_p))
 
-        measure_b = s.value(
-            DrawToolBar.NameSpace +
-            "/Options/drawings/measures/brush")
+        measure_b = s.value(DrawToolBar.NameSpace + "/Options/drawings/measures/brush")
         if measure_b is not None:
             global MeasureBrush
             MeasureBrush = QBrush(QColor(measure_b))
@@ -213,13 +189,21 @@ class DrawToolBar(object):
         return
 
     @staticmethod
-    def drawOnVideo(drawPtPos, drawLines, drawPolygon, drawMDistance,
-                    drawMArea, drawCesure, painter, surface, gt):
-        ''' Function to paint over the video '''
+    def drawOnVideo(
+        drawPtPos,
+        drawLines,
+        drawPolygon,
+        drawMDistance,
+        drawMArea,
+        drawCesure,
+        painter,
+        surface,
+        gt,
+    ):
+        """ Function to paint over the video """
         # Draw clicked points on video
         for position, pt in enumerate(drawPtPos):
-            DrawToolBar.drawPointOnVideo(
-                position + 1, pt, painter, surface, gt)
+            DrawToolBar.drawPointOnVideo(position + 1, pt, painter, surface, gt)
 
         # Draw clicked lines on video
         if len(drawLines) > 1:
@@ -228,7 +212,8 @@ class DrawToolBar(object):
                     continue
                 else:
                     DrawToolBar.drawLinesOnVideo(
-                        pt, idx, painter, surface, gt, drawLines)
+                        pt, idx, painter, surface, gt, drawLines
+                    )
 
         # Draw clicked Polygons on video
         if len(drawPolygon) > 1:
@@ -236,22 +221,20 @@ class DrawToolBar(object):
             if any(x[1] is None for x in drawPolygon):
                 for pt in drawPolygon:
                     if pt[0] is None:
-                        DrawToolBar.drawPolygonOnVideo(
-                            poly, painter, surface, gt)
+                        DrawToolBar.drawPolygonOnVideo(poly, painter, surface, gt)
                         poly = []
                         continue
                     poly.append(pt)
-                last_occurence = len(
-                    drawPolygon) - drawPolygon[::-1].index([None, None, None])
+                last_occurence = len(drawPolygon) - drawPolygon[::-1].index(
+                    [None, None, None]
+                )
                 poly = []
                 for pt in range(last_occurence, len(drawPolygon)):
                     poly.append(drawPolygon[pt])
                 if len(poly) > 1:
-                    DrawToolBar.drawPolygonOnVideo(
-                        poly, painter, surface, gt)
+                    DrawToolBar.drawPolygonOnVideo(poly, painter, surface, gt)
             else:
-                DrawToolBar.drawPolygonOnVideo(
-                    drawPolygon, painter, surface, gt)
+                DrawToolBar.drawPolygonOnVideo(drawPolygon, painter, surface, gt)
 
         # Draw Measure Distance on video
         # the measures don't persist in the video
@@ -263,7 +246,8 @@ class DrawToolBar(object):
                     continue
                 else:
                     DrawToolBar.drawMeasureDistanceOnVideo(
-                        pt, idx, painter, surface, gt, drawMDistance)
+                        pt, idx, painter, surface, gt, drawMDistance
+                    )
 
         # Draw Measure Area on video
         # the measures don't persist in the video
@@ -272,22 +256,20 @@ class DrawToolBar(object):
             if any(x[1] is None for x in drawMArea):
                 for pt in drawMArea:
                     if pt[0] is None:
-                        DrawToolBar.drawMeasureAreaOnVideo(
-                            poly, painter, surface, gt)
+                        DrawToolBar.drawMeasureAreaOnVideo(poly, painter, surface, gt)
                         poly = []
                         continue
                     poly.append(pt)
-                last_occurence = len(
-                    drawMArea) - drawMArea[::-1].index([None, None, None])
+                last_occurence = len(drawMArea) - drawMArea[::-1].index(
+                    [None, None, None]
+                )
                 poly = []
                 for pt in range(last_occurence, len(drawMArea)):
                     poly.append(drawMArea[pt])
                 if len(poly) > 1:
-                    DrawToolBar.drawMeasureAreaOnVideo(
-                        poly, painter, surface, gt)
+                    DrawToolBar.drawMeasureAreaOnVideo(poly, painter, surface, gt)
             else:
-                DrawToolBar.drawMeasureAreaOnVideo(
-                    drawMArea, painter, surface, gt)
+                DrawToolBar.drawMeasureAreaOnVideo(drawMArea, painter, surface, gt)
 
         # Draw Censure
         if drawCesure:
@@ -298,18 +280,17 @@ class DrawToolBar(object):
 
     @staticmethod
     def drawPointOnVideo(number, pt, painter, surface, gt):
-        ''' Draw Points on Video '''
+        """ Draw Points on Video """
 
-        scr_x, scr_y = vut.GetInverseMatrix(
-            pt[1], pt[0], gt, surface)
+        scr_x, scr_y = vut.GetInverseMatrix(pt[1], pt[0], gt, surface)
 
         # don't draw something outside the screen.
-        if scr_x < vut.GetXBlackZone(
-                surface) or scr_y < vut.GetYBlackZone(surface):
+        if scr_x < vut.GetXBlackZone(surface) or scr_y < vut.GetYBlackZone(surface):
             return
 
         if scr_x > vut.GetXBlackZone(surface) + vut.GetNormalizedWidth(
-                surface) or scr_y > vut.GetYBlackZone(surface) + vut.GetNormalizedHeight(surface):
+            surface
+        ) or scr_y > vut.GetYBlackZone(surface) + vut.GetNormalizedHeight(surface):
             return
 
         center = QPoint(scr_x, scr_y)
@@ -322,9 +303,8 @@ class DrawToolBar(object):
 
     @staticmethod
     def drawLinesOnVideo(pt, idx, painter, surface, gt, drawLines):
-        ''' Draw Lines on Video '''
-        scr_x, scr_y = vut.GetInverseMatrix(
-            pt[1], pt[0], gt, surface)
+        """ Draw Lines on Video """
+        scr_x, scr_y = vut.GetInverseMatrix(pt[1], pt[0], gt, surface)
 
         center = QPoint(scr_x, scr_y)
 
@@ -333,8 +313,7 @@ class DrawToolBar(object):
         if len(drawLines) > 1:
             try:
                 pt = drawLines[idx + 1]
-                scr_x, scr_y = vut.GetInverseMatrix(
-                    pt[1], pt[0], gt, surface)
+                scr_x, scr_y = vut.GetInverseMatrix(pt[1], pt[0], gt, surface)
                 end = QPoint(scr_x, scr_y)
                 painter.drawLine(center, end)
 
@@ -348,11 +327,10 @@ class DrawToolBar(object):
 
     @staticmethod
     def drawPolygonOnVideo(values, painter, surface, gt):
-        ''' Draw Polygons on Video '''
+        """ Draw Polygons on Video """
         poly = []
         for pt in values:
-            scr_x, scr_y = vut.GetInverseMatrix(
-                pt[1], pt[0], gt, surface)
+            scr_x, scr_y = vut.GetInverseMatrix(pt[1], pt[0], gt, surface)
             center = QPoint(scr_x, scr_y)
             poly.append(center)
 
@@ -374,13 +352,11 @@ class DrawToolBar(object):
         RulerTotalMeasure = 0.0
 
     @staticmethod
-    def drawMeasureDistanceOnVideo(
-            pt, idx, painter, surface, gt, drawMDistance):
-        ''' Draw Measure Distance on Video '''
+    def drawMeasureDistanceOnVideo(pt, idx, painter, surface, gt, drawMDistance):
+        """ Draw Measure Distance on Video """
         global RulerTotalMeasure
-        
-        scr_x, scr_y = vut.GetInverseMatrix(
-            pt[1], pt[0], gt, surface)
+
+        scr_x, scr_y = vut.GetInverseMatrix(pt[1], pt[0], gt, surface)
 
         center = QPoint(scr_x, scr_y)
 
@@ -390,8 +366,7 @@ class DrawToolBar(object):
 
                 end_pt = drawMDistance[idx + 1]
 
-                scr_x, scr_y = vut.GetInverseMatrix(
-                    end_pt[1], end_pt[0], gt, surface)
+                scr_x, scr_y = vut.GetInverseMatrix(end_pt[1], end_pt[0], gt, surface)
                 end = QPoint(scr_x, scr_y)
                 painter.drawLine(center, end)
 
@@ -405,7 +380,7 @@ class DrawToolBar(object):
                 m = da.measureLine(initialPoint, destPoint)
                 distance = round(m, 2)
                 text = str(distance) + " m"
-                
+
                 # Sum values to total distance
                 RulerTotalMeasure += distance
 
@@ -415,8 +390,9 @@ class DrawToolBar(object):
 
                 painter.setPen(DrawToolBar.white_pen)
                 # Total lenght
-                painter.drawText(end + QPoint(5, 10),
-                                 str(round(RulerTotalMeasure, 2)) + " m")
+                painter.drawText(
+                    end + QPoint(5, 10), str(round(RulerTotalMeasure, 2)) + " m"
+                )
 
                 # Draw Start/End Points
                 painter.drawPoint(center)
@@ -427,25 +403,23 @@ class DrawToolBar(object):
 
     @staticmethod
     def drawMeasureAreaOnVideo(values, painter, surface, gt):
-        ''' Draw Measure Area on Video '''
-        
+        """ Draw Measure Area on Video """
+
         da = QgsDistanceArea()
         da.setEllipsoid(WGS84String)
-                
+
         points = []
         poly = []
 
         for pt in values:
-            scr_x, scr_y = vut.GetInverseMatrix(
-                pt[1], pt[0], gt, surface)
+            scr_x, scr_y = vut.GetInverseMatrix(pt[1], pt[0], gt, surface)
             center = QPoint(scr_x, scr_y)
             poly.append(center)
             points.append(QgsPointXY(pt[1], pt[0]))
 
-
         # Create Video Polygon
         polygon = QPolygonF(poly)
-        
+
         path = QPainterPath()
         path.addPolygon(polygon)
 
@@ -456,27 +430,24 @@ class DrawToolBar(object):
         painter.fillPath(path, MeasureBrush)
         painter.setPen(DrawToolBar.white_pen)
         painter.drawPoints(polygon)
-        
+
         # Create QGIS Polygon
-        mapPolygon = QgsGeometry.fromPolygonXY(
-            [points]
-        )
-        
+        mapPolygon = QgsGeometry.fromPolygonXY([points])
+
         # Calculate polygon area
         area = da.measureArea(mapPolygon)
-        
+
         try:
             ctr = mapPolygon.centroid().asPoint()
             # Calculate Centroid Position
             scr_x, scr_y = vut.GetInverseMatrix(ctr.x(), ctr.y(), gt, surface)
             centroid = QPoint(scr_x, scr_y)
-               
+
             # Area
             if area >= 10000:
                 painter.drawText(
-                    centroid, str(
-                        round(
-                            da.convertAreaMeasurement(area, 1), 2)) + " km²")
+                    centroid, str(round(da.convertAreaMeasurement(area, 1), 2)) + " km²"
+                )
             else:
                 painter.drawText(centroid, str(round(area, 2)) + " m²")
         except Exception:
@@ -486,13 +457,14 @@ class DrawToolBar(object):
 
     @staticmethod
     def drawCensuredOnVideo(painter, drawCesure):
-        ''' Draw Censure on Video '''
+        """ Draw Censure on Video """
         try:
             for geom in drawCesure:
                 painter.setPen(DrawToolBar.black_pen)
                 painter.setBrush(DrawToolBar.black_brush)
-                painter.drawRect(geom[0].x(), geom[0].y(),
-                                 geom[0].width(), geom[0].height())
+                painter.drawRect(
+                    geom[0].x(), geom[0].y(), geom[0].width(), geom[0].height()
+                )
 
         except Exception:
             None
@@ -500,7 +472,7 @@ class DrawToolBar(object):
 
     @staticmethod
     def drawMagnifierOnVideo(widget, dragPos, source, painter):
-        ''' Draw Magnifier on Video '''
+        """ Draw Magnifier on Video """
         oldTransform = painter.transform()
         painter.setTransform(oldTransform)
         painter.setBrush(DrawToolBar.transparent_brush)
@@ -526,9 +498,8 @@ class DrawToolBar(object):
         painter_p.translate(-xy)
         painter_p.scale(MAX_FACTOR, MAX_FACTOR)
         painter_p.drawImage(
-            widget.surface.videoRect(),
-            source,
-            widget.surface.sourceRect())
+            widget.surface.videoRect(), source, widget.surface.sourceRect()
+        )
 
         painter_p.end()
 
@@ -538,11 +509,7 @@ class DrawToolBar(object):
         # Shape Type
         if TYPE_MAGNIFIER == 0:
             # Square
-            clipPath.addRect(
-                center.x(),
-                center.y(),
-                magnifierSize,
-                magnifierSize)
+            clipPath.addRect(center.x(), center.y(), magnifierSize, magnifierSize)
             clipPath.translate(-radius, -radius)
         else:
             # Circle
@@ -556,8 +523,9 @@ class DrawToolBar(object):
 
     @staticmethod
     def drawStampOnVideo(widget, painter):
-        ''' Draw Stamp Confidential on Video '''
+        """ Draw Stamp Confidential on Video """
         painter.drawPixmap(
             widget.surface.videoRect(),
             DrawToolBar.confidential,
-            widget.surface.sourceRect())
+            widget.surface.sourceRect(),
+        )

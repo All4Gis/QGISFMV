@@ -27,13 +27,14 @@ from io import BytesIO
 from io import IOBase
 
 from QGIS_FMV.klvdata.common import bytes_to_int
+
 try:
     from pydevd import *
 except ImportError:
     None
 
-UASLocalMetadataSet = b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00'
-KlvHeaderKey= b'\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01'
+UASLocalMetadataSet = b"\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00"
+KlvHeaderKey = b"\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01"
 
 
 class KLVParser(object):
@@ -56,7 +57,7 @@ class KLVParser(object):
         # in some videos the header not follow the correct pattern
         # Sample key:
         # b'\xdc\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01'
-        if (key.find(KlvHeaderKey) > 0):
+        if key.find(KlvHeaderKey) > 0:
             key = UASLocalMetadataSet
             byte_length = bytes_to_int(self.__read(4))
         else:
@@ -69,10 +70,10 @@ class KLVParser(object):
             # BER Long Form
             length = bytes_to_int(self.__read(byte_length - 128))
 
-#         try:
-#             value = self.__read(length)
-#         except OverflowError:
-#             value = self.__read(0)
+        #         try:
+        #             value = self.__read(length)
+        #         except OverflowError:
+        #             value = self.__read(0)
 
         value = self.__read(length)
 
@@ -80,7 +81,7 @@ class KLVParser(object):
 
     def __read(self, size):
         if size == 0:
-            return b''
+            return b""
 
         assert size > 0
 

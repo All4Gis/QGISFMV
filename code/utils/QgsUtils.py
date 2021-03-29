@@ -2,8 +2,7 @@ import os
 from qgis.PyQt.QtGui import QPixmap, QIcon
 from qgis.PyQt.QtWidgets import QMessageBox, QSpacerItem, QSizePolicy
 from QGIS_FMV.utils.QgsFmvLog import log
-from qgis.core import (QgsProject,
-                       Qgis as QGis)
+from qgis.core import QgsProject, Qgis as QGis
 from qgis.utils import iface
 from qgis.PyQt.QtCore import QSettings, Qt
 
@@ -14,10 +13,9 @@ except ImportError:
 
 
 class QgsUtils(object):
-
     @staticmethod
     def GetIcon(icon):
-        ''' Get Icon for Custom Informative Message '''
+        """ Get Icon for Custom Informative Message """
         if icon == "Question":
             i = QPixmap(":/imgFMV/images/Question.png")
         elif icon == "Information":
@@ -30,7 +28,7 @@ class QgsUtils(object):
 
     @staticmethod
     def CustomMessage(title, msg, informative="", icon="Critical"):
-        ''' Custom Informative Message '''
+        """ Custom Informative Message """
         d = QMessageBox()
         d.setTextFormat(Qt.RichText)
         d.setWindowTitle(title)
@@ -44,31 +42,30 @@ class QgsUtils(object):
 
         # Trick resize QMessageBox
         horizontalSpacer = QSpacerItem(
-            500, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
+            500, 0, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
         layout = d.layout()
-        layout.addItem(
-            horizontalSpacer,
-            layout.rowCount(),
-            0,
-            1,
-            layout.columnCount())
+        layout.addItem(horizontalSpacer, layout.rowCount(), 0, 1, layout.columnCount())
 
         ret = d.exec_()
         return ret
 
     @staticmethod
     def getLayerExtent(layer=None):
-        ''' Get Layer extent '''
-        return iface.mapCanvas().mapSettings().layerExtentToOutputExtent(layer, layer.extent())
+        """ Get Layer extent """
+        return (
+            iface.mapCanvas()
+            .mapSettings()
+            .layerExtentToOutputExtent(layer, layer.extent())
+        )
 
     @staticmethod
     def selectLayerByName(layerName, group=None):
-        ''' Select Layer by Name '''
+        """ Select Layer by Name """
         returnLayer = None
         try:
             if group is None:
-                returnLayer = QgsProject.instance(
-                ).mapLayersByName(layerName)[0]
+                returnLayer = QgsProject.instance().mapLayersByName(layerName)[0]
                 return returnLayer
             else:
                 root = QgsProject.instance().layerTreeRoot()
@@ -85,7 +82,7 @@ class QgsUtils(object):
 
     @staticmethod
     def createFolderByName(path, name):
-        ''' Create Folder by Name '''
+        """ Create Folder by Name """
         directory = os.path.join(path, name)
         try:
             if not os.path.exists(directory):
@@ -95,16 +92,12 @@ class QgsUtils(object):
 
     @staticmethod
     def showUserAndLogMessage(
-            before,
-            text="",
-            level=QGis.Info,
-            duration=3,
-            onlyLog=False):
-        ''' Show user & log info/warning/error messages '''
+        before, text="", level=QGis.Info, duration=3, onlyLog=False
+    ):
+        """ Show user & log info/warning/error messages """
         if not onlyLog:
             iface.messageBar().popWidget()
-            iface.messageBar().pushMessage(
-                before, text, level=level, duration=duration)
+            iface.messageBar().pushMessage(before, text, level=level, duration=duration)
         if level == QGis.Info:
             log.info(text)
         elif level == QGis.Warning:
@@ -113,15 +106,15 @@ class QgsUtils(object):
             log.error(text)
         return
 
-#     @staticmethod
-#     def removeMosaicFolder(video_file):
-#         ''' Remove mosaic folder '''
-#         folder = getVideoFolder(video_file)
-#         out = os.path.join(folder, "mosaic")
-#         try:
-#             shutil.rmtree(out, ignore_errors=True)
-#         except Exception:
-#             None
+    #     @staticmethod
+    #     def removeMosaicFolder(video_file):
+    #         ''' Remove mosaic folder '''
+    #         folder = getVideoFolder(video_file)
+    #         out = os.path.join(folder, "mosaic")
+    #         try:
+    #             shutil.rmtree(out, ignore_errors=True)
+    #         except Exception:
+    #             None
 
     @staticmethod
     def removeFile(path):
@@ -132,9 +125,9 @@ class QgsUtils(object):
 
     @staticmethod
     def SetShortcutForPluginFMV(text, value="Alt+F"):
-        ''' Set DEFAULT or find user shortcut '''
+        """ Set DEFAULT or find user shortcut """
         settings = QSettings()
-        settings.beginGroup('shortcuts')
+        settings.beginGroup("shortcuts")
         # Find all saved shortcuts:
         keys = [key for key in settings.childKeys() if key == text]
         if not len(keys):

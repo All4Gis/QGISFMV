@@ -8,11 +8,14 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_PlayerWindow(object):
     def setupUi(self, PlayerWindow):
         PlayerWindow.setObjectName("PlayerWindow")
         PlayerWindow.resize(1111, 987)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(PlayerWindow.sizePolicy().hasHeightForWidth())
@@ -20,10 +23,16 @@ class Ui_PlayerWindow(object):
         PlayerWindow.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
         PlayerWindow.setAcceptDrops(True)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/icon.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         PlayerWindow.setWindowIcon(icon)
         PlayerWindow.setWindowOpacity(1.0)
-        PlayerWindow.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
+        PlayerWindow.setLocale(
+            QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates)
+        )
         PlayerWindow.setAnimated(False)
         PlayerWindow.setDockNestingEnabled(True)
         self.centralwidget = QtWidgets.QWidget(PlayerWindow)
@@ -70,11 +79,15 @@ class Ui_PlayerWindow(object):
         self.toolBtn_Measure.setAutoRaise(False)
         self.toolBtn_Measure.setObjectName("toolBtn_Measure")
         self.horizontalLayout_5.addWidget(self.toolBtn_Measure)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_5.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout_5)
         self.videoWidget = VideoWidget(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(3)
         sizePolicy.setVerticalStretch(3)
         sizePolicy.setHeightForWidth(self.videoWidget.sizePolicy().hasHeightForWidth())
@@ -83,18 +96,20 @@ class Ui_PlayerWindow(object):
         self.videoWidget.setMouseTracking(True)
         self.videoWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.videoWidget.setToolTip("")
-        self.videoWidget.setStyleSheet("QWidget {\n"
-" background-color:black;\n"
-" } ")
+        self.videoWidget.setStyleSheet("QWidget {\n" " background-color:black;\n" " } ")
         self.videoWidget.setObjectName("videoWidget")
         self.verticalLayout.addWidget(self.videoWidget)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.sliderDuration = QtWidgets.QSlider(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.sliderDuration.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.sliderDuration.sizePolicy().hasHeightForWidth()
+        )
         self.sliderDuration.setSizePolicy(sizePolicy)
         self.sliderDuration.setMinimum(0)
         self.sliderDuration.setMaximum(100)
@@ -108,7 +123,9 @@ class Ui_PlayerWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.lb_prec_ts = QtWidgets.QLabel(self.centralwidget)
         self.lb_prec_ts.setText("")
-        self.lb_prec_ts.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lb_prec_ts.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.lb_prec_ts.setObjectName("lb_prec_ts")
         self.verticalLayout.addWidget(self.lb_prec_ts)
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
@@ -119,8 +136,16 @@ class Ui_PlayerWindow(object):
         self.btn_Rec.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_Rec.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/imgFMV/images/record.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon1.addPixmap(QtGui.QPixmap(":/imgFMV/images/rec_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon1.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/record.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
+        icon1.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/rec_on.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.On,
+        )
         self.btn_Rec.setIcon(icon1)
         self.btn_Rec.setCheckable(True)
         self.btn_Rec.setFlat(True)
@@ -130,20 +155,28 @@ class Ui_PlayerWindow(object):
         self.btn_GeoReferencing.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_GeoReferencing.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/imgFMV/images/mosaic.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/mosaic.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_GeoReferencing.setIcon(icon2)
         self.btn_GeoReferencing.setCheckable(True)
         self.btn_GeoReferencing.setFlat(True)
         self.btn_GeoReferencing.setObjectName("btn_GeoReferencing")
         self.horizontalLayout_3.addWidget(self.btn_GeoReferencing)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_3.addItem(spacerItem1)
         self.lb_cursor_coord = QtWidgets.QLabel(self.groupBox)
         self.lb_cursor_coord.setText("")
         self.lb_cursor_coord.setAlignment(QtCore.Qt.AlignCenter)
         self.lb_cursor_coord.setObjectName("lb_cursor_coord")
         self.horizontalLayout_3.addWidget(self.lb_cursor_coord)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_3.addItem(spacerItem2)
         self.cmb_cursorCoord = QtWidgets.QComboBox(self.groupBox)
         self.cmb_cursorCoord.setStyleSheet("")
@@ -152,35 +185,47 @@ class Ui_PlayerWindow(object):
         self.cmb_cursorCoord.addItem("")
         self.cmb_cursorCoord.addItem("")
         self.horizontalLayout_3.addWidget(self.cmb_cursorCoord)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_3.addItem(spacerItem3)
         self.btn_CaptureFrame = QtWidgets.QPushButton(self.groupBox)
         self.btn_CaptureFrame.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_CaptureFrame.setText("")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/imgFMV/images/screenshot.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/screenshot.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_CaptureFrame.setIcon(icon3)
         self.btn_CaptureFrame.setFlat(True)
         self.btn_CaptureFrame.setObjectName("btn_CaptureFrame")
         self.horizontalLayout_3.addWidget(self.btn_CaptureFrame)
         self.verticalLayout.addWidget(self.groupBox)
         self.gb_PlayerControls = QtWidgets.QGroupBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.gb_PlayerControls.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.gb_PlayerControls.sizePolicy().hasHeightForWidth()
+        )
         self.gb_PlayerControls.setSizePolicy(sizePolicy)
         self.gb_PlayerControls.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.gb_PlayerControls.setStyleSheet("QGroupBox::indicator {\n"
-"                 width: 13px;\n"
-"                 height: 13px;\n"
-"            }  \n"
-"           QGroupBox::indicator:unchecked {\n"
-"                 image: url(:/imgFMV/images/up.png);\n"
-"            }\n"
-"           QGroupBox::indicator:checked {\n"
-"               image: url(:/imgFMV/images/down.png);\n"
-"                }")
+        self.gb_PlayerControls.setStyleSheet(
+            "QGroupBox::indicator {\n"
+            "                 width: 13px;\n"
+            "                 height: 13px;\n"
+            "            }  \n"
+            "           QGroupBox::indicator:unchecked {\n"
+            "                 image: url(:/imgFMV/images/up.png);\n"
+            "            }\n"
+            "           QGroupBox::indicator:checked {\n"
+            "               image: url(:/imgFMV/images/down.png);\n"
+            "                }"
+        )
         self.gb_PlayerControls.setFlat(True)
         self.gb_PlayerControls.setCheckable(True)
         self.gb_PlayerControls.setObjectName("gb_PlayerControls")
@@ -190,7 +235,11 @@ class Ui_PlayerWindow(object):
         self.btn_previous.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_previous.setText("")
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/imgFMV/images/skip-previous.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon4.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/skip-previous.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_previous.setIcon(icon4)
         self.btn_previous.setFlat(True)
         self.btn_previous.setObjectName("btn_previous")
@@ -199,7 +248,11 @@ class Ui_PlayerWindow(object):
         self.btn_rewind.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_rewind.setText("")
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/imgFMV/images/fast-rewind.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon5.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/fast-rewind.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_rewind.setIcon(icon5)
         self.btn_rewind.setCheckable(False)
         self.btn_rewind.setFlat(True)
@@ -209,7 +262,11 @@ class Ui_PlayerWindow(object):
         self.btn_stop.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_stop.setText("")
         icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(":/imgFMV/images/stop.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon6.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/stop.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_stop.setIcon(icon6)
         self.btn_stop.setFlat(True)
         self.btn_stop.setObjectName("btn_stop")
@@ -218,7 +275,11 @@ class Ui_PlayerWindow(object):
         self.btn_play.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_play.setText("")
         icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(":/imgFMV/images/play-arrow.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon7.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/play-arrow.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_play.setIcon(icon7)
         self.btn_play.setFlat(True)
         self.btn_play.setObjectName("btn_play")
@@ -227,7 +288,11 @@ class Ui_PlayerWindow(object):
         self.btn_forward.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_forward.setText("")
         icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap(":/imgFMV/images/fast-forward.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon8.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/fast-forward.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_forward.setIcon(icon8)
         self.btn_forward.setCheckable(False)
         self.btn_forward.setAutoDefault(True)
@@ -238,7 +303,11 @@ class Ui_PlayerWindow(object):
         self.btn_next.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_next.setText("")
         icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap(":/imgFMV/images/skip-next.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon9.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/skip-next.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_next.setIcon(icon9)
         self.btn_next.setFlat(True)
         self.btn_next.setObjectName("btn_next")
@@ -247,16 +316,24 @@ class Ui_PlayerWindow(object):
         self.btn_repeat.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_repeat.setText("")
         icon10 = QtGui.QIcon()
-        icon10.addPixmap(QtGui.QPixmap(":/imgFMV/images/repeat.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon10.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/repeat.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_repeat.setIcon(icon10)
         self.btn_repeat.setCheckable(True)
         self.btn_repeat.setFlat(True)
         self.btn_repeat.setObjectName("btn_repeat")
         self.horizontalLayout.addWidget(self.btn_repeat)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem4)
         self.formLayout = QtWidgets.QFormLayout()
-        self.formLayout.setFieldGrowthPolicy(QtWidgets.QFormLayout.AllNonFixedFieldsGrow)
+        self.formLayout.setFieldGrowthPolicy(
+            QtWidgets.QFormLayout.AllNonFixedFieldsGrow
+        )
         self.formLayout.setObjectName("formLayout")
         self.btn_volume = QtWidgets.QPushButton(self.gb_PlayerControls)
         self.btn_volume.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -265,7 +342,11 @@ class Ui_PlayerWindow(object):
         self.btn_volume.setWhatsThis("")
         self.btn_volume.setText("")
         icon11 = QtGui.QIcon()
-        icon11.addPixmap(QtGui.QPixmap(":/imgFMV/images/volume_up.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon11.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/volume_up.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.btn_volume.setIcon(icon11)
         self.btn_volume.setFlat(True)
         self.btn_volume.setObjectName("btn_volume")
@@ -286,9 +367,9 @@ class Ui_PlayerWindow(object):
         self.menubarwidget = QtWidgets.QMenuBar(PlayerWindow)
         self.menubarwidget.setGeometry(QtCore.QRect(0, 0, 1111, 39))
         self.menubarwidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.menubarwidget.setStyleSheet("QMenuBar {\n"
-"    background-color: transparent;\n"
-"}")
+        self.menubarwidget.setStyleSheet(
+            "QMenuBar {\n" "    background-color: transparent;\n" "}"
+        )
         self.menubarwidget.setObjectName("menubarwidget")
         self.menuFile = QtWidgets.QMenu(self.menubarwidget)
         self.menuFile.setObjectName("menuFile")
@@ -314,7 +395,11 @@ class Ui_PlayerWindow(object):
         self.actionGray = QtWidgets.QAction(PlayerWindow)
         self.actionGray.setCheckable(True)
         icon12 = QtGui.QIcon()
-        icon12.addPixmap(QtGui.QPixmap(":/imgFMV/images/grayscale.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon12.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/grayscale.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionGray.setIcon(icon12)
         self.actionGray.setObjectName("actionGray")
         self.actionEdge_Detection = QtWidgets.QAction(PlayerWindow)
@@ -326,29 +411,49 @@ class Ui_PlayerWindow(object):
         self.actionCapture_Current_Frame.setObjectName("actionCapture_Current_Frame")
         self.actionExtract_All_Frames = QtWidgets.QAction(PlayerWindow)
         icon13 = QtGui.QIcon()
-        icon13.addPixmap(QtGui.QPixmap(":/imgFMV/images/capture_all_frames.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon13.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/capture_all_frames.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionExtract_All_Frames.setIcon(icon13)
         self.actionExtract_All_Frames.setPriority(QtWidgets.QAction.HighPriority)
         self.actionExtract_All_Frames.setObjectName("actionExtract_All_Frames")
         self.actionShow_Metadata = QtWidgets.QAction(PlayerWindow)
         icon14 = QtGui.QIcon()
-        icon14.addPixmap(QtGui.QPixmap(":/imgFMV/images/show-metadata.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon14.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/show-metadata.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionShow_Metadata.setIcon(icon14)
         self.actionShow_Metadata.setPriority(QtWidgets.QAction.HighPriority)
         self.actionShow_Metadata.setObjectName("actionShow_Metadata")
         self.actionConverter_Video = QtWidgets.QAction(PlayerWindow)
         icon15 = QtGui.QIcon()
-        icon15.addPixmap(QtGui.QPixmap(":/imgFMV/images/video-converter.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon15.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/video-converter.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionConverter_Video.setIcon(icon15)
         self.actionConverter_Video.setObjectName("actionConverter_Video")
         self.actionSave_Video_Info = QtWidgets.QAction(PlayerWindow)
         icon16 = QtGui.QIcon()
-        icon16.addPixmap(QtGui.QPixmap(":/imgFMV/images/save-video-info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon16.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/save-video-info.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionSave_Video_Info.setIcon(icon16)
         self.actionSave_Video_Info.setObjectName("actionSave_Video_Info")
         self.actionAudio = QtWidgets.QAction(PlayerWindow)
         icon17 = QtGui.QIcon()
-        icon17.addPixmap(QtGui.QPixmap(":/imgFMV/images/show-bitrate.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon17.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/show-bitrate.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionAudio.setIcon(icon17)
         self.actionAudio.setObjectName("actionAudio")
         self.actionVideo = QtWidgets.QAction(PlayerWindow)
@@ -358,7 +463,11 @@ class Ui_PlayerWindow(object):
         self.actionAudio_Video.setObjectName("actionAudio_Video")
         self.actionSave_Audio = QtWidgets.QAction(PlayerWindow)
         icon18 = QtGui.QIcon()
-        icon18.addPixmap(QtGui.QPixmap(":/imgFMV/images/save-bitrate.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon18.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/save-bitrate.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionSave_Audio.setIcon(icon18)
         self.actionSave_Audio.setObjectName("actionSave_Audio")
         self.actionSave_Video = QtWidgets.QAction(PlayerWindow)
@@ -368,25 +477,41 @@ class Ui_PlayerWindow(object):
         self.actionSave_All.setObjectName("actionSave_All")
         self.actionShow_Video_Info = QtWidgets.QAction(PlayerWindow)
         icon19 = QtGui.QIcon()
-        icon19.addPixmap(QtGui.QPixmap(":/imgFMV/images/video-info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon19.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/video-info.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionShow_Video_Info.setIcon(icon19)
         self.actionShow_Video_Info.setObjectName("actionShow_Video_Info")
         self.actionInvert_Color = QtWidgets.QAction(PlayerWindow)
         self.actionInvert_Color.setCheckable(True)
         icon20 = QtGui.QIcon()
-        icon20.addPixmap(QtGui.QPixmap(":/imgFMV/images/invert-colors.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon20.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/invert-colors.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionInvert_Color.setIcon(icon20)
         self.actionInvert_Color.setObjectName("actionInvert_Color")
         self.actionMono_Filter = QtWidgets.QAction(PlayerWindow)
         self.actionMono_Filter.setCheckable(True)
         icon21 = QtGui.QIcon()
-        icon21.addPixmap(QtGui.QPixmap(":/imgFMV/images/mono.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon21.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/mono.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionMono_Filter.setIcon(icon21)
         self.actionMono_Filter.setObjectName("actionMono_Filter")
         self.actionCanny_edge_detection = QtWidgets.QAction(PlayerWindow)
         self.actionCanny_edge_detection.setCheckable(True)
         icon22 = QtGui.QIcon()
-        icon22.addPixmap(QtGui.QPixmap(":/imgFMV/images/canny.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon22.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/canny.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionCanny_edge_detection.setIcon(icon22)
         self.actionCanny_edge_detection.setObjectName("actionCanny_edge_detection")
         self.actionZoom_Rectangle = QtWidgets.QAction(PlayerWindow)
@@ -396,13 +521,21 @@ class Ui_PlayerWindow(object):
         self.actionMagnifying_glass = QtWidgets.QAction(PlayerWindow)
         self.actionMagnifying_glass.setCheckable(True)
         icon23 = QtGui.QIcon()
-        icon23.addPixmap(QtGui.QPixmap(":/imgFMV/images/magnifier-glass.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon23.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/magnifier-glass.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionMagnifying_glass.setIcon(icon23)
         self.actionMagnifying_glass.setObjectName("actionMagnifying_glass")
         self.actionAuto_Contrast_Filter = QtWidgets.QAction(PlayerWindow)
         self.actionAuto_Contrast_Filter.setCheckable(True)
         icon24 = QtGui.QIcon()
-        icon24.addPixmap(QtGui.QPixmap(":/imgFMV/images/automatic-contrast.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon24.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/automatic-contrast.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionAuto_Contrast_Filter.setIcon(icon24)
         self.actionAuto_Contrast_Filter.setObjectName("actionAuto_Contrast_Filter")
         self.actionCreate_Mosaic = QtWidgets.QAction(PlayerWindow)
@@ -411,146 +544,248 @@ class Ui_PlayerWindow(object):
         self.actionDraw_Pinpoint = QtWidgets.QAction(PlayerWindow)
         self.actionDraw_Pinpoint.setCheckable(True)
         icon25 = QtGui.QIcon()
-        icon25.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-point.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon25.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/draw-point.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionDraw_Pinpoint.setIcon(icon25)
         self.actionDraw_Pinpoint.setObjectName("actionDraw_Pinpoint")
         self.actionDraw_Line = QtWidgets.QAction(PlayerWindow)
         self.actionDraw_Line.setCheckable(True)
         icon26 = QtGui.QIcon()
-        icon26.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-polyline.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon26.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/draw-polyline.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionDraw_Line.setIcon(icon26)
         self.actionDraw_Line.setObjectName("actionDraw_Line")
         self.actionDraw_Polygon = QtWidgets.QAction(PlayerWindow)
         self.actionDraw_Polygon.setCheckable(True)
         icon27 = QtGui.QIcon()
-        icon27.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-polygon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon27.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/draw-polygon.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionDraw_Polygon.setIcon(icon27)
         self.actionDraw_Polygon.setObjectName("actionDraw_Polygon")
         self.actionObject_Tracking = QtWidgets.QAction(PlayerWindow)
         self.actionObject_Tracking.setCheckable(True)
         icon28 = QtGui.QIcon()
-        icon28.addPixmap(QtGui.QPixmap(":/imgFMV/images/object-tracking.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon28.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/object-tracking.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionObject_Tracking.setIcon(icon28)
         self.actionObject_Tracking.setObjectName("actionObject_Tracking")
         self.actionStamp = QtWidgets.QAction(PlayerWindow)
         self.actionStamp.setCheckable(True)
         icon29 = QtGui.QIcon()
-        icon29.addPixmap(QtGui.QPixmap(":/imgFMV/images/rubber-stamp.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon29.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/rubber-stamp.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionStamp.setIcon(icon29)
         self.actionStamp.setObjectName("actionStamp")
         self.actionMeasureDistance = QtWidgets.QAction(PlayerWindow)
         self.actionMeasureDistance.setCheckable(True)
         icon30 = QtGui.QIcon()
-        icon30.addPixmap(QtGui.QPixmap(":/imgFMV/images/ruler.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon30.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/ruler.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionMeasureDistance.setIcon(icon30)
         self.actionMeasureDistance.setObjectName("actionMeasureDistance")
         self.actionMeasureArea = QtWidgets.QAction(PlayerWindow)
         self.actionMeasureArea.setCheckable(True)
         icon31 = QtGui.QIcon()
-        icon31.addPixmap(QtGui.QPixmap(":/imgFMV/images/ruler_surface.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon31.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/ruler_surface.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionMeasureArea.setIcon(icon31)
         self.actionMeasureArea.setObjectName("actionMeasureArea")
         self.actionHandDraw = QtWidgets.QAction(PlayerWindow)
         self.actionHandDraw.setCheckable(True)
         icon32 = QtGui.QIcon()
-        icon32.addPixmap(QtGui.QPixmap(":/imgFMV/images/HandDraw.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon32.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/HandDraw.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionHandDraw.setIcon(icon32)
         self.actionHandDraw.setObjectName("actionHandDraw")
         self.actionMirroredH = QtWidgets.QAction(PlayerWindow)
         self.actionMirroredH.setCheckable(True)
         icon33 = QtGui.QIcon()
-        icon33.addPixmap(QtGui.QPixmap(":/imgFMV/images/mirrored.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon33.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/mirrored.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionMirroredH.setIcon(icon33)
         self.actionMirroredH.setObjectName("actionMirroredH")
         self.actionCensure = QtWidgets.QAction(PlayerWindow)
         self.actionCensure.setCheckable(True)
         icon34 = QtGui.QIcon()
-        icon34.addPixmap(QtGui.QPixmap(":/imgFMV/images/censure-pencil.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon34.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/censure-pencil.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionCensure.setIcon(icon34)
         self.actionCensure.setObjectName("actionCensure")
         self.actionRemove_Last_censured = QtWidgets.QAction(PlayerWindow)
         icon35 = QtGui.QIcon()
-        icon35.addPixmap(QtGui.QPixmap(":/imgFMV/images/censure-pencil-remove-last.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon35.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/censure-pencil-remove-last.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionRemove_Last_censured.setIcon(icon35)
         self.actionRemove_Last_censured.setObjectName("actionRemove_Last_censured")
         self.actionRemove_All_censured = QtWidgets.QAction(PlayerWindow)
         icon36 = QtGui.QIcon()
-        icon36.addPixmap(QtGui.QPixmap(":/imgFMV/images/censure-pencil-remove-all.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon36.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/censure-pencil-remove-all.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionRemove_All_censured.setIcon(icon36)
         self.actionRemove_All_censured.setObjectName("actionRemove_All_censured")
         self.actionDraw_Polygon_remove_last = QtWidgets.QAction(PlayerWindow)
         self.actionDraw_Polygon_remove_last.setCheckable(False)
         icon37 = QtGui.QIcon()
-        icon37.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-polygon-remove-last.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon37.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/draw-polygon-remove-last.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionDraw_Polygon_remove_last.setIcon(icon37)
-        self.actionDraw_Polygon_remove_last.setObjectName("actionDraw_Polygon_remove_last")
+        self.actionDraw_Polygon_remove_last.setObjectName(
+            "actionDraw_Polygon_remove_last"
+        )
         self.actionDraw_Polygon_remove_all = QtWidgets.QAction(PlayerWindow)
         self.actionDraw_Polygon_remove_all.setCheckable(False)
         icon38 = QtGui.QIcon()
-        icon38.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-polygon-remove-all.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon38.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/draw-polygon-remove-all.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionDraw_Polygon_remove_all.setIcon(icon38)
-        self.actionDraw_Polygon_remove_all.setObjectName("actionDraw_Polygon_remove_all")
+        self.actionDraw_Polygon_remove_all.setObjectName(
+            "actionDraw_Polygon_remove_all"
+        )
         self.actionRemove_Last_Pinpoint = QtWidgets.QAction(PlayerWindow)
         self.actionRemove_Last_Pinpoint.setCheckable(False)
         icon39 = QtGui.QIcon()
-        icon39.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-point-remove-last.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon39.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/draw-point-remove-last.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionRemove_Last_Pinpoint.setIcon(icon39)
         self.actionRemove_Last_Pinpoint.setObjectName("actionRemove_Last_Pinpoint")
         self.actionRemove_All_Pinpoint = QtWidgets.QAction(PlayerWindow)
         self.actionRemove_All_Pinpoint.setCheckable(False)
         icon40 = QtGui.QIcon()
-        icon40.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-point-remove-all.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon40.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/draw-point-remove-all.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionRemove_All_Pinpoint.setIcon(icon40)
         self.actionRemove_All_Pinpoint.setObjectName("actionRemove_All_Pinpoint")
         self.actionRemove_All_Line = QtWidgets.QAction(PlayerWindow)
         self.actionRemove_All_Line.setCheckable(False)
         icon41 = QtGui.QIcon()
-        icon41.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-polyline-remove-all.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon41.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/draw-polyline-remove-all.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionRemove_All_Line.setIcon(icon41)
         self.actionRemove_All_Line.setObjectName("actionRemove_All_Line")
         self.actionLast_Segment_Line = QtWidgets.QAction(PlayerWindow)
         self.actionLast_Segment_Line.setCheckable(False)
         icon42 = QtGui.QIcon()
-        icon42.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-polyline-remove-last-segment.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon42.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/draw-polyline-remove-last-segment.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionLast_Segment_Line.setIcon(icon42)
         self.actionLast_Segment_Line.setObjectName("actionLast_Segment_Line")
         self.actionRemove_Last_Line = QtWidgets.QAction(PlayerWindow)
         self.actionRemove_Last_Line.setCheckable(False)
         icon43 = QtGui.QIcon()
-        icon43.addPixmap(QtGui.QPixmap(":/imgFMV/images/draw-polyline-remove-last.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon43.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/draw-polyline-remove-last.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionRemove_Last_Line.setIcon(icon43)
         self.actionRemove_Last_Line.setObjectName("actionRemove_Last_Line")
         self.actionCenter_on_Platform = QtWidgets.QAction(PlayerWindow)
         self.actionCenter_on_Platform.setCheckable(True)
         icon44 = QtGui.QIcon()
-        icon44.addPixmap(QtGui.QPixmap(":/imgFMV/images/center_platform.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon44.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/center_platform.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionCenter_on_Platform.setIcon(icon44)
         self.actionCenter_on_Platform.setObjectName("actionCenter_on_Platform")
         self.actionCenter_on_Footprint = QtWidgets.QAction(PlayerWindow)
         self.actionCenter_on_Footprint.setCheckable(True)
         self.actionCenter_on_Footprint.setChecked(True)
         icon45 = QtGui.QIcon()
-        icon45.addPixmap(QtGui.QPixmap(":/imgFMV/images/center_footprint.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon45.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/center_footprint.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionCenter_on_Footprint.setIcon(icon45)
         self.actionCenter_on_Footprint.setObjectName("actionCenter_on_Footprint")
         self.actionCenter_Target = QtWidgets.QAction(PlayerWindow)
         self.actionCenter_Target.setCheckable(True)
         self.actionCenter_Target.setChecked(False)
         icon46 = QtGui.QIcon()
-        icon46.addPixmap(QtGui.QPixmap(":/imgFMV/images/center_target.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon46.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/center_target.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionCenter_Target.setIcon(icon46)
         self.actionCenter_Target.setObjectName("actionCenter_Target")
         self.actionNDVI = QtWidgets.QAction(PlayerWindow)
         self.actionNDVI.setCheckable(True)
         icon47 = QtGui.QIcon()
-        icon47.addPixmap(QtGui.QPixmap(":/imgFMV/images/ndvi.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon47.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/ndvi.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionNDVI.setIcon(icon47)
         self.actionNDVI.setObjectName("actionNDVI")
         self.actionCapture_Georeferenced_Frame = QtWidgets.QAction(PlayerWindow)
         icon48 = QtGui.QIcon()
-        icon48.addPixmap(QtGui.QPixmap(":/imgFMV/images/save_geoframe.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon48.addPixmap(
+            QtGui.QPixmap(":/imgFMV/images/save_geoframe.png"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
         self.actionCapture_Georeferenced_Frame.setIcon(icon48)
-        self.actionCapture_Georeferenced_Frame.setObjectName("actionCapture_Georeferenced_Frame")
+        self.actionCapture_Georeferenced_Frame.setObjectName(
+            "actionCapture_Georeferenced_Frame"
+        )
         self.toolBtn_DPolygon.addAction(self.actionDraw_Polygon)
         self.toolBtn_DPolygon.addAction(self.actionDraw_Polygon_remove_last)
         self.toolBtn_DPolygon.addAction(self.actionDraw_Polygon_remove_all)
@@ -598,20 +833,22 @@ class Ui_PlayerWindow(object):
         self.menubarwidget.addAction(self.menuMap.menuAction())
 
         self.retranslateUi(PlayerWindow)
-        self.gb_PlayerControls.toggled['bool'].connect(PlayerWindow.toggleGroup)
-        self.btn_play.clicked['bool'].connect(PlayerWindow.playClicked)
-        self.sliderDuration.sliderMoved['int'].connect(PlayerWindow.seek)
-        self.volumeSlider.sliderMoved['int'].connect(PlayerWindow.setVolume)
-        self.actionGray.triggered['bool'].connect(PlayerWindow.grayFilter)
+        self.gb_PlayerControls.toggled["bool"].connect(PlayerWindow.toggleGroup)
+        self.btn_play.clicked["bool"].connect(PlayerWindow.playClicked)
+        self.sliderDuration.sliderMoved["int"].connect(PlayerWindow.seek)
+        self.volumeSlider.sliderMoved["int"].connect(PlayerWindow.setVolume)
+        self.actionGray.triggered["bool"].connect(PlayerWindow.grayFilter)
         self.btn_CaptureFrame.clicked.connect(PlayerWindow.ExtractCurrentFrame)
         self.btn_volume.clicked.connect(PlayerWindow.setMuted)
-        self.btn_stop.clicked['bool'].connect(PlayerWindow.stop)
+        self.btn_stop.clicked["bool"].connect(PlayerWindow.stop)
         self.btn_previous.clicked.connect(PlayerWindow.StartMedia)
         self.btn_next.clicked.connect(PlayerWindow.EndMedia)
-        self.btn_repeat.toggled['bool'].connect(PlayerWindow.AutoRepeat)
+        self.btn_repeat.toggled["bool"].connect(PlayerWindow.AutoRepeat)
         self.actionShow_Metadata.triggered.connect(PlayerWindow.OpenQgsFmvMetadata)
         self.actionExtract_All_Frames.triggered.connect(PlayerWindow.ExtractAllFrames)
-        self.actionCapture_Current_Frame.triggered.connect(PlayerWindow.ExtractCurrentFrame)
+        self.actionCapture_Current_Frame.triggered.connect(
+            PlayerWindow.ExtractCurrentFrame
+        )
         self.actionSave_Video_Info.triggered.connect(PlayerWindow.saveInfoToJson)
         self.actionAudio_Video.triggered.connect(PlayerWindow.CreateBitratePlot)
         self.actionAudio.triggered.connect(PlayerWindow.CreateBitratePlot)
@@ -623,71 +860,142 @@ class Ui_PlayerWindow(object):
         self.actionConverter_Video.triggered.connect(PlayerWindow.convertVideo)
         self.btn_rewind.clicked.connect(PlayerWindow.rewindMedia)
         self.btn_forward.clicked.connect(PlayerWindow.forwardMedia)
-        self.btn_Rec.clicked['bool'].connect(PlayerWindow.RecordVideo)
-        self.actionInvert_Color.triggered['bool'].connect(PlayerWindow.invertColorFilter)
-        self.actionCanny_edge_detection.triggered['bool'].connect(PlayerWindow.edgeFilter)
-        self.actionMono_Filter.triggered['bool'].connect(PlayerWindow.monoFilter)
-        self.actionDraw_Pinpoint.triggered['bool'].connect(PlayerWindow.pointDrawer)
-        self.actionMagnifying_glass.triggered['bool'].connect(PlayerWindow.magnifier)
-        self.actionAuto_Contrast_Filter.triggered['bool'].connect(PlayerWindow.autoContrastFilter)
-        self.actionCreate_Mosaic.triggered['bool'].connect(PlayerWindow.createMosaic)
-        self.btn_GeoReferencing.clicked['bool'].connect(PlayerWindow.createMosaic)
-        self.actionDraw_Line.triggered['bool'].connect(PlayerWindow.lineDrawer)
-        self.actionObject_Tracking.triggered['bool'].connect(PlayerWindow.ojectTracking)
-        self.actionStamp.triggered['bool'].connect(PlayerWindow.stamp)
-        self.actionDraw_Polygon.triggered['bool'].connect(PlayerWindow.polygonDrawer)
-        self.actionMeasureDistance.triggered['bool'].connect(PlayerWindow.VideoMeasureDistance)
-        self.actionMeasureArea.triggered['bool'].connect(PlayerWindow.VideoMeasureArea)
-        self.actionHandDraw.triggered['bool'].connect(PlayerWindow.VideoHandDraw)
-        self.actionMirroredH.triggered['bool'].connect(PlayerWindow.MirrorHorizontalFilter)
-        self.actionCensure.triggered['bool'].connect(PlayerWindow.VideoCensure)
-        self.actionRemove_All_censured.triggered.connect(self.videoWidget.removeAllCensure)
-        self.actionRemove_Last_censured.triggered.connect(self.videoWidget.removeLastCensured)
-        self.actionDraw_Polygon_remove_last.triggered.connect(self.videoWidget.removeLastPolygon)
-        self.actionDraw_Polygon_remove_all.triggered.connect(self.videoWidget.removeAllPolygon)
-        self.actionRemove_Last_Pinpoint.triggered.connect(self.videoWidget.removeLastPoint)
-        self.actionRemove_All_Pinpoint.triggered.connect(self.videoWidget.removeAllPoint)
+        self.btn_Rec.clicked["bool"].connect(PlayerWindow.RecordVideo)
+        self.actionInvert_Color.triggered["bool"].connect(
+            PlayerWindow.invertColorFilter
+        )
+        self.actionCanny_edge_detection.triggered["bool"].connect(
+            PlayerWindow.edgeFilter
+        )
+        self.actionMono_Filter.triggered["bool"].connect(PlayerWindow.monoFilter)
+        self.actionDraw_Pinpoint.triggered["bool"].connect(PlayerWindow.pointDrawer)
+        self.actionMagnifying_glass.triggered["bool"].connect(PlayerWindow.magnifier)
+        self.actionAuto_Contrast_Filter.triggered["bool"].connect(
+            PlayerWindow.autoContrastFilter
+        )
+        self.actionCreate_Mosaic.triggered["bool"].connect(PlayerWindow.createMosaic)
+        self.btn_GeoReferencing.clicked["bool"].connect(PlayerWindow.createMosaic)
+        self.actionDraw_Line.triggered["bool"].connect(PlayerWindow.lineDrawer)
+        self.actionObject_Tracking.triggered["bool"].connect(PlayerWindow.ojectTracking)
+        self.actionStamp.triggered["bool"].connect(PlayerWindow.stamp)
+        self.actionDraw_Polygon.triggered["bool"].connect(PlayerWindow.polygonDrawer)
+        self.actionMeasureDistance.triggered["bool"].connect(
+            PlayerWindow.VideoMeasureDistance
+        )
+        self.actionMeasureArea.triggered["bool"].connect(PlayerWindow.VideoMeasureArea)
+        self.actionHandDraw.triggered["bool"].connect(PlayerWindow.VideoHandDraw)
+        self.actionMirroredH.triggered["bool"].connect(
+            PlayerWindow.MirrorHorizontalFilter
+        )
+        self.actionCensure.triggered["bool"].connect(PlayerWindow.VideoCensure)
+        self.actionRemove_All_censured.triggered.connect(
+            self.videoWidget.removeAllCensure
+        )
+        self.actionRemove_Last_censured.triggered.connect(
+            self.videoWidget.removeLastCensured
+        )
+        self.actionDraw_Polygon_remove_last.triggered.connect(
+            self.videoWidget.removeLastPolygon
+        )
+        self.actionDraw_Polygon_remove_all.triggered.connect(
+            self.videoWidget.removeAllPolygon
+        )
+        self.actionRemove_Last_Pinpoint.triggered.connect(
+            self.videoWidget.removeLastPoint
+        )
+        self.actionRemove_All_Pinpoint.triggered.connect(
+            self.videoWidget.removeAllPoint
+        )
         self.actionRemove_All_Line.triggered.connect(self.videoWidget.removeAllLines)
         self.actionRemove_Last_Line.triggered.connect(self.videoWidget.removeLastLine)
-        self.actionLast_Segment_Line.triggered.connect(self.videoWidget.removeLastSegmentLine)
-        self.actionCenter_on_Footprint.toggled['bool'].connect(PlayerWindow.centerMapFootprint)
-        self.actionCenter_on_Platform.toggled['bool'].connect(PlayerWindow.centerMapPlatform)
-        self.actionCenter_Target.toggled['bool'].connect(PlayerWindow.centerMapTarget)
-        self.actionNDVI.triggered['bool'].connect(PlayerWindow.NDVIFilter)
-        self.actionCapture_Georeferenced_Frame.triggered.connect(PlayerWindow.ExtractCurrentGeoFrame)
-        self.cmb_cursorCoord.currentIndexChanged['int'].connect(PlayerWindow.MouseLocationCoordinates)
+        self.actionLast_Segment_Line.triggered.connect(
+            self.videoWidget.removeLastSegmentLine
+        )
+        self.actionCenter_on_Footprint.toggled["bool"].connect(
+            PlayerWindow.centerMapFootprint
+        )
+        self.actionCenter_on_Platform.toggled["bool"].connect(
+            PlayerWindow.centerMapPlatform
+        )
+        self.actionCenter_Target.toggled["bool"].connect(PlayerWindow.centerMapTarget)
+        self.actionNDVI.triggered["bool"].connect(PlayerWindow.NDVIFilter)
+        self.actionCapture_Georeferenced_Frame.triggered.connect(
+            PlayerWindow.ExtractCurrentGeoFrame
+        )
+        self.cmb_cursorCoord.currentIndexChanged["int"].connect(
+            PlayerWindow.MouseLocationCoordinates
+        )
         QtCore.QMetaObject.connectSlotsByName(PlayerWindow)
 
     def retranslateUi(self, PlayerWindow):
         _translate = QtCore.QCoreApplication.translate
         PlayerWindow.setWindowTitle(_translate("PlayerWindow", "Player"))
         self.groupBox.setTitle(_translate("PlayerWindow", "Video Tools"))
-        self.btn_Rec.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Record</p></body></html>"))
+        self.btn_Rec.setToolTip(
+            _translate("PlayerWindow", "<html><head/><body><p>Record</p></body></html>")
+        )
         self.btn_Rec.setShortcut(_translate("PlayerWindow", "Ctrl+R"))
-        self.btn_GeoReferencing.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Create Mosaic</p></body></html>"))
+        self.btn_GeoReferencing.setToolTip(
+            _translate(
+                "PlayerWindow", "<html><head/><body><p>Create Mosaic</p></body></html>"
+            )
+        )
         self.btn_GeoReferencing.setShortcut(_translate("PlayerWindow", "Ctrl+M"))
         self.cmb_cursorCoord.setItemText(0, _translate("PlayerWindow", "WGS84"))
         self.cmb_cursorCoord.setItemText(1, _translate("PlayerWindow", "MGRS"))
-        self.btn_CaptureFrame.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Capture current frame</p></body></html>"))
+        self.btn_CaptureFrame.setToolTip(
+            _translate(
+                "PlayerWindow",
+                "<html><head/><body><p>Capture current frame</p></body></html>",
+            )
+        )
         self.btn_CaptureFrame.setShortcut(_translate("PlayerWindow", "Ctrl+Q"))
         self.gb_PlayerControls.setTitle(_translate("PlayerWindow", "Controls"))
-        self.btn_previous.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Start Of Media</p></body></html>"))
+        self.btn_previous.setToolTip(
+            _translate(
+                "PlayerWindow", "<html><head/><body><p>Start Of Media</p></body></html>"
+            )
+        )
         self.btn_previous.setShortcut(_translate("PlayerWindow", "Ctrl+Left"))
-        self.btn_rewind.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Rewind</p></body></html>"))
+        self.btn_rewind.setToolTip(
+            _translate("PlayerWindow", "<html><head/><body><p>Rewind</p></body></html>")
+        )
         self.btn_rewind.setShortcut(_translate("PlayerWindow", "Left"))
-        self.btn_stop.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Stop</p></body></html>"))
+        self.btn_stop.setToolTip(
+            _translate("PlayerWindow", "<html><head/><body><p>Stop</p></body></html>")
+        )
         self.btn_stop.setShortcut(_translate("PlayerWindow", "Ctrl+S"))
-        self.btn_play.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Play/Pause</p></body></html>"))
+        self.btn_play.setToolTip(
+            _translate(
+                "PlayerWindow", "<html><head/><body><p>Play/Pause</p></body></html>"
+            )
+        )
         self.btn_play.setShortcut(_translate("PlayerWindow", "Ctrl+P"))
-        self.btn_forward.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Forward</p></body></html>"))
+        self.btn_forward.setToolTip(
+            _translate(
+                "PlayerWindow", "<html><head/><body><p>Forward</p></body></html>"
+            )
+        )
         self.btn_forward.setShortcut(_translate("PlayerWindow", "Right"))
-        self.btn_next.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>End Of Media</p></body></html>"))
+        self.btn_next.setToolTip(
+            _translate(
+                "PlayerWindow", "<html><head/><body><p>End Of Media</p></body></html>"
+            )
+        )
         self.btn_next.setShortcut(_translate("PlayerWindow", "Ctrl+Right"))
-        self.btn_repeat.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Repeat</p></body></html>"))
+        self.btn_repeat.setToolTip(
+            _translate("PlayerWindow", "<html><head/><body><p>Repeat</p></body></html>")
+        )
         self.btn_repeat.setShortcut(_translate("PlayerWindow", "Ctrl+L"))
-        self.btn_volume.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Mute/Unmute</p></body></html>"))
+        self.btn_volume.setToolTip(
+            _translate(
+                "PlayerWindow", "<html><head/><body><p>Mute/Unmute</p></body></html>"
+            )
+        )
         self.btn_volume.setShortcut(_translate("PlayerWindow", "Ctrl+U"))
-        self.volumeSlider.setToolTip(_translate("PlayerWindow", "<html><head/><body><p>Volume</p></body></html>"))
+        self.volumeSlider.setToolTip(
+            _translate("PlayerWindow", "<html><head/><body><p>Volume</p></body></html>")
+        )
         self.v_label.setText(_translate("PlayerWindow", "100%"))
         self.menuFile.setTitle(_translate("PlayerWindow", "Filters"))
         self.menuFrames.setTitle(_translate("PlayerWindow", "Frames"))
@@ -700,64 +1008,123 @@ class Ui_PlayerWindow(object):
         self.DrawToolBar.setToolTip(_translate("PlayerWindow", "Utils ToolBar"))
         self.actionGray.setText(_translate("PlayerWindow", "Gray Scale"))
         self.actionEdge_Detection.setText(_translate("PlayerWindow", "Edge Detection"))
-        self.actionCapture_Current_Frame.setText(_translate("PlayerWindow", "Capture Current Frame"))
-        self.actionCapture_Current_Frame.setShortcut(_translate("PlayerWindow", "Ctrl+Q"))
-        self.actionExtract_All_Frames.setText(_translate("PlayerWindow", "Extract All Frames"))
+        self.actionCapture_Current_Frame.setText(
+            _translate("PlayerWindow", "Capture Current Frame")
+        )
+        self.actionCapture_Current_Frame.setShortcut(
+            _translate("PlayerWindow", "Ctrl+Q")
+        )
+        self.actionExtract_All_Frames.setText(
+            _translate("PlayerWindow", "Extract All Frames")
+        )
         self.actionExtract_All_Frames.setShortcut(_translate("PlayerWindow", "Ctrl+A"))
         self.actionShow_Metadata.setText(_translate("PlayerWindow", "Show Metadata"))
         self.actionShow_Metadata.setShortcut(_translate("PlayerWindow", "Ctrl+T"))
-        self.actionConverter_Video.setText(_translate("PlayerWindow", "Converter Video"))
-        self.actionSave_Video_Info.setText(_translate("PlayerWindow", "Save Video Info to Json"))
+        self.actionConverter_Video.setText(
+            _translate("PlayerWindow", "Converter Video")
+        )
+        self.actionSave_Video_Info.setText(
+            _translate("PlayerWindow", "Save Video Info to Json")
+        )
         self.actionAudio.setText(_translate("PlayerWindow", "Show Audio"))
         self.actionVideo.setText(_translate("PlayerWindow", "Show Video"))
         self.actionAudio_Video.setText(_translate("PlayerWindow", "Show All"))
         self.actionSave_Audio.setText(_translate("PlayerWindow", "Save Audio"))
         self.actionSave_Video.setText(_translate("PlayerWindow", "Save Video"))
         self.actionSave_All.setText(_translate("PlayerWindow", "Save All"))
-        self.actionShow_Video_Info.setText(_translate("PlayerWindow", "Show Video Info"))
+        self.actionShow_Video_Info.setText(
+            _translate("PlayerWindow", "Show Video Info")
+        )
         self.actionInvert_Color.setText(_translate("PlayerWindow", "Invert Color"))
         self.actionMono_Filter.setText(_translate("PlayerWindow", "Mono Filter"))
-        self.actionCanny_edge_detection.setText(_translate("PlayerWindow", "Canny edge detection"))
+        self.actionCanny_edge_detection.setText(
+            _translate("PlayerWindow", "Canny edge detection")
+        )
         self.actionZoom_Rectangle.setText(_translate("PlayerWindow", "Zoom Rectangle"))
-        self.actionMagnifying_glass.setText(_translate("PlayerWindow", "Magnifying glass"))
-        self.actionAuto_Contrast_Filter.setText(_translate("PlayerWindow", "Auto Contrast Filter"))
+        self.actionMagnifying_glass.setText(
+            _translate("PlayerWindow", "Magnifying glass")
+        )
+        self.actionAuto_Contrast_Filter.setText(
+            _translate("PlayerWindow", "Auto Contrast Filter")
+        )
         self.actionCreate_Mosaic.setText(_translate("PlayerWindow", "Create Mosaic"))
         self.actionDraw_Pinpoint.setText(_translate("PlayerWindow", "Draw Pinpoint"))
         self.actionDraw_Line.setText(_translate("PlayerWindow", "Draw Line"))
         self.actionDraw_Polygon.setText(_translate("PlayerWindow", "Draw Polygon"))
         self.actionDraw_Polygon.setIconText(_translate("PlayerWindow", "Draw Polygon"))
         self.actionDraw_Polygon.setToolTip(_translate("PlayerWindow", "Draw Polygon"))
-        self.actionObject_Tracking.setText(_translate("PlayerWindow", "Object Tracking"))
+        self.actionObject_Tracking.setText(
+            _translate("PlayerWindow", "Object Tracking")
+        )
         self.actionStamp.setText(_translate("PlayerWindow", "Stamp"))
-        self.actionMeasureDistance.setText(_translate("PlayerWindow", "Measure Distance"))
+        self.actionMeasureDistance.setText(
+            _translate("PlayerWindow", "Measure Distance")
+        )
         self.actionMeasureArea.setText(_translate("PlayerWindow", "Measure Area"))
         self.actionHandDraw.setText(_translate("PlayerWindow", "Hand Draw"))
         self.actionMirroredH.setText(_translate("PlayerWindow", "Horizontal Mirrored"))
         self.actionCensure.setText(_translate("PlayerWindow", "Censure"))
         self.actionCensure.setToolTip(_translate("PlayerWindow", "Censure"))
-        self.actionRemove_Last_censured.setText(_translate("PlayerWindow", "Remove Last"))
+        self.actionRemove_Last_censured.setText(
+            _translate("PlayerWindow", "Remove Last")
+        )
         self.actionRemove_All_censured.setText(_translate("PlayerWindow", "Remove All"))
-        self.actionDraw_Polygon_remove_last.setText(_translate("PlayerWindow", "Remove Last Polygon"))
-        self.actionDraw_Polygon_remove_last.setIconText(_translate("PlayerWindow", "Draw Polygon"))
-        self.actionDraw_Polygon_remove_last.setToolTip(_translate("PlayerWindow", "Remove Last Polygon"))
-        self.actionDraw_Polygon_remove_all.setText(_translate("PlayerWindow", "Remove All Polygon"))
-        self.actionDraw_Polygon_remove_all.setIconText(_translate("PlayerWindow", "Draw Polygon"))
-        self.actionDraw_Polygon_remove_all.setToolTip(_translate("PlayerWindow", "Remove All Polygon"))
-        self.actionRemove_Last_Pinpoint.setText(_translate("PlayerWindow", "Remove Last Pinpoint"))
-        self.actionRemove_Last_Pinpoint.setToolTip(_translate("PlayerWindow", "Remove Last Pinpoint"))
-        self.actionRemove_All_Pinpoint.setText(_translate("PlayerWindow", "Remove All Pinpoint"))
-        self.actionRemove_All_Pinpoint.setToolTip(_translate("PlayerWindow", "Remove All Pinpoint"))
+        self.actionDraw_Polygon_remove_last.setText(
+            _translate("PlayerWindow", "Remove Last Polygon")
+        )
+        self.actionDraw_Polygon_remove_last.setIconText(
+            _translate("PlayerWindow", "Draw Polygon")
+        )
+        self.actionDraw_Polygon_remove_last.setToolTip(
+            _translate("PlayerWindow", "Remove Last Polygon")
+        )
+        self.actionDraw_Polygon_remove_all.setText(
+            _translate("PlayerWindow", "Remove All Polygon")
+        )
+        self.actionDraw_Polygon_remove_all.setIconText(
+            _translate("PlayerWindow", "Draw Polygon")
+        )
+        self.actionDraw_Polygon_remove_all.setToolTip(
+            _translate("PlayerWindow", "Remove All Polygon")
+        )
+        self.actionRemove_Last_Pinpoint.setText(
+            _translate("PlayerWindow", "Remove Last Pinpoint")
+        )
+        self.actionRemove_Last_Pinpoint.setToolTip(
+            _translate("PlayerWindow", "Remove Last Pinpoint")
+        )
+        self.actionRemove_All_Pinpoint.setText(
+            _translate("PlayerWindow", "Remove All Pinpoint")
+        )
+        self.actionRemove_All_Pinpoint.setToolTip(
+            _translate("PlayerWindow", "Remove All Pinpoint")
+        )
         self.actionRemove_All_Line.setText(_translate("PlayerWindow", "Remove All"))
         self.actionRemove_All_Line.setToolTip(_translate("PlayerWindow", "Remove All"))
-        self.actionLast_Segment_Line.setText(_translate("PlayerWindow", "Remove Last Segment"))
-        self.actionLast_Segment_Line.setToolTip(_translate("PlayerWindow", "Remove Last Segment"))
-        self.actionRemove_Last_Line.setText(_translate("PlayerWindow", "Remove Last Line"))
-        self.actionRemove_Last_Line.setToolTip(_translate("PlayerWindow", "Remove Last Line"))
-        self.actionCenter_on_Platform.setText(_translate("PlayerWindow", "Center on Platform"))
-        self.actionCenter_on_Footprint.setText(_translate("PlayerWindow", "Center on Footprint"))
+        self.actionLast_Segment_Line.setText(
+            _translate("PlayerWindow", "Remove Last Segment")
+        )
+        self.actionLast_Segment_Line.setToolTip(
+            _translate("PlayerWindow", "Remove Last Segment")
+        )
+        self.actionRemove_Last_Line.setText(
+            _translate("PlayerWindow", "Remove Last Line")
+        )
+        self.actionRemove_Last_Line.setToolTip(
+            _translate("PlayerWindow", "Remove Last Line")
+        )
+        self.actionCenter_on_Platform.setText(
+            _translate("PlayerWindow", "Center on Platform")
+        )
+        self.actionCenter_on_Footprint.setText(
+            _translate("PlayerWindow", "Center on Footprint")
+        )
         self.actionCenter_Target.setText(_translate("PlayerWindow", "Center on Target"))
         self.actionNDVI.setText(_translate("PlayerWindow", "NDVI (experimental)"))
-        self.actionCapture_Georeferenced_Frame.setText(_translate("PlayerWindow", "Capture Georeferenced Frame"))
+        self.actionCapture_Georeferenced_Frame.setText(
+            _translate("PlayerWindow", "Capture Georeferenced Frame")
+        )
+
 
 from QGIS_FMV.video.QgsVideo import VideoWidget
 from QGIS_FMV.gui import resources_rc

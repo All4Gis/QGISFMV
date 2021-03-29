@@ -1,95 +1,96 @@
 import os
-from os.path import dirname, abspath
 from qgis.PyQt.QtGui import QColor, QFont, QPolygonF
 from qgis.PyQt.QtWidgets import QApplication
 from qgis.PyQt.QtCore import QCoreApplication, QPointF
 
-from configparser import ConfigParser
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.PyQt.QtCore import QVariant, QSettings
-from qgis.core import (QgsPalLayerSettings,
-                       QgsTextFormat,
-                       QgsLayerTreeGroup,
-                       QgsTextBufferSettings,
-                       QgsVectorLayerSimpleLabeling,
-                       QgsMarkerSymbol,
-                       QgsLayerTreeLayer,
-                       QgsField,
-                       QgsFields,
-                       QgsVectorLayer,
-                       QgsVectorFileWriter,
-                       QgsFillSymbol,
-                       QgsLineSymbol,
-                       QgsSvgMarkerSymbolLayer,
-                       QgsSingleSymbolRenderer,
-                       QgsDistanceArea,
-                       QgsCoordinateReferenceSystem,
-                       QgsProject,
-                       QgsFeature,
-                       QgsGeometry,
-                       QgsPointXY,
-                       QgsPoint,
-                       QgsLineString
-                       )
+from qgis.core import (
+    QgsPalLayerSettings,
+    QgsTextFormat,
+    QgsLayerTreeGroup,
+    QgsTextBufferSettings,
+    QgsVectorLayerSimpleLabeling,
+    QgsMarkerSymbol,
+    QgsLayerTreeLayer,
+    QgsField,
+    QgsFields,
+    QgsVectorLayer,
+    QgsVectorFileWriter,
+    QgsFillSymbol,
+    QgsLineSymbol,
+    QgsSvgMarkerSymbolLayer,
+    QgsSingleSymbolRenderer,
+    QgsDistanceArea,
+    QgsCoordinateReferenceSystem,
+    QgsProject,
+    QgsFeature,
+    QgsGeometry,
+    QgsPointXY,
+    QgsPoint,
+    QgsLineString,
+)
 
 from qgis.utils import iface
 from QGIS_FMV.utils.QgsFmvStyles import FmvLayerStyles as S
 from itertools import groupby
-from qgis._3d import (QgsPhongMaterialSettings,
-                      QgsVectorLayer3DRenderer,
-                      QgsLine3DSymbol,
-                      QgsPoint3DSymbol,
-                      QgsPolygon3DSymbol)
+from qgis._3d import (
+    QgsPhongMaterialSettings,
+    QgsVectorLayer3DRenderer,
+    QgsLine3DSymbol,
+    QgsPoint3DSymbol,
+    QgsPolygon3DSymbol,
+)
 
 try:
     from pydevd import *
 except ImportError:
     None
 
-parser = ConfigParser()
-parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
+from QGIS_FMV.QgsFmvConstants import (
+    Platform_lyr,
+    Beams_lyr,
+    Footprint_lyr,
+    FrameCenter_lyr,
+    FrameAxis_lyr,
+    Point_lyr,
+    Line_lyr,
+    Polygon_lyr,
+    frames_g,
+    Trajectory_lyr,
+    epsg,
+)
 
-Platform_lyr = parser['LAYERS']['Platform_lyr']
-Beams_lyr = parser['LAYERS']['Beams_lyr']
-Footprint_lyr = parser['LAYERS']['Footprint_lyr']
-FrameCenter_lyr = parser['LAYERS']['FrameCenter_lyr']
-FrameAxis_lyr = parser['LAYERS']['FrameAxis_lyr']
-Point_lyr = parser['LAYERS']['Point_lyr']
-Line_lyr = parser['LAYERS']['Line_lyr']
-Polygon_lyr = parser['LAYERS']['Polygon_lyr']
-frames_g = parser['LAYERS']['frames_g']
-Trajectory_lyr = parser['LAYERS']['Trajectory_lyr']
-epsg = parser['LAYERS']['epsg']
+
 groupName = None
 
 encoding = "utf-8"
 
 _layerreg = QgsProject.instance()
-crtSensorSrc = crtSensorSrc2 = crtPltTailNum = 'DEFAULT'
+crtSensorSrc = crtSensorSrc2 = crtPltTailNum = "DEFAULT"
 
 TYPE_MAP = {
     str: QVariant.String,
     float: QVariant.Double,
     int: QVariant.Int,
-    bool: QVariant.Bool
+    bool: QVariant.Bool,
 }
 
-Point = 'Point'
-PointZ = 'PointZ'
-LineZ = 'LineStringZ'
-Line = 'LineString'
-Polygon = 'Polygon'
+Point = "Point"
+PointZ = "PointZ"
+LineZ = "LineStringZ"
+Line = "LineString"
+Polygon = "Polygon"
 
 
 def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
-    '''  add pin point on the map '''
+    """  add pin point on the map """
     pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
     if pointLyr is None:
         return
     pointLyr.startEditing()
     feature = QgsFeature()
-    feature.setAttributes(
-        [pointIndex, Longitude, Latitude, Altitude])
+    feature.setAttributes([pointIndex, Longitude, Latitude, Altitude])
 
     p = QgsPointXY()
     p.set(Longitude, Latitude)
@@ -100,7 +101,7 @@ def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
 
 
 def AddDrawLineOnMap(drawLines):
-    '''  add Line on the map '''
+    """  add Line on the map """
 
     RemoveAllDrawLineOnMap()
     linelyr = qgsu.selectLayerByName(Line_lyr, groupName)
@@ -125,7 +126,7 @@ def AddDrawLineOnMap(drawLines):
 
 
 def RemoveAllDrawLineOnMap():
-    ''' Remove all features on Line Layer '''
+    """ Remove all features on Line Layer """
     lineLyr = qgsu.selectLayerByName(Line_lyr, groupName)
     if lineLyr is None:
         return
@@ -136,7 +137,7 @@ def RemoveAllDrawLineOnMap():
 
 
 def RemoveLastDrawPolygonOnMap():
-    '''  Remove Last Feature on Polygon Layer '''
+    """  Remove Last Feature on Polygon Layer """
     polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
     if polyLyr is None:
         return
@@ -149,7 +150,7 @@ def RemoveLastDrawPolygonOnMap():
 
 
 def RemoveLastDrawPointOnMap():
-    ''' Remove Last features on Point Layer '''
+    """ Remove Last features on Point Layer """
     pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
     if pointLyr is None:
         return
@@ -162,7 +163,7 @@ def RemoveLastDrawPointOnMap():
 
 
 def RemoveAllDrawPointOnMap():
-    ''' Remove all features on Point Layer '''
+    """ Remove all features on Point Layer """
     pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
     if pointLyr is None:
         return
@@ -173,7 +174,7 @@ def RemoveAllDrawPointOnMap():
 
 
 def RemoveAllDrawPolygonOnMap():
-    ''' Remove all features on Polygon Layer '''
+    """ Remove all features on Polygon Layer """
     polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
     if polyLyr is None:
         return
@@ -184,7 +185,7 @@ def RemoveAllDrawPolygonOnMap():
 
 
 def AddDrawPolygonOnMap(poly_coordinates):
-    ''' Add Polygon Layer '''
+    """ Add Polygon Layer """
     polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
     if polyLyr is None:
         return
@@ -208,11 +209,12 @@ def AddDrawPolygonOnMap(poly_coordinates):
 
     # Calculate Area WSG84 (Meters)
     area_wsg84 = QgsDistanceArea()
-    area_wsg84.setSourceCrs(QgsCoordinateReferenceSystem.fromOgcWmsCrs(
-        'EPSG:4326'), _layerreg.transformContext())
-    if (area_wsg84.sourceCrs().isGeographic()):
-        area_wsg84.setEllipsoid(
-            area_wsg84.sourceCrs().ellipsoidAcronym())
+    area_wsg84.setSourceCrs(
+        QgsCoordinateReferenceSystem.fromOgcWmsCrs("EPSG:4326"),
+        _layerreg.transformContext(),
+    )
+    if area_wsg84.sourceCrs().isGeographic():
+        area_wsg84.setEllipsoid(area_wsg84.sourceCrs().ellipsoidAcronym())
 
     # Calculate Centroid
     try:
@@ -221,8 +223,14 @@ def AddDrawPolygonOnMap(poly_coordinates):
         iface.vectorLayerTools().stopEditing(polyLyr, False)
         return False
 
-    feature.setAttributes([centroid.x(), centroid.y(
-    ), 0.0, area_wsg84.measurePolygon(geomP.asPolygon()[0])])
+    feature.setAttributes(
+        [
+            centroid.x(),
+            centroid.y(),
+            0.0,
+            area_wsg84.measurePolygon(geomP.asPolygon()[0]),
+        ]
+    )
 
     polyLyr.addFeatures([feature])
 
@@ -231,25 +239,21 @@ def AddDrawPolygonOnMap(poly_coordinates):
 
 
 def SetcrtSensorSrc():
-    ''' Set Style based on Sensor type '''
+    """ Set Style based on Sensor type """
     global crtSensorSrc, crtSensorSrc2
-    crtSensorSrc = crtSensorSrc2 = 'DEFAULT'
+    crtSensorSrc = crtSensorSrc2 = "DEFAULT"
 
 
 def SetcrtPltTailNum():
-    ''' Set Style based on Platform Type Number '''
+    """ Set Style based on Platform Type Number """
     global crtPltTailNum
-    crtPltTailNum = 'DEFAULT'
+    crtPltTailNum = "DEFAULT"
 
 
 def UpdateFootPrintData(
-        packet,
-        cornerPointUL,
-        cornerPointUR,
-        cornerPointLR,
-        cornerPointLL,
-        ele):
-    ''' Update Footprint Values '''
+    packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, ele
+):
+    """ Update Footprint Values """
     global crtSensorSrc, groupName
     imgSS = packet.ImageSourceSensor
 
@@ -257,64 +261,85 @@ def UpdateFootPrintData(
 
     try:
         if all(
-            v is not None for v in [
+            v is not None
+            for v in [
                 footprintLyr,
                 cornerPointUL,
                 cornerPointUR,
                 cornerPointLR,
-                cornerPointLL]) and all(
-            v >= 2 for v in [
+                cornerPointLL,
+            ]
+        ) and all(
+            v >= 2
+            for v in [
                 len(cornerPointUL),
                 len(cornerPointUR),
                 len(cornerPointLR),
-                len(cornerPointLL)]):
-            if(imgSS != crtSensorSrc):
+                len(cornerPointLL),
+            ]
+        ):
+            if imgSS != crtSensorSrc:
                 SetDefaultFootprintStyle(footprintLyr, imgSS)
                 crtSensorSrc = imgSS
 
             footprintLyr.startEditing()
             if footprintLyr.featureCount() == 0:
                 feature = QgsFeature()
-                feature.setAttributes([cornerPointUL[1], cornerPointUL[0],
-                                       cornerPointUR[1], cornerPointUR[0],
-                                       cornerPointLR[1], cornerPointLR[0],
-                                       cornerPointLL[1], cornerPointLL[0]])
-                surface = QgsGeometry.fromPolygonXY([[
-                    QgsPointXY(cornerPointUL[1],
-                               cornerPointUL[0]),
-                    QgsPointXY(
-                        cornerPointUR[1], cornerPointUR[0]),
-                    QgsPointXY(
-                        cornerPointLR[1], cornerPointLR[0]),
-                    QgsPointXY(
-                        cornerPointLL[1], cornerPointLL[0]),
-                    QgsPointXY(cornerPointUL[1], cornerPointUL[0])]])
+                feature.setAttributes(
+                    [
+                        cornerPointUL[1],
+                        cornerPointUL[0],
+                        cornerPointUR[1],
+                        cornerPointUR[0],
+                        cornerPointLR[1],
+                        cornerPointLR[0],
+                        cornerPointLL[1],
+                        cornerPointLL[0],
+                    ]
+                )
+                surface = QgsGeometry.fromPolygonXY(
+                    [
+                        [
+                            QgsPointXY(cornerPointUL[1], cornerPointUL[0]),
+                            QgsPointXY(cornerPointUR[1], cornerPointUR[0]),
+                            QgsPointXY(cornerPointLR[1], cornerPointLR[0]),
+                            QgsPointXY(cornerPointLL[1], cornerPointLL[0]),
+                            QgsPointXY(cornerPointUL[1], cornerPointUL[0]),
+                        ]
+                    ]
+                )
                 feature.setGeometry(surface)
                 footprintLyr.addFeatures([feature])
             else:
                 fetId = 1
-                attrib = {0: cornerPointUL[1],
-                          1: cornerPointUL[0],
-                          2: cornerPointUR[1],
-                          3: cornerPointUR[0],
-                          4: cornerPointLR[1],
-                          5: cornerPointLR[0],
-                          6: cornerPointLL[1],
-                          7: cornerPointLL[0]}
+                attrib = {
+                    0: cornerPointUL[1],
+                    1: cornerPointUL[0],
+                    2: cornerPointUR[1],
+                    3: cornerPointUR[0],
+                    4: cornerPointLR[1],
+                    5: cornerPointLR[0],
+                    6: cornerPointLL[1],
+                    7: cornerPointLL[0],
+                }
 
-                footprintLyr.dataProvider().changeAttributeValues(
-                    {fetId: attrib})
+                footprintLyr.dataProvider().changeAttributeValues({fetId: attrib})
 
                 footprintLyr.dataProvider().changeGeometryValues(
-                    {fetId: QgsGeometry.fromPolygonXY([[QgsPointXY(cornerPointUL[1],
-                                                                   cornerPointUL[0]),
-                                                        QgsPointXY(
-                        cornerPointUR[1], cornerPointUR[0]),
-                        QgsPointXY(
-                        cornerPointLR[1], cornerPointLR[0]),
-                        QgsPointXY(
-                        cornerPointLL[1], cornerPointLL[0]),
-                        QgsPointXY(cornerPointUL[1], cornerPointUL[0])]])})
+                    {
+                        fetId: QgsGeometry.fromPolygonXY(
+                            [
+                                [
+                                    QgsPointXY(cornerPointUL[1], cornerPointUL[0]),
+                                    QgsPointXY(cornerPointUR[1], cornerPointUR[0]),
+                                    QgsPointXY(cornerPointLR[1], cornerPointLR[0]),
+                                    QgsPointXY(cornerPointLL[1], cornerPointLL[0]),
+                                    QgsPointXY(cornerPointUL[1], cornerPointUL[0]),
+                                ]
+                            ]
+                        )
+                    }
+                )
 
             CommonLayer(footprintLyr)
             # 3D Style
@@ -322,18 +347,18 @@ def UpdateFootPrintData(
                 SetDefaultFootprint3DStyle(footprintLyr)
 
     except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvLayers", "Failed Update FootPrint Layer! : "), str(e))
+        qgsu.showUserAndLogMessage(
+            QCoreApplication.translate(
+                "QgsFmvLayers", "Failed Update FootPrint Layer! : "
+            ),
+            str(e),
+        )
 
 
 def UpdateBeamsData(
-        packet,
-        cornerPointUL,
-        cornerPointUR,
-        cornerPointLR,
-        cornerPointLL,
-        ele):
-    ''' Update Beams Values '''
+    packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, ele
+):
+    """ Update Beams Values """
     lat = packet.SensorLatitude
     lon = packet.SensorLongitude
     alt = packet.SensorTrueAltitude
@@ -343,7 +368,8 @@ def UpdateBeamsData(
 
     try:
         if all(
-            v is not None for v in [
+            v is not None
+            for v in [
                 beamsLyr,
                 lat,
                 lon,
@@ -351,77 +377,158 @@ def UpdateBeamsData(
                 cornerPointUL,
                 cornerPointUR,
                 cornerPointLR,
-                cornerPointLL]) and all(
-            v >= 2 for v in [
+                cornerPointLL,
+            ]
+        ) and all(
+            v >= 2
+            for v in [
                 len(cornerPointUL),
                 len(cornerPointUR),
                 len(cornerPointLR),
-                len(cornerPointLL)]):
+                len(cornerPointLL),
+            ]
+        ):
             beamsLyr.startEditing()
             if beamsLyr.featureCount() == 0:
 
                 # UL
                 featureUL = QgsFeature()
                 featureUL.setAttributes(
-                    [lon, lat, alt, cornerPointUL[1], cornerPointUL[0]])
+                    [lon, lat, alt, cornerPointUL[1], cornerPointUL[0]]
+                )
                 featureUL.setGeometry(
                     QgsLineString(
-                        QgsPoint(
-                            lon, lat, alt), QgsPoint(
-                            cornerPointUL[1], cornerPointUL[0])))
+                        QgsPoint(lon, lat, alt),
+                        QgsPoint(cornerPointUL[1], cornerPointUL[0]),
+                    )
+                )
                 beamsLyr.addFeatures([featureUL])
                 # UR
                 featureUR = QgsFeature()
                 featureUR.setAttributes(
-                    [lon, lat, alt, cornerPointUR[1], cornerPointUR[0]])
+                    [lon, lat, alt, cornerPointUR[1], cornerPointUR[0]]
+                )
                 featureUR.setGeometry(
                     QgsLineString(
-                        QgsPoint(
-                            lon, lat, alt), QgsPoint(
-                            cornerPointUR[1], cornerPointUR[0])))
+                        QgsPoint(lon, lat, alt),
+                        QgsPoint(cornerPointUR[1], cornerPointUR[0]),
+                    )
+                )
                 beamsLyr.addFeatures([featureUR])
                 # LR
                 featureLR = QgsFeature()
                 featureLR.setAttributes(
-                    [lon, lat, alt, cornerPointLR[1], cornerPointLR[0]])
+                    [lon, lat, alt, cornerPointLR[1], cornerPointLR[0]]
+                )
                 featureLR.setGeometry(
                     QgsLineString(
-                        QgsPoint(
-                            lon, lat, alt), QgsPoint(
-                            cornerPointLR[1], cornerPointLR[0])))
+                        QgsPoint(lon, lat, alt),
+                        QgsPoint(cornerPointLR[1], cornerPointLR[0]),
+                    )
+                )
                 beamsLyr.addFeatures([featureLR])
                 # LL
                 featureLL = QgsFeature()
                 featureLL.setAttributes(
-                    [lon, lat, alt, cornerPointLL[1], cornerPointLL[0]])
+                    [lon, lat, alt, cornerPointLL[1], cornerPointLL[0]]
+                )
                 featureLL.setGeometry(
                     QgsLineString(
-                        QgsPoint(
-                            lon, lat, alt), QgsPoint(
-                            cornerPointLL[1], cornerPointLL[0])))
+                        QgsPoint(lon, lat, alt),
+                        QgsPoint(cornerPointLL[1], cornerPointLL[0]),
+                    )
+                )
                 beamsLyr.addFeatures([featureLL])
 
             else:
                 # UL
                 beamsLyr.dataProvider().changeAttributeValues(
-                    {1: {0: lon, 1: lat, 2: alt, 3: cornerPointUL[1], 4: cornerPointUL[0]}})
-                beamsLyr.dataProvider().changeGeometryValues({1: QgsGeometry(QgsLineString(
-                    QgsPoint(lon, lat, alt), QgsPoint(cornerPointUL[1], cornerPointUL[0])))})
+                    {
+                        1: {
+                            0: lon,
+                            1: lat,
+                            2: alt,
+                            3: cornerPointUL[1],
+                            4: cornerPointUL[0],
+                        }
+                    }
+                )
+                beamsLyr.dataProvider().changeGeometryValues(
+                    {
+                        1: QgsGeometry(
+                            QgsLineString(
+                                QgsPoint(lon, lat, alt),
+                                QgsPoint(cornerPointUL[1], cornerPointUL[0]),
+                            )
+                        )
+                    }
+                )
                 # UR
                 beamsLyr.dataProvider().changeAttributeValues(
-                    {2: {0: lon, 1: lat, 2: alt, 3: cornerPointUR[1], 4: cornerPointUR[0]}})
-                beamsLyr.dataProvider().changeGeometryValues({2: QgsGeometry(QgsLineString(
-                    QgsPoint(lon, lat, alt), QgsPoint(cornerPointUR[1], cornerPointUR[0])))})
+                    {
+                        2: {
+                            0: lon,
+                            1: lat,
+                            2: alt,
+                            3: cornerPointUR[1],
+                            4: cornerPointUR[0],
+                        }
+                    }
+                )
+                beamsLyr.dataProvider().changeGeometryValues(
+                    {
+                        2: QgsGeometry(
+                            QgsLineString(
+                                QgsPoint(lon, lat, alt),
+                                QgsPoint(cornerPointUR[1], cornerPointUR[0]),
+                            )
+                        )
+                    }
+                )
                 # LR
                 beamsLyr.dataProvider().changeAttributeValues(
-                    {3: {0: lon, 1: lat, 2: alt, 3: cornerPointLR[1], 4: cornerPointLR[0]}})
-                beamsLyr.dataProvider().changeGeometryValues({3: QgsGeometry(QgsLineString(
-                    QgsPoint(lon, lat, alt), QgsPoint(cornerPointLR[1], cornerPointLR[0])))})
+                    {
+                        3: {
+                            0: lon,
+                            1: lat,
+                            2: alt,
+                            3: cornerPointLR[1],
+                            4: cornerPointLR[0],
+                        }
+                    }
+                )
+                beamsLyr.dataProvider().changeGeometryValues(
+                    {
+                        3: QgsGeometry(
+                            QgsLineString(
+                                QgsPoint(lon, lat, alt),
+                                QgsPoint(cornerPointLR[1], cornerPointLR[0]),
+                            )
+                        )
+                    }
+                )
                 # LL
                 beamsLyr.dataProvider().changeAttributeValues(
-                    {4: {0: lon, 1: lat, 2: alt, 3: cornerPointLL[1], 4: cornerPointLL[0]}})
-                beamsLyr.dataProvider().changeGeometryValues({4: QgsGeometry(QgsLineString(
-                    QgsPoint(lon, lat, alt), QgsPoint(cornerPointLL[1], cornerPointLL[0])))})
+                    {
+                        4: {
+                            0: lon,
+                            1: lat,
+                            2: alt,
+                            3: cornerPointLL[1],
+                            4: cornerPointLL[0],
+                        }
+                    }
+                )
+                beamsLyr.dataProvider().changeGeometryValues(
+                    {
+                        4: QgsGeometry(
+                            QgsLineString(
+                                QgsPoint(lon, lat, alt),
+                                QgsPoint(cornerPointLL[1], cornerPointLL[0]),
+                            )
+                        )
+                    }
+                )
 
             CommonLayer(beamsLyr)
             # 3D Style
@@ -429,12 +536,14 @@ def UpdateBeamsData(
                 SetDefaultBeams3DStyle(beamsLyr)
 
     except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Beams Layer! : "), str(e))
+        qgsu.showUserAndLogMessage(
+            QCoreApplication.translate("QgsFmvUtils", "Failed Update Beams Layer! : "),
+            str(e),
+        )
 
 
 def UpdateTrajectoryData(packet, ele):
-    ''' Update Trajectory Values '''
+    """ Update Trajectory Values """
     lat = packet.SensorLatitude
     lon = packet.SensorLongitude
     alt = packet.SensorTrueAltitude
@@ -447,13 +556,10 @@ def UpdateTrajectoryData(packet, ele):
             trajectoryLyr.startEditing()
             f = QgsFeature()
             if trajectoryLyr.featureCount() == 0:
-                f.setAttributes(
-                    [lon, lat, alt])
+                f.setAttributes([lon, lat, alt])
                 f.setGeometry(
-                    QgsLineString(
-                        QgsPoint(
-                            lon, lat, alt), QgsPoint(
-                            lon, lat, alt)))
+                    QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(lon, lat, alt))
+                )
                 trajectoryLyr.addFeatures([f])
 
             else:
@@ -461,14 +567,14 @@ def UpdateTrajectoryData(packet, ele):
                 f.setAttributes([lon, lat, alt])
                 f.setGeometry(
                     QgsLineString(
-                        QgsPoint(
-                            lon,
-                            lat,
-                            alt),
+                        QgsPoint(lon, lat, alt),
                         QgsPoint(
                             f_last.attribute(0),
                             f_last.attribute(1),
-                            f_last.attribute(2))))
+                            f_last.attribute(2),
+                        ),
+                    )
+                )
                 trajectoryLyr.addFeatures([f])
 
             CommonLayer(trajectoryLyr)
@@ -477,12 +583,16 @@ def UpdateTrajectoryData(packet, ele):
                 SetDefaultTrajectory3DStyle(trajectoryLyr)
 
     except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Trajectory Layer! : "), str(e))
+        qgsu.showUserAndLogMessage(
+            QCoreApplication.translate(
+                "QgsFmvUtils", "Failed Update Trajectory Layer! : "
+            ),
+            str(e),
+        )
 
 
 def UpdateFrameAxisData(imgSS, sensor, framecenter, ele):
-    ''' Update Frame Axis Values '''
+    """ Update Frame Axis Values """
     global crtSensorSrc2, groupName, frameAxisMarker
 
     lat = sensor[0]
@@ -495,33 +605,34 @@ def UpdateFrameAxisData(imgSS, sensor, framecenter, ele):
     frameaxisLyr = qgsu.selectLayerByName(FrameAxis_lyr, groupName)
 
     try:
-        if all(
-            v is not None for v in [
-                frameaxisLyr,
-                lat,
-                lon,
-                alt,
-                fc_lat,
-                fc_lon]):
-            if(imgSS != crtSensorSrc2):
+        if all(v is not None for v in [frameaxisLyr, lat, lon, alt, fc_lat, fc_lon]):
+            if imgSS != crtSensorSrc2:
                 SetDefaultFrameAxisStyle(frameaxisLyr, imgSS)
                 crtSensorSrc2 = imgSS
             frameaxisLyr.startEditing()
             if frameaxisLyr.featureCount() == 0:
                 f = QgsFeature()
-                f.setAttributes(
-                    [lon, lat, alt, fc_lon, fc_lat, fc_alt])
+                f.setAttributes([lon, lat, alt, fc_lon, fc_lat, fc_alt])
                 f.setGeometry(
                     QgsLineString(
-                        QgsPoint(
-                            lon, lat, alt), QgsPoint(
-                            fc_lon, fc_lat, fc_alt)))
+                        QgsPoint(lon, lat, alt), QgsPoint(fc_lon, fc_lat, fc_alt)
+                    )
+                )
                 frameaxisLyr.addFeatures([f])
             else:
                 frameaxisLyr.dataProvider().changeAttributeValues(
-                    {1: {0: lon, 1: lat, 2: alt, 3: fc_lon, 4: fc_lat, 5: fc_alt}})
-                frameaxisLyr.dataProvider().changeGeometryValues({1: QgsGeometry(
-                    QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(fc_lon, fc_lat, fc_alt)))})
+                    {1: {0: lon, 1: lat, 2: alt, 3: fc_lon, 4: fc_lat, 5: fc_alt}}
+                )
+                frameaxisLyr.dataProvider().changeGeometryValues(
+                    {
+                        1: QgsGeometry(
+                            QgsLineString(
+                                QgsPoint(lon, lat, alt),
+                                QgsPoint(fc_lon, fc_lat, fc_alt),
+                            )
+                        )
+                    }
+                )
 
             CommonLayer(frameaxisLyr)
             # 3D Style
@@ -529,12 +640,16 @@ def UpdateFrameAxisData(imgSS, sensor, framecenter, ele):
                 SetDefaultFrameAxis3DStyle(frameaxisLyr)
 
     except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Frame axis Layer! : "), str(e))
+        qgsu.showUserAndLogMessage(
+            QCoreApplication.translate(
+                "QgsFmvUtils", "Failed Update Frame axis Layer! : "
+            ),
+            str(e),
+        )
 
 
 def UpdateFrameCenterData(packet, ele):
-    ''' Update FrameCenter Values '''
+    """ Update FrameCenter Values """
     lat = packet[0]
     lon = packet[1]
     alt = packet[2]
@@ -559,10 +674,12 @@ def UpdateFrameCenterData(packet, ele):
 
             else:
                 frameCenterLyr.dataProvider().changeAttributeValues(
-                    {1: {0: lon, 1: lat, 2: alt}})
+                    {1: {0: lon, 1: lat, 2: alt}}
+                )
 
                 frameCenterLyr.dataProvider().changeGeometryValues(
-                    {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))})
+                    {1: QgsGeometry.fromPointXY(QgsPointXY(lon, lat))}
+                )
 
             CommonLayer(frameCenterLyr)
             # 3D Style
@@ -570,12 +687,16 @@ def UpdateFrameCenterData(packet, ele):
                 SetDefaultFrameCenter3DStyle(frameCenterLyr)
 
     except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Frame Center Layer! : "), str(e))
+        qgsu.showUserAndLogMessage(
+            QCoreApplication.translate(
+                "QgsFmvUtils", "Failed Update Frame Center Layer! : "
+            ),
+            str(e),
+        )
 
 
 def UpdatePlatformData(packet, ele):
-    ''' Update PlatForm Values '''
+    """ Update PlatForm Values """
     global crtPltTailNum, groupName
 
     lat = packet.SensorLatitude
@@ -586,13 +707,7 @@ def UpdatePlatformData(packet, ele):
     platformLyr = qgsu.selectLayerByName(Platform_lyr, groupName)
 
     try:
-        if all(
-            v is not None for v in [
-                platformLyr,
-                lat,
-                lon,
-                alt,
-                PlatformHeading]):
+        if all(v is not None for v in [platformLyr, lat, lon, alt, PlatformHeading]):
             if platformTailNumber != crtPltTailNum:
                 SetDefaultPlatformStyle(platformLyr, platformTailNumber)
                 crtPltTailNum = platformTailNumber
@@ -608,10 +723,12 @@ def UpdatePlatformData(packet, ele):
 
             else:
                 platformLyr.dataProvider().changeAttributeValues(
-                    {1: {0: lon, 1: lat, 2: alt}})
+                    {1: {0: lon, 1: lat, 2: alt}}
+                )
 
                 platformLyr.dataProvider().changeGeometryValues(
-                    {1: QgsGeometry(QgsPoint(lon, lat, alt))})
+                    {1: QgsGeometry(QgsPoint(lon, lat, alt))}
+                )
 
             CommonLayer(platformLyr)
             # 3D Style
@@ -619,19 +736,23 @@ def UpdatePlatformData(packet, ele):
                 SetDefaultPlatform3DStyle(platformLyr)
 
     except Exception as e:
-        qgsu.showUserAndLogMessage(QCoreApplication.translate(
-            "QgsFmvUtils", "Failed Update Platform Layer! : "), str(e))
+        qgsu.showUserAndLogMessage(
+            QCoreApplication.translate(
+                "QgsFmvUtils", "Failed Update Platform Layer! : "
+            ),
+            str(e),
+        )
 
 
 def CommonLayer(value):
-    ''' Common commands Layers '''
+    """ Common commands Layers """
     value.commitChanges()
     value.updateExtents()
     iface.layerTreeView().refreshLayerSymbology(value.id())
 
 
 def CreateGroupByName(name=frames_g):
-    ''' Create Group if not exist '''
+    """ Create Group if not exist """
     global groupName
     root = _layerreg.layerTreeRoot()
     videogroup = root.findGroup(groupName)
@@ -645,7 +766,7 @@ def CreateGroupByName(name=frames_g):
 
 
 def RemoveGroupByName(name=frames_g):
-    ''' Remove Group if not exist '''
+    """ Remove Group if not exist """
     root = _layerreg.layerTreeRoot()
     group = root.findGroup(name)
     if group is not None:
@@ -656,23 +777,26 @@ def RemoveGroupByName(name=frames_g):
 
 
 def CreateVideoLayers(ele, name):
-    ''' Create Video Layers '''
+    """ Create Video Layers """
     global groupName
     groupName = name
 
     if qgsu.selectLayerByName(Footprint_lyr, groupName) is None:
         lyr_footprint = newPolygonsLayer(
             None,
-            ["Corner Longitude Point 1",
-             "Corner Latitude Point 1",
-             "Corner Longitude Point 2",
-             "Corner Latitude Point 2",
-             "Corner Longitude Point 3",
-             "Corner Latitude Point 3",
-             "Corner Longitude Point 4",
-             "Corner Latitude Point 4"],
+            [
+                "Corner Longitude Point 1",
+                "Corner Latitude Point 1",
+                "Corner Longitude Point 2",
+                "Corner Latitude Point 2",
+                "Corner Longitude Point 3",
+                "Corner Latitude Point 3",
+                "Corner Longitude Point 4",
+                "Corner Latitude Point 4",
+            ],
             epsg,
-            Footprint_lyr)
+            Footprint_lyr,
+        )
         SetDefaultFootprintStyle(lyr_footprint)
         addLayerNoCrsDialog(lyr_footprint, group=groupName)
 
@@ -683,13 +807,17 @@ def CreateVideoLayers(ele, name):
     if qgsu.selectLayerByName(Beams_lyr, groupName) is None:
         lyr_beams = newLinesLayer(
             None,
-            ["longitude",
-             "latitude",
-             "altitude",
-             "Corner Longitude",
-             "Corner Latitude"],
+            [
+                "longitude",
+                "latitude",
+                "altitude",
+                "Corner Longitude",
+                "Corner Latitude",
+            ],
             epsg,
-            Beams_lyr, LineZ)
+            Beams_lyr,
+            LineZ,
+        )
         SetDefaultBeamsStyle(lyr_beams)
         addLayerNoCrsDialog(lyr_beams, group=groupName)
         # 3D Style
@@ -698,8 +826,8 @@ def CreateVideoLayers(ele, name):
 
     if qgsu.selectLayerByName(Trajectory_lyr, groupName) is None:
         lyr_Trajectory = newLinesLayer(
-            None,
-            ["longitude", "latitude", "altitude"], epsg, Trajectory_lyr, LineZ)
+            None, ["longitude", "latitude", "altitude"], epsg, Trajectory_lyr, LineZ
+        )
         SetDefaultTrajectoryStyle(lyr_Trajectory)
         addLayerNoCrsDialog(lyr_Trajectory, group=groupName)
         # 3D Style
@@ -707,16 +835,20 @@ def CreateVideoLayers(ele, name):
             SetDefaultTrajectory3DStyle(lyr_Trajectory)
 
     if qgsu.selectLayerByName(FrameAxis_lyr, groupName) is None:
-        lyr_frameaxis = newLinesLayer(None,
-                                      ["longitude",
-                                       "latitude",
-                                       "altitude",
-                                       "Corner Longitude",
-                                       "Corner Latitude",
-                                       "Corner altitude"],
-                                      epsg,
-                                      FrameAxis_lyr,
-                                      LineZ)
+        lyr_frameaxis = newLinesLayer(
+            None,
+            [
+                "longitude",
+                "latitude",
+                "altitude",
+                "Corner Longitude",
+                "Corner Latitude",
+                "Corner altitude",
+            ],
+            epsg,
+            FrameAxis_lyr,
+            LineZ,
+        )
         SetDefaultFrameAxisStyle(lyr_frameaxis)
         addLayerNoCrsDialog(lyr_frameaxis, group=groupName)
         # 3D Style
@@ -725,8 +857,8 @@ def CreateVideoLayers(ele, name):
 
     if qgsu.selectLayerByName(Platform_lyr, groupName) is None:
         lyr_platform = newPointsLayer(
-            None,
-            ["longitude", "latitude", "altitude"], epsg, Platform_lyr, PointZ)
+            None, ["longitude", "latitude", "altitude"], epsg, Platform_lyr, PointZ
+        )
         SetDefaultPlatformStyle(lyr_platform)
         addLayerNoCrsDialog(lyr_platform, group=groupName)
         # 3D Style
@@ -735,13 +867,15 @@ def CreateVideoLayers(ele, name):
 
     if qgsu.selectLayerByName(Point_lyr, groupName) is None:
         lyr_point = newPointsLayer(
-            None, ["number", "longitude", "latitude", "altitude"], epsg, Point_lyr)
+            None, ["number", "longitude", "latitude", "altitude"], epsg, Point_lyr
+        )
         SetDefaultPointStyle(lyr_point)
         addLayerNoCrsDialog(lyr_point, group=groupName)
 
     if qgsu.selectLayerByName(FrameCenter_lyr, groupName) is None:
         lyr_framecenter = newPointsLayer(
-            None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr)
+            None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr
+        )
         SetDefaultFrameCenterStyle(lyr_framecenter)
         addLayerNoCrsDialog(lyr_framecenter, group=groupName)
         # 3D Style
@@ -756,13 +890,12 @@ def CreateVideoLayers(ele, name):
         addLayerNoCrsDialog(lyr_line, group=groupName)
 
     if qgsu.selectLayerByName(Polygon_lyr, groupName) is None:
-        lyr_polygon = newPolygonsLayer(None,
-                                       ["Centroid_longitude",
-                                        "Centroid_latitude",
-                                        "Centroid_altitude",
-                                        "Area"],
-                                       epsg,
-                                       Polygon_lyr)
+        lyr_polygon = newPolygonsLayer(
+            None,
+            ["Centroid_longitude", "Centroid_latitude", "Centroid_altitude", "Area"],
+            epsg,
+            Polygon_lyr,
+        )
         SetDefaultPolygonStyle(lyr_polygon)
         addLayerNoCrsDialog(lyr_polygon, group=groupName)
 
@@ -770,27 +903,29 @@ def CreateVideoLayers(ele, name):
 
 
 def ExpandLayer(layer, value=True):
-    '''Collapse/Expand layer'''
+    """Collapse/Expand layer"""
     ltl = _layerreg.layerTreeRoot().findLayer(layer.id())
     ltl.setExpanded(value)
     QApplication.processEvents()
 
 
-def SetDefaultFootprintStyle(layer, sensor='DEFAULT'):
-    ''' Footprint Symbol '''
+def SetDefaultFootprintStyle(layer, sensor="DEFAULT"):
+    """ Footprint Symbol """
     style = S.getSensor(sensor)
     fill_sym = QgsFillSymbol.createSimple(
         {
-            'color': style['COLOR'],
-            'outline_color': style['OUTLINE_COLOR'],
-            'outline_style': style['OUTLINE_STYLE'],
-            'outline_width': style['OUTLINE_WIDTH']})
+            "color": style["COLOR"],
+            "outline_color": style["OUTLINE_COLOR"],
+            "outline_style": style["OUTLINE_STYLE"],
+            "outline_width": style["OUTLINE_WIDTH"],
+        }
+    )
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
 
 
 def SetDefaultFootprint3DStyle(layer):
-    ''' Platform 3D Symbol '''
+    """ Platform 3D Symbol """
     material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(255, 0, 0))
     material.setAmbient(QColor(255, 0, 0))
@@ -805,41 +940,43 @@ def SetDefaultFootprint3DStyle(layer):
 
 
 def SetDefaultTrajectoryStyle(layer):
-    ''' Trajectory Symbol '''
-    style = S.getTrajectory('DEFAULT')
+    """ Trajectory Symbol """
+    style = S.getTrajectory("DEFAULT")
     fill_sym = QgsLineSymbol.createSimple(
         {
-            'color': style['COLOR'],
-            'width': style['WIDTH'],
-            'customdash': style['customdash'],
-            'use_custom_dash': style['use_custom_dash']})
+            "color": style["COLOR"],
+            "width": style["WIDTH"],
+            "customdash": style["customdash"],
+            "use_custom_dash": style["use_custom_dash"],
+        }
+    )
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
 
 
-def SetDefaultPlatformStyle(layer, platform='DEFAULT'):
-    ''' Platform Symbol '''
+def SetDefaultPlatformStyle(layer, platform="DEFAULT"):
+    """ Platform Symbol """
     style = S.getPlatform(platform)
 
     svgStyle = {}
-    svgStyle['name'] = style["NAME"]
-    svgStyle['outline'] = style["OUTLINE"]
-    svgStyle['outline-width'] = style["OUTLINE_WIDTH"]
-    svgStyle['size'] = style["SIZE"]
+    svgStyle["name"] = style["NAME"]
+    svgStyle["outline"] = style["OUTLINE"]
+    svgStyle["outline-width"] = style["OUTLINE_WIDTH"]
+    svgStyle["size"] = style["SIZE"]
 
     symbol_layer = QgsSvgMarkerSymbolLayer.create(svgStyle)
     layer.renderer().symbol().changeSymbolLayer(0, symbol_layer)
 
 
 def SetDefaultPlatform3DStyle(layer):
-    ''' Platform 3D Symbol '''
+    """ Platform 3D Symbol """
     material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(255, 0, 0))
     material.setAmbient(QColor(255, 0, 0))
     symbol = QgsPoint3DSymbol()
     symbol.setShape(1)
     S = {}
-    S['radius'] = 20
+    S["radius"] = 20
     symbol.setShapeProperties(S)
     symbol.setAltitudeClamping(2)
     symbol.setMaterial(material)
@@ -851,7 +988,7 @@ def SetDefaultPlatform3DStyle(layer):
 
 
 def SetDefaultTrajectory3DStyle(layer):
-    ''' Trajectory 3D Symbol '''
+    """ Trajectory 3D Symbol """
     material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(0, 0, 255))
     material.setAmbient(QColor(0, 0, 255))
@@ -868,7 +1005,7 @@ def SetDefaultTrajectory3DStyle(layer):
 
 
 def SetDefaultFrameAxis3DStyle(layer):
-    ''' Frame Axis 3D Symbol '''
+    """ Frame Axis 3D Symbol """
     material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(0, 0, 255))
     material.setAmbient(QColor(0, 0, 255))
@@ -885,7 +1022,7 @@ def SetDefaultFrameAxis3DStyle(layer):
 
 
 def SetDefaultBeams3DStyle(layer):
-    ''' Beams 3D Symbol '''
+    """ Beams 3D Symbol """
     material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(255, 255, 255))
     material.setAmbient(QColor(255, 255, 255))
@@ -902,27 +1039,29 @@ def SetDefaultBeams3DStyle(layer):
 
 
 def SetDefaultFrameCenterStyle(layer):
-    ''' Frame Center Symbol '''
+    """ Frame Center Symbol """
     style = S.getFrameCenterPoint()
     symbol = QgsMarkerSymbol.createSimple(
         {
-            'name': style["NAME"],
-            'line_color': style["LINE_COLOR"],
-            'line_width': style["LINE_WIDTH"],
-            'size': style["SIZE"]})
+            "name": style["NAME"],
+            "line_color": style["LINE_COLOR"],
+            "line_width": style["LINE_WIDTH"],
+            "size": style["SIZE"],
+        }
+    )
     renderer = QgsSingleSymbolRenderer(symbol)
     layer.setRenderer(renderer)
 
 
 def SetDefaultFrameCenter3DStyle(layer):
-    ''' Frame Center 3D Symbol '''
+    """ Frame Center 3D Symbol """
     material = QgsPhongMaterialSettings()
     material.setDiffuse(QColor(255, 255, 255))
     material.setAmbient(QColor(255, 255, 255))
     symbol = QgsPoint3DSymbol()
     symbol.setShape(1)
     S = {}
-    S['radius'] = 20
+    S["radius"] = 20
     symbol.setShapeProperties(S)
     symbol.setAltitudeClamping(2)
     symbol.setMaterial(material)
@@ -933,28 +1072,32 @@ def SetDefaultFrameCenter3DStyle(layer):
     layer.setRenderer3D(renderer)
 
 
-def SetDefaultFrameAxisStyle(layer, sensor='DEFAULT'):
-    ''' Line Symbol '''
+def SetDefaultFrameAxisStyle(layer, sensor="DEFAULT"):
+    """ Line Symbol """
     sensor_style = S.getSensor(sensor)
     style = S.getFrameAxis()
     fill_sym = QgsLineSymbol.createSimple(
         {
-            'color': sensor_style['OUTLINE_COLOR'],
-            'width': sensor_style['OUTLINE_WIDTH'],
-            'outline_style': style['OUTLINE_STYLE']})
+            "color": sensor_style["OUTLINE_COLOR"],
+            "width": sensor_style["OUTLINE_WIDTH"],
+            "outline_style": style["OUTLINE_STYLE"],
+        }
+    )
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
 
 
 def SetDefaultPointStyle(layer):
-    ''' Point Symbol '''
+    """ Point Symbol """
     style = S.getDrawingPoint()
     symbol = QgsMarkerSymbol.createSimple(
         {
-            'name': style["NAME"],
-            'line_color': style["LINE_COLOR"],
-            'line_width': style["LINE_WIDTH"],
-            'size': style["SIZE"]})
+            "name": style["NAME"],
+            "line_color": style["LINE_COLOR"],
+            "line_width": style["LINE_WIDTH"],
+            "size": style["SIZE"],
+        }
+    )
 
     renderer = QgsSingleSymbolRenderer(symbol)
     layer.setRenderer(renderer)
@@ -984,31 +1127,34 @@ def SetDefaultPointStyle(layer):
 
 
 def SetDefaultLineStyle(layer):
-    ''' Line Symbol '''
+    """ Line Symbol """
     style = S.getDrawingLine()
     symbol = layer.renderer().symbol()
-    symbol.setColor(style['COLOR'])
-    symbol.setWidth(style['WIDTH'])
+    symbol.setColor(style["COLOR"])
+    symbol.setWidth(style["WIDTH"])
 
 
 def SetDefaultPolygonStyle(layer):
-    ''' Polygon Symbol '''
+    """ Polygon Symbol """
     style = S.getDrawingPolygon()
     fill_sym = QgsFillSymbol.createSimple(
         {
-            'color': style['COLOR'],
-            'outline_color': style['OUTLINE_COLOR'],
-            'outline_style': style['OUTLINE_STYLE'],
-            'outline_width': style['OUTLINE_WIDTH']})
+            "color": style["COLOR"],
+            "outline_color": style["OUTLINE_COLOR"],
+            "outline_style": style["OUTLINE_STYLE"],
+            "outline_width": style["OUTLINE_WIDTH"],
+        }
+    )
     renderer = QgsSingleSymbolRenderer(fill_sym)
     layer.setRenderer(renderer)
 
 
-def SetDefaultBeamsStyle(layer, beam='DEFAULT'):
-    ''' Beams Symbol'''
+def SetDefaultBeamsStyle(layer, beam="DEFAULT"):
+    """ Beams Symbol"""
     style = S.getBeam(beam)
     symbol = layer.renderer().symbol()
-    symbol.setColor(QColor.fromRgba(style['COLOR']))
+    symbol.setColor(QColor.fromRgba(style["COLOR"]))
+
 
 # TODO : Update layer symbology if draw color change?
 # def UpdateStylesDrawLayers(NameSpace):
@@ -1105,68 +1251,50 @@ def addLayer(layer, loadInLegend=True, group=None, isSubGroup=False):
     return layer
 
 
-def addLayerNoCrsDialog(
-        layer,
-        loadInLegend=True,
-        group=None,
-        isSubGroup=False):
-    '''
+def addLayerNoCrsDialog(layer, loadInLegend=True, group=None, isSubGroup=False):
+    """
     Tries to add a layer from layer object
     Same as the addLayer method, but it does not ask for CRS, regardless of current
     configuration in QGIS settings
-    '''
+    """
 
     settings = QSettings()
-    prjSetting3 = settings.value('/Projections/defaultBehavior')
-    settings.setValue('/Projections/defaultBehavior', '')
+    prjSetting3 = settings.value("/Projections/defaultBehavior")
+    settings.setValue("/Projections/defaultBehavior", "")
     layer = addLayer(layer, loadInLegend, group, isSubGroup)
-    settings.setValue('/Projections/defaultBehavior', prjSetting3)
+    settings.setValue("/Projections/defaultBehavior", prjSetting3)
     QApplication.processEvents()
     return layer
 
 
 def _toQgsField(f):
-    ''' Create QgsFiel '''
+    """ Create QgsFiel """
     if isinstance(f, QgsField):
         return f
     return QgsField(f[0], TYPE_MAP.get(f[1], QVariant.String))
 
 
 def newPointsLayer(
-        filename,
-        fields,
-        crs,
-        name=None,
-        geometryType=Point,
-        encoding=encoding):
-    ''' Create new Point Layer '''
+    filename, fields, crs, name=None, geometryType=Point, encoding=encoding
+):
+    """ Create new Point Layer """
     return newVectorLayer(filename, fields, geometryType, crs, name, encoding)
 
 
 def newLinesLayer(
-        filename,
-        fields,
-        crs,
-        name=None,
-        geometryType=Line,
-        encoding=encoding):
-    ''' Create new Line Layer '''
+    filename, fields, crs, name=None, geometryType=Line, encoding=encoding
+):
+    """ Create new Line Layer """
     return newVectorLayer(filename, fields, geometryType, crs, name, encoding)
 
 
 def newPolygonsLayer(filename, fields, crs, name=None, encoding=encoding):
-    ''' Create new Polygon Layer '''
+    """ Create new Polygon Layer """
     return newVectorLayer(filename, fields, Polygon, crs, name, encoding)
 
 
-def newVectorLayer(
-        filename,
-        fields,
-        geometryType,
-        crs,
-        name=None,
-        encoding=encoding):
-    '''
+def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding=encoding):
+    """
     Creates a new vector layer
     @param filename: The filename to store the file. The extensions determines the type of file.
     If extension is not among the supported ones, a shapefile will be created and the file will
@@ -1177,35 +1305,35 @@ def newVectorLayer(
     @param geometryType: The type of geometry of the layer to create.
     @param crs: The crs of the layer to create. Accepts a QgsCoordinateSystem object or a string with the CRS authId.
     @param encoding: The layer encoding
-    '''
+    """
     if isinstance(crs, str):
         crs = QgsCoordinateReferenceSystem(crs)
     if filename is None:
         uri = geometryType
         if crs.isValid():
-            uri += '?crs=' + crs.authid() + '&'
-        fieldsdesc = ['field=' + f for f in fields]
+            uri += "?crs=" + crs.authid() + "&"
+        fieldsdesc = ["field=" + f for f in fields]
 
-        fieldsstring = '&'.join(fieldsdesc)
+        fieldsstring = "&".join(fieldsdesc)
         uri += fieldsstring
 
         if name is None:
             name = "mem_layer"
-        layer = QgsVectorLayer(uri, name, 'memory')
+        layer = QgsVectorLayer(uri, name, "memory")
 
     else:
         formats = QgsVectorFileWriter.supportedFiltersAndFormats()
         OGRCodes = {}
         for (key, value) in formats.items():
             extension = str(key)
-            extension = extension[extension.find('*.') + 2:]
-            extension = extension[:extension.find(' ')]
+            extension = extension[extension.find("*.") + 2 :]
+            extension = extension[: extension.find(" ")]
             OGRCodes[extension] = value
 
         extension = os.path.splitext(filename)[1][1:]
         if extension not in OGRCodes:
-            extension = 'shp'
-            filename = filename + '.shp'
+            extension = "shp"
+            filename = filename + ".shp"
 
         if isinstance(fields, QgsFields):
             qgsfields = fields
@@ -1214,9 +1342,10 @@ def newVectorLayer(
             for field in fields:
                 qgsfields.append(_toQgsField(field))
 
-        QgsVectorFileWriter(filename, encoding, qgsfields,
-                            geometryType, crs, OGRCodes[extension])
+        QgsVectorFileWriter(
+            filename, encoding, qgsfields, geometryType, crs, OGRCodes[extension]
+        )
 
-        layer = QgsVectorLayer(filename, os.path.basename(filename), 'ogr')
+        layer = QgsVectorLayer(filename, os.path.basename(filename), "ogr")
 
     return layer
