@@ -56,6 +56,8 @@ from QGIS_FMV.QgsFmvConstants import (
     FrameCenter_lyr,
     dtm_buffer,
     ffmpegConf,
+    ffmpeg_path,
+    ffprobe_path,
 )
 
 try:
@@ -80,13 +82,6 @@ dtm_rowLowerBound = 0
 # tLastLat = 0.0
 
 _settings = {}
-
-if isWindows:
-    ffmpeg_path = os.path.join(ffmpegConf, "ffmpeg.exe")
-    ffprobe_path = os.path.join(ffmpegConf, "ffprobe.exe")
-else:
-    ffmpeg_path = os.path.join(ffmpegConf, "ffmpeg")
-    ffprobe_path = os.path.join(ffmpegConf, "ffprobe")
 
 
 def AddVideoToSettings(row_id, path):

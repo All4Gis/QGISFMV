@@ -33,6 +33,7 @@ dtm_buffer = int(parser["GENERAL"]["DTM_buffer_size"])
 
 EARTH_MEAN_RADIUS = 6371008.8
 WGS84String = "WGS84"
+encoding = "utf-8"
 
 isWindows = platform.system() == "Windows"
 
