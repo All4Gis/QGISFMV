@@ -32,8 +32,8 @@ try:
     from pydevd import *
 except ImportError:
     None
+from QGIS_FMV.QgsFmvConstants import UASLocalMetadataSet
 
-UASLocalMetadataSet = b"\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00"
 KlvHeaderKey = b"\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01"
 
 

@@ -3,11 +3,7 @@ from configparser import ConfigParser
 import os
 from os.path import dirname, abspath
 
-try:
-    from pydevd import *
-except ImportError:
-    None
-
+# Settings
 parser = ConfigParser()
 fileConfig = os.path.join(dirname(abspath(__file__)), "settings.ini")
 parser.read(fileConfig)
@@ -30,11 +26,16 @@ epsg = parser["LAYERS"]["epsg"]
 Reverse_geocoding_url = parser["GENERAL"]["Reverse_geocoding_url"]
 dtm_buffer = int(parser["GENERAL"]["DTM_buffer_size"])
 
-
+# Geo variables
 EARTH_MEAN_RADIUS = 6371008.8
 WGS84String = "WGS84"
 encoding = "utf-8"
 
+# Klv variables
+UASLocalMetadataSet = b"\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00"
+KlvHeaderKeyOther = b"\x06\x0e+4\x02\x01\x01\x01\x0e\x01\x01\x02\x01\x01\x00\x00"
+
+# OS variables
 isWindows = platform.system() == "Windows"
 
 if isWindows:

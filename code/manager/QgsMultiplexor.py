@@ -17,6 +17,7 @@ from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 from qgis.core import Qgis as QGis
 from io import StringIO
+from QGIS_FMV.QgsFmvConstants import UASLocalMetadataSet
 
 try:
     from pydevd import *
@@ -31,7 +32,7 @@ for now I make this adaptation to be able to see it in QGIS FMV
 encoding = "ISO-8859-1"
 
 # Klv header
-cle = b"\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00"
+cle = UASLocalMetadataSet
 
 # Checksum
 _key1 = b"\x01"

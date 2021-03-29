@@ -58,6 +58,8 @@ from QGIS_FMV.QgsFmvConstants import (
     ffmpegConf,
     ffmpeg_path,
     ffprobe_path,
+    UASLocalMetadataSet,
+    KlvHeaderKeyOther,
 )
 
 try:
@@ -171,12 +173,7 @@ def getKlvStreamIndex(videoPath, islocal=False):
             continue
         else:
             # look if stream has valid klv data
-            if (
-                b"\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00"
-                in stdout_data
-                or b"\x06\x0e+4\x02\x01\x01\x01\x0e\x01\x01\x02\x01\x01\x00\x00"
-                in stdout_data
-            ):
+            if UASLocalMetadataSet in stdout_data or KlvHeaderKeyOther in stdout_data:
                 return i
             else:
                 qgsu.showUserAndLogMessage(
