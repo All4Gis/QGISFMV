@@ -40,6 +40,14 @@ from QGIS_FMV.klvdata.misb0601 import (
     FrameCenterLatitude,
     Checksum,
     FrameCenterLongitude,
+    CornerLatitudePoint1Full,
+    CornerLongitudePoint1Full,
+    CornerLatitudePoint2Full,
+    CornerLongitudePoint2Full,
+    CornerLatitudePoint3Full,
+    CornerLongitudePoint3Full,
+    CornerLatitudePoint4Full,
+    CornerLongitudePoint4Full
 )
 
 try:
@@ -133,6 +141,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
         QApplication.processEvents()
 
         HFOV = self.sp_hfov.value()
+        VFOV = self.sp_vfov.value()
 
         index = self.cmb_telemetry.currentIndex()
         out_record = self.cmb_telemetry.itemData(index)
@@ -248,13 +257,14 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                         if k == "GIMBAL.pitch":
                             GIMBAL_pitch = float(v)
 
-                            _bytes = bytes(SensorRelativeElevationAngle(v))
+                            _bytes = bytes(SensorRelativeElevationAngle(GIMBAL_pitch))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
                         # Sensor Relative Roll Angle
                         if k == "GIMBAL.roll":
-                            _bytes = bytes(SensorRelativeRollAngle(v))
+                            GIMBAL_roll = float(v)
+                            _bytes = bytes(SensorRelativeRollAngle(GIMBAL_roll))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
@@ -339,69 +349,54 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
-                    # TODO : If we save the corners in the klv have a overflow
-                    #                     # CALCULATE CORNERS COORDINATES
-                    #                     sensor = (OSD_longitude, OSD_latitude, OSD_altitude)
-                    #                     frameCenter = (destPoint[0], destPoint[1], frameCenterElevation)
-                    #                     FOV = (VFOV, HFOV)
-                    #                     others = (OSD_yaw, GIMBAL_yaw, targetWidth, slantRange)
-                    #                     cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL = CornerEstimationWithoutOffsets(sensor=sensor, frameCenter=frameCenter, FOV=FOV, others=others)
-                    #
-                    #                     # Corner Latitude Point 1 (Full)
-                    #                     _bytes = float_to_bytes(round(cornerPointUL[0],4), _domain82, _range82)
-                    #                     _len = int_to_bytes(len(_bytes))
-                    #                     _bytes = _key82 + _len + _bytes
-                    #                     sizeTotal += len(_bytes)
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Longitude Point 1 (Full)
-                    #                     _bytes = float_to_bytes(round(cornerPointUL[1],4), _domain83, _range83)
-                    #                     _len = int_to_bytes(len(_bytes))
-                    #                     _bytes = _key83 + _len + _bytes
-                    #                     sizeTotal += len(_bytes)
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Latitude Point 2 (Full)
-                    #                     _bytes = float_to_bytes(round(cornerPointUR[0],4), _domain84, _range84)
-                    #                     _len = int_to_bytes(len(_bytes))
-                    #                     _bytes = _key84 + _len + _bytes
-                    #                     sizeTotal += len(_bytes)
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Longitude Point 2 (Full)
-                    #                     _bytes = float_to_bytes(round(cornerPointUR[1],4), _domain85, _range85)
-                    #                     _len = int_to_bytes(len(_bytes))
-                    #                     _bytes = _key85 + _len + _bytes
-                    #                     sizeTotal += len(_bytes)
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Latitude Point 3 (Full)
-                    #                     _bytes = float_to_bytes(round(cornerPointLR[0],4), _domain86, _range86)
-                    #                     _len = int_to_bytes(len(_bytes))
-                    #                     _bytes = _key86 + _len + _bytes
-                    #                     sizeTotal += len(_bytes)
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Longitude Point 3 (Full)
-                    #                     _bytes = float_to_bytes(round(cornerPointLR[1],4), _domain87, _range87)
-                    #                     _len = int_to_bytes(len(_bytes))
-                    #                     _bytes = _key87 + _len + _bytes
-                    #                     sizeTotal += len(_bytes)
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Latitude Point 4 (Full)
-                    #                     _bytes = float_to_bytes(round(cornerPointLL[0],4), _domain88, _range88)
-                    #                     _len = int_to_bytes(len(_bytes))
-                    #                     _bytes = _key88 + _len + _bytes
-                    #                     sizeTotal += len(_bytes)
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Longitude Point 4 (Full)
-                    #                     _bytes = float_to_bytes(round(cornerPointLL[1],4), _domain89, _range89)
-                    #                     _len = int_to_bytes(len(_bytes))
-                    #                     _bytes = _key89 + _len + _bytes
-                    #                     sizeTotal += len(_bytes)
-                    #                     bufferData += _bytes
+                    # CALCULATE CORNERS COORDINATES
+                    # FIXME : If we add this values, the klv parse has a overflow
+                    # Probably the packets is not created correctly
+#                     sensor = (OSD_longitude, OSD_latitude, OSD_altitude)
+#                     frameCenter = (framecenterlongitude, framecenterlatitude, frameCenterElevation)
+#                     FOV = (VFOV, HFOV)
+#                     others = (OSD_yaw, GIMBAL_yaw, targetWidth, slantRange)
+#                     cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL = CornerEstimationWithoutOffsets(sensor=sensor, frameCenter=frameCenter, FOV=FOV, others=others)
+# 
+#                     # Corner Latitude Point 1 (Full) CornerLatitudePoint1Full
+#                     _bytes = bytes(CornerLatitudePoint1Full(cornerPointUL[0]))
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#                     
+#                     # Corner Longitude Point 1 (Full)
+#                     _bytes = bytes(CornerLongitudePoint1Full(cornerPointUL[1]))
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#                      
+#                     # Corner Latitude Point 2 (Full)
+#                     _bytes = bytes(CornerLatitudePoint2Full(cornerPointUR[0]))
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#                     
+#                     # Corner Longitude Point 2 (Full)
+#                     _bytes = bytes(CornerLongitudePoint2Full(cornerPointUR[1]))
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#                       
+#                     # Corner Latitude Point 3 (Full)
+#                     _bytes = bytes(CornerLatitudePoint3Full(cornerPointLR[0]))
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#                       
+#                     # Corner Longitude Point 3 (Full)
+#                     _bytes = bytes(CornerLongitudePoint3Full(cornerPointLR[1]))
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#  
+#                     # Corner Latitude Point 4 (Full)
+#                     _bytes = bytes(CornerLatitudePoint4Full(cornerPointLL[0]))
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
+#  
+#                     # Corner Longitude Point 4 (Full)
+#                     _bytes = bytes(CornerLongitudePoint4Full(cornerPointLL[1]))
+#                     sizeTotal += len(_bytes)
+#                     bufferData += _bytes
 
                     # Platform Pitch Angle (Full)
                     _bytes = bytes(PlatformPitchAngleFull(OSD_pitch))

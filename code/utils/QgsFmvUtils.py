@@ -1105,7 +1105,7 @@ def CornerEstimationWithoutOffsets(
             and frameCenterElevation is not None
         ):
             sensorGroundAltitude = sensorTrueAltitude - frameCenterElevation
-        elif frameCenterElevation != 0 and sensorTrueAltitude is not None:
+        elif frameCenterElevation == 0 and sensorTrueAltitude is not None:
             sensorGroundAltitude = sensorTrueAltitude
         else:
             # can't compute footprint without sensorGroundAltitude
@@ -1184,9 +1184,9 @@ def CornerEstimationWithoutOffsets(
         )
 
         frameCenterPoint = [
-            packet.FrameCenterLatitude,
-            packet.FrameCenterLongitude,
-            packet.FrameCenterElevation,
+            frameCenterLat,
+            frameCenterLon,
+            frameCenterElevation 
         ]
 
         # If no framcenter (f.i. horizontal target) don't comptute footprint,

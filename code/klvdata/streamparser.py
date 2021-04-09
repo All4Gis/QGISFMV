@@ -42,9 +42,12 @@ class StreamParser:
         return self
 
     def __next__(self):
-        key, value = next(self.iter_stream)
-        #         qgsu.showUserAndLogMessage(
-        #              "", "Streamparser key: " + str(key) + " value: " + str(value), onlyLog=True)
+        try:
+            key, value = next(self.iter_stream)
+            #         qgsu.showUserAndLogMessage(
+            #              "", "Streamparser key: " + str(key) + " value: " + str(value), onlyLog=True)
+        except Exception as e:
+            print("Key {0} , error {1}".format(key, str(e)))
         if key in self.parsers:
             return self.parsers[key](value)
         else:
