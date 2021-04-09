@@ -12,12 +12,35 @@ from QGIS_FMV.klvdata.common import datetime_to_bytes, int_to_bytes, float_to_by
 import csv
 import itertools
 from datetime import datetime
-from math import tan, radians, cos, pi, sin
+from math import tan, radians, degrees, cos, pi, sin
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-
 from qgis.core import Qgis as QGis
 from io import StringIO
-from QGIS_FMV.QgsFmvConstants import UASLocalMetadataSet
+from QGIS_FMV.QgsFmvConstants import UASLocalMetadataSet, EARTH_MEAN_RADIUS
+
+from QGIS_FMV.klvdata.misb0601 import (
+    PlatformHeadingAngle,
+    PlatformPitchAngle,
+    SlantRange,
+    PlatformRollAngle,
+    SensorLatitude,
+    FrameCenterElevation,
+    SensorLongitude,
+    SensorTrueAltitude,
+    TargetWidth,
+    SensorHorizontalFieldOfView,
+    SensorRelativeElevationAngle,
+    SensorEllipsoidHeightConversion,
+    PlatformRollAngleFull,
+    PlatformPitchAngleFull,
+    SensorRelativeAzimuthAngle,
+    SensorVerticalFieldOfView,
+    PrecisionTimeStamp,
+    SensorRelativeRollAngle,
+    FrameCenterLatitude,
+    Checksum,
+    FrameCenterLongitude,
+)
 
 try:
     from pydevd import *
@@ -27,153 +50,10 @@ except ImportError:
 """
 'TODO : After all the tests I haven't managed to generate a MISB video,
 for now I make this adaptation to be able to see it in QGIS FMV
+https://gist.github.com/All4Gis/509fbe06ce53a0885744d16595811e6f
 """
 
 encoding = "ISO-8859-1"
-
-# Klv header
-cle = UASLocalMetadataSet
-
-# Checksum
-_key1 = b"\x01"
-
-# Precision Time Stamp
-_key2 = b"\x02"
-
-# Platform Heading Angle
-_domain5 = (0, 2 ** 16 - 1)
-_range5 = (0, 360)
-_key5 = b"\x05"
-
-# Platform Pitch Angle
-_domain6 = ((-(2 ** 15) - 1), 2 ** 15 - 1)
-_range6 = (-20, 20)
-_key6 = b"\x06"
-
-# Platform Roll Angle
-_domain7 = ((-(2 ** 15) - 1), 2 ** 15 - 1)
-_range7 = (-50, 50)
-_key7 = b"\x07"
-
-# Sensor Latitude
-_domain13 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range13 = (-90, 90)
-_key13 = b"\x0D"
-
-# Sensor Longitude
-_domain14 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range14 = (-180, 180)
-_key14 = b"\x0E"
-
-# Sensor True Altitude
-_domain15 = (0, 2 ** 16 - 1)
-_range15 = (-900, 19000)
-_key15 = b"\x0F"
-
-# Sensor Horizontal Field of View
-_domain16 = (0, 2 ** 16 - 1)
-_range16 = (0, 180)
-_key16 = b"\x10"
-
-# Sensor Vertical Field of View
-_domain17 = (0, 2 ** 16 - 1)
-_range17 = (0, 180)
-_key17 = b"\x11"
-
-# Sensor Relative Azimuth Angle
-_domain18 = (0, 2 ** 32 - 1)
-_range18 = (0, 360)
-_key18 = b"\x12"
-
-# Sensor Relative Elevation Angle
-_domain19 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range19 = (-180, 180)
-_key19 = b"\x13"
-
-# Sensor Relative Roll Angle
-_domain20 = (0, 2 ** 32 - 1)
-_range20 = (0, 360)
-_key20 = b"\x14"
-
-# Slant Range
-_domain21 = (0, 2 ** 32 - 1)
-_range21 = (0, +5e6)
-_key21 = b"\x15"
-
-# Target Width
-_domain22 = (0, 2 ** 16 - 1)
-_range22 = (0, +10e3)
-_key22 = b"\x16"
-
-# Frame Center Latitude
-_domain23 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range23 = (-90, 90)
-_key23 = b"\x17"
-
-# Frame Center Longitude
-_domain24 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range24 = (-180, 180)
-_key24 = b"\x18"
-
-# Frame Center Elevation
-_domain25 = (0, 2 ** 16 - 1)
-_range25 = (-900, +19e3)
-_key25 = b"\x19"
-
-# Sensor Ellipsoid Height
-_domain75 = (0, 2 ** 16 - 1)
-_range75 = (-900, 19000)
-_key75 = b"\x4B"
-
-# Corner Latitude Point 1 (Full)
-_domain82 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range82 = (-90, 90)
-_key82 = b"\x52"
-
-# Corner Longitude Point 1 (Full)
-_domain83 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range83 = (-180, 180)
-_key83 = b"\x53"
-
-# Corner Latitude Point 2 (Full)
-_domain84 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range84 = (-90, 90)
-_key84 = b"\x54"
-
-# Corner Longitude Point 2 (Full)
-_domain85 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range85 = (-180, 180)
-_key85 = b"\x55"
-
-# Corner Latitude Point 3 (Full)
-_domain86 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range86 = (-90, 90)
-_key86 = b"\x56"
-
-# Corner Longitude Point 3 (Full)
-_domain87 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range87 = (-180, 180)
-_key87 = b"\x57"
-
-# Corner Latitude Point 4 (Full)
-_domain88 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range88 = (-90, 90)
-_key88 = b"\x58"
-
-# Corner Longitude Point 4 (Full)
-_domain89 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range89 = (-180, 180)
-_key89 = b"\x59"
-
-# Platform Pitch Angle (Full)
-_domain90 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range90 = (-90, 90)
-_key90 = b"\x5A"
-
-# Platform Roll Angle (Full)
-_domain91 = ((-(2 ** 31) - 1), 2 ** 31 - 1)
-_range91 = (-90, 90)
-_key91 = b"\x5B"
 
 
 class Multiplexor(QDialog, Ui_VideoMultiplexer):
@@ -291,9 +171,9 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             except Exception:
                                 date_end = datetime.strptime(v, "%Y/%m/%d %H:%M:%S")
 
-                            _bytes = datetime_to_bytes(date_end)
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key2 + _len + _bytes
+                            _bytes = bytes(
+                                PrecisionTimeStamp(datetime_to_bytes(date_end))
+                            )
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
@@ -302,75 +182,56 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             OSD_yaw = float(v)
                             if OSD_yaw < 0:
                                 OSD_yaw = OSD_yaw + 360
-                            _bytes = float_to_bytes(
-                                round(OSD_yaw, 4), _domain5, _range5
-                            )
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key5 + _len + _bytes
+
+                            _bytes = bytes(PlatformHeadingAngle(OSD_yaw))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
                         # Platform Pitch Angle
                         if k == "OSD.pitch":
                             OSD_pitch = float(v)
-                            _bytes = float_to_bytes(
-                                round(OSD_pitch, 4), _domain6, _range6
-                            )
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key6 + _len + _bytes
+
+                            _bytes = bytes(PlatformPitchAngle(OSD_pitch))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
                         # Platform Roll Angle
                         if k == "OSD.roll":
                             OSD_roll = float(v)
-                            _bytes = float_to_bytes(
-                                round(OSD_roll, 4), _domain7, _range7
-                            )
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key7 + _len + _bytes
+
+                            _bytes = bytes(PlatformRollAngle(OSD_roll))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
                         # Sensor Latitude
                         if k == "OSD.latitude":
                             OSD_latitude = float(v)
-                            _bytes = float_to_bytes(
-                                round(OSD_latitude, 4), _domain13, _range13
-                            )
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key13 + _len + _bytes
+
+                            _bytes = bytes(SensorLatitude(OSD_latitude))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
                         # Sensor Longitude
                         if k == "OSD.longitude":
                             OSD_longitude = float(v)
-                            _bytes = float_to_bytes(OSD_longitude, _domain14, _range14)
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key14 + _len + _bytes
+
+                            _bytes = bytes(SensorLongitude(OSD_longitude))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
                         # Sensor True Altitude
                         if k == "OSD.altitude [m]":
                             OSD_altitude = float(v)
-                            _bytes = float_to_bytes(
-                                round(OSD_altitude, 4), _domain15, _range15
-                            )
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key15 + _len + _bytes
+
+                            _bytes = bytes(SensorTrueAltitude(OSD_altitude))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
                         # Sensor Ellipsoid Height
                         if k == "OSD.height [m]":
                             OSD_height = float(v)
-                            _bytes = float_to_bytes(
-                                round(OSD_height, 4), _domain75, _range75
-                            )
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key75 + _len + _bytes
+
+                            _bytes = bytes(SensorEllipsoidHeightConversion(OSD_height))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
@@ -378,38 +239,27 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                         if k == "GIMBAL.yaw":
                             # GIMBAL_yaw = float(v)
                             GIMBAL_yaw = 0.0
-                            _bytes = float_to_bytes(
-                                round(GIMBAL_yaw, 4), _domain18, _range18
-                            )
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key18 + _len + _bytes
+
+                            _bytes = bytes(SensorRelativeAzimuthAngle(GIMBAL_yaw))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
                         # Sensor Relative Elevation Angle
                         if k == "GIMBAL.pitch":
                             GIMBAL_pitch = float(v)
-                            _bytes = float_to_bytes(
-                                round(GIMBAL_pitch, 4), _domain19, _range19
-                            )
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key19 + _len + _bytes
+
+                            _bytes = bytes(SensorRelativeElevationAngle(v))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
                         # Sensor Relative Roll Angle
                         if k == "GIMBAL.roll":
-                            GIMBAL_roll = float(v)
-                            _bytes = float_to_bytes(
-                                round(GIMBAL_roll, 4), _domain20, _range20
-                            )
-                            _len = int_to_bytes(len(_bytes))
-                            _bytes = _key20 + _len + _bytes
+                            _bytes = bytes(SensorRelativeRollAngle(v))
                             sizeTotal += len(_bytes)
                             bufferData += _bytes
 
-                    except Exception:
-                        print("Multiplexer error")
+                    except Exception as e:
+                        print("Multiplexer error", e)
                         continue
 
                 try:
@@ -421,25 +271,21 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
 
                     # CheckSum
                     v = abs(hash(end_path)) % (10 ** 4)
-                    _bytes = int_to_bytes(v, 4)
-                    _len = int_to_bytes(len(_bytes))
-                    _bytes = _key1 + _len + _bytes
+                    _bytes = bytes(Checksum(v))
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
                     # Sensor Horizontal Field of View
                     v = self.sp_hfov.value()
-                    _bytes = float_to_bytes(float(v), _domain16, _range16)
-                    _len = int_to_bytes(len(_bytes))
-                    _bytes = _key16 + _len + _bytes
+
+                    _bytes = bytes(SensorHorizontalFieldOfView(float(v)))
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
                     # Sensor Vertical Field of View
                     v = self.sp_vfov.value()
-                    _bytes = float_to_bytes(float(v), _domain17, _range17)
-                    _len = int_to_bytes(len(_bytes))
-                    _bytes = _key17 + _len + _bytes
+
+                    _bytes = bytes(SensorVerticalFieldOfView(float(v)))
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
@@ -448,9 +294,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     anlge = 180 + (OSD_pitch + GIMBAL_pitch)
                     slantRange = abs(OSD_altitude / (cos(radians(anlge))))
 
-                    _bytes = float_to_bytes(round(slantRange, 4), _domain21, _range21)
-                    _len = int_to_bytes(len(_bytes))
-                    _bytes = _key21 + _len + _bytes
+                    _bytes = bytes(SlantRange(slantRange))
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
@@ -459,53 +303,39 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     targetWidth = 2.0 * slantRange * tan(radians(HFOV / 2.0))
 
                     try:
-                        _bytes = float_to_bytes(
-                            round(targetWidth, 4), _domain22, _range22
-                        )
+                        _bytes = bytes(TargetWidth(targetWidth))
                     except Exception:
-                        _bytes = float_to_bytes(round(0.0, 4), _domain22, _range22)
+                        _bytes = bytes(TargetWidth(0.0))
 
-                    _len = int_to_bytes(len(_bytes))
-                    _bytes = _key22 + _len + _bytes
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
                     # Frame Center Latitude
                     angle = 90 + (OSD_pitch + GIMBAL_pitch)
                     tgHzDist = OSD_altitude * tan(radians(angle))
-                    r_earth = 6371008.8
 
                     dy = tgHzDist * cos(radians(OSD_yaw))
-                    framecenterlatitude = OSD_latitude + (dy / r_earth) * (180 / pi)
-
-                    _bytes = float_to_bytes(
-                        round(framecenterlatitude, 4), _domain23, _range23
+                    framecenterlatitude = OSD_latitude + degrees(
+                        (dy / EARTH_MEAN_RADIUS)
                     )
-                    _len = int_to_bytes(len(_bytes))
-                    _bytes = _key23 + _len + _bytes
+
+                    _bytes = bytes(FrameCenterLatitude(framecenterlatitude))
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
                     # Frame Center Longitude
                     dx = tgHzDist * sin(radians(OSD_yaw))
-                    framecenterlongitude = OSD_longitude + (dx / r_earth) * (
-                        180 / pi
-                    ) / cos(OSD_latitude * pi / 180)
+                    framecenterlongitude = OSD_longitude + degrees(
+                        (dx / EARTH_MEAN_RADIUS)
+                    ) / cos(radians(OSD_latitude))
 
-                    _bytes = float_to_bytes(
-                        round(framecenterlongitude, 4), _domain24, _range24
-                    )
-                    _len = int_to_bytes(len(_bytes))
-                    _bytes = _key24 + _len + _bytes
+                    _bytes = bytes(FrameCenterLongitude(framecenterlongitude))
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
                     # Frame Center Elevation
                     frameCenterElevation = 0.0
-
-                    _bytes = float_to_bytes(frameCenterElevation, _domain25, _range25)
-                    _len = int_to_bytes(len(_bytes))
-                    _bytes = _key25 + _len + _bytes
+                    _bytes = bytes(FrameCenterElevation(frameCenterElevation))
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
@@ -574,21 +404,17 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     #                     bufferData += _bytes
 
                     # Platform Pitch Angle (Full)
-                    _bytes = float_to_bytes(round(OSD_pitch, 4), _domain90, _range90)
-                    _len = int_to_bytes(len(_bytes))
-                    _bytes = _key90 + _len + _bytes
+                    _bytes = bytes(PlatformPitchAngleFull(OSD_pitch))
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
                     # Platform Roll Angle (Full)
-                    _bytes = float_to_bytes(round(OSD_roll, 4), _domain91, _range91)
-                    _len = int_to_bytes(len(_bytes))
-                    _bytes = _key91 + _len + _bytes
+                    _bytes = bytes(PlatformRollAngleFull(OSD_roll))
                     sizeTotal += len(_bytes)
                     bufferData += _bytes
 
                     # set packet header
-                    writeData = cle
+                    writeData = UASLocalMetadataSet
                     writeData += int_to_bytes(sizeTotal)
                     writeData += bufferData
 
