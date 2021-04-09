@@ -27,6 +27,7 @@ email=franka1986@gmail.com
 changelog=
     ** General **
      1.16:
+      - Remove unnecessary calculations.
       - Update plot bitrate code.
       - Measures now use QGIS functions.
       - Important clean code.
