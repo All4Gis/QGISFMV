@@ -1334,7 +1334,7 @@
   <customwidget>
    <class>VideoWidget</class>
    <extends>QWidget</extends>
-   <header>QGIS_FMV.video.QgsVideo</header>
+   <header>QGIS_FMV.video.QgsVideoWidget</header>
    <slots>
     <slot>removeLastLine()</slot>
     <slot>removeLastSegmentLine()</slot>

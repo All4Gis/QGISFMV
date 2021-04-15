@@ -1,6 +1,10 @@
 from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtWidgets import QSlider, QStyleOptionSlider, QStyle
 
+"""
+Custom player slider
+"""
+
 
 class QgsFmvSlider(QSlider):
 

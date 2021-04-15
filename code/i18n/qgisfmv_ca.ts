@@ -135,7 +135,7 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../manager/QgsManager.py" line="366"/>
+        <location filename="../manager/QgsManager.py" line="381"/>
         <source>Open video</source>
         <translation>Obrir vídeo</translation>
     </message>
@@ -145,12 +145,12 @@
         <translation type="obsolete">Aquest vídeo no conté Metadades ! :</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="249"/>
+        <location filename="../manager/QgsManager.py" line="248"/>
         <source>Loading</source>
         <translation>Carregant</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="310"/>
+        <location filename="../manager/QgsManager.py" line="315"/>
         <source>Start location not available.</source>
         <translation>Iniciar localització no disponible</translation>
     </message>
@@ -160,17 +160,17 @@
         <translation>No s&apos;ha pogut carregar FFMPEG!</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="71"/>
+        <location filename="../manager/QgsManager.py" line="75"/>
         <source>Remove from list</source>
         <translation>Elimina de la llista</translation>
     </message>
     <message>
         <location filename="../manager/QgsManager.py" line="214"/>
         <source>You must delete some video from the list before adding a new one</source>
-        <translation>Heu d’eliminar algun vídeo de la llista abans d’afegir-ne un de nou</translation>
+        <translation type="obsolete">Heu d’eliminar algun vídeo de la llista abans d’afegir-ne un de nou</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="323"/>
+        <location filename="../manager/QgsManager.py" line="334"/>
         <source>This video doesn&apos;t have Metadata ! </source>
         <translation type="unfinished"></translation>
     </message>
@@ -253,12 +253,17 @@
     <message>
         <location filename="../manager/QgsMultiplexor.py" line="200"/>
         <source>Open file</source>
-        <translation>Obrir fitxer</translation>
+        <translation type="obsolete">Obrir fitxer</translation>
     </message>
     <message>
-        <location filename="../manager/QgsMultiplexor.py" line="215"/>
+        <location filename="../manager/QgsMultiplexor.py" line="111"/>
         <source>You must complete all the information</source>
         <translation>Heu d’omplir tota la informació</translation>
+    </message>
+    <message>
+        <location filename="../manager/QgsMultiplexor.py" line="397"/>
+        <source>Multiplexer error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -775,7 +780,7 @@
 <context>
     <name>QgsFmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="102"/>
+        <location filename="../QgsFmv.py" line="118"/>
         <source>Full Motion Video (FMV)</source>
         <translation>Full Motion Video (FMV)</translation>
     </message>
@@ -788,137 +793,137 @@
         <translation type="obsolete">Falta la dependència</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="80"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="66"/>
         <source>Do you want install Lav Filters?</source>
         <translation>Voleu instal·lar Lav Filters?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="377"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="382"/>
         <source>Do you want install FFMPEG?</source>
         <translation>Voleu instal·lar FFMPEG?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="277"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="273"/>
         <source>Do you want install missing dependencies?</source>
         <translation>Voleu instal·lar dependències que falten?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="470"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="491"/>
         <source>Dem file not exist!</source>
         <translation>El fitxer MDE no existeix</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="312"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="307"/>
         <source>Python libraries installed correctly</source>
         <translation>Biblioteques Python instal·lades correctament</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="324"/>
         <source>Error installing the python libraries, use the requirements file!</source>
-        <translation>S&apos;ha produït un error en instal·lar les biblioteques python, utilitzeu el fitxer de requisits!</translation>
+        <translation type="obsolete">S&apos;ha produït un error en instal·lar les biblioteques python, utilitzeu el fitxer de requisits!</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="230"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="220"/>
         <source>Do you want upgrade dependencies?</source>
         <translation>Vol actualitzar les dependències?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="241"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="232"/>
         <source>Python libraries updated correctly</source>
         <translation>Les biblioteques Python s’han actualitzat correctament</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="582"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="600"/>
         <source>No requirements file found in {}</source>
         <translation>No s&apos;ha trobat cap fitxer de requisits a {}</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="230"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="220"/>
         <source>&lt;b&gt;Updates available&lt;/b&gt;</source>
         <translation type="unfinished">Actualitzacions disponibles</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="207"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="194"/>
         <source>&lt;b&gt;Missing dependencies&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="333"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="331"/>
         <source>Do you want install GStreamer?</source>
         <translation>Voleu instal·lar GStreamer?</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="361"/>
         <source>INSTALLATION FAILED: Failed to install GStreamer library.</source>
-        <translation>INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar la biblioteca GStreamer.</translation>
+        <translation type="obsolete">INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar la biblioteca GStreamer.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="367"/>
         <source>INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.</source>
-        <translation>INSTAL·LACIÓ CORRECTA: El paquet GStreamer instal·lat amb èxit.</translation>
+        <translation type="obsolete">INSTAL·LACIÓ CORRECTA: El paquet GStreamer instal·lat amb èxit.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="405"/>
         <source>Failed to install ffmpeg library, trying add-apt-repository.</source>
-        <translation>No s&apos;ha pogut instal·lar la biblioteca ffmpeg, provant add-apt-repository.</translation>
+        <translation type="obsolete">No s&apos;ha pogut instal·lar la biblioteca ffmpeg, provant add-apt-repository.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="445"/>
         <source>INSTALLATION FAILED: Could not install ffmpeg package.</source>
-        <translation>INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar el paquet ffmpeg.</translation>
+        <translation type="obsolete">INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar el paquet ffmpeg.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="422"/>
         <source>GET REPO SUCCESSFUL: Successfully added trusty-media repo where ffmpeg is located</source>
-        <translation>OBTENCIO CORRECTA: S&apos;ha afegit el repo on es troba el ffmpeg</translation>
+        <translation type="obsolete">OBTENCIO CORRECTA: S&apos;ha afegit el repo on es troba el ffmpeg</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="431"/>
         <source>UPDATE FAILED: Failed to retrieve packages.</source>
-        <translation>ACTUALITZACIÓ FALLIDA: No s&apos;ha pogut recuperar els paquets.</translation>
+        <translation type="obsolete">ACTUALITZACIÓ FALLIDA: No s&apos;ha pogut recuperar els paquets.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="437"/>
         <source>UPDATE SUCCESSFUL: Sucessfully retrived updated packages.</source>
-        <translation>ACTUALIZACIO CORRECTA: S&apos;han recuperat els paquets actualitzats amb èxit.</translation>
+        <translation type="obsolete">ACTUALIZACIO CORRECTA: S&apos;han recuperat els paquets actualitzats amb èxit.</translation>
     </message>
     <message>
         <location filename="../utils/QgsFmvInstaller.py" line="451"/>
         <source>INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.</source>
-        <translation>INSTAL·LACIÓ CORRECTA: Paquet ffmpeg instal·lat amb èxit.</translation>
+        <translation type="obsolete">INSTAL·LACIÓ CORRECTA: Paquet ffmpeg instal·lat amb èxit.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="106"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="94"/>
         <source>&lt;b&gt;Missing FFMPEG dependency&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="153"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="140"/>
         <source>&lt;b&gt;Dem file not exist!&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="153"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="140"/>
         <source>Do you want download global DEM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="80"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="66"/>
         <source>&lt;b&gt;Missing python dependency&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="277"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="273"/>
         <source>Missing python dependencies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="333"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="331"/>
         <source>Missing GStreamer dependency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="377"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="382"/>
         <source>Missing FFMPEG dependency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -928,30 +933,30 @@
     <message>
         <location filename="../player/QgsFmvMetadata.py" line="40"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
-        <translation>Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
+        <translation type="obsolete">Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="74"/>
+        <location filename="../player/QgsFmvMetadata.py" line="84"/>
         <source>Save PDF</source>
         <translation>Guardar com a PDF</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="116"/>
+        <location filename="../player/QgsFmvMetadata.py" line="131"/>
         <source>Video : </source>
         <translation>Vídeo : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="117"/>
+        <location filename="../player/QgsFmvMetadata.py" line="132"/>
         <source>TimeStamp : </source>
         <translation>Marca de temps : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="169"/>
+        <location filename="../player/QgsFmvMetadata.py" line="184"/>
         <source>Current Frame</source>
         <translation>Fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="199"/>
+        <location filename="../player/QgsFmvMetadata.py" line="216"/>
         <source>Save CSV</source>
         <translation>Guardar com a CSV</translation>
     </message>
@@ -959,12 +964,12 @@
 <context>
     <name>QgsFmvOpenStream</name>
     <message>
-        <location filename="../manager/QgsFmvOpenStream.py" line="46"/>
+        <location filename="../manager/QgsFmvOpenStream.py" line="47"/>
         <source>Checking connection!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../manager/QgsFmvOpenStream.py" line="58"/>
+        <location filename="../manager/QgsFmvOpenStream.py" line="60"/>
         <source>There is no such connection!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -977,122 +982,122 @@
         <translation type="obsolete">El buffer de metadades ha fallat! : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="265"/>
+        <location filename="../player/QgsFmvPlayer.py" line="274"/>
         <source>This video doesn&apos;t have Audio ! </source>
         <translation>Aquest vídeo no té àudio. :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="273"/>
+        <location filename="../player/QgsFmvPlayer.py" line="285"/>
         <source>Audio check Failed! : </source>
         <translation>Error de verificació d&apos;àudio! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="557"/>
+        <location filename="../player/QgsFmvPlayer.py" line="597"/>
         <source>Mute/Unmute</source>
         <translation>Silenci/ No Silenci</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="566"/>
+        <location filename="../player/QgsFmvPlayer.py" line="605"/>
         <source>Extract All Frames</source>
         <translation>Extreure Tots els Frames</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="574"/>
+        <location filename="../player/QgsFmvPlayer.py" line="612"/>
         <source>Extract Current Frame</source>
         <translation>Extreu el frame actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="582"/>
+        <location filename="../player/QgsFmvPlayer.py" line="619"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadades</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1716"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1823"/>
         <source>Video Information : </source>
         <translation>Informació del vídeo:</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1586"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1681"/>
         <source>Save Current Frame</source>
         <translation>Guarda el frame actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="471"/>
+        <location filename="../player/QgsFmvPlayer.py" line="507"/>
         <source>Save Json</source>
         <translation>Guardar a Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1250"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1309"/>
         <source>Save video record</source>
         <translation>Guarda la gravació del vídeo</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1371"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1440"/>
         <source>Save Video as...</source>
         <translation>Guardar vídeo com ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1544"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1634"/>
         <source>Save all Frames</source>
         <translation>Guardar Tots els Frames</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1459"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1535"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>Deseu el diagrama de bits d’àudio</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1479"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1558"/>
         <source>Save Video Bitrate Plot</source>
         <translation>Desa un gràfic de bits de vídeo</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1618"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1719"/>
         <source>Save Current Georeferenced Frame</source>
         <translation>Guardar el frame georeferenciat actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1197"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1251"/>
         <source>Playing : </source>
         <translation>Reproduint : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1222"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1282"/>
         <source>Open Video File : </source>
         <translation>Obrir Fitxer de Vídeo : </translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1502"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
-        <translation>Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
+        <translation type="obsolete">Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="590"/>
+        <location filename="../player/QgsFmvPlayer.py" line="626"/>
         <source>Options</source>
         <translation>Opcions</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1522"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1610"/>
         <source>Information</source>
         <translation>Informació</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1522"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1610"/>
         <source>Do you want to load the layer?</source>
         <translation>Voleu carregar la capa?</translation>
     </message>
     <message>
         <location filename="../player/QgsFmvPlayer.py" line="1743"/>
         <source>If you close or reopen the video all the information will be erased.</source>
-        <translation>Si tanqueu o torneu a obrir el vídeo, esborrarà tota la informació.</translation>
+        <translation type="obsolete">Si tanqueu o torneu a obrir el vídeo, esborrarà tota la informació.</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1743"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1851"/>
         <source>Do you want to close or reopen it?</source>
         <translation>Voleu tancar-lo o reobrir-lo?</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="306"/>
+        <location filename="../player/QgsFmvPlayer.py" line="323"/>
         <source>Metadata Buffering...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1100,14 +1105,22 @@
 <context>
     <name>QgsJsonModel</name>
     <message>
-        <location filename="../utils/QgsJsonModel.py" line="122"/>
+        <location filename="../reports/QgsJsonModel.py" line="125"/>
         <source>Key</source>
-        <translation>Clau</translation>
+        <translation type="unfinished">Clau</translation>
     </message>
     <message>
-        <location filename="../utils/QgsJsonModel.py" line="123"/>
+        <location filename="../reports/QgsJsonModel.py" line="126"/>
         <source>Value</source>
-        <translation>Valor</translation>
+        <translation type="unfinished">Valor</translation>
+    </message>
+</context>
+<context>
+    <name>QgsMultiplexor</name>
+    <message>
+        <location filename="../manager/QgsMultiplexor.py" line="94"/>
+        <source>Open file</source>
+        <translation type="unfinished">Obrir fitxer</translation>
     </message>
 </context>
 <context>
@@ -1176,7 +1189,7 @@
 <context>
     <name>VideoProcessor</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="64"/>
+        <location filename="../player/QgsFmvPlayer.py" line="65"/>
         <source>Error: Missing OpenCV packages</source>
         <translation>Error: falten els paquets OpenCV</translation>
     </message>

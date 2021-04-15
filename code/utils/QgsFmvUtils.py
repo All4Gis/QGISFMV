@@ -1,13 +1,11 @@
 import numpy as np
 from cv2 import COLOR_BGR2RGB, cvtColor, COLOR_GRAY2RGB, findHomography
-from datetime import datetime
 import inspect
 import json
 from math import sin, atan, tan, sqrt, radians, pi, degrees
 import os
 import shutil
-from qgis.PyQt.QtCore import QSettings, QUrl, QEventLoop
-from qgis.PyQt.QtCore import QCoreApplication, Qt
+from qgis.PyQt.QtCore import QSettings, QUrl, QEventLoop, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QImage, QPainter
 from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.PyQt.QtWidgets import QFileDialog
@@ -44,6 +42,7 @@ from QGIS_FMV.utils.QgsFmvLayers import (
     UpdateFrameAxisData,
     SetcrtSensorSrc,
     SetcrtPltTailNum,
+    selectLayerByName,
 )
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.QgsFmvConstants import (
@@ -60,6 +59,7 @@ from QGIS_FMV.QgsFmvConstants import (
     ffprobe_path,
     UASLocalMetadataSet,
     KlvHeaderKeyOther,
+    defaultTargetWidth,
 )
 
 try:
@@ -68,9 +68,6 @@ except ImportError:
     None
 
 settings = QSettings()
-tm = QgsApplication.taskManager()
-
-defaultTargetWidth = 200.0
 
 # Video Global variable instance
 gv = None
@@ -79,9 +76,6 @@ dtm_data = []
 dtm_transform = None
 dtm_colLowerBound = 0
 dtm_rowLowerBound = 0
-
-# tLastLon = 0.0
-# tLastLat = 0.0
 
 _settings = {}
 
@@ -625,12 +619,8 @@ def _spawn(cmds, t="ffmpeg"):
 
 def ResetData():
     """ Reset Global Data """
-    # global tLastLon, tLastLat
-
     SetcrtSensorSrc()
     SetcrtPltTailNum()
-    # tLastLon = 0.0
-    # tLastLat = 0.0
 
 
 # TODO : Study other way to save or get DTM values, withou settings value
@@ -811,9 +801,9 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
 
     # detect if we need a recenter or not. If Footprint and Platform fits in
     # 80% of the map, do not trigger recenter.
-    f_lyr = qgsu.selectLayerByName(Footprint_lyr, groupName)
-    p_lyr = qgsu.selectLayerByName(Platform_lyr, groupName)
-    t_lyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
+    f_lyr = selectLayerByName(Footprint_lyr, groupName)
+    p_lyr = selectLayerByName(Platform_lyr, groupName)
+    t_lyr = selectLayerByName(FrameCenter_lyr, groupName)
 
     iface = gv.getIface()
     centerMode = gv.getCenterMode()
@@ -868,7 +858,6 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
 
         # recenter map on platform
         if not map_detec_buffer.contains(p_lyr_out_extent) and centerMode == 1:
-            # recenter map on platform
             iface.mapCanvas().setExtent(p_lyr_out_extent)
         # recenter map on footprint
         elif not map_detec_buffer.contains(f_lyr_out_extent) and centerMode == 2:
@@ -1183,13 +1172,9 @@ def CornerEstimationWithoutOffsets(
             reversed(QgsGeoUtils.destination(destPoint, distance2, bearing))
         )
 
-        frameCenterPoint = [
-            frameCenterLat,
-            frameCenterLon,
-            frameCenterElevation 
-        ]
+        frameCenterPoint = [frameCenterLat, frameCenterLon, frameCenterElevation]
 
-        # If no framcenter (f.i. horizontal target) don't comptute footprint,
+        # If no frame center (f.i. horizontal target) don't compute footprint,
         # beams and frame center
         if frameCenterPoint[0] is None and frameCenterPoint[1] is None:
             gv.setTransform(None)
@@ -1335,95 +1320,6 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
     return pt
 
 
-# def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
-#     ''' Get Altitude from DEM '''
-#     sensorLat = sensorPt[0]
-#     sensorLon = sensorPt[1]
-#     sensorAlt = sensorPt[2]
-#     demPtLat = demPt[1]
-#     demPtLon = demPt[0]
-#     demPtAlt = demPt[2]
-#
-#     distance = sphere.distance([sensorLat, sensorLon], [demPtLat, demPtLon])
-#     distance = sqrt(distance ** 2 + (demPtAlt - demPtAlt) ** 2)
-#     dLat = (demPtLat - sensorLat) / distance
-#     dLon = (demPtLon - sensorLon) / distance
-#     dAlt = (demPtAlt - sensorAlt) / distance
-#
-#     k = ((demPtAlt - planeHeight) / (sensorAlt - demPtAlt)) * distance
-#     pt = [sensorLon + (distance + k) * dLon, sensorLat +
-#           (distance + k) * dLat, sensorAlt + (distance + k) * dAlt]
-#
-#     return pt
-
-
-def _convert_timestamp(ts):
-    """Translates the values from a regex match for two timestamps of the
-    form 00:12:34,567 into seconds."""
-    start = int(ts.group(1)) * 3600 + int(ts.group(2)) * 60
-    start += int(ts.group(3))
-    start += float(ts.group(4)) / 10 ** len(ts.group(4))
-    end = int(ts.group(5)) * 3600 + int(ts.group(6)) * 60
-    end += int(ts.group(7))
-    end += float(ts.group(8)) / 10 ** len(ts.group(8))
-    return start, end
-
-
-def _add_secs_to_time(timeval, secs_to_add):
-    """ Seconds to time """
-    secs = timeval.hour * 3600 + timeval.minute * 60 + timeval.second
-    secs += secs_to_add
-    return _seconds_to_time(secs)
-
-
-def _time_to_seconds(dateStr):
-    """
-    Time to seconds
-    @type dateStr: String
-    @param dateStr: Date string value
-    """
-    timeval = datetime.strptime(dateStr, "%H:%M:%S.%f")
-    secs = (
-        timeval.hour * 3600
-        + timeval.minute * 60
-        + timeval.second
-        + timeval.microsecond / 1000000
-    )
-
-    return secs
-
-
-def _seconds_to_time(sec):
-    """Returns a string representation of the length of time provided.
-    For example, 3675.14 -> '01:01:15'
-    @type sec: String
-    @param sec: seconds string value
-    """
-    hours = int(sec / 3600)
-    sec -= hours * 3600
-    minutes = int(sec / 60)
-    sec -= minutes * 60
-    return "%02d:%02d:%02d" % (hours, minutes, sec)
-
-
-def _seconds_to_time_frac(sec, comma=False):
-    """Returns a string representation of the length of time provided,
-    including partial seconds.
-    For example, 3675.14 -> '01:01:15.140000'
-    @type sec: String
-    @param sec: seconds string value
-    """
-    hours = int(sec / 3600)
-    sec -= hours * 3600
-    minutes = int(sec / 60)
-    sec -= minutes * 60
-    if comma:
-        frac = int(round(sec % 1.0 * 1000))
-        return "%02d:%02d:%02d,%03d" % (hours, minutes, sec, frac)
-    else:
-        return "%02d:%02d:%07.4f" % (hours, minutes, sec)
-
-
 def BurnDrawingsImage(source, overlay):
     """Burn drawings into image
     @type source: QImage
@@ -1446,3 +1342,25 @@ def BurnDrawingsImage(source, overlay):
     # Restore size
     base = base.scaled(source.size(), Qt.IgnoreAspectRatio)
     return base
+
+
+# def GetLine3DIntersectionWithPlane(sensorPt, demPt, planeHeight):
+#     ''' Get Altitude from DEM '''
+#     sensorLat = sensorPt[0]
+#     sensorLon = sensorPt[1]
+#     sensorAlt = sensorPt[2]
+#     demPtLat = demPt[1]
+#     demPtLon = demPt[0]
+#     demPtAlt = demPt[2]
+#
+#     distance = sphere.distance([sensorLat, sensorLon], [demPtLat, demPtLon])
+#     distance = sqrt(distance ** 2 + (demPtAlt - demPtAlt) ** 2)
+#     dLat = (demPtLat - sensorLat) / distance
+#     dLon = (demPtLon - sensorLon) / distance
+#     dAlt = (demPtAlt - sensorAlt) / distance
+#
+#     k = ((demPtAlt - planeHeight) / (sensorAlt - demPtAlt)) * distance
+#     pt = [sensorLon + (distance + k) * dLon, sensorLat +
+#           (distance + k) * dLat, sensorAlt + (distance + k) * dAlt]
+#
+#     return pt

@@ -82,9 +82,37 @@ Line = "LineString"
 Polygon = "Polygon"
 
 
+# def getLayerExtent(layer=None):
+#     """ Get Layer extent """
+#     return (
+#         iface.mapCanvas().mapSettings().layerExtentToOutputExtent(layer, layer.extent())
+#     )
+
+
+def selectLayerByName(layerName, group=None):
+    """ Select Layer by Name """
+    returnLayer = None
+    try:
+        if group is None:
+            returnLayer = QgsProject.instance().mapLayersByName(layerName)[0]
+            return returnLayer
+        else:
+            root = QgsProject.instance().layerTreeRoot()
+            returnLayer = QgsProject.instance().mapLayersByName(layerName)
+            g = root.findGroup(group)
+            if g is not None:
+                for child in returnLayer:
+                    layer = g.findLayer(child.id())
+                    if layer is not None:
+                        returnLayer = child
+                        return returnLayer
+    except IndexError:
+        return returnLayer
+
+
 def AddDrawPointOnMap(pointIndex, Longitude, Latitude, Altitude):
     """  add pin point on the map """
-    pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
+    pointLyr = selectLayerByName(Point_lyr, groupName)
     if pointLyr is None:
         return
     pointLyr.startEditing()
@@ -103,7 +131,7 @@ def AddDrawLineOnMap(drawLines):
     """  add Line on the map """
 
     RemoveAllDrawLineOnMap()
-    linelyr = qgsu.selectLayerByName(Line_lyr, groupName)
+    linelyr = selectLayerByName(Line_lyr, groupName)
     if linelyr is None:
         return
 
@@ -126,7 +154,7 @@ def AddDrawLineOnMap(drawLines):
 
 def RemoveAllDrawLineOnMap():
     """ Remove all features on Line Layer """
-    lineLyr = qgsu.selectLayerByName(Line_lyr, groupName)
+    lineLyr = selectLayerByName(Line_lyr, groupName)
     if lineLyr is None:
         return
     lineLyr.startEditing()
@@ -137,7 +165,7 @@ def RemoveAllDrawLineOnMap():
 
 def RemoveLastDrawPolygonOnMap():
     """  Remove Last Feature on Polygon Layer """
-    polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
+    polyLyr = selectLayerByName(Polygon_lyr, groupName)
     if polyLyr is None:
         return
     polyLyr.startEditing()
@@ -150,7 +178,7 @@ def RemoveLastDrawPolygonOnMap():
 
 def RemoveLastDrawPointOnMap():
     """ Remove Last features on Point Layer """
-    pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
+    pointLyr = selectLayerByName(Point_lyr, groupName)
     if pointLyr is None:
         return
     pointLyr.startEditing()
@@ -163,7 +191,7 @@ def RemoveLastDrawPointOnMap():
 
 def RemoveAllDrawPointOnMap():
     """ Remove all features on Point Layer """
-    pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
+    pointLyr = selectLayerByName(Point_lyr, groupName)
     if pointLyr is None:
         return
     pointLyr.startEditing()
@@ -174,7 +202,7 @@ def RemoveAllDrawPointOnMap():
 
 def RemoveAllDrawPolygonOnMap():
     """ Remove all features on Polygon Layer """
-    polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
+    polyLyr = selectLayerByName(Polygon_lyr, groupName)
     if polyLyr is None:
         return
     polyLyr.startEditing()
@@ -185,7 +213,7 @@ def RemoveAllDrawPolygonOnMap():
 
 def AddDrawPolygonOnMap(poly_coordinates):
     """ Add Polygon Layer """
-    polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
+    polyLyr = selectLayerByName(Polygon_lyr, groupName)
     if polyLyr is None:
         return
     polyLyr.startEditing()
@@ -256,7 +284,7 @@ def UpdateFootPrintData(
     global crtSensorSrc, groupName
     imgSS = packet.ImageSourceSensor
 
-    footprintLyr = qgsu.selectLayerByName(Footprint_lyr, groupName)
+    footprintLyr = selectLayerByName(Footprint_lyr, groupName)
 
     try:
         if all(
@@ -363,7 +391,7 @@ def UpdateBeamsData(
     alt = packet.SensorTrueAltitude
 
     global groupName
-    beamsLyr = qgsu.selectLayerByName(Beams_lyr, groupName)
+    beamsLyr = selectLayerByName(Beams_lyr, groupName)
 
     try:
         if all(
@@ -548,7 +576,7 @@ def UpdateTrajectoryData(packet, ele):
     alt = packet.SensorTrueAltitude
 
     global groupName
-    trajectoryLyr = qgsu.selectLayerByName(Trajectory_lyr, groupName)
+    trajectoryLyr = selectLayerByName(Trajectory_lyr, groupName)
 
     try:
         if all(v is not None for v in [trajectoryLyr, lat, lon, alt]):
@@ -601,7 +629,7 @@ def UpdateFrameAxisData(imgSS, sensor, framecenter, ele):
     fc_lon = framecenter[1]
     fc_alt = framecenter[2]
 
-    frameaxisLyr = qgsu.selectLayerByName(FrameAxis_lyr, groupName)
+    frameaxisLyr = selectLayerByName(FrameAxis_lyr, groupName)
 
     try:
         if all(v is not None for v in [frameaxisLyr, lat, lon, alt, fc_lat, fc_lon]):
@@ -657,7 +685,7 @@ def UpdateFrameCenterData(packet, ele):
         alt = 0.0
 
     global groupName
-    frameCenterLyr = qgsu.selectLayerByName(FrameCenter_lyr, groupName)
+    frameCenterLyr = selectLayerByName(FrameCenter_lyr, groupName)
 
     try:
         if all(v is not None for v in [frameCenterLyr, lat, lon, alt]):
@@ -703,7 +731,7 @@ def UpdatePlatformData(packet, ele):
     alt = packet.SensorTrueAltitude
     PlatformHeading = packet.PlatformHeadingAngle
     platformTailNumber = packet.PlatformTailNumber
-    platformLyr = qgsu.selectLayerByName(Platform_lyr, groupName)
+    platformLyr = selectLayerByName(Platform_lyr, groupName)
 
     try:
         if all(v is not None for v in [platformLyr, lat, lon, alt, PlatformHeading]):
@@ -780,7 +808,7 @@ def CreateVideoLayers(ele, name):
     global groupName
     groupName = name
 
-    if qgsu.selectLayerByName(Footprint_lyr, groupName) is None:
+    if selectLayerByName(Footprint_lyr, groupName) is None:
         lyr_footprint = newPolygonsLayer(
             None,
             [
@@ -803,7 +831,7 @@ def CreateVideoLayers(ele, name):
         if ele:
             SetDefaultFootprint3DStyle(lyr_footprint)
 
-    if qgsu.selectLayerByName(Beams_lyr, groupName) is None:
+    if selectLayerByName(Beams_lyr, groupName) is None:
         lyr_beams = newLinesLayer(
             None,
             [
@@ -823,7 +851,7 @@ def CreateVideoLayers(ele, name):
         if ele:
             SetDefaultBeams3DStyle(lyr_beams)
 
-    if qgsu.selectLayerByName(Trajectory_lyr, groupName) is None:
+    if selectLayerByName(Trajectory_lyr, groupName) is None:
         lyr_Trajectory = newLinesLayer(
             None, ["longitude", "latitude", "altitude"], epsg, Trajectory_lyr, LineZ
         )
@@ -833,7 +861,7 @@ def CreateVideoLayers(ele, name):
         if ele:
             SetDefaultTrajectory3DStyle(lyr_Trajectory)
 
-    if qgsu.selectLayerByName(FrameAxis_lyr, groupName) is None:
+    if selectLayerByName(FrameAxis_lyr, groupName) is None:
         lyr_frameaxis = newLinesLayer(
             None,
             [
@@ -854,7 +882,7 @@ def CreateVideoLayers(ele, name):
         if ele:
             SetDefaultFrameAxis3DStyle(lyr_frameaxis)
 
-    if qgsu.selectLayerByName(Platform_lyr, groupName) is None:
+    if selectLayerByName(Platform_lyr, groupName) is None:
         lyr_platform = newPointsLayer(
             None, ["longitude", "latitude", "altitude"], epsg, Platform_lyr, PointZ
         )
@@ -864,14 +892,14 @@ def CreateVideoLayers(ele, name):
         if ele:
             SetDefaultPlatform3DStyle(lyr_platform)
 
-    if qgsu.selectLayerByName(Point_lyr, groupName) is None:
+    if selectLayerByName(Point_lyr, groupName) is None:
         lyr_point = newPointsLayer(
             None, ["number", "longitude", "latitude", "altitude"], epsg, Point_lyr
         )
         SetDefaultPointStyle(lyr_point)
         addLayerNoCrsDialog(lyr_point, group=groupName)
 
-    if qgsu.selectLayerByName(FrameCenter_lyr, groupName) is None:
+    if selectLayerByName(FrameCenter_lyr, groupName) is None:
         lyr_framecenter = newPointsLayer(
             None, ["longitude", "latitude", "altitude"], epsg, FrameCenter_lyr
         )
@@ -881,14 +909,14 @@ def CreateVideoLayers(ele, name):
         if ele:
             SetDefaultFrameCenter3DStyle(lyr_framecenter)
 
-    if qgsu.selectLayerByName(Line_lyr, groupName) is None:
+    if selectLayerByName(Line_lyr, groupName) is None:
         #         lyr_line = newLinesLayer(
         # None, ["longitude", "latitude", "altitude"], epsg, Line_lyr)
         lyr_line = newLinesLayer(None, [], epsg, Line_lyr)
         SetDefaultLineStyle(lyr_line)
         addLayerNoCrsDialog(lyr_line, group=groupName)
 
-    if qgsu.selectLayerByName(Polygon_lyr, groupName) is None:
+    if selectLayerByName(Polygon_lyr, groupName) is None:
         lyr_polygon = newPolygonsLayer(
             None,
             ["Centroid_longitude", "Centroid_latitude", "Centroid_altitude", "Area"],
@@ -1159,7 +1187,7 @@ def SetDefaultBeamsStyle(layer, beam="DEFAULT"):
 # def UpdateStylesDrawLayers(NameSpace):
 #     ''' Update Symbology Drawing Layers '''
 #     s = QSettings()
-#     pointLyr = qgsu.selectLayerByName(Point_lyr, groupName)
+#     pointLyr = selectLayerByName(Point_lyr, groupName)
 #     if pointLyr is None:
 #         return
 #
@@ -1176,7 +1204,7 @@ def SetDefaultBeamsStyle(layer, beam="DEFAULT"):
 #     pointLyr.setRenderer(renderer)
 #     CommonLayer(pointLyr)
 #
-#     linelyr = qgsu.selectLayerByName(Line_lyr, groupName)
+#     linelyr = selectLayerByName(Line_lyr, groupName)
 #     if linelyr is None:
 #         return
 #
@@ -1189,7 +1217,7 @@ def SetDefaultBeamsStyle(layer, beam="DEFAULT"):
 #     symbol.setWidth(s.value(NameSpace + "/Options/drawings/lines/width"))
 #     CommonLayer(linelyr)
 #
-#     polyLyr = qgsu.selectLayerByName(Polygon_lyr, groupName)
+#     polyLyr = selectLayerByName(Polygon_lyr, groupName)
 #     if polyLyr is None:
 #         return
 #

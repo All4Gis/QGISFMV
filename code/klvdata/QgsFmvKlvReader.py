@@ -4,11 +4,9 @@ import collections
 import subprocess
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.utils.QgsFmvUtils import (
-    _time_to_seconds,
-    _seconds_to_time_frac,
-    _add_secs_to_time,
     _spawn,
 )
+
 from datetime import datetime
 
 from QGIS_FMV.QgsFmvConstants import (
@@ -232,7 +230,7 @@ class BufferedMetaReader:
         return size
 
     def bufferParalell(self, start, size):
-        start_sec = _time_to_seconds(start)
+        start_sec = qgsu._time_to_seconds(start)
         start_milisec = int(start_sec * 1000)
 
         for k in range(
@@ -240,7 +238,7 @@ class BufferedMetaReader:
         ):
             cTime = k / 1000.0
             nTime = (k + self.pass_time) / 1000.0
-            new_key = _seconds_to_time_frac(cTime)
+            new_key = qgsu._seconds_to_time_frac(cTime)
             if new_key not in self._meta:
                 # qgsu.showUserAndLogMessage("QgsFmvUtils", 'buffering: ' + _seconds_to_time_frac(cTime) + " to " + _seconds_to_time_frac(nTime), onlyLog=True)
                 self._meta[new_key] = callBackMetadataThread(
@@ -250,7 +248,7 @@ class BufferedMetaReader:
                         "-ss",
                         new_key,
                         "-to",
-                        _seconds_to_time_frac(nTime),
+                        qgsu._seconds_to_time_frac(nTime),
                         "-map",
                         "0:d:" + str(self.klv_index),
                         "-f",
@@ -282,7 +280,7 @@ class BufferedMetaReader:
                     new_t = s[0] + ".00" + str(r_milis) + "0"
             else:
                 date = datetime.strptime(s[0], "%H:%M:%S")
-                new_t = _add_secs_to_time(date, 1) + ".0000"
+                new_t = qgsu._add_secs_to_time(date, 1) + ".0000"
         except Exception:
             qgsu.showUserAndLogMessage(
                 "", "wrong value for time, need . decimal" + t, onlyLog=True
