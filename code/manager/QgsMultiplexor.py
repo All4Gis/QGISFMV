@@ -47,7 +47,7 @@ from QGIS_FMV.klvdata.misb0601 import (
     CornerLatitudePoint3Full,
     CornerLongitudePoint3Full,
     CornerLatitudePoint4Full,
-    CornerLongitudePoint4Full
+    CornerLongitudePoint4Full,
 )
 
 try:
@@ -61,6 +61,7 @@ for now I make this adaptation to be able to see it in QGIS FMV
 https://gist.github.com/All4Gis/509fbe06ce53a0885744d16595811e6f
 """
 
+# Csv Encoding
 encoding = "ISO-8859-1"
 
 
@@ -81,7 +82,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
     def OpenCsvFile(self):
         """ Open Csv File """
         filename, _ = askForFiles(
-            self, QCoreApplication.translate("Multiplexor", "Open file"), exts="csv"
+            self, QCoreApplication.translate("QgsMultiplexor", "Open file"), exts="csv"
         )
         if filename:
             self.csv_file = filename
@@ -91,7 +92,9 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
     def OpenVideoFile(self):
         """ Open Video File """
         filename, _ = askForFiles(
-            self, QCoreApplication.translate("Multiplexor", "Open file"), exts=self.Exts
+            self,
+            QCoreApplication.translate("QgsMultiplexor", "Open file"),
+            exts=self.Exts,
         )
         if filename:
             self.video_file = filename
@@ -196,42 +199,36 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                         # Platform Pitch Angle
                         if k == "OSD.pitch":
                             OSD_pitch = float(v)
-
                             _bytes = bytes(PlatformPitchAngle(OSD_pitch))
                             bufferData += _bytes
 
                         # Platform Roll Angle
                         if k == "OSD.roll":
                             OSD_roll = float(v)
-
                             _bytes = bytes(PlatformRollAngle(OSD_roll))
                             bufferData += _bytes
 
                         # Sensor Latitude
                         if k == "OSD.latitude":
                             OSD_latitude = float(v)
-
                             _bytes = bytes(SensorLatitude(OSD_latitude))
                             bufferData += _bytes
 
                         # Sensor Longitude
                         if k == "OSD.longitude":
                             OSD_longitude = float(v)
-
                             _bytes = bytes(SensorLongitude(OSD_longitude))
                             bufferData += _bytes
 
                         # Sensor True Altitude
                         if k == "OSD.altitude [m]":
                             OSD_altitude = float(v)
-
                             _bytes = bytes(SensorTrueAltitude(OSD_altitude))
                             bufferData += _bytes
 
                         # Sensor Ellipsoid Height
                         if k == "OSD.height [m]":
                             OSD_height = float(v)
-
                             _bytes = bytes(SensorEllipsoidHeightConversion(OSD_height))
                             bufferData += _bytes
 
@@ -239,14 +236,12 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                         if k == "GIMBAL.yaw":
                             # GIMBAL_yaw = float(v)
                             GIMBAL_yaw = 0.0
-
                             _bytes = bytes(SensorRelativeAzimuthAngle(GIMBAL_yaw))
                             bufferData += _bytes
 
                         # Sensor Relative Elevation Angle
                         if k == "GIMBAL.pitch":
                             GIMBAL_pitch = float(v)
-
                             _bytes = bytes(SensorRelativeElevationAngle(GIMBAL_pitch))
                             bufferData += _bytes
 
@@ -257,7 +252,13 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                             bufferData += _bytes
 
                     except Exception as e:
-                        print("Multiplexer error", e)
+                        qgsu.showUserAndLogMessage(
+                            QCoreApplication.translate(
+                                "Multiplexor", "Multiplexer error"
+                            )
+                            + e,
+                            onlyLog=True,
+                        )
                         continue
 
                 try:
@@ -274,13 +275,11 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
 
                     # Sensor Horizontal Field of View
                     v = self.sp_hfov.value()
-
                     _bytes = bytes(SensorHorizontalFieldOfView(float(v)))
                     bufferData += _bytes
 
                     # Sensor Vertical Field of View
                     v = self.sp_vfov.value()
-
                     _bytes = bytes(SensorVerticalFieldOfView(float(v)))
                     bufferData += _bytes
 
@@ -332,43 +331,43 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     # CALCULATE CORNERS COORDINATES
                     # FIXME : If we add this values, the klv parse has a overflow
                     # Probably the packets is not created correctly
-#                     sensor = (OSD_longitude, OSD_latitude, OSD_altitude)
-#                     frameCenter = (framecenterlongitude, framecenterlatitude, frameCenterElevation)
-#                     FOV = (VFOV, HFOV)
-#                     others = (OSD_yaw, GIMBAL_yaw, targetWidth, slantRange)
-#                     cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL = CornerEstimationWithoutOffsets(sensor=sensor, frameCenter=frameCenter, FOV=FOV, others=others)
-# 
-#                     # Corner Latitude Point 1 (Full) CornerLatitudePoint1Full
-#                     _bytes = bytes(CornerLatitudePoint1Full(cornerPointUL[0]))
-#                     bufferData += _bytes
-#                     
-#                     # Corner Longitude Point 1 (Full)
-#                     _bytes = bytes(CornerLongitudePoint1Full(cornerPointUL[1]))
-#                     bufferData += _bytes
-#                      
-#                     # Corner Latitude Point 2 (Full)
-#                     _bytes = bytes(CornerLatitudePoint2Full(cornerPointUR[0]))
-#                     bufferData += _bytes
-#                     
-#                     # Corner Longitude Point 2 (Full)
-#                     _bytes = bytes(CornerLongitudePoint2Full(cornerPointUR[1]))
-#                     bufferData += _bytes
-#                       
-#                     # Corner Latitude Point 3 (Full)
-#                     _bytes = bytes(CornerLatitudePoint3Full(cornerPointLR[0]))
-#                     bufferData += _bytes
-#                       
-#                     # Corner Longitude Point 3 (Full)
-#                     _bytes = bytes(CornerLongitudePoint3Full(cornerPointLR[1]))
-#                     bufferData += _bytes
-#  
-#                     # Corner Latitude Point 4 (Full)
-#                     _bytes = bytes(CornerLatitudePoint4Full(cornerPointLL[0]))
-#                     bufferData += _bytes
-#  
-#                     # Corner Longitude Point 4 (Full)
-#                     _bytes = bytes(CornerLongitudePoint4Full(cornerPointLL[1]))
-#                     bufferData += _bytes
+                    #                     sensor = (OSD_longitude, OSD_latitude, OSD_altitude)
+                    #                     frameCenter = (framecenterlongitude, framecenterlatitude, frameCenterElevation)
+                    #                     FOV = (VFOV, HFOV)
+                    #                     others = (OSD_yaw, GIMBAL_yaw, targetWidth, slantRange)
+                    #                     cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL = CornerEstimationWithoutOffsets(sensor=sensor, frameCenter=frameCenter, FOV=FOV, others=others)
+                    #
+                    #                     # Corner Latitude Point 1 (Full) CornerLatitudePoint1Full
+                    #                     _bytes = bytes(CornerLatitudePoint1Full(cornerPointUL[0]))
+                    #                     bufferData += _bytes
+                    #
+                    #                     # Corner Longitude Point 1 (Full)
+                    #                     _bytes = bytes(CornerLongitudePoint1Full(cornerPointUL[1]))
+                    #                     bufferData += _bytes
+                    #
+                    #                     # Corner Latitude Point 2 (Full)
+                    #                     _bytes = bytes(CornerLatitudePoint2Full(cornerPointUR[0]))
+                    #                     bufferData += _bytes
+                    #
+                    #                     # Corner Longitude Point 2 (Full)
+                    #                     _bytes = bytes(CornerLongitudePoint2Full(cornerPointUR[1]))
+                    #                     bufferData += _bytes
+                    #
+                    #                     # Corner Latitude Point 3 (Full)
+                    #                     _bytes = bytes(CornerLatitudePoint3Full(cornerPointLR[0]))
+                    #                     bufferData += _bytes
+                    #
+                    #                     # Corner Longitude Point 3 (Full)
+                    #                     _bytes = bytes(CornerLongitudePoint3Full(cornerPointLR[1]))
+                    #                     bufferData += _bytes
+                    #
+                    #                     # Corner Latitude Point 4 (Full)
+                    #                     _bytes = bytes(CornerLatitudePoint4Full(cornerPointLL[0]))
+                    #                     bufferData += _bytes
+                    #
+                    #                     # Corner Longitude Point 4 (Full)
+                    #                     _bytes = bytes(CornerLongitudePoint4Full(cornerPointLL[1]))
+                    #                     bufferData += _bytes
 
                     # Platform Pitch Angle (Full)
                     _bytes = bytes(PlatformPitchAngleFull(OSD_pitch))
@@ -394,7 +393,11 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
                     progress.setValue(cnt)
 
                 except Exception as e:
-                    print("Multiplexer error : " + str(e))
+                    qgsu.showUserAndLogMessage(
+                        QCoreApplication.translate("Multiplexor", "Multiplexer error")
+                        + str(e),
+                        onlyLog=True,
+                    )
 
         QApplication.restoreOverrideCursor()
         QApplication.processEvents()
@@ -461,7 +464,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
             out_record = os.path.join(out_csv, filename + ".csv")
             # The column that corresponds to the stop is also removed
             with open(csv_raw, "r", encoding=encoding) as f_input, open(
-                out_record, "w", newline="", encoding="ISO-8859-1"
+                out_record, "w", newline="", encoding=encoding
             ) as f_output:
                 # Prevent “_csv.Error: line contains NULL byte
                 data = f_input.read()

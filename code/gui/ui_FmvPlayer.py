@@ -1126,5 +1126,5 @@ class Ui_PlayerWindow(object):
         )
 
 
-from QGIS_FMV.video.QgsVideo import VideoWidget
+from QGIS_FMV.video.QgsVideoWidget import VideoWidget
 from QGIS_FMV.gui import resources_rc

@@ -30,6 +30,7 @@ dtm_buffer = int(parser["GENERAL"]["DTM_buffer_size"])
 EARTH_MEAN_RADIUS = 6371008.8
 WGS84String = "WGS84"
 encoding = "utf-8"
+defaultTargetWidth = 200.0
 
 # Klv variables
 UASLocalMetadataSet = b"\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00"

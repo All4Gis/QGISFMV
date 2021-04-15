@@ -17,7 +17,7 @@ from qgis.core import Qgis as QGis, QgsTask, QgsApplication
 from PyQt5.QtGui import QTextFormat
 
 from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
-from QGIS_FMV.utils.QgsFmvUtils import askForFiles, _seconds_to_time, BurnDrawingsImage
+from QGIS_FMV.utils.QgsFmvUtils import askForFiles, BurnDrawingsImage
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
 try:
@@ -66,7 +66,7 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
         """Save Table as pdf
         The drawings are saved by default
         """
-        timestamp = _seconds_to_time(self.player.currentInfo)
+        timestamp = qgsu._seconds_to_time(self.player.currentInfo)
 
         # Frame save drawings
         frame = BurnDrawingsImage(

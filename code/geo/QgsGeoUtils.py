@@ -1,6 +1,4 @@
-﻿# -*- coding: utf-8 -*-
 from math import degrees, radians, sin, cos, asin, atan2
-
 from QGIS_FMV.QgsFmvConstants import EARTH_MEAN_RADIUS
 
 

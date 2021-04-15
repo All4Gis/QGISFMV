@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 import os.path
 from qgis.PyQt.QtCore import QPoint, QCoreApplication, Qt, QTimer
 from qgis.PyQt.QtGui import QIcon, QMovie
 from qgis.PyQt.QtWidgets import (
     QToolTip,
     QMessageBox,
-    QAbstractSlider,
     QHeaderView,
     QStyleOptionSlider,
     QTreeView,
@@ -41,8 +39,6 @@ from QGIS_FMV.utils.QgsFmvUtils import (
     _spawn,
     UpdateLayers,
     hasElevationModel,
-    _seconds_to_time,
-    _seconds_to_time_frac,
     askForFiles,
     askForFolder,
     setCenterMode,
@@ -1103,7 +1099,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         pos_local = rectHandle.topLeft() + self.tip_offset
         pos_global = self.sliderDuration.mapToGlobal(pos_local)
 
-        tStr = _seconds_to_time(currentInfo)
+        tStr = qgsu._seconds_to_time(currentInfo)
 
         QToolTip.showText(pos_global, tStr, self)
 
@@ -1154,10 +1150,10 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
 
         if currentInfo or duration:
 
-            totalTime = _seconds_to_time(duration)
-            currentTime = _seconds_to_time(currentInfo)
+            totalTime = qgsu._seconds_to_time(duration)
+            currentTime = qgsu._seconds_to_time(currentInfo)
             tStr = currentTime + " / " + totalTime
-            currentTimeInfo = _seconds_to_time_frac(currentInfo)
+            currentTimeInfo = qgsu._seconds_to_time_frac(currentInfo)
 
             if self.isStreaming:
                 # get last metadata available
@@ -1167,7 +1163,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
                 self.readLocal(currentInfo)
             elif isPrecise:
                 nextTime = currentInfo + self.pass_time / 1000
-                nextTimeInfo = _seconds_to_time_frac(nextTime)
+                nextTimeInfo = qgsu._seconds_to_time_frac(nextTime)
                 if self.meta_reader is not None:
                     self.callMetadataSync(
                         currentTimeInfo, nextTimeInfo, self.meta_reader.klv_index
@@ -1300,7 +1296,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type value: bool
         @param value: Button checked state
         """
-        currentTime = _seconds_to_time(self.currentInfo)
+        currentTime = qgsu._seconds_to_time(self.currentInfo)
 
         if value is False:
             self.endRecord = currentTime

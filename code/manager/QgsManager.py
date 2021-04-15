@@ -49,8 +49,6 @@ try:
 except ImportError:
     None
 
-s = QSettings()
-
 
 class FmvManager(QDockWidget, Ui_ManagerWindow):
     """ Video Manager """
@@ -100,6 +98,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         # Get Video Manager List
         VideoList = getVideoManagerList()
         for load_id in VideoList:
+            s = QSettings()
             filename = s.value(getNameSpace() + "/Manager_List/" + load_id)
             _, name = os.path.split(filename)
 
