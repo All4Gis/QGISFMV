@@ -11,6 +11,7 @@ Standards supported:
 
   - "UAS Datalink Local Set", [MISB ST0601](http://www.gwg.nga.mil/misb/docs/standards/ST0601.17.pdf)
   - "Security Metadata Local Set", [MISB ST0102](https://gwg.nga.mil/misb/docs/standards/ST0102.12.pdf)
+  - "Predator UAV Basic Universal Metadata Set", [MISB EG0104](https://gwg.nga.mil/misb/docs/eg/EG0104.4.pdf)
 
 ## Table of Contents
 
