@@ -111,7 +111,6 @@ def linear_map(src_value, src_domain, dst_range):
     it should always fall within the src_domain. If not, that's a problem.
     """
     src_min, src_max, dst_min, dst_max = src_domain + dst_range
-    # assert(src_min <= src_value <= src_max)
 
     if not (src_min <= src_value <= src_max):
         raise ValueError
@@ -125,9 +124,11 @@ def linear_map(src_value, src_domain, dst_range):
     return dst_value
 
 
-def bytes_to_float(value, _domain, _range):
+def bytes_to_float(value, _domain, _range, _error=None):
     """Convert the fixed point value self.value to a floating point value."""
     src_value = int().from_bytes(value, byteorder="big", signed=(min(_domain) < 0))
+    if src_value == _error:
+        return None
     return linear_map(src_value, _domain, _range)
 
 
@@ -143,7 +144,7 @@ def ieee754_bytes_to_fp(value):
         raise ValueError
 
 
-def float_to_bytes(value, _domain, _range):
+def float_to_bytes(value, _domain, _range, _error=None):
     """Convert the fixed point value self.value to a floating point value."""
     # Some classes like MappedElement are calling float_to_bytes with arguments _domain
     # and _range in the incorrect order. The naming convention used is confusing and
@@ -152,7 +153,11 @@ def float_to_bytes(value, _domain, _range):
     src_min, src_max, dst_min, dst_max = src_domain + dst_range
     length = int((dst_max - dst_min - 1).bit_length() / 8)
     dst_value = linear_map(value, src_domain=src_domain, dst_range=dst_range)
-    return round(dst_value).to_bytes(length, byteorder="big", signed=(dst_min < 0))
+    if value is None:
+        dst_value = _error
+    else:
+        dst_value = linear_map(value, src_domain=src_domain, dst_range=dst_range)
+    return round(dst_value).to_bytes(length, byteorder='big', signed=(dst_min < 0))
 
 
 def packet_checksum(data):

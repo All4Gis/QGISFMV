@@ -153,7 +153,7 @@ class MappedElementParser(ElementParser):
     __metaclass__ = ABCMeta
 
     def __init__(self, value):
-        super().__init__(MappedValue(value, self._domain, self._range))
+        super().__init__(MappedValue(value, self._domain, self._range, self._error))
 
     @property
     @classmethod
@@ -167,19 +167,25 @@ class MappedElementParser(ElementParser):
     def _range(cls):
         pass
 
+    @property
+    @classmethod
+    @abstractmethod
+    def _error(cls):
+        pass
 
 class MappedValue(BaseValue):
-    def __init__(self, value, _domain, _range):
+    def __init__(self, value, _domain, _range, _error):
         self._domain = _domain
         self._range = _range
+        self._error = _error
 
         try:
-            self.value = round(bytes_to_float(value, self._domain, self._range), 4)
+            self.value = bytes_to_float(value, self._domain, self._range, self._error)
         except TypeError:
             self.value = value
 
     def __bytes__(self):
-        return float_to_bytes(self.value, self._domain, self._range)
+        return float_to_bytes(self.value, self._domain, self._range, self._error)
 
     def __str__(self):
         if self.value is not None:
