@@ -168,6 +168,7 @@ ffprobe : "/usr/bin/"
 
 * [Official presentation](https://slides.com/franraga/qgis-fmv/fullscreen)
 * [SIG libre 2021 WorkShop](https://slides.com/franraga/sig-libre-2021/fullscreen)
+* [SIG libre 2021 Video (Spanish)](http://hdl.handle.net/10256.1/6237)
 
 &#8593; [Back to top](#table-of-contents)
 
