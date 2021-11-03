@@ -46,7 +46,7 @@ class VideoUtils(object):
             VideoUtils.GetXBlackZone(surface)
         scr_y = (yimage / VideoUtils.GetYRatio(surface)) + \
             VideoUtils.GetYBlackZone(surface)
-        return scr_x, scr_y
+        return int(scr_x), int(scr_y)
         
         #transf = (~gt)([x, y])
         #scr_x = (transf[0] / VideoUtils.GetXRatio(surface)) + \
