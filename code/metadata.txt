@@ -25,6 +25,44 @@ email=remy.baud@swisstopo.ch
 
 changelog=
     ** General **
+    1.15:
+      - Slider made clickable.
+      - Fixed drawings position when elevation model used.
+      - Enabled drag & drop in manager.
+      - Playlist is implemented (videos play one after the other).
+      - Delete multiple videos in manager enabled.
+      - Lat/Lon displayed with precision 5.
+      - Fixed lon/lat on video does not update without moving the mouse.
+      - Fixed mousemove "jumping" behaviour when drawing on a video. 
+      - Fixed some problems with video toolbar visibility.
+      - Fixed issue: Manager shows up only after loading video list.
+      - Improved function Center on Footprint / Target / Frame Center,
+        only recenter if drawings go outside map.
+      - Export current frame fixed: black image.
+      - Fixed some navigation problems.
+      - Fixed problems when closing the application.
+      - Fixed Corner Estimation with Offset calculation.
+      - Fixed no audio or video freeze (big .ts files) on windows platform due
+        to Lav Splitter. It is recommended to make a default installation of 
+        Haali Media Splitter:
+        https://haali.su/mkv/
+      - FIxed config to update drawings every 2 seconds.
+      - Click on pause triggers an exact metadata update.
+      - Implemented playlist in manager.
+      - Added Timestamp label below duration slider.
+      - Enhanced zoom on platform/target/framecenter, only recenter if the object goes out the map.
+      - Fixed framecenter and drawings calculation.
+      - Playlist drag & Drop + multiple removals.
+      - Fixed lon/lat video mouseover not updating if mouse not moving.
+      - Fixed lon/lat precision to 7 for drawings/measure (lower resolution causes tool to "jump" on video overlay).
+      - Fixed extract frames (they came all black).
+      - Fixed navigation mit slider.
+      - Removed Python Homography lib, using directly cv2.
+      - Fixed video (.ts) freezing/sound/size problem on windows using haali splitter.
+        https://haali.su/mkv/MatroskaSplitter.exe
+      - Fixed manager: Appears first on ui and then loads saved videos.
+      - Fixed problem with full screen mode: wrong monitor and wrong context menu location.
+      - fixed drawing mode if video stopped.
     1.10:
     	- Update documentation and Ubuntu installation
     	- Fix case sensitive linux file dialog

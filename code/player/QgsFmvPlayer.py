@@ -117,7 +117,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.toolBtn_Measure.setDefaultAction(self.actionMeasureDistance)
         self.DrawToolBar.addWidget(self.toolBtn_Measure)
         self.DrawToolBar.addSeparator()
-                
+                        
         # Censure QToolButton
         #self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
         #self.DrawToolBar.addWidget(self.toolBtn_Cesure)
@@ -170,8 +170,9 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         self.playerState = QMediaPlayer.LoadingMedia
         
         #self.playFile(path, self.islocal, self.klv_folder)
+        qgsu.showUserAndLogMessage("", "Init Duration is:. "+str(self.player.duration()), onlyLog=True)
 
-        self.sliderDuration.setRange(0, self.player.duration() / 1000)
+        self.sliderDuration.setRange(0, self.player.duration())
         self.sliderDuration.sliderReleased.connect(self.sliderDurationReleased)
         
         self.sliderDuration.mousePressed.connect(self.sliderDurationPressed)
@@ -1052,7 +1053,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         pos_local = rectHandle.topLeft() + self.tip_offset
         pos_global = self.sliderDuration.mapToGlobal(pos_local)
 
-        tStr = _seconds_to_time(currentInfo)
+        tStr = _seconds_to_time(currentInfo / 1000)
 
         QToolTip.showText(pos_global, tStr, self)
 
@@ -1061,17 +1062,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         @type duration: int
         @param duration: Video duration
         '''
-        duration /= 1000
-        self.duration = duration
-        self.sliderDuration.setMaximum(duration)
+        self.duration = duration / 1000
+        #self.sliderDuration.setMaximum(int(round(duration)))
+        self.sliderDuration.setRange(0, duration)
 
     def positionChanged(self, progress):
         '''Current Video position change
         @type progress: qint64
         @param progress: Slide video duration current value
         '''
-        progress /= 1000
-               
+       
         # Remove measure if slider position change
         if self.staticDraw:
             self.RemoveMeasures()
@@ -1082,16 +1082,16 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         if not self.closing and not self.sliderDuration.isSliderDown():
             #show precise info if player is paused
             if self.playerState == QMediaPlayer.PausedState:
-                self.updateDurationInfo(progress, True)
+                self.updateDurationInfo(progress / 1000, True)
             else:
-                self.updateDurationInfo(progress)
+                self.updateDurationInfo(progress / 1000)
 
     def sliderDurationPressed(self, value):
         self.seek(value)
                     
     def sliderDurationReleased(self):
         if self.playerState == QMediaPlayer.PausedState:
-            self.updateDurationInfo(self.sliderDuration.value(), True)
+            self.updateDurationInfo(self.sliderDuration.value() / 1000, True)
     
     def updateDurationInfo(self, currentInfo, isPrecise=False):
         '''Update labels duration Info and CallBack Metadata
@@ -1334,7 +1334,7 @@ class QgsFmvPlayer(QMainWindow, Ui_PlayerWindow):
         Slider Move
         @type seconds:  String
         '''
-        self.player.setPosition(seconds * 1000)
+        self.player.setPosition(seconds)
         self.showMoveTip(seconds)
 
     def convertVideo(self):

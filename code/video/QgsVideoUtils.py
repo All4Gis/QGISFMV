@@ -46,7 +46,25 @@ class VideoUtils(object):
             VideoUtils.GetXBlackZone(surface)
         scr_y = (yimage / VideoUtils.GetYRatio(surface)) + \
             VideoUtils.GetYBlackZone(surface)
-        return scr_x, scr_y
+        
+        ret_x, ret_y = 0, 0
+        
+        try:
+            ret_x = int(scr_x)
+            ret_y = int(scr_y)
+        except OverflowError:
+
+            if scr_x >= 0:
+                ret_x = sys.maxint
+            if scr_x < 0:
+                ret_x = -sys.maxint-1
+            if scr_y >= 0:
+                ret_y = sys.maxint
+            if scr_y < 0:
+                ret_y = -sys.maxint-1
+
+            qgsu.showUserAndLogMessage("", "Treated overflow error x: " + str(ret_x) + " y:" + str(ret_y), onlyLog=True)
+        return ret_x, ret_y
         
         #transf = (~gt)([x, y])
         #scr_x = (transf[0] / VideoUtils.GetXRatio(surface)) + \
