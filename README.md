@@ -298,6 +298,3 @@ GNU Public License (GPL) Version 3
 **Free Software, Hell Yeah!**
 
 &#8593; [Back to top](#table-of-contents)
-
-[© All4gis 2018 - 2021]
-
