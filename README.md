@@ -104,7 +104,7 @@ For more information about the Unmanned Air System (UAS) metadata from STANAG 46
 * <a href="https://gisgeography.com/full-motion-video-fmv/" target="_blank">What is Full Motion Video (FMV)?</a>
 * <a href="http://www.gwg.nga.mil/misb/faq.html" target="_blank">FAQ</a>
 * <a href="http://www.gwg.nga.mil/misb/docs/nato_docs/STANAG_4609_Ed3.pdf" target="_blank">STANAG_4609_Ed3</a>
-* <a href="http://www.gwg.nga.mil/misb/docs/standards/ST0601.13.pdf" target="_blank">ST0601.13</a>
+* <a href="https://nsgreg.nga.mil/doc/view?i=5471" target="_blank">ST0601.19</a>
 * <a href="http://www.gwg.nga.mil/misb/docs/standards/ST0902.1.pdf" target="_blank">ST0902.1</a>
 
 &#8593; [Back to top](#table-of-contents)
