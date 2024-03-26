@@ -1,6 +1,6 @@
-# QGIS Full Motion Video (FMV)  [#QGISFMV](https://twitter.com/hashtag/qgisfmv?f=live)
+# QGIS Full Motion Video (FMV) [#QGISFMV](https://twitter.com/hashtag/qgisfmv?f=live)
 
-[![Build Status](https://travis-ci.org/All4Gis/QGISFMV.svg?branch=master)](https://travis-ci.org/All4Gis/QGISFMV) 
+[![Build Status](https://travis-ci.org/All4Gis/QGISFMV.svg?branch=master)](https://travis-ci.org/All4Gis/QGISFMV)
 [![Project Stats](https://www.openhub.net/p/QGISFMV/widgets/project_thin_badge.gif)](https://www.openhub.net/p/QGISFMV)
 
 ## Donations
@@ -8,7 +8,6 @@
 If this plugin is useful for you, consider to donate to the author.Want to buy me a beer (or gadget)? Please use Paypal button or contact me directly.
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?button=donate&business=5329N9XX4WQHY&item_name=QGIS+FMV+Plugin&quantity=&amount=&currency_code=EUR&shipping=&tax=&notify_url=&cmd=_donations&bn=JavaScriptButton_donate&env=www)
- 
 
 ![](images/banner.png)
 
@@ -16,32 +15,34 @@ Plugin for **QGIS 3** which allows to analyze, visualize and process videos insi
 
 Standards supported:
 
-  - "UAS Datalink Local Set", [MISB ST0601](http://www.gwg.nga.mil/misb/docs/standards/ST0601.17.pdf)
-  - "Security Metadata Local Set", [MISB ST0102](https://gwg.nga.mil/misb/docs/standards/ST0102.12.pdf)
-  - "Predator UAV Basic Universal Metadata Set", [MISB EG0104](https://gwg.nga.mil/misb/docs/eg/EG0104.4.pdf)
+- "UAS Datalink Local Set", [MISB ST0601](http://www.gwg.nga.mil/misb/docs/standards/ST0601.17.pdf)
+- "Security Metadata Local Set", [MISB ST0102](https://gwg.nga.mil/misb/docs/standards/ST0102.12.pdf)
+- "Predator UAV Basic Universal Metadata Set", [MISB EG0104](https://gwg.nga.mil/misb/docs/eg/EG0104.4.pdf)
 
 ## Table of Contents
 
-- [Motivation](#motivation)
-- [Dependencies](#dependencies)
-- [For show video](#for-show-video)
-- [Usage](#usage)
-- [Recommended readings](#recommended-readings)
-- [Installation](#installation)
-    - [Installation on Windows](#installation-on-windows)
-    - [Installation on Ubuntu](#installation-on-ubuntu)
-    - [Installation on Archlinux](#installation-on-archlinux)
-- [Slides](#slides)
-- [Mentions](#mentions)
-- [Screenshots](#screenshots)
-- [Features](#features)
-- [Contributing](#contributing)
+- [QGIS Full Motion Video (FMV) #QGISFMV](#qgis-full-motion-video-fmv-qgisfmv)
+  - [Donations](#donations)
+  - [Table of Contents](#table-of-contents)
+  - [Motivation](#motivation)
+  - [Dependencies](#dependencies)
+  - [For show video](#for-show-video)
+  - [Usage](#usage)
+  - [Recommended readings](#recommended-readings)
+  - [Installation](#installation)
+  - [Installation on Windows](#installation-on-windows)
+  - [Installation on Ubuntu](#installation-on-ubuntu)
+  - [Installation on Archlinux](#installation-on-archlinux)
+  - [Slides](#slides)
+  - [Mentions](#mentions)
+  - [Screenshots](#screenshots)
+  - [Features](#features)
+  - [Contributing](#contributing)
     - [Contributing Code](#contributing-code)
     - [Contributing translations](#contributing-translations)
-	- [Contributors List](#contributors-list)
-- [License](#license)
-- [Donations](#donations)
-	
+    - [Contributors List](#contributors-list)
+  - [License](#license)
+
 ## Motivation
 
 This development arises after observing that there was no free solution for the metadata extraction and video analysis in real time. All solutions are APIs or private tools such as
@@ -52,21 +53,21 @@ for this reason, I decided to develop this open source project and, this way, of
 
 ## Dependencies
 
-* [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `settings.ini` with the corresponding path. For example `D://FFMPEG` or `/usr/bin/`
+- [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `settings.ini` with the corresponding path. For example `D://FFMPEG` or `/usr/bin/`
 
-* [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python`
+- [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python`
 
-* [opencv-contrib-python](https://pypi.org/project/opencv-contrib-python/) : `python3 -m pip install opencv-contrib-python`
+- [opencv-contrib-python](https://pypi.org/project/opencv-contrib-python/) : `python3 -m pip install opencv-contrib-python`
 
-* [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib`
+- [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib`
 
-* [Klvdata](https://github.com/paretech/klvdata) : customized version of this library. (No need to install it)
+- [Klvdata](https://github.com/paretech/klvdata) : customized version of this library. (No need to install it)
 
 The plugin install automatically this requisites,but you can install it using on Windows and Linux:
 
 `python3 -m pip install -r requirements.txt`
 
-Here is a **settings.ini** sample [Linux](code/settings_linux_sample.ini) configuration file  or [Windows](code/settings_win_sample.ini) sample.
+Here is a **settings.ini** sample [Linux](code/settings_linux_sample.ini) configuration file or [Windows](code/settings_win_sample.ini) sample.
 On windows you can find the **settings.ini** file at **C:\Users\<user name>\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\QGIS_FMV**.
 
 &#8593; [Back to top](#table-of-contents)
@@ -75,9 +76,9 @@ On windows you can find the **settings.ini** file at **C:\Users\<user name>\AppD
 
 To see the video you need:
 
-  - **Linux**: install <a href="https://gstreamer.freedesktop.org/documentation/installing/on-linux.html" target="_blank">GStreamer dependencies</a>
-  - **Window**: install LAV Filters (install <a href="https://github.com/Nevcairiel/LAVFilters/releases" target="_blank">DirectShow Media Decoders</a>) 
-  
+- **Linux**: install <a href="https://gstreamer.freedesktop.org/documentation/installing/on-linux.html" target="_blank">GStreamer dependencies</a>
+- **Window**: install LAV Filters (install <a href="https://github.com/Nevcairiel/LAVFilters/releases" target="_blank">DirectShow Media Decoders</a>)
+
 If everything works well the plugin should install these dependencies automatically in both, Windows and Linux.
 
 &#8593; [Back to top](#table-of-contents)
@@ -85,8 +86,8 @@ If everything works well the plugin should install these dependencies automatica
 ## Usage
 
 The use of this application is simple.
-It only needs a video with metadata, like for example one of these [(ESRI copyright)](https://drive.google.com/open?id=1-B2uaW7_cfYZohZYFozrgBhIaztI1MSP)
-Then, open the plugin where the "video manager" will be shown, open the video and with a double-click, the "player" will be opened. 
+It only needs a video with metadata, like for example one of these [(ESRI copyright)](https://github.com/All4Gis/QGISFMV_Samples)
+Then, open the plugin where the "video manager" will be shown, open the video and with a double-click, the "player" will be opened.
 At this moment, you will see that new shapes have been added and you will see the platform position, metadata, etc.
 
 If we don't have a MISB video we can create it from a video file and telemetry file from a DJI for example.
@@ -101,18 +102,17 @@ For more information about the Unmanned Air System (UAS) metadata from STANAG 46
 
 ![a](images/demux.png)
 
-* <a href="https://gisgeography.com/full-motion-video-fmv/" target="_blank">What is Full Motion Video (FMV)?</a>
-* <a href="http://www.gwg.nga.mil/misb/faq.html" target="_blank">FAQ</a>
-* <a href="http://www.gwg.nga.mil/misb/docs/nato_docs/STANAG_4609_Ed3.pdf" target="_blank">STANAG_4609_Ed3</a>
-* <a href="https://nsgreg.nga.mil/doc/view?i=5471" target="_blank">ST0601.19</a>
-* <a href="http://www.gwg.nga.mil/misb/docs/standards/ST0902.1.pdf" target="_blank">ST0902.1</a>
+- <a href="https://gisgeography.com/full-motion-video-fmv/" target="_blank">What is Full Motion Video (FMV)?</a>
+- <a href="http://www.gwg.nga.mil/misb/faq.html" target="_blank">FAQ</a>
+- <a href="http://www.gwg.nga.mil/misb/docs/nato_docs/STANAG_4609_Ed3.pdf" target="_blank">STANAG_4609_Ed3</a>
+- <a href="https://nsgreg.nga.mil/doc/view?i=5471" target="_blank">ST0601.19</a>
+- <a href="http://www.gwg.nga.mil/misb/docs/standards/ST0902.1.pdf" target="_blank">ST0902.1</a>
 
 &#8593; [Back to top](#table-of-contents)
 
 ## Installation
 
 The installation can be done from the QGIS Python Plugins Repository or from the [zip](https://github.com/All4Gis/QGISFMV/releases).
-
 
 &#8593; [Back to top](#table-of-contents)
 
@@ -150,15 +150,16 @@ You need to restart QGIS after this.
 
 `sudo apt-get remove gstreamer1.0-vaapi`
 
-
 ## Installation on Archlinux
 
-_Archlinux installation :_ 
+_Archlinux installation :_
+
 ```
-pacman -S qgis python-matplotlib opencv ffmpeg 
+pacman -S qgis python-matplotlib opencv ffmpeg
 ```
 
 _ Set FFmpeg path in $HOME/.local/share/QGIS/QGIS3/profiles/[profile_name]/python/plugins/QGIS_FMV/settings.ini _
+
 ```
 ffmpeg : "/usr/bin/"
 ffprobe : "/usr/bin/"
@@ -166,19 +167,19 @@ ffprobe : "/usr/bin/"
 
 ## Slides
 
-* [Official presentation](https://slides.com/franraga/qgis-fmv/fullscreen)
-* [SIG libre 2021 WorkShop](https://slides.com/franraga/sig-libre-2021/fullscreen)
-* [SIG libre 2021 Video (Spanish)](http://hdl.handle.net/10256.1/6237)
+- [Official presentation](https://slides.com/franraga/qgis-fmv/fullscreen)
+- [SIG libre 2021 WorkShop](https://slides.com/franraga/sig-libre-2021/fullscreen)
+- [SIG libre 2021 Video (Spanish)](http://hdl.handle.net/10256.1/6237)
 
 &#8593; [Back to top](#table-of-contents)
 
 ## Mentions
 
-* [Beyond imagery and Video](https://docs.google.com/presentation/d/1b9FVFcThSJJLq4Q31C9Yx3pEsconY3QxKPZ4sifIAu4/edit?usp=sharing)
+- [Beyond imagery and Video](https://docs.google.com/presentation/d/1b9FVFcThSJJLq4Q31C9Yx3pEsconY3QxKPZ4sifIAu4/edit?usp=sharing)
 
-* [MXF Experimentation, Lessons Learned, *UK DSTL*]( https://drive.google.com/file/d/1bjLKzBc73wCrFiMkGFQDx2-w_JHf0fyf/view?usp=sharing)
+- [MXF Experimentation, Lessons Learned, _UK DSTL_](https://drive.google.com/file/d/1bjLKzBc73wCrFiMkGFQDx2-w_JHf0fyf/view?usp=sharing)
 
-* [QGIS Mexico, FMV, Luis Gallardo](https://youtu.be/edk6sbNgiAw)
+- [QGIS Mexico, FMV, Luis Gallardo](https://youtu.be/edk6sbNgiAw)
 
 If you want to add your presentation simply upload it or send me an email
 
@@ -215,12 +216,12 @@ Want to work on the project? Any kind of contribution is welcome!
 
 Follow these steps:
 
-	Fork the project.
-	Create a new branch.
-	Make your changes and write tests ( if is possible).
-	Commit your changes to the new branch.
-	Send a pull request.
-	
+    Fork the project.
+    Create a new branch.
+    Make your changes and write tests ( if is possible).
+    Commit your changes to the new branch.
+    Send a pull request.
+
 See before [FMV Coding Standards!](https://all4gis.github.io/QGISFMV/CodingStandards)
 
 **NOTE:** If you are use Linux need install pyuic5 and transifex client to compile the UI.
@@ -245,7 +246,6 @@ For test stream feature you can simulate stream channel,like this:
 
 `ffmpeg -i rtp://127.0.0.1:8888 -c copy -map 0:v? -map 0:a? -f rtp_mpegts rtp://127.0.0.1:8898 -map 0:d? -f data -`
 
-
 And **transifex** client:
 
 `pip3 install transifex-client`
@@ -254,12 +254,12 @@ And **transifex** client:
 
     pip install coveralls
     pip install pycodestyle
-    
+
     autopep8 --in-place --aggressive  --aggressive -v --recursive deploy/*.py --exclude="*gui/*"
-   
+
     pycodestyle --ignore=E501 code/*.py --statistics --exclude=code/gui/*.py
     pycodestyle --ignore=E501,W504 deploy/*.py --statistics
-	
+
 And thanks for your code.
 
 ![a](images/thanks.gif)
@@ -270,7 +270,7 @@ Contributions are welcome!
 
 [transifex](https://www.transifex.com/all4gis/QGISFMV/)
 
-### Contributors List  
+### Contributors List
 
 <!-- CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -288,8 +288,8 @@ Contributions are welcome!
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-<!-- CONTRIBUTORS-LIST:END -->
 
+<!-- CONTRIBUTORS-LIST:END -->
 
 ## License
 
