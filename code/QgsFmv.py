@@ -114,10 +114,11 @@ class Fmv:
         #    "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
     
     def tabChanged(self):
-        if self._FMVManager:
-            #qgsu.showUserAndLogMessage("", "Manager exists, Tab changed, closing.", onlyLog=True)
-            self.hideManagerWidget()
-            self.actionFMV.setChecked(False)
+        return
+        #if self._FMVManager:
+        #    #qgsu.showUserAndLogMessage("", "Manager exists, Tab changed, closing.", onlyLog=True)
+        #    self.hideManagerWidget()
+        #    self.actionFMV.setChecked(False)
     
     def unload(self):
         ''' Unload Plugin '''
