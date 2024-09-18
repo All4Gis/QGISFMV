@@ -1146,18 +1146,19 @@ def CornerEstimationWithOffsets(packet):
         if (frameCenterPoint[0]==None and frameCenterPoint[1]==None):
             geotransform = None
             return True
-        
-        if hasElevationModel():
-            cornerPointUL = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointUL)
-            cornerPointUR = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointUR)
-            cornerPointLR = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointLR)
-            cornerPointLL = GetLine3DIntersectionWithDEM(
-                GetSensor(), cornerPointLL)
-            frameCenterPoint = GetLine3DIntersectionWithDEM(
-                GetSensor(), frameCenterPoint)
+
+        #should not be required here, as we have the lon/lat offsets
+        #if hasElevationModel():
+        #    cornerPointUL = GetLine3DIntersectionWithDEM(
+        #        GetSensor(), cornerPointUL)
+        #    cornerPointUR = GetLine3DIntersectionWithDEM(
+        #        GetSensor(), cornerPointUR)
+        #    cornerPointLR = GetLine3DIntersectionWithDEM(
+        #        GetSensor(), cornerPointLR)
+        #    cornerPointLL = GetLine3DIntersectionWithDEM(
+        #        GetSensor(), cornerPointLL)
+        #    frameCenterPoint = GetLine3DIntersectionWithDEM(
+        #        GetSensor(), frameCenterPoint)
 
         UpdateFootPrintData(packet,
                             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
@@ -1313,8 +1314,9 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
                 GetSensor(), cornerPointLR)
             cornerPointLL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointLL)
-            frameCenterPoint = GetLine3DIntersectionWithDEM(
-                GetSensor(), frameCenterPoint)
+            if frameCenterPoint[2] is not None:
+                if frameCenterPoint[2] == 0:
+                    frameCenterPoint = GetLine3DIntersectionWithDEM(GetSensor(), frameCenterPoint)
 
         if sensor is not None:
             return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL
