@@ -39,6 +39,8 @@ class KLVParser(object):
     def __init__(self, source, key_length):
         if isinstance(source, IOBase):
             self.source = source
+        elif  isinstance(source, str):
+            self.source = BytesIO(bytes(source,'ascii'))
         else:
             self.source = BytesIO(source)
 
