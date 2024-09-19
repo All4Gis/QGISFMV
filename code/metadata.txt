@@ -19,12 +19,19 @@ about= Plugin for QGIS which allows to analyze, visualize and process videos ins
 	   </a>
 	   <p>If this plugin is useful for you, consider to donate to the author.</p>
 
-version=1.16
+version=1.17
 author= Rémy Baud
 email=remy.baud@swisstopo.ch
 
 changelog=
     ** General **
+	1.17:
+	  - Removed tab change cause application closing.
+      - Added image for Indago drone
+      - Indago mpg files needed lavfilters installation
+      - Anafi metadata aren't STANAG compliant (proprietary format), we may write a KLV parser for this.
+      - Fixed Frame center location on the map, not corrected with DTM (if it has an altitude)
+      - Apply DTM correction only for beams and footprint if they are near horizon (70°).
     1.15:
       - Slider made clickable.
       - Fixed drawings position when elevation model used.

@@ -48,6 +48,7 @@ class SetParser(Element):
         self.parse()
 
         self._PlatformTailNumber = None
+        self._PlatformDesignation = None
         self._PlatformHeadingAngle = None
         self._ImageSourceSensor = None
         self._SensorLatitude = None
@@ -153,6 +154,8 @@ class SetParser(Element):
                             self.PlatformTailNumber = item.value.value
                         elif item.TAG == 5:
                             self.PlatformHeadingAngle = item.value.value
+                        elif item.TAG == 10:
+                            self.PlatformDesignation = item.value.value
                         elif item.TAG == 11:
                             self.ImageSourceSensor = item.value.value
                         elif item.TAG == 13:
@@ -228,11 +231,19 @@ class SetParser(Element):
     @property
     def PlatformTailNumber(self):
         return self._PlatformTailNumber
-
+    
     @PlatformTailNumber.setter
     def PlatformTailNumber(self, value):
         self._PlatformTailNumber = value
-
+    
+    @property
+    def PlatformDesignation(self):
+        return self._PlatformDesignation
+    
+    @PlatformDesignation.setter
+    def PlatformDesignation(self, value):
+        self._PlatformDesignation = value
+    
     @property
     def PlatformHeadingAngle(self):
         return self._PlatformHeadingAngle
