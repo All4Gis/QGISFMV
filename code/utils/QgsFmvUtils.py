@@ -1325,8 +1325,6 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
             return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL
         
         
-        #don't display footprint and beams if vert angle reaches near hz.
-        #if value8 < max_vert_angle:
         UpdateFootPrintData(packet,
                         cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 
