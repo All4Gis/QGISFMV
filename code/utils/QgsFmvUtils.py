@@ -56,7 +56,6 @@ parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 frames_g = parser['LAYERS']['frames_g']
 Reverse_geocoding_url = parser['GENERAL']['Reverse_geocoding_url']
 min_buffer_size = int(parser['GENERAL']['min_buffer_size'])
-max_vert_angle = int(parser['GENERAL']['max_vert_angle'])
 Platform_lyr = parser['LAYERS']['Platform_lyr']
 Footprint_lyr = parser['LAYERS']['Footprint_lyr']
 FrameCenter_lyr = parser['LAYERS']['FrameCenter_lyr']
@@ -514,9 +513,9 @@ def getVideoLocationInfo(videoPath, islocal=False, klv_folder=None, klv_index=0)
                         '-f', 'data', '-'])
 
             stdout_data, _ = p.communicate()
-            #qgsu.showUserAndLogMessage("Video Loc info raw result", stdout_data, onlyLog=True)
+            qgsu.showUserAndLogMessage("Video Loc info raw result", stdout_data, onlyLog=True)
         if stdout_data == b'':
-            #qgsu.showUserAndLogMessage("Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)                                                                                                                                    
+            qgsu.showUserAndLogMessage("Error interpreting klv data, metadata cannot be read.", "the parser did not recognize KLV data", level=QGis.Warning)                                                                                                                                    
             return
         for packet in StreamParser(stdout_data):
             if isinstance(packet, UnknownElement):
@@ -854,7 +853,7 @@ def _spawn(cmds, t="ffmpeg"):
     cmds.insert(3, '-preset')
     cmds.insert(4, 'ultrafast')
     
-    #qgsu.showUserAndLogMessage("", "spawned : " + " ".join(cmds), onlyLog=True)
+    qgsu.showUserAndLogMessage("", "spawned : " + " ".join(cmds), onlyLog=True)
     
     return subprocess.Popen(cmds, shell=windows, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             bufsize=0,
@@ -944,19 +943,17 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     #qgsu.showUserAndLogMessage("", "FC Alt:"+str(frameCenterPoint[2]), onlyLog=True)  
      
     if OffsetLat1 is not None and LatitudePoint1Full is None:
-        if hasElevationModel() and frameCenterPoint[2] == 0.0:
+        if hasElevationModel():
             frameCenterPoint = GetLine3DIntersectionWithDEM(GetSensor(), frameCenterPoint)
         
-        qgsu.showUserAndLogMessage("", "CornerEstimationWithOffsets", onlyLog=True) 
         CornerEstimationWithOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
 
     elif OffsetLat1 is None and LatitudePoint1Full is None:
-        if hasElevationModel() and frameCenterPoint[2] == 0.0:
+        if hasElevationModel():
             frameCenterPoint = GetLine3DIntersectionWithDEM(GetSensor(), frameCenterPoint)
         
-        qgsu.showUserAndLogMessage("", "CornerEstimationWithoutOffsets", onlyLog=True) 
         CornerEstimationWithoutOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
@@ -1149,19 +1146,18 @@ def CornerEstimationWithOffsets(packet):
         if (frameCenterPoint[0]==None and frameCenterPoint[1]==None):
             geotransform = None
             return True
-
-        #should not be required here, as we have the lon/lat offsets
-        #if hasElevationModel():
-        #    cornerPointUL = GetLine3DIntersectionWithDEM(
-        #        GetSensor(), cornerPointUL)
-        #    cornerPointUR = GetLine3DIntersectionWithDEM(
-        #        GetSensor(), cornerPointUR)
-        #    cornerPointLR = GetLine3DIntersectionWithDEM(
-        #        GetSensor(), cornerPointLR)
-        #    cornerPointLL = GetLine3DIntersectionWithDEM(
-        #        GetSensor(), cornerPointLL)
-        #    frameCenterPoint = GetLine3DIntersectionWithDEM(
-        #        GetSensor(), frameCenterPoint)
+        
+        if hasElevationModel():
+            cornerPointUL = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointUL)
+            cornerPointUR = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointUR)
+            cornerPointLR = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointLR)
+            cornerPointLL = GetLine3DIntersectionWithDEM(
+                GetSensor(), cornerPointLL)
+            frameCenterPoint = GetLine3DIntersectionWithDEM(
+                GetSensor(), frameCenterPoint)
 
         UpdateFootPrintData(packet,
                             cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
@@ -1181,7 +1177,7 @@ def CornerEstimationWithOffsets(packet):
 def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, FOV=None, others=None):
     ''' Corner estimation without Offsets '''
     global geotransform
-        
+    
     try:
         if packet is not None:
             sensorLatitude = packet.SensorLatitude
@@ -1308,7 +1304,7 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
             geotransform = None
             return True
         
-        if hasElevationModel() and value8 > max_vert_angle:
+        if hasElevationModel():
             cornerPointUL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointUL)
             cornerPointUR = GetLine3DIntersectionWithDEM(
@@ -1317,19 +1313,17 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
                 GetSensor(), cornerPointLR)
             cornerPointLL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointLL)
-            if frameCenterPoint[2] is not None:
-                if frameCenterPoint[2] == 0:
-                    frameCenterPoint = GetLine3DIntersectionWithDEM(GetSensor(), frameCenterPoint)
+            frameCenterPoint = GetLine3DIntersectionWithDEM(
+                GetSensor(), frameCenterPoint)
 
         if sensor is not None:
             return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL
-        
-        
+
         UpdateFootPrintData(packet,
-                        cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
+                            cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 
         UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
-                    cornerPointLR, cornerPointLL, hasElevationModel())
+                        cornerPointLR, cornerPointLL, hasElevationModel())
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL,
