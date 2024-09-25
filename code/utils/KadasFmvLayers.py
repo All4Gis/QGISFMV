@@ -461,6 +461,7 @@ def UpdateFrameCenterData(pt, ele):
 
 
 def UpdatePlatformData(packet, ele):
+    
     ''' Update PlatForm Values '''
     global crtPltTailNum, groupName, platformMarker
 
@@ -469,7 +470,13 @@ def UpdatePlatformData(packet, ele):
     alt = packet.SensorTrueAltitude
     PlatformHeading = packet.PlatformHeadingAngle
     platformTailNumber = packet.PlatformTailNumber
+    platformDesignation = packet.PlatformDesignation
     
+    #Indago drone doesn't provide platformTailNumber, add it there for style support.
+    if "Indago" in platformDesignation:
+        platformTailNumber="INDAGO"
+        
+        
     if all(v is not None for v in [lat, lon, alt, PlatformHeading]):
     
         if platformMarker == '':
@@ -685,7 +692,7 @@ def SetDefaultTrajectoryStyle(mapItem):
 def SetDefaultPlatformStyle(mapItem, platform='DEFAULT'):
     ''' Platform Symbol '''
     style = S.getPlatform(platform)    
-    mapItem.setup(style["NAME"], 0.5, 0.5, 110, 110 )
+    mapItem.setup(style["NAME"], 0.5, 0.5, int(style['SIZE']), int(style['SIZE']))
     return
 
 

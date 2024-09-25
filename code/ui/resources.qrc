@@ -82,6 +82,7 @@
         <file>../images/zoom-rectangle.png</file> 
         <file>../images/opened-folder.png</file> 
         <file>../images/multiplexer.png</file> 
-        <file>../images/close.png</file> 
+        <file>../images/close.png</file>
+        <file>../images/platforms/Simple_drone.svg</file> 
     </qresource>
 </RCC>

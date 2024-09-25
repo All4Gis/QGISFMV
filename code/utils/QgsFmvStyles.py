@@ -99,35 +99,42 @@ class FmvLayerStyles(object):
     P['DEFAULT']['NAME'] = ':/imgFMV/images/platforms/platform_default.svg'
     P['DEFAULT']['OUTLINE'] = '255, 255, 255, 60'
     P['DEFAULT']['OUTLINE_WIDTH'] = '1'
-    P['DEFAULT']['SIZE'] = '18'
+    P['DEFAULT']['SIZE'] = '70'
 
     # Super Puma Platform
     P['Super Puma TH06'] = {}
     P['Super Puma TH06']['NAME'] = ':/imgFMV/images/platforms/plat_super_puma.svg'
     P['Super Puma TH06']['OUTLINE'] = '255, 255, 255, 60'
     P['Super Puma TH06']['OUTLINE_WIDTH'] = '1'
-    P['Super Puma TH06']['SIZE'] = '18'
+    P['Super Puma TH06']['SIZE'] = '70'
 
     # N97826 Platform
     P['N97826'] = {}
     P['N97826']['NAME'] = ':/imgFMV/images/platforms/plat_N97826.svg'
     P['N97826']['OUTLINE'] = '255, 255, 255, 60'
     P['N97826']['OUTLINE_WIDTH'] = '1'
-    P['N97826']['SIZE'] = '18'
+    P['N97826']['SIZE'] = '70'
 
     # VH-ZXX Platform
     P['VH-ZXX'] = {}
     P['VH-ZXX']['NAME'] = ':/imgFMV/images/platforms/plat_VH-ZXX.svg'
     P['VH-ZXX']['OUTLINE'] = '255, 255, 255, 60'
     P['VH-ZXX']['OUTLINE_WIDTH'] = '1'
-    P['VH-ZXX']['SIZE'] = '18'
+    P['VH-ZXX']['SIZE'] = '70'
 
     # ADS15 Platform
     P['ADS15'] = {}
     P['ADS15']['NAME'] = ':/imgFMV/images/platforms/plat_ADS15.svg'
     P['ADS15']['OUTLINE'] = '255, 255, 255, 60'
     P['ADS15']['OUTLINE_WIDTH'] = '1'
-    P['ADS15']['SIZE'] = '18'
+    P['ADS15']['SIZE'] = '70'
+    
+    # INDAGO Platform
+    P['INDAGO'] = {}
+    P['INDAGO']['NAME'] = ':/imgFMV/images/platforms/Simple_drone.svg'
+    P['INDAGO']['OUTLINE'] = '255, 255, 25s5, 60'
+    P['INDAGO']['OUTLINE_WIDTH'] = '1'
+    P['INDAGO']['SIZE'] = '70'
 
     #
     # FRAMECENTER POINT STYLES

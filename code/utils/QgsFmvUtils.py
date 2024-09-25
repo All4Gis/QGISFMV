@@ -56,6 +56,7 @@ parser.read(os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini'))
 frames_g = parser['LAYERS']['frames_g']
 Reverse_geocoding_url = parser['GENERAL']['Reverse_geocoding_url']
 min_buffer_size = int(parser['GENERAL']['min_buffer_size'])
+max_vert_angle = int(parser['GENERAL']['max_vert_angle'])
 Platform_lyr = parser['LAYERS']['Platform_lyr']
 Footprint_lyr = parser['LAYERS']['Footprint_lyr']
 FrameCenter_lyr = parser['LAYERS']['FrameCenter_lyr']
@@ -943,17 +944,19 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     #qgsu.showUserAndLogMessage("", "FC Alt:"+str(frameCenterPoint[2]), onlyLog=True)  
      
     if OffsetLat1 is not None and LatitudePoint1Full is None:
-        if hasElevationModel():
+        if hasElevationModel() and frameCenterPoint[2] == 0.0:
             frameCenterPoint = GetLine3DIntersectionWithDEM(GetSensor(), frameCenterPoint)
         
+        #qgsu.showUserAndLogMessage("", "CornerEstimationWithOffsets", onlyLog=True) 
         CornerEstimationWithOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
 
     elif OffsetLat1 is None and LatitudePoint1Full is None:
-        if hasElevationModel():
+        if hasElevationModel() and frameCenterPoint[2] == 0.0:
             frameCenterPoint = GetLine3DIntersectionWithDEM(GetSensor(), frameCenterPoint)
         
+        #qgsu.showUserAndLogMessage("", "CornerEstimationWithoutOffsets", onlyLog=True) 
         CornerEstimationWithoutOffsets(packet)
         if mosaic:
             georeferencingVideo(parent)
@@ -1178,7 +1181,7 @@ def CornerEstimationWithOffsets(packet):
 def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, FOV=None, others=None):
     ''' Corner estimation without Offsets '''
     global geotransform
-    
+        
     try:
         if packet is not None:
             sensorLatitude = packet.SensorLatitude
@@ -1305,7 +1308,7 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
             geotransform = None
             return True
         
-        if hasElevationModel():
+        if hasElevationModel() and value8 > max_vert_angle:
             cornerPointUL = GetLine3DIntersectionWithDEM(
                 GetSensor(), cornerPointUL)
             cornerPointUR = GetLine3DIntersectionWithDEM(
@@ -1320,12 +1323,13 @@ def CornerEstimationWithoutOffsets(packet=None, sensor=None, frameCenter=None, F
 
         if sensor is not None:
             return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL
-
+        
+        
         UpdateFootPrintData(packet,
-                            cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
+                        cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL, hasElevationModel())
 
         UpdateBeamsData(packet, cornerPointUL, cornerPointUR,
-                        cornerPointLR, cornerPointLL, hasElevationModel())
+                    cornerPointLR, cornerPointLL, hasElevationModel())
 
         SetGCPsToGeoTransform(cornerPointUL, cornerPointUR,
                               cornerPointLR, cornerPointLL,
