@@ -27,10 +27,9 @@ from qgis.PyQt.QtCore import (QSettings,
                               QCoreApplication,
                               QTranslator,
                               qVersion,
-                              QThread, Qt)
-from qgis.PyQt.QtGui import QIcon
+                              QThread, Qt, QUrl)
+from qgis.PyQt.QtGui import QIcon, QDesktopServices
 from qgis.PyQt.QtWidgets import QAction, QHBoxLayout, QSizePolicy, QTabWidget
-from QGIS_FMV.about.QgsFmvAbout import FmvAbout
 from QGIS_FMV.manager.QgsManager import FmvManager
 from QGIS_FMV.utils.QgsFmvLog import log
 from qgis.PyQt.QtCore import Qt
@@ -104,15 +103,6 @@ class Fmv:
         #self.iface.addPluginToMenu(QCoreApplication.translate(
         #    "QgsFmv", "Full Motion Video (FMV)"), self.actionFMV)
 
-        #''' About Action '''
-        #self.actionAbout = QAction(QIcon(":/imgFMV/images/Information.png"),
-        #                           u"FMV About", self.iface.mainWindow(),
-        #                           triggered=self.About)
-        #self.iface.registerMainWindowAction(
-        #    self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About", "Alt+A"))
-        #self.iface.addPluginToMenu(QCoreApplication.translate(
-        #    "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
-    
     def tabChanged(self):
         return
         #if self._FMVManager:
@@ -130,9 +120,7 @@ class Fmv:
 
     def About(self):
         ''' Show About Dialog '''
-        self.About = FmvAbout()
-        self.About.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
-        self.About.exec_()
+        QDesktopServices.openUrl(QUrl("https://all4gis.github.io/QGISFMV"))
 
     def run(self, toggleState ):
         ''' Run method '''

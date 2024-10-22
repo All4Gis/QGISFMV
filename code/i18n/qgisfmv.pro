@@ -1,5 +1,4 @@
-FORMS = ../ui/ui_FmvAbout.ui \
-		../ui/ui_ColorDialog.ui \
+FORMS = 	../ui/ui_ColorDialog.ui \
 		../ui/ui_FmvManager.ui \
 		../ui/ui_FmvMetadata.ui \
 		../ui/ui_FmvOptions.ui \
@@ -10,7 +9,6 @@ FORMS = ../ui/ui_FmvAbout.ui \
 SOURCES = ../QgsFmv.py \
 		  ../player/QgsFmvPlayer.py  \
 		  ../player/QgsFmvMetadata.py  \
-		  ../about/QgsFmvAbout.py   \
 		  ../manager/QgsManager.py \
 		  ../player/QgsFmvOptions.py \
 		  ../manager/QgsMultiplexor.py \
