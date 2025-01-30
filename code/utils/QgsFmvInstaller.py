@@ -194,7 +194,7 @@ def WindowsInstaller():
             buttonReply = qgsu.CustomMessage(
                 "QGIS FMV : "
                 + QCoreApplication.translate(
-                    "QgsFmvInstaller", "<b>Missing dependencies</b>"
+                    "QgsFmvInstaller", """<b>Missing dependencies</b>"""
                 ),
                 QCoreApplication.translate(
                     "QgsFmvInstaller", "Do you want install missing dependencies?"
