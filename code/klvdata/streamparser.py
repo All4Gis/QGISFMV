@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2017 Matthew Pare (paretech@gmail.com)
@@ -23,12 +26,6 @@
 from QGIS_FMV.klvdata.element import UnknownElement
 from QGIS_FMV.klvdata.klvparser import KLVParser
 
-try:
-    from pydevd import *
-except ImportError:
-    None
-
-
 class StreamParser:
     parsers = {}
 
@@ -43,8 +40,8 @@ class StreamParser:
 
     def __next__(self):
         key, value = next(self.iter_stream)
-        #         qgsu.showUserAndLogMessage(
-        #              "", "Streamparser key: " + str(key) + " value: " + str(value), onlyLog=True)
+#         qgsu.showUserAndLogMessage(
+#              "", "Streamparser key: " + str(key) + " value: " + str(value), onlyLog=True)
         if key in self.parsers:
             return self.parsers[key](value)
         else:

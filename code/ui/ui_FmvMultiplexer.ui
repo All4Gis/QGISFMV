@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>740</width>
-    <height>761</height>
+    <width>480</width>
+    <height>260</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Input Video File (e.g video.ts)</string>
+      <string>Input Video File (e.g DJI_0047.mp4)</string>
      </property>
     </widget>
    </item>
@@ -53,7 +53,7 @@
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Input Metadata File (e.g video_metadata.csv)</string>
+      <string>Input Telemetry File (DJI telemetry.csv)</string>
      </property>
     </widget>
    </item>
@@ -83,22 +83,6 @@
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Select drone</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QComboBox" name="cmb_drone">
-     <item>
-      <property name="text">
-       <string>DJI Mavic Pro</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="widget_2" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
@@ -110,6 +94,9 @@
       </item>
       <item>
        <widget class="QSpinBox" name="sp_hfov">
+        <property name="maximum">
+         <number>180</number>
+        </property>
         <property name="value">
          <number>81</number>
         </property>
@@ -124,6 +111,9 @@
       </item>
       <item>
        <widget class="QSpinBox" name="sp_vfov">
+        <property name="maximum">
+         <number>180</number>
+        </property>
         <property name="value">
          <number>66</number>
         </property>
@@ -133,76 +123,27 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="bt_createCSV">
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
+    <widget class="QCheckBox" name="chk_allRows">
      <property name="text">
-      <string>Extract Recordings</string>
+      <string>Use all CSV rows (don't filter by CUSTOM.isVideo)</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="gb_telemetry">
-     <property name="minimumSize">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
       <size>
-       <width>0</width>
-       <height>0</height>
+       <width>20</width>
+       <height>20</height>
       </size>
      </property>
-     <property name="title">
-      <string>Available telemetry</string>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QLabel" name="label_6">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Select the correct one if there is more than one (file name use CUSTOM.updateTime)</string>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cmb_telemetry">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+    </spacer>
    </item>
    <item>
     <widget class="QPushButton" name="bt_createMISB">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
      <property name="cursor">
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
@@ -265,27 +206,10 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>bt_createCSV</sender>
-   <signal>clicked()</signal>
-   <receiver>VideoMultiplexer</receiver>
-   <slot>CreateCSV()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>150</x>
-     <y>263</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>4</x>
-     <y>325</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
  <slots>
   <slot>OpenCsvFile()</slot>
   <slot>CreateMISB()</slot>
   <slot>OpenVideoFile()</slot>
-  <slot>CreateCSV()</slot>
  </slots>
 </ui>

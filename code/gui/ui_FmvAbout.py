@@ -6,8 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-
+from qgis.PyQt import QtCore, QtGui, QtWidgets
 
 class Ui_FmvAbout(object):
     def setupUi(self, FmvAbout):
@@ -15,19 +14,17 @@ class Ui_FmvAbout(object):
         FmvAbout.resize(643, 559)
         FmvAbout.setMinimumSize(QtCore.QSize(200, 250))
         icon = QtGui.QIcon()
-        icon.addPixmap(
-            QtGui.QPixmap(":/imgFMV/images/Information.png"),
-            QtGui.QIcon.Normal,
-            QtGui.QIcon.Off,
-        )
+        icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/Information.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         FmvAbout.setWindowIcon(icon)
-        FmvAbout.setLocale(
-            QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates)
-        )
+        FmvAbout.setLocale(QtCore.QLocale(QtCore.QLocale.Language.English, QtCore.QLocale.Country.UnitedStates))
         self.verticalLayout = QtWidgets.QVBoxLayout(FmvAbout)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.webView = QtWebKitWidgets.QWebView(FmvAbout)
-        self.webView.setProperty("url", QtCore.QUrl("about:blank"))
+        if _WebView is not None:
+            self.webView = _WebView(FmvAbout)
+            self.webView.setProperty("url", QtCore.QUrl("about:blank"))
+        else:
+            self.webView = QtWidgets.QTextBrowser(FmvAbout)
+            self.webView.setOpenExternalLinks(True)
         self.webView.setObjectName("webView")
         self.verticalLayout.addWidget(self.webView)
 
@@ -38,6 +35,12 @@ class Ui_FmvAbout(object):
         _translate = QtCore.QCoreApplication.translate
         FmvAbout.setWindowTitle(_translate("FmvAbout", "About"))
 
-
-from PyQt5 import QtWebKitWidgets
+_WebView = None
+try:
+    from qgis.PyQt.QtWebKitWidgets import QWebView as _WebView
+except ImportError:
+    try:
+        from qgis.PyQt.QtWebEngineWidgets import QWebEngineView as _WebView
+    except ImportError:
+        _WebView = None
 from QGIS_FMV.gui import resources_rc

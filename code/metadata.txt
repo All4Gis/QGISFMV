@@ -2,7 +2,8 @@
 name= QGIS Full Motion Video
 internal_name = QGIS_FMV
 qgisMinimumVersion=3.4
-qgisMaximumVersion=3.99
+qgisMaximumVersion=4.99
+supportsQt6=True
 description=<p>QGIS Full Motion Video.</p>
 about= Plugin for QGIS which allows to analyze, visualize and process videos inside the QGIS environment. 
 	   QGIS FMV accepts multiple video formats such as mp4, ts, avi, etc. It is also able to extract video frames, 
@@ -20,23 +21,18 @@ about= Plugin for QGIS which allows to analyze, visualize and process videos ins
 	   <p>If this plugin is useful for you, consider to donate to the author.</p>
 
 
-version=1.15
+version=1.16
 author= Francisco Raga
 email=franka1986@gmail.com
 
 changelog=
     ** General **
      1.16:
-      - Fix klv data error out of range
-      - Remove unnecessary calculations.
-      - Update plot bitrate code.
-      - Measures now use QGIS functions.
-      - Important clean code.
-      - Remove geo-py https://github.com/gojuno/geo-py code.
-      - Updated included mgrspy to fix issues with proj 6 versions mainly on Windows.
-      - Create csv with UpdateTime in the multiplexor tool.
-      - fix close manager.
-      - fix dran&drop manager video in linux.
+      - Qt5/Qt6 dual compatibility (QGIS 3 and QGIS 4).
+      - Scoped Qt and QGIS enums (required by PyQt6).
+      - Rewritten multimedia pipeline: QVideoSink/QVideoFrame and a QMediaPlaylist
+        replacement on Qt6, native QAbstractVideoSurface/QMediaPlaylist kept on Qt5.
+      - Modernized imports (qgis.PyQt), exec(), QScreen, QRegularExpression.
      1.15:
       - Slider made clickable.
       - Fixed drawings position when elevation model used.

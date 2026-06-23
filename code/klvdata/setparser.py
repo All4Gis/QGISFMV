@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2017 Matthew Pare (paretech@gmail.com)
@@ -28,15 +31,8 @@ from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.klvdata.element import Element
 from QGIS_FMV.klvdata.klvparser import KLVParser
 
-try:
-    from pydevd import *
-except ImportError:
-    None
-
-
 class SetParser(Element):
     """Parsable Element. Not intended to be used directly. Always as super class."""
-
     __metaclass__ = ABCMeta
 
     def __init__(self, value, key_length=1):
@@ -56,7 +52,7 @@ class SetParser(Element):
         self._targetWidth = None
         self._slantRange = None
         self._SensorRelativeAzimuthAngle = None
-        self._SensorRelativeElevationAngle = None
+        self._SensorRelativeElevationAngle = None                                                                                  
         self._OffsetCornerLatitudePoint1 = None
         self._OffsetCornerLongitudePoint1 = None
         self._OffsetCornerLatitudePoint2 = None
@@ -98,14 +94,7 @@ class SetParser(Element):
                 self.items[key] = self._unknown_element(key, value)
             except Exception:
                 # None
-                qgsu.showUserAndLogMessage(
-                    "",
-                    "Value cannot be read for Tag: "
-                    + str(int.from_bytes(key, byteorder=sys.byteorder))
-                    + " value: "
-                    + str(value),
-                    onlyLog=True,
-                )
+                qgsu.showUserAndLogMessage("", "Value cannot be read for Tag: " + str(int.from_bytes(key, byteorder=sys.byteorder)) + " value: " + str(value), onlyLog=True)
 
     @classmethod
     def add_parser(cls, obj):
@@ -144,13 +133,13 @@ class SetParser(Element):
         return str_dict(self.items)
 
     def MetadataList(self):
-        """ Return metadata dictionary"""
+        ''' Return metadata dictionary'''
         metadata = {}
 
         def repeat(items, indent=1, parentTAG=0):
             for item in items:
                 try:
-                    if not hasattr(item.value, "value"):
+                    if not hasattr(item.value, 'value'):
                         continue
                     if not parentTAG:
                         metadata[item.TAG] = (item.LDSName, str(item.value.value))
@@ -173,7 +162,7 @@ class SetParser(Element):
                         elif item.TAG == 18:
                             self.SensorRelativeAzimuthAngle = item.value.value
                         elif item.TAG == 19:
-                            self.SensorRelativeElevationAngle = item.value.value
+                            self.SensorRelativeElevationAngle = item.value.value                    
                         elif item.TAG == 21:
                             self.SlantRange = item.value.value
                         elif item.TAG == 22:
@@ -217,21 +206,12 @@ class SetParser(Element):
                         elif item.TAG == 89:
                             self.CornerLongitudePoint4Full = item.value.value
                     else:
-                        metadata[parentTAG][len(metadata[parentTAG]) - 1][item.TAG] = (
-                            item.LDSName,
-                            item.ESDName,
-                            item.UDSName,
-                            str(item.value.value),
-                        )
+                        metadata[parentTAG][len(metadata[parentTAG]) - 1][item.TAG] = (item.LDSName, item.ESDName, item.UDSName, str(item.value.value))
 
                 except Exception:
-                    qgsu.showUserAndLogMessage(
-                        "",
-                        "Value cannot be read: " + str(item.value.value),
-                        onlyLog=True,
-                    )
+                    qgsu.showUserAndLogMessage("", "Value cannot be read: " + str(item.value.value), onlyLog=True)
                     continue
-                if hasattr(item, "items"):
+                if hasattr(item, 'items'):
                     metadata[item.TAG] = (item.LDSName, item.ESDName, item.UDSName, {})
                     repeat(item.items.values(), indent + 1, item.TAG)
 
@@ -310,7 +290,7 @@ class SetParser(Element):
     @SensorRelativeAzimuthAngle.setter
     def SensorRelativeAzimuthAngle(self, value):
         self._SensorRelativeAzimuthAngle = float(value)
-
+        
     @property
     def SensorRelativeElevationAngle(self):
         return self._SensorRelativeElevationAngle
@@ -318,7 +298,7 @@ class SetParser(Element):
     @SensorRelativeElevationAngle.setter
     def SensorRelativeElevationAngle(self, value):
         self._SensorRelativeElevationAngle = float(value)
-
+        
     @property
     def SlantRange(self):
         return self._slantRange
@@ -490,11 +470,10 @@ class SetParser(Element):
     # ------------ END Setters/Getters ------------
 
     def structure(self):
-        """ Return metadata structure"""
-
+        ''' Return metadata structure'''
         def repeat(items, indent=1):
             for item in items:
-                if hasattr(item, "items"):
+                if hasattr(item, 'items'):
                     repeat(item.items.values(), indent + 1)
 
         repeat(self.items.values())
@@ -512,4 +491,4 @@ def str_dict(values):
 
     per_item(values)
 
-    return "\n".join(out)
+    return '\n'.join(out)

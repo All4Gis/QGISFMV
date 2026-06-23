@@ -27,16 +27,6 @@ from io import BytesIO
 from io import IOBase
 
 from QGIS_FMV.klvdata.common import bytes_to_int
-
-try:
-    from pydevd import *
-except ImportError:
-    None
-from QGIS_FMV.QgsFmvConstants import UASLocalMetadataSet
-
-KlvHeaderKey = b"\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01"
-
-
 class KLVParser(object):
     """Return key, value pairs parsed from an SMPTE ST 336 source."""
 
@@ -55,10 +45,9 @@ class KLVParser(object):
         key = self.__read(self.key_length)
         # TODO : HOTFIX for some videos, make better
         # in some videos the header not follow the correct pattern
-        # Sample key:
-        # b'\xdc\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01'
-        if key.find(KlvHeaderKey) > 0:
-            key = UASLocalMetadataSet
+        # Sample key: b'\xdc\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01'
+        if (key.find(b'\x00\x00\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01') > 0):
+            key = b'\x06\x0e+4\x02\x0b\x01\x01\x0e\x01\x03\x01\x01\x00\x00\x00'
             byte_length = bytes_to_int(self.__read(4))
         else:
             byte_length = bytes_to_int(self.__read(1))
@@ -70,10 +59,10 @@ class KLVParser(object):
             # BER Long Form
             length = bytes_to_int(self.__read(byte_length - 128))
 
-        #         try:
-        #             value = self.__read(length)
-        #         except OverflowError:
-        #             value = self.__read(0)
+#         try:
+#             value = self.__read(length)
+#         except OverflowError:
+#             value = self.__read(0)
 
         value = self.__read(length)
 
@@ -81,7 +70,7 @@ class KLVParser(object):
 
     def __read(self, size):
         if size == 0:
-            return b""
+            return b''
 
         assert size > 0
 

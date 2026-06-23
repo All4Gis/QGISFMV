@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  QGIS Full Motion Video (FMV)
@@ -22,27 +23,19 @@
 """
 import os.path
 
-from qgis.PyQt.QtCore import (
-    QSettings,
-    QCoreApplication,
-    QTranslator,
-    qVersion,
-    QThread,
-    Qt,
-)
+from qgis.PyQt.QtCore import (QSettings,
+                              QCoreApplication,
+                              QTranslator,
+                              qVersion,
+                              QThread,
+                              Qt)
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QHBoxLayout, QSizePolicy
+from qgis.PyQt.QtWidgets import QAction
 from QGIS_FMV.about.QgsFmvAbout import FmvAbout
 from QGIS_FMV.manager.QgsManager import FmvManager
 from QGIS_FMV.utils.QgsFmvLog import log
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import QgsApplication
-
-try:
-    from pydevd import *
-except ImportError:
-    None
-
 
 class Fmv:
     """ Main Class """
@@ -65,81 +58,59 @@ class Fmv:
         if localeSetting:
             locale = localeSetting[0:2]
             localePath = os.path.join(
-                self.plugin_dir, "i18n", "qgisfmv_{}.qm".format(locale)
-            )
+                self.plugin_dir, 'i18n', 'qgisfmv_{}.qm'.format(locale))
             if os.path.exists(localePath):
                 self.translator = QTranslator()
                 self.translator.load(localePath)
 
-                if qVersion() > "5.0.0":
+                if qVersion() > '5.0.0':
                     QCoreApplication.installTranslator(self.translator)
 
         self._FMVManager = None
-
+        
     def initGui(self):
-        """ FMV Action """
-        self.actionFMV = QAction(
-            QIcon(":/imgFMV/images/icon.png"),
-            "FMV",
-            self.iface.mainWindow(),
-            triggered=self.run,
-        )
-
+        ''' FMV Action '''
+        self.actionFMV = QAction(QIcon(":/imgFMV/images/icon.png"),
+                                 "FMV", self.iface.mainWindow(),
+                                 triggered=self.run)
+        
         self.iface.registerMainWindowAction(
-            self.actionFMV, qgsu.SetShortcutForPluginFMV(u"FMV")
-        )
+            self.actionFMV, qgsu.SetShortcutForPluginFMV(u"FMV"))
         self.iface.addToolBarIcon(self.actionFMV)
-        self.iface.addPluginToMenu(
-            QCoreApplication.translate("QgsFmv", "Full Motion Video (FMV)"),
-            self.actionFMV,
-        )
+        self.iface.addPluginToMenu(QCoreApplication.translate(
+            "QgsFmv", "Full Motion Video (FMV)"), self.actionFMV)
 
-        """ About Action """
-        self.actionAbout = QAction(
-            QIcon(":/imgFMV/images/Information.png"),
-            u"FMV About",
-            self.iface.mainWindow(),
-            triggered=self.About,
-        )
+        ''' About Action '''
+        self.actionAbout = QAction(QIcon(":/imgFMV/images/Information.png"),
+                                   u"FMV About", self.iface.mainWindow(),
+                                   triggered=self.About)
         self.iface.registerMainWindowAction(
-            self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About", "Alt+A")
-        )
-        self.iface.addPluginToMenu(
-            QCoreApplication.translate("QgsFmv", "Full Motion Video (FMV)"),
-            self.actionAbout,
-        )
+            self.actionAbout, qgsu.SetShortcutForPluginFMV(u"FMV About", "Alt+A"))
+        self.iface.addPluginToMenu(QCoreApplication.translate(
+            "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
 
     def unload(self):
-        """ Unload Plugin """
-        self.iface.removePluginMenu(
-            QCoreApplication.translate("QgsFmv", "Full Motion Video (FMV)"),
-            self.actionFMV,
-        )
-        self.iface.removePluginMenu(
-            QCoreApplication.translate("QgsFmv", "Full Motion Video (FMV)"),
-            self.actionAbout,
-        )
+        ''' Unload Plugin '''
+        self.iface.removePluginMenu(QCoreApplication.translate(
+            "QgsFmv", "Full Motion Video (FMV)"), self.actionFMV)
+        self.iface.removePluginMenu(QCoreApplication.translate(
+            "QgsFmv", "Full Motion Video (FMV)"), self.actionAbout)
         self.iface.removeToolBarIcon(self.actionFMV)
         log.removeLogging()
 
     def About(self):
-        """ Show About Dialog """
+        ''' Show About Dialog '''
         self.About = FmvAbout()
-        self.About.setWindowFlags(Qt.Window | Qt.WindowCloseButtonHint)
-        self.About.exec_()
-
-    def closeManager(self):
-        """ Reset Manager status (Close Button) """
-        self._FMVManager = None
-        self.run_once = False
+        self.About.setWindowFlags(Qt.WindowType.Window | Qt.WindowType.WindowCloseButtonHint)
+        self.About.exec()
 
     def run(self):
-        """ Run method """
+        ''' Run method '''
         if self._FMVManager is None and not self.run_once:
             self.run_once = True
             self.CreateDockWidget()
-
+    
     def CreateDockWidget(self):
-        """ Create Manager Video QDockWidget """
-        self._FMVManager = FmvManager(self.iface, fmv=self)
-        self.iface.addDockWidget(Qt.BottomDockWidgetArea, self._FMVManager)
+        ''' Create Manager Video QDockWidget '''                 
+        self._FMVManager = FmvManager(self.iface)
+        self.iface.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self._FMVManager)

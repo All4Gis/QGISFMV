@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2017 Matthew Pare (paretech@gmail.com)
@@ -23,24 +26,17 @@
 from abc import ABCMeta
 from abc import abstractmethod
 
-from QGIS_FMV.klvdata.common import (
-    bytes_to_datetime,
-    bytes_to_float,
-    bytes_to_hexstr,
-    bytes_to_int,
-    bytes_to_str,
-    datetime_to_bytes,
-    float_to_bytes,
-    str_to_bytes,
-    ieee754_bytes_to_fp,
-)
+from QGIS_FMV.klvdata.common import (bytes_to_datetime,
+                                     bytes_to_float,
+                                     bytes_to_hexstr,
+                                     bytes_to_int,
+                                     bytes_to_str,
+                                     datetime_to_bytes,
+                                     float_to_bytes,
+                                     str_to_bytes,
+                                     ieee754_bytes_to_fp,
+                                     ieee754_double_to_bytes)
 from QGIS_FMV.klvdata.element import Element
-
-try:
-    from pydevd import *
-except ImportError:
-    None
-
 
 class ElementParser(Element):
     """Construct a Element Parser base class.
@@ -54,7 +50,6 @@ class ElementParser(Element):
     their definitions (subclasses of Element Parser) do not need to call init
     on super with class key and instance value.
     """
-
     __metaclass__ = ABCMeta
 
     def __init__(self, value):
@@ -68,10 +63,10 @@ class ElementParser(Element):
 
     def __repr__(self):
         """Return as-code string used to re-create the object."""
-        return "{}({})".format(self.name, bytes(self.value))
+        return '{}({})'.format(self.name, bytes(self.value))
 
 
-class BaseValue:
+class BaseValue():
     __metaclass__ = ABCMeta
 
     """Abstract base class (superclass) used to insure internal interfaces are maintained."""
@@ -95,6 +90,7 @@ class BytesElementParser(ElementParser):
 
 
 class BytesValue(BaseValue):
+
     def __init__(self, value):
         try:
             self.value = bytes_to_int(value)
@@ -105,7 +101,7 @@ class BytesValue(BaseValue):
         return bytes(self.value)
 
     def __str__(self):
-        return bytes_to_hexstr(self.value, start="0x", sep="")
+        return bytes_to_hexstr(self.value, start='0x', sep='')
 
 
 class DateTimeElementParser(ElementParser):
@@ -116,6 +112,7 @@ class DateTimeElementParser(ElementParser):
 
 
 class DateTimeValue(BaseValue):
+
     def __init__(self, value):
         self.value = bytes_to_datetime(value)
 
@@ -123,7 +120,7 @@ class DateTimeValue(BaseValue):
         return datetime_to_bytes(self.value)
 
     def __str__(self):
-        return self.value.isoformat(sep=" ")
+        return self.value.isoformat(sep=' ')
 
 
 class StringElementParser(ElementParser):
@@ -134,6 +131,7 @@ class StringElementParser(ElementParser):
 
 
 class StringValue(BaseValue):
+
     def __init__(self, value):
         try:
             self.value = bytes_to_str(value)
@@ -153,7 +151,7 @@ class MappedElementParser(ElementParser):
     __metaclass__ = ABCMeta
 
     def __init__(self, value):
-        super().__init__(MappedValue(value, self._domain, self._range, self._error))
+        super().__init__(MappedValue(value, self._domain, self._range))
 
     @property
     @classmethod
@@ -167,25 +165,21 @@ class MappedElementParser(ElementParser):
     def _range(cls):
         pass
 
-    @property
-    @classmethod
-    @abstractmethod
-    def _error(cls):
-        pass
 
 class MappedValue(BaseValue):
-    def __init__(self, value, _domain, _range, _error):
+
+    def __init__(self, value, _domain, _range):
         self._domain = _domain
         self._range = _range
-        self._error = _error
 
         try:
-            self.value = bytes_to_float(value, self._domain, self._range, self._error)
+            self.value = round(bytes_to_float(
+                value, self._domain, self._range), 4)
         except TypeError:
             self.value = value
 
     def __bytes__(self):
-        return float_to_bytes(self.value, self._domain, self._range, self._error)
+        return float_to_bytes(self.value, self._domain, self._range)
 
     def __str__(self):
         if self.value is not None:
@@ -204,6 +198,7 @@ class IEEE754ElementParser(ElementParser):
 
 
 class IEEE754Value(BaseValue):
+
     def __init__(self, value):
         try:
             self.value = ieee754_bytes_to_fp(value)

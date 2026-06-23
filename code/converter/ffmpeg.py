@@ -1,25 +1,24 @@
-﻿# -*- coding: utf-8 -*-
+  # -*- coding: utf-8 -*-
 import locale
 import os
 import os.path
+import platform
 import re
 
 from QGIS_FMV.utils.QgsFmvUtils import _spawn
 
-console_encoding = locale.getdefaultlocale()[1] or "UTF-8"
-from QGIS_FMV.QgsFmvConstants import isWindows
-
 try:
-    from pydevd import *
-except ImportError:
-    None
-
+    console_encoding = locale.getencoding()
+except AttributeError:
+    console_encoding = locale.getpreferredencoding(False) or 'UTF-8'
+windows = platform.system() == 'Windows'
 
 class FFMpegError(Exception):
     pass
 
 
 class FFMpegConvertError(Exception):
+
     def __init__(self, message, cmd, output, details=None, pid=0):
         """
         @param    message: Error message.
@@ -43,11 +42,8 @@ class FFMpegConvertError(Exception):
 
     def __repr__(self):
         error = self.details if self.details else self.message
-        return '<FFMpegConvertError error="%s", pid=%s, cmd="%s">' % (
-            error,
-            self.pid,
-            self.cmd,
-        )
+        return ('<FFMpegConvertError error="%s", pid=%s, cmd="%s">' % 
+                (error, self.pid, self.cmd))
 
     def __str__(self):
         return self.__repr__()
@@ -74,23 +70,22 @@ class MediaFormatInfo(object):
         """
         Parse raw ffprobe output (key=value).
         """
-        if key == "format_name":
+        if key == 'format_name':
             self.format = val
-        elif key == "format_long_name":
+        elif key == 'format_long_name':
             self.fullname = val
-        elif key == "bit_rate":
+        elif key == 'bit_rate':
             self.bitrate = MediaStreamInfo.parse_float(val, None)
-        elif key == "duration":
+        elif key == 'duration':
             self.duration = MediaStreamInfo.parse_float(val, None)
-        elif key == "size":
+        elif key == 'size':
             self.size = MediaStreamInfo.parse_float(val, None)
 
     def __repr__(self):
         if self.duration is None:
-            return "MediaFormatInfo(format=%s)" % self.format
-        return "MediaFormatInfo(format={}, duration={:.2f})".format(
-            self.format, self.duration
-        )
+            return 'MediaFormatInfo(format=%s)' % self.format
+        return 'MediaFormatInfo(format=%s, duration=%.2f)' % (self.format,
+                                                              self.duration)
 
 
 class MediaStreamInfo(object):
@@ -150,93 +145,86 @@ class MediaStreamInfo(object):
         Parse raw ffprobe output (key=value).
         """
 
-        if key == "index":
+        if key == 'index':
             self.index = self.parse_int(val)
-        elif key == "codec_type":
+        elif key == 'codec_type':
             self.type = val
-        elif key == "codec_name":
+        elif key == 'codec_name':
             self.codec = val
-        elif key == "codec_long_name":
+        elif key == 'codec_long_name':
             self.codec_desc = val
-        elif key == "duration":
+        elif key == 'duration':
             self.duration = self.parse_float(val)
-        elif key == "bit_rate":
+        elif key == 'bit_rate':
             self.bitrate = self.parse_int(val, None)
-        elif key == "width":
+        elif key == 'width':
             self.video_width = self.parse_int(val)
-        elif key == "height":
+        elif key == 'height':
             self.video_height = self.parse_int(val)
-        elif key == "channels":
+        elif key == 'channels':
             self.audio_channels = self.parse_int(val)
-        elif key == "sample_rate":
+        elif key == 'sample_rate':
             self.audio_samplerate = self.parse_float(val)
-        elif key == "DISPOSITION:attached_pic":
+        elif key == 'DISPOSITION:attached_pic':
             self.attached_pic = self.parse_int(val)
 
-        if key.startswith("TAG:"):
-            key = key.split("TAG:")[1]
+        if key.startswith('TAG:'):
+            key = key.split('TAG:')[1]
             value = val
             self.metadata[key] = value
 
-        if self.type == "audio":
-            if key == "avg_frame_rate":
-                if "/" in val:
-                    n, d = val.split("/")
+        if self.type == 'audio':
+            if key == 'avg_frame_rate':
+                if '/' in val:
+                    n, d = val.split('/')
                     n = self.parse_float(n)
                     d = self.parse_float(d)
                     if n > 0.0 and d > 0.0:
                         self.video_fps = float(n) / float(d)
-                elif "." in val:
+                elif '.' in val:
                     self.video_fps = self.parse_float(val)
 
-        if self.type == "video":
-            if key == "r_frame_rate":
-                if "/" in val:
-                    n, d = val.split("/")
+        if self.type == 'video':
+            if key == 'r_frame_rate':
+                if '/' in val:
+                    n, d = val.split('/')
                     n = self.parse_float(n)
                     d = self.parse_float(d)
                     if n > 0.0 and d > 0.0:
                         self.video_fps = float(n) / float(d)
-                elif "." in val:
+                elif '.' in val:
                     self.video_fps = self.parse_float(val)
 
-        if self.type == "subtitle":
-            if key == "disposition:forced":
+        if self.type == 'subtitle':
+            if key == 'disposition:forced':
                 self.sub_forced = self.parse_int(val)
-            if key == "disposition:default":
+            if key == 'disposition:default':
                 self.sub_default = self.parse_int(val)
 
     def __repr__(self):
-        d = ""
-        metadata_str = [
-            "{}={}".format(key, value) for key, value in self.metadata.items()
-        ]
-        metadata_str = ", ".join(metadata_str)
+        d = ''
+        metadata_str = ['%s=%s' % (key, value) for key, value
+                        in self.metadata.items()]
+        metadata_str = ', '.join(metadata_str)
 
-        if self.type == "audio":
-            d = "type=%s, codec=%s, channels=%d, rate=%.0f" % (
-                self.type,
-                self.codec,
-                self.audio_channels,
-                self.audio_samplerate,
-            )
-        elif self.type == "video":
-            d = "type=%s, codec=%s, width=%d, height=%d, fps=%.1f" % (
-                self.type,
-                self.codec,
-                self.video_width,
-                self.video_height,
-                self.video_fps,
-            )
-        elif self.type == "subtitle":
-            d = "type={}, codec={}".format(self.type, self.codec)
+        if self.type == 'audio':
+            d = 'type=%s, codec=%s, channels=%d, rate=%.0f' % (self.type,
+                                                               self.codec,
+                                                               self.audio_channels,
+                                                               self.audio_samplerate)
+        elif self.type == 'video':
+            d = 'type=%s, codec=%s, width=%d, height=%d, fps=%.1f' % (
+                self.type, self.codec, self.video_width, self.video_height,
+                self.video_fps)
+        elif self.type == 'subtitle':
+            d = 'type=%s, codec=%s' % (self.type, self.codec)
         if self.bitrate is not None:
-            d += ", bitrate=%d" % self.bitrate
+            d += ', bitrate=%d' % self.bitrate
 
         if self.metadata:
-            value = "MediaStreamInfo({}, {})".format(d, metadata_str)
+            value = 'MediaStreamInfo(%s, %s)' % (d, metadata_str)
         else:
-            value = "MediaStreamInfo(%s)" % d
+            value = 'MediaStreamInfo(%s)' % d
 
         return value
 
@@ -265,22 +253,22 @@ class MediaInfo(object):
         in_format = False
         current_stream = None
 
-        for line in raw.split("\n"):
+        for line in raw.split('\n'):
             line = line.strip()
-            if line == "":
+            if line == '':
                 continue
-            elif line == "[STREAM]":
+            elif line == '[STREAM]':
                 current_stream = MediaStreamInfo()
-            elif line == "[/STREAM]":
+            elif line == '[/STREAM]':
                 if current_stream.type:
                     self.streams.append(current_stream)
                 current_stream = None
-            elif line == "[FORMAT]":
+            elif line == '[FORMAT]':
                 in_format = True
-            elif line == "[/FORMAT]":
+            elif line == '[/FORMAT]':
                 in_format = False
-            elif "=" in line:
-                k, v = line.split("=", 1)
+            elif '=' in line:
+                k, v = line.split('=', 1)
                 k = k.strip()
                 v = v.strip()
                 if current_stream:
@@ -289,9 +277,8 @@ class MediaInfo(object):
                     self.format.parse_ffprobe(k, v)
 
     def __repr__(self):
-        return "MediaInfo(format={}, streams={})".format(
-            repr(self.format), repr(self.streams)
-        )
+        return 'MediaInfo(format=%s, streams=%s)' % (repr(self.format),
+                                                     repr(self.streams))
 
     @property
     def video(self):
@@ -299,7 +286,7 @@ class MediaInfo(object):
         First video stream, or None if there are no video streams.
         """
         for s in self.streams:
-            if s.type == "video" and (self.posters_as_video or not s.attached_pic):
+            if s.type == 'video' and (self.posters_as_video or not s.attached_pic):
                 return s
         return None
 
@@ -313,7 +300,7 @@ class MediaInfo(object):
         First audio stream, or None if there are no audio streams.
         """
         for s in self.streams:
-            if s.type == "audio":
+            if s.type == 'audio':
                 return s
         return None
 
@@ -325,7 +312,6 @@ class FFMpeg(object):
 
     >>> f = FFMpeg()
     """
-
     DEFAULT_JPEG_QUALITY = 4
 
     def __init__(self):
@@ -335,8 +321,8 @@ class FFMpeg(object):
         """
 
         def which(name):
-            path = os.environ.get("PATH", os.defpath)
-            for d in path.split(":"):
+            path = os.environ.get('PATH', os.defpath)
+            for d in path.split(':'):
                 fpath = os.path.join(d, name)
                 if os.path.exists(fpath) and os.access(fpath, os.X_OK):
                     return fpath
@@ -344,37 +330,22 @@ class FFMpeg(object):
 
     def probeToJson(self, fname, Output=None):
         """ Save video data in json format """
-        p = _spawn(
-            [
-                "-v",
-                "quiet",
-                "-print_format",
-                "json",
-                "-show_format",
-                "-show_streams",
-                fname,
-                ">",
-                Output,
-            ],
-            t="probe",
-        )
+        p = _spawn(['-v', 'quiet',
+                    '-print_format', 'json',
+                    '-show_format',
+                    '-show_streams',
+                    fname,
+                    '>', Output], t="probe")
         p.communicate()
         return
 
     def probeGetJson(self, fname):
         """ Show json info in table """
-        p = _spawn(
-            [
-                "-v",
-                "quiet",
-                "-print_format",
-                "json",
-                "-show_format",
-                "-show_streams",
-                fname,
-            ],
-            t="probe",
-        )
+        p = _spawn(['-v', 'quiet',
+                    '-print_format', 'json',
+                    '-show_format',
+                    '-show_streams',
+                    fname], t="probe")
 
         (output, _) = p.communicate()
         p.wait()
@@ -411,7 +382,8 @@ class FFMpeg(object):
 
         info = MediaInfo(posters_as_video)
 
-        p = _spawn(["-show_format", "-show_streams", fname], t="probe")
+        p = _spawn(['-show_format',
+                    '-show_streams', fname], t="probe")
         stdout_data, _ = p.communicate()
         stdout_data = stdout_data.decode(console_encoding)
         info.parse_ffprobe(stdout_data)
@@ -445,23 +417,23 @@ class FFMpeg(object):
         if not os.path.exists(infile):
             raise FFMpegError("Input file doesn't exist: " + infile)
 
-        cmds = ["-i", infile]
+        cmds = ['-i', infile]
         cmds.extend(opts)
-        cmds.extend(["-y", outfile])
-        if isWindows:
+        cmds.extend(['-y', outfile])
+        if windows:
             timeout = None
         if timeout or task.isCanceled():
-            raise Exception("timed out while waiting for ffmpeg")
+            raise Exception('timed out while waiting for ffmpeg')
 
         try:
             p = _spawn(cmds)
         except OSError:
-            raise FFMpegError("Error while calling ffmpeg binary")
+            raise FFMpegError('Error while calling ffmpeg binary')
 
         yielded = False
-        buf = ""
-        total_output = ""
-        pat = re.compile(r"time=([0-9.:]+) ")
+        buf = ''
+        total_output = ''
+        pat = re.compile(r'time=([0-9.:]+) ')
         while True:
             if timeout or task.isCanceled():
                 raise
@@ -477,15 +449,15 @@ class FFMpeg(object):
             ret = ret.decode(console_encoding)
             total_output += ret
             buf += ret
-            if "\r" in buf:
-                line, buf = buf.split("\r", 1)
+            if '\r' in buf:
+                line, buf = buf.split('\r', 1)
 
                 tmp = pat.findall(line)
                 if len(tmp) == 1:
                     timespec = tmp[0]
-                    if ":" in timespec:
+                    if ':' in timespec:
                         timecode = 0
-                        for part in timespec.split(":"):
+                        for part in timespec.split(':'):
                             timecode = 60 * timecode + float(part)
                     else:
                         timecode = float(tmp[0])
@@ -499,34 +471,29 @@ class FFMpeg(object):
 
         if task.isCanceled():
             raise
-        if total_output == "":
-            raise FFMpegError("Error while calling ffmpeg binary")
+        if total_output == '':
+            raise FFMpegError('Error while calling ffmpeg binary')
 
-        cmd = " ".join(cmds)
-        if "\n" in total_output:
-            line = total_output.split("\n")[-2]
+        cmd = ' '.join(cmds)
+        if '\n' in total_output:
+            line = total_output.split('\n')[-2]
 
-            if line.startswith("Received signal"):
+            if line.startswith('Received signal'):
                 # Received signal 15: terminating.
-                raise FFMpegConvertError(
-                    line.split(":")[0], cmd, total_output, pid=p.pid
-                )
-            if line.startswith(infile + ": "):
-                err = line[len(infile) + 2 :]
-                raise FFMpegConvertError(
-                    "Encoding error", cmd, total_output, err, pid=p.pid
-                )
-            if line.startswith("Error while "):
-                raise FFMpegConvertError(
-                    "Encoding error", cmd, total_output, line, pid=p.pid
-                )
+                raise FFMpegConvertError(line.split(
+                    ':')[0], cmd, total_output, pid=p.pid)
+            if line.startswith(infile + ': '):
+                err = line[len(infile) + 2:]
+                raise FFMpegConvertError('Encoding error', cmd, total_output,
+                                         err, pid=p.pid)
+            if line.startswith('Error while '):
+                raise FFMpegConvertError('Encoding error', cmd, total_output,
+                                         line, pid=p.pid)
             if not yielded:
-                raise FFMpegConvertError(
-                    "Unknown ffmpeg error", cmd, total_output, line, pid=p.pid
-                )
+                raise FFMpegConvertError('Unknown ffmpeg error', cmd,
+                                         total_output, line, pid=p.pid)
         if p.returncode != 0:
-            raise FFMpegConvertError(
-                "Exited with code %d" % p.returncode, cmd, total_output, pid=p.pid
-            )
+            raise FFMpegConvertError('Exited with code %d' % p.returncode, cmd,
+                                     total_output, pid=p.pid)
         if task.isCanceled():
             raise

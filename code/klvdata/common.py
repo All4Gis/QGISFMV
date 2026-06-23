@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2017 Matthew Pare (paretech@gmail.com)
@@ -25,15 +28,9 @@ from datetime import timezone
 from struct import pack
 from struct import unpack
 
-try:
-    from pydevd import *
-except ImportError:
-    None
-
-
 def datetime_to_bytes(value):
     """Return bytes representing UTC time in microseconds."""
-    return pack(">Q", int(value.timestamp() * 1e6))
+    return pack('>Q', int(value.timestamp() * 1e6))
 
 
 def bytes_to_datetime(value):
@@ -43,12 +40,12 @@ def bytes_to_datetime(value):
 
 def bytes_to_int(value, signed=False):
     """Return integer given bytes."""
-    return int.from_bytes(bytes(value), byteorder="big", signed=signed)
+    return int.from_bytes(bytes(value), byteorder='big', signed=signed)
 
 
 def int_to_bytes(value, length=1, signed=False):
     """Return bytes given integer"""
-    return int(value).to_bytes(length, byteorder="big", signed=signed)
+    return int(value).to_bytes(length, byteorder='big', signed=signed)
 
 
 def ber_decode(value):
@@ -81,21 +78,21 @@ def ber_encode(value):
 
 def bytes_to_str(value):
     """Return UTF-8 formatted string from bytes object."""
-    return bytes(value).decode("UTF-8")
+    return bytes(value).decode('UTF-8')
 
 
 def str_to_bytes(value):
     """Return bytes object from UTF-8 formatted string."""
-    return bytes(str(value), "UTF-8")
+    return bytes(str(value), 'UTF-8')
 
 
 def hexstr_to_bytes(value):
     """Return bytes object and filter out formatting characters from
     a string of hexadecimal numbers."""
-    return bytes.fromhex("".join(filter(str.isalnum, value)))
+    return bytes.fromhex(''.join(filter(str.isalnum, value)))
 
 
-def bytes_to_hexstr(value, start="", sep=" "):
+def bytes_to_hexstr(value, start='', sep=' '):
     """Return string of hexadecimal numbers separated by spaces from a bytes object."""
     return start + sep.join(["{:02X}".format(byte) for byte in bytes(value)])
 
@@ -111,6 +108,7 @@ def linear_map(src_value, src_domain, dst_range):
     it should always fall within the src_domain. If not, that's a problem.
     """
     src_min, src_max, dst_min, dst_max = src_domain + dst_range
+    # assert(src_min <= src_value <= src_max)
 
     if not (src_min <= src_value <= src_max):
         raise ValueError
@@ -124,11 +122,9 @@ def linear_map(src_value, src_domain, dst_range):
     return dst_value
 
 
-def bytes_to_float(value, _domain, _range, _error=None):
+def bytes_to_float(value, _domain, _range):
     """Convert the fixed point value self.value to a floating point value."""
-    src_value = int().from_bytes(value, byteorder="big", signed=(min(_domain) < 0))
-    if src_value == _error:
-        return None
+    src_value = int().from_bytes(value, byteorder='big', signed=(min(_domain) < 0))
     return linear_map(src_value, _domain, _range)
 
 
@@ -137,14 +133,19 @@ def ieee754_bytes_to_fp(value):
     # src_value = int().from_bytes(value, byteorder='big', signed=False)
     l = len(value)
     if l == 4:
-        return unpack(">f", value)[0]
+        return unpack('>f', value)[0]
     elif l == 8:
-        return unpack(">d", value)[0]
+        return unpack('>d', value)[0]
     else:
         raise ValueError
 
 
-def float_to_bytes(value, _domain, _range, _error=None):
+def ieee754_double_to_bytes(value):
+    """Convert a floating point value to its IEEE754 double precision bytes (8 bytes, big-endian)."""
+    return pack('>d', value)
+
+
+def float_to_bytes(value, _domain, _range):
     """Convert the fixed point value self.value to a floating point value."""
     # Some classes like MappedElement are calling float_to_bytes with arguments _domain
     # and _range in the incorrect order. The naming convention used is confusing and
@@ -153,10 +154,6 @@ def float_to_bytes(value, _domain, _range, _error=None):
     src_min, src_max, dst_min, dst_max = src_domain + dst_range
     length = int((dst_max - dst_min - 1).bit_length() / 8)
     dst_value = linear_map(value, src_domain=src_domain, dst_range=dst_range)
-    if value is None:
-        dst_value = _error
-    else:
-        dst_value = linear_map(value, src_domain=src_domain, dst_range=dst_range)
     return round(dst_value).to_bytes(length, byteorder='big', signed=(dst_min < 0))
 
 
@@ -165,9 +162,9 @@ def packet_checksum(data):
     length = len(data) - 2
     word_size, mod = divmod(length, 2)
 
-    words = sum(unpack(">{:d}H".format(word_size), data[0 : length - mod]))
+    words = sum(unpack(">{:d}H".format(word_size), data[0:length - mod]))
 
     if mod:
         words += data[length - 1] << 8
 
-    return pack(">H", words & 0xFFFF)
+    return pack('>H', words & 0xFFFF)

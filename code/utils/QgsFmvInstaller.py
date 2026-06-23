@@ -1,4 +1,9 @@
+  # -*- coding: utf-8 -*-
+from configparser import ConfigParser
 import os
+import sys
+from os.path import dirname, abspath
+import pathlib
 import platform
 from qgis.PyQt.QtCore import Qt, QCoreApplication
 from qgis.PyQt.QtWidgets import QMessageBox, QProgressBar, QInputDialog, QLineEdit
@@ -11,6 +16,32 @@ import zipfile
 import subprocess
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 
+plugin_dir = pathlib.Path(__file__).parent.parent
+sys.path.append(str(plugin_dir))
+
+# Flag to hide the console window of spawned processes on Windows.
+CREATE_NO_WINDOW = 0x08000000
+
+
+def _version_tuple(version):
+    ''' Convert a version string like '4.10.0' into a comparable tuple of ints.
+    Non numeric parts are ignored so comparisons are reliable (e.g.
+    '3.10.0' > '3.9.0', which a plain string compare would get wrong). '''
+    parts = []
+    for chunk in str(version).split('.'):
+        num = ''.join(ch for ch in chunk if ch.isdigit())
+        if num == '':
+            break
+        parts.append(int(num))
+    return tuple(parts)
+
+parser = ConfigParser(delimiters=(':'), comment_prefixes='/', allow_no_value=True)
+fileConfig = os.path.join(dirname(dirname(abspath(__file__))), 'settings.ini')
+parser.read(fileConfig)
+
+ffmpegConf = parser['GENERAL']['ffmpeg']
+DemConf = parser['GENERAL']['DTM_file']
+
 try:
     import winreg
 except ImportError:
@@ -19,40 +50,26 @@ try:
     import apt
 except ImportError:
     None
-try:
-    from pydevd import *
-except ImportError:
-    None
-
-from QGIS_FMV.QgsFmvConstants import isWindows, ffmpegConf, DemConf, fileConfig, parser
+windows = platform.system() == 'Windows'
 
 # Download link
-LavFilters = "https://github.com/Nevcairiel/LAVFilters/releases/download/0.74.1/LAVFilters-0.74.1-Installer.exe"
+LavFilters = "https://github.com/Nevcairiel/LAVFilters/releases/download/0.79/LAVFilters-0.79-Installer.exe"
 
-# 64 Bits
-if platform.machine().endswith("64"):
-    FFMPEG = "https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20190502-7eba264-win64-static.zip"
-# 32 Bits
-else:
-    FFMPEG = "https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-20190502-7eba264-win32-static.zip"
+# zeranoe.com builds were discontinued in 2020; gyan.dev hosts current official
+# Windows builds (64-bit only nowadays, which matches modern QGIS).
+FFMPEG = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
 DemGlobal = "http://www.gisandbeers.com/RRSS/Cartografia/ETOPO1.zip"
 
 progress = QProgressBar()
-progress.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+progress.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
 opener = build_opener()
-opener.addheaders = [
-    (
-        "User-Agent",
-        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36",
-    )
-]
+opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
 install_opener(opener)
 
-
 def reporthook(blocknum, blocksize, totalsize):
-    """ Url retrieve progress """
+    ''' Url retrieve progress '''
     readsofar = blocknum * blocksize
     if totalsize > 0:
         percent = readsofar * 1e2 / totalsize
@@ -60,64 +77,48 @@ def reporthook(blocknum, blocksize, totalsize):
 
 
 def WindowsInstaller():
-    """ complete windows installation """
+    ''' complete windows installation '''
     if not IsLavFilters():
-        """ lAV Filters """
-        buttonReply = qgsu.CustomMessage(
-            "QGIS FMV",
-            QCoreApplication.translate(
-                "QgsFmvInstaller", """<b>Missing python dependency</b>"""
-            ),
-            QCoreApplication.translate(
-                "QgsFmvInstaller", "Do you want install Lav Filters?"
-            ),
-            icon="Information",
-        )
-        if buttonReply == QMessageBox.Yes:
+        ''' lAV Filters '''
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                         QCoreApplication.translate("QgsFmvInstaller", """<b>Missing python dependency</b>"""),
+                                         QCoreApplication.translate("QgsFmvInstaller", "Do you want install Lav Filters?"),
+                                         icon="Information")
+        if buttonReply == QMessageBox.StandardButton.Yes:
 
-            progressMessageBar = iface.messageBar().createMessage(
-                "QGIS FMV", " Downloading LAV Filters..."
-            )
+            progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading LAV Filters...")
             progressMessageBar.layout().addWidget(progress)
-            iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
+            iface.messageBar().pushWidget(progressMessageBar, QGis.MessageLevel.Info)
 
             # Install Lav Filter
-            filename = "LavFilters.exe"
+            filename = 'LavFilters.exe'
             urlretrieve(LavFilters, filename, reporthook)
-            process = Popen(filename, stdout=PIPE, creationflags=0x08000000)
+            process = Popen(filename, stdout=PIPE, creationflags=CREATE_NO_WINDOW)
             process.wait()
             os.remove(filename)
             iface.messageBar().clearWidgets()
 
     if not IsFFMPEG():
-        """ FFMPEG Lib """
-        buttonReply = qgsu.CustomMessage(
-            "QGIS FMV",
-            QCoreApplication.translate(
-                "QgsFmvInstaller", """<b>Missing FFMPEG dependency</b>"""
-            ),
-            QCoreApplication.translate(
-                "QgsFmvInstaller", "Do you want install FFMPEG?"
-            ),
-            icon="Information",
-        )
-        if buttonReply == QMessageBox.Yes:
+        ''' FFMPEG Lib '''
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                         QCoreApplication.translate("QgsFmvInstaller", """<b>Missing FFMPEG dependency</b>"""),
+                                         QCoreApplication.translate("QgsFmvInstaller", "Do you want install FFMPEG?"),
+                                         icon="Information")
+        if buttonReply == QMessageBox.StandardButton.Yes:
             # Download FFMPEG # Prevent HTTP Error 403: Forbidden
-            progressMessageBar = iface.messageBar().createMessage(
-                "QGIS FMV", " Downloading FFMPEG..."
-            )
+            progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading FFMPEG...")
             progressMessageBar.layout().addWidget(progress)
-            iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
+            iface.messageBar().pushWidget(progressMessageBar, QGis.MessageLevel.Info)
 
-            filename = "FFMPEG.zip"
+            filename = 'FFMPEG.zip'
             urlretrieve(FFMPEG, filename, reporthook)
-            zip_ref = zipfile.ZipFile(filename, "r")
+            zip_ref = zipfile.ZipFile(filename, 'r')
 
             dest = os.path.join(os.getenv("SystemDrive"), os.sep, "FFMPEG")
-            extensions = ".exe"
+            extensions = ('.exe')
 
             for zip_info in zip_ref.infolist():
-                if zip_info.filename[-1] == "/":
+                if zip_info.filename[-1] == '/':
                     continue
                 zip_info.filename = os.path.basename(zip_info.filename)
                 if zip_info.filename.endswith(extensions):
@@ -125,44 +126,34 @@ def WindowsInstaller():
 
             zip_ref.close()
 
-            parser.set(
-                "GENERAL", "ffmpeg", os.getenv("SystemDrive") + os.sep + "FFMPEG"
-            )
+            parser.set('GENERAL', 'ffmpeg', os.getenv("SystemDrive") + os.sep + "FFMPEG")
 
-            with open(fileConfig, "w") as configfile:
+            with open(fileConfig, 'w') as configfile:
                 parser.write(configfile)
-
+            
             os.remove(filename)
             iface.messageBar().clearWidgets()
 
     if not isDem():
-        """ DEM File """
-        buttonReply = qgsu.CustomMessage(
-            "QGIS FMV",
-            QCoreApplication.translate(
-                "QgsFmvInstaller", """<b>Dem file not exist!</b>"""
-            ),
-            QCoreApplication.translate(
-                "QgsFmvInstaller", "Do you want download global DEM?"
-            ),
-            icon="Information",
-        )
-        if buttonReply == QMessageBox.Yes:
-            progressMessageBar = iface.messageBar().createMessage(
-                "QGIS FMV", " Downloading Global DEM..."
-            )
+        ''' DEM File '''        
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                 QCoreApplication.translate("QgsFmvInstaller","""<b>Dem file not exist!</b>"""),
+                                 QCoreApplication.translate("QgsFmvInstaller", "Do you want download global DEM?"),
+                                 icon="Information")
+        if buttonReply == QMessageBox.StandardButton.Yes:
+            progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading Global DEM...")
             progressMessageBar.layout().addWidget(progress)
-            iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
-
-            filename = "DemGlobalFMV.zip"
-            urlretrieve(DemGlobal, filename, reporthook)
-            zip_ref = zipfile.ZipFile(filename, "r")
+            iface.messageBar().pushWidget(progressMessageBar, QGis.MessageLevel.Info)
+               
+            filename = 'DemGlobalFMV.zip'     
+            urlretrieve(DemGlobal,filename, reporthook)
+            zip_ref = zipfile.ZipFile(filename, 'r')
 
             dest = os.path.join(os.getenv("SystemDrive"), os.sep, "DemGlobalFMV")
-            extensions = ".tif"
+            extensions = ('.tif')
 
             for zip_info in zip_ref.infolist():
-                if zip_info.filename[-1] == "/":
+                if zip_info.filename[-1] == '/':
                     continue
                 zip_info.filename = os.path.basename(zip_info.filename)
                 if zip_info.filename.endswith(extensions):
@@ -170,331 +161,199 @@ def WindowsInstaller():
 
             zip_ref.close()
 
-            parser.set(
-                "GENERAL",
-                "DTM_file",
-                os.getenv("SystemDrive")
-                + os.sep
-                + "DemGlobalFMV"
-                + os.sep
-                + "ETOPO1.tif",
-            )
+            parser.set('GENERAL', 'DTM_file', os.getenv("SystemDrive") + os.sep + "DemGlobalFMV"+ os.sep +"ETOPO1.tif")
 
-            with open(fileConfig, "w") as configfile:
+            with open(fileConfig, 'w') as configfile:
                 parser.write(configfile)
 
             os.remove(filename)
             iface.messageBar().clearWidgets()
+        
 
     try:
-        import cv2
-        import matplotlib  # noqa
+        import cv2, matplotlib  # noqa
     except ImportError:
         try:
-            buttonReply = qgsu.CustomMessage(
-                "QGIS FMV : "
-                + QCoreApplication.translate(
-                    "QgsFmvInstaller", "<b>Missing dependencies</b>"
-                ),
-                QCoreApplication.translate(
-                    "QgsFmvInstaller", "Do you want install missing dependencies?"
-                ),
-                icon="Information",
-            )
-            if buttonReply == QMessageBox.Yes:
+            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "<b>Missing dependencies</b>"),
+                                             QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
+                                             icon="Information")
+            if buttonReply == QMessageBox.StandardButton.Yes:
                 install_pip_requirements()
-                qgsu.showUserAndLogMessage(
-                    QCoreApplication.translate(
-                        "QgsFmvInstaller", "Python libraries installed correctly"
-                    )
-                )
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
         except ImportError:
             None
     finally:
         try:
-            import cv2
-            import matplotlib  # noqa
-
+            import cv2, matplotlib  # noqa
             # We update dependencies
-            if matplotlib.__version__ < "3.1.0" or cv2.__version__ < "4.1.0":
-                buttonReply = qgsu.CustomMessage(
-                    "QGIS FMV : "
-                    + QCoreApplication.translate(
-                        "QgsFmvInstaller", "<b>Updates available</b>"
-                    ),
-                    QCoreApplication.translate(
-                        "QgsFmvInstaller", "Do you want upgrade dependencies?"
-                    ),
-                    icon="Information",
-                )
-                if buttonReply == QMessageBox.Yes:
+            if _version_tuple(matplotlib.__version__) < (3, 1, 0) or _version_tuple(cv2.__version__) < (4, 1, 0):
+                buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "<b>Updates available</b>"),
+                                                 QCoreApplication.translate("QgsFmvInstaller", "Do you want upgrade dependencies?"),
+                                                 icon="Information")
+                if buttonReply == QMessageBox.StandardButton.Yes:
                     install_pip_requirements()
-                    qgsu.showUserAndLogMessage(
-                        QCoreApplication.translate(
-                            "QgsFmvInstaller", "Python libraries updated correctly"
-                        )
-                    )
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries updated correctly"))
         except ImportError:
-            qgsu.showUserAndLogMessage(
-                QCoreApplication.translate(
-                    "QgsFmvInstaller",
-                    "Error installing the python libraries, use the requirements file!",
-                ),
-                level=QGis.Critical,
-            )
+            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
+                                       level=QGis.MessageLevel.Critical)
             raise
     return
 
 
 def get_password():
-    """Return Linux user Password."""
-    password, ok = QInputDialog.getText(
-        None,
-        "Enter Linux user password for install missing dependencies",
-        "Password:",
-        QLineEdit.Password,
-    )
-    return password if ok else ""
+        """Return Linux user Password."""
+        password, ok = QInputDialog.getText(
+            None, "Enter Linux user password for install missing dependencies", "Password:",
+            QLineEdit.EchoMode.Password
+        )
+        return password if ok else ''
 
 
 # Tested using 3.12.1-București and Ubuntu 18.04
 def LinuxInstaller():
-    """Complete Linux installation """
+    '''Complete Linux installation '''
     pwd = None
-
+    
     try:
-        import cv2
-        import matplotlib
-        import apt  # noqa
+        import cv2, matplotlib, apt  # noqa
     except ImportError:
         try:
 
-            buttonReply = qgsu.CustomMessage(
-                "QGIS FMV : "
-                + QCoreApplication.translate(
-                    "QgsFmvInstaller", "Missing python dependencies"
-                ),
-                QCoreApplication.translate(
-                    "QgsFmvInstaller", "Do you want install missing dependencies?"
-                ),
-                icon="Information",
-            )
-            if buttonReply == QMessageBox.Yes:
-
-                """ Aditional dependencies"""
+            buttonReply = qgsu.CustomMessage("QGIS FMV : " + QCoreApplication.translate("QgsFmvInstaller", "Missing python dependencies"),
+                                             QCoreApplication.translate("QgsFmvInstaller", "Do you want install missing dependencies?"),
+                                             icon="Information")
+            if buttonReply == QMessageBox.StandardButton.Yes:
+                
+                ''' Aditional dependencies'''
                 if pwd is None:
                     ret = get_password()
                     if ret == "":
                         return
-
+        
                     pwd = ret
-
+            
                 # Install matplotlib
-                cmd = "sudo apt -y install matplotlib"
-                subprocess.call("echo {} | sudo -S {}".format(pwd, cmd), shell=True)
-
+                cmd = 'sudo apt -y install matplotlib'
+                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+                
                 # Install apt
-                cmd = "sudo pip3 install python-apt"
-                subprocess.call("echo {} | sudo -S {}".format(pwd, cmd), shell=True)
+                cmd = 'sudo pip3 install python-apt'
+                subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
 
                 # Install OpenCV
-                #                 package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
-                #                 opencv_file = os.path.join(package_dir, 'install-opencv.sh')
-                #                 cmd = 'sh ' + opencv_file
-                #                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
+#                 package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
+#                 opencv_file = os.path.join(package_dir, 'install-opencv.sh')
+#                 cmd = 'sh ' + opencv_file
+#                 subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
 
-                qgsu.showUserAndLogMessage(
-                    QCoreApplication.translate(
-                        "QgsFmvInstaller", "Python libraries installed correctly"
-                    )
-                )
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Python libraries installed correctly"))
         except ImportError:
             None
     finally:
         try:
-            import cv2
-            import matplotlib
-            import apt  # noqa
+            import cv2, matplotlib,apt  # noqa
         except ImportError:
-            qgsu.showUserAndLogMessage(
-                QCoreApplication.translate(
-                    "QgsFmvInstaller",
-                    "Error installing the python libraries, use the requirements file!",
-                ),
-                level=QGis.Critical,
-            )
+            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "Error installing the python libraries, use the requirements file!"),
+                                       level=QGis.MessageLevel.Critical)
+            
 
     if not IsLavFilters():
-        """ lAV Filters (GStreamer on Linux)"""
+        ''' lAV Filters (GStreamer on Linux)'''
 
-        buttonReply = qgsu.CustomMessage(
-            "QGIS FMV",
-            QCoreApplication.translate(
-                "QgsFmvInstaller", "Missing GStreamer dependency"
-            ),
-            QCoreApplication.translate(
-                "QgsFmvInstaller", "Do you want install GStreamer?"
-            ),
-            icon="Information",
-        )
-        if buttonReply == QMessageBox.Yes:
-
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                         QCoreApplication.translate("QgsFmvInstaller", "Missing GStreamer dependency"),
+                                         QCoreApplication.translate("QgsFmvInstaller", "Do you want install GStreamer?"),
+                                         icon="Information")
+        if buttonReply == QMessageBox.StandardButton.Yes:
+            
             if pwd is None:
                 ret = get_password()
                 if ret == "":
                     return
-
+    
                 pwd = ret
-
+            
             # Install GStreamer
-            progressMessageBar = iface.messageBar().createMessage(
-                "QGIS FMV", " Downloading GStreamer..."
-            )
+            progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading GStreamer...")
             progressMessageBar.layout().addWidget(progress)
-            iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
+            iface.messageBar().pushWidget(progressMessageBar, QGis.MessageLevel.Info)
 
-            cmd = "sudo apt-get -y install python3-pyqt5.qtmultimedia gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio libqt5gstreamer-1.0-0 qtmultimedia5-examples libqt5multimedia5-plugins"
-            gst_rc = subprocess.call(
-                "echo {} | sudo -S {}".format(pwd, cmd), shell=True
-            )
+            cmd = 'sudo apt-get -y install python3-pyqt5.qtmultimedia gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio libqt5gstreamer-1.0-0 qtmultimedia5-examples libqt5multimedia5-plugins'
+            gst_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
             if gst_rc != 0:
-                qgsu.showUserAndLogMessage(
-                    QCoreApplication.translate(
-                        "QgsFmvInstaller",
-                        "INSTALLATION FAILED: Failed to install GStreamer library.",
-                    ),
-                    level=QGis.Critical,
-                )
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION FAILED: Failed to install GStreamer library.'), level=QGis.MessageLevel.Critical)
             else:
-                qgsu.showUserAndLogMessage(
-                    QCoreApplication.translate(
-                        "QgsFmvInstaller",
-                        "INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.",
-                    )
-                )
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.'))
 
             iface.messageBar().clearWidgets()
 
     if not IsFFMPEG():
-        """ FFMPEG Lib """
+        ''' FFMPEG Lib '''
 
-        buttonReply = qgsu.CustomMessage(
-            "QGIS FMV",
-            QCoreApplication.translate("QgsFmvInstaller", "Missing FFMPEG dependency"),
-            QCoreApplication.translate(
-                "QgsFmvInstaller", "Do you want install FFMPEG?"
-            ),
-            icon="Information",
-        )
-        if buttonReply == QMessageBox.Yes:
-
+        buttonReply = qgsu.CustomMessage("QGIS FMV",
+                                         QCoreApplication.translate("QgsFmvInstaller", "Missing FFMPEG dependency"),
+                                         QCoreApplication.translate("QgsFmvInstaller", "Do you want install FFMPEG?"),
+                                         icon="Information")
+        if buttonReply == QMessageBox.StandardButton.Yes:
+            
             if pwd is None:
                 ret = get_password()
                 if ret == "":
                     return
-
+    
                 pwd = ret
-
+                
             # Download FFMPEG
-            progressMessageBar = iface.messageBar().createMessage(
-                "QGIS FMV", " Downloading FFMPEG..."
-            )
+            progressMessageBar = iface.messageBar().createMessage("QGIS FMV", " Downloading FFMPEG...")
             progressMessageBar.layout().addWidget(progress)
-            iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
+            iface.messageBar().pushWidget(progressMessageBar, QGis.MessageLevel.Info)
 
-            cmd = "sudo apt-get -y install ffmpeg"
-            ff_rc = subprocess.call("echo {} | sudo -S {}".format(pwd, cmd), shell=True)
+            cmd = 'sudo apt-get -y install ffmpeg'
+            ff_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
             if ff_rc != 0:
-                qgsu.showUserAndLogMessage(
-                    QCoreApplication.translate(
-                        "QgsFmvInstaller",
-                        "Failed to install ffmpeg library, trying add-apt-repository.",
-                    ),
-                    level=QGis.Critical,
-                )
+                qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'Failed to install ffmpeg library, trying add-apt-repository.'), level=QGis.MessageLevel.Critical)
 
-                cmd = "sudo add-apt-repository ppa:jonathonf/ffmpeg-4"
-                ppa_rc = subprocess.call(
-                    "echo {} | sudo -S {}".format(pwd, cmd), shell=True
-                )
+                cmd = 'sudo add-apt-repository ppa:jonathonf/ffmpeg-4'
+                ppa_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
                 if ppa_rc != 0:
-                    qgsu.showUserAndLogMessage(
-                        QCoreApplication.translate(
-                            "QgsFmvInstaller",
-                            "INSTALLATION FAILED: Could not install ffmpeg package.",
-                        ),
-                        level=QGis.Critical,
-                    )
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION FAILED: Could not install ffmpeg package.'), level=QGis.MessageLevel.Critical)
 
                 else:
-                    qgsu.showUserAndLogMessage(
-                        QCoreApplication.translate(
-                            "QgsFmvInstaller",
-                            "GET REPO SUCCESSFUL: Successfully added trusty-media repo where ffmpeg is located",
-                        )
-                    )
+                    qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'GET REPO SUCCESSFUL: Successfully added trusty-media repo where ffmpeg is located'))
 
-                    cmd = "sudo apt-get update"
-                    up_rc = subprocess.call(
-                        "echo {} | sudo -S {}".format(pwd, cmd), shell=True
-                    )
+                    cmd = 'sudo apt-get update'
+                    up_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
                     if up_rc != 0:
-                        qgsu.showUserAndLogMessage(
-                            QCoreApplication.translate(
-                                "QgsFmvInstaller",
-                                "UPDATE FAILED: Failed to retrieve packages.",
-                            ),
-                            level=QGis.Critical,
-                        )
+                        qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'UPDATE FAILED: Failed to retrieve packages.'), level=QGis.MessageLevel.Critical)
                     else:
-                        qgsu.showUserAndLogMessage(
-                            QCoreApplication.translate(
-                                "QgsFmvInstaller",
-                                "UPDATE SUCCESSFUL: Sucessfully retrived updated packages.",
-                            )
-                        )
-                        cmd = "sudo apt-get -y install ffmpeg"
-                        ffm_rc = subprocess.call(
-                            "echo {} | sudo -S {}".format(pwd, cmd), shell=True
-                        )
+                        qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'UPDATE SUCCESSFUL: Sucessfully retrived updated packages.'))
+                        cmd = 'sudo apt-get -y install ffmpeg'
+                        ffm_rc = subprocess.call('echo {} | sudo -S {}'.format(pwd, cmd), shell=True)
                         if ffm_rc != 0:
-                            qgsu.showUserAndLogMessage(
-                                QCoreApplication.translate(
-                                    "QgsFmvInstaller",
-                                    "INSTALLATION FAILED: Could not install ffmpeg package.",
-                                ),
-                                level=QGis.Critical,
-                            )
+                            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION FAILED: Could not install ffmpeg package.'), level=QGis.MessageLevel.Critical)
                         else:
-                            qgsu.showUserAndLogMessage(
-                                QCoreApplication.translate(
-                                    "QgsFmvInstaller",
-                                    "INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.",
-                                )
-                            )
+                            qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", 'INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.'))
 
-                            parser.set("GENERAL", "ffmpeg", "/usr/bin/")
-                            with open(fileConfig, "w") as configfile:
+                            parser.set('GENERAL', 'ffmpeg', '/usr/bin/')
+                            with open(fileConfig, 'w') as configfile:
                                 parser.write(configfile)
 
                             iface.messageBar().clearWidgets()
             else:
-                parser.set("GENERAL", "ffmpeg", "/usr/bin/")
-                with open(fileConfig, "w") as configfile:
+                parser.set('GENERAL', 'ffmpeg', '/usr/bin/')
+                with open(fileConfig, 'w') as configfile:
                     parser.write(configfile)
 
                 iface.messageBar().clearWidgets()
 
     if not isDem():
-        """ DEM File """
-        progressMessageBar = iface.messageBar().createMessage(
-            "QGIS FMV",
-            QCoreApplication.translate("QgsFmvInstaller", "Dem file not exist!"),
-        )
-        iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
-        parser.set("GENERAL", "DTM_file", "")
+        ''' DEM File '''
+        progressMessageBar = iface.messageBar().createMessage("QGIS FMV",
+                                                              QCoreApplication.translate("QgsFmvInstaller", "Dem file not exist!"))
+        iface.messageBar().pushWidget(progressMessageBar, QGis.MessageLevel.Info)
+        parser.set('GENERAL', 'DTM_file', "")
 
-        with open(fileConfig, "w") as configfile:
+        with open(fileConfig, 'w') as configfile:
             parser.write(configfile)
         iface.messageBar().clearWidgets()
 
@@ -503,34 +362,30 @@ def LinuxInstaller():
 
 # TODO
 def MacInstaller():
-    """complete Mac installation """
+    '''complete Mac installation '''
     return
 
 
 def isDem():
-    """ Check if Dem is present """
-    if isWindows:
+    ''' Check if Dem is present '''
+    if windows:
         if not os.path.isfile(DemConf):
             return False
     return True
 
 
 def IsLavFilters():
-    """ Check if LavFilters is present """
-    if isWindows:
-        software_list = (
-            WinSoftwareInstalled(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_32KEY)
-            + WinSoftwareInstalled(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_64KEY)
-            + WinSoftwareInstalled(winreg.HKEY_CURRENT_USER, 0)
-        )
-        if not any("LAV Filters" in software["name"] for software in software_list):
+    ''' Check if LavFilters is present '''
+    if windows:
+        software_list = WinSoftwareInstalled(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_32KEY) + WinSoftwareInstalled(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_64KEY) + WinSoftwareInstalled(winreg.HKEY_CURRENT_USER, 0)
+        if not any('LAV Filters' in software['name'] for software in software_list):
             # does not exist
             return False
     else:
         cache = apt.Cache()
         cache.open()
         try:
-            # print("lav filters")
+            #print("lav filters")
             return cache["gst123"].is_installed
         except Exception:
             # does not exist
@@ -539,11 +394,13 @@ def IsLavFilters():
 
 
 def IsFFMPEG():
-    """ Chech if FFMPEG is present """
-    if isWindows:
+    ''' Chech if FFMPEG is present '''
+    if windows:
         if not os.path.isdir(ffmpegConf):
             return False
-        if not os.path.isfile(os.path.join(ffmpegConf, "ffmpeg.exe")):
+        # Accept both <folder>\ffmpeg.exe and the common <folder>\bin\ffmpeg.exe layout.
+        if not (os.path.isfile(os.path.join(ffmpegConf, 'ffmpeg.exe')) or
+                os.path.isfile(os.path.join(ffmpegConf, 'bin', 'ffmpeg.exe'))):
             return False
     else:
         cache = apt.Cache()
@@ -558,12 +415,8 @@ def IsFFMPEG():
 
 def WinSoftwareInstalled(hive, flag):
     aReg = winreg.ConnectRegistry(None, hive)
-    aKey = winreg.OpenKey(
-        aReg,
-        r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
-        0,
-        winreg.KEY_READ | flag,
-    )
+    aKey = winreg.OpenKey(aReg, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+                          0, winreg.KEY_READ | flag)
 
     count_subkey = winreg.QueryInfoKey(aKey)[0]
 
@@ -574,16 +427,16 @@ def WinSoftwareInstalled(hive, flag):
         try:
             asubkey_name = winreg.EnumKey(aKey, i)
             asubkey = winreg.OpenKey(aKey, asubkey_name)
-            software["name"] = winreg.QueryValueEx(asubkey, "DisplayName")[0]
+            software['name'] = winreg.QueryValueEx(asubkey, "DisplayName")[0]
 
             try:
-                software["version"] = winreg.QueryValueEx(asubkey, "DisplayVersion")[0]
+                software['version'] = winreg.QueryValueEx(asubkey, "DisplayVersion")[0]
             except EnvironmentError:
-                software["version"] = "undefined"
+                software['version'] = 'undefined'
             try:
-                software["publisher"] = winreg.QueryValueEx(asubkey, "Publisher")[0]
+                software['publisher'] = winreg.QueryValueEx(asubkey, "Publisher")[0]
             except EnvironmentError:
-                software["publisher"] = "undefined"
+                software['publisher'] = 'undefined'
             software_list.append(software)
         except EnvironmentError:
             continue
@@ -592,40 +445,20 @@ def WinSoftwareInstalled(hive, flag):
 
 
 def install_pip_requirements():
-    """ Install Requeriments from pip >= 10.0.1"""
-    package_dir = QgsApplication.qgisSettingsDirPath() + "python/plugins/QGIS_FMV/"
-    requirements_file = os.path.join(package_dir, "requirements.txt")
+    ''' Install Requeriments from pip >= 10.0.1'''
+    package_dir = QgsApplication.qgisSettingsDirPath() + 'python/plugins/QGIS_FMV/'
+    requirements_file = os.path.join(package_dir, 'requirements.txt')
     if not os.path.isfile(requirements_file):
-        qgsu.showUserAndLogMessage(
-            QCoreApplication.translate(
-                "QgsFmvInstaller", "No requirements file found in {}"
-            ).format(requirements_file),
-            onlyLog=True,
-        )
-        raise
-    try:
-        process = Popen(
-            ["python3", "-m", "pip", "install", "--upgrade", "pip"],
-            shell=isWindows,
-            stdout=PIPE,
-            stderr=PIPE,
-        )
-        process.wait()
-        process = Popen(
-            ["python3", "-m", "pip", "install", "-U", "pip", "setuptools"],
-            shell=isWindows,
-            stdout=PIPE,
-            stderr=PIPE,
-        )
-        process.wait()
-        process = Popen(
-            ["pip3", "install", "--user", "-r", requirements_file],
-            shell=isWindows,
-            stdout=PIPE,
-            stderr=PIPE,
-        )
-        process.wait()
-    except Exception:
-        raise
+        qgsu.showUserAndLogMessage(QCoreApplication.translate("QgsFmvInstaller", "No requirements file found in {}").format(
+            requirements_file), onlyLog=True)
+        raise FileNotFoundError(requirements_file)
+
+    # Use the very same interpreter that runs QGIS instead of guessing
+    # python3/pip3, which may not exist on Windows.
+    python = sys.executable
+    Popen([python, "-m", "pip", "install", "--upgrade", "pip", "setuptools"],
+          stdout=PIPE, stderr=PIPE).wait()
+    Popen([python, "-m", "pip", "install", "--user", "-r", requirements_file],
+          stdout=PIPE, stderr=PIPE).wait()
 
     return

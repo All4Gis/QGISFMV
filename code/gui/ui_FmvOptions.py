@@ -6,19 +6,14 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-
+from qgis.PyQt import QtCore, QtGui, QtWidgets
 
 class Ui_OptionsDialog(object):
     def setupUi(self, OptionsDialog):
         OptionsDialog.setObjectName("OptionsDialog")
         OptionsDialog.resize(461, 561)
         icon = QtGui.QIcon()
-        icon.addPixmap(
-            QtGui.QPixmap(":/imgFMV/images/custom-options.png"),
-            QtGui.QIcon.Normal,
-            QtGui.QIcon.Off,
-        )
+        icon.addPixmap(QtGui.QPixmap(":/imgFMV/images/custom-options.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         OptionsDialog.setWindowIcon(icon)
         self.verticalLayout = QtWidgets.QVBoxLayout(OptionsDialog)
         self.verticalLayout.setContentsMargins(5, 5, 5, 5)
@@ -41,7 +36,7 @@ class Ui_OptionsDialog(object):
         self.sl_Size.setMinimum(100)
         self.sl_Size.setMaximum(500)
         self.sl_Size.setSliderPosition(250)
-        self.sl_Size.setOrientation(QtCore.Qt.Horizontal)
+        self.sl_Size.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.sl_Size.setObjectName("sl_Size")
         self.verticalLayout_2.addWidget(self.sl_Size)
         self.label_2 = QtWidgets.QLabel(self.Magnifier_tab)
@@ -73,9 +68,7 @@ class Ui_OptionsDialog(object):
         self.rB_Circle_m.setObjectName("rB_Circle_m")
         self.gridLayout_3.addWidget(self.rB_Circle_m, 0, 2, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout_3)
-        spacerItem = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
         self.verticalLayout_2.addItem(spacerItem)
         self.tabWidget.addTab(self.Magnifier_tab, "")
         self.tab = QtWidgets.QWidget()
@@ -124,9 +117,7 @@ class Ui_OptionsDialog(object):
         self.poly_brush.setDefaultColor(QtGui.QColor(252, 215, 108, 100))
         self.poly_brush.setObjectName("poly_brush")
         self.horizontalLayout_3.addWidget(self.poly_brush)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
         self.verticalLayout_6.addLayout(self.horizontalLayout_3)
         self.verticalLayout_3.addWidget(self.groupBox)
@@ -228,26 +219,20 @@ class Ui_OptionsDialog(object):
         self.measures_brush.setDefaultColor(QtGui.QColor(185, 224, 175, 100))
         self.measures_brush.setObjectName("measures_brush")
         self.horizontalLayout_5.addWidget(self.measures_brush)
-        spacerItem2 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem2)
         self.verticalLayout_7.addLayout(self.horizontalLayout_5)
         self.verticalLayout_3.addWidget(self.groupBox_4)
-        spacerItem3 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
         self.verticalLayout_3.addItem(spacerItem3)
         self.tabWidget.addTab(self.tab, "")
         self.verticalLayout.addWidget(self.tabWidget)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem4 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.horizontalLayout.addItem(spacerItem4)
         self.pushButton = QtWidgets.QPushButton(OptionsDialog)
-        self.pushButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.pushButton.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout.addWidget(self.pushButton)
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -255,7 +240,7 @@ class Ui_OptionsDialog(object):
         self.retranslateUi(OptionsDialog)
         self.tabWidget.setCurrentIndex(0)
         self.pushButton.pressed.connect(OptionsDialog.SaveOptions)
-        self.sl_Size.sliderMoved["int"].connect(OptionsDialog.showSizeTip)
+        self.sl_Size.sliderMoved['int'].connect(OptionsDialog.showSizeTip)
         QtCore.QMetaObject.connectSlotsByName(OptionsDialog)
 
     def retranslateUi(self, OptionsDialog):
@@ -266,10 +251,7 @@ class Ui_OptionsDialog(object):
         self.label.setText(_translate("OptionsDialog", "Shape "))
         self.rB_Square_m.setText(_translate("OptionsDialog", "Square"))
         self.rB_Circle_m.setText(_translate("OptionsDialog", "Circle"))
-        self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.Magnifier_tab),
-            _translate("OptionsDialog", "Magnifier"),
-        )
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Magnifier_tab), _translate("OptionsDialog", "Magnifier"))
         self.groupBox.setTitle(_translate("OptionsDialog", "Polygons"))
         self.label_4.setText(_translate("OptionsDialog", "Width"))
         self.label_10.setText(_translate("OptionsDialog", "Pen Color"))
@@ -284,11 +266,8 @@ class Ui_OptionsDialog(object):
         self.label_7.setText(_translate("OptionsDialog", "Width"))
         self.label_14.setText(_translate("OptionsDialog", "Pen Color"))
         self.label_13.setText(_translate("OptionsDialog", "brush Color"))
-        self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.tab), _translate("OptionsDialog", "Drawings")
-        )
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("OptionsDialog", "Drawings"))
         self.pushButton.setText(_translate("OptionsDialog", "Accept"))
-
 
 from qgis import gui
 from QGIS_FMV.gui import resources_rc

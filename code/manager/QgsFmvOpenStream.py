@@ -1,14 +1,10 @@
-from qgis.PyQt.QtCore import QRegExp, QCoreApplication, Qt
-from qgis.PyQt.QtGui import QIntValidator, QRegExpValidator
+# -*- coding: utf-8 -*-
+from qgis.PyQt.QtCore import QRegularExpression, QCoreApplication, Qt
+from qgis.PyQt.QtGui import QIntValidator, QRegularExpressionValidator
 from qgis.PyQt.QtWidgets import QDialog, QApplication
 from QGIS_FMV.gui.ui_FmvOpenStream import Ui_FmvOpenStream
 from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
 from qgis.core import Qgis as QGis
-
-try:
-    from pydevd import *
-except ImportError:
-    None
 
 try:
     import cv2
@@ -31,11 +27,9 @@ class OpenStream(QDialog, Ui_FmvOpenStream):
         self.ln_port.setValidator(self.onlyInt)
 
         # IP Validator
-        v = QRegExpValidator(self)
-        rx = QRegExp(
-            "((1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})\\.){3,3}(1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})"
-        )
-        v.setRegExp(rx)
+        rx = QRegularExpression(
+            "((1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})\\.){3,3}(1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})")
+        v = QRegularExpressionValidator(rx, self)
         self.ln_host.setValidator(v)
 
     def OpenStream(self, _):
@@ -44,10 +38,9 @@ class OpenStream(QDialog, Ui_FmvOpenStream):
         port = self.ln_port.text()
         v = protocol + "://" + host + ":" + port
         if host != "" and port != "":
-            qgsu.showUserAndLogMessage(
-                QCoreApplication.translate("QgsFmvOpenStream", "Checking connection!")
-            )
-            QApplication.setOverrideCursor(Qt.WaitCursor)
+            qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                "QgsFmvOpenStream", "Checking connection!"))
+            QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
             QApplication.processEvents()
             # Check if connection exist
             cap = cv2.VideoCapture(v)
@@ -57,10 +50,6 @@ class OpenStream(QDialog, Ui_FmvOpenStream):
                 self.parent.AddFileRowToManager(v, v)
                 self.close()
             else:
-                qgsu.showUserAndLogMessage(
-                    QCoreApplication.translate(
-                        "QgsFmvOpenStream", "There is no such connection!"
-                    ),
-                    level=QGis.Warning,
-                )
+                qgsu.showUserAndLogMessage(QCoreApplication.translate(
+                    "QgsFmvOpenStream", "There is no such connection!"), level=QGis.MessageLevel.Warning)
             QApplication.restoreOverrideCursor()

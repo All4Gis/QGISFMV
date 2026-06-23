@@ -5,32 +5,32 @@
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="20"/>
         <source>Color Options</source>
-        <translation type="obsolete">Opcions de color</translation>
+        <translation>Opcions de color</translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="35"/>
         <source>Brightness</source>
-        <translation type="obsolete">Billantor</translation>
+        <translation>Billantor</translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="55"/>
         <source>Contrast</source>
-        <translation type="obsolete">Contrast</translation>
+        <translation>Contrast</translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="62"/>
         <source>Hue</source>
-        <translation type="obsolete">To</translation>
+        <translation>To</translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="69"/>
         <source>Saturation</source>
-        <translation type="obsolete">Saturació</translation>
+        <translation>Saturació</translation>
     </message>
     <message>
         <location filename="../ui/ui_ColorDialog.ui" line="130"/>
         <source>Reset</source>
-        <translation type="obsolete">Reiniciar</translation>
+        <translation>Reiniciar</translation>
     </message>
 </context>
 <context>
@@ -135,7 +135,7 @@
 <context>
     <name>ManagerDock</name>
     <message>
-        <location filename="../manager/QgsManager.py" line="381"/>
+        <location filename="../manager/QgsManager.py" line="331"/>
         <source>Open video</source>
         <translation>Obrir vídeo</translation>
     </message>
@@ -145,32 +145,32 @@
         <translation type="obsolete">Aquest vídeo no conté Metadades ! :</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="248"/>
+        <location filename="../manager/QgsManager.py" line="231"/>
         <source>Loading</source>
         <translation>Carregant</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="315"/>
+        <location filename="../manager/QgsManager.py" line="277"/>
         <source>Start location not available.</source>
         <translation>Iniciar localització no disponible</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="290"/>
+        <location filename="../manager/QgsManager.py" line="264"/>
         <source>Failed loading FFMPEG ! </source>
         <translation>No s&apos;ha pogut carregar FFMPEG!</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="75"/>
+        <location filename="../manager/QgsManager.py" line="71"/>
         <source>Remove from list</source>
         <translation>Elimina de la llista</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="214"/>
+        <location filename="../manager/QgsManager.py" line="199"/>
         <source>You must delete some video from the list before adding a new one</source>
-        <translation type="obsolete">Heu d’eliminar algun vídeo de la llista abans d’afegir-ne un de nou</translation>
+        <translation>Heu d’eliminar algun vídeo de la llista abans d’afegir-ne un de nou</translation>
     </message>
     <message>
-        <location filename="../manager/QgsManager.py" line="334"/>
+        <location filename="../manager/QgsManager.py" line="289"/>
         <source>This video doesn&apos;t have Metadata ! </source>
         <translation type="unfinished"></translation>
     </message>
@@ -251,19 +251,14 @@
 <context>
     <name>Multiplexor</name>
     <message>
-        <location filename="../manager/QgsMultiplexor.py" line="200"/>
+        <location filename="../manager/QgsMultiplexor.py" line="203"/>
         <source>Open file</source>
-        <translation type="obsolete">Obrir fitxer</translation>
+        <translation>Obrir fitxer</translation>
     </message>
     <message>
-        <location filename="../manager/QgsMultiplexor.py" line="111"/>
+        <location filename="../manager/QgsMultiplexor.py" line="218"/>
         <source>You must complete all the information</source>
         <translation>Heu d’omplir tota la informació</translation>
-    </message>
-    <message>
-        <location filename="../manager/QgsMultiplexor.py" line="397"/>
-        <source>Multiplexer error</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -364,415 +359,415 @@
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="267"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Color dialog&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">Diàleg de color</translation>
+        <translation>Diàleg de color</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvPlayer.ui" line="277"/>
         <source>Ctrl+C</source>
-        <translation type="obsolete">Ctrl+C</translation>
+        <translation>Ctrl+C</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="258"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="290"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Record&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gravar&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="269"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="301"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="285"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="317"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create Mosaic&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Crear mosaic&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="295"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="327"/>
         <source>Ctrl+M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="383"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="415"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capture current frame&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capturar fotograma actual&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="430"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="462"/>
         <source>Controls</source>
         <translation>Controls</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="445"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="477"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Start Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Inici&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="468"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="500"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rewind&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rebobinar&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="494"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="526"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Parar&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="517"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="549"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Play/Pause&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reprodueix / Pausa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="540"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="572"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Forward&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Endavant&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="569"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="601"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;End Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Final&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="592"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="624"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Repetiu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="639"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="671"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mute/Unmute&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Silenci/Volum&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="655"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="687"/>
         <source>Ctrl+U</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="665"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="697"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Volume&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Volum&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="686"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="718"/>
         <source>100%</source>
         <translation>100%</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="714"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="746"/>
         <source>Filters</source>
         <translation>Filtres</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="726"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="758"/>
         <source>Frames</source>
         <translation>Fotogrames</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="734"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="766"/>
         <source>Metadata</source>
         <translation>Metadades</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="740"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="772"/>
         <source>Converter</source>
         <translation>Conversor</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="746"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="778"/>
         <source>Information</source>
         <translation>Informació</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="754"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="786"/>
         <source>Plot Bitrate</source>
         <translation>Representa la velocitat de bits</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="802"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="834"/>
         <source>Gray Scale</source>
         <translation>Escala de grisos</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="810"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="842"/>
         <source>Edge Detection</source>
         <translation>Detecció de vores</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="819"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="851"/>
         <source>Capture Current Frame</source>
         <translation>Extreu el frame actual</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="834"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="866"/>
         <source>Extract All Frames</source>
         <translation>Extreure Tots els Frames</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="849"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="881"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadades</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="864"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="896"/>
         <source>Converter Video</source>
         <translation>Convertir Vídeo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="873"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="905"/>
         <source>Save Video Info to Json</source>
         <translation>Guardar informació de vídeo a Json</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="882"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="914"/>
         <source>Show Audio</source>
         <translation>Mostra l&apos;àudio</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="891"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="923"/>
         <source>Show Video</source>
         <translation>Mostra el vídeo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="896"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="928"/>
         <source>Show All</source>
         <translation>Mostrar tots</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="905"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="937"/>
         <source>Save Audio</source>
         <translation>Guardar àudio</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="914"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="946"/>
         <source>Save Video</source>
         <translation>Guardar vídeo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="919"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="951"/>
         <source>Save All</source>
         <translation>Guardar tot</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="928"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="960"/>
         <source>Show Video Info</source>
         <translation>Mostra la informació del vídeo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="940"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="972"/>
         <source>Invert Color</source>
         <translation>Inverteix el color</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="952"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="984"/>
         <source>Mono Filter</source>
         <translation>Filtre mono</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="964"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="996"/>
         <source>Canny edge detection</source>
         <translation>Detecció Canny edge</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="975"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1007"/>
         <source>Zoom Rectangle</source>
         <translation>Zoom rectangle</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="987"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1019"/>
         <source>Magnifying glass</source>
         <translation>Lupa</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="999"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1031"/>
         <source>Auto Contrast Filter</source>
         <translation>Filtre de contrast automàtic</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1008"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1040"/>
         <source>Create Mosaic</source>
         <translation>Crear mosaic</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1020"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1052"/>
         <source>Draw Pinpoint</source>
         <translation>Dibuixar punt</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1032"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1064"/>
         <source>Draw Line</source>
         <translation>Dibuixa línia</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1188"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1220"/>
         <source>Draw Polygon</source>
         <translation>Dibuixa un polígon</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1062"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1094"/>
         <source>Object Tracking</source>
         <translation>Seguiment d&apos;objectes</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="764"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="796"/>
         <source>Map</source>
         <translation>Mapa</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="784"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="816"/>
         <source>Utils ToolBar</source>
         <translation>Barra d&apos;utilitats</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1110"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1142"/>
         <source>Hand Draw</source>
         <translation>Dibuix de mà</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1122"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1154"/>
         <source>Horizontal Mirrored</source>
         <translation>Mirall horitzontal</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1137"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1169"/>
         <source>Censure</source>
         <translation>Censurar</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1146"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1178"/>
         <source>Remove Last</source>
         <translation>Suprimeix el darrer</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1236"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1268"/>
         <source>Remove All</source>
         <translation>Esborra-ho tot</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1173"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1205"/>
         <source>Remove Last Polygon</source>
         <translation>Suprimeix el darrer polígon</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1191"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1223"/>
         <source>Remove All Polygon</source>
         <translation>Elimina tot el polígon</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1206"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1238"/>
         <source>Remove Last Pinpoint</source>
         <translation>Suprimeix el últim punt</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1221"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1253"/>
         <source>Remove All Pinpoint</source>
         <translation>Suprimeix tots els punts</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1251"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1283"/>
         <source>Remove Last Segment</source>
         <translation>Suprimeix la última línia</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1266"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1298"/>
         <source>Remove Last Line</source>
         <translation>Suprimeix la última línia</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1278"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1310"/>
         <source>Center on Platform</source>
         <translation>Centre a la plataforma</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1293"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1325"/>
         <source>Center on Footprint</source>
         <translation>Centre de petjada</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1308"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1340"/>
         <source>Center on Target</source>
         <translation>Centre sobre objectiu</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1329"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1361"/>
         <source>Capture Georeferenced Frame</source>
         <translation>Guardar el frame georeferenciat actual</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="837"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="869"/>
         <source>Ctrl+A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="852"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="884"/>
         <source>Ctrl+T</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="455"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="487"/>
         <source>Ctrl+Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="478"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="510"/>
         <source>Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="504"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="536"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="527"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="559"/>
         <source>Ctrl+P</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="550"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="582"/>
         <source>Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="579"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="611"/>
         <source>Ctrl+Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="602"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="634"/>
         <source>Ctrl+L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="822"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="854"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1320"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1352"/>
         <source>NDVI (experimental)</source>
         <translation>NDVI (experimental)</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1086"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1118"/>
         <source>Measure Distance</source>
         <translation>Mesura la distància</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1098"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1130"/>
         <source>Measure Area</source>
         <translation>Mesura l’Àrea</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="351"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="383"/>
         <source>WGS84</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="356"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="388"/>
         <source>MGRS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvPlayer.ui" line="1074"/>
+        <location filename="../ui/ui_FmvPlayer.ui" line="1106"/>
         <source>Stamp</source>
         <translation>Segell</translation>
     </message>
@@ -780,7 +775,7 @@
 <context>
     <name>QgsFmv</name>
     <message>
-        <location filename="../QgsFmv.py" line="118"/>
+        <location filename="../QgsFmv.py" line="102"/>
         <source>Full Motion Video (FMV)</source>
         <translation>Full Motion Video (FMV)</translation>
     </message>
@@ -793,137 +788,137 @@
         <translation type="obsolete">Falta la dependència</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="66"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="76"/>
         <source>Do you want install Lav Filters?</source>
         <translation>Voleu instal·lar Lav Filters?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="382"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="287"/>
         <source>Do you want install FFMPEG?</source>
         <translation>Voleu instal·lar FFMPEG?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="273"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="216"/>
         <source>Do you want install missing dependencies?</source>
         <translation>Voleu instal·lar dependències que falten?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="491"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="345"/>
         <source>Dem file not exist!</source>
         <translation>El fitxer MDE no existeix</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="307"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="243"/>
         <source>Python libraries installed correctly</source>
         <translation>Biblioteques Python instal·lades correctament</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="324"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="250"/>
         <source>Error installing the python libraries, use the requirements file!</source>
-        <translation type="obsolete">S&apos;ha produït un error en instal·lar les biblioteques python, utilitzeu el fitxer de requisits!</translation>
+        <translation>S&apos;ha produït un error en instal·lar les biblioteques python, utilitzeu el fitxer de requisits!</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="220"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="183"/>
         <source>Do you want upgrade dependencies?</source>
         <translation>Vol actualitzar les dependències?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="232"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="188"/>
         <source>Python libraries updated correctly</source>
         <translation>Les biblioteques Python s’han actualitzat correctament</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="600"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="444"/>
         <source>No requirements file found in {}</source>
         <translation>No s&apos;ha trobat cap fitxer de requisits a {}</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="220"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="183"/>
         <source>&lt;b&gt;Updates available&lt;/b&gt;</source>
         <translation type="unfinished">Actualitzacions disponibles</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="194"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="170"/>
         <source>&lt;b&gt;Missing dependencies&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="331"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="257"/>
         <source>Do you want install GStreamer?</source>
         <translation>Voleu instal·lar GStreamer?</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="361"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="278"/>
         <source>INSTALLATION FAILED: Failed to install GStreamer library.</source>
-        <translation type="obsolete">INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar la biblioteca GStreamer.</translation>
+        <translation>INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar la biblioteca GStreamer.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="367"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="280"/>
         <source>INSTALLATION SUCCESSFUL: Sucessfully installed GStreamer package.</source>
-        <translation type="obsolete">INSTAL·LACIÓ CORRECTA: El paquet GStreamer instal·lat amb èxit.</translation>
+        <translation>INSTAL·LACIÓ CORRECTA: El paquet GStreamer instal·lat amb èxit.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="405"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="308"/>
         <source>Failed to install ffmpeg library, trying add-apt-repository.</source>
-        <translation type="obsolete">No s&apos;ha pogut instal·lar la biblioteca ffmpeg, provant add-apt-repository.</translation>
+        <translation>No s&apos;ha pogut instal·lar la biblioteca ffmpeg, provant add-apt-repository.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="445"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="327"/>
         <source>INSTALLATION FAILED: Could not install ffmpeg package.</source>
-        <translation type="obsolete">INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar el paquet ffmpeg.</translation>
+        <translation>INSTAL·LACIÓ FALLIDA: No s&apos;ha pogut instal·lar el paquet ffmpeg.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="422"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="316"/>
         <source>GET REPO SUCCESSFUL: Successfully added trusty-media repo where ffmpeg is located</source>
-        <translation type="obsolete">OBTENCIO CORRECTA: S&apos;ha afegit el repo on es troba el ffmpeg</translation>
+        <translation>OBTENCIO CORRECTA: S&apos;ha afegit el repo on es troba el ffmpeg</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="431"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="321"/>
         <source>UPDATE FAILED: Failed to retrieve packages.</source>
-        <translation type="obsolete">ACTUALITZACIÓ FALLIDA: No s&apos;ha pogut recuperar els paquets.</translation>
+        <translation>ACTUALITZACIÓ FALLIDA: No s&apos;ha pogut recuperar els paquets.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="437"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="323"/>
         <source>UPDATE SUCCESSFUL: Sucessfully retrived updated packages.</source>
-        <translation type="obsolete">ACTUALIZACIO CORRECTA: S&apos;han recuperat els paquets actualitzats amb èxit.</translation>
+        <translation>ACTUALIZACIO CORRECTA: S&apos;han recuperat els paquets actualitzats amb èxit.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="451"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="329"/>
         <source>INSTALLATION SUCCESSFUL: Sucessfully installed ffmpeg package.</source>
-        <translation type="obsolete">INSTAL·LACIÓ CORRECTA: Paquet ffmpeg instal·lat amb èxit.</translation>
+        <translation>INSTAL·LACIÓ CORRECTA: Paquet ffmpeg instal·lat amb èxit.</translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="94"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="96"/>
         <source>&lt;b&gt;Missing FFMPEG dependency&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="140"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="132"/>
         <source>&lt;b&gt;Dem file not exist!&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="140"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="132"/>
         <source>Do you want download global DEM?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="66"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="76"/>
         <source>&lt;b&gt;Missing python dependency&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="273"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="216"/>
         <source>Missing python dependencies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="331"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="257"/>
         <source>Missing GStreamer dependency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../utils/QgsFmvInstaller.py" line="382"/>
+        <location filename="../utils/QgsFmvInstaller.py" line="287"/>
         <source>Missing FFMPEG dependency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -931,32 +926,32 @@
 <context>
     <name>QgsFmvMetadata</name>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="40"/>
+        <location filename="../player/QgsFmvMetadata.py" line="41"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
-        <translation type="obsolete">Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
+        <translation>Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="84"/>
+        <location filename="../player/QgsFmvMetadata.py" line="66"/>
         <source>Save PDF</source>
         <translation>Guardar com a PDF</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="131"/>
+        <location filename="../player/QgsFmvMetadata.py" line="107"/>
         <source>Video : </source>
         <translation>Vídeo : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="132"/>
+        <location filename="../player/QgsFmvMetadata.py" line="108"/>
         <source>TimeStamp : </source>
         <translation>Marca de temps : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="184"/>
+        <location filename="../player/QgsFmvMetadata.py" line="160"/>
         <source>Current Frame</source>
         <translation>Fotograma actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvMetadata.py" line="216"/>
+        <location filename="../player/QgsFmvMetadata.py" line="188"/>
         <source>Save CSV</source>
         <translation>Guardar com a CSV</translation>
     </message>
@@ -969,7 +964,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../manager/QgsFmvOpenStream.py" line="60"/>
+        <location filename="../manager/QgsFmvOpenStream.py" line="59"/>
         <source>There is no such connection!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -982,122 +977,122 @@
         <translation type="obsolete">El buffer de metadades ha fallat! : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="274"/>
+        <location filename="../player/QgsFmvPlayer.py" line="266"/>
         <source>This video doesn&apos;t have Audio ! </source>
         <translation>Aquest vídeo no té àudio. :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="285"/>
+        <location filename="../player/QgsFmvPlayer.py" line="274"/>
         <source>Audio check Failed! : </source>
         <translation>Error de verificació d&apos;àudio! :</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="597"/>
+        <location filename="../player/QgsFmvPlayer.py" line="553"/>
         <source>Mute/Unmute</source>
         <translation>Silenci/ No Silenci</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="605"/>
+        <location filename="../player/QgsFmvPlayer.py" line="559"/>
         <source>Extract All Frames</source>
         <translation>Extreure Tots els Frames</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="612"/>
+        <location filename="../player/QgsFmvPlayer.py" line="564"/>
         <source>Extract Current Frame</source>
         <translation>Extreu el frame actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="619"/>
+        <location filename="../player/QgsFmvPlayer.py" line="570"/>
         <source>Show Metadata</source>
         <translation>Mostrar metadades</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1823"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1620"/>
         <source>Video Information : </source>
         <translation>Informació del vídeo:</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1681"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1508"/>
         <source>Save Current Frame</source>
         <translation>Guarda el frame actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="507"/>
+        <location filename="../player/QgsFmvPlayer.py" line="452"/>
         <source>Save Json</source>
         <translation>Guardar a Json</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1309"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1205"/>
         <source>Save video record</source>
         <translation>Guarda la gravació del vídeo</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1440"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1325"/>
         <source>Save Video as...</source>
         <translation>Guardar vídeo com ...</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1634"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1470"/>
         <source>Save all Frames</source>
         <translation>Guardar Tots els Frames</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1535"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1403"/>
         <source>Save Audio Bitrate Plot</source>
         <translation>Deseu el diagrama de bits d’àudio</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1558"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1420"/>
         <source>Save Video Bitrate Plot</source>
         <translation>Desa un gràfic de bits de vídeo</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1719"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1538"/>
         <source>Save Current Georeferenced Frame</source>
         <translation>Guardar el frame georeferenciat actual</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1251"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1167"/>
         <source>Playing : </source>
         <translation>Reproduint : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1282"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1181"/>
         <source>Open Video File : </source>
         <translation>Obrir Fitxer de Vídeo : </translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1502"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1440"/>
         <source>Completed with no exception and no result (probably manually canceled by the user)</source>
-        <translation type="obsolete">Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
+        <translation>Completat sense cap excepció i sense resultat (probablement cancel·lat manualment per l’usuari)</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="626"/>
+        <location filename="../player/QgsFmvPlayer.py" line="575"/>
         <source>Options</source>
         <translation>Opcions</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1610"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1453"/>
         <source>Information</source>
         <translation>Informació</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1610"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1453"/>
         <source>Do you want to load the layer?</source>
         <translation>Voleu carregar la capa?</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1743"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1647"/>
         <source>If you close or reopen the video all the information will be erased.</source>
-        <translation type="obsolete">Si tanqueu o torneu a obrir el vídeo, esborrarà tota la informació.</translation>
+        <translation>Si tanqueu o torneu a obrir el vídeo, esborrarà tota la informació.</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="1851"/>
+        <location filename="../player/QgsFmvPlayer.py" line="1647"/>
         <source>Do you want to close or reopen it?</source>
         <translation>Voleu tancar-lo o reobrir-lo?</translation>
     </message>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="323"/>
+        <location filename="../player/QgsFmvPlayer.py" line="306"/>
         <source>Metadata Buffering...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1105,22 +1100,14 @@
 <context>
     <name>QgsJsonModel</name>
     <message>
-        <location filename="../reports/QgsJsonModel.py" line="125"/>
+        <location filename="../utils/QgsJsonModel.py" line="122"/>
         <source>Key</source>
-        <translation type="unfinished">Clau</translation>
+        <translation>Clau</translation>
     </message>
     <message>
-        <location filename="../reports/QgsJsonModel.py" line="126"/>
+        <location filename="../utils/QgsJsonModel.py" line="123"/>
         <source>Value</source>
-        <translation type="unfinished">Valor</translation>
-    </message>
-</context>
-<context>
-    <name>QgsMultiplexor</name>
-    <message>
-        <location filename="../manager/QgsMultiplexor.py" line="94"/>
-        <source>Open file</source>
-        <translation type="unfinished">Obrir fitxer</translation>
+        <translation>Valor</translation>
     </message>
 </context>
 <context>
@@ -1141,7 +1128,7 @@
         <translation>Fitxer de metadades d&apos;entrada (per exemple, video_metadata.csv)</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="210"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="173"/>
         <source>Create MISB</source>
         <translation>Crear MISB</translation>
     </message>
@@ -1166,30 +1153,25 @@
         <translation>DJI Mavic Pro</translation>
     </message>
     <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="154"/>
+        <location filename="../ui/ui_FmvMultiplexer.ui" line="148"/>
         <source>Available telemetry</source>
         <translation>Telemetria disponible</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="154"/>
         <source>Select the correct one if there is more than one</source>
-        <translation type="obsolete">Seleccioneu la correcta si n&apos;hi ha més</translation>
+        <translation>Seleccioneu la correcta si n&apos;hi ha més</translation>
     </message>
     <message>
         <location filename="../ui/ui_FmvMultiplexer.ui" line="141"/>
         <source>Extract Recordings</source>
         <translation>Extracte de gravacions</translation>
     </message>
-    <message>
-        <location filename="../ui/ui_FmvMultiplexer.ui" line="178"/>
-        <source>Select the correct one if there is more than one (file name use CUSTOM.updateTime)</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>VideoProcessor</name>
     <message>
-        <location filename="../player/QgsFmvPlayer.py" line="65"/>
+        <location filename="../player/QgsFmvPlayer.py" line="69"/>
         <source>Error: Missing OpenCV packages</source>
         <translation>Error: falten els paquets OpenCV</translation>
     </message>
