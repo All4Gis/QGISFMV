@@ -86,7 +86,7 @@ If everything works well the plugin should install these dependencies automatica
 ## Usage
 
 The use of this application is simple.
-It only needs a video with metadata, like for example one of these [(ESRI copyright)](https://drive.google.com/file/d/10LA6zWLXn6VraOMvQ15MR7XZGAwLlTU9/view?usp=sharing)
+It only needs a video with metadata, like for example one of these [(ESRI copyright)](https://drive.google.com/file/d/137JaQwx5kVwhdcrxwTCSgxqBbaOjW9be/view?usp=sharing)
 Then, open the plugin where the "video manager" will be shown, open the video and with a double-click, the "player" will be opened.
 At this moment, you will see that new shapes have been added and you will see the platform position, metadata, etc.
 
