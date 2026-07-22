@@ -1,0 +1,2117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FmvSettings</class>
+ <widget class="QDialog" name="FmvSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>680</width>
+    <height>620</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>640</width>
+    <height>520</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>FMV Settings</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/imgFMV/images/misc/custom-options.png</normaloff>:/imgFMV/images/misc/custom-options.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabGeneral">
+      <attribute name="title">
+       <string>General</string>
+      </attribute>
+      <layout class="QFormLayout" name="formGeneral">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::ExpandingFieldsGrow</enum>
+       </property>
+       <property name="horizontalSpacing">
+        <number>12</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>10</number>
+       </property>
+       <property name="labelAlignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblFfmpeg">
+         <property name="text">
+          <string>FFmpeg</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <layout class="QHBoxLayout" name="layoutFfmpeg">
+         <item>
+          <widget class="QLineEdit" name="ln_ffmpeg">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>Folder containing ffmpeg (or full path to binary)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_ffmpegBrowse">
+           <property name="minimumSize">
+            <size>
+             <width>36</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>…</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblDtm">
+         <property name="text">
+          <string>DTM / elevation file</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <layout class="QHBoxLayout" name="layoutDtm">
+         <item>
+          <widget class="QLineEdit" name="ln_dtm">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_dtmBrowse">
+           <property name="minimumSize">
+            <size>
+             <width>36</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>…</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lblDtmBuffer">
+         <property name="text">
+          <string>DTM buffer (pixels)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="sb_dtmBuffer">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="minimum">
+          <number>10</number>
+         </property>
+         <property name="maximum">
+          <number>50000</number>
+         </property>
+         <property name="value">
+          <number>2000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lblMinBuffer">
+         <property name="text">
+          <string>Metadata buffer size</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="sb_minBuffer">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>500</number>
+         </property>
+         <property name="value">
+          <number>5</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lblGeocode">
+         <property name="text">
+          <string>Reverse geocoding URL</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="ln_geocode">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabLayers">
+      <attribute name="title">
+       <string>Layers</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayers">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::ExpandingFieldsGrow</enum>
+       </property>
+       <property name="horizontalSpacing">
+        <number>12</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>10</number>
+       </property>
+       <property name="labelAlignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblPlatformLyr">
+         <property name="text">
+          <string>Platform layer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="ln_platformLyr">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblFootprintLyr">
+         <property name="text">
+          <string>Footprint layer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="ln_footprintLyr">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lblTrajectoryLyr">
+         <property name="text">
+          <string>Trajectory layer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="ln_trajectoryLyr">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lblBeamsLyr">
+         <property name="text">
+          <string>Beams layer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="ln_beamsLyr">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lblFramecenterLyr">
+         <property name="text">
+          <string>Frame center layer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="ln_framecenterLyr">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="lblFramesG">
+         <property name="text">
+          <string>Georeferenced frames group</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="ln_framesG">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>28</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QLabel" name="lblLayerStylesHelp">
+         <property name="text">
+          <string>Symbology changed in the QGIS layer panel is saved automatically. Restore plugin defaults for all FMV map layers below.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QPushButton" name="btn_restoreLayerStyles">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>34</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Restore default map styles</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabDependencies">
+      <attribute name="title">
+       <string>Dependencies</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayoutDeps">
+       <item>
+        <widget class="QLabel" name="lbl_status">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="layoutDepsButtons">
+         <item>
+          <widget class="QPushButton" name="btn_checkDeps">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>34</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Check dependencies</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_installDeps">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>34</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Install missing (pip / FFmpeg)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacerDeps">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacerDeps">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabMosaic">
+      <attribute name="title">
+       <string>Mosaic</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayoutMosaic">
+       <property name="leftMargin">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>8</number>
+       </property>
+       <property name="rightMargin">
+        <number>8</number>
+       </property>
+       <property name="bottomMargin">
+        <number>8</number>
+       </property>
+       <property name="spacing">
+        <number>8</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="lbl_mosaicHelp">
+         <property name="text">
+          <string>Live mosaic blends georeferenced frames with soft footprint edges. Lower interval / move = denser coverage, more CPU and disk.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="grp_mosaicCapture">
+         <property name="title">
+          <string>Frame capture</string>
+         </property>
+         <layout class="QFormLayout" name="formMosaicCapture">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::ExpandingFieldsGrow</enum>
+          </property>
+          <property name="horizontalSpacing">
+           <number>12</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>10</number>
+          </property>
+          <property name="labelAlignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblMosaicInterval">
+            <property name="text">
+             <string>Min interval between frames</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="dsb_mosaicInterval">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="suffix">
+             <string> s</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="minimum">
+             <double>0.200000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>60.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.500000000000000</double>
+            </property>
+            <property name="value">
+             <double>2.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblMosaicMove">
+            <property name="text">
+             <string>Min platform move</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="dsb_mosaicMove">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="suffix">
+             <string> m</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="minimum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>5000.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>30.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lblMosaicKept">
+            <property name="text">
+             <string>Max kept source frames</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="sb_mosaicKept">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>500</number>
+            </property>
+            <property name="value">
+             <number>80</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="grp_mosaicOutput">
+         <property name="title">
+          <string>Output</string>
+         </property>
+         <layout class="QFormLayout" name="formMosaicOutput">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::ExpandingFieldsGrow</enum>
+          </property>
+          <property name="horizontalSpacing">
+           <number>12</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>10</number>
+          </property>
+          <property name="labelAlignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblMosaicFeather">
+            <property name="text">
+             <string>Feather (px)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="sb_mosaicFeather">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>8</number>
+            </property>
+            <property name="maximum">
+             <number>256</number>
+            </property>
+            <property name="value">
+             <number>56</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblMosaicMaxDim">
+            <property name="text">
+             <string>Max frame dimension</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="sb_mosaicMaxDim">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>256</number>
+            </property>
+            <property name="maximum">
+             <number>4096</number>
+            </property>
+            <property name="value">
+             <number>960</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lblMosaicOutput">
+            <property name="text">
+             <string>Max mosaic output size</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="sb_mosaicOutput">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>512</number>
+            </property>
+            <property name="maximum">
+             <number>8192</number>
+            </property>
+            <property name="value">
+             <number>2048</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="grp_mosaicRefresh">
+         <property name="title">
+          <string>Refresh</string>
+         </property>
+         <layout class="QFormLayout" name="formMosaicRefresh">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::ExpandingFieldsGrow</enum>
+          </property>
+          <property name="horizontalSpacing">
+           <number>12</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>10</number>
+          </property>
+          <property name="labelAlignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblMosaicRefresh">
+            <property name="text">
+             <string>Rebuild every N frames</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="sb_mosaicRefresh">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>50</number>
+            </property>
+            <property name="value">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblMosaicDisplay">
+            <property name="text">
+             <string>Refresh layer every N rebuilds</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="sb_mosaicDisplay">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>50</number>
+            </property>
+            <property name="value">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacerMosaic">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabAiDetection">
+      <attribute name="title">
+       <string>AI Detection</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayoutAi">
+       <property name="leftMargin">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>8</number>
+       </property>
+       <property name="rightMargin">
+        <number>8</number>
+       </property>
+       <property name="bottomMargin">
+        <number>8</number>
+       </property>
+       <property name="spacing">
+        <number>8</number>
+       </property>
+       <item>
+        <widget class="QScrollArea" name="scrollAiDetection">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAiDetectionContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>640</width>
+            <height>720</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayoutAiScroll">
+           <property name="leftMargin">
+            <number>4</number>
+           </property>
+           <property name="topMargin">
+            <number>4</number>
+           </property>
+           <property name="rightMargin">
+            <number>4</number>
+           </property>
+           <property name="bottomMargin">
+            <number>4</number>
+           </property>
+           <property name="spacing">
+            <number>12</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="lbl_dnnHelp">
+             <property name="text">
+              <string>For FMV and UAV video use VisDrone (aerial profile). YOLOv8n COCO is for ground-level imagery. Building, road, fire, smoke and flood still use classical CV unless you add a custom ONNX.</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="grp_dnnModel">
+             <property name="title">
+              <string>Model</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayoutDnnModel">
+              <property name="spacing">
+               <number>10</number>
+              </property>
+              <item>
+               <widget class="QCheckBox" name="chk_dnnEnabled">
+                <property name="text">
+                 <string>Use YOLO/ONNX for segmentation filters</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QFormLayout" name="formDnnModel">
+                <property name="fieldGrowthPolicy">
+                 <enum>QFormLayout::ExpandingFieldsGrow</enum>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>12</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>10</number>
+                </property>
+                <property name="labelAlignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="lblOnnxModel">
+                  <property name="text">
+                   <string>ONNX model</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <layout class="QHBoxLayout" name="layoutOnnxModel">
+                  <property name="spacing">
+                   <number>6</number>
+                  </property>
+                  <item>
+                   <widget class="QLineEdit" name="ln_onnxModel">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="placeholderText">
+                     <string>~/.qgis-fmv-models/visdrone-yolov8n.onnx</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="btn_onnxBrowse">
+                    <property name="minimumSize">
+                     <size>
+                      <width>36</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>40</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>…</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayoutDnnDownloads">
+                <property name="spacing">
+                 <number>8</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="btn_downloadVisdrone">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>34</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Download VisDrone aerial model (~6 MB + ONNX export)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="btn_downloadYolo">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>34</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Download YOLOv8n COCO (~13 MB, ground-level)</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="grp_dnnInference">
+             <property name="title">
+              <string>Inference</string>
+             </property>
+             <layout class="QFormLayout" name="formDnnInference">
+              <property name="fieldGrowthPolicy">
+               <enum>QFormLayout::ExpandingFieldsGrow</enum>
+              </property>
+              <property name="horizontalSpacing">
+               <number>12</number>
+              </property>
+              <property name="verticalSpacing">
+               <number>10</number>
+              </property>
+              <property name="labelAlignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="lblDnnProfile">
+                <property name="text">
+                 <string>Model profile</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="cb_dnnProfile">
+                <property name="minimumSize">
+                 <size>
+                  <width>260</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Aerial (VisDrone, FMV/UAV)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Ground (COCO)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Custom class IDs</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="lblOnnxType">
+                <property name="text">
+                 <string>Model type</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QComboBox" name="cb_onnxType">
+                <property name="minimumSize">
+                 <size>
+                  <width>140</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>yolov8</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>yolov5</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="lblOnnxInput">
+                <property name="text">
+                 <string>Input size (px)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QSpinBox" name="sb_onnxInput">
+                <property name="minimumSize">
+                 <size>
+                  <width>120</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="minimum">
+                 <number>320</number>
+                </property>
+                <property name="maximum">
+                 <number>1280</number>
+                </property>
+                <property name="singleStep">
+                 <number>32</number>
+                </property>
+                <property name="value">
+                 <number>640</number>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="lblOnnxConf">
+                <property name="text">
+                 <string>Confidence</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QDoubleSpinBox" name="dsb_onnxConf">
+                <property name="minimumSize">
+                 <size>
+                  <width>120</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="decimals">
+                 <number>2</number>
+                </property>
+                <property name="minimum">
+                 <double>0.050000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>0.950000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.050000000000000</double>
+                </property>
+                <property name="value">
+                 <double>0.350000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="lblOnnxNms">
+                <property name="text">
+                 <string>NMS threshold</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QDoubleSpinBox" name="dsb_onnxNms">
+                <property name="minimumSize">
+                 <size>
+                  <width>120</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="decimals">
+                 <number>2</number>
+                </property>
+                <property name="minimum">
+                 <double>0.050000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>0.950000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.050000000000000</double>
+                </property>
+                <property name="value">
+                 <double>0.450000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="grp_dnnClasses">
+             <property name="title">
+              <string>Class IDs per filter</string>
+             </property>
+             <layout class="QFormLayout" name="formDnnClasses">
+              <property name="fieldGrowthPolicy">
+               <enum>QFormLayout::ExpandingFieldsGrow</enum>
+              </property>
+              <property name="horizontalSpacing">
+               <number>12</number>
+              </property>
+              <property name="verticalSpacing">
+               <number>8</number>
+              </property>
+              <property name="labelAlignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="lblDnnClassBuilding">
+                <property name="text">
+                 <string>Building</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="ln_dnnClass_building">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>28</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="lblDnnClassRoad">
+                <property name="text">
+                 <string>Road</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="ln_dnnClass_road">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>28</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="lblDnnClassVehicle">
+                <property name="text">
+                 <string>Vehicle</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="ln_dnnClass_vehicle">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>28</height>
+                 </size>
+                </property>
+                <property name="placeholderText">
+                 <string>3,4,5,8,9 (VisDrone) or 2,3,5,7 (COCO) if empty</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="lblDnnClassPerson">
+                <property name="text">
+                 <string>Person</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="ln_dnnClass_person">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>28</height>
+                 </size>
+                </property>
+                <property name="placeholderText">
+                 <string>0,1 (VisDrone) or 0 (COCO) if empty</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="lblDnnClassFire">
+                <property name="text">
+                 <string>Fire</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLineEdit" name="ln_dnnClass_fire">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>28</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="lblDnnClassSmoke">
+                <property name="text">
+                 <string>Smoke</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLineEdit" name="ln_dnnClass_smoke">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>28</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="lblDnnClassFlood">
+                <property name="text">
+                 <string>Flood</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLineEdit" name="ln_dnnClass_flood">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>28</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_dnnStatus">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::RichText</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacerAi">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+<widget class="QWidget" name="Magnifier_tab">
+      <attribute name="title">
+       <string>Magnifier</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Maximum size in pixels</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="sl_Size">
+         <property name="minimum">
+          <number>100</number>
+         </property>
+         <property name="maximum">
+          <number>500</number>
+         </property>
+         <property name="sliderPosition">
+          <number>250</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Magnification factor</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="sb_factor">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>5</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Shape </string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QRadioButton" name="rB_Square_m">
+           <property name="text">
+            <string>Square</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QRadioButton" name="rB_Circle_m">
+           <property name="text">
+            <string>Circle</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Drawings</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { font-weight: bold; }</string>
+         </property>
+         <property name="title">
+          <string>Polygons</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="poly_width">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Pen Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="poly_pen">
+              <property name="color">
+               <color>
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color>
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>brush Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="poly_brush">
+              <property name="color">
+               <color alpha="100">
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color alpha="100">
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { font-weight: bold; }</string>
+         </property>
+         <property name="title">
+          <string>Points</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="point_width">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>20</number>
+              </property>
+              <property name="value">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Pen Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="point_pen">
+              <property name="color">
+               <color>
+                <red>220</red>
+                <green>20</green>
+                <blue>60</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color>
+                <red>220</red>
+                <green>20</green>
+                <blue>60</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { font-weight: bold; }</string>
+         </property>
+         <property name="title">
+          <string>Lines</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="lines_width">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Pen Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="lines_pen">
+              <property name="color">
+               <color>
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color>
+                <red>252</red>
+                <green>215</green>
+                <blue>108</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="styleSheet">
+          <string notr="true">QGroupBox { font-weight: bold; }</string>
+         </property>
+         <property name="title">
+          <string>Measures</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="measures_width">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Pen Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="measures_pen">
+              <property name="color">
+               <color>
+                <red>0</red>
+                <green>188</green>
+                <blue>212</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color>
+                <red>0</red>
+                <green>188</green>
+                <blue>212</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>brush Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QgsColorButton" name="measures_brush">
+              <property name="color">
+               <color alpha="100">
+                <red>255</red>
+                <green>193</green>
+                <blue>7</blue>
+               </color>
+              </property>
+              <property name="allowOpacity">
+               <bool>true</bool>
+              </property>
+              <property name="defaultColor">
+               <color alpha="100">
+                <red>255</red>
+                <green>193</green>
+                <blue>7</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="Platform_tab">
+      <attribute name="title">
+       <string>Platform</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_platform">
+       <item>
+        <widget class="QLabel" name="lbl_platform_icon">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Platform icon</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lbl_platform_icon_hint">
+         <property name="text">
+          <string>Select an icon to update the platform layer immediately.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="lw_platform_icons">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>220</height>
+          </size>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>72</width>
+           <height>72</height>
+          </size>
+         </property>
+         <property name="movement">
+          <enum>QListView::Static</enum>
+         </property>
+         <property name="resizeMode">
+          <enum>QListView::Adjust</enum>
+         </property>
+         <property name="viewMode">
+          <enum>QListView::IconMode</enum>
+         </property>
+         <property name="uniformItemSizes">
+          <bool>true</bool>
+         </property>
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>Default</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/platform_default.svg</normaloff>:/imgFMV/images/platforms/platform_default.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/platform_default.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Super Puma</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_super_puma.svg</normaloff>:/imgFMV/images/platforms/plat_super_puma.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_super_puma.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>N97826</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_N97826.svg</normaloff>:/imgFMV/images/platforms/plat_N97826.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_N97826.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>VH ZXX</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_VH-ZXX.svg</normaloff>:/imgFMV/images/platforms/plat_VH-ZXX.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_VH-ZXX.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ADS15</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_ADS15.svg</normaloff>:/imgFMV/images/platforms/plat_ADS15.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_ADS15.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dji</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_dji.svg</normaloff>:/imgFMV/images/platforms/plat_dji.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_dji.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Military Jet</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_military_jet.svg</normaloff>:/imgFMV/images/platforms/plat_military_jet.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_military_jet.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Military Heli</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_military_heli.svg</normaloff>:/imgFMV/images/platforms/plat_military_heli.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_military_heli.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Uav Fw</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_uav_fw.svg</normaloff>:/imgFMV/images/platforms/plat_uav_fw.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_uav_fw.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Reaper</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_reaper.svg</normaloff>:/imgFMV/images/platforms/plat_reaper.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_reaper.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Tank</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_tank.svg</normaloff>:/imgFMV/images/platforms/plat_tank.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_tank.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Ship</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_ship.svg</normaloff>:/imgFMV/images/platforms/plat_ship.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_ship.svg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Copter News</string>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/platforms/plat_copter_news.svg</normaloff>:/imgFMV/images/platforms/plat_copter_news.svg</iconset>
+          </property>
+          <property name="toolTip">
+           <string>:/imgFMV/images/platforms/plat_copter_news.svg</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lbl_platform_icon_selected">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+        </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lbl_settingsFile">
+     <property name="text">
+      <string>Settings file:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsColorButton</class>
+   <extends>QToolButton</extends>
+   <header>qgscolorbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>btn_ffmpegBrowse</sender>
+   <signal>clicked()</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>pickFfmpegFolder()</slot>
+  </connection>
+  <connection>
+   <sender>btn_dtmBrowse</sender>
+   <signal>clicked()</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>pickDtmFile()</slot>
+  </connection>
+  <connection>
+   <sender>btn_checkDeps</sender>
+   <signal>clicked()</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>refreshStatus()</slot>
+  </connection>
+  <connection>
+   <sender>btn_installDeps</sender>
+   <signal>clicked()</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>runInstaller()</slot>
+  </connection>
+  <connection>
+   <sender>btn_restoreLayerStyles</sender>
+   <signal>clicked()</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>restoreDefaultLayerStyles()</slot>
+  </connection>
+  <connection>
+   <sender>btn_onnxBrowse</sender>
+   <signal>clicked()</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>pickOnnxModel()</slot>
+  </connection>
+  <connection>
+   <sender>btn_downloadVisdrone</sender>
+   <signal>clicked()</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>downloadVisdroneModel()</slot>
+  </connection>
+  <connection>
+   <sender>btn_downloadYolo</sender>
+   <signal>clicked()</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>downloadYoloModel()</slot>
+  </connection>
+  <connection>
+   <sender>sl_Size</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>showSizeTip(int)</slot>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>saveSettings()</slot>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>FmvSettings</receiver>
+   <slot>reject()</slot>
+  </connection>
+ </connections>
+ <slots>
+  <slot>showSizeTip(int)</slot>
+  <slot>pickFfmpegFolder()</slot>
+  <slot>pickDtmFile()</slot>
+  <slot>refreshStatus()</slot>
+  <slot>runInstaller()</slot>
+  <slot>saveSettings()</slot>
+  <slot>restoreDefaultLayerStyles()</slot>
+  <slot>pickOnnxModel()</slot>
+  <slot>downloadVisdroneModel()</slot>
+  <slot>downloadYoloModel()</slot>
+ </slots>
+</ui>

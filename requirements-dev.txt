@@ -1,0 +1,19 @@
+# Development dependencies for QGIS FMV
+
+# Code quality
+pycodestyle>=2.11.0
+black>=24.8.0
+isort>=5.13.2
+flake8>=7.1.1
+
+# Tests
+pytest>=8.3.0
+
+# Debugging / hot reload (optional local workflow)
+debugpy>=1.8.1
+watchdog>=4.0.0
+
+# Build tools — only needed when running build.py outside QGIS
+# (QGIS 4 bundles PyQt6 internally; these are for standalone dev builds)
+PyQt6>=6.5.0
+PySide6>=6.5.0  # optional fallback for rcc resource compilation

@@ -6,59 +6,74 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>355</width>
-    <height>83</height>
+    <width>560</width>
+    <height>340</height>
    </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>0</width>
-    <height>0</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Open Stream</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/stream.png</normaloff>:/imgFMV/images/stream.png</iconset>
-  </property>
-  <property name="locale">
-   <locale language="English" country="UnitedStates"/>
+    <normaloff>:/imgFMV/images/misc/stream.png</normaloff>:/imgFMV/images/misc/stream.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QComboBox" name="cmb_protocol">
-       <property name="cursor">
-        <cursorShape>IBeamCursor</cursorShape>
+      <widget class="QLabel" name="lbl_protocol">
+       <property name="text">
+        <string>Protocol</string>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cmb_protocol">
+       <item>
+        <property name="text">
+         <string>UDP</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>TCP</string>
+        </property>
+       </item>
        <item>
         <property name="text">
          <string>RTP</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>RTSP</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lbl_host">
+       <property name="text">
+        <string>Host</string>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="ln_host">
-       <property name="text">
-        <string/>
-       </property>
        <property name="placeholderText">
         <string>127.0.0.1</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="ln_port">
-       <property name="inputMethodHints">
-        <set>Qt::ImhNone</set>
-       </property>
+      <widget class="QLabel" name="lbl_port">
        <property name="text">
-        <string/>
+        <string>Port</string>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="ln_port">
        <property name="placeholderText">
         <string>5005</string>
        </property>
@@ -67,14 +82,39 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_path">
+     <item>
+      <widget class="QLabel" name="lbl_path">
+       <property name="text">
+        <string>Path</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="ln_path">
+       <property name="placeholderText">
+        <string>/stream (RTSP only)</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTextEdit" name="lbl_hint">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="lineWrapMode">
+      <enum>QTextEdit::WidgetWidth</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QPushButton" name="btn_Open">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
        <property name="text">
-        <string>Accept</string>
+        <string>Connect</string>
        </property>
       </widget>
      </item>
@@ -87,23 +127,30 @@
  </resources>
  <connections>
   <connection>
+   <sender>cmb_protocol</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>FmvOpenStream</receiver>
+   <slot>updateStreamHint(QString)</slot>
+  </connection>
+  <connection>
    <sender>btn_Open</sender>
    <signal>clicked(bool)</signal>
    <receiver>FmvOpenStream</receiver>
    <slot>OpenStream(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>86</y>
+     <x>20</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
-     <x>6</x>
-     <y>58</y>
+     <x>20</x>
+     <y>130</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>OpenStream(bool)</slot>
+  <slot>updateStreamHint(QString)</slot>
  </slots>
 </ui>

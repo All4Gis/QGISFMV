@@ -1,66 +1,77 @@
-from qgis.PyQt.QtCore import QRegExp, QCoreApplication, Qt
-from qgis.PyQt.QtGui import QIntValidator, QRegExpValidator
-from qgis.PyQt.QtWidgets import QDialog, QApplication
-from QGIS_FMV.gui.ui_FmvOpenStream import Ui_FmvOpenStream
-from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
+# -*- coding: utf-8 -*-
+from qgis.PyQt.QtCore import QRegularExpression, QCoreApplication
+from qgis.PyQt.QtGui import QIntValidator, QRegularExpressionValidator
+from qgis.PyQt.QtWidgets import QDialog
+from QGISFMV.gui.ui_FmvOpenStream import Ui_FmvOpenStream
+from QGISFMV.utils.media.QgsFmvStreamUtils import (
+    buildStreamUri,
+    streamDisplayName,
+    validateStreamEndpoint,
+    vlcHintText,
+)
+from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from qgis.core import Qgis as QGis
-
-try:
-    from pydevd import *
-except ImportError:
-    None
-
-try:
-    import cv2
-except ImportError:
-    None
 
 
 class OpenStream(QDialog, Ui_FmvOpenStream):
-    """ Open Stream Dialog """
+    """Connect to a live UDP/TCP/RTP/RTSP MISB stream."""
 
     def __init__(self, iface, parent=None):
-        """ Contructor """
+        """Initialise the open-stream dialog."""
         super().__init__(parent)
         self.setupUi(self)
         self.parent = parent
         self.iface = iface
 
-        # Int Validator
         self.onlyInt = QIntValidator()
         self.ln_port.setValidator(self.onlyInt)
 
-        # IP Validator
-        v = QRegExpValidator(self)
-        rx = QRegExp(
-            "((1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})\\.){3,3}(1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})"
+        rx = QRegularExpression(
+            r"((1{0,1}[0-9]{0,2}|2[0-4][0-9]{1,1}|25[0-5]{1,1})\.){3,3}"
+            r"(1{0,1}[0-9]{0,2}|2[0-4][0-9]{1,1}|25[0-5]{1,1})"
         )
-        v.setRegExp(rx)
-        self.ln_host.setValidator(v)
+        self.ln_host.setValidator(QRegularExpressionValidator(rx, self))
+
+        self.updateStreamHint(self.cmb_protocol.currentText())
+
+    def updateStreamHint(self, protocol):
+        """Update the VLC hint text and RTSP path visibility for *protocol*."""
+        self.lbl_hint.setPlainText(vlcHintText(protocol))
+        self.lbl_hint.viewport().setAutoFillBackground(False)
+        is_rtsp = (protocol or "").upper() == "RTSP"
+        self.lbl_path.setVisible(is_rtsp)
+        self.ln_path.setVisible(is_rtsp)
 
     def OpenStream(self, _):
-        protocol = self.cmb_protocol.currentText().lower()
-        host = self.ln_host.text()
-        port = self.ln_port.text()
-        v = protocol + "://" + host + ":" + port
-        if host != "" and port != "":
+        """Validate inputs, build the stream URI, and open it in the player."""
+        protocol = self.cmb_protocol.currentText()
+        host = self.ln_host.text().strip() or "127.0.0.1"
+        port = self.ln_port.text().strip()
+        path = self.ln_path.text().strip()
+
+        ok, msg = validateStreamEndpoint(protocol, host, port)
+        if not ok:
             qgsu.showUserAndLogMessage(
-                QCoreApplication.translate("QgsFmvOpenStream", "Checking connection!")
+                QCoreApplication.translate(
+                    "QgsFmvOpenStream", "Invalid stream settings"
+                ),
+                msg,
+                level=QGis.MessageLevel.Warning,
             )
-            QApplication.setOverrideCursor(Qt.WaitCursor)
-            QApplication.processEvents()
-            # Check if connection exist
-            cap = cv2.VideoCapture(v)
-            ret, _ = cap.read()
-            cap.release()
-            if ret:
-                self.parent.AddFileRowToManager(v, v)
-                self.close()
-            else:
-                qgsu.showUserAndLogMessage(
-                    QCoreApplication.translate(
-                        "QgsFmvOpenStream", "There is no such connection!"
-                    ),
-                    level=QGis.Warning,
-                )
-            QApplication.restoreOverrideCursor()
+            return
+
+        try:
+            uri = buildStreamUri(protocol, host, port, path)
+        except ValueError as exc:
+            qgsu.showUserAndLogMessage(
+                QCoreApplication.translate(
+                    "QgsFmvOpenStream", "Invalid stream settings"
+                ),
+                str(exc),
+                level=QGis.MessageLevel.Warning,
+            )
+            return
+
+        name = streamDisplayName(uri)
+        self.parent.AddFileRowToManager(name, uri)
+        self.accept()

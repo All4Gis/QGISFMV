@@ -1,1 +1,12 @@
+title: QGIS Full Motion Video
+description: MISB georeferenced video in QGIS 4 — docs and community resources.
+url: https://all4gis.github.io
+baseurl: /QGISFMV
 theme: jekyll-theme-cayman
+markdown: kramdown
+plugins:
+  - jekyll-seo-tag
+
+header_pages:
+  - index.md
+  - contact.md

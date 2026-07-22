@@ -1,9 +1,42 @@
+# Python
 *.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDE
 .project
 .pydevproject
+.idea/
 .settings/
+*.swp
+*.swo
+*~
+.vscode/
+
+# Build artifacts
 deploy/Output/
-deploy/generate_exe.bat
-deploy/generate_exe.sh
-deploy/plugin_exe.py
+deploy/*.zip
+code/gui/ui_*.py
+code/gui/resources_rc.py
+code/i18n/*.qm
+.pytest_packages/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Local dev symlink (QGISFMV -> code for IDE resolution)
+QGISFMV
+.qgis_stubs/
+
+# Transifex
 .tx/.transifexrc
+.tx/*.bak
+
+# MiMoCode
+.mimocode/

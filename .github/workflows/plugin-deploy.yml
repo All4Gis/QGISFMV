@@ -1,0 +1,63 @@
+name: Plugin Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+  workflow_dispatch:
+
+jobs:
+  build-plugin:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('code/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Qt tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-base-dev qt6-tools-dev qt6-tools-dev-tools
+          pip install pyqt6
+
+      - name: Compile UI and resources
+        run: python3 build.py
+
+      - name: Build plugin zip
+        run: python3 deploy/plugin_zip.py
+
+      - name: Get version info
+        id: info
+        run: |
+          VERSION=$(grep "^version=" code/metadata.txt | cut -d'=' -f2 | tr -d ' ')
+          NAME=$(grep "^internal_name=" code/metadata.txt | cut -d'=' -f2 | tr -d ' ')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "ZIP_FILE=deploy/${NAME}_${VERSION}.zip" >> $GITHUB_OUTPUT
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qgis-fmv-${{ steps.info.outputs.version }}
+          path: ${{ steps.info.outputs.ZIP_FILE }}
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.info.outputs.ZIP_FILE }}
+          generate_release_notes: true

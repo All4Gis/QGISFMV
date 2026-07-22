@@ -1,32 +1,42 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: "[BUG]"
+about: Something isn't working
+title: "[BUG] "
 labels: bug
 assignees: ''
-
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Description
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+<!-- Clear summary of the bug -->
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## Steps to reproduce
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+1. 
+2. 
+3. 
 
-**Desktop (please complete the following information):**
- - OS: [e.g. Windows 10]
- - QGIS Version [e.g. 3.6.0]
- - Plugin Version [e.g. 1.5.0]
+## Expected behavior
 
-**Additional context**
-Add any other context about the problem here.
+## Actual behavior
+
+## Screenshots / recordings
+
+<!-- If UI-related -->
+
+## Environment
+
+| | |
+|---|---|
+| **OS** | <!-- e.g. macOS 15, Windows 11, Ubuntu 24.04 --> |
+| **QGIS** | <!-- e.g. 4.0.0 --> |
+| **Plugin** | <!-- from code/metadata.txt --> |
+| **Video type** | <!-- e.g. MISB .ts, DJI .mp4, UDP stream --> |
+
+## Logs
+
+<!-- QGIS log panel messages, Python traceback -->
+
+## Additional context
+
+<!-- DEM used? FFmpeg path from FMV Settings? Dependency check status? Sample file characteristics (no classified media) -->

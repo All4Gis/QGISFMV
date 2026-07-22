@@ -1,42 +1,193 @@
 [general]
 name= QGIS Full Motion Video
-internal_name = QGIS_FMV
-qgisMinimumVersion=3.4
-qgisMaximumVersion=3.99
-description=<p>QGIS Full Motion Video.</p>
-about= Plugin for QGIS which allows to analyze, visualize and process videos inside the QGIS environment. 
-	   QGIS FMV accepts multiple video formats such as mp4, ts, avi, etc. It is also able to extract video frames, 
-	   to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more. 
+internal_name = QGISFMV
+qgisMinimumVersion=4.0
+qgisMaximumVersion=4.99
+supportsQt6=True
+description=<p>QGIS Full Motion Video (QGIS 4).</p>
+about= Plugin for QGIS 4 which allows to analyze, visualize and process videos inside the QGIS environment.
+	   QGIS FMV accepts multiple video formats such as mp4, ts, avi, etc. It is also able to extract video frames,
+	   to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more.
 	   It also offers the possibility to create reports with video metadata.
-	   
+	   You can multiplex DJI video and telemetry into MISB STANAG 4609 files with the built-in multiplexer.
+	   It also includes 25+ real-time video filters and an **AI Detection** suite for FMV/UAV
+	   imagery: YOLO (VisDrone) for vehicles/persons plus smart CV for buildings, roads,
+	   fire, smoke and flood — with aerial-tuned defaults and optional custom ONNX models.
+
 	   <strong>QGIS FMV is in the 'Plugins' toolbar !</strong>
-	   
+
 	   <a href="https://all4gis.github.io/QGISFMV/" target="_blank">Documentation</a>
 
 	   <p>Want to buy me a beer (or gadget)? Please use Paypal button.</p>
-	   <a href="https://goo.gl/jFCeCW" target="_blank">
-	   <img border="0" alt="Donate" src="https://goo.gl/6Fov75">
+	   <a href="https://www.paypal.com/donate/?hosted_button_id=X2JMP4FMHDYQS" target="_blank">
+	   <img border="0" alt="Donate" src="https://img.shields.io/badge/Donate-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white">
 	   </a>
 	   <p>If this plugin is useful for you, consider to donate to the author.</p>
 
 
-version=1.15
+version=4.00
 author= Francisco Raga
 email=franka1986@gmail.com
 
 changelog=
     ** General **
+     4.00:
+      --- Platform / QGIS 4 ---
+      - QGIS 4 only (minimum version 4.0); QGIS 3 is no longer supported.
+      - Plugin internal name is now QGISFMV (formerly QGIS_FMV).
+      - Full Qt6 / PyQt6 migration (scoped enums, QVideoSink pipeline, modern imports).
+      - KLV / MISB stack moved to pymisb (replaces in-tree klvdata parsers).
+      - Player is a proper QDockWidget with an inner QMainWindow so the Draw
+        toolbar stays movable / floatable like a normal QGIS toolbar.
+      - Code layout cleanup: player/overlays, player/features, player/dialogs,
+        utils/install, utils/settings, utils/vision, etc.
+
+      --- FMV Settings & installer ---
+      - New FMV Settings dialog (toolbar gear) for FFmpeg, DEM, layer names,
+        Mosaic tuning, **AI Detection (YOLO/ONNX)**, magnifier, drawings,
+        platform icon, and dependency status — no hand-editing of settings.ini required.
+      - Plugin menu About dialog links to documentation site (all4gis.github.io/QGISFMV).
+      - Guided dependency setup: install pymisb / requirements / FFmpeg from Settings
+        or first-run prompts (Windows / macOS / Linux).
+      - Python deps install into ~/.qgis-fmv-packages (--target, no admin / no write
+        to QGIS.app); pip bootstrap via ensurepip or get-pip when needed.
+      - On signed macOS QGIS, OpenCV outside the app is often blocked (Team ID) —
+        playback and MISB still work; tracking / CV filters use numpy fallbacks.
+      - Auto-repair of invalid FFmpeg path in settings.ini.
+
+      --- C2 / Geo-Intelligence ---
+      - Sensor Coverage Cone overlay — FOV cone on the map from KLV (Tools menu).
+      - Distance Rings — concentric range rings (500m, 1km, 2km, 5km) around the
+        platform, updating in real time (Tools menu).
+      - C2 overlays auto-update from KLV during playback and clean up on close/switch.
+        Platform path uses the existing Trajectory layer.
+      - HUD Overlay on video (Ctrl+H) — telemetry read-out during playback.
+      - Mini Map (PiP) on video (Ctrl+Shift+M) — trajectory, footprint, platform, heading.
+      - Geofence / altitude Alerts (FMV Tools → Enable Alerts).
+      - Export trajectory to KML / GPX (Ctrl+Shift+K / Ctrl+Shift+G).
+      - Timeline widget with seekable event markers along the video duration.
+      - Multi-video sync helper for coordinated playback sessions.
+
+      --- Multiplexer ---
+      - Built-in MISB STANAG 4609 multiplexer — create .ts files from DJI
+        video + telemetry (.csv, .txt, .log) with embedded KLV metadata.
+      - No separate klv/ folder needed — KLV is embedded in the output.
+      - Supports all standard DJI telemetry formats via pymisb.
+
+      --- On-video tools ---
+      - Military Symbols dialog — place NATO APP-6D inspired SVG symbols
+        (Friendly / Hostile / Neutral / Special) on georeferenced video + map layer.
+      - Platform icon picker (Options → Platform): military, DJI, UAV, helicopter,
+        ship, tank and related presets; updates the map layer immediately.
+      - Auto Snapshots (Ctrl+Shift+S) — periodic frame capture.
+      - Mosaic controller improvements (feathering / performance controls).
+      - Tool placement banners — flashing hint when activating draw/measure tools
+        (Point, Line, Polygon, Measure Distance, Measure Area, Military Symbols).
+
+      --- Video filters (15 new) ---
+      - CLAHE (Adaptive Histogram Equalization) — improves local contrast in shadows/fog.
+      - Sharpen (Unsharp Mask) — makes buildings, vehicles and roads more visible.
+      - Motion Detection (Frame Difference) — highlights moving objects, minimal cost.
+      - Sobel Edge Detection — highlights structures, buildings, roads and lines.
+      - False Color (Turbo LUT) — makes intensity differences easy to interpret.
+      - ExG / VARI (Vegetation Index) — NDVI equivalent for RGB cameras without NIR.
+      - Background Subtraction (MOG2) — automatically detects moving objects.
+      - Dehaze (CLAHE Enhancement) — improves foggy or low-visibility images.
+      - Road & Structure Enhancement — CLAHE + Sobel + Sharpen combined.
+      - Hotspot Detection — highlights hot/bright pixels (thermal cameras).
+      - Building Detection — smart CV highlight + optional custom YOLO ONNX.
+      - Road Segmentation — asphalt/road score + lane hints + optional ONNX.
+      - Vehicle Detection — **VisDrone YOLO** (aerial) with smart CV fallback.
+      - Person Detection — **VisDrone YOLO** (aerial) with smart CV fallback.
+      - Fire / Smoke / Flood Detection — smart CV signatures + optional custom ONNX.
+      - All filters use OpenCV when available with full RGB/BGR color management;
+        pure-numpy fallbacks when OpenCV is not installed.
+
+      --- AI Detection (FMV / UAV) ---
+      - **Filters** menu lists AI detection filters inline (Building, Road, Vehicle, …).
+      - **FMV Settings → AI Detection** tab: enable DNN, model profile (aerial / COCO /
+        custom), ONNX path, confidence, NMS, per-filter class IDs, one-click VisDrone
+        download + ONNX export (~6 MB YOLOv8n).
+      - **VisDrone YOLOv8n** default for FMV/UAV (vehicle + person); COCO profile for
+        ground-level video; models stored under ~/.qgis-fmv-models/.
+      - **Hybrid pipeline**: YOLO first when enabled; automatic fallback to tuned CV when
+        DNN returns no boxes (dnn_fallback_when_empty).
+      - **[FILTERS] aerial profile** in settings.ini — overlay thresholds, detection
+        percentiles, CLAHE pre-gain, EMA smoothing, per-class min area (vehicles, persons,
+        buildings, roads).
+      - **PRO detection**: multiscale score fusion, IoU NMS on CV boxes, per-box
+        confidence labels (#id 78%), lightweight IoU tracking across frames.
+      - On-screen banner: engine tag [YOLO]/[CV], detection count and coverage %.
+      - Code split: QgsFmvFilterCore (primitives), QgsFmvDetectionFilters (AI/CV),
+        QgsFmvFilterTuning (settings), QgsFmvOnnxDetector + QgsFmvModelSetup (models).
+      - Tests: test_onnx_detector, test_video_filters (scores + filter core).
+
+      --- Toolbar & UI ---
+      - Draw toolbar is now movable and floatable — drag to any edge or float.
+      - Toolbar state (position, visibility) persists across sessions via QSettings.
+      - Right-click context menu on video → "ToolBars" submenu to show/hide toolbars.
+      - Right-click on menubar also shows "ToolBars" submenu.
+      - Metadata dialog: removed minimum size constraints — dialog can be resized freely.
+
+      --- Geo utilities ---
+      - QgsGeoUtils uses PyQGIS QgsDistanceArea for ellipsoidal WGS84 distance,
+        bearing, and polygon area (higher accuracy than pure-Python).
+      - Pure-Python destination() kept (no QGIS equivalent for great-circle destination).
+
+      --- Performance ---
+      - Fixed creatingMosaic property recursion bug in QgsFmvPlayer (RecursionError).
+      - Optimized _latest_layer_feature() to O(1).
+      - Removed unnecessary QImage.copy() in convertQImageToMat() (~2-5ms/frame at 1080p).
+      - KLV stream index cache (_klv_index_cache) — avoids re-probing the same file.
+      - Subprocess timeouts (15-600s) on communicate() across utils / player / plot /
+        multimedia — hung FFmpeg/ffprobe no longer blocks QGIS.
+      - Simplified hasElevationModel(); cleaned getVideoManagerList() logging.
+      - Eliminated per-frame startEditing/commitChanges cycle in layer updates
+        (UpdateBeamsData, UpdateTrajectoryData, UpdateFrameAxisData, UpdateFrameCenterData,
+        UpdatePlatformData) — now uses provider.direct edits.
+      - Platform icon path cached in get_user_platform_icon() — avoids QSettings disk
+        I/O on every frame.
+      - QgsProject.instance() cached in mouseMoveEvent — avoids singleton lookup on
+        every mouse movement.
+      - Reverse geocoding QEventLoop now has 8s timeout — prevents UI freeze.
+      - Decode thread properly quit/waited on player close — prevents potential segfault.
+
+      --- Code quality ---
+      - Added log.debug() to 14 previously silent except blocks.
+      - Wrapped ast.literal_eval in QgsManager.py with try/except fallback.
+      - Removed 3 unused imports, 1 redundant QSettings variable.
+      - Tightened 5 bare # noqa to # noqa: F401.
+      - Added QGIS skip guards to test_military_symbols.py and test_local_meta_reader.py.
+      - Fixed test_object_tracker.py path and import issues.
+      - Added --import-mode=importlib to pytest.ini for reliable test collection.
+      - Improved conftest.py stdlib code module shadowing fix (sysconfig + importlib.util).
+      - Removed duplicate settings.ini at code/utils/settings.ini.
+      - Simplified gdal/osr imports (removed redundant lazy-loading wrappers).
+      - get_int() now double-guarded against non-numeric defaults.
+
+      --- Logging ---
+      - Standard Python logging (replaces custom QgsFmvLog class API).
+      - Auto-init on import; rotating log at ~/.qgis-fmv/logs/qgis_fmv.log (10MB x 5).
+      - Console handler for WARNING+ (QGIS Log Messages panel).
+      - log.debug() in previously silent except blocks (utils + player).
+
+      --- Network ---
+      - reverseGeocodeLabel() uses urllib instead of blocking QEventLoop —
+        no UI freeze while waiting for HTTP.
+
+      --- Docs / tooling ---
+      - Renamed plugin screenshots folder to assets/; refreshed README / USAGE /
+        CONTRIBUTING / CODING_STANDARDS and GitHub templates.
+      - Improved shell / PowerShell install scripts and deploy/plugin_zip.py.
+      - build.py: removed shell=True; use shutil.which().
+      - GitHub Actions pip caching; Transifex CLI → Go client.
+      - requirements-dev.txt cleanup (removed deprecated transifex-client).
      1.16:
-      - Fix klv data error out of range
-      - Remove unnecessary calculations.
-      - Update plot bitrate code.
-      - Measures now use QGIS functions.
-      - Important clean code.
-      - Remove geo-py https://github.com/gojuno/geo-py code.
-      - Updated included mgrspy to fix issues with proj 6 versions mainly on Windows.
-      - Create csv with UpdateTime in the multiplexor tool.
-      - fix close manager.
-      - fix dran&drop manager video in linux.
+      - Qt5/Qt6 dual compatibility (QGIS 3 and QGIS 4).
+      - Scoped Qt and QGIS enums (required by PyQt6).
+      - Rewritten multimedia pipeline: QVideoSink/QVideoFrame and a QMediaPlaylist
+        replacement on Qt6, native QAbstractVideoSurface/QMediaPlaylist kept on Qt5.
+      - Modernized imports (qgis.PyQt), exec(), QScreen, QRegularExpression.
      1.15:
       - Slider made clickable.
       - Fixed drawings position when elevation model used.
@@ -205,7 +356,7 @@ tracker=https://github.com/All4Gis/QGISFMV/issues
 repository=https://github.com/All4Gis/QGISFMV
 
 # tags are comma separated with spaces allowed
-tags=fmv, uav, python, drone, telemetry, MISB, object tracking, DJI, stanag, video, mosaic, klv
+tags=fmv, uav, python, drone, telemetry, MISB, object tracking, DJI, stanag, video, mosaic, klv, geoint, C2, command and control, sensor cone, trajectory, CLAHE, sharpen, sobel, motion detection, vegetation index, hotspot, dehaze, false color, background subtraction, building detection, road segmentation, vehicle detection, person detection, fire detection, smoke detection, flood detection, YOLO, ONNX, VisDrone, AI detection, deep learning, computer vision, aerial imagery
 
-icon=images/icon.png
+icon=assets/icon.png
 experimental=False

@@ -1,0 +1,21 @@
+{
+  "include": [
+    "code/**/*.py"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "code/python_deps",
+    "code/gui/ui_*.py",
+    "deploy/**",
+    ".pytest_packages/**"
+  ],
+  "extraPaths": [
+    "code",
+    "code/python_deps",
+    ".qgis_stubs"
+  ],
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false,
+  "pythonVersion": "3.12",
+  "typeCheckingMode": "basic"
+}

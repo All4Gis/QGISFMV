@@ -1,483 +1,211 @@
+# -*- coding: utf-8 -*-
+"""Video Multiplexer dialog — build MISB STANAG 4609 videos with pymisb."""
+
 import os
-from qgis.PyQt.QtCore import QCoreApplication, Qt
-from qgis.PyQt.QtWidgets import QDialog, QApplication, QProgressBar
 
-from QGIS_FMV.gui.ui_FmvMultiplexer import Ui_VideoMultiplexer
-from QGIS_FMV.utils.QgsFmvUtils import (
-    askForFiles,
-    getVideoFolder,
-    CornerEstimationWithoutOffsets,
-)
-from QGIS_FMV.klvdata.common import datetime_to_bytes, int_to_bytes, float_to_bytes
-import csv
-import itertools
-from datetime import datetime
-from math import tan, radians, degrees, cos, pi, sin
-from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from qgis.core import Qgis as QGis
-from io import StringIO
-from QGIS_FMV.QgsFmvConstants import UASLocalMetadataSet, EARTH_MEAN_RADIUS
+from qgis.PyQt.QtCore import QCoreApplication
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.core import Qgis as QGis, QgsApplication, QgsTask
 
-from QGIS_FMV.klvdata.misb0601 import (
-    PlatformHeadingAngle,
-    PlatformPitchAngle,
-    SlantRange,
-    PlatformRollAngle,
-    SensorLatitude,
-    FrameCenterElevation,
-    SensorLongitude,
-    SensorTrueAltitude,
-    TargetWidth,
-    SensorHorizontalFieldOfView,
-    SensorRelativeElevationAngle,
-    SensorEllipsoidHeightConversion,
-    PlatformRollAngleFull,
-    PlatformPitchAngleFull,
-    SensorRelativeAzimuthAngle,
-    SensorVerticalFieldOfView,
-    PrecisionTimeStamp,
-    SensorRelativeRollAngle,
-    FrameCenterLatitude,
-    Checksum,
-    FrameCenterLongitude,
-    CornerLatitudePoint1Full,
-    CornerLongitudePoint1Full,
-    CornerLatitudePoint2Full,
-    CornerLongitudePoint2Full,
-    CornerLatitudePoint3Full,
-    CornerLongitudePoint3Full,
-    CornerLatitudePoint4Full,
-    CornerLongitudePoint4Full,
-)
+from QGISFMV.gui.ui_FmvMultiplexer import Ui_VideoMultiplexer
+from QGISFMV.utils.core.QgsFmvUtils import askForFiles, _ensureFfmpegPaths
+import QGISFMV.utils.core.QgsFmvUtils as _fmv_utils
+from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
-try:
-    from pydevd import *
-except ImportError:
-    None
-
-"""
-'TODO : After all the tests I haven't managed to generate a MISB video,
-for now I make this adaptation to be able to see it in QGIS FMV
-https://gist.github.com/All4Gis/509fbe06ce53a0885744d16595811e6f
-"""
-
-# Csv Encoding
-encoding = "ISO-8859-1"
 
 
 class Multiplexor(QDialog, Ui_VideoMultiplexer):
-    """ About Dialog """
+    """Create a MISB multiplexed video from source video + telemetry."""
 
     def __init__(self, iface, parent=None, Exts=None):
-        """ Contructor """
         super().__init__(parent)
         self.setupUi(self)
         self.iface = iface
-        self.parent = parent
-
-        self.video_file = None
-        self.csv_file = None
+        self._manager = parent
         self.Exts = Exts
-
-    def OpenCsvFile(self):
-        """ Open Csv File """
-        filename, _ = askForFiles(
-            self, QCoreApplication.translate("QgsMultiplexor", "Open file"), exts="csv"
-        )
-        if filename:
-            self.csv_file = filename
-            self.ln_inputMeta.setText(self.csv_file)
-        return
+        self.chk_addManager.setChecked(True)
+        self._background_tasks = []
 
     def OpenVideoFile(self):
-        """ Open Video File """
+        """Open a file dialog to select the input video file."""
         filename, _ = askForFiles(
             self,
-            QCoreApplication.translate("QgsMultiplexor", "Open file"),
+            QCoreApplication.translate("Multiplexor", "Open video file"),
             exts=self.Exts,
         )
         if filename:
-            self.video_file = filename
-            self.ln_inputVideo.setText(self.video_file)
-        return
+            self.ln_inputVideo.setText(filename)
+            if not self.ln_outputVideo.text().strip():
+                from pymisb.common import default_output
 
-    def CreateCSV(self):
-        """ Create csv for each recording """
-        self.cmb_telemetry.clear()
-        input_video = self.ln_inputVideo.text()
-        input_metadata = self.ln_inputMeta.text()
+                self.ln_outputVideo.setText(default_output(filename))
 
-        if input_video == "" or input_metadata == "":
+    def OpenTelemetryFile(self):
+        """Open a file dialog to select the input telemetry/KLV file."""
+        filename, _ = askForFiles(
+            self,
+            QCoreApplication.translate("Multiplexor", "Open telemetry file"),
+            exts=["csv", "txt", "log"],
+        )
+        if filename:
+            self.ln_inputMeta.setText(filename)
+
+    def OpenOutputFile(self):
+        """Open a save dialog for the multiplexed output .ts file."""
+        filename, _ = askForFiles(
+            self,
+            QCoreApplication.translate("Multiplexor", "Save multiplexed video as..."),
+            isSave=True,
+            exts=["ts"],
+        )
+        if filename:
+            if not filename.lower().endswith(".ts"):
+                filename += ".ts"
+            self.ln_outputVideo.setText(filename)
+
+    def CreateMISB(self):
+        """Validate inputs and start the MISB multiplexing task."""
+        inputVideo = self.ln_inputVideo.text().strip()
+        telemetryFile = self.ln_inputMeta.text().strip()
+        outputVideo = self.ln_outputVideo.text().strip()
+
+        if not inputVideo or not telemetryFile or not outputVideo:
             qgsu.showUserAndLogMessage(
                 QCoreApplication.translate(
-                    "Multiplexor", "You must complete all the information"
-                )
+                    "Multiplexor",
+                    "Select the source video, telemetry file, and output path.",
+                ),
+                level=QGis.MessageLevel.Warning,
             )
             return
 
-        self.ReadCSVRecordings(input_metadata)
-        # Enable create video button
-        self.bt_createMISB.setEnabled(True)
-        return
+        if not os.path.isfile(inputVideo):
+            qgsu.showUserAndLogMessage(
+                QCoreApplication.translate("Multiplexor", "Video file does not exist."),
+                level=QGis.MessageLevel.Warning,
+            )
+            return
 
-    def GetRows(self, csv_file):
-        with open(csv_file, "r", encoding=encoding) as f:
-            reader = csv.reader(f, delimiter=",")
-            data = list(reader)
-            row_count = len(data)
-        return row_count
+        if not os.path.isfile(telemetryFile):
+            qgsu.showUserAndLogMessage(
+                QCoreApplication.translate(
+                    "Multiplexor", "Telemetry file does not exist."
+                ),
+                level=QGis.MessageLevel.Warning,
+            )
+            return
 
-    def CreateMISB(self):
-        """ Create MISB Video """
-        """ Only tested using DJI Data """
-        # Create ProgressBar
-        self.iface.messageBar().clearWidgets()
-        progressMessageBar = self.iface.messageBar().createMessage(
-            "Creating video packets..."
-        )
-        progress = QProgressBar()
-        progress.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        progressMessageBar.layout().addWidget(progress)
-        self.iface.messageBar().pushWidget(progressMessageBar, QGis.Info)
+        ext = os.path.splitext(telemetryFile)[1].lower()
+        if ext not in (".csv", ".txt", ".log"):
+            qgsu.showUserAndLogMessage(
+                QCoreApplication.translate(
+                    "Multiplexor", "Telemetry must be a .csv, .txt, or .log file."
+                ),
+                level=QGis.MessageLevel.Warning,
+            )
+            return
 
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        QApplication.processEvents()
-
-        HFOV = self.sp_hfov.value()
-        VFOV = self.sp_vfov.value()
-
-        index = self.cmb_telemetry.currentIndex()
-        out_record = self.cmb_telemetry.itemData(index)
-        rowCount = self.GetRows(out_record)
-        progress.setMaximum(rowCount)
-
-        d = {}
-        with open(out_record, encoding=encoding) as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                date_start = datetime.strptime(
-                    row["CUSTOM.updateTime"], "%Y/%m/%d %H:%M:%S.%f"
+        outputDir = os.path.dirname(os.path.abspath(outputVideo))
+        if outputDir and not os.path.isdir(outputDir):
+            try:
+                os.makedirs(outputDir, exist_ok=True)
+            except OSError as exc:
+                qgsu.showUserAndLogMessage(
+                    QCoreApplication.translate(
+                        "Multiplexor", "Cannot create output folder: "
+                    ),
+                    str(exc),
+                    level=QGis.MessageLevel.Critical,
                 )
-                break
+                return
 
-        with open(out_record, encoding=encoding) as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                for k in row:
-                    stripK = k.strip()
-                    stripV = row[k].strip()
-                    d[stripK] = stripV
+        addManager = self.chk_addManager.isChecked()
 
-                # We create the klv file for every moment
-                bufferData = b""
-                cnt = 0
-
-                for k, v in d.items():
-                    try:
-                        if k == "CUSTOM.updateTime":
-                            # We prevent it from failing in the exact times
-                            # that don't have milliseconds
-                            try:
-                                date_end = datetime.strptime(v, "%Y/%m/%d %H:%M:%S.%f")
-                            except Exception:
-                                date_end = datetime.strptime(v, "%Y/%m/%d %H:%M:%S")
-
-                            _bytes = bytes(
-                                PrecisionTimeStamp(datetime_to_bytes(date_end))
-                            )
-                            bufferData += _bytes
-
-                        # Platform Heading Angle
-                        if k == "OSD.yaw":
-                            OSD_yaw = float(v)
-                            if OSD_yaw < 0:
-                                OSD_yaw = OSD_yaw + 360
-
-                            _bytes = bytes(PlatformHeadingAngle(OSD_yaw))
-                            bufferData += _bytes
-
-                        # Platform Pitch Angle
-                        if k == "OSD.pitch":
-                            OSD_pitch = float(v)
-                            _bytes = bytes(PlatformPitchAngle(OSD_pitch))
-                            bufferData += _bytes
-
-                        # Platform Roll Angle
-                        if k == "OSD.roll":
-                            OSD_roll = float(v)
-                            _bytes = bytes(PlatformRollAngle(OSD_roll))
-                            bufferData += _bytes
-
-                        # Sensor Latitude
-                        if k == "OSD.latitude":
-                            OSD_latitude = float(v)
-                            _bytes = bytes(SensorLatitude(OSD_latitude))
-                            bufferData += _bytes
-
-                        # Sensor Longitude
-                        if k == "OSD.longitude":
-                            OSD_longitude = float(v)
-                            _bytes = bytes(SensorLongitude(OSD_longitude))
-                            bufferData += _bytes
-
-                        # Sensor True Altitude
-                        if k == "OSD.altitude [m]":
-                            OSD_altitude = float(v)
-                            _bytes = bytes(SensorTrueAltitude(OSD_altitude))
-                            bufferData += _bytes
-
-                        # Sensor Ellipsoid Height
-                        if k == "OSD.height [m]":
-                            OSD_height = float(v)
-                            _bytes = bytes(SensorEllipsoidHeightConversion(OSD_height))
-                            bufferData += _bytes
-
-                        # Sensor Relative Azimuth Angle
-                        if k == "GIMBAL.yaw":
-                            # GIMBAL_yaw = float(v)
-                            GIMBAL_yaw = 0.0
-                            _bytes = bytes(SensorRelativeAzimuthAngle(GIMBAL_yaw))
-                            bufferData += _bytes
-
-                        # Sensor Relative Elevation Angle
-                        if k == "GIMBAL.pitch":
-                            GIMBAL_pitch = float(v)
-                            _bytes = bytes(SensorRelativeElevationAngle(GIMBAL_pitch))
-                            bufferData += _bytes
-
-                        # Sensor Relative Roll Angle
-                        if k == "GIMBAL.roll":
-                            GIMBAL_roll = float(v)
-                            _bytes = bytes(SensorRelativeRollAngle(GIMBAL_roll))
-                            bufferData += _bytes
-
-                    except Exception as e:
-                        qgsu.showUserAndLogMessage(
-                            QCoreApplication.translate(
-                                "Multiplexor", "Multiplexer error"
-                            )
-                            + e,
-                            onlyLog=True,
-                        )
-                        continue
-
-                try:
-                    # Diference time
-                    td = date_end - date_start
-                    end_path = self.klv_folder + "/%.1f.klv" % (
-                        round(td.total_seconds(), 1)
-                    )
-
-                    # CheckSum
-                    v = abs(hash(end_path)) % (10 ** 4)
-                    _bytes = bytes(Checksum(v))
-                    bufferData += _bytes
-
-                    # Sensor Horizontal Field of View
-                    v = self.sp_hfov.value()
-                    _bytes = bytes(SensorHorizontalFieldOfView(float(v)))
-                    bufferData += _bytes
-
-                    # Sensor Vertical Field of View
-                    v = self.sp_vfov.value()
-                    _bytes = bytes(SensorVerticalFieldOfView(float(v)))
-                    bufferData += _bytes
-
-                    # TODO : Check these calculations
-                    # Slant Range
-                    anlge = 180 + (OSD_pitch + GIMBAL_pitch)
-                    slantRange = abs(OSD_altitude / (cos(radians(anlge))))
-
-                    _bytes = bytes(SlantRange(slantRange))
-                    bufferData += _bytes
-
-                    # Target Width
-                    # targetWidth = 0.0
-                    targetWidth = 2.0 * slantRange * tan(radians(HFOV / 2.0))
-
-                    try:
-                        _bytes = bytes(TargetWidth(targetWidth))
-                    except Exception:
-                        _bytes = bytes(TargetWidth(0.0))
-
-                    bufferData += _bytes
-
-                    # Frame Center Latitude
-                    angle = 90 + (OSD_pitch + GIMBAL_pitch)
-                    tgHzDist = OSD_altitude * tan(radians(angle))
-
-                    dy = tgHzDist * cos(radians(OSD_yaw))
-                    framecenterlatitude = OSD_latitude + degrees(
-                        (dy / EARTH_MEAN_RADIUS)
-                    )
-
-                    _bytes = bytes(FrameCenterLatitude(framecenterlatitude))
-                    bufferData += _bytes
-
-                    # Frame Center Longitude
-                    dx = tgHzDist * sin(radians(OSD_yaw))
-                    framecenterlongitude = OSD_longitude + degrees(
-                        (dx / EARTH_MEAN_RADIUS)
-                    ) / cos(radians(OSD_latitude))
-
-                    _bytes = bytes(FrameCenterLongitude(framecenterlongitude))
-                    bufferData += _bytes
-
-                    # Frame Center Elevation
-                    frameCenterElevation = 0.0
-                    _bytes = bytes(FrameCenterElevation(frameCenterElevation))
-                    bufferData += _bytes
-
-                    # CALCULATE CORNERS COORDINATES
-                    # FIXME : If we add this values, the klv parse has a overflow
-                    # Probably the packets is not created correctly
-                    #                     sensor = (OSD_longitude, OSD_latitude, OSD_altitude)
-                    #                     frameCenter = (framecenterlongitude, framecenterlatitude, frameCenterElevation)
-                    #                     FOV = (VFOV, HFOV)
-                    #                     others = (OSD_yaw, GIMBAL_yaw, targetWidth, slantRange)
-                    #                     cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL = CornerEstimationWithoutOffsets(sensor=sensor, frameCenter=frameCenter, FOV=FOV, others=others)
-                    #
-                    #                     # Corner Latitude Point 1 (Full) CornerLatitudePoint1Full
-                    #                     _bytes = bytes(CornerLatitudePoint1Full(cornerPointUL[0]))
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Longitude Point 1 (Full)
-                    #                     _bytes = bytes(CornerLongitudePoint1Full(cornerPointUL[1]))
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Latitude Point 2 (Full)
-                    #                     _bytes = bytes(CornerLatitudePoint2Full(cornerPointUR[0]))
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Longitude Point 2 (Full)
-                    #                     _bytes = bytes(CornerLongitudePoint2Full(cornerPointUR[1]))
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Latitude Point 3 (Full)
-                    #                     _bytes = bytes(CornerLatitudePoint3Full(cornerPointLR[0]))
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Longitude Point 3 (Full)
-                    #                     _bytes = bytes(CornerLongitudePoint3Full(cornerPointLR[1]))
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Latitude Point 4 (Full)
-                    #                     _bytes = bytes(CornerLatitudePoint4Full(cornerPointLL[0]))
-                    #                     bufferData += _bytes
-                    #
-                    #                     # Corner Longitude Point 4 (Full)
-                    #                     _bytes = bytes(CornerLongitudePoint4Full(cornerPointLL[1]))
-                    #                     bufferData += _bytes
-
-                    # Platform Pitch Angle (Full)
-                    _bytes = bytes(PlatformPitchAngleFull(OSD_pitch))
-                    bufferData += _bytes
-
-                    # Platform Roll Angle (Full)
-                    _bytes = bytes(PlatformRollAngleFull(OSD_roll))
-                    bufferData += _bytes
-
-                    # set packet header
-                    writeData = UASLocalMetadataSet
-                    sizeTotal = len(bufferData)
-                    writeData += int_to_bytes(sizeTotal)
-                    writeData += bufferData
-
-                    # Write packet
-                    f_write = open(end_path, "wb+")
-                    f_write.write(writeData)
-                    f_write.close()
-
-                    cnt += 1
-
-                    progress.setValue(cnt)
-
-                except Exception as e:
-                    qgsu.showUserAndLogMessage(
-                        QCoreApplication.translate("Multiplexor", "Multiplexer error")
-                        + str(e),
-                        onlyLog=True,
-                    )
-
-        QApplication.restoreOverrideCursor()
-        QApplication.processEvents()
-        progress.setValue(rowCount)
-        self.iface.messageBar().clearWidgets()
-        # We add it to the manager
-        _, name = os.path.split(self.video_file)
-        self.parent.AddFileRowToManager(
-            name, self.video_file, islocal=True, klv_folder=self.klv_folder
+        task = QgsTask.fromFunction(
+            QCoreApplication.translate("Multiplexor", "MISB Multiplex Task"),
+            self.muxTask,
+            inputVideo=inputVideo,
+            telemetryFile=telemetryFile,
+            outputVideo=outputVideo,
+            ext=ext,
+            addManager=addManager,
+            on_finished=self.muxFinished,
+            flags=QgsTask.Flag.CanCancel,
         )
-        # Close dialog
-        self.close()
-        return
+        self._background_tasks = [
+            t for t in self._background_tasks if t is not None
+        ]
+        self._background_tasks.append(task)
+        QgsApplication.taskManager().addTask(task)
+        self.accept()
 
-    def ReadCSVRecordings(self, csv_raw):
-        """ Read the csv for each recording """
-        rows_list = []
-        time_list = []
-        with open(csv_raw, encoding=encoding) as csvfile:
-            # Prevent “_csv.Error: line contains NULL byte�?
-            data = csvfile.read()
-            data = data.replace("\x00", "?")
-            reader = csv.DictReader(StringIO(data))
-            rows = []
-            index = 0
-            for row in reader:
-                for k in row:
-                    if k == "CUSTOM.isVideo":
-                        if row[k].strip() == "":
-                            if not rows:
-                                continue
-                            else:
-                                rows_list.append(rows)
-                                rows = []
-                        else:
-                            rows.append(index)
-                    if k == "CUSTOM.updateTime":
-                        # Used to set the csv name using Update Time
-                        t = row[k].split(" ")[1].split(":")
-                        time_list.append(t[0] + "_" + t[1] + "_" + t[2])
-                index += 1
+    def _runMuxWithFfmpeg(self, task, inputVideo, packets, outputVideo):
+        """Call pymisb mux, supporting both old and new engine signatures."""
+        import inspect
 
-        if not rows_list:
-            rows_list.append(rows)
-        # Create csv
-        self.CreateDJICsv(rows_list, csv_raw, time_list)
-        return
+        from pymisb.mux.engine import mux_with_ffmpeg
 
-    def CreateDJICsv(self, rows_list, csv_raw, time_list):
-        """ DJI Drone: Create csv result files for each record """
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        QApplication.processEvents()
+        _ensureFfmpegPaths()
+        kwargs = {}
+        params = inspect.signature(mux_with_ffmpeg).parameters
+        if "ffmpeg_path" in params:
+            kwargs["ffmpeg_path"] = _fmv_utils.ffmpeg_path
+        if "task" in params:
+            kwargs["task"] = task
 
-        folder = getVideoFolder(self.video_file)
+        task.setProgress(10)
+        if task.isCanceled():
+            return
+        mux_with_ffmpeg(inputVideo, packets, outputVideo, **kwargs)
+        if task.isCanceled():
+            return
+        if not os.path.isfile(outputVideo) or os.path.getsize(outputVideo) == 0:
+            raise RuntimeError("Mux completed but the output file is missing or empty.")
+        task.setProgress(100)
 
-        qgsu.createFolderByName(folder, "klv")
-        qgsu.createFolderByName(folder, "csv")
+    def muxTask(self, task, inputVideo, telemetryFile, outputVideo, ext, addManager):
+        """Background task: multiplex KLV telemetry into the video stream."""
+        from pymisb.common import build_klv_packets, build_klv_packets_from_txt
 
-        self.klv_folder = os.path.join(folder, "klv")
-        out_csv = os.path.join(folder, "csv")
+        if ext == ".csv":
+            packets = build_klv_packets(telemetryFile)
+        else:
+            packets = build_klv_packets_from_txt(telemetryFile)
 
-        for idx, val in enumerate(rows_list):
-            filename = "_".join(["recording", time_list[idx]])
-            out_record = os.path.join(out_csv, filename + ".csv")
-            # The column that corresponds to the stop is also removed
-            with open(csv_raw, "r", encoding=encoding) as f_input, open(
-                out_record, "w", newline="", encoding=encoding
-            ) as f_output:
-                # Prevent “_csv.Error: line contains NULL byte
-                data = f_input.read()
-                data = data.replace("\x00", "?")
-                csv_input = csv.reader(StringIO(data))
-                csv.writer(f_output).writerows(itertools.islice(csv_input, 0, 1))
-                csv.writer(f_output).writerows(
-                    itertools.islice(csv_input, int(val[0]), int(val[-1]))
-                )
+        if not packets:
+            raise ValueError("No telemetry packets were generated.")
+        if task.isCanceled():
+            return None
 
-            self.cmb_telemetry.addItem(filename, out_record)
+        task.setProgress(5)
+        self._runMuxWithFfmpeg(task, inputVideo, packets, outputVideo)
+        if task.isCanceled():
+            return None
 
-        self.bt_createMISB.setEnabled(True)
-        QApplication.restoreOverrideCursor()
-        QApplication.processEvents()
-        return
+        return {
+            "task": QCoreApplication.translate("Multiplexor", "MISB Multiplex Task"),
+            "output": outputVideo,
+            "addManager": addManager,
+        }
+
+    def muxFinished(self, e, result=None):
+        """Slot: handle MISB multiplex task completion."""
+        if e is None and result:
+            qgsu.showUserAndLogMessage(
+                QCoreApplication.translate("Multiplexor", "MISB video created: ")
+                + result["output"],
+                level=QGis.MessageLevel.Success,
+            )
+            if result.get("addManager") and self._manager is not None:
+                _, name = os.path.split(result["output"])
+                self._manager.AddFileRowToManager(name, result["output"])
+            return
+
+        taskName = (result or {}).get("task", "MISB Multiplex Task")
+        detail = str(e) if e else ""
+        qgsu.showUserAndLogMessage(
+            QCoreApplication.translate("Multiplexor", "MISB video creation failed: ")
+            + taskName,
+            detail,
+            level=QGis.MessageLevel.Critical,
+        )

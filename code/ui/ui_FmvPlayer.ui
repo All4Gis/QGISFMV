@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>PlayerWindow</class>
- <widget class="QMainWindow" name="PlayerWindow">
+ <widget class="QDockWidget" name="PlayerWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1111</width>
-    <height>987</height>
+    <width>653</width>
+    <height>641</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="contextMenuPolicy">
-   <enum>Qt::NoContextMenu</enum>
+   <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
   </property>
   <property name="acceptDrops">
    <bool>true</bool>
@@ -27,768 +27,824 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/icon.png</normaloff>:/imgFMV/images/icon.png</iconset>
+    <normaloff>:/imgFMV/images/misc/icon.png</normaloff>:/imgFMV/images/misc/icon.png</iconset>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
   </property>
   <property name="locale">
-   <locale language="English" country="UnitedStates"/>
+   <locale language="English" country="UnitedStates" />
   </property>
-  <property name="animated">
-   <bool>false</bool>
+  <property name="features">
+   <set>DockWidgetClosable|DockWidgetMovable|DockWidgetFloatable</set>
   </property>
-  <property name="dockNestingEnabled">
-   <bool>true</bool>
+  <property name="allowedAreas">
+   <set>AllDockWidgetAreas</set>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="spacing">
-     <number>5</number>
-    </property>
-    <property name="leftMargin">
-     <number>3</number>
-    </property>
-    <property name="topMargin">
-     <number>7</number>
-    </property>
-    <property name="rightMargin">
-     <number>3</number>
-    </property>
-    <property name="bottomMargin">
-     <number>7</number>
-    </property>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
-      <item>
-       <widget class="QToolButton" name="toolBtn_DPolygon">
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="autoExclusive">
-         <bool>false</bool>
-        </property>
-        <property name="popupMode">
-         <enum>QToolButton::MenuButtonPopup</enum>
-        </property>
-        <property name="autoRaise">
-         <bool>false</bool>
-        </property>
-        <addaction name="actionDraw_Polygon"/>
-        <addaction name="actionDraw_Polygon_remove_last"/>
-        <addaction name="actionDraw_Polygon_remove_all"/>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="toolBtn_DPoint">
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="autoExclusive">
-         <bool>false</bool>
-        </property>
-        <property name="popupMode">
-         <enum>QToolButton::MenuButtonPopup</enum>
-        </property>
-        <property name="autoRaise">
-         <bool>false</bool>
-        </property>
-        <addaction name="actionDraw_Pinpoint"/>
-        <addaction name="actionRemove_Last_Pinpoint"/>
-        <addaction name="actionRemove_All_Pinpoint"/>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="toolBtn_DLine">
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="popupMode">
-         <enum>QToolButton::MenuButtonPopup</enum>
-        </property>
-        <addaction name="actionDraw_Line"/>
-        <addaction name="actionLast_Segment_Line"/>
-        <addaction name="actionRemove_Last_Line"/>
-        <addaction name="actionRemove_All_Line"/>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="toolBtn_Cesure">
-        <property name="cursor">
-         <cursorShape>OpenHandCursor</cursorShape>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="popupMode">
-         <enum>QToolButton::MenuButtonPopup</enum>
-        </property>
-        <addaction name="actionCensure"/>
-        <addaction name="actionRemove_Last_censured"/>
-        <addaction name="actionRemove_All_censured"/>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="toolBtn_Measure">
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="autoExclusive">
-         <bool>false</bool>
-        </property>
-        <property name="popupMode">
-         <enum>QToolButton::MenuButtonPopup</enum>
-        </property>
-        <property name="autoRaise">
-         <bool>false</bool>
-        </property>
-        <addaction name="actionMeasureDistance"/>
-        <addaction name="actionMeasureArea"/>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="VideoWidget" name="videoWidget" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>3</horstretch>
-        <verstretch>3</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>350</height>
-       </size>
-      </property>
-      <property name="mouseTracking">
-       <bool>true</bool>
-      </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
-      </property>
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QWidget {
+  <widget class="QMainWindow" name="playerMainWindow">
+   <property name="animated">
+    <bool>false</bool>
+   </property>
+   <property name="dockNestingEnabled">
+    <bool>false</bool>
+   </property>
+   <widget class="QWidget" name="centralwidget">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <property name="leftMargin">
+      <number>3</number>
+     </property>
+     <property name="topMargin">
+      <number>7</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
+     <property name="bottomMargin">
+      <number>7</number>
+     </property>
+     <item>
+      <widget class="VideoWidget" name="videoWidget" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>3</horstretch>
+         <verstretch>3</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>350</height>
+        </size>
+       </property>
+       <property name="mouseTracking">
+        <bool>true</bool>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+       </property>
+       <property name="toolTip">
+        <string />
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QWidget {
  background-color:black;
  } </string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QSlider" name="sliderDuration">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>100</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="labelDuration">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="lb_prec_ts">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="groupBox">
-      <property name="title">
-       <string>Video Tools</string>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QPushButton" name="btn_Rec">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
+        <widget class="QSlider" name="sliderDuration">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Record&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <property name="minimum">
+          <number>0</number>
          </property>
-         <property name="text">
-          <string/>
+         <property name="maximum">
+          <number>100</number>
          </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/record.png</normaloff>
-           <normalon>:/imgFMV/images/rec_on.png</normalon>:/imgFMV/images/record.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+R</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_GeoReferencing">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create Mosaic&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/mosaic.png</normaloff>:/imgFMV/images/mosaic.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+M</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="lb_cursor_coord">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QComboBox" name="cmb_cursorCoord">
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="sizeAdjustPolicy">
-          <enum>QComboBox::AdjustToContents</enum>
-         </property>
-         <item>
-          <property name="text">
-           <string>WGS84</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>MGRS</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_CaptureFrame">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capture current frame&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
+        <widget class="QLabel" name="labelDuration">
          <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/screenshot.png</normaloff>:/imgFMV/images/screenshot.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+Q</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
+          <string />
          </property>
         </widget>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="gb_PlayerControls">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QGroupBox::indicator {
+     </item>
+     <item>
+      <widget class="TimelineWidget" name="timeline" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Timeline — click to seek</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lb_prec_ts">
+       <property name="text">
+        <string />
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Video Tools</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QPushButton" name="btn_Rec">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Record&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string />
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/misc/record.png</normaloff>:/imgFMV/images/misc/record.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+R</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_GeoReferencing">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create Mosaic&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string />
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/misc/mosaic.png</normaloff>:/imgFMV/images/misc/mosaic.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+M</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="lb_cursor_coord">
+          <property name="text">
+           <string />
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cmb_cursorCoord">
+          <property name="styleSheet">
+           <string notr="true" />
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+          </property>
+          <item>
+           <property name="text">
+            <string>WGS84</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>MGRS</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_CaptureFrame">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Capture current frame&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string />
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/misc/screenshot.png</normaloff>:/imgFMV/images/misc/screenshot.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+Q</string>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="gb_PlayerControls">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QGroupBox::indicator {
                  width: 13px;
                  height: 13px;
             }  
            QGroupBox::indicator:unchecked {
-                 image: url(:/imgFMV/images/up.png);
+                 image: url(:/imgFMV/images/misc/up.png);
             }
            QGroupBox::indicator:checked {
-               image: url(:/imgFMV/images/down.png);
+               image: url(:/imgFMV/images/misc/down.png);
                 }</string>
-      </property>
-      <property name="title">
-       <string>Controls</string>
-      </property>
-      <property name="flat">
-       <bool>true</bool>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="btn_previous">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Start Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/skip-previous.png</normaloff>:/imgFMV/images/skip-previous.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+Left</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_rewind">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rewind&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/fast-rewind.png</normaloff>:/imgFMV/images/fast-rewind.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Left</string>
-         </property>
-         <property name="checkable">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_stop">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/stop.png</normaloff>:/imgFMV/images/stop.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+S</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_play">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Play/Pause&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/play-arrow.png</normaloff>:/imgFMV/images/play-arrow.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+P</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_forward">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Forward&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/fast-forward.png</normaloff>:/imgFMV/images/fast-forward.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Right</string>
-         </property>
-         <property name="checkable">
-          <bool>false</bool>
-         </property>
-         <property name="autoDefault">
-          <bool>true</bool>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_next">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;End Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/skip-next.png</normaloff>:/imgFMV/images/skip-next.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+Right</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_repeat">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/imgFMV/images/repeat.png</normaloff>:/imgFMV/images/repeat.png</iconset>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+L</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QFormLayout" name="formLayout">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-         </property>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="btn_volume">
-           <property name="cursor">
-            <cursorShape>PointingHandCursor</cursorShape>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::NoContextMenu</enum>
-           </property>
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mute/Unmute&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="statusTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/imgFMV/images/volume_up.png</normaloff>:/imgFMV/images/volume_up.png</iconset>
-           </property>
-           <property name="shortcut">
-            <string>Ctrl+U</string>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSlider" name="volumeSlider">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Volume&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="maximum">
-            <number>100</number>
-           </property>
-           <property name="value">
-            <number>100</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="v_label">
-         <property name="styleSheet">
-          <string notr="true">color: #898989</string>
-         </property>
-         <property name="text">
-          <string>100%</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QMenuBar" name="menubarwidget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1111</width>
-     <height>39</height>
-    </rect>
-   </property>
-   <property name="contextMenuPolicy">
-    <enum>Qt::CustomContextMenu</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QMenuBar {
+       </property>
+       <property name="title">
+        <string>Controls</string>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="btn_previous">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Start Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string />
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/player/skip-previous.png</normaloff>:/imgFMV/images/player/skip-previous.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+Left</string>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_rewind">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rewind&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string />
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/player/fast-rewind.png</normaloff>:/imgFMV/images/player/fast-rewind.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Left</string>
+          </property>
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_stop">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string />
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/player/stop.png</normaloff>:/imgFMV/images/player/stop.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+S</string>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_play">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Play/Pause&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string />
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/player/play-arrow.png</normaloff>:/imgFMV/images/player/play-arrow.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+P</string>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_forward">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Forward&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string />
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/player/fast-forward.png</normaloff>:/imgFMV/images/player/fast-forward.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Right</string>
+          </property>
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <property name="autoDefault">
+           <bool>true</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_next">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;End Of Media&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string />
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/player/skip-next.png</normaloff>:/imgFMV/images/player/skip-next.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+Right</string>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_repeat">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string />
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/imgFMV/images/player/repeat.png</normaloff>:/imgFMV/images/player/repeat.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+L</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QFormLayout" name="formLayout">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::FieldGrowthPolicy::AllNonFixedFieldsGrow</enum>
+          </property>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="btn_volume">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mute/Unmute&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="statusTip">
+             <string />
+            </property>
+            <property name="whatsThis">
+             <string />
+            </property>
+            <property name="text">
+             <string />
+            </property>
+            <property name="icon">
+             <iconset resource="resources.qrc">
+              <normaloff>:/imgFMV/images/player/volume_up.png</normaloff>:/imgFMV/images/player/volume_up.png</iconset>
+            </property>
+            <property name="shortcut">
+             <string>Ctrl+U</string>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSlider" name="volumeSlider">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Volume&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="v_label">
+          <property name="styleSheet">
+           <string notr="true">color: #898989</string>
+          </property>
+          <property name="text">
+           <string>100%</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QMenuBar" name="menubarwidget">
+    <property name="nativeMenuBar">
+     <bool>false</bool>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QMenuBar {
     background-color: transparent;
 }</string>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>Filters</string>
     </property>
-    <addaction name="actionGray"/>
-    <addaction name="actionInvert_Color"/>
-    <addaction name="actionMono_Filter"/>
-    <addaction name="actionCanny_edge_detection"/>
-    <addaction name="actionAuto_Contrast_Filter"/>
-    <addaction name="actionMirroredH"/>
-    <addaction name="actionNDVI"/>
+    <widget class="QMenu" name="menuFile">
+     <property name="title">
+      <string>Filters</string>
+     </property>
+     <addaction name="actionGray" />
+     <addaction name="actionInvert_Color" />
+     <addaction name="actionMono_Filter" />
+     <addaction name="actionMirroredH" />
+     <addaction name="separator" />
+     <addaction name="actionCanny_edge_detection" />
+     <addaction name="actionAuto_Contrast_Filter" />
+     <addaction name="actionBrightness_Contrast" />
+     <addaction name="separator" />
+     <addaction name="actionCLAHE" />
+     <addaction name="actionSharpen" />
+     <addaction name="actionSobel" />
+     <addaction name="actionRoad_Enhance" />
+     <addaction name="separator" />
+     <addaction name="actionMotion_Detection" />
+     <addaction name="actionBackground_Subtraction" />
+     <addaction name="actionHotspot" />
+     <addaction name="separator" />
+     <addaction name="actionFalse_Color" />
+     <addaction name="actionExG" />
+     <addaction name="actionExR" />
+     <addaction name="actionVARI" />
+     <addaction name="actionNRVI" />
+     <addaction name="actionDehaze" />
+     <addaction name="separator" />
+     <addaction name="actionBuilding_Detection" />
+     <addaction name="actionRoad_Segmentation" />
+     <addaction name="actionVehicle_Segmentation" />
+     <addaction name="actionPerson_Segmentation" />
+     <addaction name="separator" />
+     <addaction name="actionFire_Detection" />
+     <addaction name="actionSmoke_Detection" />
+     <addaction name="actionFlood_Detection" />
+    </widget>
+    <widget class="QMenu" name="menuFrames">
+     <property name="title">
+      <string>Frames</string>
+     </property>
+     <addaction name="actionCapture_Current_Frame" />
+     <addaction name="actionCapture_Georeferenced_Frame" />
+     <addaction name="actionExtract_All_Frames" />
+    </widget>
+    <widget class="QMenu" name="menuMetadata">
+     <property name="title">
+      <string>Metadata</string>
+     </property>
+     <addaction name="actionShow_Metadata" />
+    </widget>
+    <widget class="QMenu" name="menuConverter">
+     <property name="title">
+      <string>Converter</string>
+     </property>
+     <addaction name="actionConverter_Video" />
+    </widget>
+    <widget class="QMenu" name="menuInfo">
+     <property name="title">
+      <string>Information</string>
+     </property>
+     <addaction name="actionShow_Video_Info" />
+     <addaction name="separator" />
+     <addaction name="actionSave_Video_Info" />
+    </widget>
+    <widget class="QMenu" name="menuPlot_Bitrate">
+     <property name="title">
+      <string>Plot Bitrate</string>
+     </property>
+     <addaction name="actionAudio" />
+     <addaction name="actionVideo" />
+     <addaction name="separator" />
+     <addaction name="actionSave_Audio" />
+     <addaction name="actionSave_Video" />
+    </widget>
+    <widget class="QMenu" name="menuMap">
+     <property name="title">
+      <string>Map</string>
+     </property>
+     <addaction name="actionCenter_on_Platform" />
+     <addaction name="actionCenter_on_Footprint" />
+     <addaction name="actionCenter_Target" />
+    </widget>
+    <widget class="QMenu" name="menuTools">
+     <property name="title">
+      <string>Tools</string>
+     </property>
+     <addaction name="actionToggle_HUD" />
+     <addaction name="actionToggle_MiniMap" />
+     <addaction name="separator" />
+     <addaction name="actionToggle_Snapshots" />
+     <addaction name="separator" />
+     <addaction name="actionToggle_Alerts" />
+     <addaction name="actionAdd_Alert" />
+     <addaction name="actionClear_Alerts" />
+     <addaction name="separator" />
+     <addaction name="actionToggle_SensorCone" />
+     <addaction name="actionToggle_DistanceRings" />
+     <addaction name="separator" />
+     <addaction name="actionExport_KML" />
+     <addaction name="actionExport_GPX" />
+    </widget>
+    <addaction name="menuFile" />
+    <addaction name="menuFrames" />
+    <addaction name="menuMetadata" />
+    <addaction name="menuConverter" />
+    <addaction name="menuInfo" />
+    <addaction name="menuPlot_Bitrate" />
+    <addaction name="menuMap" />
+    <addaction name="separator" />
+    <addaction name="menuTools" />
    </widget>
-   <widget class="QMenu" name="menuFrames">
-    <property name="title">
-     <string>Frames</string>
+   <widget class="QStatusBar" name="statusbar" />
+   <widget class="QToolBar" name="DrawToolBar">
+    <property name="windowTitle">
+     <string>Utils ToolBar</string>
     </property>
-    <addaction name="actionCapture_Current_Frame"/>
-    <addaction name="actionCapture_Georeferenced_Frame"/>
-    <addaction name="actionExtract_All_Frames"/>
-   </widget>
-   <widget class="QMenu" name="menuMetadata">
-    <property name="title">
-     <string>Metadata</string>
+    <property name="toolTip">
+     <string>Utils ToolBar</string>
     </property>
-    <addaction name="actionShow_Metadata"/>
+    <attribute name="toolBarArea">
+     <enum>TopToolBarArea</enum>
+    </attribute>
+    <attribute name="toolBarBreak">
+     <bool>false</bool>
+    </attribute>
+    <addaction name="actionMagnifying_glass" />
+    <addaction name="separator" />
+    <widget class="QToolButton" name="toolBtn_DPolygon">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="text">
+      <string />
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
+     </property>
+     <property name="popupMode">
+      <enum>QToolButton::MenuButtonPopup</enum>
+     </property>
+     <property name="autoRaise">
+      <bool>false</bool>
+     </property>
+     <addaction name="actionDraw_Polygon" />
+     <addaction name="actionDraw_Polygon_remove_last" />
+     <addaction name="actionDraw_Polygon_remove_all" />
+    </widget>
+    <widget class="QToolButton" name="toolBtn_DPoint">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="text">
+      <string />
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
+     </property>
+     <property name="popupMode">
+      <enum>QToolButton::MenuButtonPopup</enum>
+     </property>
+     <property name="autoRaise">
+      <bool>false</bool>
+     </property>
+     <addaction name="actionDraw_Pinpoint" />
+     <addaction name="actionRemove_Last_Pinpoint" />
+     <addaction name="actionRemove_All_Pinpoint" />
+    </widget>
+    <widget class="QToolButton" name="toolBtn_DLine">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="text">
+      <string />
+     </property>
+     <property name="popupMode">
+      <enum>QToolButton::MenuButtonPopup</enum>
+     </property>
+     <addaction name="actionDraw_Line" />
+     <addaction name="actionLast_Segment_Line" />
+     <addaction name="actionRemove_Last_Line" />
+     <addaction name="actionRemove_All_Line" />
+    </widget>
+    <addaction name="actionMilitary_Symbols" />
+    <addaction name="separator" />
+    <widget class="QToolButton" name="toolBtn_Measure">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="text">
+      <string />
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
+     </property>
+     <property name="popupMode">
+      <enum>QToolButton::MenuButtonPopup</enum>
+     </property>
+     <property name="autoRaise">
+      <bool>false</bool>
+     </property>
+     <addaction name="actionMeasureDistance" />
+     <addaction name="actionMeasureArea" />
+     <addaction name="separator" />
+     <addaction name="actionRemove_Last_MeasureDistance" />
+     <addaction name="actionRemove_All_MeasureDistance" />
+     <addaction name="separator" />
+     <addaction name="actionRemove_Last_MeasureArea" />
+     <addaction name="actionRemove_All_MeasureArea" />
+    </widget>
+    <addaction name="separator" />
+    <widget class="QToolButton" name="toolBtn_Cesure">
+     <property name="cursor">
+      <cursorShape>OpenHandCursor</cursorShape>
+     </property>
+     <property name="text">
+      <string />
+     </property>
+     <property name="popupMode">
+      <enum>QToolButton::MenuButtonPopup</enum>
+     </property>
+     <addaction name="actionCensure" />
+     <addaction name="actionRemove_Last_censured" />
+     <addaction name="actionRemove_All_censured" />
+    </widget>
+    <addaction name="separator" />
+    <addaction name="actionStamp" />
+    <addaction name="separator" />
+    <addaction name="actionObject_Tracking" />
    </widget>
-   <widget class="QMenu" name="menuConverter">
-    <property name="title">
-     <string>Converter</string>
-    </property>
-    <addaction name="actionConverter_Video"/>
-   </widget>
-   <widget class="QMenu" name="menuInfo">
-    <property name="title">
-     <string>Information</string>
-    </property>
-    <addaction name="actionShow_Video_Info"/>
-    <addaction name="separator"/>
-    <addaction name="actionSave_Video_Info"/>
-   </widget>
-   <widget class="QMenu" name="menuPlot_Bitrate">
-    <property name="title">
-     <string>Plot Bitrate</string>
-    </property>
-    <addaction name="actionAudio"/>
-    <addaction name="actionVideo"/>
-    <addaction name="separator"/>
-    <addaction name="actionSave_Audio"/>
-    <addaction name="actionSave_Video"/>
-   </widget>
-   <widget class="QMenu" name="menuMap">
-    <property name="title">
-     <string>Map</string>
-    </property>
-    <addaction name="actionCenter_on_Platform"/>
-    <addaction name="actionCenter_on_Footprint"/>
-    <addaction name="actionCenter_Target"/>
-   </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuFrames"/>
-   <addaction name="menuMetadata"/>
-   <addaction name="menuConverter"/>
-   <addaction name="menuInfo"/>
-   <addaction name="menuPlot_Bitrate"/>
-   <addaction name="menuMap"/>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QToolBar" name="DrawToolBar">
-   <property name="windowTitle">
-    <string>Utils ToolBar</string>
-   </property>
-   <property name="toolTip">
-    <string>Utils ToolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <action name="actionGray">
    <property name="checkable">
@@ -796,24 +852,16 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/grayscale.png</normaloff>:/imgFMV/images/grayscale.png</iconset>
+     <normaloff>:/imgFMV/images/misc/grayscale.png</normaloff>:/imgFMV/images/misc/grayscale.png</iconset>
    </property>
    <property name="text">
     <string>Gray Scale</string>
    </property>
   </action>
-  <action name="actionEdge_Detection">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Edge Detection</string>
-   </property>
-  </action>
   <action name="actionCapture_Current_Frame">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/screenshot.png</normaloff>:/imgFMV/images/screenshot.png</iconset>
+     <normaloff>:/imgFMV/images/misc/screenshot.png</normaloff>:/imgFMV/images/misc/screenshot.png</iconset>
    </property>
    <property name="text">
     <string>Capture Current Frame</string>
@@ -822,13 +870,13 @@
     <string>Ctrl+Q</string>
    </property>
    <property name="priority">
-    <enum>QAction::HighPriority</enum>
+    <enum>QAction::Priority::HighPriority</enum>
    </property>
   </action>
   <action name="actionExtract_All_Frames">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/capture_all_frames.png</normaloff>:/imgFMV/images/capture_all_frames.png</iconset>
+     <normaloff>:/imgFMV/images/misc/capture_all_frames.png</normaloff>:/imgFMV/images/misc/capture_all_frames.png</iconset>
    </property>
    <property name="text">
     <string>Extract All Frames</string>
@@ -837,13 +885,13 @@
     <string>Ctrl+A</string>
    </property>
    <property name="priority">
-    <enum>QAction::HighPriority</enum>
+    <enum>QAction::Priority::HighPriority</enum>
    </property>
   </action>
   <action name="actionShow_Metadata">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/show-metadata.png</normaloff>:/imgFMV/images/show-metadata.png</iconset>
+     <normaloff>:/imgFMV/images/export/show-metadata.png</normaloff>:/imgFMV/images/export/show-metadata.png</iconset>
    </property>
    <property name="text">
     <string>Show Metadata</string>
@@ -852,13 +900,13 @@
     <string>Ctrl+T</string>
    </property>
    <property name="priority">
-    <enum>QAction::HighPriority</enum>
+    <enum>QAction::Priority::HighPriority</enum>
    </property>
   </action>
   <action name="actionConverter_Video">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/video-converter.png</normaloff>:/imgFMV/images/video-converter.png</iconset>
+     <normaloff>:/imgFMV/images/export/video-converter.png</normaloff>:/imgFMV/images/export/video-converter.png</iconset>
    </property>
    <property name="text">
     <string>Converter Video</string>
@@ -867,7 +915,7 @@
   <action name="actionSave_Video_Info">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/save-video-info.png</normaloff>:/imgFMV/images/save-video-info.png</iconset>
+     <normaloff>:/imgFMV/images/export/save-video-info.png</normaloff>:/imgFMV/images/export/save-video-info.png</iconset>
    </property>
    <property name="text">
     <string>Save Video Info to Json</string>
@@ -876,7 +924,7 @@
   <action name="actionAudio">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/show-bitrate.png</normaloff>:/imgFMV/images/show-bitrate.png</iconset>
+     <normaloff>:/imgFMV/images/export/show-bitrate.png</normaloff>:/imgFMV/images/export/show-bitrate.png</iconset>
    </property>
    <property name="text">
     <string>Show Audio</string>
@@ -885,7 +933,7 @@
   <action name="actionVideo">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/show-bitrate.png</normaloff>:/imgFMV/images/show-bitrate.png</iconset>
+     <normaloff>:/imgFMV/images/export/show-bitrate.png</normaloff>:/imgFMV/images/export/show-bitrate.png</iconset>
    </property>
    <property name="text">
     <string>Show Video</string>
@@ -899,7 +947,7 @@
   <action name="actionSave_Audio">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/save-bitrate.png</normaloff>:/imgFMV/images/save-bitrate.png</iconset>
+     <normaloff>:/imgFMV/images/export/save-bitrate.png</normaloff>:/imgFMV/images/export/save-bitrate.png</iconset>
    </property>
    <property name="text">
     <string>Save Audio</string>
@@ -908,7 +956,7 @@
   <action name="actionSave_Video">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/save-bitrate.png</normaloff>:/imgFMV/images/save-bitrate.png</iconset>
+     <normaloff>:/imgFMV/images/export/save-bitrate.png</normaloff>:/imgFMV/images/export/save-bitrate.png</iconset>
    </property>
    <property name="text">
     <string>Save Video</string>
@@ -922,7 +970,7 @@
   <action name="actionShow_Video_Info">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/video-info.png</normaloff>:/imgFMV/images/video-info.png</iconset>
+     <normaloff>:/imgFMV/images/export/video-info.png</normaloff>:/imgFMV/images/export/video-info.png</iconset>
    </property>
    <property name="text">
     <string>Show Video Info</string>
@@ -934,7 +982,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/invert-colors.png</normaloff>:/imgFMV/images/invert-colors.png</iconset>
+     <normaloff>:/imgFMV/images/misc/invert-colors.png</normaloff>:/imgFMV/images/misc/invert-colors.png</iconset>
    </property>
    <property name="text">
     <string>Invert Color</string>
@@ -946,7 +994,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/mono.png</normaloff>:/imgFMV/images/mono.png</iconset>
+     <normaloff>:/imgFMV/images/misc/mono.png</normaloff>:/imgFMV/images/misc/mono.png</iconset>
    </property>
    <property name="text">
     <string>Mono Filter</string>
@@ -958,21 +1006,10 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/canny.png</normaloff>:/imgFMV/images/canny.png</iconset>
+     <normaloff>:/imgFMV/images/misc/canny.png</normaloff>:/imgFMV/images/misc/canny.png</iconset>
    </property>
    <property name="text">
     <string>Canny edge detection</string>
-   </property>
-  </action>
-  <action name="actionZoom_Rectangle">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Zoom Rectangle</string>
    </property>
   </action>
   <action name="actionMagnifying_glass">
@@ -981,7 +1018,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/magnifier-glass.png</normaloff>:/imgFMV/images/magnifier-glass.png</iconset>
+     <normaloff>:/imgFMV/images/misc/magnifier-glass.png</normaloff>:/imgFMV/images/misc/magnifier-glass.png</iconset>
    </property>
    <property name="text">
     <string>Magnifying glass</string>
@@ -993,7 +1030,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/automatic-contrast.png</normaloff>:/imgFMV/images/automatic-contrast.png</iconset>
+     <normaloff>:/imgFMV/images/misc/automatic-contrast.png</normaloff>:/imgFMV/images/misc/automatic-contrast.png</iconset>
    </property>
    <property name="text">
     <string>Auto Contrast Filter</string>
@@ -1002,7 +1039,7 @@
   <action name="actionCreate_Mosaic">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/mosaic.png</normaloff>:/imgFMV/images/mosaic.png</iconset>
+     <normaloff>:/imgFMV/images/misc/mosaic.png</normaloff>:/imgFMV/images/misc/mosaic.png</iconset>
    </property>
    <property name="text">
     <string>Create Mosaic</string>
@@ -1014,7 +1051,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw-point.png</normaloff>:/imgFMV/images/draw-point.png</iconset>
+     <normaloff>:/imgFMV/images/draw/draw-point.png</normaloff>:/imgFMV/images/draw/draw-point.png</iconset>
    </property>
    <property name="text">
     <string>Draw Pinpoint</string>
@@ -1026,7 +1063,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw-polyline.png</normaloff>:/imgFMV/images/draw-polyline.png</iconset>
+     <normaloff>:/imgFMV/images/draw/draw-polyline.png</normaloff>:/imgFMV/images/draw/draw-polyline.png</iconset>
    </property>
    <property name="text">
     <string>Draw Line</string>
@@ -1038,7 +1075,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw-polygon.png</normaloff>:/imgFMV/images/draw-polygon.png</iconset>
+     <normaloff>:/imgFMV/images/draw/draw-polygon.png</normaloff>:/imgFMV/images/draw/draw-polygon.png</iconset>
    </property>
    <property name="text">
     <string>Draw Polygon</string>
@@ -1056,7 +1093,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/object-tracking.png</normaloff>:/imgFMV/images/object-tracking.png</iconset>
+     <normaloff>:/imgFMV/images/misc/object-tracking.png</normaloff>:/imgFMV/images/misc/object-tracking.png</iconset>
    </property>
    <property name="text">
     <string>Object Tracking</string>
@@ -1068,7 +1105,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/rubber-stamp.png</normaloff>:/imgFMV/images/rubber-stamp.png</iconset>
+     <normaloff>:/imgFMV/images/misc/rubber-stamp.png</normaloff>:/imgFMV/images/misc/rubber-stamp.png</iconset>
    </property>
    <property name="text">
     <string>Stamp</string>
@@ -1080,7 +1117,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/ruler.png</normaloff>:/imgFMV/images/ruler.png</iconset>
+     <normaloff>:/imgFMV/images/overlays/ruler.png</normaloff>:/imgFMV/images/overlays/ruler.png</iconset>
    </property>
    <property name="text">
     <string>Measure Distance</string>
@@ -1092,10 +1129,58 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/ruler_surface.png</normaloff>:/imgFMV/images/ruler_surface.png</iconset>
+     <normaloff>:/imgFMV/images/overlays/ruler_surface.png</normaloff>:/imgFMV/images/overlays/ruler_surface.png</iconset>
    </property>
    <property name="text">
     <string>Measure Area</string>
+   </property>
+  </action>
+  <action name="actionRemove_Last_MeasureDistance">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/ruler-remove-last.svg</normaloff>:/imgFMV/images/overlays/ruler-remove-last.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Last Distance</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Last Distance Measurement</string>
+   </property>
+  </action>
+  <action name="actionRemove_All_MeasureDistance">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/ruler-remove-all.svg</normaloff>:/imgFMV/images/overlays/ruler-remove-all.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Remove All Distances</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove All Distance Measurements</string>
+   </property>
+  </action>
+  <action name="actionRemove_Last_MeasureArea">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/ruler-remove-last.svg</normaloff>:/imgFMV/images/overlays/ruler-remove-last.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Last Area</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Last Area Measurement</string>
+   </property>
+  </action>
+  <action name="actionRemove_All_MeasureArea">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/ruler-remove-all.svg</normaloff>:/imgFMV/images/overlays/ruler-remove-all.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Remove All Areas</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove All Area Measurements</string>
    </property>
   </action>
   <action name="actionHandDraw">
@@ -1104,7 +1189,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/HandDraw.png</normaloff>:/imgFMV/images/HandDraw.png</iconset>
+     <normaloff>:/imgFMV/images/draw/HandDraw.png</normaloff>:/imgFMV/images/draw/HandDraw.png</iconset>
    </property>
    <property name="text">
     <string>Hand Draw</string>
@@ -1116,7 +1201,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/mirrored.png</normaloff>:/imgFMV/images/mirrored.png</iconset>
+     <normaloff>:/imgFMV/images/misc/mirrored.png</normaloff>:/imgFMV/images/misc/mirrored.png</iconset>
    </property>
    <property name="text">
     <string>Horizontal Mirrored</string>
@@ -1128,7 +1213,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/censure-pencil.png</normaloff>:/imgFMV/images/censure-pencil.png</iconset>
+     <normaloff>:/imgFMV/images/draw/censure-pencil.png</normaloff>:/imgFMV/images/draw/censure-pencil.png</iconset>
    </property>
    <property name="text">
     <string>Censure</string>
@@ -1140,7 +1225,7 @@
   <action name="actionRemove_Last_censured">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/censure-pencil-remove-last.png</normaloff>:/imgFMV/images/censure-pencil-remove-last.png</iconset>
+     <normaloff>:/imgFMV/images/draw/censure-pencil-remove-last.png</normaloff>:/imgFMV/images/draw/censure-pencil-remove-last.png</iconset>
    </property>
    <property name="text">
     <string>Remove Last</string>
@@ -1149,7 +1234,7 @@
   <action name="actionRemove_All_censured">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/censure-pencil-remove-all.png</normaloff>:/imgFMV/images/censure-pencil-remove-all.png</iconset>
+     <normaloff>:/imgFMV/images/draw/censure-pencil-remove-all.png</normaloff>:/imgFMV/images/draw/censure-pencil-remove-all.png</iconset>
    </property>
    <property name="text">
     <string>Remove All</string>
@@ -1161,7 +1246,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw-polygon-remove-last.png</normaloff>:/imgFMV/images/draw-polygon-remove-last.png</iconset>
+     <normaloff>:/imgFMV/images/draw/draw-polygon-remove-last.png</normaloff>:/imgFMV/images/draw/draw-polygon-remove-last.png</iconset>
    </property>
    <property name="text">
     <string>Remove Last Polygon</string>
@@ -1179,7 +1264,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw-polygon-remove-all.png</normaloff>:/imgFMV/images/draw-polygon-remove-all.png</iconset>
+     <normaloff>:/imgFMV/images/draw/draw-polygon-remove-all.png</normaloff>:/imgFMV/images/draw/draw-polygon-remove-all.png</iconset>
    </property>
    <property name="text">
     <string>Remove All Polygon</string>
@@ -1197,7 +1282,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw-point-remove-last.png</normaloff>:/imgFMV/images/draw-point-remove-last.png</iconset>
+     <normaloff>:/imgFMV/images/draw/draw-point-remove-last.png</normaloff>:/imgFMV/images/draw/draw-point-remove-last.png</iconset>
    </property>
    <property name="text">
     <string>Remove Last Pinpoint</string>
@@ -1212,7 +1297,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw-point-remove-all.png</normaloff>:/imgFMV/images/draw-point-remove-all.png</iconset>
+     <normaloff>:/imgFMV/images/draw/draw-point-remove-all.png</normaloff>:/imgFMV/images/draw/draw-point-remove-all.png</iconset>
    </property>
    <property name="text">
     <string>Remove All Pinpoint</string>
@@ -1227,7 +1312,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw-polyline-remove-all.png</normaloff>:/imgFMV/images/draw-polyline-remove-all.png</iconset>
+     <normaloff>:/imgFMV/images/draw/draw-polyline-remove-all.png</normaloff>:/imgFMV/images/draw/draw-polyline-remove-all.png</iconset>
    </property>
    <property name="text">
     <string>Remove All</string>
@@ -1242,7 +1327,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw-polyline-remove-last-segment.png</normaloff>:/imgFMV/images/draw-polyline-remove-last-segment.png</iconset>
+     <normaloff>:/imgFMV/images/draw/draw-polyline-remove-last-segment.png</normaloff>:/imgFMV/images/draw/draw-polyline-remove-last-segment.png</iconset>
    </property>
    <property name="text">
     <string>Remove Last Segment</string>
@@ -1257,7 +1342,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw-polyline-remove-last.png</normaloff>:/imgFMV/images/draw-polyline-remove-last.png</iconset>
+     <normaloff>:/imgFMV/images/draw/draw-polyline-remove-last.png</normaloff>:/imgFMV/images/draw/draw-polyline-remove-last.png</iconset>
    </property>
    <property name="text">
     <string>Remove Last Line</string>
@@ -1272,7 +1357,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/center_platform.png</normaloff>:/imgFMV/images/center_platform.png</iconset>
+     <normaloff>:/imgFMV/images/overlays/center_platform.png</normaloff>:/imgFMV/images/overlays/center_platform.png</iconset>
    </property>
    <property name="text">
     <string>Center on Platform</string>
@@ -1282,12 +1367,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/center_footprint.png</normaloff>:/imgFMV/images/center_footprint.png</iconset>
+     <normaloff>:/imgFMV/images/overlays/center_footprint.png</normaloff>:/imgFMV/images/overlays/center_footprint.png</iconset>
    </property>
    <property name="text">
     <string>Center on Footprint</string>
@@ -1302,39 +1384,472 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/center_target.png</normaloff>:/imgFMV/images/center_target.png</iconset>
+     <normaloff>:/imgFMV/images/overlays/center_target.png</normaloff>:/imgFMV/images/overlays/center_target.png</iconset>
    </property>
    <property name="text">
     <string>Center on Target</string>
    </property>
   </action>
-  <action name="actionNDVI">
+  <action name="actionBrightness_Contrast">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/ndvi.png</normaloff>:/imgFMV/images/ndvi.png</iconset>
+     <normaloff>:/imgFMV/images/misc/brightness-contrast.png</normaloff>:/imgFMV/images/misc/brightness-contrast.png</iconset>
    </property>
    <property name="text">
-    <string>NDVI (experimental)</string>
+    <string>Brightness / Contrast</string>
+   </property>
+  </action>
+  <action name="actionCLAHE">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/clahe.svg</normaloff>:/imgFMV/images/filters/clahe.svg</iconset>
+   </property>
+   <property name="text">
+    <string>CLAHE (Adaptive Contrast)</string>
+   </property>
+  </action>
+  <action name="actionSharpen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/sharpen.svg</normaloff>:/imgFMV/images/filters/sharpen.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Sharpen (Unsharp Mask)</string>
+   </property>
+  </action>
+  <action name="actionSobel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/sobel.svg</normaloff>:/imgFMV/images/filters/sobel.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Sobel Edge Detection</string>
+   </property>
+  </action>
+  <action name="actionRoad_Enhance">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/road.svg</normaloff>:/imgFMV/images/filters/road.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Road &amp; Structure Enhancement</string>
+   </property>
+  </action>
+  <action name="actionMotion_Detection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/motion.svg</normaloff>:/imgFMV/images/filters/motion.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Motion Detection</string>
+   </property>
+  </action>
+  <action name="actionBackground_Subtraction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/bgsub.svg</normaloff>:/imgFMV/images/filters/bgsub.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Background Subtraction (MOG2)</string>
+   </property>
+  </action>
+  <action name="actionHotspot">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/hotspot.svg</normaloff>:/imgFMV/images/filters/hotspot.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Hotspot Detection</string>
+   </property>
+  </action>
+  <action name="actionFalse_Color">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/falsecolor.svg</normaloff>:/imgFMV/images/filters/falsecolor.svg</iconset>
+   </property>
+   <property name="text">
+    <string>False Color (Turbo LUT)</string>
+   </property>
+  </action>
+  <action name="actionExG">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/exg.svg</normaloff>:/imgFMV/images/filters/exg.svg</iconset>
+   </property>
+   <property name="text">
+    <string>ExG (Excess Green)</string>
+   </property>
+   <property name="toolTip">
+    <string>Excess Green index: ExG = 2G − R − B (highlights green vegetation)</string>
+   </property>
+  </action>
+  <action name="actionExR">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/exr.svg</normaloff>:/imgFMV/images/filters/exr.svg</iconset>
+   </property>
+   <property name="text">
+    <string>ExR (Excess Red)</string>
+   </property>
+   <property name="toolTip">
+    <string>Excess Red index: ExR = 1.4R − G (highlights soil / red-dominant surfaces)</string>
+   </property>
+  </action>
+  <action name="actionVARI">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/vari.svg</normaloff>:/imgFMV/images/filters/vari.svg</iconset>
+   </property>
+   <property name="text">
+    <string>VARI</string>
+   </property>
+   <property name="toolTip">
+    <string>Visible Atmospherically Resistant Index: (G − R) / (G + R − B)</string>
+   </property>
+  </action>
+  <action name="actionDehaze">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/dehaze.svg</normaloff>:/imgFMV/images/filters/dehaze.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Dehaze (CLAHE Enhancement)</string>
+   </property>
+  </action>
+  <action name="actionNRVI">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/nrvi.svg</normaloff>:/imgFMV/images/filters/nrvi.svg</iconset>
+   </property>
+   <property name="text">
+    <string>NRVI (Vegetation Index)</string>
+   </property>
+   <property name="toolTip">
+    <string>Normalized Ratio Vegetation Index — (NIR−Red)/(NIR+Red); green channel used as NIR proxy for RGB video</string>
+   </property>
+  </action>
+  <action name="actionBuilding_Detection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/building.svg</normaloff>:/imgFMV/images/filters/building.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Building Segmentation (CV + AI)</string>
+   </property>
+   <property name="toolTip">
+    <string>Building structures — smart CV with optional custom YOLO ONNX (FMV Settings).</string>
+   </property>
+  </action>
+  <action name="actionRoad_Segmentation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/roadseg.svg</normaloff>:/imgFMV/images/filters/roadseg.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Road Segmentation (CV + AI)</string>
+   </property>
+   <property name="toolTip">
+    <string>Road/asphalt segmentation — smart CV with optional custom YOLO ONNX.</string>
+   </property>
+  </action>
+  <action name="actionVehicle_Segmentation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/vehicle.svg</normaloff>:/imgFMV/images/filters/vehicle.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Vehicle Segmentation (YOLO AI)</string>
+   </property>
+   <property name="toolTip">
+    <string>VisDrone YOLO detection for aerial vehicles; falls back to smart CV when YOLO finds nothing.</string>
+   </property>
+  </action>
+  <action name="actionPerson_Segmentation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/person.svg</normaloff>:/imgFMV/images/filters/person.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Person Segmentation (YOLO AI)</string>
+   </property>
+   <property name="toolTip">
+    <string>VisDrone YOLO person detection for FMV; smart CV fallback when no ONNX hits.</string>
+   </property>
+  </action>
+  <action name="actionFire_Detection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/fire.svg</normaloff>:/imgFMV/images/filters/fire.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Fire Segmentation (CV + AI)</string>
+   </property>
+   <property name="toolTip">
+    <string>Fire by warm-color signature — smart CV; optional custom YOLO in FMV Settings.</string>
+   </property>
+  </action>
+  <action name="actionSmoke_Detection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/smoke.svg</normaloff>:/imgFMV/images/filters/smoke.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Smoke Segmentation (CV + AI)</string>
+   </property>
+   <property name="toolTip">
+    <string>Smoke plumes by low-saturation texture — smart CV; optional custom YOLO.</string>
+   </property>
+  </action>
+  <action name="actionFlood_Detection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/filters/flood.svg</normaloff>:/imgFMV/images/filters/flood.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Flood Segmentation (CV + AI)</string>
+   </property>
+   <property name="toolTip">
+    <string>Water/flood by blue-cyan HSV band — smart CV; optional custom YOLO.</string>
    </property>
   </action>
   <action name="actionCapture_Georeferenced_Frame">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/save_geoframe.png</normaloff>:/imgFMV/images/save_geoframe.png</iconset>
+     <normaloff>:/imgFMV/images/misc/save_geoframe.png</normaloff>:/imgFMV/images/misc/save_geoframe.png</iconset>
    </property>
    <property name="text">
     <string>Capture Georeferenced Frame</string>
    </property>
   </action>
+  <action name="actionToggle_HUD">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/export/show-metadata.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>HUD Overlay</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionToggle_MiniMap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/misc/mini-map.png</normaloff>:/imgFMV/images/misc/mini-map.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mini Map</string>
+   </property>
+   <property name="toolTip">
+    <string>Show a georeferenced mini map overlay on the video.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+M</string>
+   </property>
+  </action>
+  <action name="actionToggle_SensorCone">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/sensor-cone.svg</normaloff>:/imgFMV/images/overlays/sensor-cone.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Sensor Coverage Cone</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the sensor field of view as a cone on the map.</string>
+   </property>
+  </action>
+  <action name="actionToggle_DistanceRings">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/distance-rings.svg</normaloff>:/imgFMV/images/overlays/distance-rings.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Distance Rings</string>
+   </property>
+   <property name="toolTip">
+    <string>Show concentric range rings around the platform position.</string>
+   </property>
+  </action>
+  <action name="actionMilitary_Symbols">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/platforms/plat_military_jet.svg</normaloff>:/imgFMV/images/platforms/plat_military_jet.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Military Symbols</string>
+   </property>
+   <property name="toolTip">
+    <string>Military Symbols — pick a symbol, then click on the georeferenced video to place it.</string>
+   </property>
+  </action>
+  <action name="actionToggle_Snapshots">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/screenshot.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Auto Snapshots</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionToggle_Alerts">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/status/Warning.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Enable Alerts</string>
+   </property>
+  </action>
+  <action name="actionAdd_Alert">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/status/Information.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Add Alert Rule...</string>
+   </property>
+  </action>
+  <action name="actionClear_Alerts">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/delete.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Clear All Alerts</string>
+   </property>
+  </action>
+  <action name="actionExport_KML">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/save_geoframe.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Export to KML</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+K</string>
+   </property>
+  </action>
+  <action name="actionExport_GPX">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/stream.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Export Track to GPX</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+G</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>TimelineWidget</class>
+   <extends>QWidget</extends>
+   <header>QGISFMV.player.features.QgsFmvTimeline</header>
+   <container>0</container>
+  </customwidget>
+  <customwidget>
    <class>VideoWidget</class>
    <extends>QWidget</extends>
-   <header>QGIS_FMV.video.QgsVideoWidget</header>
+   <header>QGISFMV.video.playback.QgsVideo</header>
    <slots>
     <slot>removeLastLine()</slot>
     <slot>removeLastSegmentLine()</slot>
@@ -1349,7 +1864,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="resources.qrc" />
  </resources>
  <connections>
   <connection>
@@ -1916,7 +2431,7 @@
    <sender>actionObject_Tracking</sender>
    <signal>triggered(bool)</signal>
    <receiver>PlayerWindow</receiver>
-   <slot>ojectTracking(bool)</slot>
+   <slot>objectTracking(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -2233,22 +2748,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionNDVI</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>PlayerWindow</receiver>
-   <slot>NDVIFilter(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>373</x>
-     <y>325</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionCapture_Georeferenced_Frame</sender>
    <signal>triggered()</signal>
    <receiver>PlayerWindow</receiver>
@@ -2280,6 +2779,414 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionBrightness_Contrast</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>brightnessContrastFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionToggle_HUD</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleHUD()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionToggle_MiniMap</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleMiniMap(bool)</slot>
+  </connection>
+  <connection>
+   <sender>actionToggle_SensorCone</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>_toggleSensorCone(bool)</slot>
+  </connection>
+  <connection>
+   <sender>actionToggle_DistanceRings</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>_toggleDistanceRings(bool)</slot>
+  </connection>
+  <connection>
+   <sender>actionMilitary_Symbols</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>militarySymbolDrawer(bool)</slot>
+  </connection>
+  <connection>
+   <sender>actionToggle_Snapshots</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleAutoSnapshots()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionToggle_Alerts</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleAlerts()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAdd_Alert</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>addAlertRule()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClear_Alerts</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>clearAlerts()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExport_KML</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>exportToKML()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExport_GPX</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>exportToGPX()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCLAHE</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>claheFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSharpen</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>sharpenFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSobel</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>sobelFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRoad_Enhance</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>roadEnhanceFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMotion_Detection</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>motionDetectionFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionBackground_Subtraction</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>backgroundSubtractionFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHotspot</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>hotspotFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFalse_Color</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>falseColorFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExG</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>exgFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExR</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>exrFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionVARI</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>variFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDehaze</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>dehazeFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionNRVI</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>nrviFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionBuilding_Detection</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>buildingDetectionFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRoad_Segmentation</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>roadSegmentationFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRemove_Last_MeasureDistance</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeLastMeasureDistance()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRemove_All_MeasureDistance</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeAllMeasureDistance()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRemove_Last_MeasureArea</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeLastMeasureArea()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRemove_All_MeasureArea</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>removeAllMeasureArea()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionVehicle_Segmentation</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>vehicleSegmentationFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPerson_Segmentation</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>personSegmentationFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFire_Detection</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>fireDetectionFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSmoke_Detection</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>smokeDetectionFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFlood_Detection</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>floodDetectionFilter(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>toggleGroup(bool)</slot>
@@ -2288,10 +3195,7 @@
   <slot>setVolume(int)</slot>
   <slot>setMuted()</slot>
   <slot>stop(bool)</slot>
-  <slot>stabilizeFilter(bool)</slot>
   <slot>edgeFilter(bool)</slot>
-  <slot>saveCurrentFrame()</slot>
-  <slot>showColorDialog()</slot>
   <slot>StartMedia()</slot>
   <slot>EndMedia()</slot>
   <slot>forwardMedia()</slot>
@@ -2303,38 +3207,54 @@
   <slot>saveInfoToJson()</slot>
   <slot>CreateBitratePlot()</slot>
   <slot>showVideoInfo()</slot>
-  <slot>SaveVideoInfoToJson()</slot>
   <slot>convertVideo()</slot>
   <slot>RecordVideo(bool)</slot>
   <slot>invertColorFilter(bool)</slot>
   <slot>grayFilter(bool)</slot>
   <slot>monoFilter(bool)</slot>
   <slot>magnifier(bool)</slot>
-  <slot>zoomRect(bool)</slot>
   <slot>autoContrastFilter(bool)</slot>
   <slot>createMosaic(bool)</slot>
   <slot>lineDrawer(bool)</slot>
   <slot>polygonDrawer(bool)</slot>
-  <slot>ojectTracking(bool)</slot>
+  <slot>objectTracking(bool)</slot>
   <slot>VideoMeasureDistance(bool)</slot>
   <slot>MirrorHorizontalFilter(bool)</slot>
   <slot>VideoCensure(bool)</slot>
-  <slot>removeLastCensured()</slot>
-  <slot>removeAllCensure()</slot>
-  <slot>removeLastPolygon()</slot>
-  <slot>removeAllPolygon()</slot>
-  <slot>removeLastPoint()</slot>
-  <slot>removeAllPoint()</slot>
-  <slot>removeLastLine()</slot>
-  <slot>removeLastSegmentLine()</slot>
-  <slot>removeAllLines()</slot>
   <slot>centerMapPlatform(bool)</slot>
   <slot>centerMapFootprint(bool)</slot>
   <slot>centerMapTarget(bool)</slot>
-  <slot>NDVIFilter(bool)</slot>
   <slot>ExtractCurrentGeoFrame()</slot>
   <slot>VideoMeasureArea(bool)</slot>
   <slot>MouseLocationCoordinates(int)</slot>
   <slot>stamp(bool)</slot>
+  <slot>claheFilter(bool)</slot>
+  <slot>sharpenFilter(bool)</slot>
+  <slot>sobelFilter(bool)</slot>
+  <slot>roadEnhanceFilter(bool)</slot>
+  <slot>motionDetectionFilter(bool)</slot>
+  <slot>backgroundSubtractionFilter(bool)</slot>
+  <slot>hotspotFilter(bool)</slot>
+  <slot>falseColorFilter(bool)</slot>
+  <slot>exgFilter(bool)</slot>
+  <slot>exrFilter(bool)</slot>
+  <slot>variFilter(bool)</slot>
+  <slot>dehazeFilter(bool)</slot>
+  <slot>nrviFilter(bool)</slot>
+  <slot>buildingDetectionFilter(bool)</slot>
+  <slot>roadSegmentationFilter(bool)</slot>
+  <slot>removeLastMeasureDistance()</slot>
+  <slot>removeAllMeasureDistance()</slot>
+  <slot>removeLastMeasureArea()</slot>
+  <slot>removeAllMeasureArea()</slot>
+  <slot>vehicleSegmentationFilter(bool)</slot>
+  <slot>personSegmentationFilter(bool)</slot>
+  <slot>fireDetectionFilter(bool)</slot>
+  <slot>smokeDetectionFilter(bool)</slot>
+  <slot>floodDetectionFilter(bool)</slot>
+  <slot>toggleMiniMap(bool)</slot>
+  <slot>_toggleSensorCone(bool)</slot>
+  <slot>_toggleDistanceRings(bool)</slot>
+  <slot>militarySymbolDrawer(bool)</slot>
  </slots>
 </ui>

@@ -1,19 +1,22 @@
+# -*- coding: utf-8 -*-
+"""About dialog."""
+
 from qgis.PyQt.QtCore import QUrl, Qt
 from qgis.PyQt.QtWidgets import QDialog
-from QGIS_FMV.gui.ui_FmvAbout import Ui_FmvAbout
 
-# try:
-#     from pydevd import *
-# except ImportError:
-#     None
+from QGISFMV.gui.ui_FmvAbout import Ui_FmvAbout
 
 
 class FmvAbout(QDialog, Ui_FmvAbout):
-    """ About Dialog """
+    """About Dialog"""
 
-    def __init__(self):
-        """ Contructor """
-        QDialog.__init__(self)
+    def __init__(self, parent=None):
+        """Initialise the about dialog."""
+        super().__init__(parent)
         self.setupUi(self)
-        self.webView.setContextMenuPolicy(Qt.NoContextMenu)
-        self.webView.load(QUrl("https://all4gis.github.io/QGISFMV/"))
+        self.webView.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
+        url = "https://all4gis.github.io/QGISFMV/"
+        if hasattr(self.webView, "load"):
+            self.webView.load(QUrl(url))
+        else:
+            self.webView.setHtml(f'<p><a href="{url}">QGIS FMV</a></p>')

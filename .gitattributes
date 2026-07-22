@@ -1,0 +1,7 @@
+# Force Unix line endings so *.sh runs on macOS, Linux, and Git Bash on Windows.
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Windows helpers stay CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>740</width>
-    <height>761</height>
+    <width>520</width>
+    <height>280</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,13 +15,13 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/multiplexer.png</normaloff>:/imgFMV/images/multiplexer.png</iconset>
+    <normaloff>:/imgFMV/images/misc/multiplexer.png</normaloff>:/imgFMV/images/misc/multiplexer.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Input Video File (e.g video.ts)</string>
+      <string>Source video</string>
      </property>
     </widget>
    </item>
@@ -44,7 +44,7 @@
        </property>
        <property name="icon">
         <iconset resource="resources.qrc">
-         <normaloff>:/imgFMV/images/opened-folder.png</normaloff>:/imgFMV/images/opened-folder.png</iconset>
+         <normaloff>:/imgFMV/images/misc/opened-folder.png</normaloff>:/imgFMV/images/misc/opened-folder.png</iconset>
        </property>
       </widget>
      </item>
@@ -53,7 +53,7 @@
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Input Metadata File (e.g video_metadata.csv)</string>
+      <string>Telemetry file (.csv, .txt, .log)</string>
      </property>
     </widget>
    </item>
@@ -67,7 +67,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btn_openCSV">
+      <widget class="QPushButton" name="btn_openTelemetry">
        <property name="cursor">
         <cursorShape>PointingHandCursor</cursorShape>
        </property>
@@ -76,7 +76,7 @@
        </property>
        <property name="icon">
         <iconset resource="resources.qrc">
-         <normaloff>:/imgFMV/images/opened-folder.png</normaloff>:/imgFMV/images/opened-folder.png</iconset>
+         <normaloff>:/imgFMV/images/misc/opened-folder.png</normaloff>:/imgFMV/images/misc/opened-folder.png</iconset>
        </property>
       </widget>
      </item>
@@ -85,129 +85,45 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Select drone</string>
+      <string>Output video (.ts)</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="cmb_drone">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <property name="text">
-       <string>DJI Mavic Pro</string>
-      </property>
+      <widget class="QLineEdit" name="ln_outputVideo"/>
      </item>
-    </widget>
+     <item>
+      <widget class="QPushButton" name="btn_saveVideo">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/imgFMV/images/misc/opened-folder.png</normaloff>:/imgFMV/images/misc/opened-folder.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
-    <widget class="QWidget" name="widget_2" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Horizontal FOV</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="sp_hfov">
-        <property name="value">
-         <number>81</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Vertical FOV</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="sp_vfov">
-        <property name="value">
-         <number>66</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="bt_createCSV">
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
+    <widget class="QCheckBox" name="chk_addManager">
      <property name="text">
-      <string>Extract Recordings</string>
+      <string>Add to the manager</string>
      </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="gb_telemetry">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
+     <property name="checked">
+      <bool>true</bool>
      </property>
-     <property name="title">
-      <string>Available telemetry</string>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QLabel" name="label_6">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Select the correct one if there is more than one (file name use CUSTOM.updateTime)</string>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cmb_telemetry">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
    <item>
     <widget class="QPushButton" name="bt_createMISB">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
      <property name="cursor">
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="text">
-      <string>Create MISB</string>
+      <string>Accept</string>
      </property>
     </widget>
    </item>
@@ -222,70 +138,30 @@
    <signal>clicked()</signal>
    <receiver>VideoMultiplexer</receiver>
    <slot>CreateMISB()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>245</x>
-     <y>390</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>5</x>
-     <y>463</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>btn_openVideo</sender>
    <signal>clicked()</signal>
    <receiver>VideoMultiplexer</receiver>
    <slot>OpenVideoFile()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>412</x>
-     <y>63</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>384</x>
-     <y>101</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
-   <sender>btn_openCSV</sender>
+   <sender>btn_openTelemetry</sender>
    <signal>clicked()</signal>
    <receiver>VideoMultiplexer</receiver>
-   <slot>OpenCsvFile()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>412</x>
-     <y>124</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>384</x>
-     <y>142</y>
-    </hint>
-   </hints>
+   <slot>OpenTelemetryFile()</slot>
   </connection>
   <connection>
-   <sender>bt_createCSV</sender>
+   <sender>btn_saveVideo</sender>
    <signal>clicked()</signal>
    <receiver>VideoMultiplexer</receiver>
-   <slot>CreateCSV()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>150</x>
-     <y>263</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>4</x>
-     <y>325</y>
-    </hint>
-   </hints>
+   <slot>OpenOutputFile()</slot>
   </connection>
  </connections>
  <slots>
-  <slot>OpenCsvFile()</slot>
+  <slot>OpenTelemetryFile()</slot>
   <slot>CreateMISB()</slot>
   <slot>OpenVideoFile()</slot>
-  <slot>CreateCSV()</slot>
+  <slot>OpenOutputFile()</slot>
  </slots>
 </ui>

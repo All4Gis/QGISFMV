@@ -1,0 +1,42 @@
+title: Community Q&A
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask the community about **installing**, **using**, or **developing** QGIS FMV.
+
+        - User guide: [USAGE.md](https://github.com/All4Gis/QGISFMV/blob/main/USAGE.md)
+        - **Bugs:** [Bug report](https://github.com/All4Gis/QGISFMV/issues/new?template=bug_report.md)
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      options:
+        - Installation & dependencies
+        - Playback & streams
+        - MISB / metadata
+        - Filters & AI detection
+        - Map layers & export
+        - Development / contributing
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: Include QGIS version, OS, and what you already tried.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment (optional)
+      placeholder: |
+        QGIS 4.x
+        macOS / Windows / Linux
+        Plugin version from Plugin Manager or git main

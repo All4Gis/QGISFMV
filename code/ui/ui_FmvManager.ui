@@ -12,16 +12,13 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/manager.png</normaloff>:/imgFMV/images/manager.png</iconset>
+    <normaloff>:/imgFMV/images/misc/manager.png</normaloff>:/imgFMV/images/misc/manager.png</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
-  <property name="features">
-   <set>QDockWidget::AllDockWidgetFeatures</set>
-  </property>
   <property name="windowTitle">
-   <string>Vi&amp;deo Manager</string>
+   <string>Video Manager</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -42,6 +39,9 @@
     </property>
     <item>
      <widget class="QMenuBar" name="menubarwidget">
+      <property name="nativeMenuBar">
+       <bool>false</bool>
+      </property>
       <property name="styleSheet">
        <string notr="true">QMenuBar {
     background-color: transparent;
@@ -68,7 +68,6 @@
        <font>
         <family>Arial</family>
         <pointsize>9</pointsize>
-        <weight>75</weight>
         <bold>true</bold>
         <stylestrategy>PreferAntialias</stylestrategy>
        </font>
@@ -77,10 +76,10 @@
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
+       <enum>Qt::FocusPolicy::NoFocus</enum>
       </property>
       <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
+       <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
       </property>
       <property name="acceptDrops">
        <bool>true</bool>
@@ -107,28 +106,37 @@ color: rgb(56, 95, 107);
 </string>
       </property>
       <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
+       <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
       </property>
       <property name="dragDropMode">
-       <enum>QAbstractItemView::DropOnly</enum>
+       <enum>QAbstractItemView::DragDropMode::DropOnly</enum>
       </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
       </property>
       <property name="selectionMode">
-       <enum>QAbstractItemView::ExtendedSelection</enum>
+       <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
       </property>
       <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
+       <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
       </property>
       <property name="gridStyle">
-       <enum>Qt::SolidLine</enum>
+       <enum>Qt::PenStyle::SolidLine</enum>
       </property>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
       </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>140</number>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>60</number>
+      </attribute>
       <attribute name="verticalHeaderVisible">
        <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultAlignment">
+       <set>Qt::AlignHCenter</set>
       </attribute>
       <column>
        <property name="text">
@@ -197,16 +205,16 @@ color: rgb(56, 95, 107);
   <action name="actionOpen_Stream">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/stream.png</normaloff>:/imgFMV/images/stream.png</iconset>
+     <normaloff>:/imgFMV/images/misc/stream.png</normaloff>:/imgFMV/images/misc/stream.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open Stream (experimental)</string>
+    <string>Open &amp;Stream</string>
    </property>
   </action>
   <action name="actionOpen_MPEG2_File">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misb-file.png</normaloff>:/imgFMV/images/misb-file.png</iconset>
+     <normaloff>:/imgFMV/images/export/misb-file.png</normaloff>:/imgFMV/images/export/misb-file.png</iconset>
    </property>
    <property name="text">
     <string>Open &amp;Video File</string>
@@ -215,7 +223,7 @@ color: rgb(56, 95, 107);
   <action name="actionCreate_MISB_File">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/multiplexer.png</normaloff>:/imgFMV/images/multiplexer.png</iconset>
+     <normaloff>:/imgFMV/images/misc/multiplexer.png</normaloff>:/imgFMV/images/misc/multiplexer.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Create MISB File</string>
@@ -224,7 +232,7 @@ color: rgb(56, 95, 107);
   <action name="CloseButton">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/close.png</normaloff>:/imgFMV/images/close.png</iconset>
+     <normaloff>:/imgFMV/images/misc/close.png</normaloff>:/imgFMV/images/misc/close.png</iconset>
    </property>
    <property name="text">
     <string>C&amp;lose</string>
@@ -235,22 +243,6 @@ color: rgb(56, 95, 107);
   <include location="resources.qrc"/>
  </resources>
  <connections>
-  <connection>
-   <sender>actionOpen_Stream</sender>
-   <signal>triggered()</signal>
-   <receiver>ManagerWindow</receiver>
-   <slot>openStreamDialog()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>338</x>
-     <y>149</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>VManager</sender>
    <signal>doubleClicked(QModelIndex)</signal>
@@ -264,6 +256,22 @@ color: rgb(56, 95, 107);
     <hint type="destinationlabel">
      <x>1</x>
      <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpen_Stream</sender>
+   <signal>triggered()</signal>
+   <receiver>ManagerWindow</receiver>
+   <slot>openStreamDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>338</x>
+     <y>89</y>
     </hint>
    </hints>
   </connection>
@@ -319,7 +327,6 @@ color: rgb(56, 95, 107);
  <slots>
   <slot>openVideoFileDialog()</slot>
   <slot>PlayVideoFromManager()</slot>
-  <slot>openStreamDialog()</slot>
   <slot>openMuiltiplexorDialog()</slot>
   <slot>closeFMV()</slot>
  </slots>

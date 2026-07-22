@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Community Q&A
+    url: https://github.com/All4Gis/QGISFMV/discussions/new?category=community-q-a
+    about: How-to questions without an SLA
+  - name: Email
+    url: mailto:franka1986@gmail.com
+    about: Direct contact with the author

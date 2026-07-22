@@ -1,87 +1,129 @@
 <RCC>
     <qresource prefix="imgFMV">
-        <file>../images/icon.png</file>
-        <file>../images/raise.png</file>
-        <file>../images/lower.png</file>
-        <file>../images/Critical.png</file>
-        <file>../images/Information.png</file>
-        <file>../images/Question.png</file>
-        <file>../images/Warning.png</file>
-        <file>../images/fast-forward.png</file>
-        <file>../images/fast-rewind.png</file>
-        <file>../images/pause.png</file>
-        <file>../images/play-arrow.png</file>
-        <file>../images/skip-next.png</file>
-        <file>../images/skip-previous.png</file>
-        <file>../images/stop.png</file>
-        <file>../images/metadata.png</file>
-        <file>../images/manager.png</file>
-        <file>../images/volume_off.png</file>
-        <file>../images/volume_30.png</file>
-        <file>../images/volume_60.png</file>
-        <file>../images/volume_up.png</file>
-        <file>../images/down.png</file>
-        <file>../images/up.png</file>
-        <file>../images/color_picker.png</file>
-        <file>../images/screenshot.png</file>
-        <file>../images/capture_all_frames.png</file>
-        <file>../images/repeat.png</file>
+        <!-- Player controls -->
+        <file>../images/player/fast-forward.png</file>
+        <file>../images/player/fast-rewind.png</file>
+        <file>../images/player/pause.png</file>
+        <file>../images/player/play-arrow.png</file>
+        <file>../images/player/skip-next.png</file>
+        <file>../images/player/skip-previous.png</file>
+        <file>../images/player/stop.png</file>
+        <file>../images/player/repeat.png</file>
+        <file>../images/player/volume_up.png</file>
+
+        <!-- Drawing tools -->
+        <file>../images/draw/draw-point.png</file>
+        <file>../images/draw/draw-point-remove-last.png</file>
+        <file>../images/draw/draw-point-remove-all.png</file>
+        <file>../images/draw/draw-polyline.png</file>
+        <file>../images/draw/draw-polyline-remove-all.png</file>
+        <file>../images/draw/draw-polyline-remove-last.png</file>
+        <file>../images/draw/draw-polyline-remove-last-segment.png</file>
+        <file>../images/draw/draw-polygon.png</file>
+        <file>../images/draw/draw-polygon-remove-last.png</file>
+        <file>../images/draw/draw-polygon-remove-all.png</file>
+        <file>../images/draw/censure-pencil.png</file>
+        <file>../images/draw/censure-pencil-remove-last.png</file>
+        <file>../images/draw/censure-pencil-remove-all.png</file>
+        <file>../images/draw/HandDraw.png</file>
+
+        <!-- Status icons -->
+        <file>../images/status/Critical.png</file>
+        <file>../images/status/Information.png</file>
+        <file>../images/status/Question.png</file>
+        <file>../images/status/Warning.png</file>
+
+        <!-- Export icons -->
+        <file>../images/export/pdf.png</file>
+        <file>../images/export/csv.png</file>
+        <file>../images/export/video-info.png</file>
+        <file>../images/export/save-video-info.png</file>
+        <file>../images/export/show-metadata.png</file>
+        <file>../images/export/show-bitrate.png</file>
+        <file>../images/export/save-bitrate.png</file>
+        <file>../images/export/video-converter.png</file>
+        <file>../images/export/misb-file.png</file>
+
+        <!-- Overlay icons -->
+        <file>../images/overlays/ruler.png</file>
+        <file>../images/overlays/ruler_surface.png</file>
+        <file>../images/overlays/distance-rings.svg</file>
+        <file>../images/overlays/sensor-cone.svg</file>
+        <file>../images/overlays/ruler-remove-last.svg</file>
+        <file>../images/overlays/ruler-remove-all.svg</file>
+        <file>../images/overlays/center_platform.png</file>
+        <file>../images/overlays/center_footprint.png</file>
+        <file>../images/overlays/center_target.png</file>
+
+        <!-- Platform icons -->
         <file>../images/platforms/platform_default.svg</file>
         <file>../images/platforms/plat_super_puma.svg</file>
         <file>../images/platforms/plat_N97826.svg</file>
         <file>../images/platforms/plat_VH-ZXX.svg</file>
         <file>../images/platforms/plat_ADS15.svg</file>
-        <file>../images/pdf.png</file>
-        <file>../images/csv.png</file>
-        <file>../images/video-info.png</file>
-        <file>../images/save-video-info.png</file>
-        <file>../images/record.png</file> 
-        <file>../images/record.gif</file> 
-        <file>../images/mosaic.png</file> 
-        <file>../images/stream.png</file> 
-        <file>../images/header_logo.png</file> 
-        <file>../images/draw-polygon.png</file> 
-        <file>../images/draw-polygon-remove-last.png</file> 
-        <file>../images/draw-polygon-remove-all.png</file> 
-        <file>../images/draw-polyline.png</file> 
-        <file>../images/draw-polyline-remove-all.png</file> 
-        <file>../images/draw-polyline-remove-last.png</file> 
-        <file>../images/draw-polyline-remove-last-segment.png</file> 
-        <file>../images/magnifier-glass.png</file> 
-        <file>../images/object-tracking.png</file>  
-        <file>../images/ruler.png</file>  
-        <file>../images/ruler_surface.png</file>  
-        <file>../images/draw-point.png</file>
-        <file>../images/draw-point-remove-last.png</file> 
-        <file>../images/draw-point-remove-all.png</file> 
-        <file>../images/invert-colors.png</file>
-        <file>../images/mono.png</file>
-        <file>../images/canny.png</file>
-        <file>../images/automatic-contrast.png</file>
-        <file>../images/grayscale.png</file>
-        <file>../images/show-metadata.png</file>
-        <file>../images/show-bitrate.png</file>
-        <file>../images/save-bitrate.png</file>
-        <file>../images/video-converter.png</file>
-        <file>../images/misb-file.png</file>
-        <file>../images/mirrored.png</file>
-        <file>../images/censure-pencil.png</file>
-        <file>../images/censure-pencil-remove-last.png</file>
-        <file>../images/censure-pencil-remove-all.png</file>
-        <file>../images/draw-text.png</file>
-        <file>../images/HandDraw.png</file>
-        <file>../images/center_platform.png</file>
-        <file>../images/center_footprint.png</file>
-        <file>../images/center_target.png</file>
-        <file>../images/ndvi.png</file>   
-        <file>../images/save_geoframe.png</file> 
-        <file>../images/mActionDeleteSelected.svg</file>  
-        <file>../images/rubber-stamp.png</file>  
-        <file>../images/custom-options.png</file>  
-        <file>../images/stamp/confidential.png</file>  
-        <file>../images/zoom-rectangle.png</file> 
-        <file>../images/opened-folder.png</file> 
-        <file>../images/multiplexer.png</file> 
-        <file>../images/close.png</file> 
+        <file>../images/platforms/plat_dji.svg</file>
+        <file>../images/platforms/plat_military_jet.svg</file>
+        <file>../images/platforms/plat_military_heli.svg</file>
+        <file>../images/platforms/plat_uav_fw.svg</file>
+        <file>../images/platforms/plat_reaper.svg</file>
+        <file>../images/platforms/plat_tank.svg</file>
+        <file>../images/platforms/plat_ship.svg</file>
+        <file>../images/platforms/plat_copter_news.svg</file>
+
+        <!-- Stamp icons -->
+        <file>../images/stamp/confidential.png</file>
+
+        <!-- Filter icons -->
+        <file>../images/filters/clahe.svg</file>
+        <file>../images/filters/sharpen.svg</file>
+        <file>../images/filters/motion.svg</file>
+        <file>../images/filters/sobel.svg</file>
+        <file>../images/filters/falsecolor.svg</file>
+        <file>../images/filters/exg.svg</file>
+        <file>../images/filters/exr.svg</file>
+        <file>../images/filters/vari.svg</file>
+        <file>../images/filters/bgsub.svg</file>
+        <file>../images/filters/dehaze.svg</file>
+        <file>../images/filters/road.svg</file>
+        <file>../images/filters/hotspot.svg</file>
+        <file>../images/filters/vehicle.svg</file>
+        <file>../images/filters/person.svg</file>
+        <file>../images/filters/fire.svg</file>
+        <file>../images/filters/smoke.svg</file>
+        <file>../images/filters/flood.svg</file>
+        <file>../images/filters/nrvi.svg</file>
+        <file>../images/filters/building.svg</file>
+        <file>../images/filters/roadseg.svg</file>
+
+        <!-- Misc icons -->
+        <file>../images/misc/icon.png</file>
+        <file>../images/misc/header_logo.png</file>
+        <file>../images/misc/mini-map.png</file>
+        <file>../images/misc/multiplexer.png</file>
+        <file>../images/misc/manager.png</file>
+        <file>../images/misc/metadata.png</file>
+        <file>../images/misc/close.png</file>
+        <file>../images/misc/delete.png</file>
+        <file>../images/misc/opened-folder.png</file>
+        <file>../images/misc/custom-options.png</file>
+        <file>../images/misc/mirrored.png</file>
+        <file>../images/misc/mosaic.png</file>
+        <file>../images/misc/stream.png</file>
+        <file>../images/misc/screenshot.png</file>
+        <file>../images/misc/capture_all_frames.png</file>
+        <file>../images/misc/magnifier-glass.png</file>
+        <file>../images/misc/object-tracking.png</file>
+        <file>../images/misc/invert-colors.png</file>
+        <file>../images/misc/mono.png</file>
+        <file>../images/misc/canny.png</file>
+        <file>../images/misc/automatic-contrast.png</file>
+        <file>../images/misc/brightness-contrast.png</file>
+        <file>../images/misc/grayscale.png</file>
+        <file>../images/misc/save_geoframe.png</file>
+        <file>../images/misc/record.png</file>
+        <file>../images/misc/record.gif</file>
+        <file>../images/misc/down.png</file>
+        <file>../images/misc/up.png</file>
+        <file>../images/misc/rubber-stamp.png</file>
     </qresource>
 </RCC>

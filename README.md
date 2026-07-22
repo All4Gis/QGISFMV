@@ -1,300 +1,264 @@
-# QGIS Full Motion Video (FMV) [#QGISFMV](https://twitter.com/hashtag/qgisfmv?f=live)
+<p align="center">
+  <img src="assets/banner.png" alt="QGIS FMV" width="800">
+</p>
 
-[![Build Status](https://travis-ci.org/All4Gis/QGISFMV.svg?branch=master)](https://travis-ci.org/All4Gis/QGISFMV)
-[![Project Stats](https://www.openhub.net/p/QGISFMV/widgets/project_thin_badge.gif)](https://www.openhub.net/p/QGISFMV)
+<h1 align="center">QGIS Full Motion Video</h1>
 
-## Donations
+<p align="center">
+  <strong>Play MISB video. See telemetry on the map. Work in QGIS.</strong>
+</p>
 
-If this plugin is useful for you, consider to donate to the author.Want to buy me a beer (or gadget)? Please use Paypal button or contact me directly.
+<p align="center">
+  <a href="https://github.com/All4Gis/QGISFMV"><img src="https://img.shields.io/badge/QGIS-4.x-589632?style=for-the-badge&logo=qgis" alt="QGIS 4"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge" alt="GPL-3.0"></a>
+  <a href="USAGE.md"><img src="https://img.shields.io/badge/Docs-Usage-0ea5e9?style=for-the-badge" alt="Usage"></a>
+  <a href="https://pypi.org/project/pymisb/"><img src="https://img.shields.io/badge/pymisb-2.x-orange?style=for-the-badge" alt="pymisb"></a>
+</p>
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?button=donate&business=5329N9XX4WQHY&item_name=QGIS+FMV+Plugin&quantity=&amount=&currency_code=EUR&shipping=&tax=&notify_url=&cmd=_donations&bn=JavaScriptButton_donate&env=www)
+<p align="center">
+  <a href="USAGE.md">User guide</a> ·
+  <a href="ARCHITECTURE.md">Architecture</a> ·
+  <a href="https://all4gis.github.io/QGISFMV/">Docs site</a> ·
+  <a href="CONTRIBUTING.md">Contributing</a> ·
+  <a href="https://github.com/All4Gis/QGISFMV/discussions">Discussions</a> ·
+  <a href="https://github.com/All4Gis/QGISFMV/issues">Issues</a>
+</p>
 
-![](images/banner.png)
+---
 
-Plugin for **QGIS 3** which allows to analyze, visualize and process videos inside the QGIS environment. **QGIS FMV** accepts multiple video formats such as _mp4, ts, avi_, etc. It is also able to extract video frames, to capture the current frame, to plot bitrate and to observe the video metadata with aerial images and more. It also offers the possibility to create reports with video metadata.
+## What it does
 
-Standards supported:
+QGIS FMV brings **Full Motion Video** into your GIS workspace: synchronized map layers (platform, footprint, sensor cone, trajectory), MISB/KLV metadata, drawing tools on video, mosaics, streams, and DJI → STANAG 4609 multiplexing.
 
-- "UAS Datalink Local Set", [MISB ST0601](http://www.gwg.nga.mil/misb/docs/standards/ST0601.17.pdf)
-- "Security Metadata Local Set", [MISB ST0102](https://gwg.nga.mil/misb/docs/standards/ST0102.12.pdf)
-- "Predator UAV Basic Universal Metadata Set", [MISB EG0104](https://gwg.nga.mil/misb/docs/eg/EG0104.4.pdf)
+Telemetry is handled by **[pymisb](https://pypi.org/project/pymisb/)** on PyPI. The plugin focuses on QGIS integration, playback, and geospatial visualization.
 
-## Table of Contents
-
-- [QGIS Full Motion Video (FMV) #QGISFMV](#qgis-full-motion-video-fmv-qgisfmv)
-  - [Donations](#donations)
-  - [Table of Contents](#table-of-contents)
-  - [Motivation](#motivation)
-  - [Dependencies](#dependencies)
-  - [For show video](#for-show-video)
-  - [Usage](#usage)
-  - [Recommended readings](#recommended-readings)
-  - [Installation](#installation)
-  - [Installation on Windows](#installation-on-windows)
-  - [Installation on Ubuntu](#installation-on-ubuntu)
-  - [Installation on Archlinux](#installation-on-archlinux)
-  - [Slides](#slides)
-  - [Mentions](#mentions)
-  - [Screenshots](#screenshots)
-  - [Features](#features)
-  - [Contributing](#contributing)
-    - [Contributing Code](#contributing-code)
-    - [Contributing translations](#contributing-translations)
-    - [Contributors List](#contributors-list)
-  - [License](#license)
-
-## Motivation
-
-This development arises after observing that there was no free solution for the metadata extraction and video analysis in real time. All solutions are APIs or private tools such as
-[Esri](http://www.esri.com/products/arcgis-capabilities/imagery/full-motion-video) or [ImpleoTv](https://impleotv.com/),
-for this reason, I decided to develop this open source project and, this way, offer this open source alternative to the QGIS community.
-
-&#8593; [Back to top](#table-of-contents)
-
-## Dependencies
-
-- [FFMPEG](http://ffmpeg.org/download.html) : After downloading it, you should store it in an accessible folder and modify `settings.ini` with the corresponding path. For example `D://FFMPEG` or `/usr/bin/`
-
-- [OpenCV](https://opencv.org/) : `python3 -m pip install opencv-python`
-
-- [opencv-contrib-python](https://pypi.org/project/opencv-contrib-python/) : `python3 -m pip install opencv-contrib-python`
-
-- [MatPlotLib](https://matplotlib.org/) : `python3 -m pip install matplotlib`
-
-- [Klvdata](https://github.com/paretech/klvdata) : customized version of this library. (No need to install it)
-
-The plugin install automatically this requisites,but you can install it using on Windows and Linux:
-
-`python3 -m pip install -r requirements.txt`
-
-Here is a **settings.ini** sample [Linux](code/settings_linux_sample.ini) configuration file or [Windows](code/settings_win_sample.ini) sample.
-On windows you can find the **settings.ini** file at **C:\Users\<user name>\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\QGIS_FMV**.
-
-&#8593; [Back to top](#table-of-contents)
-
-## For show video
-
-To see the video you need:
-
-- **Linux**: install <a href="https://gstreamer.freedesktop.org/documentation/installing/on-linux.html" target="_blank">GStreamer dependencies</a>
-- **Window**: install LAV Filters (install <a href="https://github.com/Nevcairiel/LAVFilters/releases" target="_blank">DirectShow Media Decoders</a>)
-
-If everything works well the plugin should install these dependencies automatically in both, Windows and Linux.
-
-&#8593; [Back to top](#table-of-contents)
-
-## Usage
-
-The use of this application is simple.
-It only needs a video with metadata, like for example one of these [(ESRI copyright)](https://github.com/All4Gis/QGISFMV_Samples)
-Then, open the plugin where the "video manager" will be shown, open the video and with a double-click, the "player" will be opened.
-At this moment, you will see that new shapes have been added and you will see the platform position, metadata, etc.
-
-If we don't have a MISB video we can create it from a video file and telemetry file from a DJI for example.
-
-[Link to Usage Documentation!](https://all4gis.github.io/QGISFMV/Using)
-
-&#8593; [Back to top](#table-of-contents)
-
-## Recommended readings
-
-For more information about the Unmanned Air System (UAS) metadata from STANAG 4609
-
-![a](images/demux.png)
-
-- <a href="https://gisgeography.com/full-motion-video-fmv/" target="_blank">What is Full Motion Video (FMV)?</a>
-- <a href="http://www.gwg.nga.mil/misb/faq.html" target="_blank">FAQ</a>
-- <a href="http://www.gwg.nga.mil/misb/docs/nato_docs/STANAG_4609_Ed3.pdf" target="_blank">STANAG_4609_Ed3</a>
-- <a href="https://nsgreg.nga.mil/doc/view?i=5471" target="_blank">ST0601.19</a>
-- <a href="http://www.gwg.nga.mil/misb/docs/standards/ST0902.1.pdf" target="_blank">ST0902.1</a>
-
-&#8593; [Back to top](#table-of-contents)
-
-## Installation
-
-The installation can be done from the QGIS Python Plugins Repository or from the [zip](https://github.com/All4Gis/QGISFMV/releases).
-
-&#8593; [Back to top](#table-of-contents)
-
-## Installation on Windows
-
-Windows automatically installs all, with user permission,If an error occurs, you should perform some checks.
-
-[![Watch the video (Spanish)](https://i.imgur.com/eHhh2GPl.png)](https://youtu.be/9C973pz5i6k "Como usa QGISFMV en windows")
-
-## Installation on Ubuntu
-
-Ubuntu automatically installs all the dependencies if the user wants, for this his password will be requested.
-
-If it does not install automatically, you should run:
-
-**Python dependencies**
-
-`sudo pip3 install matplotlib python-apt`
-
-The installation of **OpenCV** and **OpenCV-contrib** requires a lot of time for this reason you will have to install these dependencies using this [script](code/install-opencv.sh)
-
-`sh install-opencv.sh`
-
-**FFMPEG**
-
-`sudo apt-get -y install ffmpeg`
-
-**GStreamer/QT5 Plugins**
-
-`sudo apt-get -y install python3-pyqt5.qtmultimedia gst123 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio libqt5gstreamer-1.0-0 libqt5multimedia5-plugins`
-
-You need to restart QGIS after this.
-
-**NOTE :** If you only see the videos with .mp4 extension, make sure you don't have it installed `gstreamer1.0-vaapi`. If you have it installed, you must delete it.
-
-`sudo apt-get remove gstreamer1.0-vaapi`
-
-## Installation on Archlinux
-
-_Archlinux installation :_
-
-```
-pacman -S qgis python-matplotlib opencv ffmpeg
+```mermaid
+flowchart LR
+  subgraph inputs [Inputs]
+    V[Video file or stream]
+    T[DJI telemetry]
+  end
+  subgraph pymisb [pymisb]
+    M[mux / demux / KLV]
+  end
+  subgraph plugin [QGIS FMV]
+    VM[Video Manager]
+    P[Player + map]
+    M3[Mini map · HUD]
+  end
+  V --> M
+  T --> M
+  M --> VM
+  V --> VM
+  VM --> P
+  P --> M3
 ```
 
-_ Set FFmpeg path in $HOME/.local/share/QGIS/QGIS3/profiles/[profile_name]/python/plugins/QGIS_FMV/settings.ini _
+<p align="center">
+  <img src="assets/overview.png" alt="QGIS FMV overview" width="720">
+</p>
+
+---
+
+## Highlights
+
+| Feature | What you get |
+|---------|--------------|
+| **Live map symbology** | Platform, footprint, beams, trajectory, frame center — updated with playback |
+| **MISB / KLV** | Embedded metadata via pymisb; CSV/PDF export, ffprobe tree, bitrate plots |
+| **Playback** | OpenCV decode, scrubbing, loop, record clip, frame export |
+| **Video Filters** | 25+ real-time filters: CLAHE, Sharpen, Sobel, vegetation indices, motion, dehaze, hotspot |
+| **AI Detection** | **Filters → AI Detection**: VisDrone YOLO (vehicle/person) + smart CV (building, road, fire, smoke, flood) — tuned for FMV/UAV |
+| **Multiplexer** | Build MISB `.ts` from DJI video + `.csv` / `.txt` / `.log` telemetry |
+| **Streams** | UDP, TCP, RTP, RTSP from **File → Open Stream** |
+| **FMV Tools** | HUD overlay, mini map (PiP), alerts |
+| **On-video tools** | Draw, measure, magnifier, censor, stamp, object tracking, **military symbols** |
+| **Movable toolbar** | Draw toolbar is floatable and dockable; position persists across sessions |
+| **Mosaic** | Incremental georeferenced mosaic with feathering and performance controls |
+| **FMV Settings** | FFmpeg, DEM, layer names, **AI Detection (YOLO/ONNX)** — no hand-editing `settings.ini` required |
+
+---
+
+## Install
+
+### QGIS Plugin Manager (recommended)
+
+**Plugins → Manage and Install Plugins** → search **QGIS FMV** → **Install Plugin**
+
+### Release ZIP
+
+Download from [GitHub Releases](https://github.com/All4Gis/QGISFMV/releases) → **Plugins → Install from ZIP**
+
+### Dependencies
+
+| Component | Required | Notes |
+|-----------|----------|-------|
+| **QGIS 4.x** | Yes | Qt6 / PyQt6 — QGIS 3 is not supported |
+| **FFmpeg** | Yes | Configure in **FMV Settings** (toolbar gear) |
+| **pymisb** | Yes | Listed in `code/requirements.txt` |
+| **OpenCV** | Recommended | Filters, tracking, **YOLO/ONNX DNN** (`opencv-contrib-python` in requirements) |
+| **matplotlib** | Optional | Bitrate plots |
+| **DEM** | Optional | GeoTIFF/HGT for ground intersection |
+
+**Developers** — `install_dev.sh` symlinks the plugin and installs runtime deps into **QGIS bundled Python**:
+
+```bash
+./install_dev.sh          # macOS
+# install_dev.bat         # Windows
+# bash scripts/install_plugin_requirements.sh   # deps only
+```
+
+Runtime packages are defined in **`code/requirements.txt`** (not a local `python_deps/` folder).
+
+End users: first run can offer guided setup via **FMV Settings → Install dependencies**.
+
+---
+
+## Quick start
+
+1. Open QGIS → click **FMV** on the toolbar.
+2. **File → Open Video File** (or drag & drop onto the manager).
+3. Wait until status is **Ready** (telemetry index on long files).
+4. **Double-click** the row → player opens; map layers follow the video.
+
+**No MISB metadata?** → **File → Create MISB File** (multiplexer). Details in [USAGE.md](USAGE.md#multiplexer).
+
+### Sample videos
+
+Download sample MISB test videos from [Google Drive](https://drive.google.com/file/d/137JaQwx5kVwhdcrxwTCSgxqBbaOjW9be/view) to try the plugin.
+
+---
+
+## Video Filters
+
+25+ real-time filters in the player **Filters** menu, plus a dedicated **AI Detection** submenu for FMV/UAV imagery.
+
+| Category | Filters |
+|----------|---------|
+| **Enhancement** | CLAHE, Sharpen, Brightness/Contrast, Auto Contrast, Dehaze, Road Enhancement |
+| **Edge Detection** | Canny Edge, Sobel |
+| **Color & Vegetation** | False Color (Turbo LUT), ExG, ExR, VARI, NRVI |
+| **Motion** | Motion Detection, Background Subtraction (MOG2), Hotspot Detection |
+| **AI Detection** | See table below — YOLO + smart CV, aerial-tuned defaults |
+| **Quick** | Gray Scale, Invert Colors, Mono, Mirror Horizontal |
+
+### AI Detection (FMV / UAV)
+
+Open **Filters → AI Detection** in the player:
+
+| Filter | Engine | Notes |
+|--------|--------|-------|
+| **Vehicle (YOLO AI)** | VisDrone YOLOv8n + CV fallback | Cars, trucks, buses, vans on aerial video |
+| **Person (YOLO AI)** | VisDrone YOLOv8n + CV fallback | Pedestrians / cyclists in FMV |
+| **Building (CV + AI)** | Smart CV (+ optional custom ONNX) | Structured roofs, edges, low vegetation |
+| **Road (CV + AI)** | Smart CV (+ optional ONNX) | Asphalt segmentation + lane hints |
+| **Fire / Smoke / Flood (CV + AI)** | Smart CV (+ optional ONNX) | Color/texture signatures for incidents |
+
+Configure models in **FMV Settings → AI Detection**:
+
+- One-click **Download VisDrone aerial model** (YOLOv8n → ONNX, stored in `~/.qgis-fmv-models/`)
+- Profile **aerial** (FMV/UAV) vs **coco** (ground-level) vs **custom** class IDs
+- Confidence, NMS, per-filter ONNX overrides
+
+Advanced tuning in `code/settings.ini` → `[FILTERS]` (aerial profile, multiscale, NMS, tracking, overlay thresholds). See [USAGE.md](USAGE.md#ai-detection).
+
+All filters use OpenCV when available; pure-numpy fallbacks when OpenCV is blocked (e.g. macOS Team ID).
+
+---
+
+## Documentation
+
+All documentation lives in this repository as Markdown files (no separate docs site):
+
+| Doc | Audience |
+|-----|----------|
+| [**USAGE.md**](USAGE.md) | End users — manager, player, tools, shortcuts |
+| [**CONTRIBUTING.md**](CONTRIBUTING.md) | Developers — setup, tests, project layout |
+| [**CODING_STANDARDS.md**](CODING_STANDARDS.md) | Python / PyQt conventions |
+| [**assets/README.md**](assets/README.md) | Screenshot list & refresh checklist |
+
+---
+
+## Development
+
+```bash
+git clone https://github.com/All4Gis/QGISFMV.git && cd QGISFMV
+
+pip install -r requirements-dev.txt
+python3 build.py          # UI + resources + i18n (outside QGIS)
+
+./install_dev.sh          # macOS — symlink + deps → ~/.qgis-fmv-packages
+# install_dev.bat         # Windows
+./debug_qgis.sh           # launch QGIS with FRAN_DEBUG=1 → Attach in Cursor
+```
+
+
+Release ZIP: `python3 deploy/plugin_zip.py`
 
 ```
-ffmpeg : "/usr/bin/"
-ffprobe : "/usr/bin/"
+QGISFMV/
+├── code/                   # Plugin source (symlinked as QGISFMV)
+│   ├── QgsFmv.py           # Plugin entry
+│   ├── manager/            # Playlist, multiplexer, streams
+│   ├── player/
+│   │   ├── QgsFmvPlayer.py
+│   │   ├── dialogs/        # Metadata, settings, military symbols
+│   │   ├── overlays/       # HUD, mini map, sensor cone, distance rings
+│   │   ├── drawing/        # On-video draw toolbar
+│   │   └── features/       # Mosaic, timeline, alerts, snapshots
+│   ├── video/              # Playback, filters, DNN (see subfolders)
+│   │   ├── playback/       # QgsVideo widget, surface, state
+│   │   ├── filters/        # VideoFilters, detection, worker
+│   │   └── dnn/            # ONNX / VisDrone setup
+│   ├── utils/
+│   │   ├── settings/       # settings.ini + QgsFmvSettings
+│   │   ├── layers/         # Map layers, styles, KML/GPX export
+│   │   ├── media/          # Multimedia, ffmpeg, KLV, streams
+│   │   ├── core/           # QgsFmvUtils (georef runtime)
+│   │   ├── ui/             # Resources, QgsUtils, plots
+│   │   ├── logging/        # stdlib logging (`utils/logging/__init__.py`)
+│   │   ├── install/        # Dependency installer
+│   │   └── vision/         # Object tracking
+│   ├── geo/                # Geodesy helpers
+│   ├── about/              # About dialog
+│   ├── gui/                # Generated PyQt6 (run build.py)
+│   ├── ui/                 # Qt Designer sources
+│   ├── images/             # Icons, platform SVGs, military symbols
+│   ├── i18n/               # Translations
+│   └── requirements.txt    # Runtime Python deps (pymisb, OpenCV, matplotlib)
+├── scripts/
+│   └── install_plugin_requirements.sh
+├── assets/                 # Doc screenshots
+├── build.py                # Compile .ui / .qrc / .ts
+└── deploy/                 # Plugin ZIP builder
 ```
 
-## Slides
+---
 
-- [Official presentation](https://slides.com/franraga/qgis-fmv/fullscreen)
-- [SIG libre 2021 WorkShop](https://slides.com/franraga/sig-libre-2021/fullscreen)
-- [SIG libre 2021 Video (Spanish)](http://hdl.handle.net/10256.1/6237)
+## Standards & references
 
-&#8593; [Back to top](#table-of-contents)
+- [MISB ST 0601](http://www.gwg.nga.mil/misb/docs/standards/ST0601.17.pdf) — UAS Datalink Local Set
+- [MISB ST 0102](https://gwg.nga.mil/misb/docs/standards/ST0102.12.pdf) — Security Metadata
+- [STANAG 4609](http://www.gwg.nga.mil/misb/docs/nato_docs/STANAG_4609_Ed3.pdf) — Motion Imagery
 
-## Mentions
+---
 
-- [Beyond imagery and Video](https://docs.google.com/presentation/d/1b9FVFcThSJJLq4Q31C9Yx3pEsconY3QxKPZ4sifIAu4/edit?usp=sharing)
+## Support the project
 
-- [MXF Experimentation, Lessons Learned, _UK DSTL_](https://drive.google.com/file/d/1bjLKzBc73wCrFiMkGFQDx2-w_JHf0fyf/view?usp=sharing)
+### Community (free)
 
-- [QGIS Mexico, FMV, Luis Gallardo](https://youtu.be/edk6sbNgiAw)
+Use the plugin at no cost under [GPL-3.0](LICENSE). Ask in [Discussions](https://github.com/All4Gis/QGISFMV/discussions) or report bugs in [Issues](https://github.com/All4Gis/QGISFMV/issues).
 
-If you want to add your presentation simply upload it or send me an email
+### Donate
 
-&#8593; [Back to top](#table-of-contents)
+[![Donate with PayPal](https://img.shields.io/badge/Donate-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?hosted_button_id=X2JMP4FMHDYQS)
 
-## Screenshots
+Individual donations help sustain development.
 
-![a](images/Screenshot0.png)
-
-&#8593; [Back to top](#table-of-contents)
-
-## Features
-
-- Convert videos to other format
-- Extract metadata from video file
-- Show Platform,Trajectory,Footprint and beams position in a QGIS
-- Possibility of extracting parts of the video
-- Capture of the current frame
-- Extraction of all frames of the video
-- Extract lon/lat/alt cursor coordinates
-- Apply sobel filters, edge detection ...
-
-&#8593; [Back to top](#table-of-contents)
-
-## Contributing
-
-Contributions are welcome!
-
-&#8593; [Back to top](#table-of-contents)
-
-### Contributing Code
-
-Want to work on the project? Any kind of contribution is welcome!
-
-Follow these steps:
-
-    Fork the project.
-    Create a new branch.
-    Make your changes and write tests ( if is possible).
-    Commit your changes to the new branch.
-    Send a pull request.
-
-See before [FMV Coding Standards!](https://all4gis.github.io/QGISFMV/CodingStandards)
-
-**NOTE:** If you are use Linux need install pyuic5 and transifex client to compile the UI.
-
-https://command-not-found.com/pyuic5
-
-**Debian** `apt-get install pyqt5-dev-tools`
-
-**Ubuntu** `apt-get install pyqt5-dev-tools`
-
-**Arch Linux** `pacman -S python-pyqt5`
-
-**Kali Linux** `apt-get install pyqt5-dev-tools`
-
-**Fedora** `dnf install python2-qt5`
-
-**Raspbian** `apt-get install pyqt5-dev-tools`
-
-For test stream feature you can simulate stream channel,like this:
-
-`ffmpeg -fflags +genpts -stream_loop -1 -re -i "C:\Users\Fran Raga\Desktop\video_test\Cheyenne.ts" -f rtp_mpegts -c copy -map 0:v -map 0:a -map 0:d rtp://127.0.0.1:8888`
-
-`ffmpeg -i rtp://127.0.0.1:8888 -c copy -map 0:v? -map 0:a? -f rtp_mpegts rtp://127.0.0.1:8898 -map 0:d? -f data -`
-
-And **transifex** client:
-
-`pip3 install transifex-client`
-
-**Code Format**
-
-    pip install coveralls
-    pip install pycodestyle
-
-    autopep8 --in-place --aggressive  --aggressive -v --recursive deploy/*.py --exclude="*gui/*"
-
-    pycodestyle --ignore=E501 code/*.py --statistics --exclude=code/gui/*.py
-    pycodestyle --ignore=E501,W504 deploy/*.py --statistics
-
-And thanks for your code.
-
-![a](images/thanks.gif)
-
-### Contributing translations
-
-Contributions are welcome!
-
-[transifex](https://www.transifex.com/all4gis/QGISFMV/)
-
-### Contributors List
-
-<!-- CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/All4Gis"><img src="https://avatars0.githubusercontent.com/u/8123225?v=4" width="100px;" alt=""/><br /><sub><b>Fran Raga</b></sub></a><br /><a href="https://github.com/All4Gis/QGISFMV/commits?author=All4Gis" title="Code">💻</a><a href="https://github.com/All4Gis/QGISFMV/commits?author=All4Gis" title="Documentation">📖</a>
-    </td>	  
-    <td align="center"><a href="https://github.com/ltbam"><img src="https://avatars1.githubusercontent.com/u/11943224?v=4" width="100px;" alt=""/><br /><sub><b>ltbam</b></sub></a><br /><a href="https://github.com/All4Gis/QGISFMV/commits?author=ltbam" title="Code">💻</a>
-    </td>
-	<td align="center"><a href="https://github.com/Eandelin"><img src="https://avatars1.githubusercontent.com/u/42190209?v=4" width="100px;" alt=""/><br /><sub><b>Eandelin</b></sub></a><br /><a href="https://github.com/All4Gis/QGISFMV/commits?author=Eandelin" title="Documentation">📖</a>
-    </td>
-</tr>
-</table>
-
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-
-<!-- CONTRIBUTORS-LIST:END -->
+---
 
 ## License
 
-GNU Public License (GPL) Version 3
+**GPL v3** — [LICENSE](LICENSE)
 
-**Free Software, Hell Yeah!**
-
-&#8593; [Back to top](#table-of-contents)
+**Francisco Raga** · [All4Gis](https://github.com/All4Gis) · franka1986@gmail.com

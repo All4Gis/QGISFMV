@@ -1,15 +1,9 @@
 [main]
-host = https://www.transifex.com
+host = https://app.transifex.com
 
-[QGISFMV.qgisfmv-plugin]
+[o:all4gis:p:QGISFMV:r:qgisfmv-plugin]
 file_filter = code/i18n/qgisfmv_<lang>.ts
 source_file = code/i18n/qgisfmv_en.ts
 source_lang = en
-trans.ca = code/i18n/qgisfmv_ca.ts
-trans.es = code/i18n/qgisfmv_es.ts
-trans.fa = code/i18n/qgisfmv_fa.ts
-trans.fr = code/i18n/qgisfmv_fr.ts
-trans.gl = code/i18n/qgisfmv_gl.ts
-trans.it = code/i18n/qgisfmv_it.ts
 type = QT
-
+minimum_perc   = 35

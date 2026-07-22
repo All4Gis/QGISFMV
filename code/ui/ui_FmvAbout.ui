@@ -21,30 +21,21 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/Information.png</normaloff>:/imgFMV/images/Information.png</iconset>
+    <normaloff>:/imgFMV/images/status/Information.png</normaloff>:/imgFMV/images/status/Information.png</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QWebView" name="webView" native="true">
-     <property name="url" stdset="0">
-      <url>
-       <string>about:blank</string>
-      </url>
+    <widget class="QTextBrowser" name="webView">
+     <property name="openExternalLinks">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QWebView</class>
-   <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>

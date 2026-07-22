@@ -1,54 +1,40 @@
+# -*- coding: utf-8 -*-
+import logging
 import sys
-from QGIS_FMV.utils.QgsFmvInstaller import WindowsInstaller, LinuxInstaller
-import platform
-from QGIS_FMV.utils.QgsUtils import QgsUtils as qgsu
-from qgis.PyQt.QtWidgets import QMessageBox
-from qgis.utils import iface
-from qgis.utils import reloadPlugin
-from qgis.core import Qgis as QGis
-from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QApplication
-from QGIS_FMV.QgsFmvConstants import isWindows
 
-# Check dependencies
-try:
-    QApplication.setOverrideCursor(Qt.PointingHandCursor)
-    QApplication.processEvents()
+logger = logging.getLogger("qgis_fmv")
 
-    if isWindows:  # Windows Installer
-        try:
-            sys.path.append(
-                "D:/eclipse/plugins/org.python.pydev.core_7.5.0.202001101138/pysrc"
-            )
-            from pydevd import *
-        except ImportError:
-            None
 
-        WindowsInstaller()
-    else:  # Linux Installer
-        try:
-            sys.path.append(
-                "/home/fragalop/.eclipse/360744286_linux_gtk_x86_64/plugins/org.python.pydev.core_8.1.0.202012051215/pysrc"
-            )
-            from pydevd import *
-        except ImportError:
-            None
-        LinuxInstaller()
+def _bootstrap_plugin():
+    from QGISFMV.utils.settings.python_deps_bootstrap import bootstrapPythonDepsPath
 
-    reloadPlugin("QGIS_FMV")
-    iface.messageBar().pushMessage(
-        "QGIS FMV", "QGIS Full Motion Video installed correctly!", QGis.Info, 3
-    )
-    QApplication.restoreOverrideCursor()
-except Exception as e:
-    iface.messageBar().pushMessage(
-        "QGIS FMV", "Ooops! QGIS Full Motion Video instalation failed!", QGis.Warning, 3
-    )
-    QApplication.restoreOverrideCursor()
-    None
+    bootstrapPythonDepsPath()
+    from QGISFMV.gui import resources_rc  # noqa: F401  (registers Qt resources/icons)
+
+
+# Skip heavy imports when pytest loads ``code`` as a parent package (code/tests).
+if "pytest" not in sys.modules:
+    _bootstrap_plugin()
 
 
 def classFactory(iface):
+    import os
     from .QgsFmv import Fmv
 
-    return Fmv(iface)
+    plugin = Fmv(iface)
+
+    if os.environ.get("FRAN_DEBUG") == "1":
+        try:
+            import debugpy
+
+            debugpy.connect(("localhost", 5678))
+            logger.debug("[QGISFMV] debugpy connected on localhost:5678")
+        except ImportError:
+            logger.warning(
+                "[QGISFMV] debugpy not found — run debug_qgis.sh or: "
+                'pip3 install --target="$HOME/Library/Application Support/QGIS/QGIS4/profiles/default/python" debugpy'
+            )
+        except Exception as exc:
+            logger.error("[QGISFMV] debugpy error: %s", exc)
+
+    return plugin

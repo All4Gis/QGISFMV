@@ -1,0 +1,52 @@
+name: Transifex Sync
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+
+  push:
+    paths:
+      - 'code/i18n/*.ts'
+    branches:
+      - main
+      - master
+
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Transifex command'
+        required: true
+        default: 'sync'
+        type: choice
+        options:
+          - sync
+          - pull
+          - push
+
+env:
+  TX_TOKEN: ${{ secrets.TRANSIFEX_API_TOKEN }}
+
+jobs:
+  sync-translations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make Transifex CLI executable
+        run: chmod +x tx
+
+      - name: Sync translations
+        run: |
+          chmod +x transifex-sync.sh
+          ./transifex-sync.sh ${{ github.event.inputs.command || 'sync' }}
+
+      - name: Commit changes
+        if: success() && github.event_name == 'schedule'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add code/i18n/
+          git diff --staged --quiet || git commit -m "chore: update translations from Transifex [skip ci]"
+          git push
