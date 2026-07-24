@@ -8,11 +8,29 @@ PLUGIN_DISPLAY_NAME="QGIS FMV"
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_SOURCE="$REPO_ROOT/code"
 
-# Detect QGIS profile path
-QGIS_PROFILE="$HOME/Library/Application Support/QGIS/QGIS4/profiles/default"
-if [ ! -d "$QGIS_PROFILE" ]; then
-    echo "Error: QGIS profile not found at $QGIS_PROFILE"
-    echo "Make sure QGIS 4 is installed."
+# Detect QGIS profile path (macOS Application Support, then Linux XDG).
+resolve_qgis_profile() {
+    local candidates=(
+        "$HOME/Library/Application Support/QGIS/QGIS4/profiles/default"
+        "${XDG_DATA_HOME:-$HOME/.local/share}/QGIS/QGIS4/profiles/default"
+        "$HOME/.local/share/QGIS/QGIS3/profiles/default"
+    )
+    local path
+    for path in "${candidates[@]}"; do
+        if [ -d "$path" ]; then
+            echo "$path"
+            return 0
+        fi
+    done
+    return 1
+}
+
+if ! QGIS_PROFILE="$(resolve_qgis_profile)"; then
+    echo "Error: QGIS profile not found."
+    echo "Looked for:"
+    echo "  ~/Library/Application Support/QGIS/QGIS4/profiles/default  (macOS)"
+    echo "  ~/.local/share/QGIS/QGIS4/profiles/default                 (Linux)"
+    echo "Make sure QGIS 4 is installed and has been launched once."
     exit 1
 fi
 
@@ -27,6 +45,7 @@ fi
 echo "======================================"
 echo " $PLUGIN_DISPLAY_NAME DEV INSTALL"
 echo "======================================"
+echo "QGIS profile: $QGIS_PROFILE"
 
 mkdir -p "$PLUGIN_DIR"
 

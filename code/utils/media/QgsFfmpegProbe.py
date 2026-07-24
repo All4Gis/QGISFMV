@@ -97,15 +97,13 @@ def is_valid_stream(uri, timeout_sec=3.0):
 
     # Fallback: try ffmpeg subprocess to decode a single frame
     try:
-        from QGISFMV.utils.settings.QgsFmvSettings import ffmpeg_binary
+        from QGISFMV.utils.media.QgsFfmpegRunner import available, popen_ffmpeg
 
-        binary = ffmpeg_binary()
-        if not binary:
+        if not available():
             return False
 
-        proc = subprocess.Popen(
+        proc = popen_ffmpeg(
             [
-                binary,
                 "-hide_banner",
                 "-loglevel",
                 "error",
@@ -122,7 +120,6 @@ def is_valid_stream(uri, timeout_sec=3.0):
             stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            close_fds=True,
         )
         out, _ = proc.communicate(timeout=timeout_sec + 2)
         return len(out) > 0

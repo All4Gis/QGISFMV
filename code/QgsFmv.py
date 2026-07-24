@@ -234,14 +234,17 @@ class Fmv:
         if not depsOk:
             qgsu.showUserAndLogMessage(
                 QCoreApplication.translate(
-                    "QgsFmv", "Some FMV dependencies are missing (FFmpeg)."
+                    "QgsFmv",
+                    "Some FMV dependencies are missing (FFmpeg and/or pymisb).",
                 ),
                 QCoreApplication.translate(
                     "QgsFmv",
-                    "Open FMV Settings from the toolbar and set the FFmpeg folder.",
+                    "Open FMV Settings from the toolbar to set the FFmpeg folder "
+                    "and install Python packages, or run ./install_dev.sh "
+                    "(macOS/Linux) / install_dev.bat (Windows).",
                 ),
                 level=QGis.MessageLevel.Warning,
-                duration=10,
+                duration=12,
             )
 
     def CreateDockWidget(self):

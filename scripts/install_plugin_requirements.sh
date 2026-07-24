@@ -24,9 +24,9 @@ resolve_python() {
         echo "$QGIS_PY"
         return 0
     fi
+    local candidate
     if [ "$(uname -s)" = "Darwin" ]; then
         local app="${QGIS_APP:-/Applications/QGIS.app}"
-        local candidate
         for candidate in \
             "$app/Contents/MacOS/python" \
             "$app/Contents/MacOS/bin/python3" \
@@ -40,8 +40,26 @@ resolve_python() {
             fi
         done
     fi
+    # Linux: prefer QGIS-adjacent interpreters, then system python3.
+    for candidate in \
+        /usr/bin/python3.12 \
+        /usr/bin/python3.11 \
+        /usr/bin/python3.10 \
+        /usr/bin/python3 \
+        /usr/local/bin/python3 \
+        /usr/lib/qgis/python3 \
+        /usr/libexec/qgis/python3; do
+        if [ -x "$candidate" ]; then
+            echo "$candidate"
+            return 0
+        fi
+    done
     if command -v python3 >/dev/null 2>&1; then
         command -v python3
+        return 0
+    fi
+    if command -v python >/dev/null 2>&1; then
+        command -v python
         return 0
     fi
     return 1
@@ -150,11 +168,8 @@ if ver="$(PYTHONNOUSERSITE=1 PYTHONPATH="$FMV_PKGS" "$PY" -c "import cv2; print(
     echo "  OpenCV: OK ($ver)"
     CV2_OK=1
 else
-    echo "  OpenCV: not importable here"
-    if [ "$(uname -s)" = "Darwin" ]; then
-        echo "  (On signed macOS QGIS, OpenCV .so outside the app may be blocked."
-        echo "   The plugin will use numpy tracking fallback — no sudo required.)"
-    fi
+    echo "  OpenCV: not importable here (optional)"
+    echo "  The plugin will use numpy tracking fallback when OpenCV cannot load."
 fi
 
 if [ "$Pymisb_OK" -ne 1 ]; then

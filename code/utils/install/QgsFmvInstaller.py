@@ -62,21 +62,109 @@ def _mac_qgis_python_candidates():
     ]
 
 
+def _linux_qgis_python_candidates():
+    """Return likely QGIS / system Python interpreters on Linux."""
+    names = (
+        "python3.12",
+        "python3.11",
+        "python3.10",
+        "python3",
+        "python",
+    )
+    candidates = []
+    # Prefer interpreters next to the running QGIS binary.
+    exe = sys.executable or ""
+    bin_dir = os.path.dirname(exe) if exe else ""
+    if bin_dir:
+        for name in names:
+            candidates.append(os.path.join(bin_dir, name))
+    # Common distro / Flatpak-adjacent locations.
+    for prefix in (
+        "/usr/bin",
+        "/usr/local/bin",
+        "/usr/lib/qgis",
+        "/usr/libexec/qgis",
+    ):
+        for name in names:
+            candidates.append(os.path.join(prefix, name))
+    which_py = shutil.which("python3") or shutil.which("python")
+    if which_py:
+        candidates.append(which_py)
+    return candidates
+
+
+def _windows_qgis_python_candidates(bin_dir: str):
+    """Return likely Python interpreters next to qgis.exe / OSGeo4W."""
+    names = (
+        "python.exe",
+        "python3.exe",
+        "python312.exe",
+        "python311.exe",
+        "python310.exe",
+        "python",
+    )
+    candidates = [os.path.join(bin_dir, name) for name in names]
+    # OSGeo4W layouts often keep python one level up from bin/apps.
+    parent = os.path.dirname(bin_dir)
+    for rel in (
+        ("apps", "Python312", "python.exe"),
+        ("apps", "Python311", "python.exe"),
+        ("apps", "Python39", "python.exe"),
+        ("bin", "python.exe"),
+    ):
+        candidates.append(os.path.join(parent, *rel))
+        candidates.append(os.path.join(os.path.dirname(parent), *rel))
+    return candidates
+
+
+def _is_usable_python(path: str) -> bool:
+    if not path or not os.path.isfile(path):
+        return False
+    if WINDOWS:
+        return path.lower().endswith(".exe") or os.access(path, os.X_OK)
+    return os.access(path, os.X_OK)
+
+
 def _python_executable() -> str:
-    """Return the bundled Python interpreter, not qgis-bin (which relaunches QGIS)."""
+    """Return a real Python interpreter (never qgis-bin, which relaunches QGIS)."""
+    env_py = os.environ.get("QGIS_PY", "").strip()
+    if env_py and _is_usable_python(env_py):
+        return env_py
+
     if DARWIN:
         for candidate in _mac_qgis_python_candidates():
-            if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            if _is_usable_python(candidate):
                 return candidate
 
-    exe = sys.executable or "python"
-    base = os.path.basename(exe).lower()
-    if base.startswith("qgis") or base in ("qgis-bin.exe", "qgis.exe"):
-        bin_dir = os.path.dirname(exe)
-        for name in ("python.exe", "python3.exe", "python312.exe", "python"):
-            candidate = os.path.join(bin_dir, name)
-            if os.path.isfile(candidate):
+    exe = sys.executable or ""
+    base = os.path.basename(exe).lower() if exe else ""
+    is_qgis_launcher = base.startswith("qgis") or base in (
+        "qgis-bin.exe",
+        "qgis.exe",
+        "qgis",
+        "qgis-bin",
+    )
+
+    if is_qgis_launcher or not exe:
+        bin_dir = os.path.dirname(exe) if exe else ""
+        search = []
+        if WINDOWS:
+            search.extend(_windows_qgis_python_candidates(bin_dir or ""))
+        elif LINUX:
+            search.extend(_linux_qgis_python_candidates())
+        else:
+            for name in ("python3", "python"):
+                if bin_dir:
+                    search.append(os.path.join(bin_dir, name))
+        search.append(shutil.which("python3") or "")
+        search.append(shutil.which("python") or "")
+        for candidate in search:
+            if _is_usable_python(candidate):
                 return candidate
+        # Last resort: never return a qgis* binary for pip.
+        fallback = shutil.which("python3") or shutil.which("python") or "python3"
+        return fallback
+
     return exe
 
 
@@ -301,7 +389,11 @@ def _clean_mac_user_site_packages() -> None:
 
 
 def check_python_deps() -> Tuple[bool, str]:
-    """Return ``(ok, details)``. On macOS, OpenCV is optional."""
+    """Return ``(ok, details)``.
+
+    ``pymisb`` is required. OpenCV is recommended on all platforms but optional
+    (numpy tracking fallback) so a missing CV wheel does not block first run.
+    """
     _bootstrap_python_path()
 
     pymisb_ok, _ = _try_import("pymisb")
@@ -314,14 +406,12 @@ def check_python_deps() -> Tuple[bool, str]:
 
     details = [
         "pymisb OK" if pymisb_ok else "pymisb unavailable",
-        f"CV {cv2_ver}" if cv2_ok else "CV unavailable",
+        f"CV {cv2_ver}" if cv2_ok else "CV unavailable (optional)",
         f"matplotlib {mpl_ver}" if mpl_ok else "matplotlib unavailable",
     ]
-    if DARWIN and not cv2_ok:
-        details.append("CV optional — numpy tracking fallback")
-        return pymisb_ok, ", ".join(details)
-
-    return (pymisb_ok and cv2_ok), ", ".join(details)
+    if not cv2_ok:
+        details.append("object tracking uses numpy fallback without CV")
+    return pymisb_ok, ", ".join(details)
 
 
 def install_pymisb() -> bool:
@@ -409,13 +499,12 @@ def install_pip_requirements() -> bool:
         _install_opencv_package()
         _bootstrap_python_path()
 
-    if not _cv2_available() and DARWIN:
+    if not _cv2_available():
         _msg(
             _Tr("Native CV library not loaded"),
             _Tr(
                 "Packages are in {}.\n"
-                "On signed macOS QGIS, CV wheels outside the app are often "
-                "blocked without admin rights.\n"
+                "OpenCV wheels may fail to load with this QGIS Python ABI.\n"
                 "Playback and MISB still work; object tracking uses numpy fallback."
             ).format(target),
             QGis.MessageLevel.Warning,
@@ -443,12 +532,25 @@ def check_ffmpeg() -> Tuple[bool, str]:
 
 def _default_ffmpeg_dir() -> str:
     if WINDOWS:
-        return os.path.join(
-            os.environ.get("LOCALAPPDATA", os.path.expanduser("~")), "QGISFMV", "ffmpeg"
-        )
+        base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
+        return os.path.join(base, "QGISFMV", "ffmpeg")
     if DARWIN:
         return os.path.join(os.path.expanduser("~"), "QGISFMV", "ffmpeg")
+    found = shutil.which("ffmpeg")
+    if found:
+        return os.path.dirname(found)
+    for candidate in ("/usr/local/bin", "/usr/bin", "/snap/bin"):
+        if os.path.isfile(os.path.join(candidate, "ffmpeg")):
+            return candidate
     return "/usr/bin"
+
+
+def _resolved_ffmpeg_bin_dir() -> str:
+    """Prefer a directory that actually contains ffmpeg after install."""
+    found = shutil.which("ffmpeg")
+    if found:
+        return os.path.dirname(os.path.realpath(found))
+    return _default_ffmpeg_dir()
 
 
 def _save_ffmpeg_dir(bin_dir: str) -> None:
@@ -593,7 +695,9 @@ def install_ffmpeg_linux() -> bool:
         _msg(_Tr("Could not install FFmpeg"), err, QGis.MessageLevel.Critical)
         return False
 
-    _save_ffmpeg_dir("/usr/bin")
+    bin_dir = _resolved_ffmpeg_bin_dir()
+    _save_ffmpeg_dir(bin_dir)
+    _msg(_Tr("FFmpeg installed"), bin_dir, QGis.MessageLevel.Success)
     return True
 
 
@@ -635,20 +739,22 @@ def run_dependency_setup(interactive: bool = True) -> bool:
             _clean_mac_user_site_packages()
         if _prompt_yes(
             "QGIS FMV",
-            _Tr("Missing Python packages (pymisb / CV)."),
+            _Tr("Missing required Python package (pymisb)."),
             _Tr(
                 "Install code/requirements.txt into {} now?\n"
-                "(No admin rights — does not modify QGIS.app)"
+                "(No admin rights — does not modify QGIS.app)\n"
+                "OpenCV is recommended but optional."
             ).format(_fmv_packages_dir()),
         ):
             if not install_pip_requirements():
                 return False
-        elif DARWIN:
+        else:
             _msg(
-                _Tr("Missing Python packages (pymisb / CV)."),
+                _Tr("Missing required Python package (pymisb)."),
                 _Tr(
                     "From the repo (no sudo):\n"
-                    "  ./install_dev.sh\n"
+                    "  ./install_dev.sh   # macOS / Linux\n"
+                    "  install_dev.bat    # Windows\n"
                     "or:\n"
                     "  bash scripts/install_plugin_requirements.sh"
                 ),
@@ -656,7 +762,7 @@ def run_dependency_setup(interactive: bool = True) -> bool:
                 duration=12,
             )
         py_ok, _ = check_python_deps()
-        if not py_ok and not DARWIN:
+        if not py_ok:
             return False
 
     repair_ffmpeg_setting()
@@ -681,4 +787,6 @@ def run_dependency_setup(interactive: bool = True) -> bool:
             QGis.MessageLevel.Warning,
             duration=8,
         )
-    return ff_ok if DARWIN else (py_ok and ff_ok)
+    # pymisb is required; FFmpeg is required for demux/playback helpers.
+    # OpenCV absence alone must not fail setup.
+    return bool(py_ok and ff_ok)

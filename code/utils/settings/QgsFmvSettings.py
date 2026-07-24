@@ -129,9 +129,10 @@ def settingsFile():
 
 def _default_ffmpeg_folder():
     """Return the platform-specific default FFmpeg installation folder."""
-    if platform.system() == "Windows":
+    system = platform.system()
+    if system == "Windows":
         return os.path.join(os.environ.get("LOCALAPPDATA", ""), "QGISFMV", "ffmpeg")
-    if platform.system() == "Darwin":
+    if system == "Darwin":
         candidates = [
             os.path.expanduser("~/Applications/homebrew/bin"),
             "/opt/homebrew/bin",
@@ -145,6 +146,13 @@ def _default_ffmpeg_folder():
         if found:
             return os.path.dirname(found)
         return "/opt/homebrew/bin"
+    # Linux / other Unix: prefer PATH, then common install prefixes.
+    found = shutil.which("ffmpeg")
+    if found:
+        return os.path.dirname(os.path.realpath(found))
+    for folder in ("/usr/local/bin", "/usr/bin", "/snap/bin"):
+        if _resolve_ffmpeg_binary(folder, "ffmpeg"):
+            return folder
     return "/usr/bin"
 
 
