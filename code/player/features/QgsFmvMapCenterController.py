@@ -46,18 +46,32 @@ class MapCenterController:
             player.session.setCenterMode(2)
         elif player.actionCenter_Target.isChecked():
             player.session.setCenterMode(3)
+        else:
+            # UI unchecked → free panning (do not keep a stale session mode).
+            player.session.setCenterMode(0)
 
     def centerMapAction(self, checked, mode, layer_name):
         """Shared logic for center-on actions: uncheck siblings, set mode, center."""
         player = self.player
+        sender = player.sender()
         for other in (
             player.actionCenter_on_Platform,
             player.actionCenter_on_Footprint,
             player.actionCenter_Target,
         ):
-            if other is not player.sender():
-                other.setChecked(False)
+            if other is sender:
+                continue
+            # Block signals so unchecking Platform (default) does not re-enter
+            # centerMapPlatform(False) and clear the newly checked action.
+            other.blockSignals(True)
+            other.setChecked(False)
+            other.blockSignals(False)
         if checked:
+            # Ensure the activated action stays checked (defensive).
+            if sender is not None and not sender.isChecked():
+                sender.blockSignals(True)
+                sender.setChecked(True)
+                sender.blockSignals(False)
             player.session.setCenterMode(mode)
             centerCanvasOnLayer(player.iface, layer_name, player._videoGroupName())
         else:

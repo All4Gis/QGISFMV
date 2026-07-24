@@ -2,10 +2,7 @@
 """Shared base for QGIS map-canvas vector overlays (sensor cone, distance rings, etc.)."""
 
 from qgis.core import (
-    QgsVectorLayer,
     QgsProject,
-    QgsCategorizedSymbolRenderer,
-    QgsRendererCategory,
 )
 
 from QGISFMV.utils.logging import log

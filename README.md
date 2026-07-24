@@ -175,7 +175,6 @@ All documentation lives in this repository as Markdown files (no separate docs s
 | [**USAGE.md**](USAGE.md) | End users — manager, player, tools, shortcuts |
 | [**CONTRIBUTING.md**](CONTRIBUTING.md) | Developers — setup, tests, project layout |
 | [**CODING_STANDARDS.md**](CODING_STANDARDS.md) | Python / PyQt conventions |
-| [**assets/README.md**](assets/README.md) | Screenshot list & refresh checklist |
 
 ---
 

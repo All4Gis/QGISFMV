@@ -19,7 +19,6 @@ Thanks for improving QGIS FMV. This guide covers setup, conventions, and how to 
 | Community Q&A | [Discussions](https://github.com/All4Gis/QGISFMV/discussions) |
 | Code & docs | Pull requests |
 | Translations | [Transifex](https://www.transifex.com/all4gis/QGISFMV/) |
-| Screenshots | [assets/README.md](assets/README.md) — QGIS 4 captures welcome |
 
 ---
 
@@ -104,23 +103,23 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for session/controllers/paint pipeline de
 ```
 code/
 ├── QgsFmv.py               # Plugin entry (classFactory)
-├── manager/                # Video manager, multiplexer, streams
+├── manager/                # Video manager façade + BgLoad/Playlist/Rows controllers
 ├── player/
 │   ├── QgsFmvPlayer.py     # Player dock (composition root)
-│   ├── dialogs/            # Settings, metadata, reports, military symbols
+│   ├── dialogs/            # Settings, metadata, reports (PDF meta/geo/layout), military
 │   ├── overlays/           # HUD, mini map, sensor cone, distance rings
-│   ├── drawing/            # On-video draw toolbar
+│   ├── drawing/            # DrawToolBar façade + Config/Shapes/Measure/Hud painters
 │   └── features/           # Controllers: playback, record, export, close, menus, mosaic, …
 ├── video/
-│   ├── playback/           # QgsVideo, paint pipeline, surface, state
-│   ├── filters/            # VideoFilters, detection, FilterWorker, brightness dialog
+│   ├── playback/           # VideoWidget façade + paint/surface/draw/track/cursor
+│   ├── filters/            # VideoFilters + DetectionFilters façade/pipeline/scores
 │   └── dnn/                # QgsFmvOnnxDetector, QgsFmvModelSetup
 ├── utils/
 │   ├── settings/           # QgsFmvSettings, python_deps bootstrap
-│   ├── layers/             # QgsFmvLayers, DrawLayers, styles, export
-│   ├── media/              # Multimedia, FfmpegRunner, probe, KLV, streams
-│   ├── core/               # VideoSession, QgsFmvUtils, georef, mosaic
-│   ├── ui/                 # QgsUtils, JSON model, plots, resources
+│   ├── layers/             # QgsFmvLayers façade + Telemetry/Defaults/DrawLayers/export
+│   ├── media/              # Multimedia façade + workers/adapters, FfmpegRunner, Geocode, KLV
+│   ├── core/               # VideoSession, Utils façade, georef, corners, map center, mosaic
+│   ├── ui/                 # QgsUtils, file dialogs, JSON model, plots, resources
 │   ├── logging/            # `from QGISFMV.utils.logging import log`
 │   ├── install/            # QgsFmvInstaller
 │   └── vision/             # Object tracker
@@ -189,7 +188,7 @@ Optional: `black`, `isort`, `flake8` (see `requirements-dev.txt`).
 - [ ] Lint clean on touched Python files
 - [ ] Manual test in QGIS 4 (load video, play, multiplexer if relevant)
 - [ ] Docs updated for behavior/UI changes
-- [ ] Screenshots updated in `assets/` when UI changed — see [assets/README.md](assets/README.md)
+- [ ] Screenshots updated in `assets/` when UI changed
 - [ ] No secrets or local paths in committed files
 
 **Template:** [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)

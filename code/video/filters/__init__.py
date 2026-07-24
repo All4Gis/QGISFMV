@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Real-time video filters (classic + AI/CV detection)."""
+"""Real-time video filters (classic + AI/CV detection façade/pipeline/scores)."""
 
 __all__ = [
     "VideoFilters",

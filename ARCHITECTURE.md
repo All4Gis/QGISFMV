@@ -27,8 +27,10 @@ that symlink (tools may double-count files).
 | Video widget | `code/video/playback/` | Decode surface, interaction, paint pipeline |
 | Filters / DNN | `code/video/filters/`, `code/video/dnn/` | Classic + AI filters |
 | Session state | `code/utils/core/QgsFmvVideoSession.py` | Per-video telemetry / geo state |
-| Georef / mosaic | `code/utils/core/QgsFmvGeoReferencing.py`, `QgsFmvMosaic.py` | GCP math, mosaic frames |
-| Layers | `code/utils/layers/` | Map layers + draw/measure layer helpers |
+| Georef / mosaic | `code/utils/core/QgsFmvGeoReferencing.py`, `QgsFmvCornerEstimation.py`, `QgsFmvMosaic.py` | GCP math, footprint corner estimation, mosaic frames |
+| Map center | `code/utils/core/QgsFmvMapCenter.py` | Follow platform/footprint/frame-center canvas centering |
+| File dialogs | `code/utils/ui/QgsFmvFileDialogs.py` | Open/save file & folder pickers (last-path memory) |
+| Layers | `code/utils/layers/` | Map layers, telemetry updates, default styles, draw/measure helpers |
 | Media I/O | `code/utils/media/` | KLV readers, ffmpeg runner/probe, Qt multimedia |
 | Settings | `code/utils/settings/QgsFmvSettings.py` | `settings.ini` access + `reloadRuntime()` |
 | UI sources | `code/ui/*.ui` | Qt Designer sources (compile via `build.py`) |
@@ -120,7 +122,23 @@ All ffmpeg/ffprobe launches go through
 - Optional `-preset ultrafast` for encodes  
 
 `QgsFmvUtils._spawn()` is a thin compatibility wrapper. Multimedia fallbacks
-(`QgsFmvMultimedia`) call the runner directly.
+(`QgsFmvMultimedia` / decode workers) call the runner directly.
+
+---
+
+## Multimedia split
+
+| Module | Contents |
+|--------|----------|
+| `QgsFmvMultimedia.py` | Public façade: `createMediaPlayer`, volume/output helpers, re-exports |
+| `QgsFmvMediaTypes.py` | `PlaybackState` / `MediaStatus` / `PlaylistMode` + aliases |
+| `QgsFmvMediaProbe.py` | Path/duration/stream-info helpers (`probe_video_info`, …) |
+| `QgsFmvDecodeWorkers.py` | `FrameDecodeWorker` (OpenCV) + `FfmpegDecodeWorker` (pipe) |
+| `QgsFmvOpenCvPlayer.py` | `OpenCvMediaPlayer` QMediaPlayer-compatible backend |
+| `QgsFmvQtMediaAdapter.py` | Qt multimedia last-resort adapter |
+| `QgsFmvPlaylist.py` | `FmvPlaylist` + attach/get helpers |
+
+Prefer importing from `QgsFmvMultimedia` for public API stability.
 
 ---
 
@@ -143,12 +161,18 @@ Sizes / geometry for Metadata and Video Info live in their `.ui` files — do no
 
 | Module | Contents |
 |--------|----------|
-| `QgsFmvLayers.py` | Platform/footprint/beams/trajectory updates, group creation, styles |
+| `QgsFmvLayers.py` | Group/layer creation (`CreateVideoLayers`, `LayerFactory`, …), object tracking, platform-icon handling, generic layer helpers (`CommonLayer`, caches) |
+| `QgsFmvTelemetryLayers.py` | Per-KLV-packet `Update*Data` functions (footprint, beams, trajectory, frame axis/center, platform) + their per-group caches |
+| `QgsFmvLayerDefaults.py` | All `SetDefault*Style` functions (2D + 3D), the data-driven style registry, `ensure_fmv_3d_renderers`, `RestoreDefaultLayerStyles` |
 | `QgsFmvDrawLayers.py` | Draw point/line/polygon/military + measure sync |
 | `QgsFmvExport.py` | KML/GPX/track export |
 | `QgsFmvStyles.py` / `QgsFmvLayerStyleStore.py` | Symbology |
 
-`QgsFmvLayers` re-exports draw helpers for backward-compatible imports.
+`QgsFmvLayers` re-exports the Telemetry/Defaults/Draw helpers for
+backward-compatible imports. Layer-name constants and `groupName` stay on
+`QgsFmvLayers` (refreshed live by `QgsFmvSettings.reloadRuntime()` via
+`setattr`); Telemetry/Defaults/Draw read them back through a lazy
+`_base()` module reference to avoid a circular import at load time.
 
 ---
 
@@ -157,7 +181,53 @@ Sizes / geometry for Metadata and Video Info live in their `.ui` files — do no
 | Module | Role |
 |--------|------|
 | `QgsFmvMetadata.py` | Metadata dock widget (table UI) |
-| `QgsFmvReportGenerator.py` | PDF report generation |
+| `QgsFmvReportGenerator.py` | PDF orchestration façade (`ReportGenerator`) |
+| `QgsFmvReportMetadata.py` | Metadata leaf walk, grouping, summary fields |
+| `QgsFmvReportGeo.py` | Footprint/sensor/map extent helpers |
+| `QgsFmvReportPdfLayout.py` | Page metrics / image scale / PDF color constants |
+
+---
+
+## Video widget split
+
+| Module | Contents |
+|--------|----------|
+| `QgsVideo.py` | `VideoWidget` façade (Qt events + public Set*/remove* API) |
+| `QgsVideoPaintPipeline.py` | Z-order paint for overlays/drawings |
+| `QgsVideoSurface.py` | Frame sink + filter apply |
+| `QgsVideoState.py` | `InteractionState`, `FilterState`, `TrackLockState` |
+| `QgsVideoUtils.py` | Screen↔geo math helpers |
+| `QgsVideoRubberBands.py` | `RubberBandManager` |
+| `QgsVideoDrawController.py` | Draw-list mutations, tool toggles, measure sync |
+| `QgsVideoObjectTracking.py` | OpenCV object-tracking controller |
+| `QgsVideoCursor.py` | Georeferenced cursor / MGRS labels |
+
+---
+
+## Detection filters split
+
+| Module | Contents |
+|--------|----------|
+| `QgsFmvDetectionFilters.py` | Public `FmvDetectionFilters.*Filter` façade |
+| `QgsFmvDetectionGeometry.py` | IoU/NMS/track IDs + temporal state |
+| `QgsFmvDetectionPipeline.py` | Shared OpenCV/fallback detection engine |
+| `QgsFmvDetectionScores.py` | Per-class scorers (building/road/vehicle/…) |
+
+---
+
+## Manager / drawing splits
+
+| Module | Contents |
+|--------|----------|
+| `QgsManager.py` | `FmvManager` dock façade (UI slots) |
+| `QgsFmvManagerBgLoad.py` | Background media/KLV probe worker |
+| `QgsFmvManagerPlaylistController.py` | Play / setup / create player |
+| `QgsFmvManagerRows.py` | Row-id store + active status toggles |
+| `QgsFmvDrawToolBar.py` | `DrawToolBar.drawOnVideo` façade |
+| `QgsFmvDrawingConfig.py` | Pens/brushes/`setValues` / stamp |
+| `QgsFmvDrawShapes.py` | Point/line/polygon/military/censure |
+| `QgsFmvDrawMeasure.py` | Measure distance/area overlays |
+| `QgsFmvDrawHud.py` | Tracking HUD, magnifier, stamp paint |
 
 ---
 

@@ -64,6 +64,34 @@ class TestDestination:
         assert south[1] < start[1]
 
 
+class TestHaversineFallback:
+    """Pure-Python geodesic fallback used when QgsDistanceArea returns 0."""
+
+    def test_madrid_barcelona_order_of_magnitude(self):
+        from code.tests.support import load_plugin_module
+
+        geo = load_plugin_module("geo/QgsGeoUtils.py", "QGISFMV.geo.QgsGeoUtils")
+        madrid = (-3.7038, 40.4168)
+        barcelona = (2.1734, 41.3851)
+        d = geo._haversine_m(madrid, barcelona)
+        assert 480_000 < d < 650_000
+
+    def test_same_point_zero(self):
+        from code.tests.support import load_plugin_module
+
+        geo = load_plugin_module("geo/QgsGeoUtils.py", "QGISFMV.geo.QgsGeoUtils")
+        assert geo._haversine_m((1.0, 2.0), (1.0, 2.0)) == pytest.approx(0.0, abs=1e-6)
+
+    def test_spherical_area_positive(self):
+        from code.tests.support import load_plugin_module
+
+        geo = load_plugin_module("geo/QgsGeoUtils.py", "QGISFMV.geo.QgsGeoUtils")
+        # Small triangle near equator (~1° × 1°)
+        ring = [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0)]
+        area = geo._spherical_ring_area_m2(ring)
+        assert area > 1e9  # ~ half of 111km×111km
+
+
 # ---------------------------------------------------------------------------
 # QGIS runtime tests
 # ---------------------------------------------------------------------------

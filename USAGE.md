@@ -4,8 +4,7 @@ Everything you need to run **QGIS Full Motion Video** — from opening a file to
 
 <p align="center">
   <a href="README.md">README</a> ·
-  <a href="CONTRIBUTING.md">Contributing</a> ·
-  <a href="assets/README.md">Screenshots</a>
+  <a href="CONTRIBUTING.md">Contributing</a>
 </p>
 
 ---
@@ -555,5 +554,5 @@ Install OpenCV via requirements. Set FFmpeg path. Try **Video → Converter** to
 ---
 
 <p align="center">
-  <sub>QGIS FMV · <a href="README.md">README</a> · <a href="assets/README.md">Update screenshots</a></sub>
+  <sub>QGIS FMV · <a href="README.md">README</a></sub>
 </p>

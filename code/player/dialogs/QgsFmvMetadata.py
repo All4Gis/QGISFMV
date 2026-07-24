@@ -127,17 +127,47 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
 
         timestamp = _seconds_to_time(self.player.currentInfo)
 
-        # Clean frame (no drawings) + annotated frame (drawings burned in)
-        frame_clean = self.player.videoWidget.currentFrame()
-        if frame_clean is not None:
+        # Clean frame (no drawings) + annotated frame (drawings burned in).
+        # Force a paint so grab() sees the current overlays/drawings.
+        vw = self.player.videoWidget
+        try:
+            vw.UpdateSurface()
+            vw.repaint()
+        except Exception as exc:
+            log.debug("PDF frame refresh before capture failed: %s", exc)
+
+        frame_clean = vw.currentFrame()
+        if frame_clean is not None and not frame_clean.isNull():
             frame_clean = frame_clean.copy()
-        overlay = self.player.videoWidget.grab(
-            self.player.videoWidget.surface.videoRect()
-        ).toImage()
-        if frame_clean is not None and not frame_clean.isNull() and not overlay.isNull():
-            frame_annotated = BurnDrawingsImage(frame_clean, overlay)
         else:
+            frame_clean = None
+
+        video_rect = vw.surface.videoRect()
+        if video_rect is None or video_rect.isEmpty():
+            video_rect = vw.rect()
+        overlay = vw.grab(video_rect).toImage()
+        if overlay is not None and not overlay.isNull():
+            overlay = overlay.copy()
+        else:
+            overlay = None
+
+        if frame_clean is not None and overlay is not None:
+            frame_annotated = BurnDrawingsImage(frame_clean, overlay)
+        elif overlay is not None:
             frame_annotated = overlay
+        else:
+            frame_annotated = frame_clean
+
+        if frame_annotated is not None and not frame_annotated.isNull():
+            log.info(
+                "PDF frames captured: clean=%sx%s annotated=%sx%s",
+                frame_clean.width() if frame_clean is not None else 0,
+                frame_clean.height() if frame_clean is not None else 0,
+                frame_annotated.width(),
+                frame_annotated.height(),
+            )
+        else:
+            log.warning("PDF report: no video frame available to embed")
 
         data = self._report_metadata()
         rows = self.VManager.rowCount()

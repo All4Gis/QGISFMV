@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
+from enum import Enum
 
 # Shared constant for drawing list sentinel markers
 MOUSE_MOVE_EVENT = "mouseMoveEvent"
+
+
+class TrackLockState(Enum):
+    """Object tracking lock states."""
+    IDLE = "idle"
+    LOCKED = "locked"
+    WEAK = "weak"
+    LOST = "lost"
 
 
 class InteractionState(object):

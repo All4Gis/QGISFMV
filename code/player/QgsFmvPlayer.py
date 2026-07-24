@@ -108,7 +108,7 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         self.drawTools = DrawToolsController(self)
 
         self._setupDrawToolBar()
-        self._setupRecordButton()
+        self._setupPlaybackUi()
 
     def _setupDrawToolBar(self):
         """Configure drawing toolbar defaults (layout lives in ui_FmvPlayer.ui)."""
@@ -139,8 +139,8 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
                 )
             )
 
-    def _setupRecordButton(self):
-        """Configure the record button/animation and wire up the media player."""
+    def _setupPlaybackUi(self):
+        """Wire media player, metadata dock, toolbar, and overlays."""
         self.recordController = RecordController(self)
         self.contextMenuController = ContextMenuController(self)
         self.playIcon = QIcon(ICON_PLAY)
@@ -663,34 +663,9 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         """Extract Current GeoReferenced Frame Task (Qt Designer slot - delegates to ExportController)."""
         self.exportController.ExtractCurrentGeoFrame()
 
-    def _placeMetadataDockTopLeft(self):
-        """Pin the metadata panel to the top of the left dock column."""
-        dock = self.metadataDlg
-        area = Qt.DockWidgetArea.LeftDockWidgetArea
-        main_window = self.iface.mainWindow()
-
-        if dock.parent() is None:
-            self.iface.addDockWidget(area, dock)
-
-        for other in main_window.findChildren(QDockWidget):
-            if other is dock:
-                continue
-            if main_window.dockWidgetArea(other) != area:
-                continue
-            main_window.splitDockWidget(dock, other, Qt.Orientation.Vertical)
-            break
-
-        dock.show()
-        dock.raise_()
-
     def OpenQgsFmvMetadata(self):
-        """Open Metadata Dock"""
-        if self.metadataDlg is None:
-            self.metadataDlg = QgsFmvMetadata(player=self)
-        self._placeMetadataDockTopLeft()
-
-        self.addMetadata(self.data)
-        return
+        """Open Metadata Dock (Qt Designer slot - delegates to MetadataPipelineController)."""
+        self.metadataPipeline.OpenQgsFmvMetadata()
 
     def openFmvSettings(self):
         """Open unified FMV settings dialog."""

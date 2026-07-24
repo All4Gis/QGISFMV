@@ -1355,6 +1355,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/imgFMV/images/overlays/center_platform.png</normaloff>:/imgFMV/images/overlays/center_platform.png</iconset>
@@ -1366,6 +1369,9 @@
   <action name="actionCenter_on_Footprint">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">

@@ -1,42 +1,16 @@
 # -*- coding: utf-8 -*-
-"""Tests for the TrackLockState enum in QgsVideo.py."""
+"""Tests for the TrackLockState enum in QgsVideoState.py."""
 
 import pytest
 
-from code.tests.support import ensure_qgis_fmv_package, load_plugin_module
+from code.tests.support import load_plugin_module
 
-ensure_qgis_fmv_package()
-
-# QgsVideo has heavy Qt dependencies; import the enum directly from the source
-# by reading the file and extracting the enum definition.
-import importlib.util
-import sys
-import types
-from pathlib import Path
-
-CODE = Path(__file__).resolve().parents[2] / "code"
-
-# Minimal stubs to allow QgsVideo to import without full QGIS
-_stub_modules = [
-    "qgis", "qgis.core", "qgis.gui", "qgis.utils", "qgis.PyQt",
-    "qgis.PyQt.QtCore", "qgis.PyQt.QtGui", "qgis.PyQt.QtWidgets",
-    "qgis.PyQt.QtMultimedia",
-    "mgrs",
-]
-for name in _stub_modules:
-    if name not in sys.modules:
-        sys.modules[name] = types.ModuleType(name)
-
-# Provide minimal enums/stubs needed by QgsVideo imports
-from enum import Enum  # noqa: E402
-
-
-class TrackLockState(Enum):
-    """Object tracking lock states — extracted from QgsVideo.py for testing."""
-    IDLE = "idle"
-    LOCKED = "locked"
-    WEAK = "weak"
-    LOST = "lost"
+# QgsVideoState.py has no Qt/QGIS dependencies, so it can be loaded directly
+# without any runtime stubs.
+state_mod = load_plugin_module(
+    "video/playback/QgsVideoState.py", "QGISFMV.video.playback.QgsVideoState"
+)
+TrackLockState = state_mod.TrackLockState
 
 
 class TestTrackLockState:

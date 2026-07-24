@@ -17,6 +17,8 @@ from typing import Sequence
 
 from QGISFMV.utils.logging import log
 
+_EARTH_MEAN_RADIUS = 6371008.8
+
 # ---------------------------------------------------------------------------
 # Lazy singleton — created on first call, not at import time.
 # ---------------------------------------------------------------------------
@@ -40,12 +42,40 @@ def _get_measure():
         crs = QgsCoordinateReferenceSystem("EPSG:4326")
         ctx = QgsProject.instance().transformContext()
         _measure.setSourceCrs(crs, ctx)
-        if _measure.sourceCrs().isGeographic():
-            _measure.setEllipsoid(_measure.sourceCrs().ellipsoidAcronym())
+        # Geographic CRS without an explicit ellipsoid returns 0 from
+        # measureLine/measureArea. ``ellipsoidAcronym()`` is often empty for
+        # EPSG:4326, so force WGS84.
+        if not _measure.setEllipsoid("WGS84"):
+            _measure.setEllipsoid("EPSG:7030")
     except Exception as _exc:
-        log.debug('QgsDistanceArea CRS setup failed, using planar fallback: %s', _exc)
+        log.debug("QgsDistanceArea CRS setup failed, using planar fallback: %s", _exc)
 
     return _measure
+
+
+def _haversine_m(point1: Sequence[float], point2: Sequence[float]) -> float:
+    """Great-circle distance in meters (fallback when QGIS measure fails)."""
+    lon1, lat1 = radians(float(point1[0])), radians(float(point1[1]))
+    lon2, lat2 = radians(float(point2[0])), radians(float(point2[1]))
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = sin(dlat / 2.0) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2.0) ** 2
+    return 2.0 * _EARTH_MEAN_RADIUS * asin(min(1.0, a ** 0.5))
+
+
+def _spherical_ring_area_m2(coordinates: Sequence[Sequence[float]]) -> float:
+    """Spherical polygon area (m²) via spherical excess; fallback only."""
+    if len(coordinates) < 3:
+        return 0.0
+    rad = [ (radians(float(c[0])), radians(float(c[1]))) for c in coordinates ]
+    if rad[0] != rad[-1]:
+        rad.append(rad[0])
+    total = 0.0
+    for i in range(len(rad) - 1):
+        lon1, lat1 = rad[i]
+        lon2, lat2 = rad[i + 1]
+        total += (lon2 - lon1) * (2.0 + sin(lat1) + sin(lat2))
+    return abs(total) * _EARTH_MEAN_RADIUS * _EARTH_MEAN_RADIUS / 2.0
 
 
 # ---------------------------------------------------------------------------
@@ -57,8 +87,8 @@ def distance(point1: Sequence[float], point2: Sequence[float]) -> float:
     Geodesic distance in meters between two WGS84 points.
 
     Uses PyQGIS ``QgsDistanceArea.measureLine()`` for ellipsoidal
-    accuracy (Vincenty-level).  Falls back to planar if QGIS
-    runtime is not available.
+    accuracy (Vincenty-level).  Falls back to Haversine if QGIS
+    returns 0 for distinct points (missing ellipsoid) or is unavailable.
 
     Args:
         point1: (lon, lat) or [lon, lat] in WGS84 degrees.
@@ -67,11 +97,17 @@ def distance(point1: Sequence[float], point2: Sequence[float]) -> float:
     Returns:
         Distance in meters (float).
     """
-    from qgis.core import QgsPointXY
+    try:
+        from qgis.core import QgsPointXY
 
-    p1 = QgsPointXY(float(point1[0]), float(point1[1]))
-    p2 = QgsPointXY(float(point2[0]), float(point2[1]))
-    return _get_measure().measureLine(p1, p2)
+        p1 = QgsPointXY(float(point1[0]), float(point1[1]))
+        p2 = QgsPointXY(float(point2[0]), float(point2[1]))
+        meters = float(_get_measure().measureLine(p1, p2))
+        if meters > 0.0 or p1 == p2:
+            return meters
+    except Exception as exc:
+        log.debug("QgsDistanceArea.measureLine failed, using Haversine: %s", exc)
+    return _haversine_m(point1, point2)
 
 
 # ---------------------------------------------------------------------------
@@ -100,9 +136,6 @@ def bearing(point1: Sequence[float], point2: Sequence[float]) -> float:
 # destination(point, distance, bearing) -> (lon, lat)
 #   Pure-Python great-circle — no QGIS equivalent.
 # ---------------------------------------------------------------------------
-_EARTH_MEAN_RADIUS = 6371008.8
-
-
 def destination(point: Sequence[float], distance_m: float, bearing_deg: float) -> tuple[float, float]:
     """
     Destination point given a start point, distance, and bearing.
@@ -138,7 +171,7 @@ def polygon_area(coordinates: Sequence[Sequence[float]]) -> float:
     Geodesic area of a polygon ring in square meters (WGS84).
 
     Uses PyQGIS ``QgsDistanceArea.measureArea()`` for ellipsoidal
-    accuracy.
+    accuracy. Falls back to spherical excess if QGIS returns 0.
 
     Args:
         coordinates: List of (lon, lat) tuples forming the exterior ring.
@@ -147,11 +180,21 @@ def polygon_area(coordinates: Sequence[Sequence[float]]) -> float:
     Returns:
         Area in square meters (float).  Returns 0.0 for degenerate rings.
     """
-    if len(coordinates) < 3:
+    ring = [c for c in coordinates if c is not None and c[0] is not None]
+    if len(ring) < 3:
         return 0.0
 
-    from qgis.core import QgsPointXY, QgsGeometry
+    try:
+        from qgis.core import QgsPointXY, QgsGeometry
 
-    points = [QgsPointXY(float(c[0]), float(c[1])) for c in coordinates]
-    geom = QgsGeometry.fromPolygonXY([points])
-    return abs(_get_measure().measureArea(geom))
+        points = [QgsPointXY(float(c[0]), float(c[1])) for c in ring]
+        if points[0] != points[-1]:
+            points.append(QgsPointXY(points[0]))
+        geom = QgsGeometry.fromPolygonXY([points])
+        area_m2 = abs(float(_get_measure().measureArea(geom)))
+        if area_m2 > 0.0:
+            return area_m2
+    except Exception as exc:
+        log.debug("QgsDistanceArea.measureArea failed, using spherical: %s", exc)
+
+    return _spherical_ring_area_m2(ring)

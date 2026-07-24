@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Distance Rings overlay — concentric range rings around the platform position."""
 
-import math
-
 from qgis.core import (
     QgsGeometry,
     QgsPointXY,

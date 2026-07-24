@@ -149,7 +149,7 @@ class DrawToolsController:
         @param value: Button checked state
         """
         player = self.player
-        player.videoWidget.Track_Canvas_RubberBand.reset()
+        player.videoWidget.rubbers.track_canvas.reset()
 
         self.UncheckUtils(player.sender(), value)
         if value:
@@ -174,10 +174,10 @@ class DrawToolsController:
 
         player.toolBtn_Measure.setDefaultAction(player.actionMeasureDistance)
         self.UncheckUtils(player.sender(), value)
+        # Exclusive vs area (UncheckUtils already clears drawers; enforce flag).
+        if value:
+            player.videoWidget.SetMeasureArea(False)
         player.videoWidget.SetMeasureDistance(value)
-        if not value:
-            player.videoWidget.ResetDrawMeasureDistance()
-
         player.staticDraw = value
 
     def VideoMeasureArea(self, value):
@@ -191,9 +191,10 @@ class DrawToolsController:
 
         player.toolBtn_Measure.setDefaultAction(player.actionMeasureArea)
         self.UncheckUtils(player.sender(), value)
+        if value:
+            player.videoWidget.SetMeasureDistance(False)
         player.videoWidget.SetMeasureArea(value)
-        if not value:
-            player.videoWidget.ResetDrawMeasureArea()
+        player.staticDraw = value
 
     def _removeLastMeasurePoint(self, draw_list, sync_fn):
         """Remove last measurement point from *draw_list* and sync to map."""
@@ -280,8 +281,14 @@ class DrawToolsController:
         player = self.player
         for name in self._UNCHECKABLE_TOOLS:
             action = getattr(player, name, None)
-            if action is not None:
-                action.setChecked(False)
+            if action is None or action is sender:
+                continue
+            # Block signals so sibling tools do not re-enter their slots
+            # (e.g. MeasureArea(False) must not resume playback while
+            # MeasureDistance is being activated).
+            action.blockSignals(True)
+            action.setChecked(False)
+            action.blockSignals(False)
 
         dialog = getattr(player, "_milSymbolDialog", None)
         if dialog is not None:
@@ -291,6 +298,7 @@ class DrawToolsController:
 
         if (
             not value
+            and sender is not None
             and player.player.playbackRate() == player.playbackRateSlow
             and sender.objectName() == "actionObject_Tracking"
             and not player.videoWidget._filterSatate.hasFiltersSlow()
@@ -298,9 +306,10 @@ class DrawToolsController:
             player.sdv = player.player.position()
             player.player.setPlaybackRate(1.0)
 
-        sender.blockSignals(True)
-        sender.setChecked(value)
-        sender.blockSignals(False)
+        if sender is not None:
+            sender.blockSignals(True)
+            sender.setChecked(value)
+            sender.blockSignals(False)
 
     def UncheckFilters(self, sender, value):
         """Uncheck Filters Video"""

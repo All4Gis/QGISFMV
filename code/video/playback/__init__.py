@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""OpenCV video widget, surface, state, and utilities."""
-
-from QGISFMV.video.playback.QgsVideoState import FilterState, InteractionState, MOUSE_MOVE_EVENT
+"""OpenCV video widget, surface, state, draw/track/cursor controllers, and utilities."""
 
 __all__ = [
     "VideoWidget",
@@ -9,7 +7,9 @@ __all__ = [
     "FilterState",
     "InteractionState",
     "MOUSE_MOVE_EVENT",
+    "TrackLockState",
     "VideoUtils",
+    "RubberBandManager",
 ]
 
 
@@ -26,4 +26,12 @@ def __getattr__(name):
         from QGISFMV.video.playback.QgsVideoUtils import VideoUtils
 
         return VideoUtils
+    if name == "RubberBandManager":
+        from QGISFMV.video.playback.QgsVideoRubberBands import RubberBandManager
+
+        return RubberBandManager
+    if name in ("FilterState", "InteractionState", "MOUSE_MOVE_EVENT", "TrackLockState"):
+        from QGISFMV.video.playback import QgsVideoState as _state
+
+        return getattr(_state, name)
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

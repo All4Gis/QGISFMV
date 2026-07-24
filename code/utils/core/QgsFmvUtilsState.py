@@ -16,7 +16,7 @@ class globalVariablesState:
 
     def __init__(self):
         self.iface = _default_iface()
-        self.centerMode = 2
+        self.centerMode = 1
         self.gcornerPointUL = None
         self.gcornerPointUR = None
         self.gcornerPointLR = None

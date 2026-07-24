@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """KLV telemetry ingestion pipeline: worker-thread wiring, packet dedup, and layer sync."""
 
-from qgis.PyQt.QtCore import QCoreApplication, QThread, QTimer
-from qgis.PyQt.QtWidgets import QTableWidgetItem
+from qgis.PyQt.QtCore import QCoreApplication, QThread, QTimer, Qt
+from qgis.PyQt.QtWidgets import QDockWidget, QTableWidgetItem
 from qgis.core import Qgis as QGis
 
+from QGISFMV.player.dialogs.QgsFmvMetadata import QgsFmvMetadata
 from QGISFMV.utils.core.QgsFmvThreads import stop_qthread
 from QGISFMV.utils.core.QgsFmvUtils import UpdateLayers
 from QGISFMV.utils.layers.QgsFmvLayers import beginNewTrajectorySegment
@@ -83,6 +84,35 @@ class MetadataPipelineController:
             table.verticalScrollBar().setSliderPosition(self._sliderPosition)
         finally:
             table.setUpdatesEnabled(True)
+
+    def _placeMetadataDockTopLeft(self):
+        """Pin the metadata panel to the top of the left dock column."""
+        player = self.player
+        dock = player.metadataDlg
+        area = Qt.DockWidgetArea.LeftDockWidgetArea
+        main_window = player.iface.mainWindow()
+
+        if dock.parent() is None:
+            player.iface.addDockWidget(area, dock)
+
+        for other in main_window.findChildren(QDockWidget):
+            if other is dock:
+                continue
+            if main_window.dockWidgetArea(other) != area:
+                continue
+            main_window.splitDockWidget(dock, other, Qt.Orientation.Vertical)
+            break
+
+        dock.show()
+        dock.raise_()
+
+    def OpenQgsFmvMetadata(self):
+        """Open the metadata dock and refresh the table from current packet data."""
+        player = self.player
+        if player.metadataDlg is None:
+            player.metadataDlg = QgsFmvMetadata(player=player)
+        self._placeMetadataDockTopLeft()
+        self.addMetadata(player.data)
 
     def shutdown(self):
         """Disconnect and stop the metadata worker thread (idempotent)."""

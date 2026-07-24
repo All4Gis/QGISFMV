@@ -153,7 +153,13 @@ class CloseController:
                 m.close()
 
         self._safe_call(_close_matplot, "matplot.close")
-        self._safe_call(player.VideoInfoDialog.hide, "VideoInfoDialog.hide")
+
+        def _hide_video_info():
+            dlg = getattr(player, "VideoInfoDialog", None)
+            if dlg is not None:
+                dlg.hide()
+
+        self._safe_call(_hide_video_info, "VideoInfoDialog.hide")
 
         player.filterManager.restoreFilters()
 

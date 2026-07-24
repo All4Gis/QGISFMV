@@ -10,7 +10,6 @@ import subprocess
 from qgis.PyQt.QtCore import QCoreApplication
 
 from QGISFMV.utils.core.QgsFmvUtils import _spawn
-import QGISFMV.utils.core.QgsFmvUtils as _fmv_utils
 from QGISFMV.utils.logging import log
 
 windows = platform.system() == "Windows"

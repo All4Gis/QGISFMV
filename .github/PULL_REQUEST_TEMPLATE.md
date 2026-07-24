@@ -29,4 +29,4 @@
 
 ## Screenshots
 
-<!-- Before / after for UI changes. See assets/README.md for naming -->
+<!-- Before / after for UI changes -->

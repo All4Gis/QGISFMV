@@ -7,21 +7,13 @@ import platform
 import shutil
 import time
 from qgis.PyQt.QtCore import QSettings, QUrl, QEventLoop
-from qgis.PyQt.QtCore import QCoreApplication, QPoint, Qt
+from qgis.PyQt.QtCore import QPoint
 from qgis.PyQt.QtGui import QPainter
 from qgis.PyQt.QtNetwork import QNetworkRequest
-from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.core import (
     QgsNetworkAccessManager,
-    QgsProject,
-    QgsCoordinateTransform,
-    QgsCoordinateReferenceSystem,
-    QgsPointXY,
-    QgsWkbTypes,
     Qgis as QGis,
 )
-
-import subprocess
 
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.core.QgsFmvUtilsState import globalVariablesState  # noqa: F401
@@ -31,24 +23,13 @@ from QGISFMV.utils.core.QgsFmvVideoSession import (
     get_active_session,
     set_active_session,
 )
-from QGISFMV.utils.core.QgsImageMat import convertQImageToMat
 from QGISFMV.utils.media import QgsFfmpegRunner as _ffmpeg_runner
-
-try:
-    from osgeo import gdal, osr
-except ImportError:
-    gdal = None
-    osr = None
-
-from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance, destination as _geo_destination
 
 import pymisb.klvdata  # noqa: F401  (register ST0601 parsers)
 from pymisb.klvdata.element import UnknownElement
 from pymisb.klvdata.streamparser import StreamParser
 from QGISFMV.utils.layers.QgsFmvLayers import (
-    UpdateFootPrintData,
     UpdateTrajectoryData,
-    UpdateBeamsData,
     UpdatePlatformData,
     UpdateFrameCenterData,
     UpdateFrameAxisData,
@@ -60,7 +41,6 @@ from QGISFMV.utils.settings.QgsFmvSettings import (
     get_int,
     get_layer,
     reverse_geocoding_url as _reverse_geocoding_url,
-    load as _load_settings,
 )
 
 # ---------------------------------------------------------------------------
@@ -74,8 +54,6 @@ from QGISFMV.utils.core.QgsFmvGeoReferencing import (  # noqa: F401
     _footprint_inputs_changed,
     _refreshAffineFromStoredCorners,
     _update_footprint_beams_gcp,
-    CornerEstimationWithOffsets,
-    CornerEstimationWithoutOffsets,
     GetDemAltAt,
     GetFrameCenter,
     GetGCPGeoTransform,
@@ -88,6 +66,10 @@ from QGISFMV.utils.core.QgsFmvGeoReferencing import (  # noqa: F401
     SetImageSize,
     hasElevationModel,
 )
+from QGISFMV.utils.core.QgsFmvCornerEstimation import (  # noqa: F401
+    CornerEstimationWithOffsets,
+    CornerEstimationWithoutOffsets,
+)
 
 from QGISFMV.utils.core.QgsFmvMosaic import (  # noqa: F401
     ExtendMosaic,
@@ -97,6 +79,22 @@ from QGISFMV.utils.core.QgsFmvMosaic import (  # noqa: F401
     _mosaic_source_files,
     georeferencingVideo,
     resetMosaicFrameCounter,
+)
+from QGISFMV.utils.core.QgsFmvMapCenter import (  # noqa: F401
+    followMapCenter,
+    centerCanvasOnLayer,
+    _transformExtentToCanvas,
+    _layerExtentInCanvasCrs,
+    _transformPointToCanvas,
+    _latest_layer_feature,
+    _layer_center_on_canvas,
+    _center_fallback_point,
+)
+from QGISFMV.utils.ui.QgsFmvFileDialogs import (  # noqa: F401
+    pluginSetting,
+    setPluginSetting,
+    askForFiles,
+    askForFolder,
 )
 
 settings = QSettings()
@@ -213,163 +211,6 @@ def setCenterMode(mode, interface):
     set_active_session(session)
     gv = session
     return session
-
-
-def _transformExtentToCanvas(extent, src_crs, iface):
-    """Transform a layer extent to the map canvas CRS."""
-    if extent is None or extent.isNull() or extent.isEmpty():
-        return None
-    canvas = iface.mapCanvas()
-    dest_crs = canvas.mapSettings().destinationCrs()
-    if src_crs == dest_crs:
-        return extent
-    xform = QgsCoordinateTransform(src_crs, dest_crs, QgsProject.instance())
-    return xform.transformBoundingBox(extent)
-
-
-def _layerExtentInCanvasCrs(layer, iface):
-    """Return the latest feature extent transformed to the canvas CRS."""
-    if layer is None:
-        return None
-    feature = _latest_layer_feature(layer)
-    if feature is None or not feature.isValid():
-        if layer.featureCount() == 0:
-            return None
-        extent = layer.extent()
-        if extent is None or extent.isNull() or extent.isEmpty():
-            return None
-        return _transformExtentToCanvas(extent, layer.crs(), iface)
-
-    geom = feature.geometry()
-    if geom is None or geom.isEmpty():
-        return None
-    return _transformExtentToCanvas(geom.boundingBox(), layer.crs(), iface)
-
-
-def _transformPointToCanvas(point, src_crs, iface):
-    """Transform a map point to the canvas CRS."""
-    if point is None or iface is None:
-        return None
-    canvas = iface.mapCanvas()
-    dest_crs = canvas.mapSettings().destinationCrs()
-    if src_crs == dest_crs:
-        return QgsPointXY(point.x(), point.y())
-    xform = QgsCoordinateTransform(src_crs, dest_crs, QgsProject.instance())
-    transformed = xform.transform(QgsPointXY(point.x(), point.y()))
-    return QgsPointXY(transformed.x(), transformed.y())
-
-
-def _latest_layer_feature(layer):
-    """Return the most recently added feature in a vector layer (O(1) for single-feature layers)."""
-    if layer is None:
-        return None
-    for feature in layer.getFeatures():
-        return feature
-    return None
-
-
-def _layer_center_on_canvas(layer, iface):
-    """Return the current center point for a layer in canvas coordinates."""
-    if layer is None or iface is None:
-        return None
-
-    feature = _latest_layer_feature(layer)
-    if feature is not None and feature.isValid():
-        geom = feature.geometry()
-        if geom is not None and not geom.isEmpty():
-            if geom.type() == QgsWkbTypes.PointGeometry:
-                point = geom.asPoint()
-            else:
-                point = geom.centroid().asPoint()
-            return _transformPointToCanvas(point, layer.crs(), iface)
-
-    extent = layer.extent()
-    if extent is not None and not extent.isNull() and not extent.isEmpty():
-        center = _transformExtentToCanvas(extent, layer.crs(), iface)
-        if center is not None:
-            return center.center()
-    return None
-
-
-def _center_fallback_point(center_mode, iface):
-    """Fallback map center from live telemetry when the layer has no geometry yet."""
-    if gv is None or iface is None:
-        return None
-    if center_mode == 1:
-        lat = gv.getSensorLatitude()
-        lon = gv.getSensorLongitude()
-    elif center_mode == 3:
-        lat = gv.getFrameCenterLat()
-        lon = gv.getFrameCenterLon()
-    else:
-        return None
-    if lat is None or lon is None:
-        return None
-    point = QgsPointXY(float(lon), float(lat))
-    return _transformPointToCanvas(
-        point, QgsCoordinateReferenceSystem("EPSG:4326"), iface
-    )
-
-
-def followMapCenter(iface, centerMode, groupName):
-    """
-    Follow platform (1), footprint (2), or frame center/target (3).
-
-    When a mode is active the map is re-centered on every metadata update so
-    manual panning is overridden until the user unchecks the menu action.
-    """
-    if iface is None or not centerMode:
-        return False
-
-    from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
-
-    platform_name = settings_get("LAYERS", "platform_lyr", Platform_lyr)
-    footprint_name = settings_get("LAYERS", "footprint_lyr", Footprint_lyr)
-    target_name = settings_get("LAYERS", "framecenter_lyr", FrameCenter_lyr)
-
-    canvas = iface.mapCanvas()
-    recentered = False
-
-    if centerMode == 1:
-        lyr = qgsu.selectLayerByName(platform_name, groupName)
-        center = _layer_center_on_canvas(lyr, iface) or _center_fallback_point(1, iface)
-        if center is not None:
-            canvas.setCenter(center)
-            recentered = True
-    elif centerMode == 2:
-        lyr = qgsu.selectLayerByName(footprint_name, groupName)
-        extent = _layerExtentInCanvasCrs(lyr, iface)
-        if extent is not None:
-            margin = max(extent.width(), extent.height()) * 0.5
-            if margin <= 0:
-                margin = canvas.extent().width() * 0.05
-            canvas.setExtent(extent.buffered(margin))
-            recentered = True
-    elif centerMode == 3:
-        lyr = qgsu.selectLayerByName(target_name, groupName)
-        center = _layer_center_on_canvas(lyr, iface) or _center_fallback_point(3, iface)
-        if center is not None:
-            canvas.setCenter(center)
-            recentered = True
-
-    if recentered:
-        canvas.refresh()
-    return recentered
-
-
-def centerCanvasOnLayer(iface, layer_name, groupName):
-    """One-shot center/zoom for the requested FMV layer."""
-    from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
-
-    mode_map = {
-        settings_get("LAYERS", "platform_lyr", Platform_lyr): 1,
-        settings_get("LAYERS", "footprint_lyr", Footprint_lyr): 2,
-        settings_get("LAYERS", "framecenter_lyr", FrameCenter_lyr): 3,
-    }
-    mode = mode_map.get(layer_name)
-    if not mode:
-        return False
-    return followMapCenter(iface, mode, groupName)
 
 
 def ensureGlobalState(interface):
@@ -567,76 +408,6 @@ def _reverseGeocodeLabelFromJson(data):
     from QGISFMV.utils.media.QgsFmvGeocode import reverseGeocodeLabelFromJson
 
     return reverseGeocodeLabelFromJson(data)
-
-
-def pluginSetting(name, namespace=None, typ=str):
-    """Read a plugin setting from QSettings."""
-    namespace = namespace or PLUGIN_NAMESPACE
-    full_name = namespace + "/" + name
-    return settings.value(full_name, None, type=typ)
-
-
-def askForFiles(parent, msg=None, isSave=False, allowMultiple=False, exts="*"):
-    """dialog for save or load files"""
-    msg = msg or "Select file"
-    name = "/".join(["LAST_PATH", parent.__class__.__name__])
-    namespace = PLUGIN_NAMESPACE
-    path = pluginSetting(name, namespace)
-    f = None
-    if not isinstance(exts, list):
-        exts = [exts]
-    extString = ";; ".join(
-        [
-            (
-                " %s files (*.%s *.%s)" % (e.upper(), e, e.upper())
-                if e != "*"
-                else "All files (*.*)"
-            )
-            for e in exts
-        ]
-    )
-
-    dlg = QFileDialog()
-
-    if allowMultiple:
-        ret = dlg.getOpenFileNames(parent, msg, path, extString)
-        if ret:
-            f = ret[0]
-        else:
-            f = ret = None
-    else:
-        if isSave:
-            ret = dlg.getSaveFileName(parent, msg, path, extString) or None
-            if ret[0] != "":
-                _file_stem, ext = os.path.splitext(ret[0])
-                if not ext:
-                    ret[0] += "." + exts[0]  # Default extension
-        else:
-            ret = dlg.getOpenFileName(parent, msg, path, extString) or None
-        f = ret
-
-    if f is not None:
-        setPluginSetting(name, os.path.dirname(f[0]), namespace)
-
-    return ret
-
-
-def setPluginSetting(name, value, namespace=None):
-    """Set plugin name in QGIS settings"""
-    namespace = namespace or PLUGIN_NAMESPACE
-    settings.setValue(namespace + "/" + name, value)
-
-
-def askForFolder(parent, msg=None, options=QFileDialog.Option.ShowDirsOnly):
-    """dialog for save or load folder"""
-    msg = msg or "Select folder"
-    name = "/".join(["LAST_PATH", parent.__class__.__name__])
-    namespace = PLUGIN_NAMESPACE
-    path = pluginSetting(name, namespace)
-    folder = QFileDialog.getExistingDirectory(parent, msg, path, options)
-    if folder:
-        setPluginSetting(name, folder, namespace)
-    return folder
 
 
 def _videoFrameImage(parent):
