@@ -7,8 +7,6 @@ import time
 
 import numpy as np
 
-from qgis.PyQt.QtCore import Qt
-
 try:
     from osgeo import gdal, osr
 except ImportError:
@@ -16,8 +14,6 @@ except ImportError:
     osr = None
 
 from QGISFMV.utils.logging import log
-from QGISFMV.utils.core.QgsImageMat import convertQImageToMat
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
 
 # ---------------------------------------------------------------------------
@@ -73,12 +69,7 @@ def _footprint_ground_span_m():
 
 def _should_accept_mosaic_frame():
     """Skip frames unless the platform moved or the footprint changed enough."""
-    from QGISFMV.utils.core.QgsFmvUtils import (
-        MOSAIC_MIN_INTERVAL_SEC,
-        MOSAIC_MIN_MOVE_METERS,
-        MOSAIC_FOOTPRINT_GROW_RATIO,
-        MOSAIC_FOOTPRINT_GROW_METERS,
-    )
+    from QGISFMV.utils import constants as mosaic_cfg
     from QGISFMV.utils.core.QgsFmvUtils import gv
     global _mosaic_capture_state
     if gv is None:
@@ -113,11 +104,15 @@ def _should_accept_mosaic_frame():
     span_grew = False
     if footprint_span is not None and last_span is not None:
         span_grew = footprint_span >= max(
-            last_span * MOSAIC_FOOTPRINT_GROW_RATIO,
-            last_span + MOSAIC_FOOTPRINT_GROW_METERS,
+            last_span * mosaic_cfg.MOSAIC_FOOTPRINT_GROW_RATIO,
+            last_span + mosaic_cfg.MOSAIC_FOOTPRINT_GROW_METERS,
         )
 
-    if span_grew or elapsed >= MOSAIC_MIN_INTERVAL_SEC or moved >= MOSAIC_MIN_MOVE_METERS:
+    if (
+        span_grew
+        or elapsed >= mosaic_cfg.MOSAIC_MIN_INTERVAL_SEC
+        or moved >= mosaic_cfg.MOSAIC_MIN_MOVE_METERS
+    ):
         _mosaic_capture_state.update(
             time=now, lat=lat, lon=lon, footprint_span=footprint_span
         )
@@ -128,9 +123,11 @@ def _should_accept_mosaic_frame():
 
 def _downscale_qimage_for_mosaic(image, max_dimension=None):
     """Reduce frame size for mosaic I/O and blending."""
-    from QGISFMV.utils.core.QgsFmvUtils import MOSAIC_MAX_FRAME_DIMENSION
+    from qgis.PyQt.QtCore import Qt
+
     if max_dimension is None:
-        max_dimension = MOSAIC_MAX_FRAME_DIMENSION
+        from QGISFMV.utils import constants as mosaic_cfg
+        max_dimension = mosaic_cfg.MOSAIC_MAX_FRAME_DIMENSION
     width = image.width()
     height = image.height()
     if max(width, height) <= max_dimension:
@@ -156,9 +153,9 @@ def _mosaic_feather_weights(height, width, feather_px=None):
     Results are cached by (height, width, feather_px) to avoid repeated
     numpy allocations during mosaic frame writes.
     """
-    from QGISFMV.utils.core.QgsFmvUtils import MOSAIC_FEATHER_PX
     if feather_px is None:
-        feather_px = MOSAIC_FEATHER_PX
+        from QGISFMV.utils import constants as mosaic_cfg
+        feather_px = mosaic_cfg.MOSAIC_FEATHER_PX
     feather_px = max(8, int(feather_px))
     key = (height, width, feather_px)
     cached = _feather_weights_cache.get(key)
@@ -176,9 +173,9 @@ def _mosaic_feather_weights(height, width, feather_px=None):
 
 def _footprint_weights_from_mask(valid, feather_px=None):
     """Feather weights from distance to the footprint edge (not mosaic canvas)."""
-    from QGISFMV.utils.core.QgsFmvUtils import MOSAIC_FEATHER_PX
     if feather_px is None:
-        feather_px = MOSAIC_FEATHER_PX
+        from QGISFMV.utils import constants as mosaic_cfg
+        feather_px = mosaic_cfg.MOSAIC_FEATHER_PX
     feather_px = max(8, int(feather_px))
     valid = np.asarray(valid, dtype=bool)
     if not valid.any():
@@ -211,7 +208,6 @@ def _footprint_weights_from_mask(valid, feather_px=None):
     dist = np.minimum(dy, dx)
     weights = np.clip(dist / float(feather_px), 0.0, 1.0).astype(np.float32)
     return np.where(valid, weights, 0.0).astype(np.float32)
-
 
 # ---------------------------------------------------------------------------
 # Raster I/O helpers
@@ -249,9 +245,9 @@ def _union_extent(paths):
 
 
 def _mosaic_output_resolution(bounds, max_output_size=None):
-    from QGISFMV.utils.core.QgsFmvUtils import MOSAIC_MAX_OUTPUT_SIZE
     if max_output_size is None:
-        max_output_size = MOSAIC_MAX_OUTPUT_SIZE
+        from QGISFMV.utils import constants as mosaic_cfg
+        max_output_size = mosaic_cfg.MOSAIC_MAX_OUTPUT_SIZE
     minx, miny, maxx, maxy = bounds
     span_x = max(abs(maxx - minx), 1e-12)
     span_y = max(abs(maxy - miny), 1e-12)
@@ -391,6 +387,8 @@ def _scale_affine_for_resize(affine, old_width, old_height, new_width, new_heigh
         or (old_width == new_width and old_height == new_height)
         or old_width <= 0
         or old_height <= 0
+        or new_width <= 0
+        or new_height <= 0
     ):
         return affine
     sx = old_width / float(new_width)
@@ -411,6 +409,8 @@ def _scale_affine_for_resize(affine, old_width, old_height, new_width, new_heigh
 
 def _write_georef_frame_gdal(image, dst_filename, affine):
     """Write RGBA GeoTIFF: RGB untouched, alpha = source-edge feather."""
+    from QGISFMV.utils.core.QgsImageMat import convertQImageToMat
+
     rgb = convertQImageToMat(image)
     if rgb is None or rgb.size == 0:
         return None
@@ -475,16 +475,6 @@ def _gdal_raster_readable(path):
         ds = None
 
 
-def _mosaic_source_files(folder):
-    """Return sorted per-frame georeferenced rasters in a mosaic working folder."""
-    import glob
-
-    found = []
-    for pattern in ("g_*.tiff", "g_*.tif"):
-        found.extend(glob.glob(os.path.join(folder, pattern)))
-    return sorted(set(found))
-
-
 # ---------------------------------------------------------------------------
 # Main entry points
 # ---------------------------------------------------------------------------
@@ -506,6 +496,7 @@ def georeferencingVideo(parent):
     """Add the current frame to the live mosaic."""
     global _mosaic_frame_counter
 
+    from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
     from QGISFMV.utils.core.QgsFmvUtils import gv, getVideoFolder
     from QGISFMV.utils.core.QgsFmvUtils import _videoFrameImage, _syncVideoImageSizeFromParent
     from QGISFMV.utils.core.QgsFmvGeoReferencing import (

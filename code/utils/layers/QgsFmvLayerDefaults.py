@@ -523,6 +523,16 @@ def SetDefaultObjectPositionStyle(layer):
     _apply_style(layer, "object_position")
 
 
+def SetDefaultDetectionsStyle(layer):
+    """AI / CV detection markers (reuse object-position symbology)."""
+    _apply_style(layer, "object_position")
+
+
+def SetDefaultDetectionTrailStyle(layer):
+    """Accumulating detection heat-trail (softer object-position style)."""
+    _apply_style(layer, "object_position")
+
+
 def SetDefaultPlatformStyle(layer, platform="DEFAULT"):
     """Platform Symbol"""
     _apply_style(layer, "platform", platform)

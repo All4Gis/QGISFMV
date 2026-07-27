@@ -294,8 +294,38 @@ class MetadataPipelineController:
         if getattr(player.miniMapOverlay, "_visible", False):
             player.miniMapOverlay.update_from_state(player.session)
 
-        # Check alert rules
+        # Check alert rules + spatial geofences
         player.alertManager.checkMetadata(data)
+        geofence = getattr(player, "geofenceController", None)
+        if geofence is not None:
+            geofence.checkMetadata(data)
+
+        # Live place label (reverse geocode → HUD)
+        place = getattr(player, "placeLabelController", None)
+        if place is not None and place.isEnabled():
+            try:
+                from QGISFMV.geo.QgsFmvSpatial import metadata_lat_lon
+
+                pos = metadata_lat_lon(data, prefer_frame_center=True)
+                if pos is not None:
+                    place.onFrameCenter(pos[0], pos[1])
+            except Exception:
+                pass
+
+        # Target pin cue (range / bearing / FOV enter)
+        target_pin = getattr(player, "targetPinController", None)
+        if target_pin is not None and target_pin.hasPin():
+            try:
+                target_pin.updateFromMetadata(data)
+            except Exception:
+                pass
+
+        # Build click-to-seek geo/time index
+        map_seek = getattr(player, "mapSeekController", None)
+        if map_seek is not None:
+            map_seek.recordFromMetadata(
+                data, time_sec=getattr(player, "currentInfo", None)
+            )
 
         # Update C2 overlays
         if player.sensorConeOverlay.isVisible:

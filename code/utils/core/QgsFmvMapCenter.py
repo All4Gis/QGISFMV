@@ -20,6 +20,23 @@ from qgis.core import (
 
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
+# Cinematic (smoothed) follow — module state for lerp between centers.
+_cinematic_follow = False
+_cinematic_last = None  # QgsPointXY or None
+
+
+def set_cinematic_follow(enabled):
+    """Enable/disable smoothed map follow (lerp toward target each tick)."""
+    global _cinematic_follow, _cinematic_last
+    _cinematic_follow = bool(enabled)
+    if not _cinematic_follow:
+        _cinematic_last = None
+    return _cinematic_follow
+
+
+def is_cinematic_follow():
+    return _cinematic_follow
+
 
 def _base():
     """Lazily resolve QgsFmvUtils to dodge the circular import at load time.
@@ -150,11 +167,13 @@ def followMapCenter(iface, centerMode, groupName):
     canvas = iface.mapCanvas()
     recentered = False
 
+    global _cinematic_last
+
     if centerMode == 1:
         lyr = qgsu.selectLayerByName(platform_name, groupName)
         center = _layer_center_on_canvas(lyr, iface) or _center_fallback_point(1, iface)
         if center is not None:
-            canvas.setCenter(center)
+            canvas.setCenter(_maybe_lerp_center(canvas, center))
             recentered = True
     elif centerMode == 2:
         lyr = qgsu.selectLayerByName(footprint_name, groupName)
@@ -163,18 +182,42 @@ def followMapCenter(iface, centerMode, groupName):
             margin = max(extent.width(), extent.height()) * 0.5
             if margin <= 0:
                 margin = canvas.extent().width() * 0.05
+            # Footprint mode keeps hard extent (cinematic lerp is for point modes).
             canvas.setExtent(extent.buffered(margin))
             recentered = True
+            _cinematic_last = None
     elif centerMode == 3:
         lyr = qgsu.selectLayerByName(target_name, groupName)
         center = _layer_center_on_canvas(lyr, iface) or _center_fallback_point(3, iface)
         if center is not None:
-            canvas.setCenter(center)
+            canvas.setCenter(_maybe_lerp_center(canvas, center))
             recentered = True
 
     if recentered:
         canvas.refresh()
     return recentered
+
+
+def _maybe_lerp_center(canvas, target):
+    """Return target, or a lerped point when cinematic follow is on."""
+    global _cinematic_last
+    if not _cinematic_follow:
+        _cinematic_last = QgsPointXY(target.x(), target.y())
+        return target
+    try:
+        from QGISFMV.utils.constants import CINEMATIC_FOLLOW_ALPHA
+
+        alpha = float(CINEMATIC_FOLLOW_ALPHA)
+        cur = canvas.center()
+        if _cinematic_last is not None:
+            cur = _cinematic_last
+        nx = cur.x() + (target.x() - cur.x()) * alpha
+        ny = cur.y() + (target.y() - cur.y()) * alpha
+        out = QgsPointXY(nx, ny)
+        _cinematic_last = out
+        return out
+    except Exception:
+        return target
 
 
 def centerCanvasOnLayer(iface, layer_name, groupName):

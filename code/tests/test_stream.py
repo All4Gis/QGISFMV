@@ -51,3 +51,42 @@ class TestStreamUriHelpers:
     def test_streamDisplayName(self):
         label = self.stream.streamDisplayName("udp://@:5005")
         assert label == "UDP @:5005"
+
+    def test_isStreamUri_rejects_empty(self):
+        assert not self.stream.isStreamUri("")
+        assert not self.stream.isStreamUri(None)
+
+    def test_validate_port_range(self):
+        ok, msg = self.stream.validateStreamEndpoint("UDP", "127.0.0.1", "0")
+        assert not ok
+        ok, _ = self.stream.validateStreamEndpoint("UDP", "127.0.0.1", "5005")
+        assert ok
+
+    def test_rtsp_requires_host(self):
+        ok, msg = self.stream.validateStreamEndpoint("RTSP", "  ", "8554")
+        assert not ok
+        assert "Host" in msg
+
+    def test_build_rtp(self):
+        assert self.stream.buildStreamUri("RTP", "10.0.0.1", "5004") == "rtp://10.0.0.1:5004"
+
+    def test_vlc_hint_non_empty(self):
+        for proto in ("UDP", "TCP", "RTP", "RTSP"):
+            assert self.stream.vlcHintText(proto)
+
+    def test_windows_style_file_not_stream(self):
+        assert not self.stream.isStreamUri(r"C:\Videos\clip.ts")
+        assert not self.stream.isStreamUri("file:///C:/Videos/clip.ts")
+
+    def test_validate_none_protocol_host_safe(self):
+        ok, msg = self.stream.validateStreamEndpoint(None, None, "8554")
+        assert ok is True  # non-RTSP with no host is fine
+        ok, msg = self.stream.validateStreamEndpoint("RTSP", None, "8554")
+        assert not ok
+        assert "Host" in msg
+
+    def test_display_name_for_local_path(self):
+        assert self.stream.streamDisplayName("/tmp/clip.ts") == "clip.ts"
+
+    def test_vlc_hint_unknown_empty(self):
+        assert self.stream.vlcHintText("FOO") == ""

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Detection bounding box with corner ticks -->
+  <rect x="2.5" y="2.5" width="12" height="10" rx="1.2"
+        fill="rgba(220,80,40,0.18)" stroke="#dc5028" stroke-width="1.5"/>
+  <path d="M2.5 6.5 V2.5 H6.5" fill="none" stroke="#dc5028" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M14.5 6.5 V2.5 H10.5" fill="none" stroke="#dc5028" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M2.5 8.5 V12.5 H6.5" fill="none" stroke="#dc5028" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M14.5 8.5 V12.5 H10.5" fill="none" stroke="#dc5028" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Map pin (bottom-right) -->
+  <path d="M16 11.2 C16 9.3 17.5 8 19.2 8 C20.9 8 22.4 9.3 22.4 11.2
+           C22.4 13.6 19.2 17 19.2 17 C19.2 17 16 13.6 16 11.2 Z"
+        fill="rgba(30,100,200,0.35)" stroke="#1e64c8" stroke-width="1.4"/>
+  <circle cx="19.2" cy="11.2" r="1.35" fill="#1e64c8"/>
+</svg>

@@ -114,6 +114,7 @@ def _assign_track_ids(filter_key, boxes):
             tid = state["next_id"]
             state["next_id"] += 1
             state["tracks"].append({"id": tid, "box": box})
+            used.add(len(state["tracks"]) - 1)
         assigned.append(tid)
     state["tracks"] = [state["tracks"][i] for i in sorted(used)]
     return assigned

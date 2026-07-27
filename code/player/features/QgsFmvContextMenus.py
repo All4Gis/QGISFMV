@@ -79,6 +79,26 @@ class ContextMenuController:
         actionShowMetadata.triggered.connect(player.OpenQgsFmvMetadata)
 
         menu.addSeparator()
+        actionAddBookmark = menu.addAction(
+            QCoreApplication.translate("QgsFmvPlayer", "Add Timeline Bookmark")
+        )
+        actionAddBookmark.triggered.connect(self.addTimelineBookmark)
+        actionClearBookmarks = menu.addAction(
+            QCoreApplication.translate("QgsFmvPlayer", "Clear Timeline Bookmarks")
+        )
+        actionClearBookmarks.triggered.connect(self.clearTimelineBookmarks)
+        actionClearBookmarks.setEnabled(
+            bool(getattr(player, "timeline", None) and player.timeline.eventCount())
+        )
+        actionExportBookmarks = menu.addAction(
+            QCoreApplication.translate("QgsFmvPlayer", "Export Timeline Bookmarks…")
+        )
+        actionExportBookmarks.triggered.connect(self.exportTimelineBookmarks)
+        actionExportBookmarks.setEnabled(
+            bool(getattr(player, "timeline", None) and player.timeline.eventCount())
+        )
+
+        menu.addSeparator()
         actionClearTrack = menu.addAction(
             QIcon(ICON_TRACKING),
             QCoreApplication.translate("QgsFmvPlayer", "Clear Object Track"),
@@ -94,6 +114,35 @@ class ContextMenuController:
             QCoreApplication.translate("QgsFmvPlayer", "Export Mosaic…"),
         )
         actionExportMosaic.triggered.connect(player.exportMosaic)
+        actionMission = menu.addAction(
+            QCoreApplication.translate("QgsFmvPlayer", "Export Mission Package…")
+        )
+        actionMission.triggered.connect(player.exportMissionPackage)
+        actionGeofence = menu.addAction(
+            QCoreApplication.translate("QgsFmvPlayer", "Set Geofence from Footprint")
+        )
+        actionGeofence.triggered.connect(player.setGeofenceFromFootprint)
+        actionReplay = menu.addAction(
+            QCoreApplication.translate("QgsFmvPlayer", "Instant Replay on Alert")
+        )
+        actionReplay.setCheckable(True)
+        ir = getattr(player, "instantReplay", None)
+        actionReplay.setChecked(bool(ir and ir.isEnabled()))
+        actionReplay.triggered.connect(player.toggleInstantReplay)
+        actionStory = menu.addAction(
+            QCoreApplication.translate("QgsFmvPlayer", "Auto Storyboard Captures")
+        )
+        actionStory.setCheckable(True)
+        sb = getattr(player, "storyboardController", None)
+        actionStory.setChecked(bool(sb and sb.isEnabled()))
+        actionStory.triggered.connect(player.toggleStoryboard)
+        actionPin = menu.addAction(
+            QCoreApplication.translate("QgsFmvPlayer", "Pin Target on Map")
+        )
+        actionPin.setCheckable(True)
+        pin = getattr(player, "targetPinController", None)
+        actionPin.setChecked(bool(pin and pin.isArming()))
+        actionPin.triggered.connect(player.togglePinTarget)
 
         menu.addSeparator()
         actionSettings = menu.addAction(
@@ -115,3 +164,21 @@ class ContextMenuController:
             action.triggered.connect(lambda _: self.ToggleQToolBar())
 
         menu.exec(player.videoWidget.mapToGlobal(point))
+
+    def addTimelineBookmark(self):
+        """Drop a yellow marker on the timeline at the current playhead."""
+        ctrl = getattr(self._player, "bookmarkController", None)
+        if ctrl is not None:
+            ctrl.addBookmark()
+
+    def clearTimelineBookmarks(self):
+        """Remove all timeline markers for the current video."""
+        ctrl = getattr(self._player, "bookmarkController", None)
+        if ctrl is not None:
+            ctrl.clearBookmarks()
+
+    def exportTimelineBookmarks(self):
+        """Export timeline bookmarks via the bookmark controller when available."""
+        ctrl = getattr(self._player, "bookmarkController", None)
+        if ctrl is not None:
+            ctrl.exportBookmarks()

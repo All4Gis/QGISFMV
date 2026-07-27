@@ -112,3 +112,48 @@ def load_plugin_module(relative_path, module_name=None):
     sys.modules[module_name] = module
     spec.loader.exec_module(module)
     return module
+
+
+# ---------------------------------------------------------------------------
+# QGIS stub helpers — install temporary fakes and always restore afterward.
+# ---------------------------------------------------------------------------
+
+_QGIS_STUB_PREFIXES = ("qgis", "qgis.")
+
+
+def snapshot_modules(keys):
+    """Return ``{name: module_or_None}`` for later restore."""
+    return {k: sys.modules.get(k) for k in keys}
+
+
+def restore_modules(saved):
+    """Restore ``sys.modules`` entries captured by :func:`snapshot_modules`."""
+    for key, previous in saved.items():
+        if previous is None:
+            sys.modules.pop(key, None)
+        else:
+            sys.modules[key] = previous
+
+
+def qgis_stub_keys(*extra):
+    """Common module names touched by lightweight QGIS stubs."""
+    base = (
+        "qgis",
+        "qgis.PyQt",
+        "qgis.PyQt.QtCore",
+        "qgis.PyQt.QtWidgets",
+        "qgis.core",
+    )
+    return base + tuple(extra)
+
+
+def has_real_qgis_qt():
+    """True when a real Qt binding is importable (not a test stub)."""
+    try:
+        from qgis.PyQt.QtCore import QObject
+    except ImportError:
+        return False
+    # Stubs usually create a plain type without Qt's C++ metaclass markers.
+    return getattr(QObject, "__module__", "").startswith("qgis.") and hasattr(
+        QObject, "staticMetaObject"
+    )

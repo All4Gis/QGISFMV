@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Georeferencing utilities: GCP transforms, corner estimation, DEM intersection."""
 
-from math import atan, tan, sqrt, radians, pi, degrees, isfinite
+from math import sqrt, pi, isfinite
 
 import numpy as np
 
@@ -413,12 +413,7 @@ def _update_footprint_beams_gcp(packet, ul, ur, lr, ll, frame_center, ele):
     SetGCPsToGeoTransform(ul, ur, lr, ll, frame_center[1], frame_center[0], ele)
 
 
-# Backward-compatible re-exports: corner-point estimation now lives in
-# QgsFmvCornerEstimation.py, kept importable from here for existing callers.
-from QGISFMV.utils.core.QgsFmvCornerEstimation import (  # noqa: E402,F401
-    DEFAULT_TARGET_WIDTH,
-    CornerEstimationWithOffsets,
-    CornerEstimationWithoutOffsets,
-)
+# Shared helper lives above; corner-point estimation lives in
+# QgsFmvCornerEstimation.py (imported by QgsFmvUtils / callers directly).
 
 

@@ -131,7 +131,9 @@ class ObjectTrackingController:
             return
 
         w._track_misses += 1
-        if w._track_misses >= 3:
+        from QGISFMV.utils.constants import TRACK_WEAK_THRESHOLD
+
+        if w._track_misses >= TRACK_WEAK_THRESHOLD:
             w._track_lock_state = TrackLockState.WEAK
             w.update()
         if w._track_misses >= w._track_max_misses:

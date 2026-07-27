@@ -169,7 +169,7 @@ def _python_executable() -> str:
 
 
 def _fmv_packages_dir() -> str:
-    return os.path.expanduser("~/.qgis-fmv-packages")
+    return os.path.join(os.path.expanduser("~"), ".qgis-fmv-packages")
 
 
 def _subprocess_kwargs(env=None, input_bytes=None):
@@ -532,7 +532,7 @@ def check_ffmpeg() -> Tuple[bool, str]:
 
 def _default_ffmpeg_dir() -> str:
     if WINDOWS:
-        base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
+        base = (os.environ.get("LOCALAPPDATA") or "").strip() or os.path.expanduser("~")
         return os.path.join(base, "QGISFMV", "ffmpeg")
     if DARWIN:
         return os.path.join(os.path.expanduser("~"), "QGISFMV", "ffmpeg")

@@ -49,6 +49,8 @@
         <file>../images/overlays/ruler_surface.png</file>
         <file>../images/overlays/distance-rings.svg</file>
         <file>../images/overlays/sensor-cone.svg</file>
+        <file>../images/overlays/ai-detections.svg</file>
+        <file>../images/overlays/time-machine.svg</file>
         <file>../images/overlays/ruler-remove-last.svg</file>
         <file>../images/overlays/ruler-remove-all.svg</file>
         <file>../images/overlays/center_platform.png</file>

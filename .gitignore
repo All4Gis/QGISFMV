@@ -25,6 +25,9 @@ code/gui/ui_*.py
 code/gui/resources_rc.py
 code/i18n/*.qm
 .pytest_packages/
+.coverage
+.pytest_cache/
+htmlcov/
 
 # System
 .DS_Store

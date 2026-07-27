@@ -42,11 +42,7 @@ def cv2_available() -> bool:
 
 
 def has_object_tracking() -> bool:
-    """Return True when any tracker backend can run (numpy is bundled with QGIS)."""
-    try:
-        import numpy as _np  # noqa: F401
-    except ImportError:
-        return False
+    """Return True when any tracker backend can run (numpy ships with QGIS)."""
     return True
 
 

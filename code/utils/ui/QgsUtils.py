@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Small QGIS UI helpers used across FMV (messages, icons, folders, canvas)."""
+
 import os
 
 from qgis.PyQt.QtGui import QPixmap, QIcon
@@ -17,6 +19,7 @@ from qgis.PyQt.QtCore import QSettings, Qt
 
 
 class QgsUtils:
+    """Static helpers for message boxes, icons, project folders and canvas ops."""
 
     @staticmethod
     def GetIcon(icon):

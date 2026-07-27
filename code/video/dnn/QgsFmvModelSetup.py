@@ -35,7 +35,7 @@ USER_AGENT = "QGIS-FMV/1.17"
 
 def models_dir() -> str:
     """Return the default directory for downloaded DNN models (~/.qgis-fmv-models)."""
-    return os.path.expanduser("~/.qgis-fmv-models")
+    return os.path.join(os.path.expanduser("~"), ".qgis-fmv-models")
 
 
 def default_yolov8n_path() -> str:

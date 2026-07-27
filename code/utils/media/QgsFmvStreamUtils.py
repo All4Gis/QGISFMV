@@ -48,8 +48,7 @@ def buildStreamUri(protocol, host, port, path=""):
         route = (path or "/stream").strip()
         if not route.startswith("/"):
             route = "/" + route
-        auth_host = host
-        return f"rtsp://{auth_host}:{port}{route}"
+        return f"rtsp://{host}:{port}{route}"
 
     return f"{proto}://{host}:{port}"
 
@@ -61,7 +60,9 @@ def validateStreamEndpoint(protocol, host, port):
     port_num = int(port)
     if port_num < 1 or port_num > 65535:
         return False, "Port must be between 1 and 65535."
-    if protocol.upper() == "RTSP" and host.strip() == "":
+    proto = (protocol or "").strip().upper()
+    host_text = (host or "").strip()
+    if proto == "RTSP" and host_text == "":
         return False, "Host is required for RTSP."
     return True, ""
 

@@ -44,6 +44,8 @@ DEFAULTS = {
         "polygon_lyr": "Drawings Polygon",
         "objecttrack_lyr": "Object Track",
         "objectposition_lyr": "Object Position",
+        "detections_lyr": "AI Detections",
+        "detectiontrail_lyr": "AI Detection Trail",
         "measuredistance_lyr": "Measure Distance",
         "measurearea_lyr": "Measure Area",
         "epsg": "EPSG:4326",
@@ -128,13 +130,21 @@ def settingsFile():
 
 
 def _default_ffmpeg_folder():
-    """Return the platform-specific default FFmpeg installation folder."""
+    """Return the platform-specific default FFmpeg installation folder.
+
+    Paths are built with ``os.path.join`` so Mac / Linux / Windows behave the
+    same. Prefer ``shutil.which`` before hard-coded Homebrew/system prefixes.
+    """
     system = platform.system()
     if system == "Windows":
-        return os.path.join(os.environ.get("LOCALAPPDATA", ""), "QGISFMV", "ffmpeg")
+        base = (os.environ.get("LOCALAPPDATA") or "").strip() or os.path.expanduser("~")
+        return os.path.join(base, "QGISFMV", "ffmpeg")
     if system == "Darwin":
+        found = shutil.which("ffmpeg")
+        if found:
+            return os.path.dirname(os.path.realpath(found))
         candidates = [
-            os.path.expanduser("~/Applications/homebrew/bin"),
+            os.path.join(os.path.expanduser("~"), "Applications", "homebrew", "bin"),
             "/opt/homebrew/bin",
             "/usr/local/bin",
             "/usr/bin",
@@ -142,9 +152,6 @@ def _default_ffmpeg_folder():
         for folder in candidates:
             if _resolve_ffmpeg_binary(folder, "ffmpeg"):
                 return folder
-        found = shutil.which("ffmpeg")
-        if found:
-            return os.path.dirname(found)
         return "/opt/homebrew/bin"
     # Linux / other Unix: prefer PATH, then common install prefixes.
     found = shutil.which("ffmpeg")
@@ -255,14 +262,6 @@ def setValue(section, option, value):
     _parser.set(section, option, str(value).strip())
 
 
-def set_value(section, option, value):
-    """Legacy snake_case alias — prefer setValue() for new code."""
-    load()
-    if not _parser.has_section(section):
-        _parser.add_section(section)
-    _parser.set(section, option, str(value).strip())
-
-
 def save():
     """Persist the in-memory parser to settings.ini and reload runtime."""
     load()
@@ -281,18 +280,25 @@ def _resetDtmCache(fmv_utils):
 
 
 def _apply_mosaic_settings(fmv_utils):
-    """Push [MOSAIC] settings into QgsFmvUtils module attributes."""
+    """Push [MOSAIC] settings into constants + QgsFmvUtils attributes."""
+    from QGISFMV.utils import constants as mosaic_cfg
+
     section = "MOSAIC"
     _float = lambda k: float(get(section, k, default(section, k)))
     _int = lambda k: int(get(section, k, default(section, k)))
-    fmv_utils.MOSAIC_MIN_INTERVAL_SEC = _float("min_interval_sec")
-    fmv_utils.MOSAIC_MIN_MOVE_METERS = _float("min_move_meters")
-    fmv_utils.MOSAIC_MAX_FRAME_DIMENSION = _int("max_frame_dimension")
-    fmv_utils.MOSAIC_FEATHER_PX = _int("feather_px")
-    fmv_utils.MOSAIC_MAX_OUTPUT_SIZE = _int("max_output_size")
-    fmv_utils.MOSAIC_FOOTPRINT_GROW_RATIO = _float("footprint_grow_ratio")
-    fmv_utils.MOSAIC_FOOTPRINT_GROW_METERS = _float("footprint_grow_meters")
-    fmv_utils.MOSAIC_MAX_KEPT_FRAMES = _int("max_kept_frames")
+    values = {
+        "MOSAIC_MIN_INTERVAL_SEC": _float("min_interval_sec"),
+        "MOSAIC_MIN_MOVE_METERS": _float("min_move_meters"),
+        "MOSAIC_MAX_FRAME_DIMENSION": _int("max_frame_dimension"),
+        "MOSAIC_FEATHER_PX": _int("feather_px"),
+        "MOSAIC_MAX_OUTPUT_SIZE": _int("max_output_size"),
+        "MOSAIC_FOOTPRINT_GROW_RATIO": _float("footprint_grow_ratio"),
+        "MOSAIC_FOOTPRINT_GROW_METERS": _float("footprint_grow_meters"),
+        "MOSAIC_MAX_KEPT_FRAMES": _int("max_kept_frames"),
+    }
+    for name, value in values.items():
+        setattr(mosaic_cfg, name, value)
+        setattr(fmv_utils, name, value)
 
 
 _LAYER_ATTR_MAP = {
@@ -307,6 +313,8 @@ _LAYER_ATTR_MAP = {
     "polygon_lyr": "Polygon_lyr",
     "objecttrack_lyr": "ObjectTrack_lyr",
     "objectposition_lyr": "ObjectPosition_lyr",
+    "detections_lyr": "Detections_lyr",
+    "detectiontrail_lyr": "DetectionTrail_lyr",
     "measuredistance_lyr": "MeasureDistance_lyr",
     "measurearea_lyr": "MeasureArea_lyr",
     "frames_g": "frames_g",

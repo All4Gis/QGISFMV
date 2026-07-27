@@ -21,10 +21,11 @@ Everything you need to run **QGIS Full Motion Video** — from opening a file to
 8. [Video Filters](#video-filters)
 9. [AI Detection](#ai-detection)
 10. [FMV Tools](#fmv-tools)
-11. [Draw toolbar](#draw-toolbar)
-12. [Military symbols](#military-symbols)
-13. [Keyboard shortcuts](#keyboard-shortcuts)
-14. [Troubleshooting](#troubleshooting)
+11. [Geo-intelligence](#geo-intelligence)
+12. [Draw toolbar](#draw-toolbar)
+13. [Military symbols](#military-symbols)
+14. [Keyboard shortcuts](#keyboard-shortcuts)
+15. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -363,19 +364,183 @@ Template with comments: **`code/settings.sample.ini`**.
 
 ## FMV Tools
 
-Menu **FMV Tools** in the player:
+Menu **Tools** in the player:
 
 | Tool | Shortcut | Description |
 |------|----------|-------------|
-| **HUD Overlay** | `Ctrl+H` | Telemetry overlay on video |
+| **HUD Overlay** | `Ctrl+H` | Telemetry overlay on video (alert flash works even if HUD is off) |
 | **Mini Map** | `Ctrl+Shift+M` | PiP map — trajectory, footprint, platform, heading |
 | **Auto Snapshots** | `Ctrl+Shift+S` | Periodic frame capture |
-| **Enable Alerts** | — | Geofence / altitude alerts |
-| **Export KML / GPX** | `Ctrl+Shift+K` / `Ctrl+Shift+G` | Export trajectory |
+| **Enable Alerts** | — | Telemetry field rules (altitude, slant range, …) |
+| **Add / Clear Alert Rule** | — | Numeric thresholds on MISB fields |
+| **Set Geofence from Footprint** | — | Arm spatial AOI from current FOV |
+| **Clear Geofence** | — | Remove AOI |
+| **Watch Detections in Geofence** | — | **Sentinel**: AI hits inside AOI → alert + bookmark + HUD banner |
+| **Add Timeline Bookmark** | `B` | Marker at playhead (stores frame-center lat/lon) |
+| **Clear / Export Bookmarks** | `Ctrl+Shift+B` | CSV / KML with coordinates |
+| **Sensor Coverage Cone** | — | C2 cone on the map |
+| **Distance Rings** | — | Range rings around the platform |
+| **AI Detections on Map** | — | Publish YOLO/CV boxes as georeferenced points |
+| **Detection Heat Trail** | — | Accumulate detections over time on a trail layer |
+| **Live Place Labels** | `Ctrl+Shift+P` | Reverse-geocode frame center → HUD `PLACE` line |
+| **Instant Replay on Alert** | `Ctrl+Shift+R` | On alert/sentinel: rewind ~3 s and pause |
+| **Auto Storyboard Captures** | `Ctrl+Shift+Y` | Silent GeoTIFFs on bookmarks / alerts |
+| **Export KML / GPX** | `Ctrl+Shift+K` / `Ctrl+Shift+G` | Export trajectory / layers |
+| **Export Mission Package** | `Ctrl+Shift+E` | One ZIP: bookmarks, geotime, layers, mosaic, detections, geofence, storyboard |
+
+Menu **Map**:
+
+| Tool | Shortcut | Description |
+|------|----------|-------------|
+| **Center on Platform / Footprint / Target** | — | Follow modes |
+| **Cinematic Map Follow** | `Ctrl+Shift+C` | Smooth (lerped) map recentering while following |
+| **Click Map to Seek** | `Ctrl+Shift+J` | Click near the track → jump video |
+| **Map Time Machine** | `Ctrl+Shift+T` | Hover along the track → scrub video + **ghost FOV** |
+| **Lookback — What did we see here?** | `Ctrl+Shift+L` | Click a place → every time the FOV covered it |
+| **Pin Target on Map** | `Ctrl+Shift+N` | Lock a cue point: range / bearing / next FOV |
+| **Jump to Next Target FOV** | `Ctrl+Shift+U` | Seek to the next coverage of the pin |
+| **Clear Target Pin** | — | Remove cue marker + HUD |
 
 ![FMV Tools](assets/more_tools.png)
 
 ![Mini Map](assets/mini_map.png)
+
+---
+
+## Geo-intelligence
+
+These tools turn FMV into a **map ↔ video time machine**. They need a video with live KLV/MISB telemetry (play a few seconds so the trajectory and footprint appear).
+
+### Spatial timeline bookmarks
+
+1. Play until telemetry is flowing.
+2. Press **`B`** (or **Tools → Add Timeline Bookmark**).
+3. Markers appear on the custom timeline; alerts and the Detection Sentinel also drop **red** markers automatically.
+4. **Tools → Export Timeline Bookmarks…** → CSV or KML with `lat` / `lon` / `alt` (frame center).
+
+KML opens in Google Earth / QGIS as real placemarks (not `0,0`).
+
+### Geofence (spatial AOI)
+
+1. Play until a **Footprint** is drawn on the map.
+2. **Tools → Set Geofence from Footprint** — a red AOI polygon is added to the video group.
+3. When the **frame center enters** the AOI → alert message + red timeline marker + HUD flash.
+4. **Tools → Clear Geofence** removes the AOI.
+
+### AOI Detection Sentinel
+
+Combine geofence + AI:
+
+1. Arm a geofence (above).
+2. Keep **Tools → Watch Detections in Geofence** checked (default ON).
+3. Keep **Tools → AI Detections on Map** checked.
+4. Enable a filter under **Filters → AI Detection** (e.g. Vehicle / Person).
+5. When a detection lands **inside** the AOI → `SENTINEL: 2×vehicle inside Footprint Geofence`, timeline bookmark, and a red banner on the video.
+
+### Click Map to Seek
+
+1. Play with telemetry so the geo/time index builds.
+2. **Map → Click Map to Seek** (`Ctrl+Shift+J`).
+3. Click near the trajectory / flight path → video jumps to that time.
+
+### Map Time Machine *(wow demo)*
+
+“Scrub the mission on the map.”
+
+1. Play the video with KLV so the plugin records **(position, time, footprint)** samples.
+2. **Map → Map Time Machine** (`Ctrl+Shift+T`).
+3. Move the mouse **along the flight path** on the QGIS canvas:
+   - Video **seeks live** to that moment
+   - A translucent **ghost footprint** shows what the sensor was looking at
+4. Click to lock a moment; uncheck the tool to exit.
+
+Mutually exclusive with Click Map to Seek and Lookback.
+
+### Lookback — “What did we see here?” *(analyst wow)*
+
+Reverse query: pick a building, crossroads, or AOI on the map and ask *when did the sensor look at this?*
+
+1. Play with KLV so footprints are recorded in the geo/time index.
+2. **Map → Lookback — What did we see here?** (`Ctrl+Shift+L`).
+3. Click a point on the map.
+4. A dialog lists every clustered time the **footprint contained** that point.
+5. Double-click a row (or OK) → video jumps there and the **ghost FOV** appears.
+
+If no footprints were stored yet, Lookback falls back to times when the platform/frame-center was near the click (within ~80 m) and tells you to play longer for true FOV hits.
+
+Mutually exclusive with Time Machine / Click-to-seek.
+
+### Target Pin / Cue *(cross-cue wow)*
+
+Pin any ground point and treat it as a live cue:
+
+1. Play with KLV so the geo/time index (and footprints) build.
+2. **Map → Pin Target on Map** (`Ctrl+Shift+N`) → click a building / crossroads / AOI.
+3. A yellow cross appears on the map; the video shows a cue chip:
+   - `TGT 1.2 km / 045° / FOV@42.1s (+8.3s)` while approaching
+   - `TGT … / IN FOV` when the footprint covers the pin
+4. When coverage **enters**, a `TARGET CUE` alert fires (bookmark / Instant Replay / Storyboard if enabled).
+5. **Map → Jump to Next Target FOV** (`Ctrl+Shift+U`) seeks the next recorded visit.
+6. **Map → Clear Target Pin** removes the cue.
+
+Mutually exclusive (while arming) with Click-to-seek / Time Machine / Lookback.
+
+### AI Detections → Map
+
+1. **Tools → AI Detections on Map** must be ON (checkable).
+2. Enable an AI filter (Vehicle, Person, Fire, …).
+3. When the frame is georeferenced, box centers are projected to WGS84 and written to the **AI Detections** layer (track id, class, score).
+
+### Detection Heat Trail
+
+With AI publishing ON, enable **Tools → Detection Heat Trail**. Points accumulate on the **AI Detection Trail** layer (timestamped, capped) so you can see where detections occurred over the mission — not only the latest frame.
+
+### Instant Replay on Alert
+
+**Tools → Instant Replay on Alert** (`Ctrl+Shift+R`). When a telemetry alert, geofence enter, or Detection Sentinel fires, the player rewinds ~3 seconds and pauses (with cooldown) so you can re-watch the moment.
+
+### Live Place Labels
+
+**Tools → Live Place Labels** (`Ctrl+Shift+P`) + HUD on (`Ctrl+H`). The frame center is reverse-geocoded (throttled) and shown as `PLACE …` on the HUD strip.
+
+### Auto Storyboard Captures
+
+**Tools → Auto Storyboard Captures** (`Ctrl+Shift+Y`). On each bookmark and alert, a georeferenced GeoTIFF is written under `<video folder>/storyboard/` (included in the mission package when present).
+
+### Cinematic Map Follow
+
+**Map → Cinematic Map Follow** (`Ctrl+Shift+C`) while a center-on mode is active. The canvas eases toward the target instead of jumping each telemetry tick.
+
+### Mission package
+
+**Tools → Export Mission Package…** (`Ctrl+Shift+E`) builds a ZIP with whatever is available:
+
+| File | Content |
+|------|---------|
+| `MANIFEST.txt` | Inventory |
+| `bookmarks.csv` / `.kml` | Timeline markers + coordinates |
+| `geotime_index.csv` | Samples used by seek / Time Machine |
+| `ai_detections.csv` | Last AI points snapshot |
+| `layers.kml` | Telemetry / drawings (best-effort) |
+| `mosaic.tif` | Live mosaic if built |
+| `geofence.csv` | Armed AOI ring |
+| `storyboard/` | Auto GeoTIFF captures (if any) |
+
+Ideal for after-action briefings.
+
+### Demo script (2 minutes)
+
+```text
+1. Open MISB video → play until footprint + trajectory visible
+2. Tools → Set Geofence from Footprint
+3. Tools → AI Detections on Map + Heat Trail (ON) + Filters → Vehicle
+4. Tools → Instant Replay + Storyboard + Place Labels (ON); HUD on
+5. Map → Cinematic Follow + Map Time Machine → scrub along the track
+6. Map → Pin Target on a building → watch TGT cue / Jump to Next FOV
+7. Map → Lookback → click a building → jump through every revisit
+8. When a vehicle enters the AOI → Sentinel flash + rewind + storyboard frame
+9. Tools → Export Mission Package → open ZIP / KML / storyboard in QGIS
+```
 
 ---
 
@@ -484,15 +649,24 @@ Symbols require valid georeferencing (GCP / MISB metadata). SVG assets live in `
 | `Ctrl+Shift+C` | Save metadata CSV |
 | `Ctrl+Shift+P` | Save metadata PDF |
 
-### Player — FMV Tools
+### Player — FMV Tools & geo-intelligence
 
 | Shortcut | Action |
 |----------|--------|
 | `Ctrl+H` | HUD overlay |
 | `Ctrl+Shift+M` | Mini map |
 | `Ctrl+Shift+S` | Auto snapshots |
+| `B` | Add timeline bookmark |
+| `Ctrl+Shift+B` | Export bookmarks |
+| `Ctrl+Shift+J` | Click map to seek |
+| `Ctrl+Shift+T` | Map Time Machine |
+| `Ctrl+Shift+L` | Lookback (what did we see here?) |
+| `Ctrl+Shift+N` | Pin Target on Map |
+| `Ctrl+Shift+U` | Jump to Next Target FOV |
 | `Ctrl+Shift+K` | Export KML |
 | `Ctrl+Shift+G` | Export GPX |
+| `Ctrl+Shift+E` | Export mission package |
+| `Ctrl+Shift+P` | Metadata PDF (metadata dock) |
 
 ---
 

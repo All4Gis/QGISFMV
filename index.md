@@ -18,6 +18,7 @@ Play **MISB** video, sync telemetry on the map, and analyze FMV inside **QGIS 4*
 - MISB / KLV metadata, STANAG 4609 multiplexing (DJI → `.ts`)
 - Live map layers — platform, footprint, sensor cone, trajectory
 - 25+ video filters + **AI Detection** (VisDrone YOLO + CV for FMV/UAV)
+- **Geo-intelligence**: Map Time Machine, Lookback, Target Pin/Cue, geofence Sentinel, AI→map, Instant Replay, storyboard, place labels, heat trail, cinematic follow, mission package — see [USAGE](USAGE.md#geo-intelligence)
 - Streams (UDP, TCP, RTP, RTSP), mosaics, PDF/CSV reports, military symbols
 
 ## Install

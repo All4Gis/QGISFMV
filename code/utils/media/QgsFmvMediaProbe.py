@@ -46,6 +46,7 @@ _probeDurationMs = probeDurationMs
 
 
 def parse_fps(rate):
+    """Parse ffprobe ``N/D`` or float FPS strings; default ``25.0`` on failure."""
     if not rate:
         return 25.0
     if isinstance(rate, (int, float)):
@@ -70,6 +71,7 @@ _FPS_RE = re.compile(r"(\d+(?:\.\d+)?)\s*fps", re.IGNORECASE)
 
 
 def durationMsFromText(text):
+    """Extract media duration in milliseconds from ffmpeg/ffprobe stderr text."""
     match = _DURATION_RE.search(text or "")
     if not match:
         return 0
@@ -119,6 +121,7 @@ _probe_video_info_from_stderr = probe_video_info_from_stderr
 
 
 def read_bytes(stream, nbytes):
+    """Read up to *nbytes* from a binary stream (short-read safe)."""
     buf = bytearray()
     while len(buf) < nbytes:
         chunk = stream.read(nbytes - len(buf))
@@ -167,6 +170,7 @@ _probe_video_info = probe_video_info
 
 
 def ffmpeg_available():
+    """Return True when a usable ffmpeg binary is configured."""
     from QGISFMV.utils.media.QgsFfmpegRunner import available
 
     return available()
@@ -176,6 +180,7 @@ _ffmpeg_available = ffmpeg_available
 
 
 def ffmpeg_popen(args):
+    """Spawn ffmpeg with *args* via the shared runner."""
     from QGISFMV.utils.media.QgsFfmpegRunner import popen_ffmpeg
 
     return popen_ffmpeg(args)

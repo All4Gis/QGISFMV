@@ -41,3 +41,23 @@ class TestDetectionConstants:
 
     def test_tint_intensity_range(self):
         assert 0.0 <= mod.CONFIDENCE_TINT_INTENSITY <= 1.0
+
+
+class TestMosaicConstants:
+    def test_interval_positive(self):
+        assert mod.MOSAIC_MIN_INTERVAL_SEC > 0
+
+    def test_move_meters_positive(self):
+        assert mod.MOSAIC_MIN_MOVE_METERS > 0
+
+    def test_frame_dimension_positive(self):
+        assert mod.MOSAIC_MAX_FRAME_DIMENSION > 0
+
+    def test_feather_positive(self):
+        assert mod.MOSAIC_FEATHER_PX > 0
+
+    def test_output_size_positive(self):
+        assert mod.MOSAIC_MAX_OUTPUT_SIZE > 0
+
+    def test_grow_ratio_above_one(self):
+        assert mod.MOSAIC_FOOTPRINT_GROW_RATIO > 1.0

@@ -67,6 +67,8 @@ from QGISFMV.utils.layers.QgsFmvLayerDefaults import (  # noqa: E402,F401
     SetDefaultTrajectoryStyle,
     SetDefaultObjectTrackStyle,
     SetDefaultObjectPositionStyle,
+    SetDefaultDetectionsStyle,
+    SetDefaultDetectionTrailStyle,
     SetDefaultPlatformStyle,
     SetDefaultPlatform3DStyle,
     SetDefaultTrajectory3DStyle,
@@ -97,6 +99,8 @@ Line_lyr = get_layer("line_lyr")
 Polygon_lyr = get_layer("polygon_lyr")
 ObjectTrack_lyr = get_layer("objecttrack_lyr")
 ObjectPosition_lyr = get_layer("objectposition_lyr")
+Detections_lyr = get_layer("detections_lyr")
+DetectionTrail_lyr = get_layer("detectiontrail_lyr")
 MeasureDistance_lyr = get_layer("measuredistance_lyr")
 MeasureArea_lyr = get_layer("measurearea_lyr")
 frames_g = get_layer("frames_g")
@@ -595,6 +599,13 @@ def CreateVideoLayers(ele, name):
         (ObjectPosition_lyr, newPointsLayer,
          ["track_id", "backend", "longitude", "latitude", "altitude"], PointZ,
          SetDefaultObjectPositionStyle, ()),
+        (Detections_lyr, newPointsLayer,
+         ["track_id", "class", ("score", float), "longitude", "latitude", "altitude"],
+         Point, SetDefaultDetectionsStyle, ()),
+        (DetectionTrail_lyr, newPointsLayer,
+         ["track_id", "class", ("score", float), "longitude", "latitude", "altitude",
+          ("time_sec", float)],
+         Point, SetDefaultDetectionTrailStyle, ()),
         (MeasureDistance_lyr, newLinesLayer,
          [("length_m", float), "label", ("segments", int)], Line,
          SetDefaultMeasureDistanceStyle, ()),
@@ -615,10 +626,55 @@ def _watch_existing_layers():
     for lyr_name in (Footprint_lyr, Beams_lyr, Trajectory_lyr, FrameAxis_lyr,
                      Platform_lyr, Point_lyr, Symbol_lyr, FrameCenter_lyr,
                      Line_lyr, Polygon_lyr, ObjectTrack_lyr, ObjectPosition_lyr,
+                     Detections_lyr, DetectionTrail_lyr,
                      MeasureDistance_lyr, MeasureArea_lyr):
         existing = qgsu.selectLayerByName(lyr_name, groupName)
         if existing is not None:
             ensureLayerStyleWatch(existing, lyr_name)
+
+
+def ensure_detections_layer():
+    """Create the AI Detections layer in the current video group if missing."""
+    if not groupName:
+        return None
+    existing = qgsu.selectLayerByName(Detections_lyr, groupName)
+    if existing is not None:
+        return existing
+    _create_layer_if_missing(
+        Detections_lyr,
+        newPointsLayer,
+        ["track_id", "class", ("score", float), "longitude", "latitude", "altitude"],
+        Point,
+        SetDefaultDetectionsStyle,
+        (),
+    )
+    return qgsu.selectLayerByName(Detections_lyr, groupName)
+
+
+def ensure_detection_trail_layer():
+    """Create the accumulating AI Detection Trail layer if missing."""
+    if not groupName:
+        return None
+    existing = qgsu.selectLayerByName(DetectionTrail_lyr, groupName)
+    if existing is not None:
+        return existing
+    _create_layer_if_missing(
+        DetectionTrail_lyr,
+        newPointsLayer,
+        [
+            "track_id",
+            "class",
+            ("score", float),
+            "longitude",
+            "latitude",
+            "altitude",
+            ("time_sec", float),
+        ],
+        Point,
+        SetDefaultDetectionTrailStyle,
+        (),
+    )
+    return qgsu.selectLayerByName(DetectionTrail_lyr, groupName)
 
 
 def _create_layer_if_missing(lyr_name, factory, fields, geom_type, style_fn, style_args):

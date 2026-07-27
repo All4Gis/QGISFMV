@@ -303,21 +303,6 @@ def reset_temporal_filter_state():
         log.debug('Failed to reset detection state: %s', _exc)
 
 
-def resetTemporalFilterState():
-    """Backward-compatible alias for reset_temporal_filter_state."""
-    reset_temporal_filter_state()
-
-
-def opencvAvailable():
-    """Backward-compatible alias for opencv_available."""
-    return opencv_available()
-
-
-def opencvStatusText():
-    """Backward-compatible alias for opencv_status_text."""
-    return opencv_status_text()
-
-
 def _box3x3_sum(padded):
     """Sum of 3x3 neighborhoods over a pre-padded array (no-loop fallback for scipy)."""
     return (

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Telemetry HUD painted directly on the video widget (no overlay QWidget)."""
 
+import time
+
 from qgis.PyQt.QtCore import QPointF, Qt
 from qgis.PyQt.QtGui import QColor, QPainter, QFont, QPen, QBrush
 
@@ -18,7 +20,11 @@ class HudOverlay:
         self._frame_center_lon = None
         self._frame_center_elev = None
         self._timestamp = ""
+        self._place_label = ""
+        self._target_cue = ""
         self._video_size = (0, 0)
+        self._alert_msg = ""
+        self._alert_until = 0.0
 
     def _request_repaint(self):
         widget = self._video_widget
@@ -56,19 +62,79 @@ class HudOverlay:
         self._timestamp = ts or ""
         self._request_repaint()
 
+    def setPlaceLabel(self, label):
+        """Set the reverse-geocoded place name shown on the HUD."""
+        self._place_label = str(label or "")
+        self._request_repaint()
+
+    def setTargetCue(self, label):
+        """Set the target-pin cue line (range / bearing / next FOV)."""
+        self._target_cue = str(label or "")
+        self._request_repaint()
+
     def toggle(self):
         """Toggle HUD visibility and return the new state."""
         self._visible = not self._visible
         self._request_repaint()
         return self._visible
 
+    def setAlertBanner(self, msg, ttl_ms=3500):
+        """Flash a top alert banner for *ttl_ms* (shown even if HUD is off)."""
+        self._alert_msg = str(msg or "")
+        self._alert_until = time.time() + max(0.5, float(ttl_ms) / 1000.0)
+        self._request_repaint()
+
+    def _alert_active(self):
+        return bool(self._alert_msg) and time.time() < self._alert_until
+
     def paint(self, painter, width, height):
         """Draw HUD elements using the video widget's active painter."""
-        if not self._visible:
-            return
         if width < 10 or height < 10:
             return
         if painter is None or not painter.isActive():
+            return
+
+        # Sentinel / alert flash — independent of HUD toggle.
+        if self._alert_active():
+            painter.save()
+            try:
+                painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+                banner_h = max(28, min(44, height // 12))
+                painter.setBrush(QBrush(QColor(180, 24, 24, 200)))
+                painter.setPen(Qt.PenStyle.NoPen)
+                painter.drawRect(0, 0, width, banner_h)
+                font = QFont("Courier", max(10, min(14, width // 70)), QFont.Weight.Bold)
+                painter.setFont(font)
+                painter.setPen(QPen(QColor(255, 255, 255)))
+                painter.drawText(
+                    QPointF(12, banner_h * 0.68),
+                    self._alert_msg[:120],
+                )
+            finally:
+                painter.restore()
+
+        # Target pin cue — visible even if HUD strip is off.
+        if self._target_cue:
+            painter.save()
+            try:
+                painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+                top = 8 if not self._alert_active() else max(28, min(44, height // 12)) + 4
+                font = QFont("Courier", max(9, min(12, width // 85)), QFont.Weight.Bold)
+                painter.setFont(font)
+                metrics = painter.fontMetrics()
+                text = self._target_cue[:72]
+                tw = metrics.horizontalAdvance(text) + 16
+                th = metrics.height() + 8
+                x = max(8, width - tw - 10)
+                painter.setBrush(QBrush(QColor(20, 20, 20, 170)))
+                painter.setPen(Qt.PenStyle.NoPen)
+                painter.drawRoundedRect(x, top, tw, th, 4, 4)
+                painter.setPen(QPen(QColor(255, 200, 40)))
+                painter.drawText(QPointF(x + 8, top + th * 0.72), text)
+            finally:
+                painter.restore()
+
+        if not self._visible:
             return
 
         painter.save()
@@ -107,6 +173,8 @@ class HudOverlay:
                 f" FCLON {_fmt(self._frame_center_lon)}",
                 f" FCELV {_fmt(self._frame_center_elev, 1)} m",
             ]
+            if self._place_label:
+                lines_right.append(f" PLACE {self._place_label[:42]}")
 
             for i, txt in enumerate(lines_left):
                 painter.drawText(QPointF(x_left, y0 + i * line_h), txt)

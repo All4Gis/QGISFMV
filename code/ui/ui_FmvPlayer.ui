@@ -697,6 +697,15 @@
      <addaction name="actionCenter_on_Platform" />
      <addaction name="actionCenter_on_Footprint" />
      <addaction name="actionCenter_Target" />
+     <addaction name="actionCinematic_Follow" />
+     <addaction name="separator" />
+     <addaction name="actionClick_to_Seek" />
+     <addaction name="actionTime_Machine" />
+     <addaction name="actionLookback" />
+     <addaction name="separator" />
+     <addaction name="actionPin_Target" />
+     <addaction name="actionJump_Next_Target_FOV" />
+     <addaction name="actionClear_Target_Pin" />
     </widget>
     <widget class="QMenu" name="menuTools">
      <property name="title">
@@ -710,12 +719,25 @@
      <addaction name="actionToggle_Alerts" />
      <addaction name="actionAdd_Alert" />
      <addaction name="actionClear_Alerts" />
+     <addaction name="actionSet_Geofence" />
+     <addaction name="actionClear_Geofence" />
+     <addaction name="actionWatch_Detections_Geofence" />
+     <addaction name="separator" />
+     <addaction name="actionAdd_Bookmark" />
+     <addaction name="actionClear_Bookmarks" />
+     <addaction name="actionExport_Bookmarks" />
      <addaction name="separator" />
      <addaction name="actionToggle_SensorCone" />
      <addaction name="actionToggle_DistanceRings" />
+     <addaction name="actionPublish_Detections" />
+     <addaction name="actionDetection_Heat_Trail" />
+     <addaction name="actionPlace_Labels" />
+     <addaction name="actionInstant_Replay" />
+     <addaction name="actionStoryboard" />
      <addaction name="separator" />
      <addaction name="actionExport_KML" />
      <addaction name="actionExport_GPX" />
+     <addaction name="actionExport_Mission_Package" />
     </widget>
     <addaction name="menuFile" />
     <addaction name="menuFrames" />
@@ -1818,6 +1840,45 @@
     <string>Clear All Alerts</string>
    </property>
   </action>
+  <action name="actionAdd_Bookmark">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/status/Information.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Add Timeline Bookmark</string>
+   </property>
+   <property name="toolTip">
+    <string>Add a bookmark at the current playhead (B)</string>
+   </property>
+   <property name="shortcut">
+    <string>B</string>
+   </property>
+  </action>
+  <action name="actionClear_Bookmarks">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/delete.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Clear Timeline Bookmarks</string>
+   </property>
+  </action>
+  <action name="actionExport_Bookmarks">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/save_geoframe.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Export Timeline Bookmarks…</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+B</string>
+   </property>
+  </action>
   <action name="actionExport_KML">
    <property name="icon">
     <iconset>
@@ -1842,6 +1903,274 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
+   </property>
+  </action>
+  <action name="actionSet_Geofence">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/status/Warning.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Set Geofence from Footprint</string>
+   </property>
+   <property name="toolTip">
+    <string>Arm a spatial AOI from the current video footprint; alert when frame-center enters it.</string>
+   </property>
+  </action>
+  <action name="actionClear_Geofence">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/delete.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Clear Geofence</string>
+   </property>
+  </action>
+  <action name="actionWatch_Detections_Geofence">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/ai-detections.svg</normaloff>:/imgFMV/images/overlays/ai-detections.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Watch Detections in Geofence</string>
+   </property>
+   <property name="toolTip">
+    <string>When checked, alert + bookmark + HUD flash if AI detections land inside the armed geofence.</string>
+   </property>
+  </action>
+  <action name="actionClick_to_Seek">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/object-tracking.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Click Map to Seek</string>
+   </property>
+   <property name="toolTip">
+    <string>Click near the flown track on the map to jump the video to that time.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+J</string>
+   </property>
+  </action>
+  <action name="actionTime_Machine">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/time-machine.svg</normaloff>:/imgFMV/images/overlays/time-machine.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Map Time Machine</string>
+   </property>
+   <property name="toolTip">
+    <string>Move the mouse along the flight path to scrub the video and see a ghost footprint of what the sensor saw.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+T</string>
+   </property>
+  </action>
+  <action name="actionLookback">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/center_target.png</normaloff>:/imgFMV/images/overlays/center_target.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lookback — What did we see here?</string>
+   </property>
+   <property name="toolTip">
+    <string>Click a place on the map to list every time the sensor FOV covered it, then jump to that moment.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+L</string>
+   </property>
+  </action>
+  <action name="actionPublish_Detections">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/ai-detections.svg</normaloff>:/imgFMV/images/overlays/ai-detections.svg</iconset>
+   </property>
+   <property name="text">
+    <string>AI Detections on Map</string>
+   </property>
+   <property name="toolTip">
+    <string>When checked, publish AI/CV detection boxes as georeferenced points on the map.</string>
+   </property>
+   <property name="statusTip">
+    <string>Toggle publishing detections to the map layer</string>
+   </property>
+  </action>
+  <action name="actionExport_Mission_Package">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/save_geoframe.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Export Mission Package…</string>
+   </property>
+   <property name="toolTip">
+    <string>Bundle bookmarks, geo index, layers, mosaic, detections, storyboard into one ZIP.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+E</string>
+   </property>
+  </action>
+  <action name="actionCinematic_Follow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/overlays/center_target.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Cinematic Map Follow</string>
+   </property>
+   <property name="toolTip">
+    <string>Smooth (lerped) map recentering when following platform / footprint / target.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+C</string>
+   </property>
+  </action>
+  <action name="actionDetection_Heat_Trail">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/ai-detections.svg</normaloff>:/imgFMV/images/overlays/ai-detections.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Detection Heat Trail</string>
+   </property>
+   <property name="toolTip">
+    <string>Accumulate AI detection points over time on a separate trail layer (capped).</string>
+   </property>
+  </action>
+  <action name="actionPlace_Labels">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/stream.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Live Place Labels</string>
+   </property>
+   <property name="toolTip">
+    <string>Reverse-geocode the frame center and show a PLACE line on the HUD.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+P</string>
+   </property>
+  </action>
+  <action name="actionInstant_Replay">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/object-tracking.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Instant Replay on Alert</string>
+   </property>
+   <property name="toolTip">
+    <string>When an alert or Detection Sentinel fires, rewind a few seconds and pause.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
+  </action>
+  <action name="actionStoryboard">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/save_geoframe.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Auto Storyboard Captures</string>
+   </property>
+   <property name="toolTip">
+    <string>Silently save georeferenced frames on bookmarks and alerts into &lt;video&gt;/storyboard/.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Y</string>
+   </property>
+  </action>
+  <action name="actionPin_Target">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/imgFMV/images/overlays/center_target.png</normaloff>:/imgFMV/images/overlays/center_target.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pin Target on Map</string>
+   </property>
+   <property name="toolTip">
+    <string>Click the map to pin a cue point: HUD shows range, bearing, and next FOV visit; alert when the footprint covers it.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+N</string>
+   </property>
+  </action>
+  <action name="actionJump_Next_Target_FOV">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/object-tracking.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Jump to Next Target FOV</string>
+   </property>
+   <property name="toolTip">
+    <string>Seek to the next time the sensor FOV covers the pinned target.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+U</string>
+   </property>
+  </action>
+  <action name="actionClear_Target_Pin">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgFMV/images/misc/delete.png</normaloff>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Clear Target Pin</string>
    </property>
   </action>
  </widget>
@@ -2882,6 +3211,42 @@
    </hints>
   </connection>
   <connection>
+   <sender>actionAdd_Bookmark</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>addTimelineBookmark()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClear_Bookmarks</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>clearTimelineBookmarks()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExport_Bookmarks</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>exportTimelineBookmarks()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>actionExport_KML</sender>
    <signal>triggered(bool)</signal>
    <receiver>PlayerWindow</receiver>
@@ -2898,6 +3263,198 @@
    <signal>triggered(bool)</signal>
    <receiver>PlayerWindow</receiver>
    <slot>exportToGPX()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSet_Geofence</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>setGeofenceFromFootprint()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClear_Geofence</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>clearGeofence()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionWatch_Detections_Geofence</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleWatchDetectionsGeofence(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClick_to_Seek</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleClickToSeek(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTime_Machine</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleTimeMachine(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLookback</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleLookback(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPublish_Detections</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>togglePublishDetections(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExport_Mission_Package</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>exportMissionPackage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCinematic_Follow</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleCinematicFollow(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDetection_Heat_Trail</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleDetectionHeatTrail(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPlace_Labels</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>togglePlaceLabels(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionInstant_Replay</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleInstantReplay(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionStoryboard</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>toggleStoryboard(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPin_Target</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>togglePinTarget(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionJump_Next_Target_FOV</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>jumpToNextTargetFov()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClear_Target_Pin</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>PlayerWindow</receiver>
+   <slot>clearTargetPin()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>400</x>
@@ -3262,5 +3819,24 @@
   <slot>_toggleSensorCone(bool)</slot>
   <slot>_toggleDistanceRings(bool)</slot>
   <slot>militarySymbolDrawer(bool)</slot>
+  <slot>addTimelineBookmark()</slot>
+  <slot>clearTimelineBookmarks()</slot>
+  <slot>exportTimelineBookmarks()</slot>
+  <slot>setGeofenceFromFootprint()</slot>
+  <slot>clearGeofence()</slot>
+  <slot>toggleWatchDetectionsGeofence(bool)</slot>
+  <slot>toggleClickToSeek(bool)</slot>
+  <slot>toggleTimeMachine(bool)</slot>
+  <slot>toggleLookback(bool)</slot>
+  <slot>togglePublishDetections(bool)</slot>
+  <slot>toggleDetectionHeatTrail(bool)</slot>
+  <slot>toggleInstantReplay(bool)</slot>
+  <slot>toggleCinematicFollow(bool)</slot>
+  <slot>togglePlaceLabels(bool)</slot>
+  <slot>toggleStoryboard(bool)</slot>
+  <slot>togglePinTarget(bool)</slot>
+  <slot>jumpToNextTargetFov()</slot>
+  <slot>clearTargetPin()</slot>
+  <slot>exportMissionPackage()</slot>
  </slots>
 </ui>

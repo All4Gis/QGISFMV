@@ -17,14 +17,6 @@ do not need to change.
 from QGISFMV.player.drawing.QgsFmvDrawingConfig import (
     DrawingConfig,
     drawing_config,
-    NameSpace,
-    small_pt,
-    white_pen,
-    black_pen,
-    glass_pen,
-    transparent_brush,
-    black_brush,
-    ensure_stamp_image,
     setValues as _setValues,
 )
 from QGISFMV.player.drawing.QgsFmvDrawShapes import (
@@ -51,19 +43,6 @@ __all__ = ["DrawToolBar", "DrawingConfig", "drawing_config", "RulerTotalMeasure"
 
 
 class DrawToolBar(object):
-
-    NameSpace = NameSpace
-
-    small_pt = small_pt
-    white_pen = white_pen
-    black_pen = black_pen
-    glass_pen = glass_pen
-    transparent_brush = transparent_brush
-    black_brush = black_brush
-
-    @staticmethod
-    def _ensureStampImage():
-        ensure_stamp_image()
 
     @staticmethod
     def setValues(options=None):

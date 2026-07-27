@@ -71,7 +71,8 @@ flowchart LR
 | **AI Detection** | **Filters → AI Detection**: VisDrone YOLO (vehicle/person) + smart CV (building, road, fire, smoke, flood) — tuned for FMV/UAV |
 | **Multiplexer** | Build MISB `.ts` from DJI video + `.csv` / `.txt` / `.log` telemetry |
 | **Streams** | UDP, TCP, RTP, RTSP from **File → Open Stream** |
-| **FMV Tools** | HUD overlay, mini map (PiP), alerts |
+| **FMV Tools** | HUD, mini map, alerts, geofence, bookmarks, mission ZIP |
+| **Geo-intelligence** | **Map Time Machine**, **Lookback**, **Target Pin/Cue**, click-to-seek, AI→map, Detection Sentinel, Instant Replay, storyboard, place labels, heat trail, cinematic follow |
 | **On-video tools** | Draw, measure, magnifier, censor, stamp, object tracking, **military symbols** |
 | **Movable toolbar** | Draw toolbar is floatable and dockable; position persists across sessions |
 | **Mosaic** | Incremental georeferenced mosaic with feathering and performance controls |

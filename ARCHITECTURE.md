@@ -20,9 +20,11 @@ that symlink (tools may double-count files).
 | Plugin entry | `code/QgsFmv.py`, `code/__init__.py` | QGIS plugin class, menu/toolbar |
 | Manager | `code/manager/` | Video list dock, open stream, multiplexer |
 | Player | `code/player/QgsFmvPlayer.py` | Dock shell; wires controllers + UI |
-| Player features | `code/player/features/` | Controllers (record, metadata, mosaic, map center, …) |
+| Player features | `code/player/features/` | Controllers (record, metadata, mosaic, map seek / Time Machine, geofence, bookmarks, mission package, …) |
 | Player dialogs | `code/player/dialogs/` | Settings, metadata dock, military symbols, reports |
-| Overlays | `code/player/overlays/` | HUD, minimap, sensor cone, distance rings |
+| Overlays | `code/player/overlays/` | HUD (incl. alert banner), minimap, sensor cone, distance rings |
+| Spatial helpers | `code/geo/QgsFmvSpatial.py` | Pure point-in-polygon, nearest sample, image→lat/lon (no QGIS) |
+| AI → map | `code/video/filters/QgsFmvDetectionMap.py` | Georeferenced detection points + listener hooks (Sentinel) |
 | Drawing toolbar | `code/player/drawing/` | Draw tools painted on video |
 | Video widget | `code/video/playback/` | Decode surface, interaction, paint pipeline |
 | Filters / DNN | `code/video/filters/`, `code/video/dnn/` | Classic + AI filters |
@@ -210,8 +212,28 @@ backward-compatible imports. Layer-name constants and `groupName` stay on
 |--------|----------|
 | `QgsFmvDetectionFilters.py` | Public `FmvDetectionFilters.*Filter` façade |
 | `QgsFmvDetectionGeometry.py` | IoU/NMS/track IDs + temporal state |
-| `QgsFmvDetectionPipeline.py` | Shared OpenCV/fallback detection engine |
+| `QgsFmvDetectionPipeline.py` | Shared OpenCV/fallback detection engine (+ map notify) |
 | `QgsFmvDetectionScores.py` | Per-class scorers (building/road/vehicle/…) |
+| `QgsFmvDetectionMap.py` | Pixel boxes → WGS84 layer; heat trail; listener API for Sentinel |
+
+---
+
+## Geo-intelligence controllers
+
+| Module | Role |
+|--------|------|
+| `QgsFmvMapSeekController.py` | GeoTimeIndex; Click-to-seek; **Map Time Machine**; **Lookback** (FOV revisits) |
+| `QgsFmvTargetPin.py` | **Target Pin/Cue** — range, bearing, next FOV, enter alert |
+| `QgsFmvGeofence.py` | AOI from footprint; frame-center enter alerts; **Detection Sentinel** |
+| `QgsFmvBookmarkController.py` | Timeline markers + spatial CSV/KML export |
+| `QgsFmvInstantReplay.py` | Rewind+pause on alert / sentinel |
+| `QgsFmvPlaceLabel.py` | Throttled reverse geocode → HUD `PLACE` |
+| `QgsFmvStoryboard.py` | Silent GeoTIFF captures on bookmark / alert |
+| `QgsFmvMissionPackage.py` | After-action ZIP bundle (incl. storyboard/) |
+| `QgsFmvMapCenter.py` | Follow modes + optional cinematic lerp |
+| `QgsFmvSpatial.py` | Pure helpers: PIP, nearest sample, image→lat/lon |
+
+User-facing docs: [USAGE.md § Geo-intelligence](USAGE.md#geo-intelligence).
 
 ---
 

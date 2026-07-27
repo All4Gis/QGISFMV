@@ -1,63 +1,60 @@
 # -*- coding: utf-8 -*-
-"""Tests for utility functions in QgsFmvUtils (no QGIS runtime)."""
+"""Tests for utility time helpers and spawn (spawn still needs ffmpeg/QGIS env)."""
 
 import pytest
 
-try:
-    from qgis.PyQt.QtCore import QSettings  # noqa: F401
-    HAS_QGIS = True
-except ImportError:
-    HAS_QGIS = False
+from code.tests.support import ensure_qgis_fmv_package, load_plugin_module
 
-pytestmark = pytest.mark.skipif(not HAS_QGIS, reason="QGIS runtime not available")
+ensure_qgis_fmv_package()
+_fmt = load_plugin_module("utils/formatting.py", "QGISFMV.utils.formatting")
 
 
 class TestSecondsToTime:
-    """Test the _seconds_to_time function."""
+    """Test seconds_to_time / legacy _seconds_to_time alias."""
 
-    @pytest.fixture
-    def seconds_to_time(self):
-        from code.tests.support import load_plugin_module
+    def test_zero_seconds(self):
+        assert _fmt.seconds_to_time(0) == "00:00:00"
 
-        utils = load_plugin_module(
-            "utils/core/QgsFmvUtils.py", "QGISFMV.utils.core.QgsFmvUtils"
-        )
-        return utils._seconds_to_time
+    def test_one_second(self):
+        assert _fmt.seconds_to_time(1) == "00:00:01"
 
-    def test_zero_seconds(self, seconds_to_time):
-        assert seconds_to_time(0) == "00:00:00"
+    def test_one_minute(self):
+        assert _fmt.seconds_to_time(60) == "00:01:00"
 
-    def test_one_second(self, seconds_to_time):
-        assert seconds_to_time(1) == "00:00:01"
+    def test_one_hour(self):
+        assert _fmt.seconds_to_time(3600) == "01:00:00"
 
-    def test_one_minute(self, seconds_to_time):
-        assert seconds_to_time(60) == "00:01:00"
+    def test_complex_time(self):
+        assert _fmt.seconds_to_time(3661) == "01:01:01"
 
-    def test_one_hour(self, seconds_to_time):
-        assert seconds_to_time(3600) == "01:00:00"
+    def test_large_time(self):
+        assert _fmt.seconds_to_time(86399) == "23:59:59"
 
-    def test_complex_time(self, seconds_to_time):
-        assert seconds_to_time(3661) == "01:01:01"
+    def test_float_truncated(self):
+        assert _fmt.seconds_to_time(65.7) == "00:01:05"
 
-    def test_large_time(self, seconds_to_time):
-        assert seconds_to_time(86399) == "23:59:59"
-
-    def test_float_truncated(self, seconds_to_time):
-        assert seconds_to_time(65.7) == "00:01:05"
-
-    def test_negative(self, seconds_to_time):
-        # Negative seconds should still produce a formatted string
-        result = seconds_to_time(-1)
+    def test_negative(self):
+        result = _fmt.seconds_to_time(-1)
         assert ":" in result
 
 
+class TestTimeToSeconds:
+    def test_roundtrip(self):
+        assert _fmt.time_to_seconds("01:02:03.500000") == pytest.approx(3723.5)
+
+    def test_zero(self):
+        assert _fmt.time_to_seconds("00:00:00.000000") == 0.0
+
+
 class TestSpawn:
-    """Test the _spawn function."""
+    """Test the _spawn function (needs QgsFmvUtils + ffmpeg)."""
 
     @pytest.fixture
     def spawn(self):
-        from code.tests.support import load_plugin_module
-
+        try:
+            from qgis.PyQt.QtCore import QSettings  # noqa: F401
+        except ImportError:
+            pytest.skip("QGIS runtime not available")
         utils = load_plugin_module(
             "utils/core/QgsFmvUtils.py", "QGISFMV.utils.core.QgsFmvUtils"
         )

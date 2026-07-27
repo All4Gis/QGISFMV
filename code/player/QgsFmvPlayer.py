@@ -55,9 +55,18 @@ from QGISFMV.player.filters.FilterManager import FilterManager
 from QGISFMV.player.overlays.QgsFmvHud import HudOverlay
 from QGISFMV.player.features.QgsFmvSnapshots import AutoSnapshot
 from QGISFMV.player.features.QgsFmvAlerts import AlertManager
+from QGISFMV.player.features.QgsFmvBookmarkController import BookmarkController
+from QGISFMV.player.features.QgsFmvGeofence import GeofenceController
+from QGISFMV.player.features.QgsFmvInstantReplay import InstantReplayController
+from QGISFMV.player.features.QgsFmvMapSeekController import MapSeekController
+from QGISFMV.player.features.QgsFmvMissionPackage import MissionPackageController
+from QGISFMV.player.features.QgsFmvPlaceLabel import PlaceLabelController
+from QGISFMV.player.features.QgsFmvStoryboard import StoryboardController
+from QGISFMV.player.features.QgsFmvTargetPin import TargetPinController
 from QGISFMV.player.overlays.QgsFmvSensorCone import SensorConeOverlay
 from QGISFMV.player.overlays.QgsFmvDistanceRings import DistanceRingsOverlay
 
+from QGISFMV.utils.constants import SLOW_PLAYBACK_RATE
 from QGISFMV.utils.vision.QgsObjectTracker import cv2_available, has_object_tracking
 
 
@@ -95,7 +104,7 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         self.data = None
         self._lastMetadataPacket = None
         self.staticDraw = False
-        self.playbackRateSlow = 0.7
+        self.playbackRateSlow = SLOW_PLAYBACK_RATE
         self.sdv = 0
         self.closing = False
         self._pendingPlayOnLoad = False
@@ -229,12 +238,65 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
 
         self.autoSnapshot = AutoSnapshot(self)
         self.alertManager = AlertManager(self)
+        self.bookmarkController = BookmarkController(self)
+        self.geofenceController = GeofenceController(self)
+        self.mapSeekController = MapSeekController(self)
+        self.missionPackage = MissionPackageController(self)
+        self.instantReplay = InstantReplayController(self)
+        self.placeLabelController = PlaceLabelController(self)
+        self.storyboardController = StoryboardController(self)
+        self.targetPinController = TargetPinController(self)
+        self.alertManager.alertTriggered.connect(
+            self.bookmarkController.onAlertTriggered
+        )
+        self.alertManager.alertTriggered.connect(self._onAlertHudFlash)
+        self.alertManager.alertTriggered.connect(self.instantReplay.onAlert)
+        self.alertManager.alertTriggered.connect(self.storyboardController.onAlert)
 
         # C2 / Geo-Intelligence overlays
         self.sensorConeOverlay = SensorConeOverlay()
         self.distanceRingsOverlay = DistanceRingsOverlay()
 
         self.filterManager = FilterManager(self)
+
+        # Sync AI-detections→map toggle with the feature flag (default ON).
+        try:
+            from QGISFMV.video.filters.QgsFmvDetectionMap import (
+                add_detection_listener,
+                is_publish_enabled,
+                is_trail_enabled,
+                set_playhead_provider,
+                set_publish_enabled,
+                set_trail_enabled,
+            )
+
+            on = is_publish_enabled()
+            set_publish_enabled(on)
+            action = getattr(self, "actionPublish_Detections", None)
+            if action is not None:
+                action.blockSignals(True)
+                action.setChecked(bool(on))
+                action.blockSignals(False)
+            trail_on = is_trail_enabled()
+            set_trail_enabled(trail_on)
+            trail_action = getattr(self, "actionDetection_Heat_Trail", None)
+            if trail_action is not None:
+                trail_action.blockSignals(True)
+                trail_action.setChecked(bool(trail_on))
+                trail_action.blockSignals(False)
+            set_playhead_provider(
+                lambda: float(getattr(self, "currentInfo", 0.0) or 0.0)
+            )
+            add_detection_listener(self._onDetectionsPublished)
+        except Exception as exc:
+            log.debug("publish-detections toggle sync failed: %s", exc)
+
+        # Sentinel watch toggle defaults ON.
+        watch = getattr(self, "actionWatch_Detections_Geofence", None)
+        if watch is not None:
+            watch.blockSignals(True)
+            watch.setChecked(True)
+            watch.blockSignals(False)
 
     def setMetaReader(self, metaReader):
         """Set the KLV metadata reader for this video."""
@@ -806,6 +868,18 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         ms = int(seconds * 1000)
         self.player.setPosition(ms)
 
+    def addTimelineBookmark(self):
+        """Qt Designer slot — add a bookmark at the current playhead."""
+        self.bookmarkController.addBookmark()
+
+    def clearTimelineBookmarks(self):
+        """Qt Designer slot — clear all timeline bookmarks."""
+        self.bookmarkController.clearBookmarks()
+
+    def exportTimelineBookmarks(self):
+        """Qt Designer slot — export bookmarks to CSV/KML."""
+        self.bookmarkController.exportBookmarks()
+
     # --- Feature 5: Auto Snapshots ---
     def toggleAutoSnapshots(self):
         """Toggle automatic frame snapshots on/off."""
@@ -841,6 +915,191 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         if reply == QMessageBox.StandardButton.Yes:
             self.alertManager.clearRules()
             self.actionToggle_Alerts.setChecked(False)
+
+    # --- Geofence / Map seek / AI map / Mission package ---
+    def setGeofenceFromFootprint(self):
+        """Qt Designer slot — arm geofence from the current footprint."""
+        return self.geofenceController.setFromFootprint()
+
+    def clearGeofence(self):
+        """Qt Designer slot — remove geofence AOI rules."""
+        self.geofenceController.clear()
+        qgsu.showUserAndLogMessage(
+            "",
+            QCoreApplication.translate("QgsFmvPlayer", "Geofence cleared."),
+            level=QGis.MessageLevel.Info,
+        )
+
+    def toggleWatchDetectionsGeofence(self, checked):
+        """Qt Designer slot — AOI Detection Sentinel on/off."""
+        on = self.geofenceController.setWatchDetections(bool(checked))
+        action = getattr(self, "actionWatch_Detections_Geofence", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        return on
+
+    def _onDetectionsPublished(self, class_name, points):
+        """Listener: run Detection Sentinel when AI points land on the map."""
+        try:
+            self.geofenceController.checkDetections({str(class_name): points})
+        except Exception as exc:
+            log.debug("detection sentinel failed: %s", exc)
+
+    def _onAlertHudFlash(self, message):
+        """Flash a short HUD banner for any alert (telemetry / geofence / sentinel)."""
+        hud = getattr(self, "hudOverlay", None)
+        if hud is not None and hasattr(hud, "setAlertBanner"):
+            try:
+                hud.setAlertBanner(message, ttl_ms=3500)
+            except Exception as exc:
+                log.debug("alert HUD flash failed: %s", exc)
+
+    def toggleClickToSeek(self, checked):
+        """Qt Designer slot — arm/disarm map click→seek tool."""
+        on = self.mapSeekController.setActive(bool(checked))
+        action = getattr(self, "actionClick_to_Seek", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        return on
+
+    def toggleTimeMachine(self, checked):
+        """Qt Designer slot — Map Time Machine (hover scrub + ghost FOV)."""
+        on = self.mapSeekController.setTimeMachine(bool(checked))
+        action = getattr(self, "actionTime_Machine", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        return on
+
+    def toggleLookback(self, checked):
+        """Qt Designer slot — Lookback: what did we see at this map point?"""
+        on = self.mapSeekController.setLookback(bool(checked))
+        action = getattr(self, "actionLookback", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        return on
+
+    def togglePublishDetections(self, checked):
+        """Qt Designer slot — publish AI boxes to the map layer (checkable toggle)."""
+        from QGISFMV.video.filters.QgsFmvDetectionMap import set_publish_enabled
+
+        on = set_publish_enabled(bool(checked))
+        # Keep menu/toolbar pressed state in sync with the feature flag.
+        action = getattr(self, "actionPublish_Detections", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        qgsu.showUserAndLogMessage(
+            "",
+            QCoreApplication.translate(
+                "QgsFmvPlayer",
+                "AI detections on map: ON" if on else "AI detections on map: OFF",
+            ),
+            onlyLog=True,
+        )
+        return on
+
+    def toggleDetectionHeatTrail(self, checked):
+        """Qt Designer slot — accumulate AI detections as a heat trail on the map."""
+        from QGISFMV.video.filters.QgsFmvDetectionMap import set_trail_enabled
+
+        on = set_trail_enabled(bool(checked))
+        action = getattr(self, "actionDetection_Heat_Trail", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        qgsu.showUserAndLogMessage(
+            "",
+            QCoreApplication.translate(
+                "QgsFmvPlayer",
+                "Detection heat trail: ON" if on else "Detection heat trail: OFF",
+            ),
+            onlyLog=True,
+        )
+        return on
+
+    def toggleInstantReplay(self, checked):
+        """Qt Designer slot — rewind+pause when an alert/sentinel fires."""
+        on = self.instantReplay.setEnabled(bool(checked))
+        action = getattr(self, "actionInstant_Replay", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        return on
+
+    def toggleCinematicFollow(self, checked):
+        """Qt Designer slot — smooth (lerped) map follow."""
+        from QGISFMV.utils.core.QgsFmvMapCenter import set_cinematic_follow
+
+        on = set_cinematic_follow(bool(checked))
+        action = getattr(self, "actionCinematic_Follow", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        return on
+
+    def togglePlaceLabels(self, checked):
+        """Qt Designer slot — reverse-geocode frame center → HUD PLACE line."""
+        on = self.placeLabelController.setEnabled(bool(checked))
+        action = getattr(self, "actionPlace_Labels", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        return on
+
+    def toggleStoryboard(self, checked):
+        """Qt Designer slot — auto GeoTIFF captures on bookmarks / alerts."""
+        on = self.storyboardController.setEnabled(bool(checked))
+        action = getattr(self, "actionStoryboard", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        return on
+
+    def togglePinTarget(self, checked):
+        """Qt Designer slot — arm click-to-pin target cue on the map."""
+        on = self.targetPinController.setArming(bool(checked))
+        action = getattr(self, "actionPin_Target", None)
+        if action is not None and action.isChecked() != on:
+            action.blockSignals(True)
+            action.setChecked(on)
+            action.blockSignals(False)
+        return on
+
+    def clearTargetPin(self):
+        """Qt Designer slot — remove the pinned target cue."""
+        self.targetPinController.clear()
+        action = getattr(self, "actionPin_Target", None)
+        if action is not None and action.isChecked():
+            action.blockSignals(True)
+            action.setChecked(False)
+            action.blockSignals(False)
+        qgsu.showUserAndLogMessage(
+            "",
+            QCoreApplication.translate("QgsFmvPlayer", "Target pin cleared."),
+            onlyLog=True,
+        )
+
+    def jumpToNextTargetFov(self):
+        """Qt Designer slot — seek to the next FOV visit of the pinned target."""
+        return self.targetPinController.jumpToNextFov()
+
+    def exportMissionPackage(self):
+        """Qt Designer slot — export a mission ZIP package."""
+        return self.missionPackage.export()
 
     def closeEvent(self, event):
         """Close Event"""

@@ -15,16 +15,15 @@ from QGISFMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.core.QgsFmvUtils import askForFiles, _seconds_to_time, BurnDrawingsImage
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.player.dialogs.QgsFmvReportGenerator import (
-    ReportGenerator,
+from QGISFMV.player.dialogs.QgsFmvReportGenerator import ReportGenerator
+from QGISFMV.player.dialogs.QgsFmvReportMetadata import (
     _metadata_dict_from_table,
     _group_metadata_fields,
 )
 
 
-# Metadata-formatting helpers and PDF rendering now live in
-# QgsFmvReportGenerator.py (imported above); only _metadata_dict_from_table
-# and _group_metadata_fields are re-imported here for CreateCSV/_report_metadata.
+# Metadata-formatting helpers live in QgsFmvReportMetadata.py; PDF rendering
+# lives in ReportGenerator.
 
 
 # ---------------------------------------------------------------------------

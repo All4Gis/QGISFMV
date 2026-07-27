@@ -12,6 +12,41 @@ from QGISFMV.utils.ui.QgsPlot import ShowPlot
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
+def classify_task_result(result):
+    """Pure classifier for task result dicts (unit-testable, no Qt).
+
+    Returns a dict with boolean/string flags describing how the UI should react.
+    Unknown or empty results return ``{"kind": "empty"}``.
+    """
+    if not isinstance(result, dict):
+        return {"kind": "empty"}
+    if not result:
+        return {"kind": "empty"}
+    if result.get("error"):
+        return {
+            "kind": "error",
+            "error": result["error"],
+            "stop_record_animation": bool(result.get("stop_record_animation")),
+        }
+    task_name = result.get("task", "") or ""
+    kind = "success"
+    if "Georeferencing" in task_name:
+        kind = "georeferencing"
+    elif "Bitrate" in task_name:
+        kind = "bitrate"
+    elif task_name == "Show Video Info Task":
+        kind = "video_info"
+    elif task_name == "Save Current Georeferenced Frame Task":
+        kind = "save_georef_frame"
+    return {
+        "kind": kind,
+        "task": task_name,
+        "stop_record_animation": bool(result.get("stop_record_animation")),
+        "has_json": bool(result.get("json")),
+        "file": result.get("file"),
+    }
+
+
 class TaskResultsController:
     """Interpret QgsTask results/errors and route them to the right UI update."""
 
@@ -33,62 +68,67 @@ class TaskResultsController:
                     ),
                     level=QGis.MessageLevel.Warning,
                 )
-            elif isinstance(result, dict):
-                if result.get("stop_record_animation"):
-                    player.recordController.StopRecordAnimation()
-                if result.get("error"):
-                    qgsu.showUserAndLogMessage(
-                        result["error"], level=QGis.MessageLevel.Warning
-                    )
-                    return
-                task_name = result.get("task", "")
-                if "Georeferencing" in task_name:
-                    return
+                return
+
+            info = classify_task_result(result)
+            if info.get("stop_record_animation"):
+                player.recordController.StopRecordAnimation()
+            if info["kind"] == "error":
                 qgsu.showUserAndLogMessage(
-                    QCoreApplication.translate(
-                        "QgsFmvPlayer", "Successfully " + task_name + "!"
-                    )
+                    info["error"], level=QGis.MessageLevel.Warning
                 )
-                if "Bitrate" in task_name:
-                    try:
-                        player.matplot = ShowPlot(
-                            player.BitratePlot.bitrate_data,
-                            player.BitratePlot.frame_count,
-                            player.fileName,
-                            player.BitratePlot.output,
-                        )
-                    except ImportError:
-                        qgsu.showUserAndLogMessage(
-                            QCoreApplication.translate(
-                                "QgsFmvPlayer",
-                                "Install matplotlib and numpy to show bitrate plots.",
-                            ),
-                            level=QGis.MessageLevel.Warning,
-                        )
-                if task_name == "Show Video Info Task":
-                    if result.get("json"):
-                        player.exportController.showVideoInfoDialog(result.get("json"))
-                    else:
-                        qgsu.showUserAndLogMessage(
-                            QCoreApplication.translate(
-                                "QgsFmvPlayer", "Could not read video information."
-                            ),
-                            level=QGis.MessageLevel.Warning,
-                        )
-                if task_name == "Save Current Georeferenced Frame Task":
-                    buttonReply = qgsu.CustomMessage(
-                        QCoreApplication.translate("QgsFmvPlayer", "Information"),
-                        QCoreApplication.translate(
-                            "QgsFmvPlayer", "Do you want to load the layer?"
-                        ),
-                        icon="Information",
+                return
+            if info["kind"] == "georeferencing":
+                return
+            if info["kind"] == "empty":
+                return
+
+            task_name = info.get("task", "")
+            qgsu.showUserAndLogMessage(
+                QCoreApplication.translate(
+                    "QgsFmvPlayer", "Successfully " + task_name + "!"
+                )
+            )
+            if info["kind"] == "bitrate":
+                try:
+                    player.matplot = ShowPlot(
+                        player.BitratePlot.bitrate_data,
+                        player.BitratePlot.frame_count,
+                        player.fileName,
+                        player.BitratePlot.output,
                     )
-                    if buttonReply == QMessageBox.StandardButton.Yes:
-                        _file = result["file"]
-                        root, _ = os.path.splitext(_file)
-                        layer = QgsRasterLayer(_file, root)
-                        QgsProject.instance().addMapLayer(layer)
-                    return
+                except ImportError:
+                    qgsu.showUserAndLogMessage(
+                        QCoreApplication.translate(
+                            "QgsFmvPlayer",
+                            "Install matplotlib and numpy to show bitrate plots.",
+                        ),
+                        level=QGis.MessageLevel.Warning,
+                    )
+            elif info["kind"] == "video_info":
+                if info.get("has_json"):
+                    player.exportController.showVideoInfoDialog(result.get("json"))
+                else:
+                    qgsu.showUserAndLogMessage(
+                        QCoreApplication.translate(
+                            "QgsFmvPlayer", "Could not read video information."
+                        ),
+                        level=QGis.MessageLevel.Warning,
+                    )
+            elif info["kind"] == "save_georef_frame":
+                buttonReply = qgsu.CustomMessage(
+                    QCoreApplication.translate("QgsFmvPlayer", "Information"),
+                    QCoreApplication.translate(
+                        "QgsFmvPlayer", "Do you want to load the layer?"
+                    ),
+                    icon="Information",
+                )
+                if buttonReply == QMessageBox.StandardButton.Yes:
+                    _file = result["file"]
+                    root, _ = os.path.splitext(_file)
+                    layer = QgsRasterLayer(_file, root)
+                    QgsProject.instance().addMapLayer(layer)
+                return
         else:
             if (result or {}).get("stop_record_animation"):
                 player.recordController.StopRecordAnimation()

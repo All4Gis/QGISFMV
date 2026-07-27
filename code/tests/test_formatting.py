@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tests for QGISFMV.utils.formatting shared utilities."""
 
+import pytest
+
 from code.tests.support import ensure_qgis_fmv_package, load_plugin_module
 
 ensure_qgis_fmv_package()
@@ -84,3 +86,11 @@ class TestFormatArea:
 
     def test_large_hectares(self):
         assert mod.format_area(500000) == "50.00 ha"
+
+
+class TestTimeHelpers:
+    def test_seconds_to_time(self):
+        assert mod.seconds_to_time(3661) == "01:01:01"
+
+    def test_time_to_seconds(self):
+        assert mod.time_to_seconds("00:01:05.000000") == pytest.approx(65.0)

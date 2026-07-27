@@ -52,7 +52,6 @@ from QGISFMV.player.dialogs.QgsFmvReportMetadata import (
     _metadata_dict_from_table,
     _classification_level,
     _is_classified,
-    _group_metadata_fields,
     _build_grouped_metadata_html,
 )
 from QGISFMV.player.dialogs.QgsFmvReportGeo import (
@@ -63,12 +62,6 @@ from QGISFMV.player.dialogs.QgsFmvReportGeo import (
     _padded_map_extent,
     _geo_to_pixel,
 )
-
-# Metadata-formatting, geo/map, and PDF layout helpers now live in
-# QgsFmvReportMetadata.py, QgsFmvReportGeo.py, and QgsFmvReportPdfLayout.py
-# (imported above). _metadata_dict_from_table and _group_metadata_fields are
-# re-exported here for backward compatibility (QgsFmvMetadata.py imports
-# them from this module).
 
 
 # ---------------------------------------------------------------------------

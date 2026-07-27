@@ -1,22 +1,18 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from math import sin, radians
 import json
 import os
 import platform
 import shutil
 import time
-from qgis.PyQt.QtCore import QSettings, QUrl, QEventLoop
+from qgis.PyQt.QtCore import QSettings
 from qgis.PyQt.QtCore import QPoint
 from qgis.PyQt.QtGui import QPainter
-from qgis.PyQt.QtNetwork import QNetworkRequest
 from qgis.core import (
-    QgsNetworkAccessManager,
     Qgis as QGis,
 )
 
 from QGISFMV.utils.logging import log
-from QGISFMV.utils.core.QgsFmvUtilsState import globalVariablesState  # noqa: F401
 from QGISFMV.utils.core.QgsFmvVideoSession import (
     VideoSession,
     ensure_session,
@@ -47,7 +43,6 @@ from QGISFMV.utils.settings.QgsFmvSettings import (
 # Backward-compat re-exports from domain modules
 # ---------------------------------------------------------------------------
 from QGISFMV.utils.core.QgsFmvGeoReferencing import (  # noqa: F401
-    DEFAULT_TARGET_WIDTH,
     _find_homography,
     _find_homography_numpy,
     _affineTransformIsUsable,
@@ -74,9 +69,12 @@ from QGISFMV.utils.core.QgsFmvCornerEstimation import (  # noqa: F401
 from QGISFMV.utils.core.QgsFmvMosaic import (  # noqa: F401
     ExtendMosaic,
     WriteGeoreferencedFrame,
+    _dataset_extent_wgs84,
+    _footprint_weights_from_mask,
     _gdal_raster_readable,
     _get_wgs84_srs,
-    _mosaic_source_files,
+    _mosaic_feather_weights,
+    _should_accept_mosaic_frame,
     georeferencingVideo,
     resetMosaicFrameCounter,
 )
@@ -188,9 +186,8 @@ def getVideoFolder(video_file):
 
 
 def RemoveVideoFolder(filename):
-    """Remove video temporal folder if exist"""
-    videoFile, _ = os.path.splitext(filename)
-    folder = getVideoFolder(videoFile)
+    """Remove video temporal folder if exist."""
+    folder = getVideoFolder(filename)
     try:
         shutil.rmtree(folder, ignore_errors=True)
     except Exception as e:
@@ -345,69 +342,6 @@ def fetchReverseGeocodeLabel(centerLat, centerLon):
     )
 
     return _fetch_label(Reverse_geocoding_url, centerLat, centerLon)
-
-
-def _fetchReverseGeocodeJson(centerLat, centerLon, useQtNetwork=True):
-    """Fetch reverse-geocode JSON (Qt network on GUI thread, urllib otherwise)."""
-    from QGISFMV.utils.media.QgsFmvGeocode import (
-        GEOCODE_USER_AGENT,
-        normalizeReverseGeocodeUrl,
-        fetchReverseGeocodeJson as _fetch_urllib,
-    )
-
-    if Reverse_geocoding_url == "" or centerLat is None or centerLon is None:
-        return None
-    if not useQtNetwork:
-        return _fetch_urllib(Reverse_geocoding_url, centerLat, centerLon)
-
-    try:
-        from qgis.PyQt.QtCore import QTimer
-
-        url = normalizeReverseGeocodeUrl(
-            Reverse_geocoding_url.format(str(centerLat), str(centerLon))
-        )
-        request = QNetworkRequest(QUrl(url))
-        request.setHeader(
-            QNetworkRequest.KnownHeaders.UserAgentHeader,
-            GEOCODE_USER_AGENT,
-        )
-        request.setRawHeader(b"Accept", b"application/json")
-        reply = QgsNetworkAccessManager.instance().get(request)
-        loop = QEventLoop()
-        reply.finished.connect(loop.quit)
-        _timeout = QTimer()
-        _timeout.setSingleShot(True)
-        _timeout.timeout.connect(loop.quit)
-        _timeout.start(8000)
-        loop.exec()
-        _timeout.stop()
-        reply.finished.disconnect(loop.quit)
-        if not reply.isFinished():
-            reply.abort()
-            log.warning("Reverse geocode timed out for %s, %s", centerLat, centerLon)
-            return None
-        status = reply.attribute(QNetworkRequest.Attribute.HttpStatusCodeAttribute)
-        raw = bytes(reply.readAll().data())
-        if status and int(status) >= 400:
-            log.warning(
-                "Reverse geocode HTTP %s: %s",
-                status,
-                raw[:200].decode("utf-8", errors="replace"),
-            )
-            return None
-        return json.loads(raw.decode("utf-8", errors="replace"))
-    except Exception as exc:
-        log.warning(
-            "Reverse geocode (Qt) failed for %s, %s: %s", centerLat, centerLon, exc
-        )
-        return None
-
-
-def _reverseGeocodeLabelFromJson(data):
-    """Build a short Start Location label from a Nominatim JSON payload."""
-    from QGISFMV.utils.media.QgsFmvGeocode import reverseGeocodeLabelFromJson
-
-    return reverseGeocodeLabelFromJson(data)
 
 
 def _videoFrameImage(parent):
@@ -639,33 +573,22 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     return True
 
 
-# Mosaic tuning constants (refreshed by QgsFmvSettings._apply_mosaic_settings)
-MOSAIC_MIN_INTERVAL_SEC = 2.0
-MOSAIC_MIN_MOVE_METERS = 30.0
-MOSAIC_MAX_FRAME_DIMENSION = 960
-MOSAIC_FEATHER_PX = 56
-MOSAIC_MAX_OUTPUT_SIZE = 2048
-MOSAIC_MAX_KEPT_FRAMES = 80
-MOSAIC_FOOTPRINT_GROW_RATIO = 1.12
-MOSAIC_FOOTPRINT_GROW_METERS = 35.0
-
-
-def _time_to_seconds(dateStr):
-    """Convert time string HH:MM:SS.ffffff to seconds"""
-    timeval = datetime.strptime(dateStr, "%H:%M:%S.%f")
-    return (
-        timeval.hour * 3600
-        + timeval.minute * 60
-        + timeval.second
-        + timeval.microsecond / 1e6
-    )
-
-
-def _seconds_to_time(sec):
-    """Convert seconds to HH:MM:SS string"""
-    hours, remainder = divmod(int(sec), 3600)
-    minutes, seconds = divmod(remainder, 60)
-    return "%02d:%02d:%02d" % (hours, minutes, seconds)
+# Mosaic tuning constants (canonical values in utils.constants; mirrored here
+# so QgsFmvSettings.reloadRuntime can mutate the cached module attributes).
+from QGISFMV.utils.constants import (  # noqa: F401
+    MOSAIC_MIN_INTERVAL_SEC,
+    MOSAIC_MIN_MOVE_METERS,
+    MOSAIC_MAX_FRAME_DIMENSION,
+    MOSAIC_FEATHER_PX,
+    MOSAIC_MAX_OUTPUT_SIZE,
+    MOSAIC_MAX_KEPT_FRAMES,
+    MOSAIC_FOOTPRINT_GROW_RATIO,
+    MOSAIC_FOOTPRINT_GROW_METERS,
+)
+from QGISFMV.utils.formatting import (  # noqa: F401
+    seconds_to_time as _seconds_to_time,
+    time_to_seconds as _time_to_seconds,
+)
 
 
 def BurnDrawingsImage(source, overlay):

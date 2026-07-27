@@ -2,7 +2,7 @@
 """Export telemetry layers to KML / GPX."""
 
 import xml.etree.ElementTree as ET
-from datetime import datetime
+from datetime import datetime, timezone
 
 from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.PyQt.QtCore import QCoreApplication
@@ -105,7 +105,9 @@ def _build_gpx_document(name, points):
     )
     metadata = ET.SubElement(gpx, "metadata")
     ET.SubElement(metadata, "name").text = name
-    ET.SubElement(metadata, "time").text = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    ET.SubElement(metadata, "time").text = datetime.now(timezone.utc).strftime(
+        "%Y-%m-%dT%H:%M:%SZ"
+    )
 
     trk = ET.SubElement(gpx, "trk")
     ET.SubElement(trk, "name").text = name

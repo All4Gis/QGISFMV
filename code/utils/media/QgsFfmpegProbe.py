@@ -3,7 +3,6 @@
 
 import json
 import os
-import platform
 import re
 import subprocess
 
@@ -12,7 +11,6 @@ from qgis.PyQt.QtCore import QCoreApplication
 from QGISFMV.utils.core.QgsFmvUtils import _spawn
 from QGISFMV.utils.logging import log
 
-windows = platform.system() == "Windows"
 _TIME_RE = re.compile(r"time=([0-9.:]+) ")
 
 

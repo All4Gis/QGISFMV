@@ -2,7 +2,7 @@
 """Point / line / polygon / military symbol / censure painting on the video frame."""
 import os
 
-from qgis.PyQt.QtCore import QPointF, Qt, QPoint, QRectF
+from qgis.PyQt.QtCore import QPointF, QPoint, QRectF
 from qgis.PyQt.QtGui import (
     QPainter,
     QPainterPath,

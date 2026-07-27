@@ -21,10 +21,6 @@ except ImportError:
 # Nominatim usage policy: identify the application.
 GEOCODE_USER_AGENT = "QGIS-FMV/4.00 (https://github.com/All4Gis/QGISFMV)"
 
-DEFAULT_REVERSE_URL = (
-    "https://nominatim.openstreetmap.org/reverse?format=json&lat={}&lon={}"
-)
-
 
 def normalizeReverseGeocodeUrl(url):
     """Prefer Nominatim ``/reverse`` over legacy ``reverse.php``."""

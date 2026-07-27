@@ -350,6 +350,9 @@ def _run_detection(
                     result, weight = _confidence_overlay(
                         rgb, score, tint, label, **opts
                     )
+                    _notify_map_detections(
+                        ema_key, boxes, track_ids, opts.get("box_scores")
+                    )
                     return result, weight, engine, boxes
         except Exception as _exc:
             log.debug('DNN detection failed, falling back to classical: %s', _exc)
@@ -376,8 +379,20 @@ def _run_detection(
     result, weight = _confidence_overlay(
         rgb, score, tint, label, **opts
     )
+    _notify_map_detections(ema_key, boxes, track_ids, opts.get("box_scores"))
     return result, weight, engine, boxes
 
+
+def _notify_map_detections(class_name, boxes, track_ids, scores):
+    """Best-effort publish of detection boxes onto the map (georeferenced)."""
+    if not boxes:
+        return
+    try:
+        from QGISFMV.video.filters.QgsFmvDetectionMap import notify_detections
+
+        notify_detections(class_name, boxes, track_ids=track_ids, scores=scores)
+    except Exception as exc:
+        log.debug("notify_detections failed: %s", exc)
 
 # Filter-specific pipeline parameter defaults — avoids repeating long kwarg
 # lists in every _detect_opencv_X / _detect_fallback_X pair.

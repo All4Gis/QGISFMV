@@ -15,7 +15,7 @@ import sys
 def bootstrapPythonDepsPath():
     """Guard macOS user-site issues and add optional local package path."""
 
-    local_pkgs = os.path.expanduser("~/.qgis-fmv-packages")
+    local_pkgs = os.path.join(os.path.expanduser("~"), ".qgis-fmv-packages")
     if os.path.isdir(local_pkgs) and local_pkgs not in sys.path:
         # Append (do not insert): wheels here must never shadow QGIS's numpy.
         # A bad install (wrong CPython ABI / Team ID) would otherwise break QGIS.
