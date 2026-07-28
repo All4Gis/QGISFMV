@@ -50,7 +50,7 @@ jobs:
           echo "ZIP_FILE=deploy/${NAME}_${VERSION}.zip" >> $GITHUB_OUTPUT
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: qgis-fmv-${{ steps.info.outputs.version }}
           path: ${{ steps.info.outputs.ZIP_FILE }}
