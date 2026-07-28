@@ -1,7 +1,7 @@
 # Development dependencies for QGIS FMV
 
 # Code quality
-pycodestyle>=2.11.0
+pycodestyle>=2.14.0
 black>=24.8.0
 isort>=5.13.2
 flake8>=7.1.1
