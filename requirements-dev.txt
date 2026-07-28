@@ -10,7 +10,7 @@ flake8>=7.1.1
 pytest>=8.3.0
 
 # Debugging / hot reload (optional local workflow)
-debugpy>=1.8.1
+debugpy>=1.8.21
 watchdog>=4.0.0
 
 # Build tools — only needed when running build.py outside QGIS
