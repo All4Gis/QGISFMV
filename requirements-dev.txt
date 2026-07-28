@@ -15,5 +15,5 @@ watchdog>=4.0.0
 
 # Build tools — only needed when running build.py outside QGIS
 # (QGIS 4 bundles PyQt6 internally; these are for standalone dev builds)
-PyQt6>=6.5.0
+PyQt6>=6.11.0
 PySide6>=6.5.0  # optional fallback for rcc resource compilation
