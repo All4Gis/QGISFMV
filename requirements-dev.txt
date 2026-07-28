@@ -11,7 +11,7 @@ pytest>=8.3.0
 
 # Debugging / hot reload (optional local workflow)
 debugpy>=1.8.1
-watchdog>=4.0.0
+watchdog>=6.0.0
 
 # Build tools — only needed when running build.py outside QGIS
 # (QGIS 4 bundles PyQt6 internally; these are for standalone dev builds)
