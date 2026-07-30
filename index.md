@@ -9,7 +9,7 @@ Play **MISB** video, sync telemetry on the map, and analyze FMV inside **QGIS 4*
 
 <p>
   <a class="btn" href="https://github.com/All4Gis/QGISFMV">GitHub</a>
-  <a class="btn" href="https://github.com/All4Gis/QGISFMV/blob/main/USAGE.md">User guide</a>
+  <a class="btn" href="https://github.com/All4Gis/QGISFMV/blob/master/USAGE.md">User guide</a>
   <a class="btn" href="{{ site.baseurl }}/contact.html">Contact</a>
 </p>
 
@@ -25,13 +25,13 @@ Play **MISB** video, sync telemetry on the map, and analyze FMV inside **QGIS 4*
 
 **Plugins → Manage and Install Plugins** → search **QGIS FMV** → Install
 
-Requires **QGIS 4.x**, **FFmpeg**, and **pymisb**. See the [README](https://github.com/All4Gis/QGISFMV/blob/main/README.md) for details.
+Requires **QGIS 4.x**, **FFmpeg**, and **pymisb**. See the [README](https://github.com/All4Gis/QGISFMV/blob/master/README.md) for details.
 
 ## Documentation
 
 | Resource | Link |
 |----------|------|
-| User guide | [USAGE.md](https://github.com/All4Gis/QGISFMV/blob/main/USAGE.md) |
+| User guide | [USAGE.md](https://github.com/All4Gis/QGISFMV/blob/master/USAGE.md) |
 | Source & issues | [GitHub](https://github.com/All4Gis/QGISFMV) |
 
 ## Support

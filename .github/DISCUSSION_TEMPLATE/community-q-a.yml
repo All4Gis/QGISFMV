@@ -6,7 +6,7 @@ body:
       value: |
         Ask the community about **installing**, **using**, or **developing** QGIS FMV.
 
-        - User guide: [USAGE.md](https://github.com/All4Gis/QGISFMV/blob/main/USAGE.md)
+        - User guide: [USAGE.md](https://github.com/All4Gis/QGISFMV/blob/master/USAGE.md)
         - **Bugs:** [Bug report](https://github.com/All4Gis/QGISFMV/issues/new?template=bug_report.md)
 
   - type: dropdown
