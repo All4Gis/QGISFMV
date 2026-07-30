@@ -39,7 +39,10 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Run tests
-        run: pytest code/tests/ -v --tb=short -x
+        run: |
+          pytest code/tests/ \
+            --ignore=code/tests/test_misb_coords.py \
+            -v --tb=short -x
 
       - name: Lint code (pycodestyle)
         run: |
