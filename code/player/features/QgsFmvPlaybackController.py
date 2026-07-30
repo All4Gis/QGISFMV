@@ -3,30 +3,31 @@
 
 import os.path
 
+from qgis.core import Qgis as QGis
+from qgis.core import QgsTask
 from qgis.PyQt.QtCore import QCoreApplication, Qt, QTimer, QUrl
 from qgis.PyQt.QtWidgets import QApplication
-from qgis.core import Qgis as QGis, QgsTask
 
+from QGISFMV.utils.core.QgsFmvUtils import _seconds_to_time, hasElevationModel
+from QGISFMV.utils.layers.QgsFmvLayers import CreateVideoLayers
+from QGISFMV.utils.logging import log
+from QGISFMV.utils.media.QgsFmvKlvReader import StreamMetaReader
 from QGISFMV.utils.media.QgsFmvMultimedia import (
-    hasVideo,
-    getPlaylist,
-    PlayingState,
-    PausedState,
-    StoppedState,
-    LoadingMedia,
-    LoadedMedia,
     BufferingMedia,
-    StalledMedia,
-    InvalidMedia,
     EndOfMedia,
+    InvalidMedia,
+    LoadedMedia,
+    LoadingMedia,
+    PausedState,
+    PlayingState,
     PlaylistLoop,
     PlaylistSequential,
+    StalledMedia,
+    StoppedState,
+    getPlaylist,
+    hasVideo,
 )
-from QGISFMV.utils.media.QgsFmvKlvReader import StreamMetaReader
 from QGISFMV.utils.media.QgsFmvStreamUtils import isStreamUri, streamDisplayName
-from QGISFMV.utils.layers.QgsFmvLayers import CreateVideoLayers
-from QGISFMV.utils.core.QgsFmvUtils import _seconds_to_time, hasElevationModel
-from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 

@@ -3,10 +3,9 @@
 
 import sys
 import types
+from code.tests.support import load_plugin_module
 
 import pytest
-
-from code.tests.support import load_plugin_module
 
 
 def _legacyFrameIndex(ms, fps):

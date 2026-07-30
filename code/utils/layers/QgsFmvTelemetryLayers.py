@@ -13,7 +13,6 @@ reference (``_base()``) so this module always sees their live values —
 mirrors the pattern already used by QgsFmvDrawLayers.py.
 """
 
-from qgis.PyQt.QtCore import QCoreApplication
 from qgis.core import (
     QgsFeature,
     QgsGeometry,
@@ -22,17 +21,18 @@ from qgis.core import (
     QgsPointXY,
     QgsPolygon,
 )
+from qgis.PyQt.QtCore import QCoreApplication
 
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.utils.layers.QgsFmvLayerStyleStore import (
-    apply_or_default as applyLayerStyle,
-)
 from QGISFMV.utils.layers.QgsFmvLayerDefaults import (
     SetDefaultFootprintStyle,
     SetDefaultFrameAxisStyle,
     SetDefaultFrameCenterStyle,
     SetDefaultPlatformStyle,
 )
+from QGISFMV.utils.layers.QgsFmvLayerStyleStore import (
+    apply_or_default as applyLayerStyle,
+)
+from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 # Per-video-group caches. Kept here (not in QgsFmvLayers) per the module split;
 # QgsFmvLayers imports these dicts by reference so ``layers_mod._trajectory_active_feature``

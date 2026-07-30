@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Tests for video state classes (no QGIS runtime)."""
 
-import pytest
-
 from code.tests.support import load_plugin_module
+
+import pytest
 
 
 class TestInteractionState:

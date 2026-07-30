@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Georeferencing utilities: GCP transforms, corner estimation, DEM intersection."""
 
-from math import sqrt, pi, isfinite
+from math import isfinite, pi, sqrt
 
 import numpy as np
 
@@ -19,13 +19,10 @@ except ImportError:
     findHomography = None
     _HAS_CV2 = False
 
+from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
+from QGISFMV.utils.layers.QgsFmvLayers import UpdateBeamsData, UpdateFootPrintData
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.utils.layers.QgsFmvLayers import (
-    UpdateFootPrintData,
-    UpdateBeamsData,
-)
-from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
 
 # ---------------------------------------------------------------------------
 # Homography helpers
@@ -78,10 +75,10 @@ def hasElevationModel():
 def GetDemAltAt(lon, lat):
     """Return the DTM elevation at (lon, lat), or 0 if no DTM is loaded."""
     from QGISFMV.utils.core.QgsFmvUtils import (
-        dtm_data,
-        dtm_transform,
         dtm_colLowerBound,
+        dtm_data,
         dtm_rowLowerBound,
+        dtm_transform,
     )
 
     alt = 0
@@ -106,11 +103,11 @@ def GetDemAltAt(lon, lat):
 def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
     """Obtain height for points, intersecting with DEM."""
     from QGISFMV.utils.core.QgsFmvUtils import (
-        dtm_data,
-        dtm_transform,
         dtm_buffer,
         dtm_colLowerBound,
+        dtm_data,
         dtm_rowLowerBound,
+        dtm_transform,
     )
 
     sensorLat = sensorPt[0]

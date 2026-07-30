@@ -3,7 +3,6 @@
 
 import sys
 import types
-
 from code.tests.support import (
     ensure_qgis_fmv_package,
     load_plugin_module,

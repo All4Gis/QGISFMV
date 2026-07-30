@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Tests for detection geometry helpers (IoU / NMS / tracking) — no QGIS GUI."""
 
-import numpy as np
-
 from code.tests.support import ensure_qgis_fmv_package, load_plugin_module
+
+import numpy as np
 
 
 def _geom():

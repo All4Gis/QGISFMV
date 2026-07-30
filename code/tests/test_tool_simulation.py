@@ -10,11 +10,6 @@ from __future__ import annotations
 
 import sys
 import types
-from pathlib import Path
-from unittest.mock import MagicMock, patch
-
-import pytest
-
 from code.tests.support import (
     CODE,
     ensure_qgis_fmv_package,
@@ -23,6 +18,10 @@ from code.tests.support import (
     restore_modules,
     snapshot_modules,
 )
+from pathlib import Path
+from unittest.mock import MagicMock, patch
+
+import pytest
 
 
 def _install_common_stubs():

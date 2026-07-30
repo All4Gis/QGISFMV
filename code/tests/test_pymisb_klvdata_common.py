@@ -4,7 +4,6 @@
 from pathlib import Path
 
 import pytest
-
 from pymisb.klvdata.common import (
     ber_decode,
     ber_encode,

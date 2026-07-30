@@ -5,19 +5,19 @@ from __future__ import annotations
 
 import numpy as np
 
-from QGISFMV.utils.logging import log
-from QGISFMV.video.filters.QgsFmvFilterCore import (
-    FilterCore,
-    _HAS_NDIMAGE,
-    _get_cv2_module,
-    opencv_available,
-)
 import QGISFMV.video.filters.QgsFmvDetectionGeometry as _geom
+from QGISFMV.utils.logging import log
 from QGISFMV.video.filters.QgsFmvDetectionGeometry import (
     _assign_track_ids,
     _multiscale_score,
     _nms_boxes,
     _region_scores,
+)
+from QGISFMV.video.filters.QgsFmvFilterCore import (
+    _HAS_NDIMAGE,
+    FilterCore,
+    _get_cv2_module,
+    opencv_available,
 )
 
 
@@ -97,8 +97,8 @@ def _confidence_overlay(
     base = rgb.astype(np.float64)
     from QGISFMV.utils.constants import (
         CONFIDENCE_BASE_BRIGHTNESS,
-        CONFIDENCE_TINT_RANGE,
         CONFIDENCE_TINT_INTENSITY,
+        CONFIDENCE_TINT_RANGE,
     )
 
     out = base * (
@@ -328,9 +328,9 @@ def _run_detection(
     from QGISFMV.video.filters.QgsFmvFilterTuning import (
         clahe_before_detection,
         dnn_fallback_when_empty,
-        ema_alpha as tuned_ema_alpha,
-        tune_overlay_options,
     )
+    from QGISFMV.video.filters.QgsFmvFilterTuning import ema_alpha as tuned_ema_alpha
+    from QGISFMV.video.filters.QgsFmvFilterTuning import tune_overlay_options
 
     overlay_kwargs = tune_overlay_options(dict(overlay_kwargs))
     ema_alpha = tuned_ema_alpha(ema_alpha)

@@ -24,24 +24,19 @@
 
 import os.path
 
-from qgis.PyQt.QtCore import (
-    QSettings,
-    QCoreApplication,
-    QTranslator,
-    QTimer,
-    Qt,
-)
-from qgis.PyQt.QtGui import QIcon, QAction
+from qgis.core import Qgis as QGis
+from qgis.core import QgsApplication
+from qgis.PyQt.QtCore import QCoreApplication, QSettings, Qt, QTimer, QTranslator
+from qgis.PyQt.QtGui import QAction, QIcon
 from qgis.PyQt.QtWidgets import QDialog
+
 from QGISFMV.about.QgsFmvAbout import FmvAbout
 from QGISFMV.player.dialogs.QgsFmvSettings import open_fmv_settings
 from QGISFMV.utils.install.QgsFmvInstaller import run_dependency_setup
-from qgis.core import Qgis as QGis
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.settings.QgsFmvSettings import reloadRuntime, repair_ffmpeg_setting
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from QGISFMV.utils.ui.QgsFmvResources import ICON_ABOUT, ICON_OPTIONS, ICON_PLUGIN
-from qgis.core import QgsApplication
+from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
 class Fmv:

@@ -8,12 +8,12 @@ import os
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 
-from qgis.PyQt.QtCore import QCoreApplication, QObject
 from qgis.core import Qgis as QGis
+from qgis.PyQt.QtCore import QCoreApplication, QObject
 
 from QGISFMV.geo.QgsFmvSpatial import metadata_lat_lon
-from QGISFMV.utils.logging import log
 from QGISFMV.utils.core.QgsFmvUtils import askForFiles
+from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 

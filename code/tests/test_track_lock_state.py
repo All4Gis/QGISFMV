@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Tests for the TrackLockState enum in QgsVideoState.py."""
 
-import pytest
-
 from code.tests.support import load_plugin_module
+
+import pytest
 
 # QgsVideoState.py has no Qt/QGIS dependencies, so it can be loaded directly
 # without any runtime stubs.

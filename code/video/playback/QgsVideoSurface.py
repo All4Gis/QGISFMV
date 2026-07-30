@@ -14,12 +14,11 @@ Slow OpenCV filters run on a background thread with frame dropping.
 
 """
 
-from qgis.PyQt.QtCore import Qt, QRect, QPoint, QSize
+from qgis.PyQt.QtCore import QPoint, QRect, QSize, Qt
 
-from QGISFMV.video.filters import VideoFilters
-
-from QGISFMV.video.filters.QgsFilterWorker import FilterThreadPool
 from QGISFMV.utils.core.QgsFmvUtils import SetImageSize
+from QGISFMV.video.filters import VideoFilters
+from QGISFMV.video.filters.QgsFilterWorker import FilterThreadPool
 
 
 class _SinkFormat(object):

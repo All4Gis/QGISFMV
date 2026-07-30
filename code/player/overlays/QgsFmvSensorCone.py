@@ -4,14 +4,14 @@
 import math
 
 from qgis.core import (
-    QgsGeometry,
-    QgsPointXY,
+    QgsCategorizedSymbolRenderer,
     QgsFeature,
-    QgsVectorLayer,
     QgsField,
     QgsFillSymbol,
+    QgsGeometry,
+    QgsPointXY,
     QgsRendererCategory,
-    QgsCategorizedSymbolRenderer,
+    QgsVectorLayer,
 )
 from qgis.PyQt.QtCore import QVariant
 
@@ -129,10 +129,8 @@ class SensorConeOverlay(VectorOverlayBase):
         altitude,
     ):
         """Build a polygon cone from sensor to frame center area."""
-        from QGISFMV.geo.QgsGeoUtils import (
-            destination as _geo_destination,
-            bearing as _geo_bearing,
-        )
+        from QGISFMV.geo.QgsGeoUtils import bearing as _geo_bearing
+        from QGISFMV.geo.QgsGeoUtils import destination as _geo_destination
 
         bearing = _geo_bearing((sensor_lon, sensor_lat), (frame_lon, frame_lat))
 

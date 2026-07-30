@@ -9,8 +9,8 @@ Paste this into the QGIS Python console or execute via::
 It boots the plugin, runs every test in test_gui_*.py, and prints a summary.
 """
 
-import sys
 import os
+import sys
 import traceback
 
 # Ensure the plugin root is on the path

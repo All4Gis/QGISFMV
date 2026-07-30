@@ -2,23 +2,23 @@
 """Distance Rings overlay — concentric range rings around the platform position."""
 
 from qgis.core import (
-    QgsGeometry,
-    QgsPointXY,
-    QgsFeature,
-    QgsVectorLayer,
-    QgsField,
-    QgsLineSymbol,
     QgsCategorizedSymbolRenderer,
-    QgsRendererCategory,
+    QgsFeature,
+    QgsField,
+    QgsGeometry,
+    QgsLineSymbol,
     QgsPalLayerSettings,
-    QgsVectorLayerSimpleLabeling,
+    QgsPointXY,
+    QgsRendererCategory,
     QgsTextFormat,
+    QgsVectorLayer,
+    QgsVectorLayerSimpleLabeling,
 )
 from qgis.PyQt.QtCore import QVariant
 from qgis.PyQt.QtGui import QColor
 
-from QGISFMV.player.overlays._base import VectorOverlayBase
 from QGISFMV.geo.QgsGeoUtils import destination as _geo_destination
+from QGISFMV.player.overlays._base import VectorOverlayBase
 
 _DISTANCE_RINGS_LAYER = "Distance Rings"
 DEFAULT_RING_DISTANCES = [500, 1000, 2000, 5000]

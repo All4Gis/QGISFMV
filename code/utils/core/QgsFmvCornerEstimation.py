@@ -15,14 +15,12 @@ QgsFmvGeoReferencing.py re-exports this module's functions for backward
 compatibility.
 """
 
-from math import atan, tan, sqrt, radians, degrees
+from math import atan, degrees, radians, sqrt, tan
 
+from QGISFMV.geo.QgsGeoUtils import destination as _geo_destination
+from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.geo.QgsGeoUtils import (
-    distance as _geo_distance,
-    destination as _geo_destination,
-)
 
 DEFAULT_TARGET_WIDTH = 200.0
 

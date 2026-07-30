@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Picture-in-picture mini map overlay on the video widget."""
 
-from math import radians, sin, cos
+from math import cos, radians, sin
 
 from qgis.core import (
     QgsCoordinateReferenceSystem,
@@ -10,13 +10,13 @@ from qgis.core import (
     QgsRectangle,
 )
 from qgis.gui import QgsMapCanvas
-from qgis.PyQt.QtCore import Qt, QPointF, QRectF
-from qgis.PyQt.QtGui import QColor, QPainter, QPen, QBrush, QFont, QLinearGradient
-from qgis.PyQt.QtWidgets import QWidget, QVBoxLayout
+from qgis.PyQt.QtCore import QPointF, QRectF, Qt
+from qgis.PyQt.QtGui import QBrush, QColor, QFont, QLinearGradient, QPainter, QPen
+from qgis.PyQt.QtWidgets import QVBoxLayout, QWidget
 
 from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
-from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
 from QGISFMV.utils.logging import log
+from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 

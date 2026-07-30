@@ -4,14 +4,10 @@
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 
-from qgis.PyQt.QtWidgets import QFileDialog
+from qgis.core import Qgis as QGis
+from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
 from qgis.PyQt.QtCore import QCoreApplication
-from qgis.core import (
-    QgsProject,
-    QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform,
-    Qgis as QGis,
-)
+from qgis.PyQt.QtWidgets import QFileDialog
 
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
@@ -342,9 +338,10 @@ def _collect_line_points(layer):
 
 def exportObjectTrack(parent=None, group_name=None):
     """Export the Object Track layer to GPX or GeoJSON."""
+    from qgis.core import QgsCoordinateTransformContext, QgsVectorFileWriter
+
     from QGISFMV.utils.layers.QgsFmvLayers import ObjectTrack_lyr
     from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
-    from qgis.core import QgsVectorFileWriter, QgsCoordinateTransformContext
 
     layer_name = settings_get("LAYERS", "objecttrack_lyr", ObjectTrack_lyr)
     group = _findVideoGroup(group_name)

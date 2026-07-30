@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import time
 
-from qgis.PyQt.QtCore import QCoreApplication
 from qgis.core import Qgis as QGis
+from qgis.PyQt.QtCore import QCoreApplication
 
 from QGISFMV.geo.QgsFmvSpatial import (
     close_ring,
@@ -86,10 +86,10 @@ def footprint_ring_from_session(session=None):
 def footprint_ring_from_layer(group_name):
     """Read footprint polygon vertices from the map layer if present."""
     try:
-        from QGISFMV.utils.layers.QgsFmvLayers import Footprint_lyr
         from QGISFMV.player.dialogs.QgsFmvReportGeo import (
             _corners_from_footprint_feature,
         )
+        from QGISFMV.utils.layers.QgsFmvLayers import Footprint_lyr
 
         layer = qgsu.selectLayerByName(Footprint_lyr, group_name)
         if layer is None or layer.featureCount() == 0:
@@ -252,6 +252,7 @@ class GeofenceController:
                 QgsVectorLayer,
             )
             from qgis.PyQt.QtCore import QVariant
+
             from QGISFMV.utils.layers.QgsFmvLayers import addLayerNoCrsDialog, groupName
 
             self._remove_aoi_layer()

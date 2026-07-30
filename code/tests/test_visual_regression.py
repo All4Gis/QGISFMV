@@ -19,6 +19,7 @@ Run inside QGIS::
 
 import os
 import sys
+
 import pytest
 
 _qgis_available = False

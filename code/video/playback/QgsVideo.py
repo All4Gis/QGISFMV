@@ -1,42 +1,29 @@
 # -*- coding: utf-8 -*-
-from qgis.PyQt.QtCore import (
-    Qt,
-    QPoint,
-    QPointF,
-    QEvent,
-    QBasicTimer,
-    QTimer,
-)
-from qgis.PyQt.QtGui import (
-    QPalette,
-    QColor,
-    QBrush,
-    QCursor,
-    QMouseEvent,
-)
-from qgis.utils import iface
-
-from QGISFMV.utils.media.QgsFmvMultimedia import StoppedState, PlayingState
+from qgis.PyQt.QtCore import QBasicTimer, QEvent, QPoint, QPointF, Qt, QTimer
+from qgis.PyQt.QtGui import QBrush, QColor, QCursor, QMouseEvent, QPalette
 from qgis.PyQt.QtMultimedia import QVideoSink
 from qgis.PyQt.QtWidgets import QWidget as VideoWidgetBase
-from QGISFMV.video.playback.QgsVideoSurface import VideoSinkSurface
-from QGISFMV.video.playback.QgsVideoPaintPipeline import VideoPaintPipeline
-from QGISFMV.video.playback.QgsVideoRubberBands import RubberBandManager
-from QGISFMV.video.playback.QgsVideoDrawController import VideoDrawController
-from QGISFMV.video.playback.QgsVideoCursor import CursorController
-from QGISFMV.video.playback.QgsVideoObjectTracking import ObjectTrackingController
+from qgis.utils import iface
+
 from QGISFMV.utils.core.QgsFmvUtils import (
     GetGCPGeoTransform,
     GetImageHeight,
     qmouse_pos,
 )
-from QGISFMV.video.playback.QgsVideoUtils import VideoUtils as vut
+from QGISFMV.utils.logging import log
+from QGISFMV.utils.media.QgsFmvMultimedia import PlayingState, StoppedState
+from QGISFMV.video.playback.QgsVideoCursor import CursorController
+from QGISFMV.video.playback.QgsVideoDrawController import VideoDrawController
+from QGISFMV.video.playback.QgsVideoObjectTracking import ObjectTrackingController
+from QGISFMV.video.playback.QgsVideoPaintPipeline import VideoPaintPipeline
+from QGISFMV.video.playback.QgsVideoRubberBands import RubberBandManager
 from QGISFMV.video.playback.QgsVideoState import (
-    InteractionState,
     FilterState,
+    InteractionState,
     TrackLockState,
 )
-from QGISFMV.utils.logging import log
+from QGISFMV.video.playback.QgsVideoSurface import VideoSinkSurface
+from QGISFMV.video.playback.QgsVideoUtils import VideoUtils as vut
 
 
 class VideoWidget(VideoWidgetBase):

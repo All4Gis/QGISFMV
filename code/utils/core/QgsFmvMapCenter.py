@@ -12,10 +12,10 @@ value, mirroring the pattern already used by QgsFmvDrawLayers.py.
 """
 
 from qgis.core import (
-    QgsCoordinateTransform,
     QgsCoordinateReferenceSystem,
-    QgsProject,
+    QgsCoordinateTransform,
     QgsPointXY,
+    QgsProject,
     QgsWkbTypes,
 )
 

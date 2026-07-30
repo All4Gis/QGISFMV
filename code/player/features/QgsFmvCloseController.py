@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Shutdown/teardown orchestration: session cleanup, task cancellation, dock removal."""
 
+from qgis.core import QgsApplication
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QMessageBox
-from qgis.core import QgsApplication
 
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu

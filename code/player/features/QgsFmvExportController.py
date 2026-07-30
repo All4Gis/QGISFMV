@@ -4,16 +4,11 @@
 import os.path
 import subprocess
 
+from qgis.core import Qgis as QGis
+from qgis.core import QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QFileDialog
-from qgis.core import Qgis as QGis, QgsTask
 
-from QGISFMV.utils.media.QgsFfmpegProbe import (
-    convert_video,
-    is_valid_media,
-    save_probe_json_task,
-    show_probe_json_task,
-)
 from QGISFMV.utils.core.QgsFmvUtils import (
     BurnDrawingsImage,
     GetGeotransform_affine,
@@ -22,11 +17,17 @@ from QGISFMV.utils.core.QgsFmvUtils import (
     askForFolder,
 )
 from QGISFMV.utils.layers.QgsFmvExport import (
-    exportGroupToKML,
     exportGroupToGPX,
+    exportGroupToKML,
     exportObjectTrack,
 )
 from QGISFMV.utils.logging import log
+from QGISFMV.utils.media.QgsFfmpegProbe import (
+    convert_video,
+    is_valid_media,
+    save_probe_json_task,
+    show_probe_json_task,
+)
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 try:

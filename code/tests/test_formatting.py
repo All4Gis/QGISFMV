@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Tests for QGISFMV.utils.formatting shared utilities."""
 
-import pytest
-
 from code.tests.support import ensure_qgis_fmv_package, load_plugin_module
+
+import pytest
 
 ensure_qgis_fmv_package()
 mod = load_plugin_module("utils/formatting.py")

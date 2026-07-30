@@ -7,6 +7,7 @@ Stream utilities are in QgsFmvStreamUtils.
 """
 
 import math
+
 import pytest
 
 

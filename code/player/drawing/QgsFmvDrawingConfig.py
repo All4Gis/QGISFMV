@@ -15,8 +15,8 @@ This module owns:
 
 import os
 
-from qgis.PyQt.QtCore import Qt, QSettings
-from qgis.PyQt.QtGui import QColor, QFont, QPen, QBrush, QPixmap, QImage
+from qgis.PyQt.QtCore import QSettings, Qt
+from qgis.PyQt.QtGui import QBrush, QColor, QFont, QImage, QPen, QPixmap
 
 from QGISFMV.utils.core.QgsFmvUtils import getNameSpace
 from QGISFMV.utils.logging import log

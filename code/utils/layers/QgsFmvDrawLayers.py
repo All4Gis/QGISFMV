@@ -10,15 +10,15 @@ module always sees their live values.
 
 from itertools import groupby
 
-from qgis.PyQt.QtCore import QPointF
-from qgis.PyQt.QtGui import QPolygonF
 from qgis.core import (
-    QgsDistanceArea,
     QgsCoordinateReferenceSystem,
+    QgsDistanceArea,
     QgsFeature,
     QgsGeometry,
     QgsPointXY,
 )
+from qgis.PyQt.QtCore import QPointF
+from qgis.PyQt.QtGui import QPolygonF
 from qgis.utils import iface
 
 from QGISFMV.utils.logging import log

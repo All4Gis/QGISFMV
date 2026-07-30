@@ -2,6 +2,7 @@
 """Automatic frame snapshots — capture frames on metadata change or interval."""
 
 import os
+
 from qgis.PyQt.QtCore import QTimer
 
 from QGISFMV.utils.core.QgsFmvUtils import getVideoFolder

@@ -6,16 +6,16 @@ from __future__ import annotations
 import numpy as np
 
 from QGISFMV.utils.logging import log
-from QGISFMV.video.filters.QgsFmvFilterCore import (
-    FilterCore,
-    _HAS_NDIMAGE,
-    _get_cv2_module,
-    _ndimage,
-)
 from QGISFMV.video.filters.QgsFmvDetectionPipeline import (
     _detect_fallback_generic,
     _motion_boost,
     _run_opencv_pipeline_for,
+)
+from QGISFMV.video.filters.QgsFmvFilterCore import (
+    _HAS_NDIMAGE,
+    FilterCore,
+    _get_cv2_module,
+    _ndimage,
 )
 
 

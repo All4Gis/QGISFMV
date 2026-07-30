@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """Tests for unified FFmpeg subprocess runner."""
 
+from code.tests.support import load_plugin_module
 from unittest.mock import MagicMock, patch
 
 import pytest
-
-from code.tests.support import load_plugin_module
 
 
 @pytest.fixture

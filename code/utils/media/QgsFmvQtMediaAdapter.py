@@ -8,20 +8,20 @@ from qgis.PyQt.QtCore import QObject, QUrl, pyqtSignal
 from QGISFMV.utils.media.QgsFmvMediaProbe import _url_to_path
 from QGISFMV.utils.media.QgsFmvMediaTypes import (
     BufferedMedia,
+    BufferingMedia,
     EndOfMedia,
     InvalidMedia,
     LoadedMedia,
     LoadingMedia,
     NoMedia,
+    PausedState,
     PlayingState,
     StalledMedia,
     StoppedState,
-    BufferingMedia,
-    PausedState,
 )
 
 try:
-    from qgis.PyQt.QtMultimedia import QMediaPlayer, QAudioOutput
+    from qgis.PyQt.QtMultimedia import QAudioOutput, QMediaPlayer
 
     _HAS_QT_MEDIA = True
 except ImportError:

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Background KLV parsing (keeps QGIS main thread responsive during live streams)."""
 
-from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot
-from pymisb.klvdata.streamparser import StreamParser
 from pymisb.klvdata.element import UnknownElement
+from pymisb.klvdata.streamparser import StreamParser
+from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot
 
 
 class MetadataParseWorker(QObject):

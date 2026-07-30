@@ -329,6 +329,7 @@ class MapSeekController:
     def _show_lookback_dialog(self, lon, lat, hits):
         """List FOV visit times; double-click / Accept jumps the video."""
         try:
+            from qgis.PyQt.QtCore import Qt
             from qgis.PyQt.QtWidgets import (
                 QDialog,
                 QDialogButtonBox,
@@ -337,7 +338,6 @@ class MapSeekController:
                 QListWidgetItem,
                 QVBoxLayout,
             )
-            from qgis.PyQt.QtCore import Qt
         except Exception as exc:
             log.debug("lookback dialog unavailable: %s", exc)
             return
@@ -514,14 +514,14 @@ class MapSeekController:
         if canvas is None:
             return
         try:
-            from qgis.gui import QgsRubberBand
             from qgis.core import (
                 QgsCoordinateReferenceSystem,
                 QgsCoordinateTransform,
-                QgsProject,
                 QgsPointXY,
+                QgsProject,
                 QgsWkbTypes,
             )
+            from qgis.gui import QgsRubberBand
             from qgis.PyQt.QtGui import QColor
         except Exception as exc:
             log.debug("rubber band unavailable: %s", exc)

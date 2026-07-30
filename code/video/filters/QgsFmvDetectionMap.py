@@ -153,12 +153,13 @@ def notify_detections(class_name, boxes, track_ids=None, scores=None, time_sec=N
 def upsert_detection_features(class_name, points):
     """Replace features for *class_name* on the AI Detections layer."""
     from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
-    from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+
     from QGISFMV.utils.layers.QgsFmvLayers import (
         Detections_lyr,
         ensure_detections_layer,
         groupName,
     )
+    from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
     ensure_detections_layer()
     layer = qgsu.selectLayerByName(Detections_lyr, groupName)
@@ -201,12 +202,13 @@ def upsert_detection_features(class_name, points):
 def append_detection_trail(class_name, points, time_sec=0.0):
     """Append points to the accumulating AI Detection Trail layer (capped)."""
     from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
-    from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+
     from QGISFMV.utils.layers.QgsFmvLayers import (
         DetectionTrail_lyr,
         ensure_detection_trail_layer,
         groupName,
     )
+    from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
     if not points:
         return 0

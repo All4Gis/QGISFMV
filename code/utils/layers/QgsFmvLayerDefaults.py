@@ -14,38 +14,38 @@ QgsFmvDrawLayers.py.
 
 import os
 
-from qgis.PyQt.QtGui import QColor, QFont
-from qgis.PyQt.QtCore import QPointF
 from qgis.core import (
-    QgsPalLayerSettings,
-    QgsTextFormat,
-    QgsTextBufferSettings,
-    QgsVectorLayerSimpleLabeling,
-    QgsMarkerSymbol,
+    Qgis,
     QgsFillSymbol,
     QgsLineSymbol,
-    QgsSvgMarkerSymbolLayer,
-    QgsSingleSymbolRenderer,
-    QgsRuleBasedRenderer,
-    QgsSymbol,
-    QgsWkbTypes,
+    QgsMarkerSymbol,
+    QgsPalLayerSettings,
     QgsProject,
+    QgsRuleBasedRenderer,
+    QgsSingleSymbolRenderer,
+    QgsSvgMarkerSymbolLayer,
+    QgsSymbol,
+    QgsTextBufferSettings,
+    QgsTextFormat,
     QgsUnitTypes,
-    Qgis,
+    QgsVectorLayerSimpleLabeling,
+    QgsWkbTypes,
 )
-
+from qgis.PyQt.QtCore import QPointF
+from qgis.PyQt.QtGui import QColor, QFont
 from qgis.utils import iface
+
+from QGISFMV.utils.layers.QgsFmvStyles import FmvLayerStyles as S
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.utils.layers.QgsFmvStyles import FmvLayerStyles as S
 
 try:
     from qgis._3d import (
-        QgsPhongMaterialSettings,
-        QgsVectorLayer3DRenderer,
         QgsLine3DSymbol,
+        QgsPhongMaterialSettings,
         QgsPoint3DSymbol,
         QgsPolygon3DSymbol,
+        QgsVectorLayer3DRenderer,
     )
 
     _HAS_3D = True

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Rule-based alerts — notify when telemetry conditions are met."""
 
+from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QObject, pyqtSignal
 from qgis.PyQt.QtWidgets import QDialog
-from qgis.core import Qgis as QGis
 
 from QGISFMV.player.dialogs.QgsFmvAlertRule import FmvAlertRuleDialog
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu

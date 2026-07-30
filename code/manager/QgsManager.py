@@ -2,51 +2,37 @@
 import ast
 import os
 import platform
-from QGISFMV.utils.settings.QgsFmvSettings import get, load
+
+from qgis.PyQt.QtCore import QCoreApplication, QEvent, QPoint, QSettings, Qt, pyqtSlot
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtCore import (
-    pyqtSlot,
-    QCoreApplication,
-    QEvent,
-    QPoint,
-    QSettings,
-    Qt,
-)
+
+from QGISFMV.utils.settings.QgsFmvSettings import get, load
 
 settings = QSettings()
-from qgis.PyQt.QtWidgets import (
-    QDockWidget,
-    QTableWidgetItem,
-    QMenu,
-)
 import qgis.utils
+from qgis.core import Qgis as QGis
+from qgis.core import QgsApplication
+from qgis.PyQt.QtGui import QAction, QColor
+from qgis.PyQt.QtWidgets import QDockWidget, QMenu, QTableWidgetItem
 
-from qgis.PyQt.QtGui import QColor, QAction
-
-from QGISFMV.utils.logging import log
-
-from QGISFMV.player.drawing.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGISFMV.gui.ui_FmvManager import Ui_ManagerWindow
-from QGISFMV.utils.core.QgsFmvUtils import (
-    askForFiles,
-    RemoveVideoToSettings,
-    RemoveVideoFolder,
-    getVideoManagerList,
-    getNameSpace,
-    qmouse_pos,
-)
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.utils.ui.QgsFmvResources import ICON_DELETE
-from qgis.core import (
-    QgsApplication,
-    Qgis as QGis,
-)
-from QGISFMV.utils.media.QgsFmvMultimedia import createPlaylist
-from QGISFMV.utils.media.QgsFmvStreamUtils import isStreamUri
-
 from QGISFMV.manager.QgsFmvManagerBgLoad import ManagerBgLoadController
 from QGISFMV.manager.QgsFmvManagerPlaylistController import ManagerPlaylistController
 from QGISFMV.manager.QgsFmvManagerRows import ManagerRowStore
+from QGISFMV.player.drawing.QgsFmvDrawToolBar import DrawToolBar as draw
+from QGISFMV.utils.core.QgsFmvUtils import (
+    RemoveVideoFolder,
+    RemoveVideoToSettings,
+    askForFiles,
+    getNameSpace,
+    getVideoManagerList,
+    qmouse_pos,
+)
+from QGISFMV.utils.logging import log
+from QGISFMV.utils.media.QgsFmvMultimedia import createPlaylist
+from QGISFMV.utils.media.QgsFmvStreamUtils import isStreamUri
+from QGISFMV.utils.ui.QgsFmvResources import ICON_DELETE
+from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 load()
 

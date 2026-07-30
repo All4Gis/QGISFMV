@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from qgis.PyQt.QtCore import QRegularExpression, QCoreApplication
+from qgis.core import Qgis as QGis
+from qgis.PyQt.QtCore import QCoreApplication, QRegularExpression
 from qgis.PyQt.QtGui import QIntValidator, QRegularExpressionValidator
 from qgis.PyQt.QtWidgets import QDialog
+
 from QGISFMV.gui.ui_FmvOpenStream import Ui_FmvOpenStream
 from QGISFMV.utils.media.QgsFmvStreamUtils import (
     buildStreamUri,
@@ -10,7 +12,6 @@ from QGISFMV.utils.media.QgsFmvStreamUtils import (
     vlcHintText,
 )
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from qgis.core import Qgis as QGis
 
 
 class OpenStream(QDialog, Ui_FmvOpenStream):

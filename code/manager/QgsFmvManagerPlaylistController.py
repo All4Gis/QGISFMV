@@ -3,13 +3,13 @@
 for the video selected in the Manager, and center the map on its start point.
 """
 
-from qgis.PyQt.QtCore import Qt
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsPointXY,
     QgsProject,
 )
+from qgis.PyQt.QtCore import Qt
 
 from QGISFMV.utils.media.QgsFmvMultimedia import attachPlaylist
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu

@@ -14,32 +14,32 @@ from __future__ import annotations
 import numpy as np
 
 from QGISFMV.utils.core.QgsImageMat import convertMatToQImage, convertQImageToMat
-from QGISFMV.video.filters.QgsFmvFilterCore import FilterCore
 from QGISFMV.video.filters.QgsFmvDetectionGeometry import reset_detection_state
 from QGISFMV.video.filters.QgsFmvDetectionPipeline import _run_detection
 from QGISFMV.video.filters.QgsFmvDetectionScores import (
-    _building_structure_score,
-    _building_detect_opencv,
     _building_detect_fallback,
-    _road_surface_score,
-    _road_detect_opencv,
-    _road_detect_fallback,
-    _vehicle_blob_score,
-    _vehicle_detect_opencv,
-    _vehicle_detect_fallback,
-    _person_score,
-    _person_detect_opencv,
-    _person_detect_fallback,
-    _fire_score,
-    _fire_detect_opencv,
+    _building_detect_opencv,
+    _building_structure_score,
     _fire_detect_fallback,
-    _smoke_score,
-    _smoke_detect_opencv,
-    _smoke_detect_fallback,
-    _flood_score,
-    _flood_detect_opencv,
+    _fire_detect_opencv,
+    _fire_score,
     _flood_detect_fallback,
+    _flood_detect_opencv,
+    _flood_score,
+    _person_detect_fallback,
+    _person_detect_opencv,
+    _person_score,
+    _road_detect_fallback,
+    _road_detect_opencv,
+    _road_surface_score,
+    _smoke_detect_fallback,
+    _smoke_detect_opencv,
+    _smoke_score,
+    _vehicle_blob_score,
+    _vehicle_detect_fallback,
+    _vehicle_detect_opencv,
 )
+from QGISFMV.video.filters.QgsFmvFilterCore import FilterCore
 
 __all__ = ["FmvDetectionFilters", "reset_detection_state"]
 

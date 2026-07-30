@@ -11,58 +11,58 @@ for backward compatibility with other call sites).
 import os
 from datetime import datetime
 
-from qgis.PyQt.QtCore import Qt, QCoreApplication, QSize, QPointF, QUrl
-from qgis.PyQt.QtGui import (
-    QFont,
-    QTextCursor,
-    QTextDocument,
-    QTextBlockFormat,
-    QTextImageFormat,
-    QTextTableFormat,
-    QTextLength,
-    QColor,
-    QImage,
-    QPainter,
-    QPen,
-    QPolygonF,
-    QTextFormat,
-    QPageSize,
-)
-from qgis.PyQt.QtPrintSupport import QPrinter
 from qgis.core import (
     QgsCoordinateReferenceSystem,
-    QgsMapSettings,
     QgsMapRendererSequentialJob,
+    QgsMapSettings,
     QgsProject,
     QgsRectangle,
 )
+from qgis.PyQt.QtCore import QCoreApplication, QPointF, QSize, Qt, QUrl
+from qgis.PyQt.QtGui import (
+    QColor,
+    QFont,
+    QImage,
+    QPageSize,
+    QPainter,
+    QPen,
+    QPolygonF,
+    QTextBlockFormat,
+    QTextCursor,
+    QTextDocument,
+    QTextFormat,
+    QTextImageFormat,
+    QTextLength,
+    QTextTableFormat,
+)
+from qgis.PyQt.QtPrintSupport import QPrinter
 
-from QGISFMV.utils.logging import log
-from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
-from QGISFMV.utils.ui.QgsFmvResources import ICON_HEADER_LOGO
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from QGISFMV.player.dialogs.QgsFmvReportGeo import (
+    _create_osm_basemap_layer,
+    _extent_from_corners,
+    _footprint_corners_for_report,
+    _geo_to_pixel,
+    _padded_map_extent,
+    _sensor_position_for_report_with_group,
+)
+from QGISFMV.player.dialogs.QgsFmvReportMetadata import (
+    _SUMMARY_SPECS,
+    _build_grouped_metadata_html,
+    _classification_level,
+    _html_escape,
+    _is_classified,
+    _metadata_dict_from_table,
+    _summary_field_value,
+)
 from QGISFMV.player.dialogs.QgsFmvReportPdfLayout import (
     _PDF_COLORS,
     _pdf_page_metrics,
     _scale_image_for_pdf,
 )
-from QGISFMV.player.dialogs.QgsFmvReportMetadata import (
-    _html_escape,
-    _SUMMARY_SPECS,
-    _summary_field_value,
-    _metadata_dict_from_table,
-    _classification_level,
-    _is_classified,
-    _build_grouped_metadata_html,
-)
-from QGISFMV.player.dialogs.QgsFmvReportGeo import (
-    _footprint_corners_for_report,
-    _sensor_position_for_report_with_group,
-    _create_osm_basemap_layer,
-    _extent_from_corners,
-    _padded_map_extent,
-    _geo_to_pixel,
-)
+from QGISFMV.utils.logging import log
+from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
+from QGISFMV.utils.ui.QgsFmvResources import ICON_HEADER_LOGO
+from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 # ---------------------------------------------------------------------------
 # ReportGenerator — owns PDF rendering, separated from the dock widget

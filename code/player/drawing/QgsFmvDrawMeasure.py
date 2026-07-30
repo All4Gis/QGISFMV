@@ -1,23 +1,13 @@
 # -*- coding: utf-8 -*-
 """Measure distance/area painting: labels, vertices and running totals."""
 
-from qgis.PyQt.QtCore import QPointF, QPoint, QRectF
-from qgis.PyQt.QtGui import (
-    QPainter,
-    QPainterPath,
-    QColor,
-    QPen,
-    QBrush,
-    QPolygonF,
-)
+from qgis.PyQt.QtCore import QPoint, QPointF, QRectF
+from qgis.PyQt.QtGui import QBrush, QColor, QPainter, QPainterPath, QPen, QPolygonF
 
-from QGISFMV.geo.QgsGeoUtils import (
-    distance as _geo_distance,
-    polygon_area as _geo_polygon_area,
-)
+from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
+from QGISFMV.geo.QgsGeoUtils import polygon_area as _geo_polygon_area
 from QGISFMV.player.drawing.QgsFmvDrawingConfig import drawing_config
 from QGISFMV.utils.logging import log
-
 from QGISFMV.video.playback.QgsVideoUtils import VideoUtils as vut
 
 RulerTotalMeasure = 0.0

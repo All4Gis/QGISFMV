@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tests for Nominatim reverse-geocode helpers (no live network / no QGIS)."""
 
-from unittest.mock import MagicMock, patch
-
 from code.tests.support import load_plugin_module
+from unittest.mock import MagicMock, patch
 
 
 def _mod():

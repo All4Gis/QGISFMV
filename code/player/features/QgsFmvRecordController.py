@@ -4,9 +4,9 @@
 import os.path
 import subprocess
 
+from qgis.core import QgsTask
 from qgis.PyQt.QtCore import QCoreApplication, QTimer
 from qgis.PyQt.QtGui import QIcon, QMovie
-from qgis.core import QgsTask
 
 from QGISFMV.utils.core.QgsFmvUtils import (
     _seconds_to_time,

@@ -4,7 +4,8 @@
 import os
 import platform
 
-from qgis.PyQt.QtCore import QCoreApplication, QSettings, QPoint, Qt
+from qgis.core import Qgis as QGis
+from qgis.PyQt.QtCore import QCoreApplication, QPoint, QSettings, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
     QDialog,
@@ -15,7 +16,6 @@ from qgis.PyQt.QtWidgets import (
     QStyleOptionSlider,
     QToolTip,
 )
-from qgis.core import Qgis as QGis
 
 from QGISFMV.gui.ui_FmvSettings import Ui_FmvSettings
 from QGISFMV.player.drawing.QgsFmvDrawToolBar import DrawToolBar as draw

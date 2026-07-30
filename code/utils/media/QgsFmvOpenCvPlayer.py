@@ -9,16 +9,13 @@ try:
 except ImportError:
     cv2 = None
 
-from qgis.PyQt.QtCore import QObject, QTimer, QThread, pyqtSignal
+from qgis.PyQt.QtCore import QObject, QThread, QTimer, pyqtSignal
 
 from QGISFMV.utils.media.QgsFmvDecodeWorkers import (
-    FrameDecodeWorker,
     FfmpegDecodeWorker,
+    FrameDecodeWorker,
 )
-from QGISFMV.utils.media.QgsFmvMediaProbe import (
-    _ffmpeg_available,
-    _url_to_path,
-)
+from QGISFMV.utils.media.QgsFmvMediaProbe import _ffmpeg_available, _url_to_path
 from QGISFMV.utils.media.QgsFmvMediaTypes import (
     EndOfMedia,
     InvalidMedia,

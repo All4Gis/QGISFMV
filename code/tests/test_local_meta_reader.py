@@ -2,6 +2,7 @@
 """LocalFileMetaReader offset lookup (requires QGIS/PyQt for plugin imports)."""
 
 import bisect
+
 import pytest
 
 pytest.importorskip("qgis")

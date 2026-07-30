@@ -5,6 +5,7 @@ pycodestyle>=2.14.0
 black>=24.8.0
 isort>=5.13.2
 flake8>=7.3.0
+isort>=5.13.2
 
 # Tests
 pytest>=8.3.0

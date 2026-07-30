@@ -7,11 +7,6 @@ import csv
 import sys
 import types
 import zipfile
-from pathlib import Path
-from unittest.mock import MagicMock
-
-import pytest
-
 from code.tests.support import (
     ensure_qgis_fmv_package,
     load_plugin_module,
@@ -19,6 +14,10 @@ from code.tests.support import (
     restore_modules,
     snapshot_modules,
 )
+from pathlib import Path
+from unittest.mock import MagicMock
+
+import pytest
 
 
 class TestSpatialHelpers:

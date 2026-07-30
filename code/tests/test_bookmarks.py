@@ -4,10 +4,6 @@
 import sys
 import types
 import xml.etree.ElementTree as ET
-from unittest.mock import MagicMock
-
-import pytest
-
 from code.tests.support import (
     ensure_qgis_fmv_package,
     load_plugin_module,
@@ -15,6 +11,9 @@ from code.tests.support import (
     restore_modules,
     snapshot_modules,
 )
+from unittest.mock import MagicMock
+
+import pytest
 
 
 def _load_bookmark_mod():

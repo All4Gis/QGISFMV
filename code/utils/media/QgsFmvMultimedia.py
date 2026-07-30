@@ -35,9 +35,9 @@ from QGISFMV.utils.media.QgsFmvMediaProbe import (  # noqa: F401
     _ffmpeg_available,
     _ffmpeg_popen,
     _parse_fps,
-    _probeDurationMs,
     _probe_video_info,
     _probe_video_info_from_stderr,
+    _probeDurationMs,
     _read_bytes,
     _url_to_path,
     _validateMediaPath,
@@ -45,15 +45,15 @@ from QGISFMV.utils.media.QgsFmvMediaProbe import (  # noqa: F401
     ffmpeg_available,
     ffmpeg_popen,
     parse_fps,
-    probeDurationMs,
     probe_video_info,
     probe_video_info_from_stderr,
+    probeDurationMs,
     read_bytes,
     url_to_path,
     validateMediaPath,
 )
-from QGISFMV.utils.media.QgsFmvMediaTypes import (  # noqa: F401
-    BufferedMedia,
+from QGISFMV.utils.media.QgsFmvMediaTypes import BufferedMedia  # noqa: F401
+from QGISFMV.utils.media.QgsFmvMediaTypes import (
     BufferingMedia,
     EndOfMedia,
     InvalidMedia,
@@ -71,8 +71,8 @@ from QGISFMV.utils.media.QgsFmvMediaTypes import (  # noqa: F401
     StoppedState,
 )
 from QGISFMV.utils.media.QgsFmvOpenCvPlayer import OpenCvMediaPlayer
-from QGISFMV.utils.media.QgsFmvPlaylist import (  # noqa: F401
-    FmvPlaylist,
+from QGISFMV.utils.media.QgsFmvPlaylist import FmvPlaylist  # noqa: F401
+from QGISFMV.utils.media.QgsFmvPlaylist import (
     _MediaShim,
     attachPlaylist,
     createPlaylist,
@@ -80,8 +80,8 @@ from QGISFMV.utils.media.QgsFmvPlaylist import (  # noqa: F401
     mediaUrlToContent,
 )
 from QGISFMV.utils.media.QgsFmvQtMediaAdapter import (  # noqa: F401
-    QtMediaPlayerAdapter,
     _HAS_QT_MEDIA,
+    QtMediaPlayerAdapter,
     _QtMediaPlayerAdapter,
 )
 

@@ -7,6 +7,7 @@ the QGIS runtime for QgsDistanceArea.
 """
 
 import math
+
 import pytest
 
 
@@ -17,7 +18,7 @@ class TestDestinationPure:
     """Great-circle destination — pure Python, no QGIS."""
 
     def _dest(self, point, dist, brg):
-        from math import degrees, radians, sin, cos, asin, atan2
+        from math import asin, atan2, cos, degrees, radians, sin
 
         R = 6371008.8
         lon1, lat1 = (radians(c) for c in point)

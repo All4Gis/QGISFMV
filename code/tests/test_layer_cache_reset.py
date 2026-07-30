@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Unit tests for per-group layer cache reset helpers."""
 
-import pytest
-
 from code.tests.support import load_plugin_module as _load_plugin_module
+
+import pytest
 
 
 @pytest.fixture

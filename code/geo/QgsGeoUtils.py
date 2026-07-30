@@ -12,7 +12,7 @@ safely imported before ``QgsApplication`` is fully initialized.
 
 from __future__ import annotations
 
-from math import degrees, radians, sin, cos, asin, atan2
+from math import asin, atan2, cos, degrees, radians, sin
 from typing import Sequence
 
 from QGISFMV.utils.logging import log
@@ -31,11 +31,7 @@ def _get_measure():
     if _measure is not None:
         return _measure
 
-    from qgis.core import (
-        QgsDistanceArea,
-        QgsCoordinateReferenceSystem,
-        QgsProject,
-    )
+    from qgis.core import QgsCoordinateReferenceSystem, QgsDistanceArea, QgsProject
 
     _measure = QgsDistanceArea()
     try:
@@ -187,7 +183,7 @@ def polygon_area(coordinates: Sequence[Sequence[float]]) -> float:
         return 0.0
 
     try:
-        from qgis.core import QgsPointXY, QgsGeometry
+        from qgis.core import QgsGeometry, QgsPointXY
 
         points = [QgsPointXY(float(c[0]), float(c[1])) for c in ring]
         if points[0] != points[-1]:

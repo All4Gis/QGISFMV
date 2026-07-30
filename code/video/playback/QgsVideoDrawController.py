@@ -7,26 +7,26 @@ placement-hint flashing, and the drag-rubberband bookkeeping used by the
 mouse event handlers.
 """
 
-from qgis.PyQt.QtCore import QPoint, QRect, QSize
 from qgis.core import QgsPointXY, QgsWkbTypes
+from qgis.PyQt.QtCore import QPoint, QRect, QSize
 
 from QGISFMV.utils.core.QgsFmvUtils import GetGCPGeoTransform, qmouse_pos
-from QGISFMV.utils.logging import log
 from QGISFMV.utils.layers.QgsFmvLayers import (
-    AddDrawPointOnMap,
     AddDrawLineOnMap,
-    AddDrawPolygonOnMap,
     AddDrawMilitarySymbolOnMap,
-    RemoveLastDrawPolygonOnMap,
-    RemoveAllDrawPolygonOnMap,
-    RemoveLastDrawPointOnMap,
-    RemoveAllDrawPointOnMap,
-    RemoveLastDrawMilitarySymbolOnMap,
-    RemoveAllDrawMilitarySymbolOnMap,
+    AddDrawPointOnMap,
+    AddDrawPolygonOnMap,
     RemoveAllDrawLineOnMap,
-    SyncMeasureDistanceOnMap,
+    RemoveAllDrawMilitarySymbolOnMap,
+    RemoveAllDrawPointOnMap,
+    RemoveAllDrawPolygonOnMap,
+    RemoveLastDrawMilitarySymbolOnMap,
+    RemoveLastDrawPointOnMap,
+    RemoveLastDrawPolygonOnMap,
     SyncMeasureAreaOnMap,
+    SyncMeasureDistanceOnMap,
 )
+from QGISFMV.utils.logging import log
 from QGISFMV.video.playback.QgsVideoState import MOUSE_MOVE_EVENT
 
 

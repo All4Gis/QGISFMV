@@ -4,7 +4,6 @@
 import os
 import platform
 import shutil
-
 from configparser import ConfigParser
 
 try:

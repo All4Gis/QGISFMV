@@ -7,15 +7,15 @@ math used by the PDF report, extracted from QgsFmvReportGenerator.py.
 
 from qgis.core import QgsRectangle
 
-from QGISFMV.utils.logging import log
-from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.player.overlays.QgsFmvMiniMap import create_osm_basemap
 from QGISFMV.player.dialogs.QgsFmvReportMetadata import (
     _find_metadata_value,
     _metadata_leaf_entries,
     _normalize_key,
 )
+from QGISFMV.player.overlays.QgsFmvMiniMap import create_osm_basemap
+from QGISFMV.utils.logging import log
+from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
+from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
 def _corners_from_footprint_feature(feature):

@@ -4,7 +4,7 @@
 import os
 
 from qgis.PyQt.QtCore import Qt, pyqtSignal
-from qgis.PyQt.QtGui import QIcon, QPixmap, QPainter
+from qgis.PyQt.QtGui import QIcon, QPainter, QPixmap
 from qgis.PyQt.QtSvg import QSvgRenderer
 from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox, QListWidgetItem
 

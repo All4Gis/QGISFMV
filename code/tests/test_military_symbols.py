@@ -2,6 +2,7 @@
 """Military symbol catalog and bundled SVG assets."""
 
 import os
+
 import pytest
 
 pytest.importorskip("qgis")

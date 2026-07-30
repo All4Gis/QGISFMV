@@ -3,10 +3,7 @@
 
 from qgis.PyQt.QtCore import QObject, QUrl
 
-from QGISFMV.utils.media.QgsFmvMediaTypes import (
-    PlaylistLoop,
-    PlaylistSequential,
-)
+from QGISFMV.utils.media.QgsFmvMediaTypes import PlaylistLoop, PlaylistSequential
 
 
 class _MediaShim(object):

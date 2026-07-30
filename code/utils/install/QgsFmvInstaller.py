@@ -13,11 +13,12 @@ import zipfile
 from typing import Optional, Sequence, Tuple
 from urllib.request import Request, urlopen
 
+from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtWidgets import QInputDialog, QLineEdit, QMessageBox, QProgressBar
-from qgis.core import Qgis as QGis
 from qgis.utils import iface
 
+from QGISFMV.utils.logging import log
 from QGISFMV.utils.settings.QgsFmvSettings import (
     ffmpeg_binary,
     plugin_root,
@@ -27,7 +28,6 @@ from QGISFMV.utils.settings.QgsFmvSettings import (
     set_value,
 )
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.utils.logging import log
 
 # ---------------------------------------------------------------------------
 # Constants / platform

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Timeline widget showing event markers / bookmarks along the video duration."""
 
-from qgis.PyQt.QtCore import Qt, QRectF, pyqtSignal
-from qgis.PyQt.QtGui import QColor, QPainter, QPen, QBrush, QFont
-from qgis.PyQt.QtWidgets import QWidget, QToolTip
+from qgis.PyQt.QtCore import QRectF, Qt, pyqtSignal
+from qgis.PyQt.QtGui import QBrush, QColor, QFont, QPainter, QPen
+from qgis.PyQt.QtWidgets import QToolTip, QWidget
 
 
 class TimelineEvent:

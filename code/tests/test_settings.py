@@ -3,7 +3,6 @@
 
 import os
 import types
-
 from code.tests.support import load_plugin_module
 
 

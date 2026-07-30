@@ -5,14 +5,15 @@ import time
 from collections import deque
 from datetime import datetime
 
-from QGISFMV.utils.logging import log
+from pymisb.klvdata.streamparser import StreamParser
+
 from QGISFMV.utils.core.QgsFmvUtils import (
-    _time_to_seconds,
-    _spawn,
     KLV_HEADER_0601,
     KLV_HEADER_EG0104,
+    _spawn,
+    _time_to_seconds,
 )
-from pymisb.klvdata.streamparser import StreamParser
+from QGISFMV.utils.logging import log
 
 STREAM_PACKET_CACHE = 600
 STREAM_READ_CHUNK = 65536
@@ -230,8 +231,9 @@ class LocalFileMetaReader:
 
     def _getMediaDuration(self):
         try:
-            from QGISFMV.utils.media.QgsFfmpegProbe import probe_json
             import json
+
+            from QGISFMV.utils.media.QgsFfmpegProbe import probe_json
 
             data = probe_json(self.videoPath)
             if not data:

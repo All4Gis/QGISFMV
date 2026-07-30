@@ -5,22 +5,16 @@ and completion handling that turns a probe result into row state + UI updates.
 
 import os
 
-from qgis.PyQt.QtCore import (
-    QCoreApplication,
-    QObject,
-    QThread,
-    QUrl,
-    pyqtSignal,
-)
-from qgis.PyQt.QtWidgets import QTableWidgetItem
 from qgis.core import Qgis as QGis
+from qgis.PyQt.QtCore import QCoreApplication, QObject, QThread, QUrl, pyqtSignal
+from qgis.PyQt.QtWidgets import QTableWidgetItem
 
-from QGISFMV.utils.logging import log
 from QGISFMV.utils.core.QgsFmvUtils import (
     AddVideoToSettings,
     _coordsFromKlvStream,
     getKlvStreamIndex,
 )
+from QGISFMV.utils.logging import log
 from QGISFMV.utils.media.QgsFfmpegProbe import is_valid_media, is_valid_stream
 from QGISFMV.utils.media.QgsFmvKlvReader import LocalFileMetaReader, StreamMetaReader
 from QGISFMV.utils.media.QgsFmvMultimedia import mediaUrlToContent

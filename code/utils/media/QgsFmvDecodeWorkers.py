@@ -13,8 +13,8 @@ from QGISFMV.utils.logging import log
 from QGISFMV.utils.media.QgsFmvMediaProbe import (
     _ffmpeg_available,
     _ffmpeg_popen,
-    _probeDurationMs,
     _probe_video_info,
+    _probeDurationMs,
     _read_bytes,
     _validateMediaPath,
 )

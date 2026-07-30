@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Persist FMV map layer symbology in QGIS user settings."""
 
-from qgis.PyQt.QtCore import QSettings
 from qgis.core import QgsMapLayerStyle
+from qgis.PyQt.QtCore import QSettings
 
 _SUPPRESS = set()
 _WATCHED = {}

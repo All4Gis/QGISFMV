@@ -5,21 +5,22 @@ import glob
 import os
 import shutil
 
+from qgis.core import Qgis as QGis
+from qgis.core import QgsProject, QgsRasterLayer, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QFileDialog
-from qgis.core import Qgis as QGis, QgsProject, QgsRasterLayer, QgsTask
 
+from QGISFMV.utils.core.QgsFmvUtils import (
+    ExtendMosaic,
+    getVideoFolder,
+    resetMosaicFrameCounter,
+)
 from QGISFMV.utils.layers.QgsFmvLayers import (
     CreateGroupByName,
     addLayerNoCrsDialog,
     frames_g,
 )
 from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
-from QGISFMV.utils.core.QgsFmvUtils import (
-    ExtendMosaic,
-    getVideoFolder,
-    resetMosaicFrameCounter,
-)
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 

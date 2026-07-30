@@ -8,23 +8,24 @@ stays on the widget itself since it is read directly by the paint pipeline;
 this controller only owns the logic that mutates it.
 """
 
-from qgis.PyQt.QtCore import Qt, QPoint, QRect, QSize, QCoreApplication
-from qgis.core import Qgis as QGis, QgsPointXY, QgsWkbTypes
+from qgis.core import Qgis as QGis
+from qgis.core import QgsPointXY, QgsWkbTypes
+from qgis.PyQt.QtCore import QCoreApplication, QPoint, QRect, QSize, Qt
 
 from QGISFMV.utils.core.QgsImageMat import convertQImageToMat
+from QGISFMV.utils.layers.QgsFmvLayers import (
+    BeginObjectTrack,
+    ClearObjectTracks,
+    UpdateObjectTrack,
+)
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from QGISFMV.utils.vision.QgsObjectTracker import create_object_tracker
-from QGISFMV.utils.layers.QgsFmvLayers import (
-    BeginObjectTrack,
-    UpdateObjectTrack,
-    ClearObjectTracks,
-)
 from QGISFMV.video.playback.QgsVideoState import TrackLockState
 from QGISFMV.video.playback.QgsVideoUtils import VideoUtils as vut
 
 try:
-    from cv2 import resize, cvtColor, COLOR_RGB2BGR
+    from cv2 import COLOR_RGB2BGR, cvtColor, resize
 except ImportError:
     resize = None
     cvtColor = None

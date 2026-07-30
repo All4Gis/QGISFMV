@@ -1,13 +1,13 @@
 # Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
+import xml.etree.ElementTree as etree
 from io import BytesIO
 
-from qgis.PyQt.QtCore import QObject, QCoreApplication
+from qgis.PyQt.QtCore import QCoreApplication, QObject
+
 from QGISFMV.utils.core.QgsFmvUtils import _spawn
 from QGISFMV.utils.logging import log
-
-import xml.etree.ElementTree as etree
 
 numpy = None
 matplot = None
@@ -20,8 +20,8 @@ def _ensure_plot_deps():
     if _plot_ok:
         return True
     try:
-        import numpy as _np
         import matplotlib.pyplot as _mp
+        import numpy as _np
 
         numpy = _np
         matplot = _mp

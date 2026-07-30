@@ -24,10 +24,10 @@ Or run via pytest with the QGIS runner::
 import time
 from pathlib import Path
 
-from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtGui import QImage, QColor
-from qgis.PyQt.QtWidgets import QApplication, QWidget, QAction
 from qgis.core import QgsApplication
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtGui import QColor, QImage
+from qgis.PyQt.QtWidgets import QAction, QApplication, QWidget
 
 # ---------------------------------------------------------------------------
 # Paths

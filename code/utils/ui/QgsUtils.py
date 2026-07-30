@@ -3,8 +3,13 @@
 
 import os
 
-from qgis.PyQt.QtGui import QPixmap, QIcon
+from qgis.core import Qgis as QGis
+from qgis.core import QgsProject
+from qgis.PyQt.QtCore import QSettings, Qt
+from qgis.PyQt.QtGui import QIcon, QPixmap
 from qgis.PyQt.QtWidgets import QMessageBox
+from qgis.utils import iface
+
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsFmvResources import (
     ICON_CRITICAL,
@@ -13,9 +18,6 @@ from QGISFMV.utils.ui.QgsFmvResources import (
     ICON_QUESTION,
     ICON_WARNING,
 )
-from qgis.core import QgsProject, Qgis as QGis
-from qgis.utils import iface
-from qgis.PyQt.QtCore import QSettings, Qt
 
 
 class QgsUtils:

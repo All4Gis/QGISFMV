@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """About dialog."""
 
-from qgis.PyQt.QtCore import QUrl, Qt
+from qgis.PyQt.QtCore import Qt, QUrl
 from qgis.PyQt.QtWidgets import QDialog
 
 from QGISFMV.gui.ui_FmvAbout import Ui_FmvAbout

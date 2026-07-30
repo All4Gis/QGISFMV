@@ -6,11 +6,11 @@ instance used while drawing, measuring, censoring, or tracking objects on the
 video widget.
 """
 
-from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtGui import QPalette, QColor, QBrush
-from qgis.PyQt.QtWidgets import QRubberBand
 from qgis.core import QgsWkbTypes
 from qgis.gui import QgsRubberBand
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtGui import QBrush, QColor, QPalette
+from qgis.PyQt.QtWidgets import QRubberBand
 from qgis.utils import iface
 
 

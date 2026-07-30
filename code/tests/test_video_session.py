@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """Tests for VideoSession lifecycle (no QGIS runtime beyond stubs)."""
 
+from code.tests.support import load_plugin_module
 from unittest.mock import MagicMock, patch
 
 import pytest
-
-from code.tests.support import load_plugin_module
 
 
 @pytest.fixture

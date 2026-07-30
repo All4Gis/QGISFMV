@@ -10,11 +10,11 @@ import tempfile
 import zipfile
 from datetime import datetime, timezone
 
-from qgis.PyQt.QtCore import QCoreApplication
 from qgis.core import Qgis as QGis
+from qgis.PyQt.QtCore import QCoreApplication
 
-from QGISFMV.utils.logging import log
 from QGISFMV.utils.core.QgsFmvUtils import askForFiles
+from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 

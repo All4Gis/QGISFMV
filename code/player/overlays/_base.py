@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 """Shared base for QGIS map-canvas vector overlays (sensor cone, distance rings, etc.)."""
 
-from qgis.core import (
-    QgsProject,
-)
+from qgis.core import QgsProject
 
 from QGISFMV.utils.logging import log
 

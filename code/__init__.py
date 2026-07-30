@@ -19,6 +19,7 @@ if "pytest" not in sys.modules:
 
 def classFactory(iface):
     import os
+
     from .QgsFmv import Fmv
 
     plugin = Fmv(iface)

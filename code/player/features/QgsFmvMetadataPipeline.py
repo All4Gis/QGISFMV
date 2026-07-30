@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """KLV telemetry ingestion pipeline: worker-thread wiring, packet dedup, and layer sync."""
 
-from qgis.PyQt.QtCore import QCoreApplication, QThread, QTimer, Qt
-from qgis.PyQt.QtWidgets import QDockWidget, QTableWidgetItem
 from qgis.core import Qgis as QGis
+from qgis.PyQt.QtCore import QCoreApplication, Qt, QThread, QTimer
+from qgis.PyQt.QtWidgets import QDockWidget, QTableWidgetItem
 
 from QGISFMV.player.dialogs.QgsFmvMetadata import QgsFmvMetadata
 from QGISFMV.utils.core.QgsFmvThreads import stop_qthread

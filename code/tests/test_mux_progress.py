@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Unit tests for pymisb mux progress helpers."""
 
-import pytest
-
 from code.tests.support import ensure_pymisb_installed
+
+import pytest
 
 
 class _FakeTask(object):

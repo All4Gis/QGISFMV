@@ -1,15 +1,16 @@
 # 2017 by Gregor Engberding , MIT License
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
+from qgis.core import NULL
 from qgis.PyQt.QtCore import (
-    QJsonDocument,
     QAbstractItemModel,
+    QCoreApplication,
+    QJsonDocument,
+    QJsonParseError,
     QModelIndex,
     Qt,
-    QCoreApplication,
-    QJsonParseError,
 )
-from qgis.core import NULL
+
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 

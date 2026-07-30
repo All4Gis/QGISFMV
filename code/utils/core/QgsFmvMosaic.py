@@ -13,8 +13,8 @@ except ImportError:
     gdal = None
     osr = None
 
-from QGISFMV.utils.logging import log
 from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
+from QGISFMV.utils.logging import log
 
 # ---------------------------------------------------------------------------
 # Module-level state
@@ -512,17 +512,18 @@ def georeferencingVideo(parent):
     """Add the current frame to the live mosaic."""
     global _mosaic_frame_counter
 
-    from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-    from QGISFMV.utils.core.QgsFmvUtils import gv, getVideoFolder
-    from QGISFMV.utils.core.QgsFmvUtils import (
-        _videoFrameImage,
-        _syncVideoImageSizeFromParent,
-    )
     from QGISFMV.utils.core.QgsFmvGeoReferencing import (
         SetImageSize,
         _affineTransformIsUsable,
         _refreshAffineFromStoredCorners,
     )
+    from QGISFMV.utils.core.QgsFmvUtils import (
+        _syncVideoImageSizeFromParent,
+        _videoFrameImage,
+        getVideoFolder,
+        gv,
+    )
+    from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
     if parent is None:
         return

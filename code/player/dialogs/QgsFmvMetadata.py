@@ -3,27 +3,24 @@ import csv
 import os
 import platform
 
-from qgis.PyQt.QtCore import Qt, QCoreApplication
+from qgis.core import Qgis as QGis
+from qgis.core import QgsApplication, QgsTask
+from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtWidgets import QDockWidget
-from qgis.core import (
-    Qgis as QGis,
-    QgsTask,
-    QgsApplication,
-)
 
 from QGISFMV.gui.ui_FmvMetadata import Ui_FmvMetadata
-from QGISFMV.utils.logging import log
-from QGISFMV.utils.core.QgsFmvUtils import (
-    askForFiles,
-    _seconds_to_time,
-    BurnDrawingsImage,
-)
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from QGISFMV.player.dialogs.QgsFmvReportGenerator import ReportGenerator
 from QGISFMV.player.dialogs.QgsFmvReportMetadata import (
-    _metadata_dict_from_table,
     _group_metadata_fields,
+    _metadata_dict_from_table,
 )
+from QGISFMV.utils.core.QgsFmvUtils import (
+    BurnDrawingsImage,
+    _seconds_to_time,
+    askForFiles,
+)
+from QGISFMV.utils.logging import log
+from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 # Metadata-formatting helpers live in QgsFmvReportMetadata.py; PDF rendering
 # lives in ReportGenerator.

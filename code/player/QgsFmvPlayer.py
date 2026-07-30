@@ -1,72 +1,66 @@
 # -*- coding: utf-8 -*-
 import os.path
 
-from qgis.PyQt.QtCore import QPoint, QCoreApplication, QSettings, Qt
+from qgis.core import Qgis as QGis
+from qgis.core import QgsApplication
+from qgis.PyQt.QtCore import QCoreApplication, QPoint, QSettings, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (
-    QToolTip,
+    QDialog,
+    QDockWidget,
     QMessageBox,
     QStyle,
     QStyleOptionSlider,
-    QDockWidget,
-    QDialog,
-)
-from qgis.core import Qgis as QGis, QgsApplication
-
-from QGISFMV.utils.media.QgsFmvMultimedia import (
-    createMediaPlayer,
-    setVideoOutput,
-    connectStateChanged,
-    setVolume,
-    getVolume,
-    PausedState,
-    StoppedState,
+    QToolTip,
 )
 
 from QGISFMV.gui.ui_FmvPlayer import Ui_PlayerWindow
-from QGISFMV.player.dialogs.QgsFmvSettings import open_fmv_settings
-
-from QGISFMV.utils.media.QgsFmvStreamUtils import isStreamUri, streamDisplayName
 from QGISFMV.player.dialogs.QgsFmvMetadata import QgsFmvMetadata
-from QGISFMV.player.features.QgsFmvMosaicController import MosaicController
-from QGISFMV.player.features.QgsFmvRecordController import RecordController
-from QGISFMV.player.features.QgsFmvMetadataPipeline import MetadataPipelineController
-from QGISFMV.player.features.QgsFmvMapCenterController import MapCenterController
-from QGISFMV.player.features.QgsFmvPlaybackController import PlaybackController
+from QGISFMV.player.dialogs.QgsFmvSettings import open_fmv_settings
+from QGISFMV.player.features.QgsFmvAlerts import AlertManager
+from QGISFMV.player.features.QgsFmvBookmarkController import BookmarkController
 from QGISFMV.player.features.QgsFmvCloseController import CloseController
-from QGISFMV.player.features.QgsFmvTaskResults import TaskResultsController
-from QGISFMV.player.features.QgsFmvExportController import ExportController
 from QGISFMV.player.features.QgsFmvContextMenus import ContextMenuController
 from QGISFMV.player.features.QgsFmvDrawToolsController import DrawToolsController
-from QGISFMV.utils.layers.QgsFmvLayers import RemoveGroupByName
-from QGISFMV.utils.core.QgsFmvUtils import (
-    ResetData,
-    _seconds_to_time,
-    getNameSpace,
-)
-from QGISFMV.utils.core.QgsFmvVideoSession import VideoSession
-from QGISFMV.utils.ui.QgsPlot import CreatePlotsBitrate
-from QGISFMV.utils.logging import log
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.utils.ui.QgsFmvResources import ICON_PAUSE, ICON_PLAY
+from QGISFMV.player.features.QgsFmvExportController import ExportController
+from QGISFMV.player.features.QgsFmvGeofence import GeofenceController
+from QGISFMV.player.features.QgsFmvInstantReplay import InstantReplayController
+from QGISFMV.player.features.QgsFmvMapCenterController import MapCenterController
+from QGISFMV.player.features.QgsFmvMapSeekController import MapSeekController
+from QGISFMV.player.features.QgsFmvMetadataPipeline import MetadataPipelineController
+from QGISFMV.player.features.QgsFmvMissionPackage import MissionPackageController
+from QGISFMV.player.features.QgsFmvMosaicController import MosaicController
+from QGISFMV.player.features.QgsFmvPlaceLabel import PlaceLabelController
+from QGISFMV.player.features.QgsFmvPlaybackController import PlaybackController
+from QGISFMV.player.features.QgsFmvRecordController import RecordController
+from QGISFMV.player.features.QgsFmvSnapshots import AutoSnapshot
+from QGISFMV.player.features.QgsFmvStoryboard import StoryboardController
+from QGISFMV.player.features.QgsFmvTargetPin import TargetPinController
+from QGISFMV.player.features.QgsFmvTaskResults import TaskResultsController
 from QGISFMV.player.filters.FilterManager import FilterManager
+from QGISFMV.player.overlays.QgsFmvDistanceRings import DistanceRingsOverlay
 
 # New features
 from QGISFMV.player.overlays.QgsFmvHud import HudOverlay
-from QGISFMV.player.features.QgsFmvSnapshots import AutoSnapshot
-from QGISFMV.player.features.QgsFmvAlerts import AlertManager
-from QGISFMV.player.features.QgsFmvBookmarkController import BookmarkController
-from QGISFMV.player.features.QgsFmvGeofence import GeofenceController
-from QGISFMV.player.features.QgsFmvInstantReplay import InstantReplayController
-from QGISFMV.player.features.QgsFmvMapSeekController import MapSeekController
-from QGISFMV.player.features.QgsFmvMissionPackage import MissionPackageController
-from QGISFMV.player.features.QgsFmvPlaceLabel import PlaceLabelController
-from QGISFMV.player.features.QgsFmvStoryboard import StoryboardController
-from QGISFMV.player.features.QgsFmvTargetPin import TargetPinController
 from QGISFMV.player.overlays.QgsFmvSensorCone import SensorConeOverlay
-from QGISFMV.player.overlays.QgsFmvDistanceRings import DistanceRingsOverlay
-
 from QGISFMV.utils.constants import SLOW_PLAYBACK_RATE
+from QGISFMV.utils.core.QgsFmvUtils import ResetData, _seconds_to_time, getNameSpace
+from QGISFMV.utils.core.QgsFmvVideoSession import VideoSession
+from QGISFMV.utils.layers.QgsFmvLayers import RemoveGroupByName
+from QGISFMV.utils.logging import log
+from QGISFMV.utils.media.QgsFmvMultimedia import (
+    PausedState,
+    StoppedState,
+    connectStateChanged,
+    createMediaPlayer,
+    getVolume,
+    setVideoOutput,
+    setVolume,
+)
+from QGISFMV.utils.media.QgsFmvStreamUtils import isStreamUri, streamDisplayName
+from QGISFMV.utils.ui.QgsFmvResources import ICON_PAUSE, ICON_PLAY
+from QGISFMV.utils.ui.QgsPlot import CreatePlotsBitrate
+from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from QGISFMV.utils.vision.QgsObjectTracker import cv2_available, has_object_tracking
 
 

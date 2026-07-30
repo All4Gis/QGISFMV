@@ -2,6 +2,7 @@
 """Tests for KML/GPX export XML structure (no QGIS runtime)."""
 
 import xml.etree.ElementTree as ET
+
 import pytest
 
 

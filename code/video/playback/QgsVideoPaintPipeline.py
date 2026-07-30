@@ -5,13 +5,13 @@ Keeps the z-order painting logic (background, drawings, overlays, HUD) in a
 single place so paintEvent itself stays a thin dispatch call.
 """
 
-from qgis.PyQt.QtCore import Qt, QRect
-from qgis.PyQt.QtGui import QPainter, QPen, QColor, QFont
+from qgis.PyQt.QtCore import QRect, Qt
+from qgis.PyQt.QtGui import QColor, QFont, QPainter, QPen
 
 from QGISFMV.player.drawing.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGISFMV.utils.core.QgsFmvUtils import GetGCPGeoTransform
-from QGISFMV.video.playback.QgsVideoUtils import VideoUtils as vut
 from QGISFMV.utils.logging import log
+from QGISFMV.video.playback.QgsVideoUtils import VideoUtils as vut
 
 
 class VideoPaintPipeline:

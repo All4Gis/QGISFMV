@@ -9,8 +9,8 @@ import html
 
 from qgis.PyQt.QtCore import QCoreApplication
 
-from QGISFMV.utils.logging import log
 from QGISFMV.player.dialogs.QgsFmvReportPdfLayout import _PDF_COLORS
+from QGISFMV.utils.logging import log
 
 _METADATA_GROUPS = (
     (

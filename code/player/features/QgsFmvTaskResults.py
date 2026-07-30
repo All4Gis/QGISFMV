@@ -3,9 +3,10 @@
 
 import os.path
 
+from qgis.core import Qgis as QGis
+from qgis.core import QgsProject, QgsRasterLayer
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QMessageBox
-from qgis.core import Qgis as QGis, QgsProject, QgsRasterLayer
 
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsPlot import ShowPlot

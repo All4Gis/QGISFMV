@@ -8,6 +8,7 @@ require the QGIS runtime (QgsDistanceArea).
 """
 
 import math
+
 import pytest
 
 
@@ -19,7 +20,7 @@ class TestDestination:
 
     def _destination(self, point, distance_m, bearing_deg):
         """Import destination without QGIS dependency."""
-        from math import degrees, radians, sin, cos, asin, atan2
+        from math import asin, atan2, cos, degrees, radians, sin
 
         R = 6371008.8
         lon1, lat1 = (radians(c) for c in point)
