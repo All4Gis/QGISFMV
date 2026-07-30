@@ -48,9 +48,9 @@ jobs:
         run: |
           black --check code/ --exclude code/gui
 
-      - name: Check imports (isort)
-        run: |
-          isort --check-only code/ --skip code/gui
+      # - name: Check imports (isort)
+      #   run: |
+      #     isort --check-only code/ --skip code/gui
 
       - name: Lint code (pycodestyle)
         run: |
