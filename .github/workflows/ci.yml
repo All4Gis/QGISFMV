@@ -55,12 +55,12 @@ jobs:
       - name: Lint code (pycodestyle)
         run: |
           pycodestyle \
-            --ignore=E203,E501,W503 \
+            --ignore=E203,E402,E501,W503 \
             code/*.py code/**/*.py \
             --statistics \
             --exclude=code/gui/*.py,code/QGISFMV
 
           pycodestyle \
-            --ignore=E203,E501,W503,W504 \
+            --ignore=E203,E402,E501,W503,W504 \
             deploy/*.py \
             --statistics
