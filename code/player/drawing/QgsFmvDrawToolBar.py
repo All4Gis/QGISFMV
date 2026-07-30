@@ -14,6 +14,7 @@ The actual implementations live in focused sibling modules:
 call sites (``QgsVideoPaintPipeline``, ``QgsFmvSettings``, ``QgsManager``, ...)
 do not need to change.
 """
+
 from QGISFMV.player.drawing.QgsFmvDrawingConfig import (
     DrawingConfig,
     drawing_config,
@@ -79,7 +80,9 @@ class DrawToolBar(object):
         if len(drawLines) > 1:
             for idx, pt in enumerate(drawLines):
                 if pt[0] is not None:
-                    DrawToolBar.drawLinesOnVideo(pt, idx, painter, surface, gt, drawLines)
+                    DrawToolBar.drawLinesOnVideo(
+                        pt, idx, painter, surface, gt, drawLines
+                    )
 
         # Draw polygons (split at separators)
         for segment in DrawToolBar._split_at_separators(drawPolygon):
@@ -138,7 +141,9 @@ class DrawToolBar(object):
     @staticmethod
     def drawMeasureDistanceOnVideo(pt, idx, painter, surface, gt, drawMDistance):
         """Draw Measure Distance on Video"""
-        return draw_measure_distance_on_video(pt, idx, painter, surface, gt, drawMDistance)
+        return draw_measure_distance_on_video(
+            pt, idx, painter, surface, gt, drawMDistance
+        )
 
     @staticmethod
     def drawMeasureAreaOnVideo(values, painter, surface, gt):

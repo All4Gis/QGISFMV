@@ -6,6 +6,7 @@ Owns the map-canvas cursor marker (rubberband) and the Lon/Lat/Alt (or MGRS)
 label shown in the player's status bar while hovering over a georeferenced
 video.
 """
+
 import mgrs
 
 from qgis.core import (
@@ -85,8 +86,11 @@ class CursorController:
 
         if w._interaction.militarySymbolDrawer:
             w._milSymbolPreview = [
-                Longitude, Latitude, Altitude,
-                w._selectedMilSymbolId, w._selectedMilSymbolLabel,
+                Longitude,
+                Latitude,
+                Altitude,
+                w._selectedMilSymbolId,
+                w._selectedMilSymbolLabel,
             ]
             w.update()
 
@@ -97,10 +101,14 @@ class CursorController:
         if w._interaction.lineDrawer:
             w._draw.add_move_event_value(w.drawLines, Longitude, Latitude, Altitude)
         if w._interaction.measureDistance and w.drawMeasureDistance:
-            w._draw.add_move_event_value(w.drawMeasureDistance, Longitude, Latitude, Altitude)
+            w._draw.add_move_event_value(
+                w.drawMeasureDistance, Longitude, Latitude, Altitude
+            )
             w._draw.sync_measure_distance_map()
         if w._interaction.measureArea and w.drawMeasureArea:
-            w._draw.add_move_event_value(w.drawMeasureArea, Longitude, Latitude, Altitude)
+            w._draw.add_move_event_value(
+                w.drawMeasureArea, Longitude, Latitude, Altitude
+            )
             w._draw.sync_measure_area_map()
 
     def format_mgrs_label(self, Latitude, Longitude):

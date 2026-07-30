@@ -73,7 +73,11 @@ class FilterWorker(QObject):
             return
         try:
             # ``state`` is already a snapshot when submitted from FilterThreadPool.
-            snap = state if isinstance(state, FilterState) else snapshot_filter_state(state)
+            snap = (
+                state
+                if isinstance(state, FilterState)
+                else snapshot_filter_state(state)
+            )
             result = VideoFilters.apply(image, snap, downscale_slow=True)
             if result is None or result.isNull():
                 result = VideoFilters._failure_overlay(image, "empty filter result")
@@ -143,6 +147,7 @@ class FilterThreadPool(QObject):
             self._worker.finished.disconnect(self._handle_finished)
         except Exception as exc:
             from QGISFMV.utils.logging import log
+
             log.debug("filter worker disconnect failed: %s", exc)
         thread = getattr(self, "_thread", None)
         self._thread = None

@@ -4,6 +4,7 @@
 Owns footprint/sensor-position lookups and the mini-map extent/projection
 math used by the PDF report, extracted from QgsFmvReportGenerator.py.
 """
+
 from qgis.core import QgsRectangle
 
 from QGISFMV.utils.logging import log

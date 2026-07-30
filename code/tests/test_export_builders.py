@@ -88,9 +88,7 @@ def export_mod():
 
 class TestBuildGpxDocument:
     def test_track_points(self, export_mod, tmp_path):
-        gpx = export_mod._build_gpx_document(
-            "demo", [(-3.7, 40.4), (-3.71, 40.41)]
-        )
+        gpx = export_mod._build_gpx_document("demo", [(-3.7, 40.4), (-3.71, 40.41)])
         assert gpx.tag == "gpx"
         pts = list(gpx.iter("trkpt"))
         assert len(pts) == 2

@@ -11,6 +11,7 @@ try:
     from QGISFMV.utils.logging import log
 except ImportError:
     import logging
+
     log = logging.getLogger("qgis_fmv")
 
 _PLUGIN_ROOT = os.path.dirname(

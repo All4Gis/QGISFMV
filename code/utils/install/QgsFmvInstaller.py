@@ -49,6 +49,7 @@ _Tr = lambda text: QCoreApplication.translate("QgsFmvInstaller", text)
 # Subprocess / Python helpers
 # ---------------------------------------------------------------------------
 
+
 def _mac_qgis_python_candidates():
     """Return likely QGIS Python interpreters on macOS (wrapper first)."""
     app = os.environ.get("QGIS_APP", "/Applications/QGIS.app")
@@ -267,8 +268,13 @@ def _msg(title: str, text: str = "", level=QGis.MessageLevel.Info, duration: int
     qgsu.showUserAndLogMessage(title, text, level=level, duration=duration)
 
 
-def _prompt_yes(title: str, question: str, detail: str = "", icon: str = "Information") -> bool:
-    return qgsu.CustomMessage(title, question, detail, icon=icon) == QMessageBox.StandardButton.Yes
+def _prompt_yes(
+    title: str, question: str, detail: str = "", icon: str = "Information"
+) -> bool:
+    return (
+        qgsu.CustomMessage(title, question, detail, icon=icon)
+        == QMessageBox.StandardButton.Yes
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -322,6 +328,7 @@ def _download(url: str, dest: str, with_progress: bool = True) -> None:
 # pip bootstrap / requirements
 # ---------------------------------------------------------------------------
 
+
 def _ensure_pip() -> bool:
     """Make ``python -m pip`` available (ensurepip or get-pip into packages dir)."""
     ok, _ = _run_pip(["--version"])
@@ -368,9 +375,7 @@ def _install_opencv_package() -> Tuple[bool, str]:
     """Install opencv-contrib-python into ~/.qgis-fmv-packages (no sudo)."""
     target = _fmv_packages_dir()
     os.makedirs(target, exist_ok=True)
-    return _run_pip_env(
-        ["install", "opencv-contrib-python==4.13.0.92"], target=target
-    )
+    return _run_pip_env(["install", "opencv-contrib-python==4.13.0.92"], target=target)
 
 
 def _clean_mac_user_site_packages() -> None:
@@ -428,6 +433,7 @@ def _remove_numpy_from_target(target: str) -> None:
     """Remove numpy from the target dir to avoid conflicting with QGIS's own numpy."""
     for name in ("numpy", "numpy-*"):
         import glob as _glob
+
         for path in _glob.glob(os.path.join(target, name + ".dist-info")):
             shutil.rmtree(path, ignore_errors=True)
         pkg_dir = os.path.join(target, "numpy")
@@ -457,9 +463,9 @@ def install_pip_requirements() -> bool:
 
     _msg(
         _Tr("Installing dependencies"),
-        _Tr(
-            "Installing into {} (no admin / no write to QGIS.app).\nPython: {}"
-        ).format(target, python),
+        _Tr("Installing into {} (no admin / no write to QGIS.app).\nPython: {}").format(
+            target, python
+        ),
         QGis.MessageLevel.Info,
         duration=8,
     )
@@ -519,6 +525,7 @@ def install_pip_requirements() -> bool:
 # ---------------------------------------------------------------------------
 # FFmpeg
 # ---------------------------------------------------------------------------
+
 
 def check_ffmpeg() -> Tuple[bool, str]:
     """Return (ok, path_or_message) for the configured FFmpeg binary."""
@@ -678,7 +685,9 @@ def install_ffmpeg_linux() -> bool:
         " ".join(cmd),
         icon="Question",
     ):
-        _msg(_Tr("Run in a terminal"), " ".join(cmd), QGis.MessageLevel.Info, duration=10)
+        _msg(
+            _Tr("Run in a terminal"), " ".join(cmd), QGis.MessageLevel.Info, duration=10
+        )
         return False
 
     pwd, ok = QInputDialog.getText(
@@ -713,6 +722,7 @@ def install_ffmpeg() -> bool:
 # ---------------------------------------------------------------------------
 # Orchestration
 # ---------------------------------------------------------------------------
+
 
 def run_dependency_setup(interactive: bool = True) -> bool:
     """Check and optionally install Python + FFmpeg dependencies."""

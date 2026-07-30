@@ -6,6 +6,7 @@ from enum import IntEnum
 
 class PlaybackState(IntEnum):
     """Media playback state constants."""
+
     Stopped = 0
     Playing = 1
     Paused = 2
@@ -13,6 +14,7 @@ class PlaybackState(IntEnum):
 
 class MediaStatus(IntEnum):
     """Media source status constants."""
+
     NoMedia = 0
     Loading = 1
     Loaded = 2
@@ -25,6 +27,7 @@ class MediaStatus(IntEnum):
 
 class PlaylistMode(IntEnum):
     """Playlist playback mode constants."""
+
     Sequential = 0
     Loop = 1
 

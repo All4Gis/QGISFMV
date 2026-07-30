@@ -24,19 +24,20 @@ import pytest
 _qgis_available = False
 try:
     from qgis.core import QgsApplication
+
     _qgis_available = QgsApplication.instance() is not None
 except ImportError:
     pass
 
 pytestmark = pytest.mark.skipif(
-    not _qgis_available,
-    reason="QGIS runtime not available"
+    not _qgis_available, reason="QGIS runtime not available"
 )
 
 
 @pytest.fixture
 def harness():
     from QGISFMV.tests.gui_test_harness import GUITestHarness
+
     h = GUITestHarness()
     h.start()
     yield h
@@ -115,7 +116,9 @@ class TestToolbarVisual:
         toolbar = harness.find_widget("DrawToolBar", parent=player)
         if toolbar is not None:
             actions = toolbar.actions()
-            assert len(actions) >= 5, f"Toolbar should have ≥5 actions, got {len(actions)}"
+            assert (
+                len(actions) >= 5
+            ), f"Toolbar should have ≥5 actions, got {len(actions)}"
 
 
 class TestOverlayVisual:
@@ -161,9 +164,13 @@ class TestFilterVisual:
         if player is None:
             pytest.skip("No player open")
         filter_actions = [
-            "actionGray", "actionInvert_Color", "actionMono_Filter",
-            "actionCanny_edge_detection", "actionAuto_Contrast_Filter",
-            "actionMirroredH", "actionBrightness_Contrast",
+            "actionGray",
+            "actionInvert_Color",
+            "actionMono_Filter",
+            "actionCanny_edge_detection",
+            "actionAuto_Contrast_Filter",
+            "actionMirroredH",
+            "actionBrightness_Contrast",
         ]
         for name in filter_actions:
             action = harness.find_action(name, parent=player)

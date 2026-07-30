@@ -111,19 +111,21 @@ class FmvSettingsDialog(QDialog, Ui_FmvSettings):
         )
         self.sb_mosaicRefresh.setValue(int(get("MOSAIC", "refresh_every", "3") or 3))
         self.sb_mosaicDisplay.setValue(int(get("MOSAIC", "display_every", "2") or 2))
-        self.sb_mosaicKept.setValue(
-            int(get("MOSAIC", "max_kept_frames", "80") or 80)
-        )
+        self.sb_mosaicKept.setValue(int(get("MOSAIC", "max_kept_frames", "80") or 80))
         enabled = str(get("DNN", "use_dnn_detection", "false")).strip().lower()
         self.chk_dnnEnabled.setChecked(enabled in ("1", "true", "yes", "on"))
-        profile = (get("DNN", "dnn_model_profile", "aerial") or "aerial").strip().lower()
+        profile = (
+            (get("DNN", "dnn_model_profile", "aerial") or "aerial").strip().lower()
+        )
         idx_profile = self.cb_dnnProfile.findData(profile)
         if idx_profile < 0 and profile == "visdrone":
             idx_profile = self.cb_dnnProfile.findData("aerial")
         if idx_profile >= 0:
             self.cb_dnnProfile.setCurrentIndex(idx_profile)
         self.ln_onnxModel.setText(get("DNN", "onnx_model", "") or "")
-        idx = self.cb_onnxType.findText(get("DNN", "onnx_model_type", "yolov8") or "yolov8")
+        idx = self.cb_onnxType.findText(
+            get("DNN", "onnx_model_type", "yolov8") or "yolov8"
+        )
         if idx >= 0:
             self.cb_onnxType.setCurrentIndex(idx)
         self.sb_onnxInput.setValue(int(get("DNN", "onnx_input_size", "640") or 640))
@@ -169,9 +171,10 @@ class FmvSettingsDialog(QDialog, Ui_FmvSettings):
                 path = item.data(Qt.ItemDataRole.UserRole) or ""
                 if not path:
                     continue
-                if os.path.normpath(str(path)) == current_norm or os.path.basename(
-                    str(path)
-                ) == current_base:
+                if (
+                    os.path.normpath(str(path)) == current_norm
+                    or os.path.basename(str(path)) == current_base
+                ):
                     selected_row = row
                     break
 
@@ -210,7 +213,10 @@ class FmvSettingsDialog(QDialog, Ui_FmvSettings):
             group_name = self._player._videoGroupName()
         refresh_platform_icon_layers(group_name)
 
-        if self._player is not None and getattr(self._player, "iface", None) is not None:
+        if (
+            self._player is not None
+            and getattr(self._player, "iface", None) is not None
+        ):
             self._player.iface.mapCanvas().refresh()
 
     def showSizeTip(self, _):
@@ -277,19 +283,26 @@ class FmvSettingsDialog(QDialog, Ui_FmvSettings):
                 "Downloading VisDrone weights and exporting ONNX (may take a minute)…",
             ),
             download_fn=configure_aerial_dnn,
-            success_title=QCoreApplication.translate("FmvSettings", "VisDrone model ready"),
+            success_title=QCoreApplication.translate(
+                "FmvSettings", "VisDrone model ready"
+            ),
             success_msg=QCoreApplication.translate(
                 "FmvSettings",
                 "Aerial model saved to {} — Vehicle and Person filters use VisDrone classes.",
             ),
-            fail_title=QCoreApplication.translate("FmvSettings", "Aerial model setup failed"),
+            fail_title=QCoreApplication.translate(
+                "FmvSettings", "Aerial model setup failed"
+            ),
             on_success=_on_success,
             duration=8,
         )
 
     def downloadYoloModel(self):
         """Download YOLOv8n COCO model for general object detection."""
-        from QGISFMV.video.dnn.QgsFmvModelSetup import configure_default_dnn, default_yolov8n_path
+        from QGISFMV.video.dnn.QgsFmvModelSetup import (
+            configure_default_dnn,
+            default_yolov8n_path,
+        )
 
         def _on_success(_msg):
             self.chk_dnnEnabled.setChecked(True)
@@ -303,7 +316,9 @@ class FmvSettingsDialog(QDialog, Ui_FmvSettings):
 
         self._download_model(
             btn=self.btn_downloadYolo,
-            status_text=QCoreApplication.translate("FmvSettings", "Downloading YOLOv8n…"),
+            status_text=QCoreApplication.translate(
+                "FmvSettings", "Downloading YOLOv8n…"
+            ),
             download_fn=lambda: configure_default_dnn(default_yolov8n_path()),
             success_title=QCoreApplication.translate("FmvSettings", "YOLO model ready"),
             success_msg=QCoreApplication.translate(
@@ -315,8 +330,17 @@ class FmvSettingsDialog(QDialog, Ui_FmvSettings):
             duration=6,
         )
 
-    def _download_model(self, btn, status_text, download_fn, success_title, success_msg,
-                        fail_title, on_success, duration=6):
+    def _download_model(
+        self,
+        btn,
+        status_text,
+        download_fn,
+        success_title,
+        success_msg,
+        fail_title,
+        on_success,
+        duration=6,
+    ):
         """Shared download-install-expose flow for DNN model setup buttons."""
         self.lbl_dnnStatus.setText(status_text)
         btn.setEnabled(False)
@@ -325,8 +349,10 @@ class FmvSettingsDialog(QDialog, Ui_FmvSettings):
             if ok:
                 on_success(msg)
                 qgsu.showUserAndLogMessage(
-                    success_title, success_msg.format(msg),
-                    level=QGis.MessageLevel.Success, duration=duration,
+                    success_title,
+                    success_msg.format(msg),
+                    level=QGis.MessageLevel.Success,
+                    duration=duration,
                 )
             else:
                 QMessageBox.warning(self, fail_title, msg)

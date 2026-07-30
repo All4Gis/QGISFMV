@@ -19,16 +19,19 @@ class TestGeoConstants:
     def test_earth_mean_radius(self):
         """Earth mean radius should be ~6371 km."""
         from QGISFMV.geo.QgsGeoUtils import _EARTH_MEAN_RADIUS
+
         assert 6_000_000 < _EARTH_MEAN_RADIUS < 7_000_000
 
     def test_earth_mean_radius_approximate(self):
         """Earth mean radius should be approximately 6371008.8 m."""
         from QGISFMV.geo.QgsGeoUtils import _EARTH_MEAN_RADIUS
+
         assert _EARTH_MEAN_RADIUS == pytest.approx(6_371_008.8, rel=1e-6)
 
     def test_destination_uses_correct_radius(self):
         """1 degree of latitude at equator ≈ 111.32 km."""
         from QGISFMV.geo.QgsGeoUtils import destination
+
         # Go 1 degree north from equator
         lon, lat = destination((0.0, 0.0), 111_320, 0.0)
         assert lat == pytest.approx(1.0, abs=0.01)
@@ -104,13 +107,21 @@ class TestStreamUtils:
         assert self._stream_display_name("udp://239.1.1.1:5000") == "239.1.1.1:5000"
 
     def test_build_stream_uri_udp(self):
-        assert self._build_stream_uri("udp", "239.1.1.1", 5000) == "udp://239.1.1.1:5000"
+        assert (
+            self._build_stream_uri("udp", "239.1.1.1", 5000) == "udp://239.1.1.1:5000"
+        )
 
     def test_build_stream_uri_tcp(self):
-        assert self._build_stream_uri("tcp", "192.168.1.100", 8080) == "tcp://192.168.1.100:8080"
+        assert (
+            self._build_stream_uri("tcp", "192.168.1.100", 8080)
+            == "tcp://192.168.1.100:8080"
+        )
 
     def test_build_stream_uri_rtsp(self):
-        assert self._build_stream_uri("rtsp", "camera.local", 554) == "rtsp://camera.local:554"
+        assert (
+            self._build_stream_uri("rtsp", "camera.local", 554)
+            == "rtsp://camera.local:554"
+        )
 
     def test_build_stream_uri_no_port_raises(self):
         with pytest.raises(TypeError):

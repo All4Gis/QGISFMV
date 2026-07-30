@@ -207,9 +207,7 @@ class MiniMapOverlay(QWidget):
         except (TypeError, ValueError):
             return None
         center = (sum(lons) / 4.0, sum(lats) / 4.0)
-        return max(
-            _geo_distance(center, (float(c[1]), float(c[0]))) for c in corners
-        )
+        return max(_geo_distance(center, (float(c[1]), float(c[0]))) for c in corners)
 
     def _extent_from_state(self, gv):
         if gv is None:
@@ -286,7 +284,9 @@ class MiniMapOverlay(QWidget):
         try:
             import mgrs
 
-            self._mgrs = mgrs.MGRS().toMgrs(float(self._sensor_lat), float(self._sensor_lon))
+            self._mgrs = mgrs.MGRS().toMgrs(
+                float(self._sensor_lat), float(self._sensor_lon)
+            )
         except Exception as _exc:
             log.debug("MiniMap MGRS conversion failed: %s", _exc)
             self._mgrs = ""
@@ -325,9 +325,7 @@ class MiniMapOverlay(QWidget):
         coord_font = QFont("Consolas", 7)
         painter.setFont(coord_font)
         painter.setPen(QPen(QColor(180, 220, 255, 210)))
-        coord_text = (
-            f"{_fmt_coord(self._sensor_lat)}  {_fmt_coord(self._sensor_lon)}"
-        )
+        coord_text = f"{_fmt_coord(self._sensor_lat)}  {_fmt_coord(self._sensor_lon)}"
         painter.drawText(QPointF(10, 28), coord_text)
 
     def _draw_north_arrow(self, painter):

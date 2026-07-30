@@ -86,6 +86,7 @@ def _install_common_stubs():
     # Returning a fresh instance per call is enough for our AlertManager usage.
     qtcore.QObject = QObject
     qtcore.pyqtSignal = pyqtSignal
+
     class _FakeTimer:
         def __init__(self, parent=None):
             self._parent = parent
@@ -173,6 +174,7 @@ def _install_common_stubs():
     qtgui.QFont = object
     qtgui.QPixmap = MagicMock
     qtgui.QAction = MagicMock
+
     class _FakeMovie:
         def __init__(self, *a, **k):
             self.frameChanged = types.SimpleNamespace(
@@ -255,7 +257,9 @@ def _install_common_stubs():
     qtw.QMenu = QMenu
     qtw.QToolBar = object
     qtw.QActionGroup = MagicMock
-    qtw.QToolTip = types.SimpleNamespace(showText=lambda *a: None, hideText=lambda: None)
+    qtw.QToolTip = types.SimpleNamespace(
+        showText=lambda *a: None, hideText=lambda: None
+    )
     qtw.QMessageBox = types.SimpleNamespace(
         StandardButton=types.SimpleNamespace(Yes=1, No=0)
     )
@@ -639,7 +643,11 @@ class TestSimulateAlertRules:
             "QGISFMV.player.features.QgsFmvAlerts",
         )
         meta = {0: ["Platform Heading Angle", "90"]}
-        for op, value, expect in ((">", "80", True), ("<", "80", False), ("==", "90", True)):
+        for op, value, expect in (
+            (">", "80", True),
+            ("<", "80", False),
+            ("==", "90", True),
+        ):
             rule = alerts.AlertRule("Heading", op, value)
             ok, actual = rule.check(meta)
             assert ok is expect
@@ -879,7 +887,9 @@ class TestSimulateMetadataPipeline:
         ctrl.resetFramePosition()
         ctrl.resetAppliedLayerSeq()
         ctrl.clearMetadata()
-        ctrl.addMetadata({1: ["Sensor Latitude", "40.0"], 2: ["Sensor Longitude", "-3.0"]})
+        ctrl.addMetadata(
+            {1: ["Sensor Latitude", "40.0"], 2: ["Sensor Longitude", "-3.0"]}
+        )
         player.metadataDlg.VManager.insertRow.assert_called()
         ctrl.shutdown()
         assert ctrl._metadataWorker is None

@@ -55,8 +55,12 @@ def _nms_boxes(boxes, scores, iou_thresh=0.42):
         ix1 = np.minimum(boxes_arr[i, 2], boxes_arr[rest, 2])
         iy1 = np.minimum(boxes_arr[i, 3], boxes_arr[rest, 3])
         inter = np.maximum(0, ix1 - ix0) * np.maximum(0, iy1 - iy0)
-        area_i = max(0, boxes_arr[i, 2] - boxes_arr[i, 0]) * max(0, boxes_arr[i, 3] - boxes_arr[i, 1])
-        area_rest = np.maximum(0, boxes_arr[rest, 2] - boxes_arr[rest, 0]) * np.maximum(0, boxes_arr[rest, 3] - boxes_arr[rest, 1])
+        area_i = max(0, boxes_arr[i, 2] - boxes_arr[i, 0]) * max(
+            0, boxes_arr[i, 3] - boxes_arr[i, 1]
+        )
+        area_rest = np.maximum(0, boxes_arr[rest, 2] - boxes_arr[rest, 0]) * np.maximum(
+            0, boxes_arr[rest, 3] - boxes_arr[rest, 1]
+        )
         ious = inter / np.maximum(area_i + area_rest - inter, 1e-6)
         order = rest[ious < iou_thresh]
     return [boxes[i] for i in keep_idx], [float(scores[i]) for i in keep_idx]

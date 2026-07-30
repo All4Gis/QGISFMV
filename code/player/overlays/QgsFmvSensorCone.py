@@ -33,25 +33,31 @@ class SensorConeOverlay(VectorOverlayBase):
     def _create_layer(self):
         vl = QgsVectorLayer("Polygon?crs=EPSG:4326", _SENSOR_CONE_LAYER_NAME, "memory")
         provider = vl.dataProvider()
-        provider.addAttributes([
-            QgsField("sensor_lat", QVariant.Double),
-            QgsField("sensor_lon", QVariant.Double),
-            QgsField("frame_lat", QVariant.Double),
-            QgsField("frame_lon", QVariant.Double),
-            QgsField("fov_v", QVariant.Double),
-            QgsField("fov_h", QVariant.Double),
-            QgsField("slant_range", QVariant.Double),
-            QgsField("altitude", QVariant.Double),
-        ])
+        provider.addAttributes(
+            [
+                QgsField("sensor_lat", QVariant.Double),
+                QgsField("sensor_lon", QVariant.Double),
+                QgsField("frame_lat", QVariant.Double),
+                QgsField("frame_lon", QVariant.Double),
+                QgsField("fov_v", QVariant.Double),
+                QgsField("fov_h", QVariant.Double),
+                QgsField("slant_range", QVariant.Double),
+                QgsField("altitude", QVariant.Double),
+            ]
+        )
         vl.updateFields()
 
-        symbol = QgsFillSymbol.createSimple({
-            "color": "30,100,200,60",
-            "outline_color": "30,100,200,180",
-            "outline_width": "0.5",
-            "outline_style": "dash",
-        })
-        vl.setRenderer(QgsCategorizedSymbolRenderer("", [QgsRendererCategory("", symbol, "")]))
+        symbol = QgsFillSymbol.createSimple(
+            {
+                "color": "30,100,200,60",
+                "outline_color": "30,100,200,180",
+                "outline_width": "0.5",
+                "outline_style": "dash",
+            }
+        )
+        vl.setRenderer(
+            QgsCategorizedSymbolRenderer("", [QgsRendererCategory("", symbol, "")])
+        )
         vl.setOpacity(0.35)
         vl.triggerRepaint()
         return vl
@@ -96,26 +102,44 @@ class SensorConeOverlay(VectorOverlayBase):
 
         feature = QgsFeature(layer.fields())
         feature.setGeometry(cone_geom)
-        feature.setAttributes([
-            sensor_lat, sensor_lon, frame_lat, frame_lon,
-            fov_v or 0.0, fov_h, slant or 0.0, altitude or 0.0,
-        ])
+        feature.setAttributes(
+            [
+                sensor_lat,
+                sensor_lon,
+                frame_lat,
+                frame_lon,
+                fov_v or 0.0,
+                fov_h,
+                slant or 0.0,
+                altitude or 0.0,
+            ]
+        )
         provider.addFeatures([feature])
         layer.updateExtents()
         layer.triggerRepaint()
 
-    def _buildCone(self, sensor_lat, sensor_lon, frame_lat, frame_lon,
-                   fov_h_deg, slant_range, altitude):
+    def _buildCone(
+        self,
+        sensor_lat,
+        sensor_lon,
+        frame_lat,
+        frame_lon,
+        fov_h_deg,
+        slant_range,
+        altitude,
+    ):
         """Build a polygon cone from sensor to frame center area."""
-        from QGISFMV.geo.QgsGeoUtils import destination as _geo_destination, bearing as _geo_bearing
+        from QGISFMV.geo.QgsGeoUtils import (
+            destination as _geo_destination,
+            bearing as _geo_bearing,
+        )
 
         bearing = _geo_bearing((sensor_lon, sensor_lat), (frame_lon, frame_lat))
 
         # Distance from sensor to frame center (meters)
         from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
-        dist = _geo_distance(
-            (sensor_lon, sensor_lat), (frame_lon, frame_lat)
-        )
+
+        dist = _geo_distance((sensor_lon, sensor_lat), (frame_lon, frame_lat))
 
         # Cone length: use slant range or distance to frame center
         cone_len = dist * 1.3  # extend 30% beyond frame center

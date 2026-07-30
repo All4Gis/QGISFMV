@@ -7,6 +7,7 @@ live in QgsFmvReportMetadata.py, QgsFmvReportGeo.py, and
 QgsFmvReportPdfLayout.py respectively (imported below, and some re-exported
 for backward compatibility with other call sites).
 """
+
 import os
 from datetime import datetime
 
@@ -63,10 +64,10 @@ from QGISFMV.player.dialogs.QgsFmvReportGeo import (
     _geo_to_pixel,
 )
 
-
 # ---------------------------------------------------------------------------
 # ReportGenerator — owns PDF rendering, separated from the dock widget
 # ---------------------------------------------------------------------------
+
 
 class ReportGenerator:
     """Generates professional multi-section FMV analysis PDF reports."""
@@ -116,7 +117,10 @@ class ReportGenerator:
         _section_chrome_pt = 120.0
         frame_max_height_pt = max(
             180.0,
-            min(metrics["content_height"] * 0.62, metrics["content_height"] - _section_chrome_pt),
+            min(
+                metrics["content_height"] * 0.62,
+                metrics["content_height"] - _section_chrome_pt,
+            ),
         )
         map_max_height_pt = max(
             160.0,
@@ -231,9 +235,7 @@ class ReportGenerator:
         group_name = None
         if self.player is not None and hasattr(self.player, "_videoGroupName"):
             group_name = self.player._videoGroupName()
-        lat, lon = _sensor_position_for_report_with_group(
-            data, group_name, self.player
-        )
+        lat, lon = _sensor_position_for_report_with_group(data, group_name, self.player)
         lat_text = f"{lat:.6f}" if lat is not None else "—"
         lon_text = f"{lon:.6f}" if lon is not None else "—"
         coord_t = QCoreApplication.translate("QgsFmvMetadata", "Sensor position")
@@ -266,9 +268,7 @@ class ReportGenerator:
             160.0,
             min(max_height_pt, metrics["content_height"] - 120.0),
         )
-        scaled = _scale_image_for_pdf(
-            image, max_width_pt, safe_h, metrics["pt_to_px"]
-        )
+        scaled = _scale_image_for_pdf(image, max_width_pt, safe_h, metrics["pt_to_px"])
         if scaled is None or scaled.isNull():
             return
 
@@ -287,13 +287,9 @@ class ReportGenerator:
         table_fmt.setBorder(0)
         table_fmt.setCellPadding(2)
         table_fmt.setCellSpacing(0)
-        table_fmt.setWidth(
-            QTextLength(QTextLength.Type.PercentageLength, 100)
-        )
+        table_fmt.setWidth(QTextLength(QTextLength.Type.PercentageLength, 100))
         table_fmt.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        table_fmt.setPageBreakPolicy(
-            QTextFormat.PageBreakFlag.PageBreak_AlwaysBefore
-        )
+        table_fmt.setPageBreakPolicy(QTextFormat.PageBreakFlag.PageBreak_AlwaysBefore)
 
         has_intro = bool(html_before or note)
         row_count = 2 + (1 if has_intro else 0) + (1 if caption else 0)
@@ -547,7 +543,12 @@ class ReportGenerator:
         """Cover block with branding, document info and classification banner."""
         cursor.insertHtml(
             self._build_cover_html(
-                video_name, file_path, timestamp, precision_ts, generated_at, classification
+                video_name,
+                file_path,
+                timestamp,
+                precision_ts,
+                generated_at,
+                classification,
             )
         )
 
@@ -555,9 +556,7 @@ class ReportGenerator:
 
     def _insert_summary(self, cursor, data):
         """Key telemetry snapshot in a compact grid."""
-        summary_t = QCoreApplication.translate(
-            "QgsFmvMetadata", "Executive Summary"
-        )
+        summary_t = QCoreApplication.translate("QgsFmvMetadata", "Executive Summary")
         cursor.insertHtml(
             f"<h2 style='color:{_PDF_COLORS['primary']}; font-size:13pt; "
             f"border-bottom:2px solid {_PDF_COLORS['accent']}; padding-bottom:4px; "
@@ -632,9 +631,7 @@ class ReportGenerator:
                 if not bbox.isNull() and not bbox.isEmpty():
                     return _padded_map_extent(bbox)
 
-        lat, lon = _sensor_position_for_report_with_group(
-            data, group_name, self.player
-        )
+        lat, lon = _sensor_position_for_report_with_group(data, group_name, self.player)
         if lat is None or lon is None:
             return None
 
@@ -694,9 +691,7 @@ class ReportGenerator:
                     map_settings.setCrsTransformContext(transform_context)
                 map_settings.setOutputSize(QSize(width_px, height_px))
                 map_settings.setFlag(QgsMapSettings.Flag.Antialiasing, True)
-                map_settings.setFlag(
-                    QgsMapSettings.Flag.UseRenderingOptimization, True
-                )
+                map_settings.setFlag(QgsMapSettings.Flag.UseRenderingOptimization, True)
                 map_settings.setBackgroundColor(QColor(30, 34, 42))
 
                 renderer = QgsMapRendererSequentialJob(map_settings)
@@ -738,9 +733,7 @@ class ReportGenerator:
                 painter.setPen(QPen(outline, 3))
                 painter.drawPolygon(polygon)
 
-        lat, lon = _sensor_position_for_report_with_group(
-            data, group_name, self.player
-        )
+        lat, lon = _sensor_position_for_report_with_group(data, group_name, self.player)
         if lat is not None and lon is not None:
             px, py = _geo_to_pixel(lon, lat, extent, width_px, height_px)
             painter.setBrush(QColor(255, 255, 255, 230))
@@ -855,9 +848,7 @@ class ReportGenerator:
         footprint_t = QCoreApplication.translate(
             "QgsFmvMetadata", "Current frame footprint"
         )
-        platform_t = QCoreApplication.translate(
-            "QgsFmvMetadata", "Platform position"
-        )
+        platform_t = QCoreApplication.translate("QgsFmvMetadata", "Platform position")
         basemap_t = QCoreApplication.translate(
             "QgsFmvMetadata", "OpenStreetMap basemap"
         )
@@ -886,7 +877,9 @@ class ReportGenerator:
         block_fmt.setBottomMargin(0)
         cursor.insertBlock(block_fmt)
 
-    def _center_block(self, cursor, page_break=QTextFormat.PageBreakFlag.PageBreak_Auto):
+    def _center_block(
+        self, cursor, page_break=QTextFormat.PageBreakFlag.PageBreak_Auto
+    ):
         cursor.movePosition(QTextCursor.MoveOperation.End)
         center_format = QTextBlockFormat()
         center_format.setAlignment(Qt.AlignmentFlag.AlignHCenter)

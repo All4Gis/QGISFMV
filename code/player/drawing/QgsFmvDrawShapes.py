@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Point / line / polygon / military symbol / censure painting on the video frame."""
+
 import os
 
 from qgis.PyQt.QtCore import QPointF, QPoint, QRectF

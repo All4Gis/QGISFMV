@@ -89,7 +89,10 @@ class ExportController:
         player = self._player
         if player.closing:
             return
-        if result is not None and result.get("videoPath") not in (None, player.fileName):
+        if result is not None and result.get("videoPath") not in (
+            None,
+            player.fileName,
+        ):
             return
         if e is not None or result is None:
             player.actionAudio.setEnabled(False)
@@ -472,7 +475,8 @@ class ExportController:
         if gdal is None:
             qgsu.showUserAndLogMessage(
                 QCoreApplication.translate(
-                    "QgsFmvPlayer", "GDAL is not available; cannot save georeferenced frame."
+                    "QgsFmvPlayer",
+                    "GDAL is not available; cannot save georeferenced frame.",
                 )
             )
             return

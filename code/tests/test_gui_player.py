@@ -24,13 +24,14 @@ import pytest
 _qgis_available = False
 try:
     from qgis.core import QgsApplication
+
     _qgis_available = QgsApplication.instance() is not None
 except ImportError:
     pass
 
 pytestmark = pytest.mark.skipif(
     not _qgis_available,
-    reason="QGIS runtime not available (run inside QGIS or via qgis --code)"
+    reason="QGIS runtime not available (run inside QGIS or via qgis --code)",
 )
 
 
@@ -41,6 +42,7 @@ pytestmark = pytest.mark.skipif(
 def harness():
     """Create and start a GUITestHarness, yield it, then tear down."""
     from QGISFMV.tests.gui_test_harness import GUITestHarness
+
     h = GUITestHarness()
     h.start()
     yield h
@@ -119,8 +121,11 @@ class TestPlayerMenus:
         player = harness.get_player()
         if player is None:
             pytest.skip("No player open yet")
-        for name in ["actionCenter_on_Platform", "actionCenter_on_Footprint",
-                      "actionCenter_Target"]:
+        for name in [
+            "actionCenter_on_Platform",
+            "actionCenter_on_Footprint",
+            "actionCenter_Target",
+        ]:
             action = harness.find_action(name, parent=player)
             assert action is not None, f"{name} not found"
 

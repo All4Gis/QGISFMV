@@ -103,7 +103,9 @@ class HudOverlay:
                 painter.setBrush(QBrush(QColor(180, 24, 24, 200)))
                 painter.setPen(Qt.PenStyle.NoPen)
                 painter.drawRect(0, 0, width, banner_h)
-                font = QFont("Courier", max(10, min(14, width // 70)), QFont.Weight.Bold)
+                font = QFont(
+                    "Courier", max(10, min(14, width // 70)), QFont.Weight.Bold
+                )
                 painter.setFont(font)
                 painter.setPen(QPen(QColor(255, 255, 255)))
                 painter.drawText(
@@ -118,7 +120,11 @@ class HudOverlay:
             painter.save()
             try:
                 painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-                top = 8 if not self._alert_active() else max(28, min(44, height // 12)) + 4
+                top = (
+                    8
+                    if not self._alert_active()
+                    else max(28, min(44, height // 12)) + 4
+                )
                 font = QFont("Courier", max(9, min(12, width // 85)), QFont.Weight.Bold)
                 painter.setFont(font)
                 metrics = painter.fontMetrics()

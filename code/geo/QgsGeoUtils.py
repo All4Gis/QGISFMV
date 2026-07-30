@@ -60,14 +60,14 @@ def _haversine_m(point1: Sequence[float], point2: Sequence[float]) -> float:
     dlat = lat2 - lat1
     dlon = lon2 - lon1
     a = sin(dlat / 2.0) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2.0) ** 2
-    return 2.0 * _EARTH_MEAN_RADIUS * asin(min(1.0, a ** 0.5))
+    return 2.0 * _EARTH_MEAN_RADIUS * asin(min(1.0, a**0.5))
 
 
 def _spherical_ring_area_m2(coordinates: Sequence[Sequence[float]]) -> float:
     """Spherical polygon area (m²) via spherical excess; fallback only."""
     if len(coordinates) < 3:
         return 0.0
-    rad = [ (radians(float(c[0])), radians(float(c[1]))) for c in coordinates ]
+    rad = [(radians(float(c[0])), radians(float(c[1]))) for c in coordinates]
     if rad[0] != rad[-1]:
         rad.append(rad[0])
     total = 0.0
@@ -136,7 +136,9 @@ def bearing(point1: Sequence[float], point2: Sequence[float]) -> float:
 # destination(point, distance, bearing) -> (lon, lat)
 #   Pure-Python great-circle — no QGIS equivalent.
 # ---------------------------------------------------------------------------
-def destination(point: Sequence[float], distance_m: float, bearing_deg: float) -> tuple[float, float]:
+def destination(
+    point: Sequence[float], distance_m: float, bearing_deg: float
+) -> tuple[float, float]:
     """
     Destination point given a start point, distance, and bearing.
 

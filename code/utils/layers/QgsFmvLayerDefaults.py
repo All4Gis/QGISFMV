@@ -11,6 +11,7 @@ module reads them through a module reference (``_base()``) instead of
 importing them by value — mirrors the pattern already used by
 QgsFmvDrawLayers.py.
 """
+
 import os
 
 from qgis.PyQt.QtGui import QColor, QFont
@@ -46,6 +47,7 @@ try:
         QgsPoint3DSymbol,
         QgsPolygon3DSymbol,
     )
+
     _HAS_3D = True
 except ImportError:
     QgsPhongMaterialSettings = None
@@ -65,6 +67,7 @@ def _base():
     to call time guarantees both modules are fully initialized.
     """
     import QGISFMV.utils.layers.QgsFmvLayers as _mod
+
     return _mod
 
 
@@ -257,7 +260,7 @@ def _apply_military_symbol(layer):
         point_symbol.deleteSymbolLayer(0)
         point_symbol.appendSymbolLayer(svg_layer)
         rule = QgsRuleBasedRenderer.Rule(point_symbol)
-        rule.setFilterExpression(f'"symbol_id" = \'{symbol_id}\'')
+        rule.setFilterExpression(f"\"symbol_id\" = '{symbol_id}'")
         rule.setActive(True)
         root.appendChild(rule)
 
@@ -708,7 +711,10 @@ def RestoreDefaultLayerStyles():
             ("DEFAULT",),
         ),
         settings_get("LAYERS", "point_lyr", base.Point_lyr): (SetDefaultPointStyle, ()),
-        settings_get("LAYERS", "symbol_lyr", base.Symbol_lyr): (SetDefaultMilitarySymbolStyle, ()),
+        settings_get("LAYERS", "symbol_lyr", base.Symbol_lyr): (
+            SetDefaultMilitarySymbolStyle,
+            (),
+        ),
         settings_get("LAYERS", "framecenter_lyr", base.FrameCenter_lyr): (
             SetDefaultFrameCenterStyle,
             (),
@@ -754,7 +760,5 @@ def RestoreDefaultLayerStyles():
                 try:
                     iface.layerTreeView().refreshLayerSymbology(layer.id())
                 except Exception as exc:
-                    log.debug(
-                        "Layer tree refresh failed for %s: %s", layer.name(), exc
-                    )
+                    log.debug("Layer tree refresh failed for %s: %s", layer.name(), exc)
     return restored

@@ -115,7 +115,11 @@ class CloseController:
         def _stop_video_widget_timers():
             vw = getattr(player, "videoWidget", None)
             if vw is not None:
-                for timer_name in ("_track_timer", "_display_refresh_timer", "_toolHintTimer"):
+                for timer_name in (
+                    "_track_timer",
+                    "_display_refresh_timer",
+                    "_toolHintTimer",
+                ):
                     timer = getattr(vw, timer_name, None)
                     if timer is not None:
                         timer.stop()
@@ -130,16 +134,16 @@ class CloseController:
         # Manager owns readers for reopen; dispose only when QGIS/plugin is exiting.
         reader = player.metaReader
         player.metaReader = None
-        parent_shutting_down = bool(
-            getattr(player.parent, "_shutting_down", False)
-        )
+        parent_shutting_down = bool(getattr(player.parent, "_shutting_down", False))
         if reader is not None and (self._isAppClosing() or parent_shutting_down):
             self._safe_call(reader.dispose, "metaReader.dispose")
 
         self._safe_call(player.stop, "stop")
 
         if player.parent is not None:
-            self._safe_call(player.parent.ToggleActiveFromTitle, "ToggleActiveFromTitle")
+            self._safe_call(
+                player.parent.ToggleActiveFromTitle, "ToggleActiveFromTitle"
+            )
 
         def _cleanup_metadata_dock():
             player.metadataDlg.hide()

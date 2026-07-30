@@ -30,7 +30,12 @@ def __getattr__(name):
         from QGISFMV.video.playback.QgsVideoRubberBands import RubberBandManager
 
         return RubberBandManager
-    if name in ("FilterState", "InteractionState", "MOUSE_MOVE_EVENT", "TrackLockState"):
+    if name in (
+        "FilterState",
+        "InteractionState",
+        "MOUSE_MOVE_EVENT",
+        "TrackLockState",
+    ):
         from QGISFMV.video.playback import QgsVideoState as _state
 
         return getattr(_state, name)

@@ -7,6 +7,7 @@ MOUSE_MOVE_EVENT = "mouseMoveEvent"
 
 class TrackLockState(Enum):
     """Object tracking lock states."""
+
     IDLE = "idle"
     LOCKED = "locked"
     WEAK = "weak"

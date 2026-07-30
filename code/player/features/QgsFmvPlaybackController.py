@@ -198,9 +198,7 @@ class PlaybackController:
                 if isStreamUri(videoPath)
                 else QUrl.fromLocalFile(videoPath)
             )
-            log.info(
-                "Opening video: %s (%s)", videoPath, type(player.player).__name__
-            )
+            log.info("Opening video: %s (%s)", videoPath, type(player.player).__name__)
             if player._loadedMediaPath != videoPath:
                 player._loadedMediaPath = videoPath
                 player._pendingPlayOnLoad = True

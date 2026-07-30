@@ -44,6 +44,7 @@ class MosaicController:
                 task.cancel()
             except Exception as exc:
                 from QGISFMV.utils.logging import log
+
                 log.debug("mosaic task cancel failed: %s", exc)
 
         # Drop layer reference; RemoveGroupByName / project cleanup owns removal.

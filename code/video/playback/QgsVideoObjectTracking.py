@@ -7,6 +7,7 @@ persistent-layer publishing that goes along with it. Tracking *state*
 stays on the widget itself since it is read directly by the paint pipeline;
 this controller only owns the logic that mutates it.
 """
+
 from qgis.PyQt.QtCore import Qt, QPoint, QRect, QSize, QCoreApplication
 from qgis.core import Qgis as QGis, QgsPointXY, QgsWkbTypes
 

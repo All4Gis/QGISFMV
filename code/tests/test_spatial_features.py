@@ -32,7 +32,10 @@ class TestSpatialHelpers:
         assert near[2] == 2.0
         assert spatial.box_center((0, 0, 10, 20)) == (5.0, 10.0)
         assert spatial.metadata_lat_lon(
-            {0: ["Frame Center Latitude", "40.1"], 1: ["Frame Center Longitude", "-3.2"]}
+            {
+                0: ["Frame Center Latitude", "40.1"],
+                1: ["Frame Center Longitude", "-3.2"],
+            }
         ) == (40.1, -3.2)
         hits = spatial.detections_inside_ring(
             {
@@ -292,7 +295,7 @@ class TestMissionPackageHelpers:
                     return [Ev()]
 
             class Idx:
-                samples = [( -3.0, 40.0, 1.0)]
+                samples = [(-3.0, 40.0, 1.0)]
 
             player = MagicMock()
             player.fileName = "/tmp/demo.ts"

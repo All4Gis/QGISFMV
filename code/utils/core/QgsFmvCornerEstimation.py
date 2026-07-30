@@ -14,11 +14,15 @@ reference (``_base()``) to avoid a circular import at load time, since
 QgsFmvGeoReferencing.py re-exports this module's functions for backward
 compatibility.
 """
+
 from math import atan, tan, sqrt, radians, degrees
 
 from QGISFMV.utils.logging import log
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance, destination as _geo_destination
+from QGISFMV.geo.QgsGeoUtils import (
+    distance as _geo_distance,
+    destination as _geo_destination,
+)
 
 DEFAULT_TARGET_WIDTH = 200.0
 
@@ -32,6 +36,7 @@ def _base():
     guarantees both modules are fully initialized.
     """
     import QGISFMV.utils.core.QgsFmvGeoReferencing as _mod
+
     return _mod
 
 
@@ -68,20 +73,34 @@ def CornerEstimationWithOffsets(packet):
         # If no framcenter (f.i. horizontal target) don't comptpute footprint, beams and frame center
         if frameCenterPoint[0] is None and frameCenterPoint[1] is None:
             from QGISFMV.utils.core.QgsFmvUtils import gv
+
             gv.setTransform(None)
             return True
         if base.hasElevationModel():
-            cornerPointUL = base.GetLine3DIntersectionWithDEM(base.GetSensor(), cornerPointUL)
-            cornerPointUR = base.GetLine3DIntersectionWithDEM(base.GetSensor(), cornerPointUR)
-            cornerPointLR = base.GetLine3DIntersectionWithDEM(base.GetSensor(), cornerPointLR)
-            cornerPointLL = base.GetLine3DIntersectionWithDEM(base.GetSensor(), cornerPointLL)
+            cornerPointUL = base.GetLine3DIntersectionWithDEM(
+                base.GetSensor(), cornerPointUL
+            )
+            cornerPointUR = base.GetLine3DIntersectionWithDEM(
+                base.GetSensor(), cornerPointUR
+            )
+            cornerPointLR = base.GetLine3DIntersectionWithDEM(
+                base.GetSensor(), cornerPointLR
+            )
+            cornerPointLL = base.GetLine3DIntersectionWithDEM(
+                base.GetSensor(), cornerPointLL
+            )
             frameCenterPoint = base.GetLine3DIntersectionWithDEM(
                 base.GetSensor(), frameCenterPoint
             )
 
         base._update_footprint_beams_gcp(
-            packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL,
-            frameCenterPoint, base.hasElevationModel(),
+            packet,
+            cornerPointUL,
+            cornerPointUR,
+            cornerPointLR,
+            cornerPointLL,
+            frameCenterPoint,
+            base.hasElevationModel(),
         )
 
     except Exception as e:
@@ -173,14 +192,16 @@ def CornerEstimationWithoutOffsets(
         half_target_width = targetWidth / 2.0
 
         # Slant range from sensor to frame center (hypotenuse of ground dist + altitude).
-        slant_to_center = sqrt(distance_to_center ** 2 + sensorGroundAltitude ** 2)
+        slant_to_center = sqrt(distance_to_center**2 + sensorGroundAltitude**2)
         half_cross_track = targetWidth * aspect_ratio / 2.0
 
         # Angular half-width of the target footprint as seen from the sensor.
         half_target_angle = degrees(atan(half_target_width / distance_to_center))
 
         # Angular elevation and depression angles for near/far edges of the footprint.
-        center_elevation_angle = degrees(atan(distance_to_center / sensorGroundAltitude))
+        center_elevation_angle = degrees(
+            atan(distance_to_center / sensorGroundAltitude)
+        )
         footprint_half_angle = degrees(atan(half_cross_track / slant_to_center))
 
         near_angle = center_elevation_angle - footprint_half_angle
@@ -195,12 +216,16 @@ def CornerEstimationWithoutOffsets(
         dist_to_far_edge = far_ground_dist - distance_to_center
 
         # Cross-track offsets for near and far edges.
-        near_cross_track = half_target_width - dist_to_near_edge * tan(radians(half_target_angle))
-        far_cross_track = half_target_width + dist_to_far_edge * tan(radians(half_target_angle))
+        near_cross_track = half_target_width - dist_to_near_edge * tan(
+            radians(half_target_angle)
+        )
+        far_cross_track = half_target_width + dist_to_far_edge * tan(
+            radians(half_target_angle)
+        )
 
         # Distances from frame center to each corner pair (near-left/right, far-left/right).
-        near_corner_dist = sqrt(dist_to_near_edge ** 2 + near_cross_track ** 2)
-        far_corner_dist = sqrt(dist_to_far_edge ** 2 + far_cross_track ** 2)
+        near_corner_dist = sqrt(dist_to_near_edge**2 + near_cross_track**2)
+        far_corner_dist = sqrt(dist_to_far_edge**2 + far_cross_track**2)
 
         # Angular offsets for the near and far cross-track corners.
         near_cross_angle = degrees(atan(near_cross_track / dist_to_near_edge))
@@ -208,28 +233,45 @@ def CornerEstimationWithoutOffsets(
 
         # Compute four corners: UL, UR (far edge), LR, LL (near edge).
         bearing_ul = (absolute_heading + 360.0 - far_cross_angle) % 360.0
-        cornerPointUL = list(reversed(_geo_destination(center_point, far_corner_dist, bearing_ul)))
+        cornerPointUL = list(
+            reversed(_geo_destination(center_point, far_corner_dist, bearing_ul))
+        )
 
         bearing_ur = (absolute_heading + far_cross_angle) % 360.0
-        cornerPointUR = list(reversed(_geo_destination(center_point, far_corner_dist, bearing_ur)))
+        cornerPointUR = list(
+            reversed(_geo_destination(center_point, far_corner_dist, bearing_ur))
+        )
 
         bearing_lr = (absolute_heading + 180.0 - near_cross_angle) % 360.0
-        cornerPointLR = list(reversed(_geo_destination(center_point, near_corner_dist, bearing_lr)))
+        cornerPointLR = list(
+            reversed(_geo_destination(center_point, near_corner_dist, bearing_lr))
+        )
 
         bearing_ll = (absolute_heading + 180.0 + near_cross_angle) % 360.0
-        cornerPointLL = list(reversed(_geo_destination(center_point, near_corner_dist, bearing_ll)))
+        cornerPointLL = list(
+            reversed(_geo_destination(center_point, near_corner_dist, bearing_ll))
+        )
 
         frameCenterPoint = [frameCenterLat, frameCenterLon, frameCenterElevation]
 
         if frameCenterPoint[0] is None and frameCenterPoint[1] is None:
             from QGISFMV.utils.core.QgsFmvUtils import gv
+
             gv.setTransform(None)
             return True
         if base.hasElevationModel():
-            cornerPointUL = base.GetLine3DIntersectionWithDEM(base.GetSensor(), cornerPointUL)
-            cornerPointUR = base.GetLine3DIntersectionWithDEM(base.GetSensor(), cornerPointUR)
-            cornerPointLR = base.GetLine3DIntersectionWithDEM(base.GetSensor(), cornerPointLR)
-            cornerPointLL = base.GetLine3DIntersectionWithDEM(base.GetSensor(), cornerPointLL)
+            cornerPointUL = base.GetLine3DIntersectionWithDEM(
+                base.GetSensor(), cornerPointUL
+            )
+            cornerPointUR = base.GetLine3DIntersectionWithDEM(
+                base.GetSensor(), cornerPointUR
+            )
+            cornerPointLR = base.GetLine3DIntersectionWithDEM(
+                base.GetSensor(), cornerPointLR
+            )
+            cornerPointLL = base.GetLine3DIntersectionWithDEM(
+                base.GetSensor(), cornerPointLL
+            )
             frameCenterPoint = base.GetLine3DIntersectionWithDEM(
                 base.GetSensor(), frameCenterPoint
             )
@@ -238,8 +280,13 @@ def CornerEstimationWithoutOffsets(
             return cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL
 
         base._update_footprint_beams_gcp(
-            packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL,
-            frameCenterPoint, base.hasElevationModel(),
+            packet,
+            cornerPointUL,
+            cornerPointUR,
+            cornerPointLR,
+            cornerPointLL,
+            frameCenterPoint,
+            base.hasElevationModel(),
         )
 
     except Exception as e:

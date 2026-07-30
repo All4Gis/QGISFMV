@@ -7,6 +7,7 @@ measure-distance/measure-area layer sync functions. Generic layer helpers
 QgsFmvLayers.py and are accessed here through a module reference so this
 module always sees their live values.
 """
+
 from itertools import groupby
 
 from qgis.PyQt.QtCore import QPointF
@@ -34,6 +35,7 @@ def _base():
     to call time guarantees both modules are fully initialized.
     """
     import QGISFMV.utils.layers.QgsFmvLayers as _mod
+
     return _mod
 
 
@@ -49,7 +51,9 @@ def _delete_last_feature(layer_name, group_name=None):
         _base().CommonLayer(layer)
 
 
-def AddDrawMilitarySymbolOnMap(pointIndex, Longitude, Latitude, Altitude, symbol_id, unit_name):
+def AddDrawMilitarySymbolOnMap(
+    pointIndex, Longitude, Latitude, Altitude, symbol_id, unit_name
+):
     """Add a military symbol point on the map."""
     symbolLyr = qgsu.selectLayerByName(_base().Symbol_lyr, _base().groupName)
     if symbolLyr is None:
@@ -225,12 +229,14 @@ def _split_measure_chains(points):
 def _format_length_label(meters):
     """Format a distance in meters as a human-readable string (m or km)."""
     from QGISFMV.utils.formatting import format_length
+
     return format_length(meters)
 
 
 def _format_area_label(area_m2):
     """Format an area in square meters as a human-readable string (m2, ha, or km2)."""
     from QGISFMV.utils.formatting import format_area
+
     return format_area(area_m2)
 
 

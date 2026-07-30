@@ -80,8 +80,12 @@ def save_screenshot(img, name):
 def image_hash(img):
     """Return a perceptual hash (average hash) of a QImage for comparison."""
     # Scale down to 16×16 grayscale
-    small = img.scaled(16, 16, Qt.AspectRatioMode.IgnoreAspectRatio,
-                       Qt.TransformationMode.FastTransformation)
+    small = img.scaled(
+        16,
+        16,
+        Qt.AspectRatioMode.IgnoreAspectRatio,
+        Qt.TransformationMode.FastTransformation,
+    )
     pixels = []
     for y in range(16):
         for x in range(16):
@@ -139,6 +143,7 @@ class GUITestHarness:
         # Ensure QGIS app is running
         if QgsApplication.instance() is None:
             import sys
+
             QgsApplication.setPrefixPath("/Applications/QGIS.app/Contents/MacOS", True)
             self._qgs_app = QgsApplication([], False)
             self._qgs_app.initQgis()
@@ -147,10 +152,12 @@ class GUITestHarness:
 
         # Create a mock iface if needed
         from qgis.utils import iface as _iface
+
         self._iface = _iface
 
         # Load the plugin
         from QGISFMV.QgsFmv import Fmv
+
         self._plugin = Fmv(self._iface)
         self._started = True
         _ensure_dirs()
@@ -192,6 +199,7 @@ class GUITestHarness:
     def _get_main_window(self):
         """Return the QGIS main window."""
         from qgis.utils import iface
+
         if iface is not None:
             return iface.mainWindow()
         return QApplication.activeWindow()
@@ -283,6 +291,7 @@ class GUITestHarness:
         if not baseline_path.exists():
             # First run — save as baseline
             import shutil
+
             shutil.copy2(str(current_path), str(baseline_path))
             return True, 1.0
 
@@ -296,7 +305,9 @@ class GUITestHarness:
             diff.fill(QColor(255, 255, 255))
             for y in range(min(current_img.height(), baseline_img.height())):
                 for x in range(min(current_img.width(), baseline_img.width())):
-                    if qGray(current_img.pixel(x, y)) != qGray(baseline_img.pixel(x, y)):
+                    if qGray(current_img.pixel(x, y)) != qGray(
+                        baseline_img.pixel(x, y)
+                    ):
                         diff.setPixel(x, y, QColor(255, 0, 0).rgba())
             diff.save(str(diff_path), "PNG")
 
@@ -314,6 +325,7 @@ class GUITestHarness:
         dst = _BASELINES_DIR / f"{name}.png"
         if src.exists():
             import shutil
+
             shutil.copy2(str(src), str(dst))
 
     # ------------------------------------------------------------------

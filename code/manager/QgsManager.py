@@ -59,6 +59,7 @@ def _parse_extensions():
         return ast.literal_eval(get("FILES", "exts"))
     except (SyntaxError, ValueError):
         from QGISFMV.utils.logging import log
+
         log.warning("Failed to parse [FILES] exts, using defaults")
         return _DEFAULT_EXTS
 
@@ -141,6 +142,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 self._PlayerDlg.applyRuntimeSettings()
             except Exception as exc:
                 from QGISFMV.utils.logging import log
+
                 log.debug("applyRuntimeSettings failed: %s", exc)
 
     def loadVideosFromSettings(self):
@@ -261,6 +263,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
         """Add file Video to new Row"""
         self.loading = True
         from QGISFMV.utils.constants import MAX_VIDEOS_IN_MANAGER
+
         if self.VManager.rowCount() > MAX_VIDEOS_IN_MANAGER:
             qgsu.showUserAndLogMessage(
                 QCoreApplication.translate(
@@ -428,6 +431,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 reader.dispose()
             except Exception as exc:
                 from QGISFMV.utils.logging import log
+
                 log.debug("dispose metaReader row %s failed: %s", row_id, exc)
             row_data["metaReader"] = None
         self._row_data.clear()
@@ -440,6 +444,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 plugin._FMVManager = None
         except Exception as exc:
             from QGISFMV.utils.logging import log
+
             log.debug("clear plugin manager ref failed: %s", exc)
 
     def shutdown(self):
@@ -456,6 +461,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
                 player.forceClose()
             except Exception as exc:
                 from QGISFMV.utils.logging import log
+
                 log.debug("shutdown player.forceClose failed: %s", exc)
             try:
                 self.iface.removeDockWidget(player)

@@ -446,7 +446,9 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         settings = QSettings()
         ns = getNameSpace()
         settings.setValue(f"{ns}/Player/ToolBar/visible", self.DrawToolBar.isVisible())
-        settings.setValue(f"{ns}/Player/ToolBar/geometry", self.DrawToolBar.saveGeometry())
+        settings.setValue(
+            f"{ns}/Player/ToolBar/geometry", self.DrawToolBar.saveGeometry()
+        )
 
     def _restoreToolBarState(self):
         """Restore toolbar geometry and visibility from QSettings."""
@@ -462,28 +464,49 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
     # All one-liner filter methods that simply forward to self.filterManager.
     # Method names MUST remain callable as instance attributes because they
     # are connected to Qt signals in ui_FmvPlayer.ui.
-    _FILTER_DELEGATES = frozenset({
-        # Basic image filters
-        "grayFilter", "MirrorHorizontalFilter", "edgeFilter",
-        "invertColorFilter", "autoContrastFilter", "monoFilter",
-        "brightnessContrastFilter",
-        # Enhancement filters
-        "claheFilter", "sharpenFilter", "sobelFilter", "roadEnhanceFilter",
-        # Motion / detection filters
-        "motionDetectionFilter", "backgroundSubtractionFilter", "hotspotFilter",
-        # Vegetation / spectral index filters
-        "falseColorFilter", "exgFilter", "exrFilter", "variFilter",
-        "dehazeFilter", "nrviFilter",
-        # Segmentation filters
-        "buildingDetectionFilter", "roadSegmentationFilter",
-        "vehicleSegmentationFilter", "personSegmentationFilter",
-        # Fire / smoke / flood filters
-        "fireDetectionFilter", "smokeDetectionFilter", "floodDetectionFilter",
-        # Brightness / contrast helpers
-        "setBrightness", "setContrastLevel",
-        # Brightness–contrast dialog lifecycle
-        "_onBCDialogClosed", "_closeBCDialog",
-    })
+    _FILTER_DELEGATES = frozenset(
+        {
+            # Basic image filters
+            "grayFilter",
+            "MirrorHorizontalFilter",
+            "edgeFilter",
+            "invertColorFilter",
+            "autoContrastFilter",
+            "monoFilter",
+            "brightnessContrastFilter",
+            # Enhancement filters
+            "claheFilter",
+            "sharpenFilter",
+            "sobelFilter",
+            "roadEnhanceFilter",
+            # Motion / detection filters
+            "motionDetectionFilter",
+            "backgroundSubtractionFilter",
+            "hotspotFilter",
+            # Vegetation / spectral index filters
+            "falseColorFilter",
+            "exgFilter",
+            "exrFilter",
+            "variFilter",
+            "dehazeFilter",
+            "nrviFilter",
+            # Segmentation filters
+            "buildingDetectionFilter",
+            "roadSegmentationFilter",
+            "vehicleSegmentationFilter",
+            "personSegmentationFilter",
+            # Fire / smoke / flood filters
+            "fireDetectionFilter",
+            "smokeDetectionFilter",
+            "floodDetectionFilter",
+            # Brightness / contrast helpers
+            "setBrightness",
+            "setContrastLevel",
+            # Brightness–contrast dialog lifecycle
+            "_onBCDialogClosed",
+            "_closeBCDialog",
+        }
+    )
 
     def __getattr__(self, name):
         if name in self._FILTER_DELEGATES:
@@ -495,8 +518,11 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
                 sender = self.sender()
                 self._sender = sender
                 return getattr(self.filterManager, name)(*args, **kwargs)
+
             return _delegate
-        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+        raise AttributeError(
+            f"'{type(self).__name__}' object has no attribute '{name}'"
+        )
 
     def magnifier(self, value):
         """Magnifier Glass Utils (Qt Designer slot - delegates to DrawToolsController)."""
@@ -741,9 +767,7 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         path = video_path if video_path is not None else self.fileName
         if not path:
             return None
-        return (
-            streamDisplayName(path) if isStreamUri(path) else os.path.basename(path)
-        )
+        return streamDisplayName(path) if isStreamUri(path) else os.path.basename(path)
 
     def prepareSwitchVideo(self):
         """Confirm and reset the current session when switching manager videos."""
@@ -831,6 +855,7 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         if on:
             try:
                 from QGISFMV.utils.core.QgsFmvUtils import gv
+
                 self.hudOverlay.updateFromState(gv)
             except Exception as exc:
                 log.debug("HUD overlay update failed: %s", exc)
@@ -843,6 +868,7 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         if checked:
             self.miniMapOverlay.set_group(self._videoGroupName())
             from QGISFMV.utils.core.QgsFmvUtils import gv
+
             self.miniMapOverlay.update_from_state(gv)
         return checked
 
@@ -899,7 +925,8 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         count = len(self.alertManager.rules())
         if count == 0:
             qgsu.showUserAndLogMessage(
-                "", "No alert rules to clear.",
+                "",
+                "No alert rules to clear.",
                 level=QGis.MessageLevel.Warning,
             )
             return

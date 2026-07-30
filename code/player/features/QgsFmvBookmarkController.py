@@ -131,9 +131,7 @@ class BookmarkController(QObject):
             label = f"{label} {timeline.eventCount() + 1}"
         if lat is None or lon is None:
             lat, lon, alt = self._current_geo()
-        ev = timeline.addEvent(
-            time_sec, label=label, lat=lat, lon=lon, alt=alt
-        )
+        ev = timeline.addEvent(time_sec, label=label, lat=lat, lon=lon, alt=alt)
         story = getattr(self._player, "storyboardController", None)
         if story is not None and hasattr(story, "onBookmark"):
             try:
@@ -172,8 +170,10 @@ class BookmarkController(QObject):
         timeline = self._timeline()
         if timeline is None:
             return None
-        events = timeline.events() if hasattr(timeline, "events") else list(
-            getattr(timeline, "_events", [])
+        events = (
+            timeline.events()
+            if hasattr(timeline, "events")
+            else list(getattr(timeline, "_events", []))
         )
         if not events:
             qgsu.showUserAndLogMessage(

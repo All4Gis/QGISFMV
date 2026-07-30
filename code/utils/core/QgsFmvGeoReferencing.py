@@ -31,6 +31,7 @@ from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
 # Homography helpers
 # ---------------------------------------------------------------------------
 
+
 def _find_homography_numpy(src_pts, dst_pts):
     """Perspective homography without OpenCV (DLT, 3x3)."""
     src = np.asarray(src_pts, dtype=np.float32)
@@ -66,9 +67,11 @@ def _find_homography(src_pts, dst_pts):
 # DEM / DTM helpers
 # ---------------------------------------------------------------------------
 
+
 def hasElevationModel():
     """Check if DEM is loaded"""
     from QGISFMV.utils.core.QgsFmvUtils import dtm_data
+
     return bool(dtm_data)
 
 
@@ -80,6 +83,7 @@ def GetDemAltAt(lon, lat):
         dtm_colLowerBound,
         dtm_rowLowerBound,
     )
+
     alt = 0
     if dtm_transform is None or not dtm_data:
         return float(alt)
@@ -108,6 +112,7 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
         dtm_colLowerBound,
         dtm_rowLowerBound,
     )
+
     sensorLat = sensorPt[0]
     sensorLon = sensorPt[1]
     sensorAlt = sensorPt[2]
@@ -116,7 +121,10 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
     try:
         targetAlt = targetPt[2]
     except (IndexError, TypeError) as e:
-        log.debug("GetLine3DIntersectionWithDEM: no target altitude, using frame center: %s", e)
+        log.debug(
+            "GetLine3DIntersectionWithDEM: no target altitude, using frame center: %s",
+            e,
+        )
         targetAlt = GetFrameCenter()[2]
 
     distance = _geo_distance([sensorLat, sensorLon], [targetLat, targetLon])
@@ -167,15 +175,18 @@ def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
 # State accessors
 # ---------------------------------------------------------------------------
 
+
 def GetSensor():
     """Get Sensor values"""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     return [gv.getSensorLatitude(), gv.getSensorLongitude(), gv.getSensorTrueAltitude()]
 
 
 def GetFrameCenter():
     """Get Frame Center values"""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     sensorTrueAltitude = gv.getSensorTrueAltitude()
     # if sensor height is null, compute it from sensor altitude.
     if gv.getFrameCenterElevation() is None:
@@ -194,18 +205,21 @@ def GetFrameCenter():
 def GetGCPGeoTransform():
     """Return Geotransform"""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     return gv.getTransform()
 
 
 def GetGeotransform_affine():
     """Get current frame affine transformation"""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     return gv.getAffineTransform()
 
 
 def SetImageSize(w, h):
     """Set Image Size — skip if unchanged to avoid redundant state updates."""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     if gv is None or w <= 0 or h <= 0:
         return
     if gv.getXSize() == w and gv.getYSize() == h:
@@ -217,6 +231,7 @@ def SetImageSize(w, h):
 def GetImageWidth():
     """Get Image Width"""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     if gv is None:
         return 0
     return gv.getXSize()
@@ -225,6 +240,7 @@ def GetImageWidth():
 def GetImageHeight():
     """Get Image Height"""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     if gv is None:
         return 0
     return gv.getYSize()
@@ -233,6 +249,7 @@ def GetImageHeight():
 # ---------------------------------------------------------------------------
 # Affine / transform helpers
 # ---------------------------------------------------------------------------
+
 
 def _affineTransformIsUsable(affine):
     if affine is None or len(affine) != 6:
@@ -243,6 +260,7 @@ def _affineTransformIsUsable(affine):
 def _refreshAffineFromStoredCorners():
     """Recompute GDAL affine when corners are known but image size was still zero."""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     if gv is None:
         return False
     ul = gv.getCornerUL()
@@ -266,6 +284,7 @@ def _refreshAffineFromStoredCorners():
 def _footprint_inputs_changed(packet):
     """Return True when footprint corner inputs differ from the last computed geometry."""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     if gv is None:
         return True
     if packet.CornerLatitudePoint1Full is None:
@@ -314,6 +333,7 @@ def _footprint_inputs_changed(packet):
 # GCP / GeoTransform
 # ---------------------------------------------------------------------------
 
+
 def SetGCPsToGeoTransform(
     cornerPointUL,
     cornerPointUR,
@@ -325,6 +345,7 @@ def SetGCPsToGeoTransform(
 ):
     """Make Geotranform from pixel to lon lat coordinates"""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     gcps = []
     gv.setCornerUL(cornerPointUL)
     gv.setCornerUR(cornerPointUR)
@@ -415,5 +436,3 @@ def _update_footprint_beams_gcp(packet, ul, ur, lr, ll, frame_center, ele):
 
 # Shared helper lives above; corner-point estimation lives in
 # QgsFmvCornerEstimation.py (imported by QgsFmvUtils / callers directly).
-
-

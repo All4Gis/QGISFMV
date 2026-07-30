@@ -13,8 +13,8 @@ Python conventions for QGIS FMV. PEP 8 base with QGIS/PyQt habits used in this r
 
 ```bash
 # CI-aligned linter (never lint via the QGISFMV→code symlink)
-pycodestyle --ignore=E501 code/ --exclude=code/gui,code/QGISFMV
-pycodestyle --ignore=E501,W504 deploy/
+pycodestyle --ignore=E203,E501,W503 code/ --exclude=code/gui,code/QGISFMV
+pycodestyle --ignore=E203,E501,W503,W504 deploy/
 
 # Optional
 black code/ --exclude code/gui

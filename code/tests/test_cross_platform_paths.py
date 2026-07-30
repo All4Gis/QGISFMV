@@ -44,7 +44,9 @@ class TestDefaultFfmpegFolder:
         fake.parent.mkdir(parents=True)
         fake.write_text("x")
         monkeypatch.setattr(
-            settings.shutil, "which", lambda name: str(fake) if name == "ffmpeg" else None
+            settings.shutil,
+            "which",
+            lambda name: str(fake) if name == "ffmpeg" else None,
         )
         folder = settings._default_ffmpeg_folder()
         assert folder == str(fake.parent)
@@ -56,7 +58,9 @@ class TestDefaultFfmpegFolder:
         fake.parent.mkdir(parents=True)
         fake.write_text("x")
         monkeypatch.setattr(
-            settings.shutil, "which", lambda name: str(fake) if name == "ffmpeg" else None
+            settings.shutil,
+            "which",
+            lambda name: str(fake) if name == "ffmpeg" else None,
         )
         folder = settings._default_ffmpeg_folder()
         assert folder == str(fake.parent)

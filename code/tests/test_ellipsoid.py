@@ -20,6 +20,7 @@ class TestDestination:
     def _destination(self, point, distance_m, bearing_deg):
         """Import destination without QGIS dependency."""
         from math import degrees, radians, sin, cos, asin, atan2
+
         R = 6371008.8
         lon1, lat1 = (radians(c) for c in point)
         rb = radians(bearing_deg)
@@ -98,26 +99,28 @@ class TestHaversineFallback:
 _qgis_available = False
 try:
     from qgis.core import QgsApplication
+
     _qgis_available = QgsApplication.instance() is not None
 except ImportError:
     pass
 
 pytestmark_qgis = pytest.mark.skipif(
-    not _qgis_available,
-    reason="QGIS runtime not available"
+    not _qgis_available, reason="QGIS runtime not available"
 )
 
 
-@ pytestmark_qgis
+@pytestmark_qgis
 class TestDistanceQGIS:
     """Test distance() using QgsDistanceArea (requires QGIS)."""
 
     def test_same_point(self):
         from QGISFMV.geo.QgsGeoUtils import distance
+
         assert distance((0.0, 0.0), (0.0, 0.0)) == 0.0
 
     def test_madrid_barcelona(self):
         from QGISFMV.geo.QgsGeoUtils import distance
+
         madrid = (-3.7038, 40.4168)
         barcelona = (2.1734, 41.3851)
         d = distance(madrid, barcelona)
@@ -125,66 +128,76 @@ class TestDistanceQGIS:
 
     def test_symmetry(self):
         from QGISFMV.geo.QgsGeoUtils import distance
+
         a = (0.0, 0.0)
         b = (10.0, 10.0)
         assert distance(a, b) == pytest.approx(distance(b, a), rel=1e-6)
 
     def test_pole_to_pole(self):
         from QGISFMV.geo.QgsGeoUtils import distance
+
         d = distance((0.0, 89.0), (0.0, -89.0))
         assert 19_000_000 < d < 21_000_000
 
     def test_known_distance_1_degree_lat(self):
         """1 degree of latitude ≈ 111 km."""
         from QGISFMV.geo.QgsGeoUtils import distance
+
         d = distance((0.0, 0.0), (0.0, 1.0))
         assert 110_000 < d < 112_000
 
     def test_known_distance_500km_north(self):
         """~500 km north from Madrid along the same meridian."""
         from QGISFMV.geo.QgsGeoUtils import distance
+
         d = distance((-3.7038, 40.4168), (-3.7038, 44.9))
         assert 480_000 < d < 520_000
 
 
-@ pytestmark_qgis
+@pytestmark_qgis
 class TestBearingQGIS:
     """Test bearing() using QgsDistanceArea (requires QGIS)."""
 
     def test_bearing_north(self):
         from QGISFMV.geo.QgsGeoUtils import bearing
+
         b = bearing((0.0, 0.0), (0.0, 10.0))
         assert b == pytest.approx(0.0, abs=1.0)
 
     def test_bearing_east(self):
         from QGISFMV.geo.QgsGeoUtils import bearing
+
         b = bearing((0.0, 0.0), (10.0, 0.0))
         assert b == pytest.approx(90.0, abs=1.0)
 
     def test_bearing_south(self):
         from QGISFMV.geo.QgsGeoUtils import bearing
+
         b = bearing((0.0, 10.0), (0.0, 0.0))
         assert b == pytest.approx(180.0, abs=1.0)
 
     def test_bearing_west(self):
         from QGISFMV.geo.QgsGeoUtils import bearing
+
         b = bearing((0.0, 0.0), (-10.0, 0.0))
         assert b == pytest.approx(270.0, abs=5.0)
 
     def test_bearing_symmetry(self):
         from QGISFMV.geo.QgsGeoUtils import bearing
+
         b_ab = bearing((0.0, 0.0), (10.0, 10.0))
         b_ba = bearing((10.0, 10.0), (0.0, 0.0))
         # Back bearing should be roughly opposite
         assert (b_ab + 180) % 360 == pytest.approx(b_ba, abs=5.0)
 
 
-@ pytestmark_qgis
+@pytestmark_qgis
 class TestPolygonAreaQGIS:
     """Test polygon_area() using QgsDistanceArea (requires QGIS)."""
 
     def test_degenerate_ring(self):
         from QGISFMV.geo.QgsGeoUtils import polygon_area
+
         assert polygon_area([]) == 0.0
         assert polygon_area([(0, 0)]) == 0.0
         assert polygon_area([(0, 0), (1, 1)]) == 0.0
@@ -192,6 +205,7 @@ class TestPolygonAreaQGIS:
     def test_known_area(self):
         """A 1-degree × 1-degree box at the equator ≈ 12,364 km²."""
         from QGISFMV.geo.QgsGeoUtils import polygon_area
+
         ring = [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)]
         area = polygon_area(ring)
         assert 12_000_000_000 < area < 12_500_000_000
@@ -199,6 +213,7 @@ class TestPolygonAreaQGIS:
     def test_small_square(self):
         """A small square near Madrid."""
         from QGISFMV.geo.QgsGeoUtils import polygon_area
+
         # ~1km × 1km square
         ring = [
             (-3.70, 40.41),

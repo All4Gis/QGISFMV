@@ -115,9 +115,7 @@ def bookmark_mod():
         yield mod
     finally:
         restore_modules(saved)
-        sys.modules.pop(
-            "QGISFMV.player.features.QgsFmvBookmarkController", None
-        )
+        sys.modules.pop("QGISFMV.player.features.QgsFmvBookmarkController", None)
 
 
 class TestBookmarkExportHelpers:

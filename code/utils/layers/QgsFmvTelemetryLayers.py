@@ -12,6 +12,7 @@ still live in QgsFmvLayers.py and are accessed here through a module
 reference (``_base()``) so this module always sees their live values —
 mirrors the pattern already used by QgsFmvDrawLayers.py.
 """
+
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.core import (
     QgsFeature,
@@ -49,6 +50,7 @@ def _base():
     to call time guarantees both modules are fully initialized.
     """
     import QGISFMV.utils.layers.QgsFmvLayers as _mod
+
     return _mod
 
 
@@ -79,7 +81,11 @@ def _update_beam_corner(beam_id, lon, lat, alt, corner, provider):
         {beam_id: {0: lon, 1: lat, 2: alt, 3: corner[1], 4: corner[0]}}
     )
     provider.changeGeometryValues(
-        {beam_id: QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt), _corner_point_3d(corner)))}
+        {
+            beam_id: QgsGeometry(
+                QgsLineString(QgsPoint(lon, lat, alt), _corner_point_3d(corner))
+            )
+        }
     )
 
 
@@ -183,13 +189,13 @@ def UpdateFootPrintData(
                 base.crtSensorSrc = imgSS
 
             corners = [cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]
-            ring = QgsLineString([_corner_point_3d(c) for c in corners] + [_corner_point_3d(corners[0])])
+            ring = QgsLineString(
+                [_corner_point_3d(c) for c in corners] + [_corner_point_3d(corners[0])]
+            )
             polygon = QgsPolygon()
             polygon.setExteriorRing(ring)
             surface = QgsGeometry(polygon)
-            attrib = {
-                i: corners[i // 2][1 - (i % 2)] for i in range(8)
-            }
+            attrib = {i: corners[i // 2][1 - (i % 2)] for i in range(8)}
 
             provider = footprintLyr.dataProvider()
             flat_attrs = [coord for c in corners for coord in (c[1], c[0])]
@@ -230,10 +236,24 @@ def UpdateBeamsData(
     try:
         if all(
             v is not None
-            for v in [beamsLyr, lat, lon, alt, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]
+            for v in [
+                beamsLyr,
+                lat,
+                lon,
+                alt,
+                cornerPointUL,
+                cornerPointUR,
+                cornerPointLR,
+                cornerPointLL,
+            ]
         ) and all(
             v >= 2
-            for v in [len(cornerPointUL), len(cornerPointUR), len(cornerPointLR), len(cornerPointLL)]
+            for v in [
+                len(cornerPointUL),
+                len(cornerPointUR),
+                len(cornerPointLR),
+                len(cornerPointLL),
+            ]
         ):
             lon, lat, alt = float(lon), float(lat), float(alt)
             corners = [cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL]
@@ -316,12 +336,8 @@ def UpdateTrajectoryData(packet, ele):
 
             provider = trajectoryLyr.dataProvider()
             line.addVertex(point)
-            provider.changeGeometryValues(
-                {feature_id: QgsGeometry(line)}
-            )
-            provider.changeAttributeValues(
-                {feature_id: {0: lon, 1: lat, 2: alt}}
-            )
+            provider.changeGeometryValues({feature_id: QgsGeometry(line)})
+            provider.changeAttributeValues({feature_id: {0: lon, 1: lat, 2: alt}})
             base._refresh_memory_layer(trajectoryLyr)
 
     except Exception as e:
@@ -358,7 +374,11 @@ def UpdateFrameAxisData(imgSS, sensor, framecenter, ele):
             _upsert_single_feature(
                 frameaxisLyr,
                 [lon, lat, alt, fc_lon, fc_lat, fc_alt],
-                QgsGeometry(QgsLineString(QgsPoint(lon, lat, alt), QgsPoint(fc_lon, fc_lat, fc_alt))),
+                QgsGeometry(
+                    QgsLineString(
+                        QgsPoint(lon, lat, alt), QgsPoint(fc_lon, fc_lat, fc_alt)
+                    )
+                ),
             )
 
     except Exception as e:

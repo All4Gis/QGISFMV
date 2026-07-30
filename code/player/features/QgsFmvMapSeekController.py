@@ -99,7 +99,9 @@ class MapSeekController:
             time_sec = float(getattr(self.player, "currentInfo", 0.0) or 0.0)
         footprint = None
         try:
-            from QGISFMV.player.features.QgsFmvGeofence import footprint_ring_from_session
+            from QGISFMV.player.features.QgsFmvGeofence import (
+                footprint_ring_from_session,
+            )
 
             footprint = footprint_ring_from_session(
                 getattr(self.player, "session", None)
@@ -303,9 +305,7 @@ class MapSeekController:
             return []
         sample = hits[0]
         self._seek_to(sample[2])
-        self._show_ghost(
-            sample[3] if len(sample) > 3 else None, sample[0], sample[1]
-        )
+        self._show_ghost(sample[3] if len(sample) > 3 else None, sample[0], sample[1])
         qgsu.showUserAndLogMessage(
             "",
             f"Lookback: seen {len(hits)} time(s) — jumped to {sample[2]:.1f}s",
@@ -323,9 +323,7 @@ class MapSeekController:
         self._lookback_idx = index
         sample = self._lookback_hits[index]
         self._seek_to(sample[2])
-        self._show_ghost(
-            sample[3] if len(sample) > 3 else None, sample[0], sample[1]
-        )
+        self._show_ghost(sample[3] if len(sample) > 3 else None, sample[0], sample[1])
         return sample[2]
 
     def _show_lookback_dialog(self, lon, lat, hits):
@@ -366,8 +364,7 @@ class MapSeekController:
             lst.addItem(item)
         layout.addWidget(lst)
         buttons = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok
-            | QDialogButtonBox.StandardButton.Close
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Close
         )
         layout.addWidget(buttons)
 

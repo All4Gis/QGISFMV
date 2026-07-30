@@ -10,6 +10,7 @@ layer names via ``setattr`` in ``reloadRuntime()``) — so this module reads
 them through a module reference (``_base()``) instead of importing by
 value, mirroring the pattern already used by QgsFmvDrawLayers.py.
 """
+
 from qgis.core import (
     QgsCoordinateTransform,
     QgsCoordinateReferenceSystem,
@@ -47,6 +48,7 @@ def _base():
     call time guarantees both modules are fully initialized.
     """
     import QGISFMV.utils.core.QgsFmvUtils as _mod
+
     return _mod
 
 

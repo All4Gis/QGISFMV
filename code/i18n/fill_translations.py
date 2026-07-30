@@ -226,7 +226,9 @@ def auto_translate(sources: list[str], target: str) -> dict[str, str]:
     return out
 
 
-def apply_translations(ts_path: Path, lang: str, mapping: dict[str, str]) -> tuple[int, int]:
+def apply_translations(
+    ts_path: Path, lang: str, mapping: dict[str, str]
+) -> tuple[int, int]:
     """Apply *mapping* translations into a .ts file; returns (filled, kept_literal) counts."""
     tree = ET.parse(ts_path)
     root = tree.getroot()
@@ -246,7 +248,12 @@ def apply_translations(ts_path: Path, lang: str, mapping: dict[str, str]) -> tup
         if lang == "en":
             text = source
         else:
-            text = MANUAL.get(lang, {}).get(source) or mapping.get(source) or existing or source
+            text = (
+                MANUAL.get(lang, {}).get(source)
+                or mapping.get(source)
+                or existing
+                or source
+            )
         tr_el.text = text
         if tr_el.get("type") == "unfinished":
             del tr_el.attrib["type"]
@@ -260,7 +267,9 @@ def apply_translations(ts_path: Path, lang: str, mapping: dict[str, str]) -> tup
 def main():
     """CLI entry point: auto-translate and fill all .ts files from the English source."""
     parser = argparse.ArgumentParser(description="Fill QGIS FMV translation TS files")
-    parser.add_argument("--no-auto", action="store_true", help="Skip Google auto-translate")
+    parser.add_argument(
+        "--no-auto", action="store_true", help="Skip Google auto-translate"
+    )
     args = parser.parse_args()
 
     en_path = I18N_DIR / LANG_FILES["en"]
@@ -273,7 +282,9 @@ def main():
         try:
             from deep_translator import GoogleTranslator  # noqa: F401
         except ImportError:
-            print("Install deep-translator: pip install deep-translator", file=sys.stderr)
+            print(
+                "Install deep-translator: pip install deep-translator", file=sys.stderr
+            )
             sys.exit(1)
         for lang in LANG_FILES:
             if lang == "en":
@@ -293,7 +304,11 @@ def main():
         if lang == "en":
             mapping = {s: s for s in sources}
         filled, kept = apply_translations(path, lang, mapping)
-        unfinished = sum(1 for _ in ET.parse(path).getroot().iter("translation") if _.get("type") == "unfinished")
+        unfinished = sum(
+            1
+            for _ in ET.parse(path).getroot().iter("translation")
+            if _.get("type") == "unfinished"
+        )
         print(f"  {fname}: filled {filled}, kept {kept}, unfinished left {unfinished}")
 
 

@@ -36,16 +36,24 @@ class DistanceRingsOverlay(VectorOverlayBase):
     def _create_layer(self):
         vl = QgsVectorLayer("LineString?crs=EPSG:4326", _DISTANCE_RINGS_LAYER, "memory")
         provider = vl.dataProvider()
-        provider.addAttributes([
-            QgsField("ring_dist_m", QVariant.Double),
-            QgsField("ring_label", QVariant.String),
-        ])
+        provider.addAttributes(
+            [
+                QgsField("ring_dist_m", QVariant.Double),
+                QgsField("ring_label", QVariant.String),
+            ]
+        )
         vl.updateFields()
 
-        symbol = QgsLineSymbol.createSimple({
-            "color": "180,180,180,150", "width": "0.6", "line_style": "dash",
-        })
-        vl.setRenderer(QgsCategorizedSymbolRenderer("", [QgsRendererCategory("", symbol, "")]))
+        symbol = QgsLineSymbol.createSimple(
+            {
+                "color": "180,180,180,150",
+                "width": "0.6",
+                "line_style": "dash",
+            }
+        )
+        vl.setRenderer(
+            QgsCategorizedSymbolRenderer("", [QgsRendererCategory("", symbol, "")])
+        )
 
         settings = QgsPalLayerSettings()
         settings.fieldName = "ring_label"
@@ -71,9 +79,12 @@ class DistanceRingsOverlay(VectorOverlayBase):
             return
 
         # Skip if position hasn't changed significantly
-        if (self._last_lat is not None and self._last_lon is not None
-                and abs(lat - self._last_lat) < 1e-8
-                and abs(lon - self._last_lon) < 1e-8):
+        if (
+            self._last_lat is not None
+            and self._last_lon is not None
+            and abs(lat - self._last_lat) < 1e-8
+            and abs(lon - self._last_lon) < 1e-8
+        ):
             return
 
         self._last_lat = lat

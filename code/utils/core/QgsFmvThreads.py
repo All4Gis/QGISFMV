@@ -16,6 +16,7 @@ def stop_qthread(thread, timeout_ms=2000):
         thread.setParent(None)
     except Exception as exc:
         from QGISFMV.utils.logging import log
+
         log.debug("thread setParent(None) failed: %s", exc)
     try:
         if thread.isRunning():
@@ -25,4 +26,5 @@ def stop_qthread(thread, timeout_ms=2000):
                 thread.wait(500)
     except Exception as exc:
         from QGISFMV.utils.logging import log
+
         log.debug("thread quit/wait failed: %s", exc)

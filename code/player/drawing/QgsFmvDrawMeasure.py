@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Measure distance/area painting: labels, vertices and running totals."""
+
 from qgis.PyQt.QtCore import QPointF, QPoint, QRectF
 from qgis.PyQt.QtGui import (
     QPainter,
@@ -10,7 +11,10 @@ from qgis.PyQt.QtGui import (
     QPolygonF,
 )
 
-from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance, polygon_area as _geo_polygon_area
+from QGISFMV.geo.QgsGeoUtils import (
+    distance as _geo_distance,
+    polygon_area as _geo_polygon_area,
+)
 from QGISFMV.player.drawing.QgsFmvDrawingConfig import drawing_config
 from QGISFMV.utils.logging import log
 
@@ -21,11 +25,13 @@ RulerTotalMeasure = 0.0
 
 def _format_length_m(meters):
     from QGISFMV.utils.formatting import format_length
+
     return format_length(meters)
 
 
 def _format_area_m2(area_m2):
     from QGISFMV.utils.formatting import format_area
+
     return format_area(area_m2)
 
 
@@ -170,9 +176,7 @@ def draw_measure_area_on_video(values, painter, surface, gt):
     painter.fillPath(path, cfg.MeasureBrush)
 
     for p in poly:
-        draw_measure_vertex(
-            painter, QPoint(int(p.x()), int(p.y())), radius=4
-        )
+        draw_measure_vertex(painter, QPoint(int(p.x()), int(p.y())), radius=4)
 
     # Centroid from lon/lat mean (stable for labels)
     if lats and lons:
@@ -181,7 +185,10 @@ def draw_measure_area_on_video(values, painter, surface, gt):
         )
         centroid = QPoint(int(scr_x), int(scr_y))
     else:
-        centroid = QPoint(int(polygon.boundingRect().center().x()), int(polygon.boundingRect().center().y()))
+        centroid = QPoint(
+            int(polygon.boundingRect().center().x()),
+            int(polygon.boundingRect().center().y()),
+        )
 
     if len(ring) >= 3:
         draw_measure_label(

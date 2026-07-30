@@ -8,6 +8,7 @@ from QGISFMV.utils.logging import log
 _HAS_SCIPY = False
 try:
     from scipy.signal import convolve2d as _scipy_conv2d
+
     _HAS_SCIPY = True
 except ImportError:
     pass
@@ -62,7 +63,7 @@ if _HAS_CV2:
     try:
         _COLORMAP_NRVI = getattr(_cv2, "COLORMAP_RDYLGN", COLORMAP_TURBO)
     except Exception as _exc:
-        log.debug('COLORMAP_RDYLGN lookup failed, using TURBO: %s', _exc)
+        log.debug("COLORMAP_RDYLGN lookup failed, using TURBO: %s", _exc)
         _COLORMAP_NRVI = COLORMAP_TURBO
 
 
@@ -80,7 +81,7 @@ def _cv2_from_tracker():
 
         return cv2_mod
     except Exception as _exc:
-        log.debug('cv2_from_tracker probe failed: %s', _exc)
+        log.debug("cv2_from_tracker probe failed: %s", _exc)
         return None
 
 
@@ -124,7 +125,7 @@ def opencv_available():
 
         return cv2_available()
     except Exception as _exc:
-        log.debug('opencv_available check failed: %s', _exc)
+        log.debug("opencv_available check failed: %s", _exc)
         return False
 
 
@@ -243,7 +244,7 @@ def _double_threshold_hysteresis(suppressed, low, high):
             promoted = np.zeros((h, w), dtype=np.int32)
             for di in range(3):
                 for dj in range(3):
-                    promoted += padded[di:di + h, dj:dj + w]
+                    promoted += padded[di : di + h, dj : dj + w]
         newly_strong = weak_mask & (promoted > 0)
         if not np.any(newly_strong):
             break
@@ -257,7 +258,11 @@ def _canny_numpy(gray, sigma=0.33):
     blurred = _conv2d(gray.astype(np.float32), _gaussian_kernel(5, sigma))
     magnitude, direction = _sobel_gradients(blurred)
     suppressed = _non_maximum_suppression(magnitude, direction)
-    v = float(np.median(suppressed[suppressed > 0])) if np.any(suppressed > 0) else 128.0
+    v = (
+        float(np.median(suppressed[suppressed > 0]))
+        if np.any(suppressed > 0)
+        else 128.0
+    )
     low = max(0, (1.0 - sigma) * v)
     high = min(255, (1.0 + sigma) * v)
     return _double_threshold_hysteresis(suppressed, low, high)
@@ -281,7 +286,7 @@ def _clahe_numpy(gray, clip_limit=4.0, grid_size=8):
             excess = np.maximum(hist - tile_clip, 0).sum()
             hist = np.clip(hist, 0, tile_clip)
             hist += excess // 256
-            hist[:int(excess % 256)] += 1
+            hist[: int(excess % 256)] += 1
             cdf = np.cumsum(hist).astype(np.float32)
             cdf_min = float(cdf[cdf > 0].min()) if np.any(cdf > 0) else 0.0
             denom = total - cdf_min
@@ -291,6 +296,7 @@ def _clahe_numpy(gray, clip_limit=4.0, grid_size=8):
             result[y0:y1, x0:x1] = lut[tile]
     return result
 
+
 def reset_temporal_filter_state():
     """Clear motion background state (detection state cleared separately)."""
     global _prev_motion_frame, _mog2_subtractor
@@ -298,17 +304,24 @@ def reset_temporal_filter_state():
     _mog2_subtractor = None
     try:
         from QGISFMV.video.filters.QgsFmvDetectionFilters import reset_detection_state
+
         reset_detection_state()
     except Exception as _exc:
-        log.debug('Failed to reset detection state: %s', _exc)
+        log.debug("Failed to reset detection state: %s", _exc)
 
 
 def _box3x3_sum(padded):
     """Sum of 3x3 neighborhoods over a pre-padded array (no-loop fallback for scipy)."""
     return (
-        padded[:-2, :-2] + padded[:-2, 1:-1] + padded[:-2, 2:]
-        + padded[1:-1, :-2] + padded[1:-1, 1:-1] + padded[1:-1, 2:]
-        + padded[2:, :-2] + padded[2:, 1:-1] + padded[2:, 2:]
+        padded[:-2, :-2]
+        + padded[:-2, 1:-1]
+        + padded[:-2, 2:]
+        + padded[1:-1, :-2]
+        + padded[1:-1, 1:-1]
+        + padded[1:-1, 2:]
+        + padded[2:, :-2]
+        + padded[2:, 1:-1]
+        + padded[2:, 2:]
     )
 
 
@@ -350,14 +363,16 @@ class FilterCore:
         else:
             # Numpy "bar code" encoding of mode so the banner is never blank.
             text_u = str(text or "")
-            mode = 1 if "ROAD" in text_u.upper() else 2 if "BUILD" in text_u.upper() else 3
+            mode = (
+                1 if "ROAD" in text_u.upper() else 2 if "BUILD" in text_u.upper() else 3
+            )
             for i in range(8):
                 x0 = 12 + i * 14
                 x1 = x0 + 10
                 if x1 >= w - 8:
                     break
                 on = bool((mode + i) & 1) if i < 4 else bool(i % 2)
-                out_rgb[8:band_h - 8, x0:x1] = (255, 255, 255) if on else (20, 20, 20)
+                out_rgb[8 : band_h - 8, x0:x1] = (255, 255, 255) if on else (20, 20, 20)
         return out_rgb
 
     @staticmethod
@@ -531,16 +546,25 @@ class FilterCore:
             visited = np.zeros_like(mask, dtype=bool)
             for y in range(0, h - block, block):
                 for x in range(0, w - block, block):
-                    if visited[y, x] or not mask[y : y + block, x : x + block].mean() > 0.45:
+                    if (
+                        visited[y, x]
+                        or not mask[y : y + block, x : x + block].mean() > 0.45
+                    ):
                         continue
                     x0, y0, x1, y1 = x, y, min(w, x + block), min(h, y + block)
                     grew = True
                     while grew:
                         grew = False
-                        if x1 < w and mask[y0:y1, x1 : min(w, x1 + half_block)].mean() > 0.35:
+                        if (
+                            x1 < w
+                            and mask[y0:y1, x1 : min(w, x1 + half_block)].mean() > 0.35
+                        ):
                             x1 = min(w, x1 + half_block)
                             grew = True
-                        if y1 < h and mask[y1 : min(h, y1 + half_block), x0:x1].mean() > 0.35:
+                        if (
+                            y1 < h
+                            and mask[y1 : min(h, y1 + half_block), x0:x1].mean() > 0.35
+                        ):
                             y1 = min(h, y1 + half_block)
                             grew = True
                     visited[y0:y1, x0:x1] = True

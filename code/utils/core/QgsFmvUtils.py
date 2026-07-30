@@ -168,6 +168,7 @@ def getVideoManagerList():
         return VideoList
     except Exception as e:
         from QGISFMV.utils.logging import log
+
         log.debug("getVideoManagerList failed: %s", e)
         return []
 
@@ -192,6 +193,7 @@ def RemoveVideoFolder(filename):
         shutil.rmtree(folder, ignore_errors=True)
     except Exception as e:
         from QGISFMV.utils.logging import log
+
         log.debug("RemoveVideoFolder failed: %s", e)
 
 
@@ -253,6 +255,7 @@ def _klvIndexFromProbe(videoPath):
             data_idx += 1
     except Exception as e:
         from QGISFMV.utils.logging import log
+
         log.debug("KLV probe failed for %s: %s", videoPath, e)
     return None
 
@@ -376,9 +379,7 @@ def _spawn(cmds, t="ffmpeg"):
 
 RECORD_CONTAINER_FORMATS = ("ts", "mp4", "mkv", "mov")
 
-RAW_VIDEO_EXTENSIONS = frozenset(
-    {"h264", "264", "hevc", "h265", "avc", "265"}
-)
+RAW_VIDEO_EXTENSIONS = frozenset({"h264", "264", "hevc", "h265", "avc", "265"})
 
 
 def recordSaveExtensions(source_path=None):
@@ -545,8 +546,13 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
             return False
 
         _update_footprint_beams_gcp(
-            packet, cornerPointUL, cornerPointUR, cornerPointLR, cornerPointLL,
-            frameCenterPoint, hasElevationModel(),
+            packet,
+            cornerPointUL,
+            cornerPointUR,
+            cornerPointLR,
+            cornerPointLL,
+            frameCenterPoint,
+            hasElevationModel(),
         )
         geometry_ok = True
 
@@ -619,4 +625,5 @@ try:
     _apply_mosaic_settings(__import__(__name__))
 except Exception as e:
     from QGISFMV.utils.logging import log
+
     log.debug("Mosaic settings import failed (non-critical): %s", e)

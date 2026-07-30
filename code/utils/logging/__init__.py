@@ -40,7 +40,10 @@ if not log.handlers:
         _fh.setLevel(logging.DEBUG)
         log.addHandler(_fh)
     except Exception as _exc:
-        print("[QGISFMV] Warning: could not create log file: {}".format(_exc), file=sys.stderr)
+        print(
+            "[QGISFMV] Warning: could not create log file: {}".format(_exc),
+            file=sys.stderr,
+        )
 
     _ch = logging.StreamHandler()
     _ch.setFormatter(_fmt)

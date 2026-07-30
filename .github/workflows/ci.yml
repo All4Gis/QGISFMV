@@ -44,7 +44,23 @@ jobs:
             --ignore=code/tests/test_misb_coords.py \
             -v --tb=short -x
 
+      - name: Check formatting (black)
+        run: |
+          black --check code/ --exclude code/gui
+
+      - name: Check imports (isort)
+        run: |
+          isort --check-only code/ --skip code/gui
+
       - name: Lint code (pycodestyle)
         run: |
-          pycodestyle --ignore=E501 code/*.py code/**/*.py --statistics --exclude=code/gui/*.py,code/QGISFMV
-          pycodestyle --ignore=E501,W504 deploy/*.py --statistics
+          pycodestyle \
+            --ignore=E203,E501,W503 \
+            code/*.py code/**/*.py \
+            --statistics \
+            --exclude=code/gui/*.py,code/QGISFMV
+
+          pycodestyle \
+            --ignore=E203,E501,W503,W504 \
+            deploy/*.py \
+            --statistics

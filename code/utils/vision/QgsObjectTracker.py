@@ -37,6 +37,7 @@ def cv2_available() -> bool:
         return True
     except Exception as exc:
         from QGISFMV.utils.logging import log
+
         log.debug("cv2 import failed: %s", exc)
         return _load_cv2_tracker_factory() is not None
 
@@ -57,6 +58,7 @@ class _OpenCvTrackerAdapter:
             ok = self._tracker.init(frame, bbox)
         except Exception as exc:
             from QGISFMV.utils.logging import log
+
             log.debug("tracker init failed: %s", exc)
             return False
         return ok is not False
@@ -66,6 +68,7 @@ class _OpenCvTrackerAdapter:
             ok, bbox = self._tracker.update(frame)
         except Exception as exc:
             from QGISFMV.utils.logging import log
+
             log.debug("tracker update failed: %s", exc)
             return False, None
         if not ok or bbox is None:
@@ -111,9 +114,7 @@ class NumpyMosseTracker:
     def _gray(frame):
         if frame.ndim == 3:
             return (
-                0.299 * frame[:, :, 0]
-                + 0.587 * frame[:, :, 1]
-                + 0.114 * frame[:, :, 2]
+                0.299 * frame[:, :, 0] + 0.587 * frame[:, :, 1] + 0.114 * frame[:, :, 2]
             ).astype(np.float32)
         return frame.astype(np.float32)
 

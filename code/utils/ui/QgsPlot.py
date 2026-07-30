@@ -126,6 +126,7 @@ def ShowPlot(bitrate_data, frame_count, fileName, output=None):
         fig.canvas.manager.set_window_title(fileName)
     except Exception as exc:
         from QGISFMV.utils.logging import log
+
         log.debug("matplotlib window title failed: %s", exc)
     matplot.title(QCoreApplication.translate("QgsFmvPlayer", "Stream Bitrate vs Time"))
     matplot.xlabel(QCoreApplication.translate("QgsFmvPlayer", "Time (sec)"))

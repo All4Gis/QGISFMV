@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Object tracking HUD, magnifier and stamp overlay painting."""
+
 from qgis.PyQt.QtCore import QPointF, Qt, QPoint, QRectF
 from qgis.PyQt.QtGui import (
     QPainter,

@@ -5,7 +5,6 @@ from qgis.PyQt.QtWidgets import QDialog
 
 from QGISFMV.gui.ui_FmvAlertRule import Ui_FmvAlertRule
 
-
 # Default MISB-ish fields offered in the combo (editable list for callers).
 DEFAULT_ALERT_FIELDS = (
     "Sensor Latitude",

@@ -49,7 +49,10 @@ class PlaceLabelController:
         if now - self._last_ms < PLACE_LABEL_MIN_INTERVAL_MS:
             return
         if self._last_lat is not None:
-            if haversine_m((lon, lat), (self._last_lon, self._last_lat)) < PLACE_LABEL_MIN_MOVE_M:
+            if (
+                haversine_m((lon, lat), (self._last_lon, self._last_lat))
+                < PLACE_LABEL_MIN_MOVE_M
+            ):
                 return
         if self._busy:
             return

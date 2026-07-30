@@ -87,7 +87,9 @@ class TestClassifyTaskResult:
         assert mod.classify_task_result("x")["kind"] == "empty"
 
     def test_error(self, mod):
-        info = mod.classify_task_result({"error": "boom", "stop_record_animation": True})
+        info = mod.classify_task_result(
+            {"error": "boom", "stop_record_animation": True}
+        )
         assert info["kind"] == "error"
         assert info["error"] == "boom"
         assert info["stop_record_animation"] is True

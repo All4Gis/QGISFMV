@@ -68,7 +68,10 @@ class TestStreamUriHelpers:
         assert "Host" in msg
 
     def test_build_rtp(self):
-        assert self.stream.buildStreamUri("RTP", "10.0.0.1", "5004") == "rtp://10.0.0.1:5004"
+        assert (
+            self.stream.buildStreamUri("RTP", "10.0.0.1", "5004")
+            == "rtp://10.0.0.1:5004"
+        )
 
     def test_vlc_hint_non_empty(self):
         for proto in ("UDP", "TCP", "RTP", "RTSP"):

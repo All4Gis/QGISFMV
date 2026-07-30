@@ -96,15 +96,17 @@ def fetchReverseGeocodeJson(url_template, centerLat, centerLon, timeout=8):
         )
         with urllib.request.urlopen(req, timeout=timeout) as response:
             return json.loads(response.read().decode("utf-8", errors="replace"))
-    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError, OSError) as exc:
-        log.warning(
-            "Reverse geocode failed for %s, %s: %s", centerLat, centerLon, exc
-        )
+    except (
+        urllib.error.URLError,
+        urllib.error.HTTPError,
+        TimeoutError,
+        ValueError,
+        OSError,
+    ) as exc:
+        log.warning("Reverse geocode failed for %s, %s: %s", centerLat, centerLon, exc)
         return None
     except Exception as exc:
-        log.warning(
-            "Reverse geocode failed for %s, %s: %s", centerLat, centerLon, exc
-        )
+        log.warning("Reverse geocode failed for %s, %s: %s", centerLat, centerLon, exc)
         return None
 
 

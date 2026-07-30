@@ -67,6 +67,7 @@ def _to_4326_transform(layer):
 def _extract_points_from_geom(geom):
     """Extract ordered (lon, lat) vertices from any geometry type."""
     from qgis.core import QgsWkbTypes
+
     wkb = geom.wkbType()
     if wkb in (QgsWkbTypes.LineString, QgsWkbTypes.LineStringZ):
         return [(pt.x(), pt.y()) for pt in geom.asPolyline()]
@@ -100,8 +101,11 @@ def _build_gpx_document(name, points):
     gpx_ns = "http://www.topografix.com/GPX/1/1"
     xsi_ns = "http://www.w3.org/2001/XMLSchema-instance"
     gpx = ET.Element(
-        "gpx", version="1.1", creator="QGIS FMV",
-        xmlns=gpx_ns, **{"xmlns:xsi": xsi_ns},
+        "gpx",
+        version="1.1",
+        creator="QGIS FMV",
+        xmlns=gpx_ns,
+        **{"xmlns:xsi": xsi_ns},
     )
     metadata = ET.SubElement(gpx, "metadata")
     ET.SubElement(metadata, "name").text = name
@@ -294,7 +298,8 @@ def exportGroupToGPX(group_name=None):
             layer = platform
     if layer is None:
         qgsu.showUserAndLogMessage(
-            "", "Platform track layer not found.",
+            "",
+            "Platform track layer not found.",
             level=QGis.MessageLevel.Warning,
         )
         return
@@ -302,7 +307,8 @@ def exportGroupToGPX(group_name=None):
     path, _ = QFileDialog.getSaveFileName(
         None,
         QCoreApplication.translate("QgsFmvExport", "Export track to GPX"),
-        "", "GPX (*.gpx)",
+        "",
+        "GPX (*.gpx)",
     )
     if not path:
         return
@@ -312,7 +318,8 @@ def exportGroupToGPX(group_name=None):
     all_points = _collect_layer_points(layer)
     if not all_points:
         qgsu.showUserAndLogMessage(
-            "", "No track points found.",
+            "",
+            "No track points found.",
             level=QGis.MessageLevel.Warning,
         )
         return
@@ -321,8 +328,10 @@ def exportGroupToGPX(group_name=None):
     _write_gpx_file(gpx, path)
 
     qgsu.showUserAndLogMessage(
-        "", f"Track exported to {path} ({len(all_points)} points)",
-        level=QGis.MessageLevel.Success, duration=3,
+        "",
+        f"Track exported to {path} ({len(all_points)} points)",
+        level=QGis.MessageLevel.Success,
+        duration=3,
     )
 
 
@@ -343,9 +352,7 @@ def exportObjectTrack(parent=None, group_name=None):
     if layer is None:
         qgsu.showUserAndLogMessage(
             "",
-            QCoreApplication.translate(
-                "QgsFmvExport", "Object Track layer not found."
-            ),
+            QCoreApplication.translate("QgsFmvExport", "Object Track layer not found."),
             level=QGis.MessageLevel.Warning,
         )
         return
@@ -403,9 +410,7 @@ def exportObjectTrack(parent=None, group_name=None):
     if not all_points:
         qgsu.showUserAndLogMessage(
             "",
-            QCoreApplication.translate(
-                "QgsFmvExport", "No object track points found."
-            ),
+            QCoreApplication.translate("QgsFmvExport", "No object track points found."),
             level=QGis.MessageLevel.Warning,
         )
         return

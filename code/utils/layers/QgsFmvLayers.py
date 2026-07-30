@@ -9,6 +9,7 @@ this module's live layer-name constants / ``groupName`` / style-cache
 globals through a module reference (their own ``_base()`` helper) since
 QgsFmvSettings.reloadRuntime() refreshes those constants with ``setattr``.
 """
+
 import os
 from qgis.PyQt.QtWidgets import QApplication
 from qgis.PyQt.QtCore import QCoreApplication, QSettings
@@ -291,7 +292,10 @@ def UpdateObjectTrack(lon, lat, alt, track_id, backend=""):
 
     if line.numPoints() > 0:
         last = line.pointN(line.numPoints() - 1)
-        if _geo_distance((last.x(), last.y()), (lon, lat)) < OBJECT_TRACK_MIN_STEP_METERS:
+        if (
+            _geo_distance((last.x(), last.y()), (lon, lat))
+            < OBJECT_TRACK_MIN_STEP_METERS
+        ):
             _update_object_position_layer(track_id, backend, lon, lat, alt)
             return True
 
@@ -558,64 +562,173 @@ def CreateVideoLayers(ele, name):
     _watch_existing_layers()
 
     # Remove corrupt memory layers that need recreation.
-    for lyr_name in (Footprint_lyr, Beams_lyr, Trajectory_lyr, FrameAxis_lyr,
-                     Platform_lyr, FrameCenter_lyr):
+    for lyr_name in (
+        Footprint_lyr,
+        Beams_lyr,
+        Trajectory_lyr,
+        FrameAxis_lyr,
+        Platform_lyr,
+        FrameCenter_lyr,
+    ):
         _remove_invalid_memory_layer(lyr_name, groupName)
 
     # Layer definitions: (name, factory, fields, geom_type, style_fn, style_args)
     layer_defs = [
-        (Footprint_lyr, newPolygonsLayer, _FOOTPRINT_FIELDS, PolygonZ,
-         SetDefaultFootprintStyle, ("DEFAULT",)),
-        (Beams_lyr, newLinesLayer,
-         ["longitude", "latitude", "altitude", "Corner Longitude", "Corner Latitude"],
-         LineZ, SetDefaultBeamsStyle, ("DEFAULT",)),
-        (Trajectory_lyr, newLinesLayer,
-         ["longitude", "latitude", "altitude"], LineZ,
-         SetDefaultTrajectoryStyle, ()),
-        (FrameAxis_lyr, newLinesLayer,
-         ["longitude", "latitude", "altitude", "Corner Longitude",
-          "Corner Latitude", "Corner altitude"],
-         LineZ, SetDefaultFrameAxisStyle, ("DEFAULT",)),
-        (Platform_lyr, newPointsLayer,
-         ["longitude", "latitude", "altitude"], PointZ,
-         SetDefaultPlatformStyle, ("DEFAULT",)),
-        (Point_lyr, newPointsLayer,
-         ["number", "longitude", "latitude", "altitude"], Point,
-         SetDefaultPointStyle, ()),
-        (Symbol_lyr, newPointsLayer,
-         ["number", "symbol_id", "unit_name", "longitude", "latitude", "altitude"],
-         Point, SetDefaultMilitarySymbolStyle, ()),
-        (FrameCenter_lyr, newPointsLayer,
-         ["longitude", "latitude", "altitude"], Point,
-         SetDefaultFrameCenterStyle, ()),
-        (Line_lyr, newLinesLayer, [], Line,
-         SetDefaultLineStyle, ()),
-        (Polygon_lyr, newPolygonsLayer,
-         ["Centroid_longitude", "Centroid_latitude", "Centroid_altitude", "Area"],
-         Polygon, SetDefaultPolygonStyle, ()),
-        (ObjectTrack_lyr, newLinesLayer,
-         ["track_id", "backend", "longitude", "latitude", "altitude"], LineZ,
-         SetDefaultObjectTrackStyle, ()),
-        (ObjectPosition_lyr, newPointsLayer,
-         ["track_id", "backend", "longitude", "latitude", "altitude"], PointZ,
-         SetDefaultObjectPositionStyle, ()),
-        (Detections_lyr, newPointsLayer,
-         ["track_id", "class", ("score", float), "longitude", "latitude", "altitude"],
-         Point, SetDefaultDetectionsStyle, ()),
-        (DetectionTrail_lyr, newPointsLayer,
-         ["track_id", "class", ("score", float), "longitude", "latitude", "altitude",
-          ("time_sec", float)],
-         Point, SetDefaultDetectionTrailStyle, ()),
-        (MeasureDistance_lyr, newLinesLayer,
-         [("length_m", float), "label", ("segments", int)], Line,
-         SetDefaultMeasureDistanceStyle, ()),
-        (MeasureArea_lyr, newPolygonsLayer,
-         [("area_m2", float), "label", ("vertices", int)], Polygon,
-         SetDefaultMeasureAreaStyle, ()),
+        (
+            Footprint_lyr,
+            newPolygonsLayer,
+            _FOOTPRINT_FIELDS,
+            PolygonZ,
+            SetDefaultFootprintStyle,
+            ("DEFAULT",),
+        ),
+        (
+            Beams_lyr,
+            newLinesLayer,
+            [
+                "longitude",
+                "latitude",
+                "altitude",
+                "Corner Longitude",
+                "Corner Latitude",
+            ],
+            LineZ,
+            SetDefaultBeamsStyle,
+            ("DEFAULT",),
+        ),
+        (
+            Trajectory_lyr,
+            newLinesLayer,
+            ["longitude", "latitude", "altitude"],
+            LineZ,
+            SetDefaultTrajectoryStyle,
+            (),
+        ),
+        (
+            FrameAxis_lyr,
+            newLinesLayer,
+            [
+                "longitude",
+                "latitude",
+                "altitude",
+                "Corner Longitude",
+                "Corner Latitude",
+                "Corner altitude",
+            ],
+            LineZ,
+            SetDefaultFrameAxisStyle,
+            ("DEFAULT",),
+        ),
+        (
+            Platform_lyr,
+            newPointsLayer,
+            ["longitude", "latitude", "altitude"],
+            PointZ,
+            SetDefaultPlatformStyle,
+            ("DEFAULT",),
+        ),
+        (
+            Point_lyr,
+            newPointsLayer,
+            ["number", "longitude", "latitude", "altitude"],
+            Point,
+            SetDefaultPointStyle,
+            (),
+        ),
+        (
+            Symbol_lyr,
+            newPointsLayer,
+            ["number", "symbol_id", "unit_name", "longitude", "latitude", "altitude"],
+            Point,
+            SetDefaultMilitarySymbolStyle,
+            (),
+        ),
+        (
+            FrameCenter_lyr,
+            newPointsLayer,
+            ["longitude", "latitude", "altitude"],
+            Point,
+            SetDefaultFrameCenterStyle,
+            (),
+        ),
+        (Line_lyr, newLinesLayer, [], Line, SetDefaultLineStyle, ()),
+        (
+            Polygon_lyr,
+            newPolygonsLayer,
+            ["Centroid_longitude", "Centroid_latitude", "Centroid_altitude", "Area"],
+            Polygon,
+            SetDefaultPolygonStyle,
+            (),
+        ),
+        (
+            ObjectTrack_lyr,
+            newLinesLayer,
+            ["track_id", "backend", "longitude", "latitude", "altitude"],
+            LineZ,
+            SetDefaultObjectTrackStyle,
+            (),
+        ),
+        (
+            ObjectPosition_lyr,
+            newPointsLayer,
+            ["track_id", "backend", "longitude", "latitude", "altitude"],
+            PointZ,
+            SetDefaultObjectPositionStyle,
+            (),
+        ),
+        (
+            Detections_lyr,
+            newPointsLayer,
+            [
+                "track_id",
+                "class",
+                ("score", float),
+                "longitude",
+                "latitude",
+                "altitude",
+            ],
+            Point,
+            SetDefaultDetectionsStyle,
+            (),
+        ),
+        (
+            DetectionTrail_lyr,
+            newPointsLayer,
+            [
+                "track_id",
+                "class",
+                ("score", float),
+                "longitude",
+                "latitude",
+                "altitude",
+                ("time_sec", float),
+            ],
+            Point,
+            SetDefaultDetectionTrailStyle,
+            (),
+        ),
+        (
+            MeasureDistance_lyr,
+            newLinesLayer,
+            [("length_m", float), "label", ("segments", int)],
+            Line,
+            SetDefaultMeasureDistanceStyle,
+            (),
+        ),
+        (
+            MeasureArea_lyr,
+            newPolygonsLayer,
+            [("area_m2", float), "label", ("vertices", int)],
+            Polygon,
+            SetDefaultMeasureAreaStyle,
+            (),
+        ),
     ]
 
     for lyr_name, factory, fields, geom_type, style_fn, style_args in layer_defs:
-        _create_layer_if_missing(lyr_name, factory, fields, geom_type, style_fn, style_args)
+        _create_layer_if_missing(
+            lyr_name, factory, fields, geom_type, style_fn, style_args
+        )
 
     ensure_fmv_3d_renderers(groupName)
     QApplication.processEvents()
@@ -623,11 +736,24 @@ def CreateVideoLayers(ele, name):
 
 def _watch_existing_layers():
     """Register style-change watchers on layers that already exist."""
-    for lyr_name in (Footprint_lyr, Beams_lyr, Trajectory_lyr, FrameAxis_lyr,
-                     Platform_lyr, Point_lyr, Symbol_lyr, FrameCenter_lyr,
-                     Line_lyr, Polygon_lyr, ObjectTrack_lyr, ObjectPosition_lyr,
-                     Detections_lyr, DetectionTrail_lyr,
-                     MeasureDistance_lyr, MeasureArea_lyr):
+    for lyr_name in (
+        Footprint_lyr,
+        Beams_lyr,
+        Trajectory_lyr,
+        FrameAxis_lyr,
+        Platform_lyr,
+        Point_lyr,
+        Symbol_lyr,
+        FrameCenter_lyr,
+        Line_lyr,
+        Polygon_lyr,
+        ObjectTrack_lyr,
+        ObjectPosition_lyr,
+        Detections_lyr,
+        DetectionTrail_lyr,
+        MeasureDistance_lyr,
+        MeasureArea_lyr,
+    ):
         existing = qgsu.selectLayerByName(lyr_name, groupName)
         if existing is not None:
             ensureLayerStyleWatch(existing, lyr_name)
@@ -677,7 +803,9 @@ def ensure_detection_trail_layer():
     return qgsu.selectLayerByName(DetectionTrail_lyr, groupName)
 
 
-def _create_layer_if_missing(lyr_name, factory, fields, geom_type, style_fn, style_args):
+def _create_layer_if_missing(
+    lyr_name, factory, fields, geom_type, style_fn, style_args
+):
     """Create a layer if it doesn't exist in the current group, apply style, and add to map."""
     if qgsu.selectLayerByName(lyr_name, groupName) is not None:
         return
@@ -832,7 +960,9 @@ def newLinesLayer(
     return LayerFactory.create(filename, fields, geometryType, crs, name, encoding)
 
 
-def newPolygonsLayer(filename, fields, crs, name=None, geometryType=Polygon, encoding=encoding):
+def newPolygonsLayer(
+    filename, fields, crs, name=None, geometryType=Polygon, encoding=encoding
+):
     """Create new Polygon Layer"""
     return LayerFactory.create(filename, fields, geometryType, crs, name, encoding)
 

@@ -86,7 +86,10 @@ class AutoSnapshot:
                     if self._last_lat is not None:
                         dlat = abs(lat - self._last_lat)
                         dlon = abs(lon - self._last_lon)
-                        if dlat < self._change_threshold and dlon < self._change_threshold:
+                        if (
+                            dlat < self._change_threshold
+                            and dlon < self._change_threshold
+                        ):
                             return  # no significant move, skip
                     self._last_lat = lat
                     self._last_lon = lon

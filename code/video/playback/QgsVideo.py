@@ -25,9 +25,17 @@ from QGISFMV.video.playback.QgsVideoRubberBands import RubberBandManager
 from QGISFMV.video.playback.QgsVideoDrawController import VideoDrawController
 from QGISFMV.video.playback.QgsVideoCursor import CursorController
 from QGISFMV.video.playback.QgsVideoObjectTracking import ObjectTrackingController
-from QGISFMV.utils.core.QgsFmvUtils import GetGCPGeoTransform, GetImageHeight, qmouse_pos
+from QGISFMV.utils.core.QgsFmvUtils import (
+    GetGCPGeoTransform,
+    GetImageHeight,
+    qmouse_pos,
+)
 from QGISFMV.video.playback.QgsVideoUtils import VideoUtils as vut
-from QGISFMV.video.playback.QgsVideoState import InteractionState, FilterState, TrackLockState
+from QGISFMV.video.playback.QgsVideoState import (
+    InteractionState,
+    FilterState,
+    TrackLockState,
+)
 from QGISFMV.utils.logging import log
 
 
@@ -97,6 +105,7 @@ class VideoWidget(VideoWidgetBase):
         self._track_id = 0
         self._track_misses = 0
         from QGISFMV.utils.constants import TRACK_MAX_MISSES, TRACK_TIMER_INTERVAL_MS
+
         self._track_max_misses = TRACK_MAX_MISSES
         self._track_lock_state = TrackLockState.IDLE
         self._track_timer = QTimer(self)
@@ -522,8 +531,12 @@ class VideoWidget(VideoWidgetBase):
             self.setCursor(QCursor(Qt.CursorShape.CrossCursor))
 
         if GetGCPGeoTransform() is not None:
-            Longitude, Latitude, Altitude = vut.GetPointCommonCoords(event, self.surface)
-            self._cursor.update_georeferenced(Longitude, Latitude, Altitude, event, force)
+            Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
+                event, self.surface
+            )
+            self._cursor.update_georeferenced(
+                Longitude, Latitude, Altitude, event, force
+            )
         else:
             self._cursor.clear_coords_label()
 
@@ -553,7 +566,9 @@ class VideoWidget(VideoWidgetBase):
 
         has_gt = GetGCPGeoTransform() is not None
         if has_gt:
-            Longitude, Latitude, Altitude = vut.GetPointCommonCoords(event, self.surface)
+            Longitude, Latitude, Altitude = vut.GetPointCommonCoords(
+                event, self.surface
+            )
             self._draw.handle_click(Longitude, Latitude, Altitude)
 
         self.origin = qmouse_pos(event)

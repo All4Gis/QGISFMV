@@ -135,7 +135,9 @@ class TargetPinController:
         t = float(getattr(self.player, "currentInfo", 0.0) or 0.0)
         footprint = None
         try:
-            from QGISFMV.player.features.QgsFmvGeofence import footprint_ring_from_session
+            from QGISFMV.player.features.QgsFmvGeofence import (
+                footprint_ring_from_session,
+            )
 
             footprint = footprint_ring_from_session(
                 getattr(self.player, "session", None)

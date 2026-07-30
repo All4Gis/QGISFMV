@@ -6,6 +6,7 @@ manager's ``_row_data`` dict of per-video metadata (playable flag, initial
 point, cached KLV reader). This module centralizes that lookup logic plus the
 "Playing"/"Ready" status-cell toggling.
 """
+
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QTableWidgetItem
 

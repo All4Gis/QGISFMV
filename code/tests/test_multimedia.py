@@ -116,7 +116,9 @@ class TestMediaProbe:
         sys.modules.pop("QGISFMV.utils.media.QgsFmvMediaProbe", None)
 
     def test_parse_fps_fraction(self):
-        assert self.probe.parse_fps("30000/1001") == pytest.approx(29.97002997, rel=1e-6)
+        assert self.probe.parse_fps("30000/1001") == pytest.approx(
+            29.97002997, rel=1e-6
+        )
 
     def test_parse_fps_float_string(self):
         assert self.probe.parse_fps("25") == 25.0
@@ -155,7 +157,10 @@ class TestMediaProbe:
     def test_url_to_path_qurl_stream(self):
         from qgis.PyQt.QtCore import QUrl
 
-        assert self.probe.url_to_path(QUrl("udp://127.0.0.1:5000")) == "udp://127.0.0.1:5000"
+        assert (
+            self.probe.url_to_path(QUrl("udp://127.0.0.1:5000"))
+            == "udp://127.0.0.1:5000"
+        )
 
 
 class TestFmvPlaylist:

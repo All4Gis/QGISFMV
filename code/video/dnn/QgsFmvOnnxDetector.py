@@ -165,12 +165,12 @@ def _nms_indices(idxs) -> List[int]:
         try:
             idxs = list(idxs.values())
         except Exception as _exc:
-            log.debug('NMS dict values conversion failed: %s', _exc)
+            log.debug("NMS dict values conversion failed: %s", _exc)
             return []
     try:
         flat = np.asarray(idxs).reshape(-1)
     except Exception as _exc:
-        log.debug('NMS indices reshape failed: %s', _exc)
+        log.debug("NMS indices reshape failed: %s", _exc)
         return []
     out: List[int] = []
     for raw in flat:
@@ -193,13 +193,13 @@ def _get_cv2():
 
         return _get_cv2_module()
     except Exception as _exc:
-        log.debug('FilterCore cv2 import failed: %s', _exc)
+        log.debug("FilterCore cv2 import failed: %s", _exc)
         try:
             import cv2
 
             return cv2
         except Exception as _exc:
-            log.debug('Direct cv2 import failed: %s', _exc)
+            log.debug("Direct cv2 import failed: %s", _exc)
             return None
 
 
@@ -208,7 +208,9 @@ def _model_profile() -> str:
     try:
         from QGISFMV.utils.settings.QgsFmvSettings import get
 
-        profile = (get("DNN", "dnn_model_profile", "aerial") or "aerial").strip().lower()
+        profile = (
+            (get("DNN", "dnn_model_profile", "aerial") or "aerial").strip().lower()
+        )
         if profile in ("custom", "coco", "aerial", "visdrone"):
             if profile == "visdrone":
                 return "aerial"
@@ -219,7 +221,7 @@ def _model_profile() -> str:
         if "yolov8n" in model or "coco" in model:
             return "coco"
     except Exception as _exc:
-        log.debug('DNN model profile settings read failed: %s', _exc)
+        log.debug("DNN model profile settings read failed: %s", _exc)
     return "aerial"
 
 
@@ -263,10 +265,12 @@ def _dnn_base_settings() -> Optional[dict]:
             "input_size": int(get("DNN", "onnx_input_size", "640") or 640),
             "confidence": float(get("DNN", "onnx_confidence", "0.35") or 0.35),
             "nms": float(get("DNN", "onnx_nms", "0.45") or 0.45),
-            "model_type": (get("DNN", "onnx_model_type", "yolov8") or "yolov8").strip().lower(),
+            "model_type": (get("DNN", "onnx_model_type", "yolov8") or "yolov8")
+            .strip()
+            .lower(),
         }
     except Exception as _exc:
-        log.debug('DNN base settings read failed: %s', _exc)
+        log.debug("DNN base settings read failed: %s", _exc)
         return None
 
 
@@ -279,7 +283,7 @@ def _model_path_for_filter(filter_key: str) -> Optional[str]:
 
         override = (get("DNN", "onnx_model_{}".format(filter_key), "") or "").strip()
     except Exception as _exc:
-        log.debug('DNN filter model override read failed: %s', _exc)
+        log.debug("DNN filter model override read failed: %s", _exc)
         override = ""
     path = override or base["global_model"]
     if path and os.path.isfile(path):
@@ -297,7 +301,7 @@ def class_ids_for_filter(filter_key: str) -> Tuple[int, ...]:
         if parsed:
             return parsed
     except Exception as _exc:
-        log.debug('DNN class ids settings read failed: %s', _exc)
+        log.debug("DNN class ids settings read failed: %s", _exc)
     return _default_class_map().get(filter_key, ())
 
 
@@ -316,7 +320,9 @@ def dnn_status_text() -> str:
     """Return a human-readable summary of DNN detection readiness."""
     base = _dnn_base_settings()
     if not base:
-        return "DNN off — set [DNN] use_dnn_detection=true and onnx_model in settings.ini"
+        return (
+            "DNN off — set [DNN] use_dnn_detection=true and onnx_model in settings.ini"
+        )
     enabled = [key for key in SEGMENTATION_FILTER_KEYS if dnn_enabled_for_filter(key)]
     if not enabled:
         profile = _model_profile()
@@ -324,7 +330,9 @@ def dnn_status_text() -> str:
             hint = "vehicle/person use VisDrone class ids when profile=aerial"
         else:
             hint = "vehicle/person use COCO class ids when profile=coco"
-        return "DNN on but no filter ready — set dnn_<filter>_class_ids ({})".format(hint)
+        return "DNN on but no filter ready — set dnn_<filter>_class_ids ({})".format(
+            hint
+        )
     model = base["global_model"]
     return "DNN ON ({}) filters: {}".format(
         base["model_type"],
@@ -335,7 +343,9 @@ def dnn_status_text() -> str:
 class OnnxYoloDetector:
     """Lazy-loaded YOLO ONNX net via cv2.dnn.readNetFromONNX."""
 
-    def __init__(self, model_path: str, input_size: int = 640, model_type: str = "yolov8"):
+    def __init__(
+        self, model_path: str, input_size: int = 640, model_type: str = "yolov8"
+    ):
         cv2 = _get_cv2()
         if cv2 is None:
             raise RuntimeError("OpenCV is not available")
@@ -350,7 +360,7 @@ class OnnxYoloDetector:
             self._net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
             self._net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
         except Exception as _exc:
-            log.debug('ONNX preferable backend/target setup failed: %s', _exc)
+            log.debug("ONNX preferable backend/target setup failed: %s", _exc)
 
     def detect(
         self,
@@ -376,7 +386,12 @@ class OnnxYoloDetector:
         outputs = _forward_outputs(self._net)
         if self._model_type.startswith("yolov5"):
             return self._postprocess_yolov5(
-                outputs, conf_threshold, nms_threshold, letterbox_scale, (h, w), class_ids
+                outputs,
+                conf_threshold,
+                nms_threshold,
+                letterbox_scale,
+                (h, w),
+                class_ids,
             )
         return self._postprocess_yolov8(
             outputs, conf_threshold, nms_threshold, letterbox_scale, (h, w), class_ids

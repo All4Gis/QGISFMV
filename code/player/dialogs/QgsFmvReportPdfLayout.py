@@ -5,9 +5,9 @@ Owns the report color palette and the pure sizing helpers used to lay out
 the PDF document (page metrics, image scaling), extracted from
 QgsFmvReportGenerator.py.
 """
+
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QPageLayout
-
 
 # ── PDF report palette (FMV branding) ──
 _PDF_COLORS = {

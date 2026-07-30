@@ -275,6 +275,7 @@ class LocalFileMetaReader:
                             continue
         except Exception as exc:
             from QGISFMV.utils.logging import log
+
             log.debug("Metadata timestamp parse failed: %s", exc)
         return None
 
@@ -368,7 +369,8 @@ class StreamMetaReader:
         if not self._loaded:
             log.warning(
                 "StreamMetaReader: no KLV data received from %s within %ss",
-                source, connectTimeout,
+                source,
+                connectTimeout,
             )
 
     def _readLoop(self):

@@ -123,7 +123,9 @@ def build_mission_package(player, zip_path):
             kml_out = os.path.join(tmp, "layers.kml")
             # exportGroupToKML may open a dialog — try with a direct write if available.
             # Fall back: skip when dialog-only.
-            group = player._videoGroupName() if hasattr(player, "_videoGroupName") else None
+            group = (
+                player._videoGroupName() if hasattr(player, "_videoGroupName") else None
+            )
             # Use private builder if export API requires dialog.
             _write_group_kml_silent(group, kml_out)
             if os.path.isfile(kml_out) and os.path.getsize(kml_out) > 0:

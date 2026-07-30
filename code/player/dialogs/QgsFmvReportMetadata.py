@@ -4,13 +4,13 @@
 Owns lookup/normalization of MISB metadata entries and the HTML table
 builders used by the PDF report, extracted from QgsFmvReportGenerator.py.
 """
+
 import html
 
 from qgis.PyQt.QtCore import QCoreApplication
 
 from QGISFMV.utils.logging import log
 from QGISFMV.player.dialogs.QgsFmvReportPdfLayout import _PDF_COLORS
-
 
 _METADATA_GROUPS = (
     (
@@ -332,9 +332,7 @@ def _build_grouped_metadata_html(data, VManager):
             parts.append(f"<tr style='background:{bg};'>")
             for col_index, cell in enumerate((str(key), str(label), str(value))):
                 mono = (
-                    "font-family:monospace; font-size:7.5pt;"
-                    if col_index == 2
-                    else ""
+                    "font-family:monospace; font-size:7.5pt;" if col_index == 2 else ""
                 )
                 parts.append(
                     f"<td style='padding:5px 8px; font-size:8pt; vertical-align:top; "

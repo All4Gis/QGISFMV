@@ -5,6 +5,7 @@ Remembers the last-used path per dialog-owning widget class in QSettings
 (``pluginSetting`` / ``setPluginSetting``), used only by ``askForFiles`` and
 ``askForFolder`` below.
 """
+
 import os
 
 from qgis.PyQt.QtCore import QSettings
@@ -20,6 +21,7 @@ def _base():
     call time guarantees both modules are fully initialized.
     """
     import QGISFMV.utils.core.QgsFmvUtils as _mod
+
     return _mod
 
 

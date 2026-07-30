@@ -53,7 +53,9 @@ def default_visdrone_onnx_path() -> str:
     return os.path.join(models_dir(), VISDRONE_ONNX_FILENAME)
 
 
-def _download(url: str, dest: str, progress: Optional[Callable[[int, int], None]] = None) -> None:
+def _download(
+    url: str, dest: str, progress: Optional[Callable[[int, int], None]] = None
+) -> None:
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     req = Request(url, headers={"User-Agent": USER_AGENT})
     ctx = ssl.create_default_context()
@@ -98,8 +100,9 @@ def download_yolov8n(
     progress: Optional[Callable[[int, int], None]] = None,
 ) -> Tuple[bool, str]:
     """Download YOLOv8n COCO ONNX into ~/.qgis-fmv-models/. Returns (ok, message)."""
-    return _download_model(YOLOV8N_URL, dest or default_yolov8n_path(),
-                           1_000_000, "YOLOv8n", progress)
+    return _download_model(
+        YOLOV8N_URL, dest or default_yolov8n_path(), 1_000_000, "YOLOv8n", progress
+    )
 
 
 def download_visdrone_pt(
@@ -107,8 +110,13 @@ def download_visdrone_pt(
     progress: Optional[Callable[[int, int], None]] = None,
 ) -> Tuple[bool, str]:
     """Download VisDrone YOLOv8n PyTorch weights. Returns (ok, path_or_error)."""
-    return _download_model(VISDRONE_PT_URL, dest or default_visdrone_pt_path(),
-                           500_000, "VisDrone weights", progress)
+    return _download_model(
+        VISDRONE_PT_URL,
+        dest or default_visdrone_pt_path(),
+        500_000,
+        "VisDrone weights",
+        progress,
+    )
 
 
 def _export_onnx_inprocess(pt_path: str, dest_onnx: str) -> Tuple[bool, str]:
@@ -234,13 +242,13 @@ def _reload_dnn_runtime() -> None:
 
         reset_dnn_cache()
     except Exception as _exc:
-        log.debug('Failed to reset DNN cache during reload: %s', _exc)
+        log.debug("Failed to reset DNN cache during reload: %s", _exc)
     try:
         from QGISFMV.utils.settings.QgsFmvSettings import reloadRuntime
 
         reloadRuntime()
     except Exception as _exc:
-        log.debug('Failed to reload DNN runtime settings: %s', _exc)
+        log.debug("Failed to reload DNN runtime settings: %s", _exc)
 
 
 def configure_default_dnn(model_path: Optional[str] = None) -> Tuple[bool, str]:

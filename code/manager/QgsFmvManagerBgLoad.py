@@ -2,6 +2,7 @@
 """Background media/telemetry probing for the Manager: worker/thread lifecycle
 and completion handling that turns a probe result into row state + UI updates.
 """
+
 import os
 
 from qgis.PyQt.QtCore import (
@@ -53,20 +54,19 @@ class _BgWorker(QObject):
                     metaReader = StreamMetaReader(self._filename)
                 except Exception as exc:
                     from QGISFMV.utils.logging import log
+
                     log.error("StreamMetaReader failed: %s", exc)
                     metaReader = None
                 try:
                     media_ok = is_valid_stream(self._filename)
                 except Exception as exc:
                     from QGISFMV.utils.logging import log
+
                     log.error("is_valid_stream failed: %s", exc)
                     media_ok = False
                 if metaReader is not None and metaReader.hasTelemetry():
                     firstPacket = metaReader.firstPacket()
-                    if (
-                        isinstance(firstPacket, (bytes, bytearray))
-                        and firstPacket
-                    ):
+                    if isinstance(firstPacket, (bytes, bytearray)) and firstPacket:
                         coords = _coordsFromKlvStream(firstPacket)
             else:
                 media_ok = is_valid_media(self._filename)
@@ -77,10 +77,7 @@ class _BgWorker(QObject):
                     )
                 if metaReader is not None and metaReader.hasTelemetry():
                     firstPacket = metaReader.firstPacket()
-                    if (
-                        isinstance(firstPacket, (bytes, bytearray))
-                        and firstPacket
-                    ):
+                    if isinstance(firstPacket, (bytes, bytearray)) and firstPacket:
                         coords = _coordsFromKlvStream(firstPacket)
             if coords:
                 from QGISFMV.utils.core.QgsFmvUtils import fetchReverseGeocodeLabel
@@ -176,7 +173,11 @@ class ManagerBgLoadController:
         )
         if metaReader is not None:
             row_entry["metaReader"] = metaReader
-            load_err = metaReader.loadError() if callable(getattr(metaReader, "loadError", None)) else None
+            load_err = (
+                metaReader.loadError()
+                if callable(getattr(metaReader, "loadError", None))
+                else None
+            )
             if load_err:
                 qgsu.showUserAndLogMessage(
                     QCoreApplication.translate("ManagerDock", "Telemetry index failed"),
@@ -205,7 +206,9 @@ class ManagerBgLoadController:
         pbar.setValue(60)
         return row_entry
 
-    def _onLocationReady(self, row_id, rowPosition, r, row_entry, pbar, metaReader, media_ok):
+    def _onLocationReady(
+        self, row_id, rowPosition, r, row_entry, pbar, metaReader, media_ok
+    ):
         """Resolve start location, update the table row, and mark playability."""
         manager = self._m
         location = list(r.get("location") or [])
@@ -288,11 +291,17 @@ class ManagerBgLoadController:
 
             if not media_ok:
                 qgsu.showUserAndLogMessage(
-                    QCoreApplication.translate("ManagerDock", "Failed loading FFMPEG ! ")
+                    QCoreApplication.translate(
+                        "ManagerDock", "Failed loading FFMPEG ! "
+                    )
                 )
 
-            row_entry = self._onTelemetryReady(row_id, rowPosition, metaReader, pbar, media_ok)
-            row_entry = self._onLocationReady(row_id, rowPosition, r, row_entry, pbar, metaReader, media_ok)
+            row_entry = self._onTelemetryReady(
+                row_id, rowPosition, metaReader, pbar, media_ok
+            )
+            row_entry = self._onLocationReady(
+                row_id, rowPosition, r, row_entry, pbar, metaReader, media_ok
+            )
             self._onPlaylistReady(row_id, rowPosition, filename, row_entry, pbar)
         except Exception as exc:
             qgsu.showUserAndLogMessage(

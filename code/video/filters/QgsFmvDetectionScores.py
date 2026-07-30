@@ -68,16 +68,10 @@ def _vehicle_blob_score(rgb):
 
         road_mix = (0.30 + 0.70 * road) if is_aerial_profile() else (0.55 + 0.45 * road)
     except Exception as _exc:
-        log.debug('is_aerial_profile import failed, using default road mix: %s', _exc)
+        log.debug("is_aerial_profile import failed, using default road mix: %s", _exc)
         road_mix = 0.55 + 0.45 * road
 
-    score = (
-        contrast
-        * edge_norm
-        * not_veg
-        * road_mix
-        * (0.82 + 0.18 * motion)
-    )
+    score = contrast * edge_norm * not_veg * road_mix * (0.82 + 0.18 * motion)
     return np.clip(score, 0, 1)
 
 
@@ -88,7 +82,9 @@ def _building_detect_opencv(_rgb, score):
     edge_norm = cv2.GaussianBlur(edges.astype(np.float64) / 255.0, (5, 5), 0)
     merged = score * (0.50 + 0.50 * edge_norm)
     out, boxes, _labels, _mask = _run_opencv_pipeline_for(
-        "building", cv2, merged,
+        "building",
+        cv2,
+        merged,
     )
     return out, boxes
 
@@ -104,7 +100,10 @@ def _road_detect_opencv(_rgb, score):
     kh = max(3, h // 80 | 1)
     close_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kw, kh))
     out, boxes, _labels, mask_u8 = _run_opencv_pipeline_for(
-        "road", cv2, score, close_kernel=close_kernel,
+        "road",
+        cv2,
+        score,
+        close_kernel=close_kernel,
     )
     if boxes:
         keep = np.zeros(score.shape, dtype=bool)
@@ -140,7 +139,9 @@ def _vehicle_detect_opencv(_rgb, score):
     edge_norm = cv2.GaussianBlur(edges.astype(np.float64) / 255.0, (3, 3), 0)
     merged = score * (0.50 + 0.50 * edge_norm) * (0.55 + 0.45 * contrast)
     out, boxes, _labels, _mask = _run_opencv_pipeline_for(
-        "vehicle", cv2, merged,
+        "vehicle",
+        cv2,
+        merged,
     )
     return out, boxes
 
@@ -180,7 +181,9 @@ def _person_detect_opencv(_rgb, score):
     p90 = float(np.percentile(tophat, 90)) + 1e-6
     merged = score * np.clip(0.65 + 0.35 * (tophat / p90), 0, 1)
     out, boxes, _labels, _mask = _run_opencv_pipeline_for(
-        "person", cv2, merged,
+        "person",
+        cv2,
+        merged,
     )
     return out, boxes
 
@@ -203,12 +206,22 @@ def _fire_score(rgb):
 def _fire_detect_opencv(_rgb, score):
     cv2 = _get_cv2_module()
     hsv = cv2.cvtColor(_rgb, cv2.COLOR_RGB2HSV)
-    mask1 = cv2.inRange(hsv, np.array([0, 70, 80], dtype=np.uint8), np.array([22, 255, 255], dtype=np.uint8))
-    mask2 = cv2.inRange(hsv, np.array([160, 70, 80], dtype=np.uint8), np.array([179, 255, 255], dtype=np.uint8))
+    mask1 = cv2.inRange(
+        hsv,
+        np.array([0, 70, 80], dtype=np.uint8),
+        np.array([22, 255, 255], dtype=np.uint8),
+    )
+    mask2 = cv2.inRange(
+        hsv,
+        np.array([160, 70, 80], dtype=np.uint8),
+        np.array([179, 255, 255], dtype=np.uint8),
+    )
     warm = cv2.bitwise_or(mask1, mask2).astype(np.float64) / 255.0
     merged = np.maximum(score, warm * 0.85)
     out, boxes, _labels, mask_u8 = _run_opencv_pipeline_for(
-        "fire", cv2, merged,
+        "fire",
+        cv2,
+        merged,
     )
     if not boxes and not np.any(mask_u8):
         out = merged * 0.0
@@ -242,16 +255,21 @@ def _smoke_score(rgb):
 def _smoke_detect_opencv(_rgb, score):
     cv2 = _get_cv2_module()
     hsv = cv2.cvtColor(_rgb, cv2.COLOR_RGB2HSV)
-    color = cv2.inRange(
-        hsv,
-        np.array([0, 0, 100], dtype=np.uint8),
-        np.array([180, 45, 235], dtype=np.uint8),
-    ).astype(np.float64) / 255.0
+    color = (
+        cv2.inRange(
+            hsv,
+            np.array([0, 0, 100], dtype=np.uint8),
+            np.array([180, 45, 235], dtype=np.uint8),
+        ).astype(np.float64)
+        / 255.0
+    )
     gray = cv2.cvtColor(_rgb, cv2.COLOR_RGB2GRAY)
     edges = cv2.Canny(gray, 40, 120).astype(np.float64) / 255.0
     merged = score * (0.55 + 0.45 * color) * (1.0 - 0.75 * edges)
     out, boxes, _labels, _mask = _run_opencv_pipeline_for(
-        "smoke", cv2, merged,
+        "smoke",
+        cv2,
+        merged,
     )
     return out, boxes
 
@@ -275,18 +293,24 @@ def _flood_score(rgb):
 def _flood_detect_opencv(_rgb, score):
     cv2 = _get_cv2_module()
     hsv = cv2.cvtColor(_rgb, cv2.COLOR_RGB2HSV)
-    color = cv2.inRange(
-        hsv,
-        np.array([85, 20, 35], dtype=np.uint8),
-        np.array([135, 170, 220], dtype=np.uint8),
-    ).astype(np.float64) / 255.0
+    color = (
+        cv2.inRange(
+            hsv,
+            np.array([85, 20, 35], dtype=np.uint8),
+            np.array([135, 170, 220], dtype=np.uint8),
+        ).astype(np.float64)
+        / 255.0
+    )
     merged = np.maximum(score, color * 0.90)
     h, w = score.shape
     close_kernel = cv2.getStructuringElement(
         cv2.MORPH_ELLIPSE, (max(7, w // 40 | 1), max(7, h // 40 | 1))
     )
     out, boxes, _labels, _mask = _run_opencv_pipeline_for(
-        "flood", cv2, merged, close_kernel=close_kernel,
+        "flood",
+        cv2,
+        merged,
+        close_kernel=close_kernel,
     )
     return out, boxes
 

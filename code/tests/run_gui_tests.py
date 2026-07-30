@@ -105,5 +105,6 @@ def run_all():
 # Allow import as a module or direct execution
 if __name__ == "__main__":
     import pytest
+
     success = run_all()
     sys.exit(0 if success else 1)

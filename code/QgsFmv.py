@@ -112,9 +112,7 @@ class Fmv:
             self.actionConfig,
         )
 
-        toolbar_title = QCoreApplication.translate(
-            "QgsFmv", "Full Motion Video (FMV)"
-        )
+        toolbar_title = QCoreApplication.translate("QgsFmv", "Full Motion Video (FMV)")
         self.toolbar = self.iface.addToolBar(toolbar_title)
         self.toolbar.setObjectName("QGISFMVToolbar")
         self.toolbar.setWindowTitle(toolbar_title)
@@ -198,7 +196,10 @@ class Fmv:
         player = None
         if self._FMVManager is not None:
             player = getattr(self._FMVManager, "_PlayerDlg", None)
-        if open_fmv_settings(self.iface.mainWindow(), player=player) == QDialog.DialogCode.Accepted:
+        if (
+            open_fmv_settings(self.iface.mainWindow(), player=player)
+            == QDialog.DialogCode.Accepted
+        ):
             self.applyRuntimeSettings()
 
     def applyRuntimeSettings(self):

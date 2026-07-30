@@ -137,9 +137,7 @@ class TestGPXStructure:
 
         trkseg = ET.SubElement(trk, "trkseg")
         for lon, lat in [(-3.70, 40.41), (-3.71, 40.42), (-3.72, 40.43)]:
-            ET.SubElement(
-                trkseg, "trkpt", lat=f"{lat:.6f}", lon=f"{lon:.6f}"
-            )
+            ET.SubElement(trkseg, "trkpt", lat=f"{lat:.6f}", lon=f"{lon:.6f}")
 
         return gpx
 
@@ -325,9 +323,7 @@ class TestGPXFileRoundtrip:
             (-3.7101, 40.4204),
         ]
         for lon, lat in trajectory:
-            ET.SubElement(
-                trkseg, "trkpt", lat=f"{lat:.6f}", lon=f"{lon:.6f}"
-            )
+            ET.SubElement(trkseg, "trkpt", lat=f"{lat:.6f}", lon=f"{lon:.6f}")
 
         tree = ET.ElementTree(gpx)
         ET.indent(tree, space="  ")

@@ -18,18 +18,34 @@ from QGISFMV.video.filters.QgsFmvFilterCore import (
 )
 from QGISFMV.video.filters.QgsFmvDetectionFilters import FmvDetectionFilters
 
+
 class VideoFilters(object):
     """Video frame filters applied frame-by-frame."""
 
     _SLOW_FLAGS = (
-        "edgeDetectionFilter", "contrastFilter", "brightnessContrastFilter",
-        "claheFilter", "sharpenFilter", "sobelFilter", "falseColorFilter",
-        "exgFilter", "exrFilter", "variFilter", "nrviFilter",
-        "dehazeFilter", "roadEnhanceFilter", "hotspotFilter",
-        "motionDetectionFilter", "backgroundSubtractionFilter",
-        "buildingDetectionFilter", "roadSegmentationFilter",
-        "vehicleSegmentationFilter", "personSegmentationFilter",
-        "fireDetectionFilter", "smokeDetectionFilter", "floodDetectionFilter",
+        "edgeDetectionFilter",
+        "contrastFilter",
+        "brightnessContrastFilter",
+        "claheFilter",
+        "sharpenFilter",
+        "sobelFilter",
+        "falseColorFilter",
+        "exgFilter",
+        "exrFilter",
+        "variFilter",
+        "nrviFilter",
+        "dehazeFilter",
+        "roadEnhanceFilter",
+        "hotspotFilter",
+        "motionDetectionFilter",
+        "backgroundSubtractionFilter",
+        "buildingDetectionFilter",
+        "roadSegmentationFilter",
+        "vehicleSegmentationFilter",
+        "personSegmentationFilter",
+        "fireDetectionFilter",
+        "smokeDetectionFilter",
+        "floodDetectionFilter",
     )
 
     @staticmethod
@@ -46,7 +62,12 @@ class VideoFilters(object):
         scale = max_dim / float(max(w, h))
         nw, nh = int(w * scale), int(h * scale)
         return (
-            image.scaled(nw, nh, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.FastTransformation),
+            image.scaled(
+                nw,
+                nh,
+                Qt.AspectRatioMode.IgnoreAspectRatio,
+                Qt.TransformationMode.FastTransformation,
+            ),
             scale,
         )
 
@@ -166,7 +187,9 @@ class VideoFilters(object):
             canny = _fcore.Canny(blurred, lower, upper)
             # Slight dilation so thin edges are visible after downscale.
             kernel = _fcore.getStructuringElement(_fcore.MORPH_RECT, (2, 2))
-            canny = _fcore.morphologyEx(canny, _fcore.MORPH_DILATE, kernel, iterations=1)
+            canny = _fcore.morphologyEx(
+                canny, _fcore.MORPH_DILATE, kernel, iterations=1
+            )
         else:
             canny = _canny_numpy(gray, sigma)
 
@@ -187,12 +210,22 @@ class VideoFilters(object):
             lab = _fcore.cvtColor(img, _fcore.COLOR_RGB2LAB)
             l_ch, a_ch, b_ch = _fcore.split(lab)
             l_ch = _fcore._clahe.apply(l_ch)
-            result = _fcore.cvtColor(_fcore.merge((l_ch, a_ch, b_ch)), _fcore.COLOR_LAB2RGB)
+            result = _fcore.cvtColor(
+                _fcore.merge((l_ch, a_ch, b_ch)), _fcore.COLOR_LAB2RGB
+            )
             return convertMatToQImage(result, bgr=False)
         else:
             bgr = img.astype(np.float64) / 255.0
-            rgb_lin = np.where(bgr <= 0.04045, bgr / 12.92, ((bgr + 0.055) / 1.055) ** 2.4)
-            m = np.array([[0.4124564, 0.3575761, 0.1804375], [0.2126729, 0.7151522, 0.0721750], [0.0193339, 0.1191920, 0.9503041]])
+            rgb_lin = np.where(
+                bgr <= 0.04045, bgr / 12.92, ((bgr + 0.055) / 1.055) ** 2.4
+            )
+            m = np.array(
+                [
+                    [0.4124564, 0.3575761, 0.1804375],
+                    [0.2126729, 0.7151522, 0.0721750],
+                    [0.0193339, 0.1191920, 0.9503041],
+                ]
+            )
             xyz = rgb_lin @ m.T
             ref = np.array([0.95047, 1.0, 1.08883])
             xyz_n = xyz / ref
@@ -206,9 +239,23 @@ class VideoFilters(object):
             fy = (L_eq + 16.0) / 116.0
             fx = a / 500.0 + fy
             fz = fy - b_ch / 200.0
-            xyz_out = np.stack([ref[0] * np.where(fx**3 > 0.008856, fx**3, (fx - 16.0 / 116.0) / 7.787), ref[1] * np.where(fy**3 > 0.008856, fy**3, (fy - 16.0 / 116.0) / 7.787), ref[2] * np.where(fz**3 > 0.008856, fz**3, (fz - 16.0 / 116.0) / 7.787)], axis=2)
+            xyz_out = np.stack(
+                [
+                    ref[0]
+                    * np.where(fx**3 > 0.008856, fx**3, (fx - 16.0 / 116.0) / 7.787),
+                    ref[1]
+                    * np.where(fy**3 > 0.008856, fy**3, (fy - 16.0 / 116.0) / 7.787),
+                    ref[2]
+                    * np.where(fz**3 > 0.008856, fz**3, (fz - 16.0 / 116.0) / 7.787),
+                ],
+                axis=2,
+            )
             rgb_lin_out = xyz_out @ np.linalg.inv(m).T
-            rgb_srgb = np.where(rgb_lin_out <= 0.0031308, rgb_lin_out * 12.92, 1.055 * np.power(np.clip(rgb_lin_out, 0, None), 1.0 / 2.4) - 0.055)
+            rgb_srgb = np.where(
+                rgb_lin_out <= 0.0031308,
+                rgb_lin_out * 12.92,
+                1.055 * np.power(np.clip(rgb_lin_out, 0, None), 1.0 / 2.4) - 0.055,
+            )
             result = (np.clip(rgb_srgb, 0, 1) * 255).astype(np.uint8)
             return convertMatToQImage(result, bgr=False)
 
@@ -237,7 +284,9 @@ class VideoFilters(object):
             l_ch, a_ch, b_ch = _fcore.split(lab)
             clahe = _fcore.createCLAHE(clipLimit=3.5, tileGridSize=(8, 8))
             l_ch = clahe.apply(l_ch)
-            result_bgr = _fcore.cvtColor(_fcore.merge((l_ch, a_ch, b_ch)), _fcore.COLOR_LAB2BGR)
+            result_bgr = _fcore.cvtColor(
+                _fcore.merge((l_ch, a_ch, b_ch)), _fcore.COLOR_LAB2BGR
+            )
             return convertMatToQImage(result_bgr, bgr=True)
         gray = convertQImageToMat(image, cn=1)
         eq = _clahe_numpy(gray, clip_limit=3.5)
@@ -258,13 +307,9 @@ class VideoFilters(object):
                 255,
             ).astype(np.uint8)
             return convertMatToQImage(sharpened, bgr=True)
-        kernel = np.array(
-            [[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]], dtype=np.float64
-        )
+        kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]], dtype=np.float64)
         rgb = img.astype(np.float64)
-        sharpened = np.stack(
-            [_conv2d(rgb[:, :, c], kernel) for c in range(3)], axis=2
-        )
+        sharpened = np.stack([_conv2d(rgb[:, :, c], kernel) for c in range(3)], axis=2)
         result = np.clip(sharpened, 0, 255).astype(np.uint8)
         return convertMatToQImage(result, bgr=False)
 
@@ -275,7 +320,10 @@ class VideoFilters(object):
         gray = convertQImageToMat(image, cn=1)
         if _HAS_CV2:
             img_blur = _fcore.GaussianBlur(gray, (15, 15), 0)
-            if _fcore._prev_motion_frame is None or _fcore._prev_motion_frame.shape != img_blur.shape:
+            if (
+                _fcore._prev_motion_frame is None
+                or _fcore._prev_motion_frame.shape != img_blur.shape
+            ):
                 _fcore._prev_motion_frame = img_blur
                 return image
             diff = np.abs(
@@ -285,15 +333,18 @@ class VideoFilters(object):
             # Overlay motion (green) on the original frame for readability.
             rgb = convertQImageToMat(image, cn=3).copy()
             motion = thresh > 0
-            rgb[motion, 1] = np.clip(rgb[motion, 1].astype(np.int16) + 120, 0, 255).astype(
-                np.uint8
-            )
+            rgb[motion, 1] = np.clip(
+                rgb[motion, 1].astype(np.int16) + 120, 0, 255
+            ).astype(np.uint8)
             rgb[motion, 0] = (rgb[motion, 0] * 0.4).astype(np.uint8)
             rgb[motion, 2] = (rgb[motion, 2] * 0.4).astype(np.uint8)
             _fcore._prev_motion_frame = img_blur
             return convertMatToQImage(rgb, bgr=False)
 
-        if _fcore._prev_motion_frame is None or _fcore._prev_motion_frame.shape != gray.shape:
+        if (
+            _fcore._prev_motion_frame is None
+            or _fcore._prev_motion_frame.shape != gray.shape
+        ):
             _fcore._prev_motion_frame = gray
             return image
         diff = np.abs(
@@ -314,7 +365,7 @@ class VideoFilters(object):
         if _HAS_CV2:
             gx = _fcore.Sobel(gray, _fcore.CV_64F, 1, 0, ksize=3)
             gy = _fcore.Sobel(gray, _fcore.CV_64F, 0, 1, ksize=3)
-            magnitude = np.sqrt(gx ** 2 + gy ** 2)
+            magnitude = np.sqrt(gx**2 + gy**2)
         else:
             magnitude, _ = _fcore._sobel_gradients(gray.astype(np.float64))
         peak = float(magnitude.max()) if magnitude.size else 0.0
@@ -354,8 +405,10 @@ class VideoFilters(object):
         peak = float(np.percentile(np.abs(s), 99)) if s.size else 1.0
         if peak < 1e-6:
             peak = 1.0
-        norm = np.clip(s / peak, 0, 1) if amplify_positive else np.clip(
-            (s / peak + 1.0) * 0.5, 0, 1
+        norm = (
+            np.clip(s / peak, 0, 1)
+            if amplify_positive
+            else np.clip((s / peak + 1.0) * 0.5, 0, 1)
         )
         heat = (norm * 255.0).astype(np.float64)
         tint = np.asarray(tint_rgb, dtype=np.float64)
@@ -414,7 +467,7 @@ class VideoFilters(object):
                 rgb[motion, 1] = 255
                 rgb[motion, 0] = (rgb[motion, 0] * 0.25).astype(np.uint8)
                 rgb[motion, 2] = (rgb[motion, 2] * 0.25).astype(np.uint8)
-                dim = (~motion)
+                dim = ~motion
                 rgb[dim] = (rgb[dim].astype(np.float64) * 0.55).astype(np.uint8)
                 return convertMatToQImage(rgb, bgr=False)
         return VideoFilters.MotionDetectionFilter(image)
@@ -433,7 +486,9 @@ class VideoFilters(object):
             l_ch = np.clip(
                 (l_ch.astype(np.float64) - p2) / (p98 - p2 + 1e-6) * 255, 0, 255
             ).astype(np.uint8)
-            result_bgr = _fcore.cvtColor(_fcore.merge((l_ch, a_ch, b_ch)), _fcore.COLOR_LAB2BGR)
+            result_bgr = _fcore.cvtColor(
+                _fcore.merge((l_ch, a_ch, b_ch)), _fcore.COLOR_LAB2BGR
+            )
             return convertMatToQImage(result_bgr, bgr=True)
         gray = convertQImageToMat(image, cn=1)
         eq = _clahe_numpy(gray, clip_limit=6.0, grid_size=16)
@@ -449,7 +504,9 @@ class VideoFilters(object):
             l_ch, a_ch, b_ch = _fcore.split(lab)
             clahe = _fcore.createCLAHE(clipLimit=4.0, tileGridSize=(8, 8))
             l_ch = clahe.apply(l_ch)
-            enhanced = _fcore.cvtColor(_fcore.merge((l_ch, a_ch, b_ch)), _fcore.COLOR_LAB2BGR)
+            enhanced = _fcore.cvtColor(
+                _fcore.merge((l_ch, a_ch, b_ch)), _fcore.COLOR_LAB2BGR
+            )
             blurred = _fcore.GaussianBlur(enhanced, (0, 0), 2)
             sharpened = np.clip(
                 enhanced.astype(np.float64)
@@ -512,12 +569,14 @@ class VideoFilters(object):
         rgb = (np.stack((r, g, b), axis=2) * 255).astype(np.uint8)
         return convertMatToQImage(rgb, bgr=False)
 
-
     BuildingDetectionFilter = staticmethod(FmvDetectionFilters.BuildingDetectionFilter)
     RoadSegmentationFilter = staticmethod(FmvDetectionFilters.RoadSegmentationFilter)
-    VehicleSegmentationFilter = staticmethod(FmvDetectionFilters.VehicleSegmentationFilter)
-    PersonSegmentationFilter = staticmethod(FmvDetectionFilters.PersonSegmentationFilter)
+    VehicleSegmentationFilter = staticmethod(
+        FmvDetectionFilters.VehicleSegmentationFilter
+    )
+    PersonSegmentationFilter = staticmethod(
+        FmvDetectionFilters.PersonSegmentationFilter
+    )
     FireDetectionFilter = staticmethod(FmvDetectionFilters.FireDetectionFilter)
     SmokeDetectionFilter = staticmethod(FmvDetectionFilters.SmokeDetectionFilter)
     FloodDetectionFilter = staticmethod(FmvDetectionFilters.FloodDetectionFilter)
-

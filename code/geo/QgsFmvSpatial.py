@@ -178,7 +178,9 @@ def image_xy_to_latlon(gt, x: float, y: float) -> Optional[Point2]:
         return None
 
 
-def metadata_lat_lon(metadata_dict, prefer_frame_center: bool = True) -> Optional[Point2]:
+def metadata_lat_lon(
+    metadata_dict, prefer_frame_center: bool = True
+) -> Optional[Point2]:
     """Extract ``(lat, lon)`` from a MetadataList-style dict."""
     if not metadata_dict:
         return None

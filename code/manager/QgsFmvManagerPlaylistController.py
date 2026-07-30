@@ -2,6 +2,7 @@
 """Player attach/playback orchestration: create or reuse the FMV player dock
 for the video selected in the Manager, and center the map on its start point.
 """
+
 from qgis.PyQt.QtCore import Qt
 from qgis.core import (
     QgsCoordinateReferenceSystem,

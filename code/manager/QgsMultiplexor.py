@@ -13,7 +13,6 @@ import QGISFMV.utils.core.QgsFmvUtils as _fmv_utils
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
-
 class Multiplexor(QDialog, Ui_VideoMultiplexer):
     """Create a MISB multiplexed video from source video + telemetry."""
 
@@ -132,9 +131,7 @@ class Multiplexor(QDialog, Ui_VideoMultiplexer):
             on_finished=self.muxFinished,
             flags=QgsTask.Flag.CanCancel,
         )
-        self._background_tasks = [
-            t for t in self._background_tasks if t is not None
-        ]
+        self._background_tasks = [t for t in self._background_tasks if t is not None]
         self._background_tasks.append(task)
         QgsApplication.taskManager().addTask(task)
         self.accept()

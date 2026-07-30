@@ -47,7 +47,10 @@ def _ema_score(name, score, alpha=0.40):
 def _motion_boost(lum):
     """Return [0,1] motion magnitude vs previous detection frame."""
     cur = FilterCore.smooth(lum, sigma=1.0)
-    if _geom._detection_prev_gray is None or _geom._detection_prev_gray.shape != cur.shape:
+    if (
+        _geom._detection_prev_gray is None
+        or _geom._detection_prev_gray.shape != cur.shape
+    ):
         _geom._detection_prev_gray = cur
         return np.zeros_like(cur)
     diff = np.abs(cur - _geom._detection_prev_gray)
@@ -93,10 +96,17 @@ def _confidence_overlay(
     tint = np.asarray(tint_rgb, dtype=np.float64)
     base = rgb.astype(np.float64)
     from QGISFMV.utils.constants import (
-        CONFIDENCE_BASE_BRIGHTNESS, CONFIDENCE_TINT_RANGE, CONFIDENCE_TINT_INTENSITY,
+        CONFIDENCE_BASE_BRIGHTNESS,
+        CONFIDENCE_TINT_RANGE,
+        CONFIDENCE_TINT_INTENSITY,
     )
-    out = base * (CONFIDENCE_BASE_BRIGHTNESS + CONFIDENCE_TINT_RANGE * (1.0 - weight[..., None]))
-    out = out * (1.0 - CONFIDENCE_TINT_INTENSITY * weight[..., None]) + tint * (CONFIDENCE_TINT_INTENSITY * weight[..., None])
+
+    out = base * (
+        CONFIDENCE_BASE_BRIGHTNESS + CONFIDENCE_TINT_RANGE * (1.0 - weight[..., None])
+    )
+    out = out * (1.0 - CONFIDENCE_TINT_INTENSITY * weight[..., None]) + tint * (
+        CONFIDENCE_TINT_INTENSITY * weight[..., None]
+    )
     out = np.clip(out, 0, 255).astype(np.uint8)
     nboxes = 0
     if boxes:
@@ -129,9 +139,7 @@ def _confidence_overlay(
                         except Exception as exc:
                             log.debug("cv2.putText failed: %s", exc)
     if engine is None:
-        engine = "CV" if opencv_available() else (
-            "SCIPY" if _HAS_NDIMAGE else "NUMPY"
-        )
+        engine = "CV" if opencv_available() else ("SCIPY" if _HAS_NDIMAGE else "NUMPY")
     FilterCore.draw_filter_banner(
         out,
         f"{str(label)} [{str(engine)}] det:{nboxes} {float(cov):.0f}%",
@@ -355,7 +363,7 @@ def _run_detection(
                     )
                     return result, weight, engine, boxes
         except Exception as _exc:
-            log.debug('DNN detection failed, falling back to classical: %s', _exc)
+            log.debug("DNN detection failed, falling back to classical: %s", _exc)
     engine = "CV"
     score_map = _multiscale_score(work_rgb, score_fn)
     try:
@@ -364,7 +372,7 @@ def _run_detection(
         else:
             raise RuntimeError("OpenCV unavailable")
     except Exception as _exc:
-        log.debug('OpenCV detection pipeline failed, using fallback: %s', _exc)
+        log.debug("OpenCV detection pipeline failed, using fallback: %s", _exc)
         engine = "SCIPY" if _HAS_NDIMAGE else "NUMPY"
         raw_score, boxes = fallback_fn(work_rgb, score_map)
     score = _ema_score(ema_key, raw_score, alpha=ema_alpha)
@@ -376,9 +384,7 @@ def _run_detection(
     opts["engine"] = engine
     tint = opts.pop("tint_rgb")
     label = opts.pop("label")
-    result, weight = _confidence_overlay(
-        rgb, score, tint, label, **opts
-    )
+    result, weight = _confidence_overlay(rgb, score, tint, label, **opts)
     _notify_map_detections(ema_key, boxes, track_ids, opts.get("box_scores"))
     return result, weight, engine, boxes
 
@@ -394,63 +400,188 @@ def _notify_map_detections(class_name, boxes, track_ids, scores):
     except Exception as exc:
         log.debug("notify_detections failed: %s", exc)
 
+
 # Filter-specific pipeline parameter defaults — avoids repeating long kwarg
 # lists in every _detect_opencv_X / _detect_fallback_X pair.
 _FALLBACK_FILTER_CONFIG = {
-    "building": dict(percentile=82, default_thr=0.28, open_iter=1, close_iter=2,
-                     min_area_frac=0.0012, max_area_frac=0.35, aspect_range=(0.25, 5.0),
-                     min_extent=0.16, max_boxes=40, mask_blend=0.0, filter_key="building"),
-    "road": dict(percentile=78, default_thr=0.32, open_iter=1, close_iter=3,
-                 min_area_frac=0.0015, max_area_frac=0.55, aspect_range=(1.2, 30.0),
-                 min_extent=0.10, max_boxes=25, mask_blend=0.35, filter_key="road"),
-    "vehicle": dict(percentile=84, default_thr=0.22, open_iter=1, close_iter=1,
-                    min_area_frac=0.00005, max_area_frac=0.025, aspect_range=(0.35, 5.0),
-                    min_extent=0.10, max_boxes=60, filter_key="vehicle"),
-    "person": dict(percentile=82, default_thr=0.22, open_iter=1, close_iter=2,
-                   min_area_frac=0.0002, max_area_frac=0.06, aspect_range=(1.5, 7.0),
-                   min_extent=0.14, max_boxes=30, prefer_vertical=True, mask_blend=0.0,
-                   filter_key="person"),
-    "fire": dict(percentile=78, default_thr=0.18, open_iter=1, close_iter=2,
-                 min_area_frac=0.00015, max_area_frac=0.35, aspect_range=(0.2, 8.0),
-                 min_extent=0.12, max_boxes=25, mask_blend=0.35, filter_key="fire"),
-    "smoke": dict(percentile=80, default_thr=0.24, open_iter=1, close_iter=3,
-                  min_area_frac=0.002, max_area_frac=0.55, aspect_range=(0.3, 12.0),
-                  min_extent=0.12, max_boxes=20, filter_key="smoke"),
-    "flood": dict(percentile=78, default_thr=0.22, open_iter=1, close_iter=3,
-                  min_area_frac=0.0015, max_area_frac=0.70, aspect_range=(0.2, 20.0),
-                  min_extent=0.10, max_boxes=20, filter_key="flood"),
+    "building": dict(
+        percentile=82,
+        default_thr=0.28,
+        open_iter=1,
+        close_iter=2,
+        min_area_frac=0.0012,
+        max_area_frac=0.35,
+        aspect_range=(0.25, 5.0),
+        min_extent=0.16,
+        max_boxes=40,
+        mask_blend=0.0,
+        filter_key="building",
+    ),
+    "road": dict(
+        percentile=78,
+        default_thr=0.32,
+        open_iter=1,
+        close_iter=3,
+        min_area_frac=0.0015,
+        max_area_frac=0.55,
+        aspect_range=(1.2, 30.0),
+        min_extent=0.10,
+        max_boxes=25,
+        mask_blend=0.35,
+        filter_key="road",
+    ),
+    "vehicle": dict(
+        percentile=84,
+        default_thr=0.22,
+        open_iter=1,
+        close_iter=1,
+        min_area_frac=0.00005,
+        max_area_frac=0.025,
+        aspect_range=(0.35, 5.0),
+        min_extent=0.10,
+        max_boxes=60,
+        filter_key="vehicle",
+    ),
+    "person": dict(
+        percentile=82,
+        default_thr=0.22,
+        open_iter=1,
+        close_iter=2,
+        min_area_frac=0.0002,
+        max_area_frac=0.06,
+        aspect_range=(1.5, 7.0),
+        min_extent=0.14,
+        max_boxes=30,
+        prefer_vertical=True,
+        mask_blend=0.0,
+        filter_key="person",
+    ),
+    "fire": dict(
+        percentile=78,
+        default_thr=0.18,
+        open_iter=1,
+        close_iter=2,
+        min_area_frac=0.00015,
+        max_area_frac=0.35,
+        aspect_range=(0.2, 8.0),
+        min_extent=0.12,
+        max_boxes=25,
+        mask_blend=0.35,
+        filter_key="fire",
+    ),
+    "smoke": dict(
+        percentile=80,
+        default_thr=0.24,
+        open_iter=1,
+        close_iter=3,
+        min_area_frac=0.002,
+        max_area_frac=0.55,
+        aspect_range=(0.3, 12.0),
+        min_extent=0.12,
+        max_boxes=20,
+        filter_key="smoke",
+    ),
+    "flood": dict(
+        percentile=78,
+        default_thr=0.22,
+        open_iter=1,
+        close_iter=3,
+        min_area_frac=0.0015,
+        max_area_frac=0.70,
+        aspect_range=(0.2, 20.0),
+        min_extent=0.10,
+        max_boxes=20,
+        filter_key="flood",
+    ),
 }
 
 _OPENCV_FILTER_CONFIG = {
-    "building": dict(percentile=82, default_thr=0.28, close_size=7,
-                     min_area_frac=0.0012, max_area_frac=0.35, aspect_range=(0.25, 5.0),
-                     min_extent=0.16, max_boxes=40, filter_key="building"),
-    "road": dict(percentile=78, default_thr=0.32,
-                 min_area_frac=0.0015, max_area_frac=0.55, aspect_range=(1.2, 30.0),
-                 min_extent=0.10, max_boxes=25, mask_blend=0.35, filter_key="road"),
-    "vehicle": dict(percentile=82, default_thr=0.20,
-                    min_area_frac=0.00005, max_area_frac=0.025, aspect_range=(0.35, 5.0),
-                    min_extent=0.10, max_boxes=60, filter_key="vehicle"),
-    "person": dict(percentile=82, default_thr=0.22, close_size=7,
-                   min_area_frac=0.0002, max_area_frac=0.06, aspect_range=(1.5, 7.0),
-                   min_extent=0.14, max_boxes=30, prefer_vertical=True, mask_blend=0.0,
-                   filter_key="person"),
-    "fire": dict(percentile=78, default_thr=0.18, close_size=7,
-                 min_area_frac=0.00015, max_area_frac=0.35, aspect_range=(0.2, 8.0),
-                 min_extent=0.12, max_boxes=25, mask_blend=0.35, filter_key="fire"),
-    "smoke": dict(percentile=80, default_thr=0.24, close_size=9,
-                  min_area_frac=0.002, max_area_frac=0.55, aspect_range=(0.3, 12.0),
-                  min_extent=0.12, max_boxes=20, filter_key="smoke"),
-    "flood": dict(percentile=78, default_thr=0.22,
-                  min_area_frac=0.0015, max_area_frac=0.70, aspect_range=(0.2, 20.0),
-                  min_extent=0.10, max_boxes=20, filter_key="flood"),
+    "building": dict(
+        percentile=82,
+        default_thr=0.28,
+        close_size=7,
+        min_area_frac=0.0012,
+        max_area_frac=0.35,
+        aspect_range=(0.25, 5.0),
+        min_extent=0.16,
+        max_boxes=40,
+        filter_key="building",
+    ),
+    "road": dict(
+        percentile=78,
+        default_thr=0.32,
+        min_area_frac=0.0015,
+        max_area_frac=0.55,
+        aspect_range=(1.2, 30.0),
+        min_extent=0.10,
+        max_boxes=25,
+        mask_blend=0.35,
+        filter_key="road",
+    ),
+    "vehicle": dict(
+        percentile=82,
+        default_thr=0.20,
+        min_area_frac=0.00005,
+        max_area_frac=0.025,
+        aspect_range=(0.35, 5.0),
+        min_extent=0.10,
+        max_boxes=60,
+        filter_key="vehicle",
+    ),
+    "person": dict(
+        percentile=82,
+        default_thr=0.22,
+        close_size=7,
+        min_area_frac=0.0002,
+        max_area_frac=0.06,
+        aspect_range=(1.5, 7.0),
+        min_extent=0.14,
+        max_boxes=30,
+        prefer_vertical=True,
+        mask_blend=0.0,
+        filter_key="person",
+    ),
+    "fire": dict(
+        percentile=78,
+        default_thr=0.18,
+        close_size=7,
+        min_area_frac=0.00015,
+        max_area_frac=0.35,
+        aspect_range=(0.2, 8.0),
+        min_extent=0.12,
+        max_boxes=25,
+        mask_blend=0.35,
+        filter_key="fire",
+    ),
+    "smoke": dict(
+        percentile=80,
+        default_thr=0.24,
+        close_size=9,
+        min_area_frac=0.002,
+        max_area_frac=0.55,
+        aspect_range=(0.3, 12.0),
+        min_extent=0.12,
+        max_boxes=20,
+        filter_key="smoke",
+    ),
+    "flood": dict(
+        percentile=78,
+        default_thr=0.22,
+        min_area_frac=0.0015,
+        max_area_frac=0.70,
+        aspect_range=(0.2, 20.0),
+        min_extent=0.10,
+        max_boxes=20,
+        filter_key="flood",
+    ),
 }
 
 
 def _detect_fallback_generic(filter_key, score):
     """Run fallback pipeline using params from _FALLBACK_FILTER_CONFIG."""
     return _fallback_detection_pipeline(
-        score, **_FALLBACK_FILTER_CONFIG[filter_key],
+        score,
+        **_FALLBACK_FILTER_CONFIG[filter_key],
     )
 
 

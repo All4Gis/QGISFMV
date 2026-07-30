@@ -5,6 +5,7 @@ Owns every QRubberBand (video-widget overlay) and QgsRubberBand (map-canvas)
 instance used while drawing, measuring, censoring, or tracking objects on the
 video widget.
 """
+
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QPalette, QColor, QBrush
 from qgis.PyQt.QtWidgets import QRubberBand
@@ -39,7 +40,9 @@ class RubberBandManager:
         # Map-canvas rubber bands
         canvas = iface.mapCanvas()
 
-        self.poly_canvas = QgsRubberBand(canvas, QgsWkbTypes.GeometryType.PolygonGeometry)
+        self.poly_canvas = QgsRubberBand(
+            canvas, QgsWkbTypes.GeometryType.PolygonGeometry
+        )
         self.poly_canvas.setColor(color_amber)
         self.poly_canvas.setWidth(3)
 
@@ -47,16 +50,22 @@ class RubberBandManager:
         self.track_canvas.setColor(color_track)
         self.track_canvas.setWidth(3)
 
-        self.cursor_canvas = QgsRubberBand(canvas, QgsWkbTypes.GeometryType.PointGeometry)
+        self.cursor_canvas = QgsRubberBand(
+            canvas, QgsWkbTypes.GeometryType.PointGeometry
+        )
         self.cursor_canvas.setWidth(4)
         self.cursor_canvas.setColor(QColor(255, 100, 100, 250))
         self.cursor_canvas.setIcon(QgsRubberBand.IconType.ICON_FULL_DIAMOND)
 
-        self.measure_dist_canvas = QgsRubberBand(canvas, QgsWkbTypes.GeometryType.LineGeometry)
+        self.measure_dist_canvas = QgsRubberBand(
+            canvas, QgsWkbTypes.GeometryType.LineGeometry
+        )
         self.measure_dist_canvas.setColor(color_measure_dist)
         self.measure_dist_canvas.setWidth(3)
 
-        self.measure_area_canvas = QgsRubberBand(canvas, QgsWkbTypes.GeometryType.PolygonGeometry)
+        self.measure_area_canvas = QgsRubberBand(
+            canvas, QgsWkbTypes.GeometryType.PolygonGeometry
+        )
         self.measure_area_canvas.setColor(color_measure_area)
         self.measure_area_canvas.setFillColor(QColor(255, 193, 7, 90))
         self.measure_area_canvas.setWidth(3)

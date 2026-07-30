@@ -12,6 +12,7 @@ This module owns:
 * :func:`setValues` — loads persisted QSettings values into ``drawing_config``
   (and optionally reflects them onto an options dialog).
 """
+
 import os
 
 from qgis.PyQt.QtCore import Qt, QSettings
@@ -27,16 +28,34 @@ class DrawingConfig:
     """All mutable drawing parameters in one place."""
 
     __slots__ = (
-        "MAX_MAGNIFIER", "MAX_FACTOR", "TYPE_MAGNIFIER",
-        "PolyWidth", "PolyPen", "PolyBrush",
-        "PointRadius", "PointFillColor", "PointOutlineColor",
-        "PointLabelColor", "PointLabelBgColor", "PointPen", "PointFont",
-        "LineWidth", "LinePen",
-        "TrackLockColor", "TrackWeakColor", "TrackLostColor", "TrackHudFont",
-        "MeasureWidth", "MeasurePen", "MeasureBrush",
-        "MeasureLabelBg", "MeasureLabelFg",
-        "MeasureVertexFill", "MeasureVertexOutline",
-        "MeasureFont", "MeasureGlowPen",
+        "MAX_MAGNIFIER",
+        "MAX_FACTOR",
+        "TYPE_MAGNIFIER",
+        "PolyWidth",
+        "PolyPen",
+        "PolyBrush",
+        "PointRadius",
+        "PointFillColor",
+        "PointOutlineColor",
+        "PointLabelColor",
+        "PointLabelBgColor",
+        "PointPen",
+        "PointFont",
+        "LineWidth",
+        "LinePen",
+        "TrackLockColor",
+        "TrackWeakColor",
+        "TrackLostColor",
+        "TrackHudFont",
+        "MeasureWidth",
+        "MeasurePen",
+        "MeasureBrush",
+        "MeasureLabelBg",
+        "MeasureLabelFg",
+        "MeasureVertexFill",
+        "MeasureVertexOutline",
+        "MeasureFont",
+        "MeasureGlowPen",
     )
 
     def __init__(self):
@@ -129,9 +148,7 @@ def ensure_stamp_image():
     try:
         from QGISFMV.utils.settings.QgsFmvSettings import plugin_root
 
-        stamp_path = os.path.join(
-            plugin_root(), "images", "stamp", "confidential.png"
-        )
+        stamp_path = os.path.join(plugin_root(), "images", "stamp", "confidential.png")
         if os.path.isfile(stamp_path):
             confidential = QPixmap(stamp_path)
     except Exception as exc:
@@ -146,6 +163,7 @@ def ensure_stamp_image():
 # ---------------------------------------------------------------------------
 # Settings persistence.
 # ---------------------------------------------------------------------------
+
 
 def setValues(options=None):
     """Load drawing tool settings from QSettings and update drawing_config."""
@@ -252,8 +270,10 @@ def setValues(options=None):
         cfg.MeasurePen.setWidth(cfg.MeasureWidth)
         cfg.MeasureVertexFill = QColor(m_color)
         cfg.MeasureGlowPen = QPen(
-            QColor(0, 0, 0, 110), cfg.MeasureWidth + 2,
-            cap=Qt.PenCapStyle.RoundCap, join=Qt.PenJoinStyle.RoundJoin,
+            QColor(0, 0, 0, 110),
+            cfg.MeasureWidth + 2,
+            cap=Qt.PenCapStyle.RoundCap,
+            join=Qt.PenJoinStyle.RoundJoin,
         )
         if options is not None:
             options.measures_pen.setColor(QColor(m_color))

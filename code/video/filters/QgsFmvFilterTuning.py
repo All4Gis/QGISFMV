@@ -14,6 +14,7 @@ def _get(section: str, key: str, default: str) -> str:
         return str(get(section, key, default) or default).strip()
     except Exception as _exc:
         from QGISFMV.utils.logging import log
+
         log.debug("Settings read [%s] %s failed: %s", section, key, _exc)
         return default
 
@@ -119,24 +120,34 @@ def tracking_enabled() -> bool:
     return _bool("tracking_enabled", True)
 
 
-def apply_aerial_pipeline_kw(filter_key: str | None = None, **kwargs: Any) -> Dict[str, Any]:
+def apply_aerial_pipeline_kw(
+    filter_key: str | None = None, **kwargs: Any
+) -> Dict[str, Any]:
     """Merge FMV-friendly detection kwargs (lower thresholds, smaller min area)."""
     if not is_aerial_profile():
         return dict(kwargs)
     tuned = pipeline_defaults(filter_key)
     out = dict(kwargs)
     if "percentile" in out:
-        out["percentile"] = min(int(out["percentile"]), int(tuned.get("percentile", 70)))
+        out["percentile"] = min(
+            int(out["percentile"]), int(tuned.get("percentile", 70))
+        )
     if "default_thr" in out:
-        out["default_thr"] = min(float(out["default_thr"]), float(tuned.get("default_thr", 0.10)))
+        out["default_thr"] = min(
+            float(out["default_thr"]), float(tuned.get("default_thr", 0.10))
+        )
     if "min_pos" in out:
         out["min_pos"] = min(int(out.get("min_pos", 48)), int(tuned.get("min_pos", 20)))
     elif "min_pos" not in out:
         out["min_pos"] = int(tuned.get("min_pos", 20))
     if "min_extent" in out:
-        out["min_extent"] = min(float(out["min_extent"]), float(tuned.get("min_extent", 0.08)))
+        out["min_extent"] = min(
+            float(out["min_extent"]), float(tuned.get("min_extent", 0.08))
+        )
     if "min_area_frac" in out and "min_area_frac" in tuned:
-        out["min_area_frac"] = min(float(out["min_area_frac"]), float(tuned["min_area_frac"]))
+        out["min_area_frac"] = min(
+            float(out["min_area_frac"]), float(tuned["min_area_frac"])
+        )
     if "mask_blend" in out and "mask_blend" in tuned:
         out["mask_blend"] = max(float(out["mask_blend"]), float(tuned["mask_blend"]))
     return out

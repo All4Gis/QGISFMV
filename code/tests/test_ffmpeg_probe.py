@@ -77,5 +77,7 @@ class TestConvertVideo:
     def test_returns_none_for_missing_input(self, tmp_path, monkeypatch):
         monkeypatch.setattr(probe, "ffmpeg_path", "/usr/bin/ffmpeg")
         task = type("Task", (), {"isCanceled": lambda: False})()
-        result = probe.convert_video(task, "/nonexistent/in.mp4", str(tmp_path / "out.mp4"))
+        result = probe.convert_video(
+            task, "/nonexistent/in.mp4", str(tmp_path / "out.mp4")
+        )
         assert result is None

@@ -6,6 +6,7 @@ symbols, measurements), the tool Set*/removeLast*/removeAll* logic, the
 placement-hint flashing, and the drag-rubberband bookkeeping used by the
 mouse event handlers.
 """
+
 from qgis.PyQt.QtCore import QPoint, QRect, QSize
 from qgis.core import QgsPointXY, QgsWkbTypes
 
@@ -220,8 +221,9 @@ class VideoDrawController:
         symbol_index = len(w.drawMilSymbols) + 1
         symbol_id = getattr(w, "_selectedMilSymbolId", "f_inf")
         unit_name = getattr(w, "_selectedMilSymbolLabel", "")
-        AddDrawMilitarySymbolOnMap(symbol_index, Longitude, Latitude, Altitude,
-                                   symbol_id, unit_name)
+        AddDrawMilitarySymbolOnMap(
+            symbol_index, Longitude, Latitude, Altitude, symbol_id, unit_name
+        )
         w.drawMilSymbols.append([Longitude, Latitude, Altitude, symbol_id, unit_name])
         player = getattr(w, "_player", None) or getattr(w, "parent", None)
         if player is not None and hasattr(player, "_refreshMilSymbolPlacedCount"):
@@ -273,9 +275,7 @@ class VideoDrawController:
     def sync_measure_area_map(self):
         """Refresh the rubber band and persistent layer for area measurements."""
         w = self._widget
-        w.rubbers.measure_area_canvas.reset(
-            QgsWkbTypes.GeometryType.PolygonGeometry
-        )
+        w.rubbers.measure_area_canvas.reset(QgsWkbTypes.GeometryType.PolygonGeometry)
         try:
             w._sync_draw_group()
             SyncMeasureAreaOnMap(w.drawMeasureArea, w._map_group())
@@ -404,7 +404,9 @@ class VideoDrawController:
         w = self._widget
         w._interaction.lineDrawer = value
         if value:
-            self.flash_tool_placement_hint(w.tr("Double-click on the video to draw lines"))
+            self.flash_tool_placement_hint(
+                w.tr("Double-click on the video to draw lines")
+            )
         else:
             self.clear_tool_hint()
         w.update()
@@ -550,10 +552,6 @@ class VideoDrawController:
         w = self._widget
         mp = qmouse_pos(event)
         if not w.rubbers.tracking_video.isHidden():
-            w.rubbers.tracking_video.setGeometry(
-                QRect(w.origin, mp).normalized()
-            )
+            w.rubbers.tracking_video.setGeometry(QRect(w.origin, mp).normalized())
         if not w.rubbers.censure_video.isHidden():
-            w.rubbers.censure_video.setGeometry(
-                QRect(w.origin, mp).normalized()
-            )
+            w.rubbers.censure_video.setGeometry(QRect(w.origin, mp).normalized())

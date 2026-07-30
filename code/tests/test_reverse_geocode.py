@@ -43,9 +43,7 @@ class TestFetchReverseGeocode:
     def test_sends_user_agent_and_rewrites_legacy_url(self):
         mod = _mod()
         mock_resp = MagicMock()
-        mock_resp.read.return_value = (
-            b'{"display_name":"A, B, C","address":{"town":"Sevilla","state":"Andaluc\\u00eda"}}'
-        )
+        mock_resp.read.return_value = b'{"display_name":"A, B, C","address":{"town":"Sevilla","state":"Andaluc\\u00eda"}}'
         mock_resp.__enter__.return_value = mock_resp
         mock_resp.__exit__.return_value = False
 

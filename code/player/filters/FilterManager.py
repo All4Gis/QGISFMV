@@ -3,35 +3,49 @@
 
 from QGISFMV.video.filters.QgsBrightnessContrast import BrightnessContrastDialog
 
-
 # Filter name -> (widget method name, description) for the 20+ trivial _setFilter calls.
 _FILTER_DISPATCH = {
-    "grayFilter":                ("SetGray",                "Gray Video Filter"),
-    "MirrorHorizontalFilter":    ("SetMirrorH",             "Mirror Horizontal Video Filter"),
-    "edgeFilter":                ("SetEdgeDetection",       "Edge Detection Video Filter"),
-    "invertColorFilter":         ("SetInvertColor",         "Invert Color Video Filter"),
-    "autoContrastFilter":        ("SetAutoContrastFilter",  "Auto Contrast Video Filter"),
-    "monoFilter":                ("SetMonoFilter",          "Filter Mono Video"),
-    "claheFilter":               ("claheFilter",            "CLAHE adaptive contrast filter"),
-    "sharpenFilter":             ("sharpenFilter",          "Sharpen (unsharp mask) filter"),
-    "sobelFilter":               ("sobelFilter",            "Sobel edge detection filter"),
-    "roadEnhanceFilter":         ("roadEnhanceFilter",      "Road & structure enhancement filter"),
-    "motionDetectionFilter":     ("motionDetectionFilter",  "Motion detection filter"),
-    "backgroundSubtractionFilter": ("backgroundSubtractionFilter", "Background subtraction (MOG2) filter"),
-    "hotspotFilter":             ("hotspotFilter",          "Hotspot detection filter"),
-    "falseColorFilter":          ("falseColorFilter",       "False color (Turbo LUT) filter"),
-    "exgFilter":                 ("exgFilter",              "Excess Green (ExG = 2G − R − B) filter"),
-    "exrFilter":                 ("exrFilter",              "Excess Red (ExR = 1.4R − G) filter"),
-    "variFilter":                ("variFilter",             "VARI vegetation index filter"),
-    "dehazeFilter":              ("dehazeFilter",           "Dehaze (CLAHE enhancement) filter"),
-    "nrviFilter":                ("nrviFilter",             "NRVI vegetation index (RGB approx) filter"),
-    "buildingDetectionFilter":   ("buildingDetectionFilter", "Building Segmentation (classical CV) filter"),
-    "roadSegmentationFilter":    ("roadSegmentationFilter", "Road Segmentation (classical CV) filter"),
-    "vehicleSegmentationFilter": ("vehicleSegmentationFilter", "Vehicle Segmentation filter"),
-    "personSegmentationFilter":  ("personSegmentationFilter", "Person Segmentation filter"),
-    "fireDetectionFilter":       ("fireDetectionFilter",    "Fire Segmentation filter"),
-    "smokeDetectionFilter":      ("smokeDetectionFilter",   "Smoke Segmentation filter"),
-    "floodDetectionFilter":      ("floodDetectionFilter",   "Flood Segmentation filter"),
+    "grayFilter": ("SetGray", "Gray Video Filter"),
+    "MirrorHorizontalFilter": ("SetMirrorH", "Mirror Horizontal Video Filter"),
+    "edgeFilter": ("SetEdgeDetection", "Edge Detection Video Filter"),
+    "invertColorFilter": ("SetInvertColor", "Invert Color Video Filter"),
+    "autoContrastFilter": ("SetAutoContrastFilter", "Auto Contrast Video Filter"),
+    "monoFilter": ("SetMonoFilter", "Filter Mono Video"),
+    "claheFilter": ("claheFilter", "CLAHE adaptive contrast filter"),
+    "sharpenFilter": ("sharpenFilter", "Sharpen (unsharp mask) filter"),
+    "sobelFilter": ("sobelFilter", "Sobel edge detection filter"),
+    "roadEnhanceFilter": ("roadEnhanceFilter", "Road & structure enhancement filter"),
+    "motionDetectionFilter": ("motionDetectionFilter", "Motion detection filter"),
+    "backgroundSubtractionFilter": (
+        "backgroundSubtractionFilter",
+        "Background subtraction (MOG2) filter",
+    ),
+    "hotspotFilter": ("hotspotFilter", "Hotspot detection filter"),
+    "falseColorFilter": ("falseColorFilter", "False color (Turbo LUT) filter"),
+    "exgFilter": ("exgFilter", "Excess Green (ExG = 2G − R − B) filter"),
+    "exrFilter": ("exrFilter", "Excess Red (ExR = 1.4R − G) filter"),
+    "variFilter": ("variFilter", "VARI vegetation index filter"),
+    "dehazeFilter": ("dehazeFilter", "Dehaze (CLAHE enhancement) filter"),
+    "nrviFilter": ("nrviFilter", "NRVI vegetation index (RGB approx) filter"),
+    "buildingDetectionFilter": (
+        "buildingDetectionFilter",
+        "Building Segmentation (classical CV) filter",
+    ),
+    "roadSegmentationFilter": (
+        "roadSegmentationFilter",
+        "Road Segmentation (classical CV) filter",
+    ),
+    "vehicleSegmentationFilter": (
+        "vehicleSegmentationFilter",
+        "Vehicle Segmentation filter",
+    ),
+    "personSegmentationFilter": (
+        "personSegmentationFilter",
+        "Person Segmentation filter",
+    ),
+    "fireDetectionFilter": ("fireDetectionFilter", "Fire Segmentation filter"),
+    "smokeDetectionFilter": ("smokeDetectionFilter", "Smoke Segmentation filter"),
+    "floodDetectionFilter": ("floodDetectionFilter", "Flood Segmentation filter"),
 }
 
 
@@ -191,20 +205,37 @@ class FilterManager:
         """Uncheck all other filter actions, then check *sender*."""
         if self._all_filter_actions is None:
             self._all_filter_actions = tuple(
-                getattr(self._player, name) for name in (
-                    "actionGray", "actionInvert_Color", "actionMono_Filter",
-                    "actionCanny_edge_detection", "actionAuto_Contrast_Filter",
-                    "actionMirroredH", "actionBrightness_Contrast",
-                    "actionCLAHE", "actionSharpen", "actionSobel",
-                    "actionRoad_Enhance", "actionMotion_Detection",
-                    "actionBackground_Subtraction", "actionHotspot",
-                    "actionFalse_Color", "actionExG", "actionExR",
-                    "actionVARI", "actionNRVI", "actionDehaze",
-                    "actionBuilding_Detection", "actionRoad_Segmentation",
-                    "actionVehicle_Segmentation", "actionPerson_Segmentation",
-                    "actionFire_Detection", "actionSmoke_Detection",
+                getattr(self._player, name)
+                for name in (
+                    "actionGray",
+                    "actionInvert_Color",
+                    "actionMono_Filter",
+                    "actionCanny_edge_detection",
+                    "actionAuto_Contrast_Filter",
+                    "actionMirroredH",
+                    "actionBrightness_Contrast",
+                    "actionCLAHE",
+                    "actionSharpen",
+                    "actionSobel",
+                    "actionRoad_Enhance",
+                    "actionMotion_Detection",
+                    "actionBackground_Subtraction",
+                    "actionHotspot",
+                    "actionFalse_Color",
+                    "actionExG",
+                    "actionExR",
+                    "actionVARI",
+                    "actionNRVI",
+                    "actionDehaze",
+                    "actionBuilding_Detection",
+                    "actionRoad_Segmentation",
+                    "actionVehicle_Segmentation",
+                    "actionPerson_Segmentation",
+                    "actionFire_Detection",
+                    "actionSmoke_Detection",
                     "actionFlood_Detection",
-                ) if hasattr(self._player, name)
+                )
+                if hasattr(self._player, name)
             )
         for action in self._all_filter_actions:
             action.blockSignals(True)

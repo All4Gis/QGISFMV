@@ -255,9 +255,7 @@ class GeofenceController:
             from QGISFMV.utils.layers.QgsFmvLayers import addLayerNoCrsDialog, groupName
 
             self._remove_aoi_layer()
-            layer = QgsVectorLayer(
-                "Polygon?crs=EPSG:4326", "FMV Geofence", "memory"
-            )
+            layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "FMV Geofence", "memory")
             fields = QgsFields()
             fields.append(QgsField("label", QVariant.String))
             layer.dataProvider().addAttributes(fields.toList())

@@ -98,16 +98,21 @@ def _popen_kwargs(
         "shell": False,
     }
     if _windows:
-        kwargs["creationflags"] = getattr(
-            subprocess, "CREATE_NO_WINDOW", 0x08000000
-        )
+        kwargs["creationflags"] = getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000)
     else:
         kwargs["close_fds"] = True
     return kwargs
 
 
-def spawn(cmds, t="ffmpeg", stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-          stderr=subprocess.PIPE, bufsize=0, inject_ultrafast=True):
+def spawn(
+    cmds,
+    t="ffmpeg",
+    stdin=subprocess.PIPE,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    bufsize=0,
+    inject_ultrafast=True,
+):
     """Spawn ffmpeg or ffprobe with *cmds* (without the binary prefix).
 
     Parameters
@@ -135,14 +140,17 @@ def spawn(cmds, t="ffmpeg", stdin=subprocess.PIPE, stdout=subprocess.PIPE,
 
     return subprocess.Popen(
         cmds,
-        **_popen_kwargs(
-            stdin=stdin, stdout=stdout, stderr=stderr, bufsize=bufsize
-        ),
+        **_popen_kwargs(stdin=stdin, stdout=stdout, stderr=stderr, bufsize=bufsize),
     )
 
 
-def popen_ffmpeg(args, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
-                 stderr=subprocess.DEVNULL, bufsize=0):
+def popen_ffmpeg(
+    args,
+    stdin=subprocess.DEVNULL,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.DEVNULL,
+    bufsize=0,
+):
     """Spawn ffmpeg with common pipe defaults used by multimedia fallbacks."""
     ensure_paths()
     if not _ffmpeg_path or not os.path.isfile(_ffmpeg_path):
@@ -151,9 +159,7 @@ def popen_ffmpeg(args, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
             raise RuntimeError("FFmpeg is not configured")
     return subprocess.Popen(
         [_ffmpeg_path] + list(args),
-        **_popen_kwargs(
-            stdin=stdin, stdout=stdout, stderr=stderr, bufsize=bufsize
-        ),
+        **_popen_kwargs(stdin=stdin, stdout=stdout, stderr=stderr, bufsize=bufsize),
     )
 
 

@@ -40,7 +40,9 @@ def probe_json(path, timeout_sec=None):
 
     proc = _spawn(args, t="probe")
     try:
-        communicate_timeout = timeout_sec if timeout_sec else (3.0 if is_stream else None)
+        communicate_timeout = (
+            timeout_sec if timeout_sec else (3.0 if is_stream else None)
+        )
         out, _ = proc.communicate(timeout=communicate_timeout)
     except subprocess.TimeoutExpired:
         try:
@@ -190,7 +192,9 @@ def _run_ffmpeg(cmds, task, duration=0.0):
                 line, buf = buf.split("\r", 1)
                 matches = _TIME_RE.findall(line)
                 if matches and duration > 0.01:
-                    task.setProgress(int(100.0 * _parse_timecode(matches[-1]) / duration))
+                    task.setProgress(
+                        int(100.0 * _parse_timecode(matches[-1]) / duration)
+                    )
 
         proc.stdout.close()
         proc.stderr.close()

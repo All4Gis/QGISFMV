@@ -4,6 +4,7 @@
 Keeps the z-order painting logic (background, drawings, overlays, HUD) in a
 single place so paintEvent itself stays a thin dispatch call.
 """
+
 from qgis.PyQt.QtCore import Qt, QRect
 from qgis.PyQt.QtGui import QPainter, QPen, QColor, QFont
 

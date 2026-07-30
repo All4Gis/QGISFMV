@@ -14,9 +14,7 @@ class VideoInfoDialog(QDialog, Ui_FmvVideoInfo):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
-        self.setWindowFlags(
-            Qt.WindowType.Window | Qt.WindowType.WindowCloseButtonHint
-        )
+        self.setWindowFlags(Qt.WindowType.Window | Qt.WindowType.WindowCloseButtonHint)
         self._model = QJsonModel()
         self.treeView.setModel(self._model)
         self.treeView.header().setSectionResizeMode(

@@ -32,6 +32,7 @@ _cached_wgs84_srs = None
 # WGS84 SRS cache
 # ---------------------------------------------------------------------------
 
+
 def _get_wgs84_srs():
     global _cached_wgs84_srs
     if _cached_wgs84_srs is None:
@@ -44,9 +45,11 @@ def _get_wgs84_srs():
 # Frame capture helpers
 # ---------------------------------------------------------------------------
 
+
 def _footprint_ground_span_m():
     """Approximate ground radius of the current video footprint."""
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     if gv is None:
         return None
     corners = [
@@ -62,15 +65,14 @@ def _footprint_ground_span_m():
     center_lat = sum(lats) / 4.0
     center_lon = sum(lons) / 4.0
     center = (center_lon, center_lat)
-    return max(
-        _geo_distance(center, (c[1], c[0])) for c in corners
-    )
+    return max(_geo_distance(center, (c[1], c[0])) for c in corners)
 
 
 def _should_accept_mosaic_frame():
     """Skip frames unless the platform moved or the footprint changed enough."""
     from QGISFMV.utils import constants as mosaic_cfg
     from QGISFMV.utils.core.QgsFmvUtils import gv
+
     global _mosaic_capture_state
     if gv is None:
         return True
@@ -127,6 +129,7 @@ def _downscale_qimage_for_mosaic(image, max_dimension=None):
 
     if max_dimension is None:
         from QGISFMV.utils import constants as mosaic_cfg
+
         max_dimension = mosaic_cfg.MOSAIC_MAX_FRAME_DIMENSION
     width = image.width()
     height = image.height()
@@ -147,6 +150,7 @@ def _downscale_qimage_for_mosaic(image, max_dimension=None):
 # Feather / weight helpers
 # ---------------------------------------------------------------------------
 
+
 def _mosaic_feather_weights(height, width, feather_px=None):
     """Source-image edge ramp (image space) for soft frame borders.
 
@@ -155,6 +159,7 @@ def _mosaic_feather_weights(height, width, feather_px=None):
     """
     if feather_px is None:
         from QGISFMV.utils import constants as mosaic_cfg
+
         feather_px = mosaic_cfg.MOSAIC_FEATHER_PX
     feather_px = max(8, int(feather_px))
     key = (height, width, feather_px)
@@ -175,6 +180,7 @@ def _footprint_weights_from_mask(valid, feather_px=None):
     """Feather weights from distance to the footprint edge (not mosaic canvas)."""
     if feather_px is None:
         from QGISFMV.utils import constants as mosaic_cfg
+
         feather_px = mosaic_cfg.MOSAIC_FEATHER_PX
     feather_px = max(8, int(feather_px))
     valid = np.asarray(valid, dtype=bool)
@@ -209,9 +215,11 @@ def _footprint_weights_from_mask(valid, feather_px=None):
     weights = np.clip(dist / float(feather_px), 0.0, 1.0).astype(np.float32)
     return np.where(valid, weights, 0.0).astype(np.float32)
 
+
 # ---------------------------------------------------------------------------
 # Raster I/O helpers
 # ---------------------------------------------------------------------------
+
 
 def _dataset_extent_wgs84(path):
     ds = gdal.Open(path)
@@ -247,6 +255,7 @@ def _union_extent(paths):
 def _mosaic_output_resolution(bounds, max_output_size=None):
     if max_output_size is None:
         from QGISFMV.utils import constants as mosaic_cfg
+
         max_output_size = mosaic_cfg.MOSAIC_MAX_OUTPUT_SIZE
     minx, miny, maxx, maxy = bounds
     span_x = max(abs(maxx - minx), 1e-12)
@@ -407,6 +416,7 @@ def _scale_affine_for_resize(affine, old_width, old_height, new_width, new_heigh
 # Georeferenced frame writing
 # ---------------------------------------------------------------------------
 
+
 def _write_georef_frame_gdal(image, dst_filename, affine):
     """Write RGBA GeoTIFF: RGB untouched, alpha = source-edge feather."""
     from QGISFMV.utils.core.QgsImageMat import convertQImageToMat
@@ -479,6 +489,7 @@ def _gdal_raster_readable(path):
 # Main entry points
 # ---------------------------------------------------------------------------
 
+
 def resetMosaicFrameCounter():
     """Reset per-session mosaic frame numbering."""
     global _mosaic_frame_counter, _mosaic_log_once, _mosaic_capture_state
@@ -489,7 +500,12 @@ def resetMosaicFrameCounter():
         "affine": False,
         "write": False,
     }
-    _mosaic_capture_state = {"time": 0.0, "lat": None, "lon": None, "footprint_span": None}
+    _mosaic_capture_state = {
+        "time": 0.0,
+        "lat": None,
+        "lon": None,
+        "footprint_span": None,
+    }
 
 
 def georeferencingVideo(parent):
@@ -498,7 +514,10 @@ def georeferencingVideo(parent):
 
     from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
     from QGISFMV.utils.core.QgsFmvUtils import gv, getVideoFolder
-    from QGISFMV.utils.core.QgsFmvUtils import _videoFrameImage, _syncVideoImageSizeFromParent
+    from QGISFMV.utils.core.QgsFmvUtils import (
+        _videoFrameImage,
+        _syncVideoImageSizeFromParent,
+    )
     from QGISFMV.utils.core.QgsFmvGeoReferencing import (
         SetImageSize,
         _affineTransformIsUsable,
@@ -590,9 +609,7 @@ def ExtendMosaic(task, out_path, new_frames, base_path=None):
         return {"error": "no readable georeferenced frames"}
 
     base_ok = (
-        base_path
-        and os.path.isfile(base_path)
-        and _gdal_raster_readable(base_path)
+        base_path and os.path.isfile(base_path) and _gdal_raster_readable(base_path)
     )
     sources = ([base_path] if base_ok else []) + frames
     full_rebuild = not base_ok and len(sources) > 1

@@ -13,14 +13,17 @@ from qgis.core import (
 
 from QGISFMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGISFMV.utils.logging import log
-from QGISFMV.utils.core.QgsFmvUtils import askForFiles, _seconds_to_time, BurnDrawingsImage
+from QGISFMV.utils.core.QgsFmvUtils import (
+    askForFiles,
+    _seconds_to_time,
+    BurnDrawingsImage,
+)
 from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from QGISFMV.player.dialogs.QgsFmvReportGenerator import ReportGenerator
 from QGISFMV.player.dialogs.QgsFmvReportMetadata import (
     _metadata_dict_from_table,
     _group_metadata_fields,
 )
-
 
 # Metadata-formatting helpers live in QgsFmvReportMetadata.py; PDF rendering
 # lives in ReportGenerator.
@@ -29,6 +32,7 @@ from QGISFMV.player.dialogs.QgsFmvReportMetadata import (
 # ---------------------------------------------------------------------------
 # QgsFmvMetadata — dock widget (public API unchanged)
 # ---------------------------------------------------------------------------
+
 
 class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
     """Metadata Class Reports"""
@@ -290,7 +294,9 @@ class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):
                 writer.writerow(["FMV Metadata Report"])
                 writer.writerow(["Video", video_name])
                 writer.writerow(["Timestamp", timestamp])
-                writer.writerow(["Generated", datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+                writer.writerow(
+                    ["Generated", datetime.now().strftime("%Y-%m-%d %H:%M:%S")]
+                )
                 writer.writerow([])
                 writer.writerow(headers)
 
