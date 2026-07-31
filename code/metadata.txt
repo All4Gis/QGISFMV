@@ -24,13 +24,13 @@ about= Plugin for QGIS 4 which allows to analyze, visualize and process videos i
 	   <p>If this plugin is useful for you, consider to donate to the author.</p>
 
 
-version=4.00
+version=4.0
 author= Francisco Raga
 email=franka1986@gmail.com
 
 changelog=
     ** General **
-     4.00:
+     4.0:
       --- Platform / QGIS 4 ---
       - QGIS 4 only (minimum version 4.0); QGIS 3 is no longer supported.
       - Plugin internal name is now QGISFMV (formerly QGIS_FMV).
