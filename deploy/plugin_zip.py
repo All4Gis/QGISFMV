@@ -9,12 +9,12 @@ from pathlib import Path
 import ast
 import shutil
 import sys
+import zipfile
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 CODE_DIR = REPO_ROOT / "code"
 OUTPUT_DIR = SCRIPT_DIR / "Output"
-
 
 # Directories and patterns to exclude from the plugin zip
 EXCLUDE_PATTERNS = [
@@ -22,12 +22,12 @@ EXCLUDE_PATTERNS = [
     "__pycache__",
     ".settings",
     "sql",
-    "ui",
     "tests",
     ".git",
     "python_deps",  # legacy vendor dir — deps come from requirements.txt
     # File patterns
     "*.sh",
+    "*.ui",
     "*.bat",
     "*.pro",
     "*.ts",
@@ -111,6 +111,7 @@ def strip_python_comments(directory):
             content = py.read_text(encoding="utf-8")
             tree = ast.parse(content)
             docstring_lines = set()
+
             for node in ast.walk(tree):
                 if isinstance(
                     node,
@@ -155,12 +156,15 @@ def strip_python_comments(directory):
                 new_lines.append(line)
 
             new_content = "".join(new_lines)
+
             if new_content != content:
                 py.write_text(new_content, encoding="utf-8")
                 new_size = py.stat().st_size
                 saved += original_size - new_size
+
         except (SyntaxError, Exception):
             pass
+
     return saved
 
 
@@ -176,8 +180,10 @@ def make_ignore_fn(patterns):
 def copy_project_structure(patterns):
     """Copy project structure excluding dev/CI artifacts."""
     print("Copying structure...")
+
     if OUTPUT_DIR.exists():
         shutil.rmtree(OUTPUT_DIR)
+
     shutil.copytree(CODE_DIR, OUTPUT_DIR, ignore=make_ignore_fn(patterns))
 
     print(f"  -> {OUTPUT_DIR}")
@@ -186,6 +192,7 @@ def copy_project_structure(patterns):
 def optimize_assets(directory):
     """Optimize images and strip Python comments in copied directory."""
     print("Optimizing assets...")
+
     total_saved = 0
 
     saved = optimize_pngs(directory)
@@ -209,38 +216,63 @@ def optimize_assets(directory):
         print("  No optimization applied")
 
 
-def create_zip(source_dir, zip_path):
-    """Create a zip archive from source_dir."""
+def create_zip_with_folder(source_dir, zip_path, folder_name):
+    """Create a zip archive with source_dir contents inside folder_name."""
     print(f"Creating {zip_path.name}...")
-    shutil.make_archive(str(zip_path.with_suffix("")), "zip", source_dir)
+
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+        for root, dirs, files in os.walk(source_dir):
+            for file in files:
+                if file == ".DS_Store":
+                    continue
+
+                file_path = Path(root) / file
+                arcname = os.path.join(
+                    folder_name,
+                    os.path.relpath(file_path, source_dir),
+                )
+
+                zipf.write(file_path, arcname)
+
     print(f"  -> {zip_path}")
 
 
 def main():
     """Main build function."""
+
     metadata = CODE_DIR / "metadata.txt"
+
     if not metadata.exists():
         print(f"Error: {metadata} not found")
         sys.exit(1)
 
     cp = ConfigParser()
+
     with metadata.open() as f:
         cp.read_file(f)
 
-    if not cp.has_option("general", "internal_name") or not cp.has_option(
-        "general", "version"
-    ):
+    if not cp.has_option("general", "version"):
         print("Error: metadata.txt missing required fields")
         sys.exit(1)
 
-    internal_name = cp.get("general", "internal_name")
-    version = cp.get("general", "version")
+    plugin_name = "QGISFMV"
 
     copy_project_structure(EXCLUDE_PATTERNS)
     optimize_assets(OUTPUT_DIR)
-    zip_path = OUTPUT_DIR.parent / f"{internal_name}_{version}.zip"
-    create_zip(OUTPUT_DIR, zip_path)
+
+    zip_path = OUTPUT_DIR.parent / f"{plugin_name}.zip"
+
+    create_zip_with_folder(
+        OUTPUT_DIR,
+        zip_path,
+        plugin_name,
+    )
+
     shutil.rmtree(OUTPUT_DIR)
+
+    zip_size = zip_path.stat().st_size / 1024
+
+    print(f"\n  Plugin zip: {zip_path.name} ({zip_size:.1f} KB)")
     print("Done.")
 
 
