@@ -6,7 +6,7 @@ from code.tests.support import ensure_qgis_fmv_package, load_plugin_module
 import pytest
 
 ensure_qgis_fmv_package()
-_fmt = load_plugin_module("utils/formatting.py", "QGISFMV.utils.formatting")
+_fmt = load_plugin_module("utils/formatting.py", "QGIS_FMV.utils.formatting")
 
 
 class TestSecondsToTime:
@@ -56,7 +56,7 @@ class TestSpawn:
         except ImportError:
             pytest.skip("QGIS runtime not available")
         utils = load_plugin_module(
-            "utils/core/QgsFmvUtils.py", "QGISFMV.utils.core.QgsFmvUtils"
+            "utils/core/QgsFmvUtils.py", "QGIS_FMV.utils.core.QgsFmvUtils"
         )
         return utils._spawn
 

@@ -30,7 +30,7 @@ class TestMediaTypes:
     def setup_class(cls):
         cls.types_mod = load_plugin_module(
             "utils/media/QgsFmvMediaTypes.py",
-            "QGISFMV.utils.media.QgsFmvMediaTypes",
+            "QGIS_FMV.utils.media.QgsFmvMediaTypes",
         )
 
     def test_playback_state_aliases(self):
@@ -106,13 +106,13 @@ class TestMediaProbe:
         _install_qtcore_stub(with_qobject=False)
         cls.probe = load_plugin_module(
             "utils/media/QgsFmvMediaProbe.py",
-            "QGISFMV.utils.media.QgsFmvMediaProbe",
+            "QGIS_FMV.utils.media.QgsFmvMediaProbe",
         )
 
     @classmethod
     def teardown_class(cls):
         _restore_modules(cls._saved)
-        sys.modules.pop("QGISFMV.utils.media.QgsFmvMediaProbe", None)
+        sys.modules.pop("QGIS_FMV.utils.media.QgsFmvMediaProbe", None)
 
     def test_parse_fps_fraction(self):
         assert self.probe.parse_fps("30000/1001") == pytest.approx(
@@ -169,18 +169,18 @@ class TestFmvPlaylist:
         _install_qtcore_stub(with_qobject=True)
         types_mod = load_plugin_module(
             "utils/media/QgsFmvMediaTypes.py",
-            "QGISFMV.utils.media.QgsFmvMediaTypes",
+            "QGIS_FMV.utils.media.QgsFmvMediaTypes",
         )
-        sys.modules["QGISFMV.utils.media.QgsFmvMediaTypes"] = types_mod
+        sys.modules["QGIS_FMV.utils.media.QgsFmvMediaTypes"] = types_mod
         cls.playlist_mod = load_plugin_module(
             "utils/media/QgsFmvPlaylist.py",
-            "QGISFMV.utils.media.QgsFmvPlaylist",
+            "QGIS_FMV.utils.media.QgsFmvPlaylist",
         )
 
     @classmethod
     def teardown_class(cls):
         _restore_modules(cls._saved)
-        sys.modules.pop("QGISFMV.utils.media.QgsFmvPlaylist", None)
+        sys.modules.pop("QGIS_FMV.utils.media.QgsFmvPlaylist", None)
 
     def test_add_and_count(self):
         pl = self.playlist_mod.FmvPlaylist()

@@ -1,0 +1,135 @@
+[general]
+name=QGIS Full Motion Video
+internal_name=QGISFMV
+
+qgisMinimumVersion=4.0
+qgisMaximumVersion=4.99
+
+description=Full Motion Video plugin for QGIS 4.
+
+about=Full Motion Video plugin for QGIS 4.
+ Allows analysis, visualization and processing of Full Motion Video inside the QGIS environment.
+ Supports MP4, TS, AVI and other common video formats.
+ Extracts frames, captures images and displays telemetry and metadata.
+ Supports MISB STANAG 4609 video with embedded KLV metadata.
+ Includes a built-in DJI telemetry multiplexer.
+ Provides more than 25 real-time video filters.
+ Includes AI detection based on YOLO and ONNX models.
+ Documentation: https://all4gis.github.io/QGISFMV/
+ GitHub: https://github.com/All4Gis/QGISFMV
+
+version=4.0
+
+author=Francisco Raga
+email=franka1986@gmail.com
+
+changelog=
+    4.0
+      - QGIS 4 only.
+      - Full Qt6 / PyQt6 migration.
+      - New FMV Settings dialog.
+      - MISB support migrated to pymisb.
+      - Built-in STANAG 4609 multiplexer.
+      - Sensor Coverage Cone.
+      - Distance Rings.
+      - HUD Overlay.
+      - Mini Map.
+      - Geofence and altitude alerts.
+      - Export trajectory to KML and GPX.
+      - Timeline with event markers.
+      - Multi-video synchronization.
+      - Military symbols.
+      - Platform icon selector.
+      - Automatic snapshots.
+      - Improved mosaic controller.
+      - More than 25 real-time video filters.
+      - AI Detection (YOLO / ONNX / VisDrone).
+      - Vehicle, person, building, road, fire, smoke and flood detection.
+      - OpenCV and NumPy fallback support.
+      - New AI Settings page.
+      - Improved toolbar handling.
+      - Better metadata dialog.
+      - Improved geodesic calculations.
+      - Performance optimizations.
+      - Better logging.
+      - FFmpeg auto-repair.
+      - Improved installers.
+      - Documentation updated.
+      - Numerous bug fixes.
+    1.5:
+    	- Added EG0104 Parser for legacy Predator Metadataset
+    	- Auto install dependencies on windows
+    	- Change FmvConfig file (settings.ini)
+    	- Fix mosaic algorithm
+    	- Reimplimented algorithms
+    	- Add 3D Support (Experimental)
+    	- Convert Video is cancelable
+    	- Preserve Metadata when Record video
+    	- Save current Georeferenced Frame
+    	- Add new icons
+    	- Fixed unplayable Non-MISB Video. These video can now be played, there is just no draws in map
+    	- Fixed Metadata view that was empty when you load it
+    	- Center Map on Footprint / Target / Sensor
+    	- Display View Axis on Map
+    	- Add new sensor styles and platform icons
+    	- Fix Klv lib parsers in some videos
+    	- Fix calculate footprint
+    	- Buffer size crash #44
+    1.4:
+    	- Move all thread to QgsTask
+    	- New Remove Draw Menu last or all drawings
+    	- Refactor code for easy contributions
+    	- Ruler on video
+    	- Video manager shows now a progress bar while meta buffer loading
+    	- Video manager has "Start Location" row that show the city where video is filmed 
+		 (reverse geocoding nominatim, config key: Reverse_geocoding_url)
+    	- Video manager status row shows "Loading", "Ready", "Playing" as video states
+    	- There is a "Exts" config key where video format are listed (the first is the default)
+    	- New icons
+    	- Minor Changes
+    1.3:
+    	- Fixed meta reader running after closing
+    	- Draw Point -> added numbers to points
+    	- Video Footprint (With elevation model)
+    	- new context menu for show/hide toolbars plugin
+    	- Add new filter "Horizontal Mirrored"
+    	- Set the keyboard shortcut for FMV by default and make it properly configurable
+    	- Remove Utils menu and create Utils Toolbar
+    	- Migrate Docs to github pages https://all4gis.github.io/QGISFMV/
+    	- render layers in parallel and use all cores
+		- Add area and lat,long centroid coords on polygon attributes table
+    	- Better and more rich PDF report
+    	- Save reports in other thread
+    	- Fix record function
+    	- optimized code
+    	- Minor changes
+    1.2:
+    	- Better and more complet PDF report
+    	- Remove FFMPEG unnecessary subfolder
+    	- Display altitude with OnMouseOver.
+		- Drawn points and lines are "drapped" on DTM on map and video.
+		- Drawn points and lines have altitude attribute.
+    	- Draw Lines on video
+    	- Draw Polygons on video
+    	- Minor changes
+	1.1:
+		- Install requirements automatically.
+		- About point to read the docs
+		- remove documents folder
+		- PR #2, #3, #4 ,#5, #10 and #6 thanks to ltbam.
+		- Minor changes
+	1.0:
+		- Start of plugin.
+
+homepage=https://github.com/All4Gis/QGISFMV
+tracker=https://github.com/All4Gis/QGISFMV/issues
+repository=https://github.com/All4Gis/QGISFMV
+
+tags=fmv,uav,python,drone,telemetry,misb,stanag,video,mosaic,klv,geoint,c2,command and control,sensor cone,trajectory,clahe,sharpen,sobel,motion detection,vegetation index,hotspot,dehaze,false color,background subtraction,building detection,road segmentation,vehicle detection,person detection,fire detection,smoke detection,flood detection,yolo,onnx,visdrone,ai detection,deep learning,computer vision,aerial imagery
+
+icon=images/misc/icon.png
+
+experimental=False
+deprecated=False
+server=False
+hasProcessingProvider=False

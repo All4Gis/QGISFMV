@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 21L21 3"/>
+<path d="m9 9 6 6" stroke="#ff5252"/>
+<path d="m15 9-6 6" stroke="#ff5252"/>
+<rect x="2" y="2" width="20" height="20" rx="2" opacity=".3" stroke-dasharray="4,2"/>
+</svg>

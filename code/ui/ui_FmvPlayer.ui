@@ -2178,13 +2178,13 @@
   <customwidget>
    <class>TimelineWidget</class>
    <extends>QWidget</extends>
-   <header>QGISFMV.player.features.QgsFmvTimeline</header>
+   <header>QGIS_FMV.player.features.QgsFmvTimeline</header>
    <container>0</container>
   </customwidget>
   <customwidget>
    <class>VideoWidget</class>
    <extends>QWidget</extends>
-   <header>QGISFMV.video.playback.QgsVideo</header>
+   <header>QGIS_FMV.video.playback.QgsVideo</header>
    <slots>
     <slot>removeLastLine()</slot>
     <slot>removeLastSegmentLine()</slot>

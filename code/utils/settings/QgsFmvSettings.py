@@ -7,7 +7,7 @@ import shutil
 from configparser import ConfigParser
 
 try:
-    from QGISFMV.utils.logging import log
+    from QGIS_FMV.utils.logging import log
 except ImportError:
     import logging
 
@@ -138,7 +138,7 @@ def _default_ffmpeg_folder():
     system = platform.system()
     if system == "Windows":
         base = (os.environ.get("LOCALAPPDATA") or "").strip() or os.path.expanduser("~")
-        return os.path.join(base, "QGISFMV", "ffmpeg")
+        return os.path.join(base, "QGIS_FMV", "ffmpeg")
     if system == "Darwin":
         found = shutil.which("ffmpeg")
         if found:
@@ -281,7 +281,7 @@ def _resetDtmCache(fmv_utils):
 
 def _apply_mosaic_settings(fmv_utils):
     """Push [MOSAIC] settings into constants + QgsFmvUtils attributes."""
-    from QGISFMV.utils import constants as mosaic_cfg
+    from QGIS_FMV.utils import constants as mosaic_cfg
 
     section = "MOSAIC"
     _float = lambda k: float(get(section, k, default(section, k)))
@@ -356,14 +356,14 @@ def reloadRuntime():
     """Push settings.ini into modules that cache values for hot paths."""
     load(force=True)
 
-    import QGISFMV.utils.core.QgsFmvUtils as fmv_utils
-    import QGISFMV.utils.layers.QgsFmvLayers as layers
+    import QGIS_FMV.utils.core.QgsFmvUtils as fmv_utils
+    import QGIS_FMV.utils.layers.QgsFmvLayers as layers
 
     _sync_fmv_utils_module(fmv_utils)
     _sync_layer_module(layers)
 
     try:
-        from QGISFMV.utils.media.QgsFfmpegRunner import invalidate_paths
+        from QGIS_FMV.utils.media.QgsFfmpegRunner import invalidate_paths
 
         invalidate_paths()
         fmv_utils._ensureFfmpegPaths()
@@ -373,7 +373,7 @@ def reloadRuntime():
     log.info("Settings reloaded from " + SETTINGS_PATH)
 
     try:
-        from QGISFMV.video.dnn.QgsFmvOnnxDetector import reset_dnn_cache
+        from QGIS_FMV.video.dnn.QgsFmvOnnxDetector import reset_dnn_cache
 
         reset_dnn_cache()
     except Exception as exc:

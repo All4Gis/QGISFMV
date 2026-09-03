@@ -4,7 +4,7 @@ Centralized logging for QGIS FMV (stdlib ``logging`` — no extra pip package).
 
 Usage::
 
-    from QGISFMV.utils.logging import log
+    from QGIS_FMV.utils.logging import log
     log.info("video loaded")
     log.error("parse failed", exc_info=True)
 
@@ -41,7 +41,7 @@ if not log.handlers:
         log.addHandler(_fh)
     except Exception as _exc:
         print(
-            "[QGISFMV] Warning: could not create log file: {}".format(_exc),
+            "[QGIS_FMV] Warning: could not create log file: {}".format(_exc),
             file=sys.stderr,
         )
 

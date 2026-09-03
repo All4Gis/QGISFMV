@@ -259,7 +259,7 @@ def main():
         print("Error: metadata.txt missing required fields")
         sys.exit(1)
 
-    plugin_name = "QGISFMV"
+    plugin_name = "QGIS_FMV"
 
     copy_project_structure(EXCLUDE_PATTERNS)
     optimize_assets(OUTPUT_DIR)

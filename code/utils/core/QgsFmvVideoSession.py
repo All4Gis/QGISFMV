@@ -7,7 +7,7 @@ legacy ``QgsFmvUtils.gv`` name remains as a thin alias to the active
 session for backward compatibility.
 """
 
-from QGISFMV.utils.core.QgsFmvUtilsState import globalVariablesState
+from QGIS_FMV.utils.core.QgsFmvUtilsState import globalVariablesState
 
 # Active session for the currently focused player (single-video default).
 _active_session = None
@@ -70,7 +70,7 @@ def set_active_session(session):
 def _sync_legacy_gv():
     """Keep ``QgsFmvUtils.gv`` pointing at the active session."""
     try:
-        import QGISFMV.utils.core.QgsFmvUtils as utils
+        import QGIS_FMV.utils.core.QgsFmvUtils as utils
 
         utils.gv = _active_session
     except Exception:

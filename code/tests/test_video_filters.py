@@ -13,10 +13,10 @@
 #             pytest.skip("Qt / QGIS runtime not available")
 
 #         worker = load_plugin_module(
-#             "video/filters/QgsFilterWorker.py", "QGISFMV.video.filters.QgsFilterWorker"
+#             "video/filters/QgsFilterWorker.py", "QGIS_FMV.video.filters.QgsFilterWorker"
 #         )
 #         state_mod = load_plugin_module(
-#             "video/playback/QgsVideoState.py", "QGISFMV.video.playback.QgsVideoState"
+#             "video/playback/QgsVideoState.py", "QGIS_FMV.video.playback.QgsVideoState"
 #         )
 #         state = state_mod.FilterState()
 #         state.claheFilter = True
@@ -71,7 +71,7 @@
 #         from code.tests.support import load_plugin_module
 
 #         return load_plugin_module(
-#             "video/filters/QgsFmvFilterCore.py", "QGISFMV.video.filters.QgsFmvFilterCore"
+#             "video/filters/QgsFmvFilterCore.py", "QGIS_FMV.video.filters.QgsFmvFilterCore"
 #         )
 
 #     def test_shape_5x5(self, filters):
@@ -100,7 +100,7 @@
 
 #         return load_plugin_module(
 #             "video/filters/QgsFmvDetectionScores.py",
-#             "QGISFMV.video.filters.QgsFmvDetectionScores",
+#             "QGIS_FMV.video.filters.QgsFmvDetectionScores",
 #         )
 
 #     def test_road_score_prefers_gray_strip(self, scores):
@@ -128,13 +128,13 @@
 
 #         geom = load_plugin_module(
 #             "video/filters/QgsFmvDetectionGeometry.py",
-#             "QGISFMV.video.filters.QgsFmvDetectionGeometry",
+#             "QGIS_FMV.video.filters.QgsFmvDetectionGeometry",
 #         )
 #         geom.reset_detection_state()
 #         try:
 #             tuning = load_plugin_module(
 #                 "video/filters/QgsFmvFilterTuning.py",
-#                 "QGISFMV.video.filters.QgsFmvFilterTuning",
+#                 "QGIS_FMV.video.filters.QgsFmvFilterTuning",
 #             )
 #             monkeypatch.setattr(tuning, "is_aerial_profile", lambda: True)
 #         except Exception:
@@ -170,7 +170,7 @@
 #         from code.tests.support import load_plugin_module
 
 #         return load_plugin_module(
-#             "video/filters/QgsFmvFilterCore.py", "QGISFMV.video.filters.QgsFmvFilterCore"
+#             "video/filters/QgsFmvFilterCore.py", "QGIS_FMV.video.filters.QgsFmvFilterCore"
 #         )
 
 #     def test_identity_kernel(self, filters):
@@ -207,7 +207,7 @@
 #         from code.tests.support import load_plugin_module
 
 #         filters_pkg = load_plugin_module(
-#             "video/filters/__init__.py", "QGISFMV.video.filters"
+#             "video/filters/__init__.py", "QGIS_FMV.video.filters"
 #         )
 #         text = filters_pkg.opencv_status_text()
 #         assert isinstance(text, str)

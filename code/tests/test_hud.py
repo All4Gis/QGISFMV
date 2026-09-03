@@ -13,7 +13,7 @@ class TestHudOverlay:
         try:
             from qgis.PyQt.QtWidgets import QApplication
 
-            from QGISFMV.player.overlays.QgsFmvHud import HudOverlay
+            from QGIS_FMV.player.overlays.QgsFmvHud import HudOverlay
 
             return HudOverlay
         except ImportError:
@@ -60,7 +60,7 @@ class TestHudOverlay:
         assert hud._lat is None
 
     def test_update_from_state_with_values(self, hud_class, app):
-        from QGISFMV.utils.core.QgsFmvUtilsState import globalVariablesState
+        from QGIS_FMV.utils.core.QgsFmvUtilsState import globalVariablesState
 
         hud = HudOverlay()
         gv = globalVariablesState()
@@ -74,7 +74,7 @@ class TestHudOverlay:
         assert hud._alt == 1000.0
 
     def test_update_from_state_empty_altitude(self, hud_class, app):
-        from QGISFMV.utils.core.QgsFmvUtilsState import globalVariablesState
+        from QGIS_FMV.utils.core.QgsFmvUtilsState import globalVariablesState
 
         hud = HudOverlay()
         gv = globalVariablesState()

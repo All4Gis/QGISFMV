@@ -59,14 +59,14 @@ from qgis.PyQt.QtCore import QCoreApplication
 
 from pymisb.klvdata.streamparser import StreamParser
 
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.utils.settings.QgsFmvSettings import get, get_layer
-from QGISFMV.utils.logging import log
+from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.utils.settings.QgsFmvSettings import get, get_layer
+from QGIS_FMV.utils.logging import log
 ```
 
-Order: stdlib → third-party → QGIS/PyQt → `QGISFMV.*`
+Order: stdlib → third-party → QGIS/PyQt → `QGIS_FMV.*`
 
-Plugin namespace: **`QGISFMV`** (`code/metadata.txt` → `internal_name`).
+Plugin namespace: **`QGIS_FMV`** (`code/metadata.txt` → `internal_name`).
 
 ---
 
@@ -138,8 +138,8 @@ Keep `QgsFmvPlayer` as a thin composition root + Qt Designer slot delegates.
 | `code/utils/formatting.py` | `format_length()` / `format_area()` — shared by DrawToolBar and Layers |
 | `code/utils/constants.py` | Named constants (`SKIP_INTERVAL_MS`, `TRACK_MAX_MISSES`, etc.) — import instead of hard-coding |
 
-- Use `QGISFMV.utils.constants` for numeric thresholds instead of inline magic numbers
-- Use `QGISFMV.utils.formatting` for distance/area formatting instead of duplicating logic
+- Use `QGIS_FMV.utils.constants` for numeric thresholds instead of inline magic numbers
+- Use `QGIS_FMV.utils.formatting` for distance/area formatting instead of duplicating logic
 
 ---
 
@@ -161,7 +161,7 @@ Use Args / Returns for complex APIs.
 - Catch **specific** exceptions
 - User messages: `QgsUtils.showUserAndLogMessage()` + `Qgis.MessageLevel`
 - Background work → signals to main thread; never block GUI on ffmpeg
-- Internal logging: `from QGISFMV.utils.logging import log`
+- Internal logging: `from QGIS_FMV.utils.logging import log`
 
 ---
 

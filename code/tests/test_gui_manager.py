@@ -7,7 +7,7 @@ operations, and that its UI elements are properly configured.
 
 Run inside QGIS Python console::
 
-    import pytest; pytest.main(["-xvs", "QGISFMV/tests/test_gui_manager.py"])
+    import pytest; pytest.main(["-xvs", "QGIS_FMV/tests/test_gui_manager.py"])
 """
 
 import os
@@ -30,7 +30,7 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.fixture
 def harness():
-    from QGISFMV.tests.gui_test_harness import GUITestHarness
+    from QGIS_FMV.tests.gui_test_harness import GUITestHarness
 
     h = GUITestHarness()
     h.start()

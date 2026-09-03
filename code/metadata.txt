@@ -1,6 +1,6 @@
 [general]
 name=QGIS Full Motion Video
-internal_name=QGISFMV
+internal_name=QGIS_FMV
 
 qgisMinimumVersion=4.0
 qgisMaximumVersion=4.99

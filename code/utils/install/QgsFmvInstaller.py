@@ -18,8 +18,8 @@ from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtWidgets import QInputDialog, QLineEdit, QMessageBox, QProgressBar
 from qgis.utils import iface
 
-from QGISFMV.utils.logging import log
-from QGISFMV.utils.settings.QgsFmvSettings import (
+from QGIS_FMV.utils.logging import log
+from QGIS_FMV.utils.settings.QgsFmvSettings import (
     ffmpeg_binary,
     plugin_root,
     reloadRuntime,
@@ -27,7 +27,7 @@ from QGISFMV.utils.settings.QgsFmvSettings import (
     save,
     set_value,
 )
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 # ---------------------------------------------------------------------------
 # Constants / platform
@@ -237,7 +237,7 @@ def _run_pip(args: Sequence[str]) -> Tuple[bool, str]:
 
 def _bootstrap_python_path() -> None:
     try:
-        from QGISFMV.utils.settings.python_deps_bootstrap import bootstrapPythonDepsPath
+        from QGIS_FMV.utils.settings.python_deps_bootstrap import bootstrapPythonDepsPath
 
         bootstrapPythonDepsPath()
     except Exception as exc:
@@ -246,7 +246,7 @@ def _bootstrap_python_path() -> None:
 
 def _cv2_available() -> bool:
     try:
-        from QGISFMV.utils.vision.QgsObjectTracker import cv2_available
+        from QGIS_FMV.utils.vision.QgsObjectTracker import cv2_available
 
         return bool(cv2_available())
     except Exception as exc:
@@ -540,9 +540,9 @@ def check_ffmpeg() -> Tuple[bool, str]:
 def _default_ffmpeg_dir() -> str:
     if WINDOWS:
         base = (os.environ.get("LOCALAPPDATA") or "").strip() or os.path.expanduser("~")
-        return os.path.join(base, "QGISFMV", "ffmpeg")
+        return os.path.join(base, "QGIS_FMV", "ffmpeg")
     if DARWIN:
-        return os.path.join(os.path.expanduser("~"), "QGISFMV", "ffmpeg")
+        return os.path.join(os.path.expanduser("~"), "QGIS_FMV", "ffmpeg")
     found = shutil.which("ffmpeg")
     if found:
         return os.path.dirname(found)

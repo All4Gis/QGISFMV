@@ -11,7 +11,7 @@ import pytest
 def runner():
     return load_plugin_module(
         "utils/media/QgsFfmpegRunner.py",
-        "QGISFMV.utils.media.QgsFfmpegRunner",
+        "QGIS_FMV.utils.media.QgsFfmpegRunner",
     )
 
 

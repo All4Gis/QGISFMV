@@ -4,7 +4,7 @@ Run all GUI / visual tests inside QGIS.
 
 Paste this into the QGIS Python console or execute via::
 
-    QGISFMV/tests/run_gui_tests.sh
+    QGIS_FMV/tests/run_gui_tests.sh
 
 It boots the plugin, runs every test in test_gui_*.py, and prints a summary.
 """
@@ -18,12 +18,12 @@ _plugin_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _plugin_root not in sys.path:
     sys.path.insert(0, _plugin_root)
 
-from QGISFMV.tests.gui_test_harness import GUITestHarness
+from QGIS_FMV.tests.gui_test_harness import GUITestHarness
 
 # Test modules to run
 _TEST_MODULES = [
-    "QGISFMV.tests.test_gui_manager",
-    "QGISFMV.tests.test_gui_player",
+    "QGIS_FMV.tests.test_gui_manager",
+    "QGIS_FMV.tests.test_gui_player",
 ]
 
 

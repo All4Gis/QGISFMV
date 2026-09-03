@@ -8,7 +8,7 @@ them against baseline images.
 
 Usage (from the QGIS Python console or via ``qgis --code``)::
 
-    from QGISFMV.tests.gui_test_harness import GUITestHarness
+    from QGIS_FMV.tests.gui_test_harness import GUITestHarness
     harness = GUITestHarness()
     harness.start()
     harness.click("actionPlay")
@@ -18,7 +18,7 @@ Usage (from the QGIS Python console or via ``qgis --code``)::
 
 Or run via pytest with the QGIS runner::
 
-    QGISFMV/tests/run_tests.sh test_gui_player.py
+    QGIS_FMV/tests/run_tests.sh test_gui_player.py
 """
 
 import time
@@ -156,7 +156,7 @@ class GUITestHarness:
         self._iface = _iface
 
         # Load the plugin
-        from QGISFMV.QgsFmv import Fmv
+        from QGIS_FMV.QgsFmv import Fmv
 
         self._plugin = Fmv(self._iface)
         self._started = True

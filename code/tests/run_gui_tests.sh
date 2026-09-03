@@ -24,7 +24,7 @@ echo "Plugin dir: $PLUGIN_DIR"
 "$QGIS_BIN" --code "
 import sys
 sys.path.insert(0, '$PLUGIN_DIR')
-from QGISFMV.tests.run_gui_tests import run_all
+from QGIS_FMV.tests.run_gui_tests import run_all
 success = run_all()
 import sys
 sys.exit(0 if success else 1)

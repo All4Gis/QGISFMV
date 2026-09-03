@@ -8,7 +8,7 @@ import pytest
 # QgsVideoState.py has no Qt/QGIS dependencies, so it can be loaded directly
 # without any runtime stubs.
 state_mod = load_plugin_module(
-    "video/playback/QgsVideoState.py", "QGISFMV.video.playback.QgsVideoState"
+    "video/playback/QgsVideoState.py", "QGIS_FMV.video.playback.QgsVideoState"
 )
 TrackLockState = state_mod.TrackLockState
 

@@ -7,10 +7,10 @@ from code.tests.support import load_plugin_module
 
 
 def _load_stream_utils():
-    probe = types.ModuleType("QGISFMV.utils.media.QgsFfmpegProbe")
+    probe = types.ModuleType("QGIS_FMV.utils.media.QgsFfmpegProbe")
     probe.is_valid_stream = lambda *args, **kwargs: False
     probe.probe_stream_json = lambda *args, **kwargs: None
-    sys.modules["QGISFMV.utils.media.QgsFfmpegProbe"] = probe
+    sys.modules["QGIS_FMV.utils.media.QgsFfmpegProbe"] = probe
     return load_plugin_module("utils/media/QgsFmvStreamUtils.py")
 
 

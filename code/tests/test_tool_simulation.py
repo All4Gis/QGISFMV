@@ -31,27 +31,27 @@ def _install_common_stubs():
         "qgis.PyQt.QtWidgets",
         "qgis.core",
         "qgis.utils",
-        "QGISFMV.utils.ui.QgsUtils",
-        "QGISFMV.utils.ui.QgsPlot",
-        "QGISFMV.utils.core.QgsFmvUtils",
-        "QGISFMV.utils.layers.QgsFmvLayers",
-        "QGISFMV.utils.layers.QgsFmvExport",
-        "QGISFMV.utils.media.QgsFfmpegProbe",
-        "QGISFMV.utils.media.QgsFmvMultimedia",
-        "QGISFMV.video.playback.QgsVideoState",
-        "QGISFMV.player.dialogs.QgsFmvAlertRule",
-        "QGISFMV.player.dialogs.QgsFmvMilitarySymbols",
-        "QGISFMV.player.dialogs.QgsFmvMetadata",
-        "QGISFMV.utils.core.QgsFmvThreads",
-        "QGISFMV.utils.media.QgsFmvKlvReader",
-        "QGISFMV.utils.media.QgsFmvMetadataWorker",
-        "QGISFMV.utils.settings.QgsFmvSettings",
-        "QGISFMV.player.dialogs.QgsFmvSettings",
-        "QGISFMV.player.dialogs.QgsFmvVideoInfo",
-        "QGISFMV.player.overlays.QgsFmvHud",
-        "QGISFMV.player.overlays.QgsFmvMiniMap",
-        "QGISFMV.player.overlays.QgsFmvSensorCone",
-        "QGISFMV.player.overlays.QgsFmvDistanceRings",
+        "QGIS_FMV.utils.ui.QgsUtils",
+        "QGIS_FMV.utils.ui.QgsPlot",
+        "QGIS_FMV.utils.core.QgsFmvUtils",
+        "QGIS_FMV.utils.layers.QgsFmvLayers",
+        "QGIS_FMV.utils.layers.QgsFmvExport",
+        "QGIS_FMV.utils.media.QgsFfmpegProbe",
+        "QGIS_FMV.utils.media.QgsFmvMultimedia",
+        "QGIS_FMV.video.playback.QgsVideoState",
+        "QGIS_FMV.player.dialogs.QgsFmvAlertRule",
+        "QGIS_FMV.player.dialogs.QgsFmvMilitarySymbols",
+        "QGIS_FMV.player.dialogs.QgsFmvMetadata",
+        "QGIS_FMV.utils.core.QgsFmvThreads",
+        "QGIS_FMV.utils.media.QgsFmvKlvReader",
+        "QGIS_FMV.utils.media.QgsFmvMetadataWorker",
+        "QGIS_FMV.utils.settings.QgsFmvSettings",
+        "QGIS_FMV.player.dialogs.QgsFmvSettings",
+        "QGIS_FMV.player.dialogs.QgsFmvVideoInfo",
+        "QGIS_FMV.player.overlays.QgsFmvHud",
+        "QGIS_FMV.player.overlays.QgsFmvMiniMap",
+        "QGIS_FMV.player.overlays.QgsFmvSensorCone",
+        "QGIS_FMV.player.overlays.QgsFmvDistanceRings",
     )
     saved = snapshot_modules(keys)
     for name in keys:
@@ -269,11 +269,11 @@ def _install_common_stubs():
     qtw.QApplication = MagicMock
     qtw.QTableWidgetItem = MagicMock
 
-    alert_dlg = sys.modules["QGISFMV.player.dialogs.QgsFmvAlertRule"]
+    alert_dlg = sys.modules["QGIS_FMV.player.dialogs.QgsFmvAlertRule"]
     alert_dlg.FmvAlertRuleDialog = MagicMock
-    mil = sys.modules["QGISFMV.player.dialogs.QgsFmvMilitarySymbols"]
+    mil = sys.modules["QGIS_FMV.player.dialogs.QgsFmvMilitarySymbols"]
     mil.MilitarySymbolDialog = MagicMock
-    meta_dlg = sys.modules["QGISFMV.player.dialogs.QgsFmvMetadata"]
+    meta_dlg = sys.modules["QGIS_FMV.player.dialogs.QgsFmvMetadata"]
     meta_dlg.QgsFmvMetadata = MagicMock
 
     core = sys.modules["qgis.core"]
@@ -301,7 +301,7 @@ def _install_common_stubs():
     utils_iface = sys.modules["qgis.utils"]
     utils_iface.iface = MagicMock()
 
-    ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+    ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
 
     class QgsUtils:
         @staticmethod
@@ -320,16 +320,16 @@ def _install_common_stubs():
 
     ui.QgsUtils = QgsUtils
 
-    plot = sys.modules["QGISFMV.utils.ui.QgsPlot"]
+    plot = sys.modules["QGIS_FMV.utils.ui.QgsPlot"]
     plot.ShowPlot = lambda *a, **k: None
     plot.CreatePlotsBitrate = MagicMock
 
-    fmv_utils = sys.modules["QGISFMV.utils.core.QgsFmvUtils"]
+    fmv_utils = sys.modules["QGIS_FMV.utils.core.QgsFmvUtils"]
     fmv_utils.askForFiles = lambda *a, **k: None
     fmv_utils.askForFolder = lambda *a, **k: None
     fmv_utils._seconds_to_time = lambda s: "00:00:00"
     fmv_utils.ResetData = lambda: None
-    fmv_utils.getNameSpace = lambda: "QGISFMV"
+    fmv_utils.getNameSpace = lambda: "QGIS_FMV"
     fmv_utils.hasElevationModel = lambda: False
     fmv_utils.pluginSetting = lambda *a, **k: None
     fmv_utils.setPluginSetting = lambda *a, **k: None
@@ -348,14 +348,14 @@ def _install_common_stubs():
     fmv_utils.ensureGlobalState = lambda *a, **k: None
 
     probe = sys.modules.setdefault(
-        "QGISFMV.utils.media.QgsFfmpegProbe", types.ModuleType("probe")
+        "QGIS_FMV.utils.media.QgsFfmpegProbe", types.ModuleType("probe")
     )
     probe.convert_video = lambda *a, **k: None
     probe.is_valid_media = lambda *a, **k: True
     probe.save_probe_json_task = MagicMock()
     probe.show_probe_json_task = MagicMock()
 
-    mm = sys.modules["QGISFMV.utils.media.QgsFmvMultimedia"]
+    mm = sys.modules["QGIS_FMV.utils.media.QgsFmvMultimedia"]
     for name, value in (
         ("PlayingState", 1),
         ("PausedState", 2),
@@ -373,10 +373,10 @@ def _install_common_stubs():
     mm.hasVideo = lambda *a, **k: True
     mm.getPlaylist = MagicMock(return_value=MagicMock())
 
-    vs = sys.modules["QGISFMV.video.playback.QgsVideoState"]
+    vs = sys.modules["QGIS_FMV.video.playback.QgsVideoState"]
     vs.MOUSE_MOVE_EVENT = object
 
-    threads = sys.modules["QGISFMV.utils.core.QgsFmvThreads"]
+    threads = sys.modules["QGIS_FMV.utils.core.QgsFmvThreads"]
     threads.stop_qthread = lambda t: None
 
     class _Worker:
@@ -399,17 +399,17 @@ def _install_common_stubs():
         def submit(self, *a, **k):
             return None
 
-    worker_mod = sys.modules["QGISFMV.utils.media.QgsFmvMetadataWorker"]
+    worker_mod = sys.modules["QGIS_FMV.utils.media.QgsFmvMetadataWorker"]
     worker_mod.MetadataParseWorker = _Worker
 
-    klv = sys.modules["QGISFMV.utils.media.QgsFmvKlvReader"]
+    klv = sys.modules["QGIS_FMV.utils.media.QgsFmvKlvReader"]
     klv.LocalFileMetaReader = MagicMock
     klv.StreamMetaReader = MagicMock
 
-    settings_mod = sys.modules["QGISFMV.utils.settings.QgsFmvSettings"]
+    settings_mod = sys.modules["QGIS_FMV.utils.settings.QgsFmvSettings"]
     settings_mod.get = lambda section, key, default=None: default
 
-    layers = sys.modules["QGISFMV.utils.layers.QgsFmvLayers"]
+    layers = sys.modules["QGIS_FMV.utils.layers.QgsFmvLayers"]
     layers.RemoveGroupByName = lambda *a, **k: None
     layers.exportGroupToKML = lambda *a, **k: None
     layers.exportGroupToGPX = lambda *a, **k: None
@@ -423,7 +423,7 @@ def _install_common_stubs():
     layers.FrameCenter_lyr = "Frame Center"
     layers.Platform_lyr = "Platform"
 
-    export = sys.modules["QGISFMV.utils.layers.QgsFmvExport"]
+    export = sys.modules["QGIS_FMV.utils.layers.QgsFmvExport"]
     export.exportGroupToKML = lambda *a, **k: None
     export.exportGroupToGPX = lambda *a, **k: None
     export.exportObjectTrack = lambda *a, **k: None
@@ -535,11 +535,11 @@ class TestSimulateBookmarksAndAlerts:
     def test_bookmark_and_alert_pipeline(self, stubs, tmp_path):
         bm = load_plugin_module(
             "player/features/QgsFmvBookmarkController.py",
-            "QGISFMV.player.features.QgsFmvBookmarkController",
+            "QGIS_FMV.player.features.QgsFmvBookmarkController",
         )
         alerts = load_plugin_module(
             "player/features/QgsFmvAlerts.py",
-            "QGISFMV.player.features.QgsFmvAlerts",
+            "QGIS_FMV.player.features.QgsFmvAlerts",
         )
         player = _mock_player()
         ctrl = bm.BookmarkController(player)
@@ -567,7 +567,7 @@ class TestSimulateTaskResults:
     def test_all_result_kinds(self, stubs):
         mod = load_plugin_module(
             "player/features/QgsFmvTaskResults.py",
-            "QGISFMV.player.features.QgsFmvTaskResults",
+            "QGIS_FMV.player.features.QgsFmvTaskResults",
         )
         player = _mock_player()
         ctrl = mod.TaskResultsController(player)
@@ -627,7 +627,7 @@ class TestSimulateControllersSmoke:
         ],
     )
     def test_controller_smoke(self, stubs, rel_path, cls_name, calls):
-        mod = load_plugin_module(rel_path, "QGISFMV." + rel_path.replace("/", ".")[:-3])
+        mod = load_plugin_module(rel_path, "QGIS_FMV." + rel_path.replace("/", ".")[:-3])
         cls = getattr(mod, cls_name)
         player = _mock_player()
         ctrl = cls(player)
@@ -639,7 +639,7 @@ class TestSimulateAlertRules:
     def test_ops(self, stubs):
         alerts = load_plugin_module(
             "player/features/QgsFmvAlerts.py",
-            "QGISFMV.player.features.QgsFmvAlerts",
+            "QGIS_FMV.player.features.QgsFmvAlerts",
         )
         meta = {0: ["Platform Heading Angle", "90"]}
         for op, value, expect in (
@@ -656,7 +656,7 @@ class TestSimulateDetectionAndMosaic:
     def test_iou_nms(self, stubs):
         geom = load_plugin_module(
             "video/filters/QgsFmvDetectionGeometry.py",
-            "QGISFMV.video.filters.QgsFmvDetectionGeometry",
+            "QGIS_FMV.video.filters.QgsFmvDetectionGeometry",
         )
         geom.reset_detection_state()
         assert geom._box_iou((0, 0, 10, 10), (0, 0, 10, 10)) == pytest.approx(1.0)
@@ -668,7 +668,7 @@ class TestSimulateDetectionAndMosaic:
     def test_mosaic_helpers(self, stubs):
         mosaic = load_plugin_module(
             "utils/core/QgsFmvMosaic.py",
-            "QGISFMV.utils.core.QgsFmvMosaic",
+            "QGIS_FMV.utils.core.QgsFmvMosaic",
         )
         w = mosaic._mosaic_feather_weights(16, 16, feather_px=8)
         assert w.shape == (16, 16)
@@ -681,7 +681,7 @@ class TestSimulateExportAndRecordSmoke:
         try:
             mod = load_plugin_module(
                 "player/features/QgsFmvExportController.py",
-                "QGISFMV.player.features.QgsFmvExportController",
+                "QGIS_FMV.player.features.QgsFmvExportController",
             )
         except Exception as exc:
             pytest.skip(f"ExportController deps unavailable under stubs: {exc}")
@@ -695,7 +695,7 @@ class TestSimulateExportAndRecordSmoke:
         try:
             mod = load_plugin_module(
                 "player/features/QgsFmvRecordController.py",
-                "QGISFMV.player.features.QgsFmvRecordController",
+                "QGIS_FMV.player.features.QgsFmvRecordController",
             )
         except Exception as exc:
             pytest.skip(f"RecordController deps unavailable under stubs: {exc}")
@@ -795,7 +795,7 @@ class TestSimulateDrawTools:
     def test_draw_tool_toggles(self, stubs):
         mod = load_plugin_module(
             "player/features/QgsFmvDrawToolsController.py",
-            "QGISFMV.player.features.QgsFmvDrawToolsController",
+            "QGIS_FMV.player.features.QgsFmvDrawToolsController",
         )
         player = _mock_player()
         player.sender = MagicMock(return_value=player.actionDraw_Pinpoint)
@@ -817,7 +817,7 @@ class TestSimulateSnapshots:
     def test_auto_snapshot_toggle(self, stubs, tmp_path):
         mod = load_plugin_module(
             "player/features/QgsFmvSnapshots.py",
-            "QGISFMV.player.features.QgsFmvSnapshots",
+            "QGIS_FMV.player.features.QgsFmvSnapshots",
         )
         player = _mock_player()
         folder = tmp_path / "video"
@@ -836,7 +836,7 @@ class TestSimulateMosaicController:
     def test_mosaic_enable_and_frame(self, stubs, tmp_path):
         mod = load_plugin_module(
             "player/features/QgsFmvMosaicController.py",
-            "QGISFMV.player.features.QgsFmvMosaicController",
+            "QGIS_FMV.player.features.QgsFmvMosaicController",
         )
         player = _mock_player()
         folder = tmp_path / "video"
@@ -860,7 +860,7 @@ class TestSimulatePlaybackController:
     def test_state_and_seek_helpers(self, stubs):
         mod = load_plugin_module(
             "player/features/QgsFmvPlaybackController.py",
-            "QGISFMV.player.features.QgsFmvPlaybackController",
+            "QGIS_FMV.player.features.QgsFmvPlaybackController",
         )
         player = _mock_player()
         player.playerState = 0
@@ -878,7 +878,7 @@ class TestSimulateMetadataPipeline:
     def test_metadata_reset_and_clear(self, stubs):
         mod = load_plugin_module(
             "player/features/QgsFmvMetadataPipeline.py",
-            "QGISFMV.player.features.QgsFmvMetadataPipeline",
+            "QGIS_FMV.player.features.QgsFmvMetadataPipeline",
         )
         player = _mock_player()
         ctrl = mod.MetadataPipelineController(player)

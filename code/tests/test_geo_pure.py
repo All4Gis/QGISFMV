@@ -6,7 +6,7 @@ from code.tests.support import ensure_qgis_fmv_package, load_plugin_module
 import pytest
 
 ensure_qgis_fmv_package()
-geo = load_plugin_module("geo/QgsGeoUtils.py", "QGISFMV.geo.QgsGeoUtils")
+geo = load_plugin_module("geo/QgsGeoUtils.py", "QGIS_FMV.geo.QgsGeoUtils")
 
 
 class TestHaversine:

@@ -17,10 +17,10 @@ compatibility.
 
 from math import atan, degrees, radians, sqrt, tan
 
-from QGISFMV.geo.QgsGeoUtils import destination as _geo_destination
-from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
-from QGISFMV.utils.logging import log
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.geo.QgsGeoUtils import destination as _geo_destination
+from QGIS_FMV.geo.QgsGeoUtils import distance as _geo_distance
+from QGIS_FMV.utils.logging import log
+from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 DEFAULT_TARGET_WIDTH = 200.0
 
@@ -33,7 +33,7 @@ def _base():
     if this module happens to load first. Deferring the import to call time
     guarantees both modules are fully initialized.
     """
-    import QGISFMV.utils.core.QgsFmvGeoReferencing as _mod
+    import QGIS_FMV.utils.core.QgsFmvGeoReferencing as _mod
 
     return _mod
 
@@ -70,7 +70,7 @@ def CornerEstimationWithOffsets(packet):
 
         # If no framcenter (f.i. horizontal target) don't comptpute footprint, beams and frame center
         if frameCenterPoint[0] is None and frameCenterPoint[1] is None:
-            from QGISFMV.utils.core.QgsFmvUtils import gv
+            from QGIS_FMV.utils.core.QgsFmvUtils import gv
 
             gv.setTransform(None)
             return True
@@ -253,7 +253,7 @@ def CornerEstimationWithoutOffsets(
         frameCenterPoint = [frameCenterLat, frameCenterLon, frameCenterElevation]
 
         if frameCenterPoint[0] is None and frameCenterPoint[1] is None:
-            from QGISFMV.utils.core.QgsFmvUtils import gv
+            from QGIS_FMV.utils.core.QgsFmvUtils import gv
 
             gv.setTransform(None)
             return True

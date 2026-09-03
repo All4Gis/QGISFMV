@@ -104,8 +104,8 @@ class TestQgsFmvSettings:
             Trajectory_lyr="",
             epsg="",
         )
-        sys.modules["QGISFMV.utils.core.QgsFmvUtils"] = fmv_stub
-        sys.modules["QGISFMV.utils.layers.QgsFmvLayers"] = layers_stub
+        sys.modules["QGIS_FMV.utils.core.QgsFmvUtils"] = fmv_stub
+        sys.modules["QGIS_FMV.utils.layers.QgsFmvLayers"] = layers_stub
 
         settings.set_value("GENERAL", "dtm_buffer_size", "3000")
         settings.set_value("GENERAL", "ffmpeg", "/custom/ffmpeg/bin")

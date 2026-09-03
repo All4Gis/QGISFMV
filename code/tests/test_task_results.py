@@ -17,8 +17,8 @@ import pytest
 def _load_classifier():
     ensure_qgis_fmv_package()
     keys = qgis_stub_keys(
-        "QGISFMV.utils.ui.QgsPlot",
-        "QGISFMV.utils.ui.QgsUtils",
+        "QGIS_FMV.utils.ui.QgsPlot",
+        "QGIS_FMV.utils.ui.QgsUtils",
     )
     saved = snapshot_modules(keys)
 
@@ -47,10 +47,10 @@ def _load_classifier():
     core.QgsProject = types.SimpleNamespace(instance=lambda: None)
     core.QgsRasterLayer = object
 
-    plot = sys.modules["QGISFMV.utils.ui.QgsPlot"]
+    plot = sys.modules["QGIS_FMV.utils.ui.QgsPlot"]
     plot.ShowPlot = lambda *a, **k: None
 
-    ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+    ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
 
     class QgsUtils:
         @staticmethod
@@ -65,7 +65,7 @@ def _load_classifier():
 
     mod = load_plugin_module(
         "player/features/QgsFmvTaskResults.py",
-        "QGISFMV.player.features.QgsFmvTaskResults",
+        "QGIS_FMV.player.features.QgsFmvTaskResults",
     )
     return mod, saved
 
@@ -77,7 +77,7 @@ def mod():
         yield module
     finally:
         restore_modules(saved)
-        sys.modules.pop("QGISFMV.player.features.QgsFmvTaskResults", None)
+        sys.modules.pop("QGIS_FMV.player.features.QgsFmvTaskResults", None)
 
 
 class TestClassifyTaskResult:

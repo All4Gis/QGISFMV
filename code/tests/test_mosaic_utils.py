@@ -15,7 +15,7 @@ def mosaic():
     ensure_qgis_fmv_package()
     # Clear feather cache between tests.
     mod = load_plugin_module(
-        "utils/core/QgsFmvMosaic.py", "QGISFMV.utils.core.QgsFmvMosaic"
+        "utils/core/QgsFmvMosaic.py", "QGIS_FMV.utils.core.QgsFmvMosaic"
     )
     mod._feather_weights_cache.clear()
     mod._mosaic_capture_state = {
@@ -31,7 +31,7 @@ def mosaic():
 def mock_gv(monkeypatch, mosaic):
     """Install a lightweight session stand-in on QgsFmvUtils.gv."""
     ensure_qgis_fmv_package()
-    utils_name = "QGISFMV.utils.core.QgsFmvUtils"
+    utils_name = "QGIS_FMV.utils.core.QgsFmvUtils"
     if utils_name not in __import__("sys").modules:
         stub = types.ModuleType(utils_name)
         __import__("sys").modules[utils_name] = stub
@@ -136,7 +136,7 @@ class TestAcceptMosaicFrame:
         mock_gv.getSensorLatitude.return_value = 41.0
         mock_gv.getSensorLongitude.return_value = -3.0
         # Force interval not to dominate; movement alone should accept.
-        import QGISFMV.utils.constants as cfg
+        import QGIS_FMV.utils.constants as cfg
 
         monkeypatch.setattr(cfg, "MOSAIC_MIN_INTERVAL_SEC", 9999.0)
         monkeypatch.setattr(cfg, "MOSAIC_MIN_MOVE_METERS", 10.0)
@@ -145,10 +145,10 @@ class TestAcceptMosaicFrame:
     def test_accept_none_gv(self, mosaic, monkeypatch):
         import sys
 
-        utils = sys.modules.get("QGISFMV.utils.core.QgsFmvUtils")
+        utils = sys.modules.get("QGIS_FMV.utils.core.QgsFmvUtils")
         if utils is None:
-            utils = types.ModuleType("QGISFMV.utils.core.QgsFmvUtils")
-            sys.modules["QGISFMV.utils.core.QgsFmvUtils"] = utils
+            utils = types.ModuleType("QGIS_FMV.utils.core.QgsFmvUtils")
+            sys.modules["QGIS_FMV.utils.core.QgsFmvUtils"] = utils
         utils.gv = None
         assert mosaic._should_accept_mosaic_frame() is True
 
@@ -187,14 +187,14 @@ class TestFootprintInputsChanged:
         try:
             geo = load_plugin_module(
                 "utils/core/QgsFmvGeoReferencing.py",
-                "QGISFMV.utils.core.QgsFmvGeoReferencing",
+                "QGIS_FMV.utils.core.QgsFmvGeoReferencing",
             )
         except Exception as exc:
             pytest.skip(f"GeoReferencing unavailable: {exc}")
 
         import sys
 
-        utils_name = "QGISFMV.utils.core.QgsFmvUtils"
+        utils_name = "QGIS_FMV.utils.core.QgsFmvUtils"
         utils = sys.modules.get(utils_name)
         if utils is None:
             utils = types.ModuleType(utils_name)

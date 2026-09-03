@@ -38,7 +38,7 @@ _SUBPACKAGES = (
 # Packages whose real ``__init__.py`` must be loaded (not empty stubs).
 _LOAD_INIT = frozenset(
     {
-        "QGISFMV.utils.logging",
+        "QGIS_FMV.utils.logging",
     }
 )
 
@@ -65,9 +65,9 @@ def _ensure_subpackage(name, path):
 
 
 def ensure_qgis_fmv_package():
-    if "QGISFMV" in sys.modules:
+    if "QGIS_FMV" in sys.modules:
         # Ensure logging init is loaded even if an older stub was cached.
-        logging_name = "QGISFMV.utils.logging"
+        logging_name = "QGIS_FMV.utils.logging"
         logging_path = CODE / "utils" / "logging"
         if logging_name in sys.modules and not hasattr(
             sys.modules[logging_name], "log"
@@ -76,14 +76,14 @@ def ensure_qgis_fmv_package():
             _ensure_subpackage(logging_name, logging_path)
         return
 
-    pkg = types.ModuleType("QGISFMV")
+    pkg = types.ModuleType("QGIS_FMV")
     pkg.__path__ = [str(CODE)]
-    pkg.__package__ = "QGISFMV"
-    sys.modules["QGISFMV"] = pkg
+    pkg.__package__ = "QGIS_FMV"
+    sys.modules["QGIS_FMV"] = pkg
 
     for rel in _SUBPACKAGES:
         parts = rel.split(".")
-        name = "QGISFMV." + rel
+        name = "QGIS_FMV." + rel
         path = CODE.joinpath(*parts)
         if path.is_dir():
             _ensure_subpackage(name, path)
@@ -103,7 +103,7 @@ def load_plugin_module(relative_path, module_name=None):
         rel = relative_path.replace("\\", "/")
         if rel.endswith(".py"):
             rel = rel[:-3]
-        module_name = "QGISFMV." + rel.replace("/", ".")
+        module_name = "QGIS_FMV." + rel.replace("/", ".")
     file_path = CODE / relative_path
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     if spec is None or spec.loader is None:

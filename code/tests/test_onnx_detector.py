@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Tests for YOLO/ONNX aerial vs COCO class tables."""
 
-from QGISFMV.video.dnn.QgsFmvOnnxDetector import (
+from QGIS_FMV.video.dnn.QgsFmvOnnxDetector import (
     FILTER_COCO_CLASSES,
     FILTER_VISDRONE_CLASSES,
     VISDRONE_CLASS_NAMES,

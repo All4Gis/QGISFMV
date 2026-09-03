@@ -7,7 +7,7 @@ import pytest
 
 pytest.importorskip("qgis")
 
-from QGISFMV.utils.media.QgsFmvKlvReader import LocalFileMetaReader
+from QGIS_FMV.utils.media.QgsFmvKlvReader import LocalFileMetaReader
 
 
 def _lookupOffset(offsets, targetSec):

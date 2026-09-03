@@ -19,8 +19,8 @@ def _stub_qgis_modules():
     """Minimal stubs so GeoReferencing can import without a QGIS runtime."""
     ensure_qgis_fmv_package()
     keys = qgis_stub_keys(
-        "QGISFMV.utils.layers.QgsFmvLayers",
-        "QGISFMV.utils.ui.QgsUtils",
+        "QGIS_FMV.utils.layers.QgsFmvLayers",
+        "QGIS_FMV.utils.ui.QgsUtils",
     )
     saved = snapshot_modules(keys)
 
@@ -37,11 +37,11 @@ def _stub_qgis_modules():
     _mod("qgis.PyQt.QtCore")
     _mod("qgis.core")
 
-    layers = _mod("QGISFMV.utils.layers.QgsFmvLayers")
+    layers = _mod("QGIS_FMV.utils.layers.QgsFmvLayers")
     layers.UpdateFootPrintData = lambda *a, **k: None
     layers.UpdateBeamsData = lambda *a, **k: None
 
-    ui = _mod("QGISFMV.utils.ui.QgsUtils")
+    ui = _mod("QGIS_FMV.utils.ui.QgsUtils")
 
     class QgsUtils:
         @staticmethod
@@ -58,14 +58,14 @@ def geo():
     try:
         mod = load_plugin_module(
             "utils/core/QgsFmvGeoReferencing.py",
-            "QGISFMV.utils.core.QgsFmvGeoReferencing",
+            "QGIS_FMV.utils.core.QgsFmvGeoReferencing",
         )
     except Exception as exc:
         restore_modules(saved)
         pytest.skip(f"Cannot load GeoReferencing: {exc}")
     yield mod
     restore_modules(saved)
-    sys.modules.pop("QGISFMV.utils.core.QgsFmvGeoReferencing", None)
+    sys.modules.pop("QGIS_FMV.utils.core.QgsFmvGeoReferencing", None)
 
 
 class TestHomographyNumpy:

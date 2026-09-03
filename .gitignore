@@ -34,7 +34,7 @@ htmlcov/
 Thumbs.db
 
 # Local dev symlink (QGISFMV -> code for IDE resolution)
-QGISFMV
+QGIS_FMV
 .qgis_stubs/
 
 # Transifex

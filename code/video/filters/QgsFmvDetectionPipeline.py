@@ -5,15 +5,15 @@ from __future__ import annotations
 
 import numpy as np
 
-import QGISFMV.video.filters.QgsFmvDetectionGeometry as _geom
-from QGISFMV.utils.logging import log
-from QGISFMV.video.filters.QgsFmvDetectionGeometry import (
+import QGIS_FMV.video.filters.QgsFmvDetectionGeometry as _geom
+from QGIS_FMV.utils.logging import log
+from QGIS_FMV.video.filters.QgsFmvDetectionGeometry import (
     _assign_track_ids,
     _multiscale_score,
     _nms_boxes,
     _region_scores,
 )
-from QGISFMV.video.filters.QgsFmvFilterCore import (
+from QGIS_FMV.video.filters.QgsFmvFilterCore import (
     _HAS_NDIMAGE,
     FilterCore,
     _get_cv2_module,
@@ -95,7 +95,7 @@ def _confidence_overlay(
         cov = 100.0 * float(np.mean(weight > weight_gate))
     tint = np.asarray(tint_rgb, dtype=np.float64)
     base = rgb.astype(np.float64)
-    from QGISFMV.utils.constants import (
+    from QGIS_FMV.utils.constants import (
         CONFIDENCE_BASE_BRIGHTNESS,
         CONFIDENCE_TINT_INTENSITY,
         CONFIDENCE_TINT_RANGE,
@@ -110,7 +110,7 @@ def _confidence_overlay(
     out = np.clip(out, 0, 255).astype(np.uint8)
     nboxes = 0
     if boxes:
-        from QGISFMV.video.filters.QgsFmvFilterTuning import show_box_confidence
+        from QGIS_FMV.video.filters.QgsFmvFilterTuning import show_box_confidence
 
         bc = box_color or (255, 255, 255)
         for idx, (x0, y0, x1, y1) in enumerate(boxes):
@@ -168,7 +168,7 @@ def _opencv_detection_pipeline(
     filter_key=None,
 ):
     """Threshold score map, morph, CC boxes — shared OpenCV detection path."""
-    from QGISFMV.video.filters.QgsFmvFilterTuning import apply_aerial_pipeline_kw
+    from QGIS_FMV.video.filters.QgsFmvFilterTuning import apply_aerial_pipeline_kw
 
     tuned = apply_aerial_pipeline_kw(
         filter_key,
@@ -225,7 +225,7 @@ def _opencv_detection_pipeline(
         conf = float(patch.mean()) if patch.size else 0.0
         boxes.append((x0, y0, x0 + bw, y0 + bh, conf))
     boxes.sort(key=lambda t: t[4], reverse=True)
-    from QGISFMV.video.filters.QgsFmvFilterTuning import box_nms_iou
+    from QGIS_FMV.video.filters.QgsFmvFilterTuning import box_nms_iou
 
     cand = boxes[: max_boxes * 2]
     if cand:
@@ -266,7 +266,7 @@ def _fallback_detection_pipeline(
     filter_key=None,
 ):
     """SciPy/numpy fallback matching the OpenCV detection pipeline."""
-    from QGISFMV.video.filters.QgsFmvFilterTuning import apply_aerial_pipeline_kw
+    from QGIS_FMV.video.filters.QgsFmvFilterTuning import apply_aerial_pipeline_kw
 
     tuned = apply_aerial_pipeline_kw(
         filter_key,
@@ -298,7 +298,7 @@ def _fallback_detection_pipeline(
     )
     if boxes:
         confs = _region_scores(score, boxes)
-        from QGISFMV.video.filters.QgsFmvFilterTuning import box_nms_iou
+        from QGIS_FMV.video.filters.QgsFmvFilterTuning import box_nms_iou
 
         boxes, _confs = _nms_boxes(boxes, confs, iou_thresh=box_nms_iou())
         boxes = boxes[:max_boxes]
@@ -325,12 +325,12 @@ def _run_detection(
     dnn_filter_key=None,
 ):
     """Run OpenCV detection when available, else scipy/numpy fallback."""
-    from QGISFMV.video.filters.QgsFmvFilterTuning import (
+    from QGIS_FMV.video.filters.QgsFmvFilterTuning import (
         clahe_before_detection,
         dnn_fallback_when_empty,
     )
-    from QGISFMV.video.filters.QgsFmvFilterTuning import ema_alpha as tuned_ema_alpha
-    from QGISFMV.video.filters.QgsFmvFilterTuning import tune_overlay_options
+    from QGIS_FMV.video.filters.QgsFmvFilterTuning import ema_alpha as tuned_ema_alpha
+    from QGIS_FMV.video.filters.QgsFmvFilterTuning import tune_overlay_options
 
     overlay_kwargs = tune_overlay_options(dict(overlay_kwargs))
     ema_alpha = tuned_ema_alpha(ema_alpha)
@@ -340,7 +340,7 @@ def _run_detection(
 
     if dnn_filter_key:
         try:
-            from QGISFMV.video.dnn.QgsFmvOnnxDetector import try_dnn_detection
+            from QGIS_FMV.video.dnn.QgsFmvOnnxDetector import try_dnn_detection
 
             dnn = try_dnn_detection(work_rgb, dnn_filter_key)
             if dnn is not None:
@@ -394,7 +394,7 @@ def _notify_map_detections(class_name, boxes, track_ids, scores):
     if not boxes:
         return
     try:
-        from QGISFMV.video.filters.QgsFmvDetectionMap import notify_detections
+        from QGIS_FMV.video.filters.QgsFmvDetectionMap import notify_detections
 
         notify_detections(class_name, boxes, track_ids=track_ids, scores=scores)
     except Exception as exc:

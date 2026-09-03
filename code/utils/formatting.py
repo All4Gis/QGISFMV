@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Shared formatting utilities for QGISFMV."""
+"""Shared formatting utilities for QGIS_FMV."""
 
 from datetime import datetime
 

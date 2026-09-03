@@ -19,7 +19,7 @@ from qgis.core import (
     QgsWkbTypes,
 )
 
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 # Cinematic (smoothed) follow — module state for lerp between centers.
 _cinematic_follow = False
@@ -47,7 +47,7 @@ def _base():
     fail if this module happens to load first. Deferring the import to
     call time guarantees both modules are fully initialized.
     """
-    import QGISFMV.utils.core.QgsFmvUtils as _mod
+    import QGIS_FMV.utils.core.QgsFmvUtils as _mod
 
     return _mod
 
@@ -159,7 +159,7 @@ def followMapCenter(iface, centerMode, groupName):
     if iface is None or not centerMode:
         return False
 
-    from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
+    from QGIS_FMV.utils.settings.QgsFmvSettings import get as settings_get
 
     base = _base()
     platform_name = settings_get("LAYERS", "platform_lyr", base.Platform_lyr)
@@ -207,7 +207,7 @@ def _maybe_lerp_center(canvas, target):
         _cinematic_last = QgsPointXY(target.x(), target.y())
         return target
     try:
-        from QGISFMV.utils.constants import CINEMATIC_FOLLOW_ALPHA
+        from QGIS_FMV.utils.constants import CINEMATIC_FOLLOW_ALPHA
 
         alpha = float(CINEMATIC_FOLLOW_ALPHA)
         cur = canvas.center()
@@ -224,7 +224,7 @@ def _maybe_lerp_center(canvas, target):
 
 def centerCanvasOnLayer(iface, layer_name, groupName):
     """One-shot center/zoom for the requested FMV layer."""
-    from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
+    from QGIS_FMV.utils.settings.QgsFmvSettings import get as settings_get
 
     base = _base()
     mode_map = {

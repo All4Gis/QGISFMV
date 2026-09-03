@@ -17,7 +17,7 @@ import pytest
 
 def _load_export():
     ensure_qgis_fmv_package()
-    keys = qgis_stub_keys("QGISFMV.utils.ui.QgsUtils")
+    keys = qgis_stub_keys("QGIS_FMV.utils.ui.QgsUtils")
     saved = snapshot_modules(keys)
 
     for name in keys:
@@ -53,7 +53,7 @@ def _load_export():
     qtw = sys.modules["qgis.PyQt.QtWidgets"]
     qtw.QFileDialog = object
 
-    ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+    ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
 
     class QgsUtils:
         @staticmethod
@@ -67,7 +67,7 @@ def _load_export():
     ui.QgsUtils = QgsUtils
 
     mod = load_plugin_module(
-        "utils/layers/QgsFmvExport.py", "QGISFMV.utils.layers.QgsFmvExport"
+        "utils/layers/QgsFmvExport.py", "QGIS_FMV.utils.layers.QgsFmvExport"
     )
     return mod, saved
 
@@ -82,7 +82,7 @@ def export_mod():
         yield mod
     finally:
         restore_modules(saved)
-        sys.modules.pop("QGISFMV.utils.layers.QgsFmvExport", None)
+        sys.modules.pop("QGIS_FMV.utils.layers.QgsFmvExport", None)
 
 
 class TestBuildGpxDocument:

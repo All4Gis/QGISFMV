@@ -80,7 +80,7 @@ def worker_mod():
     try:
         mod = load_plugin_module(
             "utils/media/QgsFmvMetadataWorker.py",
-            "QGISFMV.utils.media.QgsFmvMetadataWorker",
+            "QGIS_FMV.utils.media.QgsFmvMetadataWorker",
         )
     except Exception as exc:
         restore_modules(saved)
@@ -89,7 +89,7 @@ def worker_mod():
         yield mod
     finally:
         restore_modules(saved)
-        sys.modules.pop("QGISFMV.utils.media.QgsFmvMetadataWorker", None)
+        sys.modules.pop("QGIS_FMV.utils.media.QgsFmvMetadataWorker", None)
 
 
 class TestMetadataParseWorkerCoalesce:

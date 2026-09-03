@@ -13,7 +13,7 @@ def layers_mod():
     except ImportError:
         pytest.skip("QGIS runtime not available")
     return _load_plugin_module(
-        "utils/layers/QgsFmvLayers.py", "QGISFMV.utils.layers.QgsFmvLayers"
+        "utils/layers/QgsFmvLayers.py", "QGIS_FMV.utils.layers.QgsFmvLayers"
     )
 
 

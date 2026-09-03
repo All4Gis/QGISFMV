@@ -10,18 +10,18 @@ from qgis.core import QgsProject, QgsRasterLayer, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QFileDialog
 
-from QGISFMV.utils.core.QgsFmvUtils import (
+from QGIS_FMV.utils.core.QgsFmvUtils import (
     ExtendMosaic,
     getVideoFolder,
     resetMosaicFrameCounter,
 )
-from QGISFMV.utils.layers.QgsFmvLayers import (
+from QGIS_FMV.utils.layers.QgsFmvLayers import (
     CreateGroupByName,
     addLayerNoCrsDialog,
     frames_g,
 )
-from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.utils.settings.QgsFmvSettings import get as settings_get
+from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
 class MosaicController:
@@ -44,7 +44,7 @@ class MosaicController:
             try:
                 task.cancel()
             except Exception as exc:
-                from QGISFMV.utils.logging import log
+                from QGIS_FMV.utils.logging import log
 
                 log.debug("mosaic task cancel failed: %s", exc)
 
@@ -94,11 +94,11 @@ class MosaicController:
             if getattr(player, "session", None) is not None:
                 player.session.activate()
             else:
-                from QGISFMV.utils.core.QgsFmvUtils import ensureGlobalState
+                from QGIS_FMV.utils.core.QgsFmvUtils import ensureGlobalState
 
                 ensureGlobalState(player.iface)
             resetMosaicFrameCounter()
-            import QGISFMV.utils.layers.QgsFmvLayers as _layers
+            import QGIS_FMV.utils.layers.QgsFmvLayers as _layers
 
             _layers.groupName = player._videoGroupName()
             self.reset()
@@ -225,7 +225,7 @@ class MosaicController:
 
     def _refresh_layer(self, path):
         player = self._player
-        import QGISFMV.utils.layers.QgsFmvLayers as _layers
+        import QGIS_FMV.utils.layers.QgsFmvLayers as _layers
 
         _layers.groupName = player._videoGroupName()
 
@@ -243,18 +243,18 @@ class MosaicController:
                     try:
                         player.iface.mapCanvas().refresh()
                     except Exception as exc:
-                        from QGISFMV.utils.logging import log
+                        from QGIS_FMV.utils.logging import log
 
                         log.debug("Mosaic canvas refresh failed: %s", exc)
                     return
             except Exception as exc:
-                from QGISFMV.utils.logging import log
+                from QGIS_FMV.utils.logging import log
 
                 log.debug("Mosaic in-place layer update failed: %s", exc)
             try:
                 QgsProject.instance().removeMapLayer(self.layer.id())
             except Exception as exc:
-                from QGISFMV.utils.logging import log
+                from QGIS_FMV.utils.logging import log
 
                 log.debug("Mosaic layer removal failed: %s", exc)
             self.layer = None
@@ -289,14 +289,14 @@ class MosaicController:
         try:
             player.iface.layerTreeView().refreshLayerSymbology(layer.id())
         except Exception as exc:
-            from QGISFMV.utils.logging import log
+            from QGIS_FMV.utils.logging import log
 
             log.debug("Mosaic tree symbology refresh failed: %s", exc)
 
         try:
             player.iface.mapCanvas().refresh()
         except Exception as exc:
-            from QGISFMV.utils.logging import log
+            from QGIS_FMV.utils.logging import log
 
             log.debug("Mosaic canvas refresh failed: %s", exc)
 

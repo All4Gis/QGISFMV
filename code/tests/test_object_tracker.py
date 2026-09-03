@@ -14,7 +14,7 @@ _spec.loader.exec_module(_mod)
 load_plugin_module = _mod.load_plugin_module
 
 tracker_mod = load_plugin_module(
-    "utils/vision/QgsObjectTracker.py", "QGISFMV.utils.vision.QgsObjectTracker"
+    "utils/vision/QgsObjectTracker.py", "QGIS_FMV.utils.vision.QgsObjectTracker"
 )
 
 

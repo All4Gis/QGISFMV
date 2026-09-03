@@ -11,7 +11,7 @@ QGIS_BIN="${QGIS_BIN:-/Applications/QGIS.app/Contents/MacOS/QGIS-final-4_0_0}"
 
 # Ensure plugin symlink (same as LoadQSS install_dev.sh layout)
 PLUGIN_DIR="$QGIS_PROFILE/python/plugins"
-if [ ! -e "$PLUGIN_DIR/QGISFMV" ]; then
+if [ ! -e "$PLUGIN_DIR/QGIS_FMV" ]; then
     echo "Plugin not linked — running install_dev.sh first..."
     bash "$ROOT/install_dev.sh"
 fi
@@ -32,11 +32,11 @@ if [ ! -x "$QGIS_BIN" ]; then
 fi
 
 echo "======================================"
-echo " QGISFMV DEBUG MODE"
+echo " QGIS_FMV DEBUG MODE"
 echo "======================================"
 echo ""
 echo "Starting QGIS with debug mode..."
-echo "Cursor: Run and Debug → 'Attach to QGIS (QGISFMV)'"
+echo "Cursor: Run and Debug → 'Attach to QGIS (QGIS_FMV)'"
 echo ""
 
 exec "$QGIS_BIN"

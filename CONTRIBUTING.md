@@ -120,7 +120,7 @@ code/
 │   ├── media/              # Multimedia façade + workers/adapters, FfmpegRunner, Geocode, KLV
 │   ├── core/               # VideoSession, Utils façade, georef, corners, map center, mosaic
 │   ├── ui/                 # QgsUtils, file dialogs, JSON model, plots, resources
-│   ├── logging/            # `from QGISFMV.utils.logging import log`
+│   ├── logging/            # `from QGIS_FMV.utils.logging import log`
 │   ├── install/            # QgsFmvInstaller
 │   └── vision/             # Object tracker
 ├── geo/                    # Geodesy (QgsGeoUtils)
@@ -134,7 +134,7 @@ code/
 └── requirements.txt        # Runtime deps for QGIS Python
 ```
 
-Root `QGISFMV` → symlink to `code/` (QGIS plugin name). Edit/lint `code/` only.
+Root `QGIS_FMV` → symlink to `code/` (QGIS plugin name). Edit/lint `code/` only.
 
 **UI workflow:** edit `code/ui/*.ui` → `python3 build.py` → never edit `code/gui/ui_*.py` directly.
 Prefer Designer for dialog chrome; Python only for dynamic/custom-painted widgets.

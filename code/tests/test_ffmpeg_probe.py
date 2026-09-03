@@ -8,7 +8,7 @@ pytest.importorskip("qgis")
 from code.tests.support import load_plugin_module
 
 probe = load_plugin_module(
-    "utils/media/QgsFfmpegProbe.py", "QGISFMV.utils.media.QgsFfmpegProbe"
+    "utils/media/QgsFfmpegProbe.py", "QGIS_FMV.utils.media.QgsFfmpegProbe"
 )
 
 

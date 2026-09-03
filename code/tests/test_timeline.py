@@ -90,7 +90,7 @@ def _timeline_mod():
 
     mod = load_plugin_module(
         "player/features/QgsFmvTimeline.py",
-        "QGISFMV.player.features.QgsFmvTimeline",
+        "QGIS_FMV.player.features.QgsFmvTimeline",
     )
     return mod, saved
 
@@ -110,4 +110,4 @@ class TestTimelineEvents:
             assert tw.eventCount() == 0
         finally:
             restore_modules(saved)
-            sys.modules.pop("QGISFMV.player.features.QgsFmvTimeline", None)
+            sys.modules.pop("QGIS_FMV.player.features.QgsFmvTimeline", None)

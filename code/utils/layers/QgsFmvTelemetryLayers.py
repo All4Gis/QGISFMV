@@ -23,16 +23,16 @@ from qgis.core import (
 )
 from qgis.PyQt.QtCore import QCoreApplication
 
-from QGISFMV.utils.layers.QgsFmvLayerDefaults import (
+from QGIS_FMV.utils.layers.QgsFmvLayerDefaults import (
     SetDefaultFootprintStyle,
     SetDefaultFrameAxisStyle,
     SetDefaultFrameCenterStyle,
     SetDefaultPlatformStyle,
 )
-from QGISFMV.utils.layers.QgsFmvLayerStyleStore import (
+from QGIS_FMV.utils.layers.QgsFmvLayerStyleStore import (
     apply_or_default as applyLayerStyle,
 )
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 # Per-video-group caches. Kept here (not in QgsFmvLayers) per the module split;
 # QgsFmvLayers imports these dicts by reference so ``layers_mod._trajectory_active_feature``
@@ -49,7 +49,7 @@ def _base():
     could fail if this module happens to load first. Deferring the import
     to call time guarantees both modules are fully initialized.
     """
-    import QGISFMV.utils.layers.QgsFmvLayers as _mod
+    import QGIS_FMV.utils.layers.QgsFmvLayers as _mod
 
     return _mod
 
@@ -281,7 +281,7 @@ def UpdateBeamsData(
 
 def UpdateTrajectoryData(packet, ele):
     """Update Trajectory Values"""
-    from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
+    from QGIS_FMV.geo.QgsGeoUtils import distance as _geo_distance
 
     lat = packet.SensorLatitude
     lon = packet.SensorLongitude

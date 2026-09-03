@@ -22,8 +22,8 @@ def _load_bookmark_mod():
         "qgis.PyQt.QtGui",
         "qgis.PyQt.QtWidgets",
         "qgis.core",
-        "QGISFMV.utils.ui.QgsUtils",
-        "QGISFMV.utils.core.QgsFmvUtils",
+        "QGIS_FMV.utils.ui.QgsUtils",
+        "QGIS_FMV.utils.core.QgsFmvUtils",
     )
     saved = snapshot_modules(keys)
     for name in keys:
@@ -57,7 +57,7 @@ def _load_bookmark_mod():
         MessageLevel=types.SimpleNamespace(Warning=1, Info=0)
     )
 
-    ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+    ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
 
     class QgsUtils:
         @staticmethod
@@ -66,12 +66,12 @@ def _load_bookmark_mod():
 
     ui.QgsUtils = QgsUtils
 
-    utils = sys.modules["QGISFMV.utils.core.QgsFmvUtils"]
+    utils = sys.modules["QGIS_FMV.utils.core.QgsFmvUtils"]
     utils.askForFiles = lambda *a, **k: None
 
     mod = load_plugin_module(
         "player/features/QgsFmvBookmarkController.py",
-        "QGISFMV.player.features.QgsFmvBookmarkController",
+        "QGIS_FMV.player.features.QgsFmvBookmarkController",
     )
     return mod, saved
 
@@ -114,7 +114,7 @@ def bookmark_mod():
         yield mod
     finally:
         restore_modules(saved)
-        sys.modules.pop("QGISFMV.player.features.QgsFmvBookmarkController", None)
+        sys.modules.pop("QGIS_FMV.player.features.QgsFmvBookmarkController", None)
 
 
 class TestBookmarkExportHelpers:

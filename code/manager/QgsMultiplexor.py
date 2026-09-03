@@ -8,10 +8,10 @@ from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QDialog
 
-import QGISFMV.utils.core.QgsFmvUtils as _fmv_utils
-from QGISFMV.gui.ui_FmvMultiplexer import Ui_VideoMultiplexer
-from QGISFMV.utils.core.QgsFmvUtils import _ensureFfmpegPaths, askForFiles
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+import QGIS_FMV.utils.core.QgsFmvUtils as _fmv_utils
+from QGIS_FMV.gui.ui_FmvMultiplexer import Ui_VideoMultiplexer
+from QGIS_FMV.utils.core.QgsFmvUtils import _ensureFfmpegPaths, askForFiles
+from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
 class Multiplexor(QDialog, Ui_VideoMultiplexer):

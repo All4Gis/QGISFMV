@@ -14,7 +14,7 @@ First run creates baselines; subsequent runs compare.
 
 Run inside QGIS::
 
-    import pytest; pytest.main(["-xvs", "QGISFMV/tests/test_visual_regression.py"])
+    import pytest; pytest.main(["-xvs", "QGIS_FMV/tests/test_visual_regression.py"])
 """
 
 import os
@@ -37,7 +37,7 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.fixture
 def harness():
-    from QGISFMV.tests.gui_test_harness import GUITestHarness
+    from QGIS_FMV.tests.gui_test_harness import GUITestHarness
 
     h = GUITestHarness()
     h.start()

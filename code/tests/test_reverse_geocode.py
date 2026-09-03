@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 
 def _mod():
     return load_plugin_module(
-        "utils/media/QgsFmvGeocode.py", "QGISFMV.utils.media.QgsFmvGeocode"
+        "utils/media/QgsFmvGeocode.py", "QGIS_FMV.utils.media.QgsFmvGeocode"
     )
 
 

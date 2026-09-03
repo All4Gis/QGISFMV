@@ -21,9 +21,9 @@ from qgis.PyQt.QtCore import QPointF
 from qgis.PyQt.QtGui import QPolygonF
 from qgis.utils import iface
 
-from QGISFMV.utils.logging import log
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGISFMV.video.playback.QgsVideoState import MOUSE_MOVE_EVENT
+from QGIS_FMV.utils.logging import log
+from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.video.playback.QgsVideoState import MOUSE_MOVE_EVENT
 
 
 def _base():
@@ -34,7 +34,7 @@ def _base():
     could fail if this module happens to load first. Deferring the import
     to call time guarantees both modules are fully initialized.
     """
-    import QGISFMV.utils.layers.QgsFmvLayers as _mod
+    import QGIS_FMV.utils.layers.QgsFmvLayers as _mod
 
     return _mod
 
@@ -228,21 +228,21 @@ def _split_measure_chains(points):
 
 def _format_length_label(meters):
     """Format a distance in meters as a human-readable string (m or km)."""
-    from QGISFMV.utils.formatting import format_length
+    from QGIS_FMV.utils.formatting import format_length
 
     return format_length(meters)
 
 
 def _format_area_label(area_m2):
     """Format an area in square meters as a human-readable string (m2, ha, or km2)."""
-    from QGISFMV.utils.formatting import format_area
+    from QGIS_FMV.utils.formatting import format_area
 
     return format_area(area_m2)
 
 
 def SyncMeasureDistanceOnMap(points, group_name=None):
     """Rebuild Measure Distance layer features from video measure vertices."""
-    from QGISFMV.geo.QgsGeoUtils import distance as _geo_distance
+    from QGIS_FMV.geo.QgsGeoUtils import distance as _geo_distance
 
     key = _base()._draw_group(group_name)
     layer = qgsu.selectLayerByName(_base().MeasureDistance_lyr, key)
@@ -278,7 +278,7 @@ def SyncMeasureDistanceOnMap(points, group_name=None):
 
 def SyncMeasureAreaOnMap(points, group_name=None):
     """Rebuild Measure Area layer features from video measure vertices."""
-    from QGISFMV.geo.QgsGeoUtils import polygon_area as _geo_polygon_area
+    from QGIS_FMV.geo.QgsGeoUtils import polygon_area as _geo_polygon_area
 
     key = _base()._draw_group(group_name)
     layer = qgsu.selectLayerByName(_base().MeasureArea_lyr, key)

@@ -6,7 +6,7 @@ set "REPO_ROOT=%REPO_ROOT:~0,-1%"
 set "PLUGIN_SOURCE=%REPO_ROOT%\code"
 set "QGIS_PROFILE=%APPDATA%\QGIS\QGIS4\profiles\default"
 set "PLUGIN_DIR=%QGIS_PROFILE%\python\plugins"
-set "PLUGIN_NAME=QGISFMV"
+set "PLUGIN_NAME=QGIS_FMV"
 set "FMV_PKGS=%USERPROFILE%\.qgis-fmv-packages"
 if defined QGIS_FMV_PACKAGES set "FMV_PKGS=%QGIS_FMV_PACKAGES%"
 

@@ -2,7 +2,7 @@
 
 set -e
 
-PLUGIN_NAME="QGISFMV"
+PLUGIN_NAME="QGIS_FMV"
 PLUGIN_DISPLAY_NAME="QGIS FMV"
 
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -85,5 +85,5 @@ echo "Now open QGIS and use Plugin Reloader"
 echo ""
 echo "Debug (same flow as LoadQSS):"
 echo "  1. ./debug_qgis.sh"
-echo "  2. Cursor → Run and Debug → 'Attach to QGIS (QGISFMV)'"
+echo "  2. Cursor → Run and Debug → 'Attach to QGIS (QGIS_FMV)'"
 echo "  3. Reload plugin to hit breakpoints"

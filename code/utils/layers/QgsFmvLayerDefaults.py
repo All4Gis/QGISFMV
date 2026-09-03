@@ -35,9 +35,9 @@ from qgis.PyQt.QtCore import QPointF
 from qgis.PyQt.QtGui import QColor, QFont
 from qgis.utils import iface
 
-from QGISFMV.utils.layers.QgsFmvStyles import FmvLayerStyles as S
-from QGISFMV.utils.logging import log
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.utils.layers.QgsFmvStyles import FmvLayerStyles as S
+from QGIS_FMV.utils.logging import log
+from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 try:
     from qgis._3d import (
@@ -66,7 +66,7 @@ def _base():
     could fail if this module happens to load first. Deferring the import
     to call time guarantees both modules are fully initialized.
     """
-    import QGISFMV.utils.layers.QgsFmvLayers as _mod
+    import QGIS_FMV.utils.layers.QgsFmvLayers as _mod
 
     return _mod
 
@@ -239,7 +239,7 @@ def _label_point(layer, style):
 
 def _apply_military_symbol(layer):
     """Rule-based SVG renderer for NATO military symbols."""
-    from QGISFMV.player.dialogs.QgsFmvMilitarySymbols import (
+    from QGIS_FMV.player.dialogs.QgsFmvMilitarySymbols import (
         MILITARY_SYMBOLS,
         symbol_svg_path,
     )
@@ -683,8 +683,8 @@ def SetDefaultBeamsStyle(layer, beam="DEFAULT"):
 
 def RestoreDefaultLayerStyles():
     """Clear saved symbology and re-apply plugin defaults on open FMV layers."""
-    from QGISFMV.utils.layers.QgsFmvLayerStyleStore import clear, ensure_watch
-    from QGISFMV.utils.settings.QgsFmvSettings import get as settings_get
+    from QGIS_FMV.utils.layers.QgsFmvLayerStyleStore import clear, ensure_watch
+    from QGIS_FMV.utils.settings.QgsFmvSettings import get as settings_get
 
     clear()
     base = _base()

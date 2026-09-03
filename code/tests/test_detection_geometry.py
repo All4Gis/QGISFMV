@@ -10,7 +10,7 @@ def _geom():
     ensure_qgis_fmv_package()
     return load_plugin_module(
         "video/filters/QgsFmvDetectionGeometry.py",
-        "QGISFMV.video.filters.QgsFmvDetectionGeometry",
+        "QGIS_FMV.video.filters.QgsFmvDetectionGeometry",
     )
 
 
@@ -67,7 +67,7 @@ class TestTrackIds:
         # Force tracking on without settings.
         tuning = load_plugin_module(
             "video/filters/QgsFmvFilterTuning.py",
-            "QGISFMV.video.filters.QgsFmvFilterTuning",
+            "QGIS_FMV.video.filters.QgsFmvFilterTuning",
         )
         monkeypatch.setattr(tuning, "tracking_enabled", lambda: True)
         ids1 = g._assign_track_ids("vehicles", [(0, 0, 10, 10)])
@@ -80,7 +80,7 @@ class TestTrackIds:
         g.reset_detection_state()
         tuning = load_plugin_module(
             "video/filters/QgsFmvFilterTuning.py",
-            "QGISFMV.video.filters.QgsFmvFilterTuning",
+            "QGIS_FMV.video.filters.QgsFmvFilterTuning",
         )
         monkeypatch.setattr(tuning, "tracking_enabled", lambda: False)
         assert g._assign_track_ids("vehicles", [(0, 0, 10, 10)]) == []

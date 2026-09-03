@@ -20,7 +20,7 @@ def _base():
     fail if this module happens to load first. Deferring the import to
     call time guarantees both modules are fully initialized.
     """
-    import QGISFMV.utils.core.QgsFmvUtils as _mod
+    import QGIS_FMV.utils.core.QgsFmvUtils as _mod
 
     return _mod
 

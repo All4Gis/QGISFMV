@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<polygon points="24 6 42 24 24 42 6 24" fill="#FF8080" stroke="#c00" stroke-width="2.5"/>
+<text x="24" y="29" fill="#102040" font-size="16" font-weight="bold" text-anchor="middle">?</text>
+</svg>

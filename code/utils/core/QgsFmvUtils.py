@@ -13,7 +13,7 @@ from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QPoint, QSettings
 from qgis.PyQt.QtGui import QPainter
 
-from QGISFMV.utils.core.QgsFmvCornerEstimation import (  # noqa: F401
+from QGIS_FMV.utils.core.QgsFmvCornerEstimation import (  # noqa: F401
     CornerEstimationWithOffsets,
     CornerEstimationWithoutOffsets,
 )
@@ -21,7 +21,7 @@ from QGISFMV.utils.core.QgsFmvCornerEstimation import (  # noqa: F401
 # ---------------------------------------------------------------------------
 # Backward-compat re-exports from domain modules
 # ---------------------------------------------------------------------------
-from QGISFMV.utils.core.QgsFmvGeoReferencing import (  # noqa: F401
+from QGIS_FMV.utils.core.QgsFmvGeoReferencing import (  # noqa: F401
     GetDemAltAt,
     GetFrameCenter,
     GetGCPGeoTransform,
@@ -40,7 +40,7 @@ from QGISFMV.utils.core.QgsFmvGeoReferencing import (  # noqa: F401
     _update_footprint_beams_gcp,
     hasElevationModel,
 )
-from QGISFMV.utils.core.QgsFmvMapCenter import (  # noqa: F401
+from QGIS_FMV.utils.core.QgsFmvMapCenter import (  # noqa: F401
     _center_fallback_point,
     _latest_layer_feature,
     _layer_center_on_canvas,
@@ -50,8 +50,8 @@ from QGISFMV.utils.core.QgsFmvMapCenter import (  # noqa: F401
     centerCanvasOnLayer,
     followMapCenter,
 )
-from QGISFMV.utils.core.QgsFmvMosaic import ExtendMosaic  # noqa: F401
-from QGISFMV.utils.core.QgsFmvMosaic import (
+from QGIS_FMV.utils.core.QgsFmvMosaic import ExtendMosaic  # noqa: F401
+from QGIS_FMV.utils.core.QgsFmvMosaic import (
     WriteGeoreferencedFrame,
     _dataset_extent_wgs84,
     _footprint_weights_from_mask,
@@ -62,13 +62,13 @@ from QGISFMV.utils.core.QgsFmvMosaic import (
     georeferencingVideo,
     resetMosaicFrameCounter,
 )
-from QGISFMV.utils.core.QgsFmvVideoSession import (
+from QGIS_FMV.utils.core.QgsFmvVideoSession import (
     VideoSession,
     ensure_session,
     get_active_session,
     set_active_session,
 )
-from QGISFMV.utils.layers.QgsFmvLayers import (
+from QGIS_FMV.utils.layers.QgsFmvLayers import (
     SetcrtPltTailNum,
     SetcrtSensorSrc,
     UpdateFrameAxisData,
@@ -76,19 +76,19 @@ from QGISFMV.utils.layers.QgsFmvLayers import (
     UpdatePlatformData,
     UpdateTrajectoryData,
 )
-from QGISFMV.utils.logging import log
-from QGISFMV.utils.media import QgsFfmpegRunner as _ffmpeg_runner
-from QGISFMV.utils.settings.QgsFmvSettings import get_int, get_layer
-from QGISFMV.utils.settings.QgsFmvSettings import (
+from QGIS_FMV.utils.logging import log
+from QGIS_FMV.utils.media import QgsFfmpegRunner as _ffmpeg_runner
+from QGIS_FMV.utils.settings.QgsFmvSettings import get_int, get_layer
+from QGIS_FMV.utils.settings.QgsFmvSettings import (
     reverse_geocoding_url as _reverse_geocoding_url,
 )
-from QGISFMV.utils.ui.QgsFmvFileDialogs import askForFiles  # noqa: F401
-from QGISFMV.utils.ui.QgsFmvFileDialogs import (
+from QGIS_FMV.utils.ui.QgsFmvFileDialogs import askForFiles  # noqa: F401
+from QGIS_FMV.utils.ui.QgsFmvFileDialogs import (
     askForFolder,
     pluginSetting,
     setPluginSetting,
 )
-from QGISFMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 settings = QSettings()
 windows = platform.system() == "Windows"
@@ -114,7 +114,7 @@ Trajectory_lyr = get_layer("trajectory_lyr")
 ffmpeg_path = "ffmpeg.exe" if windows else "ffmpeg"
 ffprobe_path = "ffprobe.exe" if windows else "ffprobe"
 
-PLUGIN_NAMESPACE = "QGISFMV"
+PLUGIN_NAMESPACE = "QGIS_FMV"
 
 # Active video session (alias of VideoSession). Prefer get_active_session().
 gv = None
@@ -135,7 +135,7 @@ def qmouse_pos(event):
 def _resolve_ffmpeg_binary(folder, exe_name):
     """Resolve an ffmpeg/ffprobe binary, falling back to a 'bin' subfolder
     (common layout of official Windows builds)."""
-    from QGISFMV.utils.settings.QgsFmvSettings import _resolve_ffmpeg_binary as _resolve
+    from QGIS_FMV.utils.settings.QgsFmvSettings import _resolve_ffmpeg_binary as _resolve
 
     result = _resolve(folder, exe_name)
     if result:
@@ -162,7 +162,7 @@ def getVideoManagerList():
         settings.endGroup()
         return VideoList
     except Exception as e:
-        from QGISFMV.utils.logging import log
+        from QGIS_FMV.utils.logging import log
 
         log.debug("getVideoManagerList failed: %s", e)
         return []
@@ -172,10 +172,10 @@ def getVideoFolder(video_file):
     """Get or create Video Temporal folder"""
     home = os.path.expanduser("~")
 
-    qgsu.createFolderByName(home, "QGISFMV")
+    qgsu.createFolderByName(home, "QGIS_FMV")
 
     root, _ = os.path.splitext(os.path.basename(video_file))
-    homefmv = os.path.join(home, "QGISFMV")
+    homefmv = os.path.join(home, "QGIS_FMV")
 
     qgsu.createFolderByName(homefmv, root)
     return os.path.join(homefmv, root)
@@ -187,7 +187,7 @@ def RemoveVideoFolder(filename):
     try:
         shutil.rmtree(folder, ignore_errors=True)
     except Exception as e:
-        from QGISFMV.utils.logging import log
+        from QGIS_FMV.utils.logging import log
 
         log.debug("RemoveVideoFolder failed: %s", e)
 
@@ -233,7 +233,7 @@ def _ensureFfmpegPaths():
 def _klvIndexFromProbe(videoPath):
     """Return the ``0:d:N`` index for the first KLV data stream, if any."""
     try:
-        from QGISFMV.utils.media.QgsFfmpegProbe import probe_json
+        from QGIS_FMV.utils.media.QgsFfmpegProbe import probe_json
 
         data = probe_json(videoPath)
         if not data:
@@ -249,7 +249,7 @@ def _klvIndexFromProbe(videoPath):
                 return data_idx
             data_idx += 1
     except Exception as e:
-        from QGISFMV.utils.logging import log
+        from QGIS_FMV.utils.logging import log
 
         log.debug("KLV probe failed for %s: %s", videoPath, e)
     return None
@@ -335,7 +335,7 @@ def _coordsFromKlvStream(rawData):
 
 def fetchReverseGeocodeLabel(centerLat, centerLon):
     """Thread-safe reverse geocode (urllib); for QgsTask / worker threads."""
-    from QGISFMV.utils.media.QgsFmvGeocode import (
+    from QGIS_FMV.utils.media.QgsFmvGeocode import (
         fetchReverseGeocodeLabel as _fetch_label,
     )
 
@@ -421,7 +421,7 @@ def buildRecordFfmpegArgs(infile, start_record, end_record, out_path):
 
 def ResetData(group_name=None):
     """Reset layer feature caches and active session telemetry fields."""
-    from QGISFMV.utils.layers.QgsFmvLayers import resetLayerCaches
+    from QGIS_FMV.utils.layers.QgsFmvLayers import resetLayerCaches
 
     SetcrtSensorSrc()
     SetcrtPltTailNum()
@@ -446,7 +446,7 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
     groupName = group
     # Keep layer helpers and map-centering on the same video group.
     if group is not None:
-        import QGISFMV.utils.layers.QgsFmvLayers as _layers
+        import QGIS_FMV.utils.layers.QgsFmvLayers as _layers
 
         _layers.groupName = group
     geometry_ok = False
@@ -576,8 +576,8 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
 
 # Mosaic tuning constants (canonical values in utils.constants; mirrored here
 # so QgsFmvSettings.reloadRuntime can mutate the cached module attributes).
-from QGISFMV.utils.constants import MOSAIC_FEATHER_PX  # noqa: F401
-from QGISFMV.utils.constants import (
+from QGIS_FMV.utils.constants import MOSAIC_FEATHER_PX  # noqa: F401
+from QGIS_FMV.utils.constants import (
     MOSAIC_FOOTPRINT_GROW_METERS,
     MOSAIC_FOOTPRINT_GROW_RATIO,
     MOSAIC_MAX_FRAME_DIMENSION,
@@ -586,8 +586,8 @@ from QGISFMV.utils.constants import (
     MOSAIC_MIN_INTERVAL_SEC,
     MOSAIC_MIN_MOVE_METERS,
 )
-from QGISFMV.utils.formatting import seconds_to_time as _seconds_to_time  # noqa: F401
-from QGISFMV.utils.formatting import time_to_seconds as _time_to_seconds
+from QGIS_FMV.utils.formatting import seconds_to_time as _seconds_to_time  # noqa: F401
+from QGIS_FMV.utils.formatting import time_to_seconds as _time_to_seconds
 
 
 def BurnDrawingsImage(source, overlay):
@@ -613,10 +613,10 @@ def BurnDrawingsImage(source, overlay):
 
 
 try:
-    from QGISFMV.utils.settings.QgsFmvSettings import _apply_mosaic_settings
+    from QGIS_FMV.utils.settings.QgsFmvSettings import _apply_mosaic_settings
 
     _apply_mosaic_settings(__import__(__name__))
 except Exception as e:
-    from QGISFMV.utils.logging import log
+    from QGIS_FMV.utils.logging import log
 
     log.debug("Mosaic settings import failed (non-critical): %s", e)

@@ -2,7 +2,7 @@
 
 set -e
 
-PLUGIN_NAME="QGISFMV"
+PLUGIN_NAME="QGIS_FMV"
 
 resolve_plugin_dir() {
     local candidates=(

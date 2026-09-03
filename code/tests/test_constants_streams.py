@@ -19,19 +19,19 @@ class TestGeoConstants:
 
     def test_earth_mean_radius(self):
         """Earth mean radius should be ~6371 km."""
-        from QGISFMV.geo.QgsGeoUtils import _EARTH_MEAN_RADIUS
+        from QGIS_FMV.geo.QgsGeoUtils import _EARTH_MEAN_RADIUS
 
         assert 6_000_000 < _EARTH_MEAN_RADIUS < 7_000_000
 
     def test_earth_mean_radius_approximate(self):
         """Earth mean radius should be approximately 6371008.8 m."""
-        from QGISFMV.geo.QgsGeoUtils import _EARTH_MEAN_RADIUS
+        from QGIS_FMV.geo.QgsGeoUtils import _EARTH_MEAN_RADIUS
 
         assert _EARTH_MEAN_RADIUS == pytest.approx(6_371_008.8, rel=1e-6)
 
     def test_destination_uses_correct_radius(self):
         """1 degree of latitude at equator ≈ 111.32 km."""
-        from QGISFMV.geo.QgsGeoUtils import destination
+        from QGIS_FMV.geo.QgsGeoUtils import destination
 
         # Go 1 degree north from equator
         lon, lat = destination((0.0, 0.0), 111_320, 0.0)

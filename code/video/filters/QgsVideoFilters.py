@@ -3,11 +3,11 @@ import numpy as np
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QImage
 
-import QGISFMV.video.filters.QgsFmvFilterCore as _fcore
-from QGISFMV.utils.core.QgsImageMat import convertMatToQImage, convertQImageToMat
-from QGISFMV.utils.logging import log
-from QGISFMV.video.filters.QgsFmvDetectionFilters import FmvDetectionFilters
-from QGISFMV.video.filters.QgsFmvFilterCore import (
+import QGIS_FMV.video.filters.QgsFmvFilterCore as _fcore
+from QGIS_FMV.utils.core.QgsImageMat import convertMatToQImage, convertQImageToMat
+from QGIS_FMV.utils.logging import log
+from QGIS_FMV.video.filters.QgsFmvDetectionFilters import FmvDetectionFilters
+from QGIS_FMV.video.filters.QgsFmvFilterCore import (
     _COLORMAP_NRVI,
     _HAS_CV2,
     _MAX_SLOW_FILTER_DIM,

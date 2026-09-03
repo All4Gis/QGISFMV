@@ -7,7 +7,7 @@ import pytest
 
 pytest.importorskip("qgis")
 
-from QGISFMV.player.dialogs.QgsFmvMilitarySymbols import (
+from QGIS_FMV.player.dialogs.QgsFmvMilitarySymbols import (
     MILITARY_SYMBOLS,
     symbol_svg_path,
     symbols_dir,

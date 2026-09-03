@@ -10,7 +10,7 @@ class TestInteractionState:
     @pytest.fixture
     def state(self):
         module = load_plugin_module(
-            "video/playback/QgsVideoState.py", "QGISFMV.video.playback.QgsVideoState"
+            "video/playback/QgsVideoState.py", "QGIS_FMV.video.playback.QgsVideoState"
         )
         return module.InteractionState()
 
@@ -53,7 +53,7 @@ class TestFilterState:
     @pytest.fixture
     def state(self):
         module = load_plugin_module(
-            "video/playback/QgsVideoState.py", "QGISFMV.video.playback.QgsVideoState"
+            "video/playback/QgsVideoState.py", "QGIS_FMV.video.playback.QgsVideoState"
         )
         return module.FilterState()
 

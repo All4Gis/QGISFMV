@@ -5,25 +5,25 @@ from qgis.PyQt.QtMultimedia import QVideoSink
 from qgis.PyQt.QtWidgets import QWidget as VideoWidgetBase
 from qgis.utils import iface
 
-from QGISFMV.utils.core.QgsFmvUtils import (
+from QGIS_FMV.utils.core.QgsFmvUtils import (
     GetGCPGeoTransform,
     GetImageHeight,
     qmouse_pos,
 )
-from QGISFMV.utils.logging import log
-from QGISFMV.utils.media.QgsFmvMultimedia import PlayingState, StoppedState
-from QGISFMV.video.playback.QgsVideoCursor import CursorController
-from QGISFMV.video.playback.QgsVideoDrawController import VideoDrawController
-from QGISFMV.video.playback.QgsVideoObjectTracking import ObjectTrackingController
-from QGISFMV.video.playback.QgsVideoPaintPipeline import VideoPaintPipeline
-from QGISFMV.video.playback.QgsVideoRubberBands import RubberBandManager
-from QGISFMV.video.playback.QgsVideoState import (
+from QGIS_FMV.utils.logging import log
+from QGIS_FMV.utils.media.QgsFmvMultimedia import PlayingState, StoppedState
+from QGIS_FMV.video.playback.QgsVideoCursor import CursorController
+from QGIS_FMV.video.playback.QgsVideoDrawController import VideoDrawController
+from QGIS_FMV.video.playback.QgsVideoObjectTracking import ObjectTrackingController
+from QGIS_FMV.video.playback.QgsVideoPaintPipeline import VideoPaintPipeline
+from QGIS_FMV.video.playback.QgsVideoRubberBands import RubberBandManager
+from QGIS_FMV.video.playback.QgsVideoState import (
     FilterState,
     InteractionState,
     TrackLockState,
 )
-from QGISFMV.video.playback.QgsVideoSurface import VideoSinkSurface
-from QGISFMV.video.playback.QgsVideoUtils import VideoUtils as vut
+from QGIS_FMV.video.playback.QgsVideoSurface import VideoSinkSurface
+from QGIS_FMV.video.playback.QgsVideoUtils import VideoUtils as vut
 
 
 class VideoWidget(VideoWidgetBase):
@@ -91,7 +91,7 @@ class VideoWidget(VideoWidgetBase):
         self._tracker_backend = None
         self._track_id = 0
         self._track_misses = 0
-        from QGISFMV.utils.constants import TRACK_MAX_MISSES, TRACK_TIMER_INTERVAL_MS
+        from QGIS_FMV.utils.constants import TRACK_MAX_MISSES, TRACK_TIMER_INTERVAL_MS
 
         self._track_max_misses = TRACK_MAX_MISSES
         self._track_lock_state = TrackLockState.IDLE
@@ -127,7 +127,7 @@ class VideoWidget(VideoWidgetBase):
         group = self._map_group()
         if not group:
             return
-        import QGISFMV.utils.layers.QgsFmvLayers as _layers
+        import QGIS_FMV.utils.layers.QgsFmvLayers as _layers
 
         _layers.groupName = group
 
@@ -288,7 +288,7 @@ class VideoWidget(VideoWidgetBase):
             "smokeDetectionFilter",
             "floodDetectionFilter",
         ):
-            from QGISFMV.video.filters import reset_temporal_filter_state
+            from QGIS_FMV.video.filters import reset_temporal_filter_state
 
             reset_temporal_filter_state()
         self.surface.refreshFilters()
@@ -421,7 +421,7 @@ class VideoWidget(VideoWidgetBase):
 
     def RestoreFilters(self):
         """Remove and restore all video filters"""
-        from QGISFMV.video.filters import reset_temporal_filter_state
+        from QGIS_FMV.video.filters import reset_temporal_filter_state
 
         self._filterSatate.clear()
         reset_temporal_filter_state()

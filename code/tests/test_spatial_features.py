@@ -76,8 +76,8 @@ class TestGeofenceRule:
         keys = qgis_stub_keys(
             "qgis.PyQt.QtWidgets",
             "qgis.core",
-            "QGISFMV.utils.ui.QgsUtils",
-            "QGISFMV.utils.logging",
+            "QGIS_FMV.utils.ui.QgsUtils",
+            "QGIS_FMV.utils.logging",
         )
         saved = snapshot_modules(keys)
         try:
@@ -91,7 +91,7 @@ class TestGeofenceRule:
             core.Qgis = types.SimpleNamespace(
                 MessageLevel=types.SimpleNamespace(Warning=1, Info=0)
             )
-            ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+            ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
 
             class QgsUtils:
                 @staticmethod
@@ -103,12 +103,12 @@ class TestGeofenceRule:
                     return None
 
             ui.QgsUtils = QgsUtils
-            logmod = sys.modules["QGISFMV.utils.logging"]
+            logmod = sys.modules["QGIS_FMV.utils.logging"]
             logmod.log = types.SimpleNamespace(debug=lambda *a, **k: None)
 
             mod = load_plugin_module(
                 "player/features/QgsFmvGeofence.py",
-                "QGISFMV.player.features.QgsFmvGeofence",
+                "QGIS_FMV.player.features.QgsFmvGeofence",
             )
             ring = [(0, 0), (10, 0), (10, 10), (0, 10)]
             rule = mod.GeofenceRule(ring, label="AOI", mode="enter")
@@ -154,23 +154,23 @@ class TestGeoTimeIndex:
         keys = qgis_stub_keys(
             "qgis.PyQt.QtWidgets",
             "qgis.core",
-            "QGISFMV.utils.ui.QgsUtils",
-            "QGISFMV.utils.logging",
+            "QGIS_FMV.utils.ui.QgsUtils",
+            "QGIS_FMV.utils.logging",
         )
         saved = snapshot_modules(keys)
         try:
             for name in keys:
                 sys.modules.setdefault(name, types.ModuleType(name))
-            ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+            ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
             ui.QgsUtils = types.SimpleNamespace(
                 showUserAndLogMessage=lambda *a, **k: None
             )
-            logmod = sys.modules["QGISFMV.utils.logging"]
+            logmod = sys.modules["QGIS_FMV.utils.logging"]
             logmod.log = types.SimpleNamespace(debug=lambda *a, **k: None)
 
             mod = load_plugin_module(
                 "player/features/QgsFmvMapSeekController.py",
-                "QGISFMV.player.features.QgsFmvMapSeekController",
+                "QGIS_FMV.player.features.QgsFmvMapSeekController",
             )
             idx = mod.GeoTimeIndex(min_step_m=1.0, min_dt_sec=0.0)
             ring = [(0.0, 0.0), (0.01, 0.0), (0.01, 0.01), (0.0, 0.01)]
@@ -210,7 +210,7 @@ class TestDetectionGeo:
 
         mod = load_plugin_module(
             "video/filters/QgsFmvDetectionMap.py",
-            "QGISFMV.video.filters.QgsFmvDetectionMap",
+            "QGIS_FMV.video.filters.QgsFmvDetectionMap",
         )
         # Identity-ish: lat=y, lon=x (homography with scalar 1)
         gt = np.array([[0, 1, 0], [1, 0, 0], [0, 0, 1]], dtype=float)
@@ -229,11 +229,11 @@ class TestMissionPackageHelpers:
         keys = qgis_stub_keys(
             "qgis.PyQt.QtWidgets",
             "qgis.core",
-            "QGISFMV.utils.ui.QgsUtils",
-            "QGISFMV.utils.core.QgsFmvUtils",
-            "QGISFMV.utils.logging",
-            "QGISFMV.utils.layers.QgsFmvExport",
-            "QGISFMV.video.filters.QgsFmvDetectionMap",
+            "QGIS_FMV.utils.ui.QgsUtils",
+            "QGIS_FMV.utils.core.QgsFmvUtils",
+            "QGIS_FMV.utils.logging",
+            "QGIS_FMV.utils.layers.QgsFmvExport",
+            "QGIS_FMV.video.filters.QgsFmvDetectionMap",
         )
         saved = snapshot_modules(keys)
         try:
@@ -253,17 +253,17 @@ class TestMissionPackageHelpers:
             core.Qgis = types.SimpleNamespace(
                 MessageLevel=types.SimpleNamespace(Warning=1, Info=0)
             )
-            ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+            ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
             ui.QgsUtils = types.SimpleNamespace(
                 showUserAndLogMessage=lambda *a, **k: None
             )
-            utils = sys.modules["QGISFMV.utils.core.QgsFmvUtils"]
+            utils = sys.modules["QGIS_FMV.utils.core.QgsFmvUtils"]
             utils.askForFiles = lambda *a, **k: None
-            logmod = sys.modules["QGISFMV.utils.logging"]
+            logmod = sys.modules["QGIS_FMV.utils.logging"]
             logmod.log = types.SimpleNamespace(
                 debug=lambda *a, **k: None, error=lambda *a, **k: None
             )
-            det = sys.modules["QGISFMV.video.filters.QgsFmvDetectionMap"]
+            det = sys.modules["QGIS_FMV.video.filters.QgsFmvDetectionMap"]
             det.last_detections = lambda: {
                 "vehicle": [{"track_id": 1, "lon": -3.0, "lat": 40.0, "score": 0.8}]
             }
@@ -274,7 +274,7 @@ class TestMissionPackageHelpers:
 
             mod = load_plugin_module(
                 "player/features/QgsFmvMissionPackage.py",
-                "QGISFMV.player.features.QgsFmvMissionPackage",
+                "QGIS_FMV.player.features.QgsFmvMissionPackage",
             )
             geo_p = tmp_path / "geo.csv"
             assert mod.write_geotime_csv(str(geo_p), [(1.0, 2.0, 3.5)]) == 1
@@ -329,9 +329,9 @@ class TestSpatialBookmarksExport:
             "qgis.PyQt.QtGui",
             "qgis.PyQt.QtWidgets",
             "qgis.core",
-            "QGISFMV.utils.ui.QgsUtils",
-            "QGISFMV.utils.core.QgsFmvUtils",
-            "QGISFMV.utils.logging",
+            "QGIS_FMV.utils.ui.QgsUtils",
+            "QGIS_FMV.utils.core.QgsFmvUtils",
+            "QGIS_FMV.utils.logging",
         )
         saved = snapshot_modules(keys)
         try:
@@ -353,21 +353,21 @@ class TestSpatialBookmarksExport:
             core.Qgis = types.SimpleNamespace(
                 MessageLevel=types.SimpleNamespace(Warning=1, Info=0)
             )
-            ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+            ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
             ui.QgsUtils = types.SimpleNamespace(
                 showUserAndLogMessage=lambda *a, **k: None
             )
-            utils = sys.modules["QGISFMV.utils.core.QgsFmvUtils"]
+            utils = sys.modules["QGIS_FMV.utils.core.QgsFmvUtils"]
             utils.askForFiles = lambda *a, **k: None
             utils.GetFrameCenter = lambda: (40.4, -3.7, 500.0)
-            logmod = sys.modules["QGISFMV.utils.logging"]
+            logmod = sys.modules["QGIS_FMV.utils.logging"]
             logmod.log = types.SimpleNamespace(
                 debug=lambda *a, **k: None, error=lambda *a, **k: None
             )
 
             mod = load_plugin_module(
                 "player/features/QgsFmvBookmarkController.py",
-                "QGISFMV.player.features.QgsFmvBookmarkController",
+                "QGIS_FMV.player.features.QgsFmvBookmarkController",
             )
 
             class Ev:
@@ -395,7 +395,7 @@ class TestDetectionTrailFlags:
     def test_trail_toggle(self):
         mod = load_plugin_module(
             "video/filters/QgsFmvDetectionMap.py",
-            "QGISFMV.video.filters.QgsFmvDetectionMap",
+            "QGIS_FMV.video.filters.QgsFmvDetectionMap",
         )
         assert mod.set_trail_enabled(True) is True
         assert mod.is_trail_enabled() is True
@@ -406,19 +406,19 @@ class TestDetectionTrailFlags:
 class TestInstantReplayController:
     def test_disabled_noop_and_enabled_rewinds(self):
         ensure_qgis_fmv_package()
-        keys = qgis_stub_keys("QGISFMV.utils.ui.QgsUtils")
+        keys = qgis_stub_keys("QGIS_FMV.utils.ui.QgsUtils")
         saved = snapshot_modules(keys)
         try:
             for name in keys:
                 sys.modules.setdefault(name, types.ModuleType(name))
-            ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+            ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
             ui.QgsUtils = types.SimpleNamespace(
                 showUserAndLogMessage=lambda *a, **k: None
             )
 
             mod = load_plugin_module(
                 "player/features/QgsFmvInstantReplay.py",
-                "QGISFMV.player.features.QgsFmvInstantReplay",
+                "QGIS_FMV.player.features.QgsFmvInstantReplay",
             )
             player = MagicMock()
             player.player.position.return_value = 10_000
@@ -436,12 +436,12 @@ class TestInstantReplayController:
 class TestCinematicFollowFlag:
     def test_set_cinematic_follow(self):
         ensure_qgis_fmv_package()
-        keys = qgis_stub_keys("QGISFMV.utils.ui.QgsUtils")
+        keys = qgis_stub_keys("QGIS_FMV.utils.ui.QgsUtils")
         saved = snapshot_modules(keys)
         try:
             for name in keys:
                 sys.modules.setdefault(name, types.ModuleType(name))
-            ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+            ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
             ui.QgsUtils = types.SimpleNamespace()
             # Stub qgis.core types used at import
             core = sys.modules.setdefault("qgis.core", types.ModuleType("qgis.core"))
@@ -455,7 +455,7 @@ class TestCinematicFollowFlag:
                 setattr(core, attr, object)
             mod = load_plugin_module(
                 "utils/core/QgsFmvMapCenter.py",
-                "QGISFMV.utils.core.QgsFmvMapCenter",
+                "QGIS_FMV.utils.core.QgsFmvMapCenter",
             )
             assert mod.set_cinematic_follow(True) is True
             assert mod.is_cinematic_follow() is True
@@ -468,7 +468,7 @@ class TestPlaceLabelController:
     def test_enable_clears_on_disable(self):
         mod = load_plugin_module(
             "player/features/QgsFmvPlaceLabel.py",
-            "QGISFMV.player.features.QgsFmvPlaceLabel",
+            "QGIS_FMV.player.features.QgsFmvPlaceLabel",
         )
         player = MagicMock()
         hud = MagicMock()
@@ -483,24 +483,24 @@ class TestTargetPinController:
     def test_set_pin_and_cue_update(self):
         ensure_qgis_fmv_package()
         keys = qgis_stub_keys(
-            "QGISFMV.utils.ui.QgsUtils",
-            "QGISFMV.player.features.QgsFmvGeofence",
+            "QGIS_FMV.utils.ui.QgsUtils",
+            "QGIS_FMV.player.features.QgsFmvGeofence",
         )
         saved = snapshot_modules(keys)
         try:
             for name in keys:
                 sys.modules.setdefault(name, types.ModuleType(name))
-            ui = sys.modules["QGISFMV.utils.ui.QgsUtils"]
+            ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
             ui.QgsUtils = types.SimpleNamespace(
                 showUserAndLogMessage=lambda *a, **k: None
             )
-            geo = sys.modules["QGISFMV.player.features.QgsFmvGeofence"]
+            geo = sys.modules["QGIS_FMV.player.features.QgsFmvGeofence"]
             ring = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
             geo.footprint_ring_from_session = lambda *a, **k: ring
 
             mod = load_plugin_module(
                 "player/features/QgsFmvTargetPin.py",
-                "QGISFMV.player.features.QgsFmvTargetPin",
+                "QGIS_FMV.player.features.QgsFmvTargetPin",
             )
             player = MagicMock()
             player.iface = None

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Consolidated geodesic utilities for QGISFMV.
+Consolidated geodesic utilities for QGIS_FMV.
 
 Uses PyQGIS ``QgsDistanceArea`` for ellipsoidal WGS84 distance, bearing,
 and area calculations.  Pure-Python ``destination()`` is provided because
@@ -15,7 +15,7 @@ from __future__ import annotations
 from math import asin, atan2, cos, degrees, radians, sin
 from typing import Sequence
 
-from QGISFMV.utils.logging import log
+from QGIS_FMV.utils.logging import log
 
 _EARTH_MEAN_RADIUS = 6371008.8
 

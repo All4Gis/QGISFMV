@@ -11,7 +11,7 @@ import pytest
 def session_mod():
     return load_plugin_module(
         "utils/core/QgsFmvVideoSession.py",
-        "QGISFMV.utils.core.QgsFmvVideoSession",
+        "QGIS_FMV.utils.core.QgsFmvVideoSession",
     )
 
 
