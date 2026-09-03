@@ -8,7 +8,7 @@ flake8>=7.3.0
 
 # Tests
 pytest>=8.3.0
-numpy>=2.5.1
+numpy>=2.5.2
 pymisb==2.0.1
 # Debugging / hot reload (optional local workflow)
 debugpy>=1.8.21
@@ -17,4 +17,4 @@ watchdog>=6.0.0
 # Build tools — only needed when running build.py outside QGIS
 # (QGIS 4 bundles PyQt6 internally; these are for standalone dev builds)
 PyQt6>=6.5.0
-PySide6>=6.11.1  # optional fallback for rcc resource compilation
+PySide6>=6.11.2  # optional fallback for rcc resource compilation
