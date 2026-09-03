@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<circle cx="12" cy="12" r="8" opacity=".2"/>
-<circle cx="12" cy="12" r="5" opacity=".4"/>
-<circle cx="12" cy="12" r="2" opacity=".8"/>
-<line x1="12" x2="12" y1="2" y2="5" opacity=".5"/>
-<line x1="12" x2="12" y1="19" y2="22" opacity=".5"/>
-</svg>
