@@ -233,6 +233,10 @@ def create_zip_with_folder(source_dir, zip_path, folder_name):
                 )
 
                 zipf.write(file_path, arcname)
+        # Include the repository LICENSE file
+        license_file = REPO_ROOT / "LICENSE"
+        if license_file.exists():
+            zipf.write(license_file, os.path.join(folder_name, "LICENSE"))
 
     print(f"  -> {zip_path}")
 
