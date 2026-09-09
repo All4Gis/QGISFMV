@@ -34,8 +34,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Make Transifex CLI executable
-        run: chmod +x tx
+      - name: Install Transifex CLI
+        run: |
+          curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Sync translations
         run: |
