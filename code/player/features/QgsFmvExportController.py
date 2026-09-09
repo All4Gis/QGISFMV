@@ -8,26 +8,16 @@ from qgis.core import Qgis as QGis
 from qgis.core import QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QFileDialog
-
-from QGIS_FMV.utils.core.QgsFmvUtils import (
-    BurnDrawingsImage,
-    GetGeotransform_affine,
-    _spawn,
-    askForFiles,
-    askForFolder,
-)
-from QGIS_FMV.utils.layers.QgsFmvExport import (
-    exportGroupToGPX,
-    exportGroupToKML,
-    exportObjectTrack,
-)
+from QGIS_FMV.utils.core.QgsFmvUtils import (BurnDrawingsImage,
+                                             GetGeotransform_affine, _spawn,
+                                             askForFiles, askForFolder)
+from QGIS_FMV.utils.layers.QgsFmvExport import (exportGroupToGPX,
+                                                exportGroupToKML,
+                                                exportObjectTrack)
 from QGIS_FMV.utils.logging import log
-from QGIS_FMV.utils.media.QgsFfmpegProbe import (
-    convert_video,
-    is_valid_media,
-    save_probe_json_task,
-    show_probe_json_task,
-)
+from QGIS_FMV.utils.media.QgsFfmpegProbe import (convert_video, is_valid_media,
+                                                 save_probe_json_task,
+                                                 show_probe_json_task)
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 try:
@@ -357,7 +347,8 @@ class ExportController:
         return {"task": task.description()}
 
     def _saveAllFramesFfmpeg(self, task, fileName, directory):
-        from QGIS_FMV.utils.media.QgsFfmpegRunner import available, popen_ffmpeg
+        from QGIS_FMV.utils.media.QgsFfmpegRunner import (available,
+                                                          popen_ffmpeg)
 
         if not available():
             return {"task": task.description(), "error": "FFmpeg is not configured"}

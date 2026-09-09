@@ -2,7 +2,6 @@
 """Background OpenCV filter processing to keep the video UI responsive."""
 
 from qgis.PyQt.QtCore import QObject, QThread, pyqtSignal, pyqtSlot
-
 from QGIS_FMV.video.filters import VideoFilters
 from QGIS_FMV.video.playback.QgsVideoState import FilterState
 

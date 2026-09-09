@@ -2,8 +2,8 @@
 """Drawing-tool toggles: magnifier, stamp, drawers, measures, military symbols."""
 
 from qgis.PyQt.QtCore import Qt
-
-from QGIS_FMV.utils.media.QgsFmvMultimedia import PausedState, PlayingState, StoppedState
+from QGIS_FMV.utils.media.QgsFmvMultimedia import (PausedState, PlayingState,
+                                                   StoppedState)
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.playback.QgsVideoState import MOUSE_MOVE_EVENT
 
@@ -29,7 +29,8 @@ class DrawToolsController:
 
     def _setupMilitarySymbolTool(self):
         """Wire military symbol picker dialog (toolbar action is in ui_FmvPlayer.ui)."""
-        from QGIS_FMV.player.dialogs.QgsFmvMilitarySymbols import MilitarySymbolDialog
+        from QGIS_FMV.player.dialogs.QgsFmvMilitarySymbols import \
+            MilitarySymbolDialog
 
         player = self.player
         player._milSymbolDialog = MilitarySymbolDialog(player)

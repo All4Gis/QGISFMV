@@ -2,7 +2,6 @@
 """Alert-rule dialog — layout defined in ``ui_FmvAlertRule.ui``."""
 
 from qgis.PyQt.QtWidgets import QDialog
-
 from QGIS_FMV.gui.ui_FmvAlertRule import Ui_FmvAlertRule
 
 # Default MISB-ish fields offered in the combo (editable list for callers).

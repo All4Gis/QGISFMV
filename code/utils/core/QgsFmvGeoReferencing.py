@@ -20,7 +20,8 @@ except ImportError:
     _HAS_CV2 = False
 
 from QGIS_FMV.geo.QgsGeoUtils import distance as _geo_distance
-from QGIS_FMV.utils.layers.QgsFmvLayers import UpdateBeamsData, UpdateFootPrintData
+from QGIS_FMV.utils.layers.QgsFmvLayers import (UpdateBeamsData,
+                                                UpdateFootPrintData)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
@@ -74,12 +75,9 @@ def hasElevationModel():
 
 def GetDemAltAt(lon, lat):
     """Return the DTM elevation at (lon, lat), or 0 if no DTM is loaded."""
-    from QGIS_FMV.utils.core.QgsFmvUtils import (
-        dtm_colLowerBound,
-        dtm_data,
-        dtm_rowLowerBound,
-        dtm_transform,
-    )
+    from QGIS_FMV.utils.core.QgsFmvUtils import (dtm_colLowerBound, dtm_data,
+                                                 dtm_rowLowerBound,
+                                                 dtm_transform)
 
     alt = 0
     if dtm_transform is None or not dtm_data:
@@ -102,13 +100,9 @@ def GetDemAltAt(lon, lat):
 
 def GetLine3DIntersectionWithDEM(sensorPt, targetPt):
     """Obtain height for points, intersecting with DEM."""
-    from QGIS_FMV.utils.core.QgsFmvUtils import (
-        dtm_buffer,
-        dtm_colLowerBound,
-        dtm_data,
-        dtm_rowLowerBound,
-        dtm_transform,
-    )
+    from QGIS_FMV.utils.core.QgsFmvUtils import (dtm_buffer, dtm_colLowerBound,
+                                                 dtm_data, dtm_rowLowerBound,
+                                                 dtm_transform)
 
     sensorLat = sensorPt[0]
     sensorLon = sensorPt[1]

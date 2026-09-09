@@ -4,7 +4,6 @@
 from qgis.core import QgsApplication
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QMessageBox
-
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 

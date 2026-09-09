@@ -11,13 +11,10 @@ this controller only owns the logic that mutates it.
 from qgis.core import Qgis as QGis
 from qgis.core import QgsPointXY, QgsWkbTypes
 from qgis.PyQt.QtCore import QCoreApplication, QPoint, QRect, QSize, Qt
-
 from QGIS_FMV.utils.core.QgsImageMat import convertQImageToMat
-from QGIS_FMV.utils.layers.QgsFmvLayers import (
-    BeginObjectTrack,
-    ClearObjectTracks,
-    UpdateObjectTrack,
-)
+from QGIS_FMV.utils.layers.QgsFmvLayers import (BeginObjectTrack,
+                                                ClearObjectTracks,
+                                                UpdateObjectTrack)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.utils.vision.QgsObjectTracker import create_object_tracker

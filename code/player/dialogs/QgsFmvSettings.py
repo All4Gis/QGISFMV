@@ -7,39 +7,24 @@ import platform
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication, QPoint, QSettings, Qt
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import (
-    QDialog,
-    QFileDialog,
-    QListWidgetItem,
-    QMessageBox,
-    QStyle,
-    QStyleOptionSlider,
-    QToolTip,
-)
-
+from qgis.PyQt.QtWidgets import (QDialog, QFileDialog, QListWidgetItem,
+                                 QMessageBox, QStyle, QStyleOptionSlider,
+                                 QToolTip)
 from QGIS_FMV.gui.ui_FmvSettings import Ui_FmvSettings
 from QGIS_FMV.player.drawing.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.utils.core.QgsFmvUtils import getNameSpace
-from QGIS_FMV.utils.install.QgsFmvInstaller import (
-    check_ffmpeg,
-    check_python_deps,
-    run_dependency_setup,
-)
-from QGIS_FMV.utils.layers.QgsFmvLayers import (
-    RestoreDefaultLayerStyles,
-    get_user_platform_icon,
-    list_platform_icon_choices,
-    refresh_platform_icon_layers,
-    set_user_platform_icon,
-)
-from QGIS_FMV.utils.settings.QgsFmvSettings import (
-    get,
-    reloadRuntime,
-    repair_ffmpeg_setting,
-    save,
-    set_value,
-    settings_file,
-)
+from QGIS_FMV.utils.install.QgsFmvInstaller import (check_ffmpeg,
+                                                    check_python_deps,
+                                                    run_dependency_setup)
+from QGIS_FMV.utils.layers.QgsFmvLayers import (RestoreDefaultLayerStyles,
+                                                get_user_platform_icon,
+                                                list_platform_icon_choices,
+                                                refresh_platform_icon_layers,
+                                                set_user_platform_icon)
+from QGIS_FMV.utils.settings.QgsFmvSettings import (get, reloadRuntime,
+                                                    repair_ffmpeg_setting,
+                                                    save, set_value,
+                                                    settings_file)
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
@@ -299,10 +284,8 @@ class FmvSettingsDialog(QDialog, Ui_FmvSettings):
 
     def downloadYoloModel(self):
         """Download YOLOv8n COCO model for general object detection."""
-        from QGIS_FMV.video.dnn.QgsFmvModelSetup import (
-            configure_default_dnn,
-            default_yolov8n_path,
-        )
+        from QGIS_FMV.video.dnn.QgsFmvModelSetup import (configure_default_dnn,
+                                                         default_yolov8n_path)
 
         def _on_success(_msg):
             self.chk_dnnEnabled.setChecked(True)

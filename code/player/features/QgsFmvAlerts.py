@@ -4,7 +4,6 @@
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QObject, pyqtSignal
 from qgis.PyQt.QtWidgets import QDialog
-
 from QGIS_FMV.player.dialogs.QgsFmvAlertRule import FmvAlertRuleDialog
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 

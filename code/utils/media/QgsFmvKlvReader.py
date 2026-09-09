@@ -6,13 +6,9 @@ from collections import deque
 from datetime import datetime
 
 from pymisb.klvdata.streamparser import StreamParser
-
-from QGIS_FMV.utils.core.QgsFmvUtils import (
-    KLV_HEADER_0601,
-    KLV_HEADER_EG0104,
-    _spawn,
-    _time_to_seconds,
-)
+from QGIS_FMV.utils.core.QgsFmvUtils import (KLV_HEADER_0601,
+                                             KLV_HEADER_EG0104, _spawn,
+                                             _time_to_seconds)
 from QGIS_FMV.utils.logging import log
 
 STREAM_PACKET_CACHE = 600

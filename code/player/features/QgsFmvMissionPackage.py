@@ -12,7 +12,6 @@ from datetime import datetime, timezone
 
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication
-
 from QGIS_FMV.utils.core.QgsFmvUtils import askForFiles
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
@@ -82,9 +81,7 @@ def build_mission_package(player, zip_path):
         if bm is not None and events:
             try:
                 from QGIS_FMV.player.features.QgsFmvBookmarkController import (
-                    write_bookmarks_csv,
-                    write_bookmarks_kml,
-                )
+                    write_bookmarks_csv, write_bookmarks_kml)
 
                 csv_p = os.path.join(tmp, "bookmarks.csv")
                 kml_p = os.path.join(tmp, "bookmarks.kml")
@@ -106,7 +103,8 @@ def build_mission_package(player, zip_path):
 
         # AI detections snapshot
         try:
-            from QGIS_FMV.video.filters.QgsFmvDetectionMap import last_detections
+            from QGIS_FMV.video.filters.QgsFmvDetectionMap import \
+                last_detections
 
             dets = last_detections()
             if dets:
@@ -211,7 +209,8 @@ def build_mission_package(player, zip_path):
 def _write_group_kml_silent(group_name, out_path):
     """Best-effort silent KML export of the video group."""
     try:
-        from QGIS_FMV.utils.layers.QgsFmvExport import _findVideoGroup, _groupLayers
+        from QGIS_FMV.utils.layers.QgsFmvExport import (_findVideoGroup,
+                                                        _groupLayers)
 
         group = _findVideoGroup(group_name)
         if group is None:

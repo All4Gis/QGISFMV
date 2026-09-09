@@ -7,7 +7,8 @@ import threading
 import time
 
 from QGIS_FMV.geo.QgsFmvSpatial import haversine_m
-from QGIS_FMV.utils.constants import PLACE_LABEL_MIN_INTERVAL_MS, PLACE_LABEL_MIN_MOVE_M
+from QGIS_FMV.utils.constants import (PLACE_LABEL_MIN_INTERVAL_MS,
+                                      PLACE_LABEL_MIN_MOVE_M)
 from QGIS_FMV.utils.logging import log
 
 
@@ -67,7 +68,8 @@ class PlaceLabelController:
 
     def _fetch(self, lat, lon):
         try:
-            from QGIS_FMV.utils.core.QgsFmvUtils import fetchReverseGeocodeLabel
+            from QGIS_FMV.utils.core.QgsFmvUtils import \
+                fetchReverseGeocodeLabel
 
             label = fetchReverseGeocodeLabel(lat, lon) or ""
             if label in ("-", ""):

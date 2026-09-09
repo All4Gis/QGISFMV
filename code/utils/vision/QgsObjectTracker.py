@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import numpy as np
-
 from QGIS_FMV.utils.logging import log
 
 _CV2_TRACKER = None

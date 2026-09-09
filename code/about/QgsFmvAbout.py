@@ -3,7 +3,6 @@
 
 from qgis.PyQt.QtCore import Qt, QUrl
 from qgis.PyQt.QtWidgets import QDialog
-
 from QGIS_FMV.gui.ui_FmvAbout import Ui_FmvAbout
 
 

@@ -4,7 +4,6 @@
 import os
 
 from qgis.PyQt.QtCore import QTimer
-
 from QGIS_FMV.utils.core.QgsFmvUtils import getVideoFolder
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 

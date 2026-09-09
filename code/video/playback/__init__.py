@@ -27,7 +27,8 @@ def __getattr__(name):
 
         return VideoUtils
     if name == "RubberBandManager":
-        from QGIS_FMV.video.playback.QgsVideoRubberBands import RubberBandManager
+        from QGIS_FMV.video.playback.QgsVideoRubberBands import \
+            RubberBandManager
 
         return RubberBandManager
     if name in (

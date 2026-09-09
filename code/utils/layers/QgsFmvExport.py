@@ -5,10 +5,10 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 
 from qgis.core import Qgis as QGis
-from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
+from qgis.core import (QgsCoordinateReferenceSystem, QgsCoordinateTransform,
+                       QgsProject)
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QFileDialog
-
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
@@ -339,7 +339,6 @@ def _collect_line_points(layer):
 def exportObjectTrack(parent=None, group_name=None):
     """Export the Object Track layer to GPX or GeoJSON."""
     from qgis.core import QgsCoordinateTransformContext, QgsVectorFileWriter
-
     from QGIS_FMV.utils.layers.QgsFmvLayers import ObjectTrack_lyr
     from QGIS_FMV.utils.settings.QgsFmvSettings import get as settings_get
 

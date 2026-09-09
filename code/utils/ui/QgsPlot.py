@@ -5,7 +5,6 @@ import xml.etree.ElementTree as etree
 from io import BytesIO
 
 from qgis.PyQt.QtCore import QCoreApplication, QObject
-
 from QGIS_FMV.utils.core.QgsFmvUtils import _spawn
 from QGIS_FMV.utils.logging import log
 

@@ -8,7 +8,6 @@ builders used by the PDF report, extracted from QgsFmvReportGenerator.py.
 import html
 
 from qgis.PyQt.QtCore import QCoreApplication
-
 from QGIS_FMV.player.dialogs.QgsFmvReportPdfLayout import _PDF_COLORS
 from QGIS_FMV.utils.logging import log
 

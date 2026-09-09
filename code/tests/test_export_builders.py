@@ -4,13 +4,9 @@
 import sys
 import types
 import xml.etree.ElementTree as ET
-from code.tests.support import (
-    ensure_qgis_fmv_package,
-    load_plugin_module,
-    qgis_stub_keys,
-    restore_modules,
-    snapshot_modules,
-)
+from code.tests.support import (ensure_qgis_fmv_package, load_plugin_module,
+                                qgis_stub_keys, restore_modules,
+                                snapshot_modules)
 
 import pytest
 

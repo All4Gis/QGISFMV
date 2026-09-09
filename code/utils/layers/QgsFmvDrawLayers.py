@@ -10,17 +10,11 @@ module always sees their live values.
 
 from itertools import groupby
 
-from qgis.core import (
-    QgsCoordinateReferenceSystem,
-    QgsDistanceArea,
-    QgsFeature,
-    QgsGeometry,
-    QgsPointXY,
-)
+from qgis.core import (QgsCoordinateReferenceSystem, QgsDistanceArea,
+                       QgsFeature, QgsGeometry, QgsPointXY)
 from qgis.PyQt.QtCore import QPointF
 from qgis.PyQt.QtGui import QPolygonF
 from qgis.utils import iface
-
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.video.playback.QgsVideoState import MOUSE_MOVE_EVENT

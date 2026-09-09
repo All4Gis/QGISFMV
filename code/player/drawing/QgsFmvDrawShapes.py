@@ -4,24 +4,14 @@
 import os
 
 from qgis.PyQt.QtCore import QPoint, QPointF, QRectF
-from qgis.PyQt.QtGui import (
-    QBrush,
-    QColor,
-    QFont,
-    QPainter,
-    QPainterPath,
-    QPen,
-    QPolygonF,
-)
+from qgis.PyQt.QtGui import (QBrush, QColor, QFont, QPainter, QPainterPath,
+                             QPen, QPolygonF)
 from qgis.PyQt.QtSvg import QSvgRenderer
-
 from QGIS_FMV.player.dialogs.QgsFmvMilitarySymbols import symbol_svg_path
-from QGIS_FMV.player.drawing.QgsFmvDrawingConfig import (
-    black_brush,
-    black_pen,
-    drawing_config,
-    white_pen,
-)
+from QGIS_FMV.player.drawing.QgsFmvDrawingConfig import (black_brush,
+                                                         black_pen,
+                                                         drawing_config,
+                                                         white_pen)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.video.playback.QgsVideoUtils import VideoUtils as vut
 

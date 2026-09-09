@@ -6,12 +6,9 @@ from __future__ import annotations
 import os
 
 from qgis.core import QgsTask
-
-from QGIS_FMV.utils.core.QgsFmvUtils import (
-    BurnDrawingsImage,
-    GetGeotransform_affine,
-    getVideoFolder,
-)
+from QGIS_FMV.utils.core.QgsFmvUtils import (BurnDrawingsImage,
+                                             GetGeotransform_affine,
+                                             getVideoFolder)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 

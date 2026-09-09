@@ -14,39 +14,22 @@ QgsFmvDrawLayers.py.
 
 import os
 
-from qgis.core import (
-    Qgis,
-    QgsFillSymbol,
-    QgsLineSymbol,
-    QgsMarkerSymbol,
-    QgsPalLayerSettings,
-    QgsProject,
-    QgsRuleBasedRenderer,
-    QgsSingleSymbolRenderer,
-    QgsSvgMarkerSymbolLayer,
-    QgsSymbol,
-    QgsTextBufferSettings,
-    QgsTextFormat,
-    QgsUnitTypes,
-    QgsVectorLayerSimpleLabeling,
-    QgsWkbTypes,
-)
+from qgis.core import (Qgis, QgsFillSymbol, QgsLineSymbol, QgsMarkerSymbol,
+                       QgsPalLayerSettings, QgsProject, QgsRuleBasedRenderer,
+                       QgsSingleSymbolRenderer, QgsSvgMarkerSymbolLayer,
+                       QgsSymbol, QgsTextBufferSettings, QgsTextFormat,
+                       QgsUnitTypes, QgsVectorLayerSimpleLabeling, QgsWkbTypes)
 from qgis.PyQt.QtCore import QPointF
 from qgis.PyQt.QtGui import QColor, QFont
 from qgis.utils import iface
-
 from QGIS_FMV.utils.layers.QgsFmvStyles import FmvLayerStyles as S
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 try:
-    from qgis._3d import (
-        QgsLine3DSymbol,
-        QgsPhongMaterialSettings,
-        QgsPoint3DSymbol,
-        QgsPolygon3DSymbol,
-        QgsVectorLayer3DRenderer,
-    )
+    from qgis._3d import (QgsLine3DSymbol, QgsPhongMaterialSettings,
+                          QgsPoint3DSymbol, QgsPolygon3DSymbol,
+                          QgsVectorLayer3DRenderer)
 
     _HAS_3D = True
 except ImportError:
@@ -240,9 +223,7 @@ def _label_point(layer, style):
 def _apply_military_symbol(layer):
     """Rule-based SVG renderer for NATO military symbols."""
     from QGIS_FMV.player.dialogs.QgsFmvMilitarySymbols import (
-        MILITARY_SYMBOLS,
-        symbol_svg_path,
-    )
+        MILITARY_SYMBOLS, symbol_svg_path)
 
     default_sym = QgsSymbol.defaultSymbol(QgsWkbTypes.PointGeometry)
     renderer = QgsRuleBasedRenderer(default_sym)

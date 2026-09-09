@@ -10,7 +10,6 @@ from datetime import datetime, timezone
 
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication, QObject
-
 from QGIS_FMV.geo.QgsFmvSpatial import metadata_lat_lon
 from QGIS_FMV.utils.core.QgsFmvUtils import askForFiles
 from QGIS_FMV.utils.logging import log

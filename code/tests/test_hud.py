@@ -12,7 +12,6 @@ class TestHudOverlay:
         """Import HudOverlay class without requiring QGIS."""
         try:
             from qgis.PyQt.QtWidgets import QApplication
-
             from QGIS_FMV.player.overlays.QgsFmvHud import HudOverlay
 
             return HudOverlay

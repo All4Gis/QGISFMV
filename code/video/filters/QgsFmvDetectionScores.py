@@ -4,19 +4,11 @@
 from __future__ import annotations
 
 import numpy as np
-
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.video.filters.QgsFmvDetectionPipeline import (
-    _detect_fallback_generic,
-    _motion_boost,
-    _run_opencv_pipeline_for,
-)
-from QGIS_FMV.video.filters.QgsFmvFilterCore import (
-    _HAS_NDIMAGE,
-    FilterCore,
-    _get_cv2_module,
-    _ndimage,
-)
+    _detect_fallback_generic, _motion_boost, _run_opencv_pipeline_for)
+from QGIS_FMV.video.filters.QgsFmvFilterCore import (_HAS_NDIMAGE, FilterCore,
+                                                     _get_cv2_module, _ndimage)
 
 
 def _building_structure_score(rgb):

@@ -7,7 +7,6 @@ import re
 import subprocess
 
 from qgis.PyQt.QtCore import QUrl
-
 from QGIS_FMV.utils.logging import log
 
 
@@ -86,7 +85,8 @@ _durationMsFromText = durationMsFromText
 def probe_video_info_from_stderr(path):
     """Fallback probe using ``ffmpeg -i`` stderr (works on difficult MPEG-TS)."""
     try:
-        from QGIS_FMV.utils.media.QgsFfmpegRunner import available, popen_ffmpeg
+        from QGIS_FMV.utils.media.QgsFfmpegRunner import (available,
+                                                          popen_ffmpeg)
 
         if not available():
             return None

@@ -3,17 +3,13 @@
 
 from math import cos, radians, sin
 
-from qgis.core import (
-    QgsCoordinateReferenceSystem,
-    QgsProject,
-    QgsRasterLayer,
-    QgsRectangle,
-)
+from qgis.core import (QgsCoordinateReferenceSystem, QgsProject,
+                       QgsRasterLayer, QgsRectangle)
 from qgis.gui import QgsMapCanvas
 from qgis.PyQt.QtCore import QPointF, QRectF, Qt
-from qgis.PyQt.QtGui import QBrush, QColor, QFont, QLinearGradient, QPainter, QPen
+from qgis.PyQt.QtGui import (QBrush, QColor, QFont, QLinearGradient, QPainter,
+                             QPen)
 from qgis.PyQt.QtWidgets import QVBoxLayout, QWidget
-
 from QGIS_FMV.geo.QgsGeoUtils import distance as _geo_distance
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.settings.QgsFmvSettings import get as settings_get

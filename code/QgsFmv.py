@@ -26,16 +26,18 @@ import os.path
 
 from qgis.core import Qgis as QGis
 from qgis.core import QgsApplication
-from qgis.PyQt.QtCore import QCoreApplication, QSettings, Qt, QTimer, QTranslator
+from qgis.PyQt.QtCore import (QCoreApplication, QSettings, Qt, QTimer,
+                              QTranslator)
 from qgis.PyQt.QtGui import QAction, QIcon
 from qgis.PyQt.QtWidgets import QDialog
-
 from QGIS_FMV.about.QgsFmvAbout import FmvAbout
 from QGIS_FMV.player.dialogs.QgsFmvSettings import open_fmv_settings
 from QGIS_FMV.utils.install.QgsFmvInstaller import run_dependency_setup
 from QGIS_FMV.utils.logging import log
-from QGIS_FMV.utils.settings.QgsFmvSettings import reloadRuntime, repair_ffmpeg_setting
-from QGIS_FMV.utils.ui.QgsFmvResources import ICON_ABOUT, ICON_OPTIONS, ICON_PLUGIN
+from QGIS_FMV.utils.settings.QgsFmvSettings import (reloadRuntime,
+                                                    repair_ffmpeg_setting)
+from QGIS_FMV.utils.ui.QgsFmvResources import (ICON_ABOUT, ICON_OPTIONS,
+                                               ICON_PLUGIN)
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
@@ -129,7 +131,8 @@ class Fmv:
         )
 
         try:
-            from QGIS_FMV.video.dnn.QgsFmvModelSetup import ensure_default_dnn_assets
+            from QGIS_FMV.video.dnn.QgsFmvModelSetup import \
+                ensure_default_dnn_assets
 
             ok, model_path = ensure_default_dnn_assets(quiet=True)
             if ok:

@@ -7,14 +7,10 @@ import subprocess
 from qgis.core import QgsTask
 from qgis.PyQt.QtCore import QCoreApplication, QTimer
 from qgis.PyQt.QtGui import QIcon, QMovie
-
-from QGIS_FMV.utils.core.QgsFmvUtils import (
-    _seconds_to_time,
-    _spawn,
-    askForFiles,
-    buildRecordFfmpegArgs,
-    recordSaveExtensions,
-)
+from QGIS_FMV.utils.core.QgsFmvUtils import (_seconds_to_time, _spawn,
+                                             askForFiles,
+                                             buildRecordFfmpegArgs,
+                                             recordSaveExtensions)
 from QGIS_FMV.utils.ui.QgsFmvResources import ICON_RECORD, RECORD_GIF
 
 

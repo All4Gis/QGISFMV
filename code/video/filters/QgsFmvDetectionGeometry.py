@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import numpy as np
-
 from QGIS_FMV.video.filters.QgsFmvFilterCore import _HAS_NDIMAGE, _ndimage
 
 _detection_ema = {}

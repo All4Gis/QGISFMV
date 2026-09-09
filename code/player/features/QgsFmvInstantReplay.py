@@ -5,7 +5,8 @@ from __future__ import annotations
 
 import time
 
-from QGIS_FMV.utils.constants import INSTANT_REPLAY_COOLDOWN_MS, INSTANT_REPLAY_SEC
+from QGIS_FMV.utils.constants import (INSTANT_REPLAY_COOLDOWN_MS,
+                                      INSTANT_REPLAY_SEC)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 

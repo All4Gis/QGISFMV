@@ -5,12 +5,8 @@ from __future__ import annotations
 
 import time
 
-from QGIS_FMV.geo.QgsFmvSpatial import (
-    haversine_m,
-    lookback_samples,
-    metadata_lat_lon,
-    nearest_sample,
-)
+from QGIS_FMV.geo.QgsFmvSpatial import (haversine_m, lookback_samples,
+                                        metadata_lat_lon, nearest_sample)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
@@ -99,9 +95,8 @@ class MapSeekController:
             time_sec = float(getattr(self.player, "currentInfo", 0.0) or 0.0)
         footprint = None
         try:
-            from QGIS_FMV.player.features.QgsFmvGeofence import (
-                footprint_ring_from_session,
-            )
+            from QGIS_FMV.player.features.QgsFmvGeofence import \
+                footprint_ring_from_session
 
             footprint = footprint_ring_from_session(
                 getattr(self.player, "session", None)
@@ -330,14 +325,9 @@ class MapSeekController:
         """List FOV visit times; double-click / Accept jumps the video."""
         try:
             from qgis.PyQt.QtCore import Qt
-            from qgis.PyQt.QtWidgets import (
-                QDialog,
-                QDialogButtonBox,
-                QLabel,
-                QListWidget,
-                QListWidgetItem,
-                QVBoxLayout,
-            )
+            from qgis.PyQt.QtWidgets import (QDialog, QDialogButtonBox, QLabel,
+                                             QListWidget, QListWidgetItem,
+                                             QVBoxLayout)
         except Exception as exc:
             log.debug("lookback dialog unavailable: %s", exc)
             return
@@ -407,11 +397,8 @@ class MapSeekController:
     def _to_wgs84(self, canvas, point):
         lon, lat = float(point.x()), float(point.y())
         try:
-            from qgis.core import (
-                QgsCoordinateReferenceSystem,
-                QgsCoordinateTransform,
-                QgsProject,
-            )
+            from qgis.core import (QgsCoordinateReferenceSystem,
+                                   QgsCoordinateTransform, QgsProject)
 
             crs = canvas.mapSettings().destinationCrs()
             if crs.isValid() and crs.authid() != "EPSG:4326":
@@ -514,13 +501,9 @@ class MapSeekController:
         if canvas is None:
             return
         try:
-            from qgis.core import (
-                QgsCoordinateReferenceSystem,
-                QgsCoordinateTransform,
-                QgsPointXY,
-                QgsProject,
-                QgsWkbTypes,
-            )
+            from qgis.core import (QgsCoordinateReferenceSystem,
+                                   QgsCoordinateTransform, QgsPointXY,
+                                   QgsProject, QgsWkbTypes)
             from qgis.gui import QgsRubberBand
             from qgis.PyQt.QtGui import QColor
         except Exception as exc:
