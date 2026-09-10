@@ -13,6 +13,7 @@ pymisb==2.0.1
 # Debugging / hot reload (optional local workflow)
 debugpy>=1.8.21
 watchdog>=6.0.0
+defusedxml==0.7.1
 
 # Build tools — only needed when running build.py outside QGIS
 # (QGIS 4 bundles PyQt6 internally; these are for standalone dev builds)
