@@ -26,7 +26,7 @@ def classFactory(iface):
 
     plugin = Fmv(iface)
 
-    if os.environ.get("FRAN_DEBUG") == "1":
+    if os.environ.get("QGISFMV_DEBUG") == "1":
         try:
             import debugpy
 
