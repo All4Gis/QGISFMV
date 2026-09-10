@@ -1,6 +1,8 @@
 # Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
+
 # -*- coding: utf-8 -*-
+
 from io import BytesIO
 
 import defusedxml.ElementTree as ET
@@ -10,14 +12,17 @@ from QGIS_FMV.utils.logging import log
 
 numpy = None
 matplot = None
+
 _plot_ok = None  # None = untested, True/False = cached
 
 
 def _ensure_plot_deps():
     """Import matplotlib/numpy on first use; retries after fresh install."""
     global numpy, matplot, _plot_ok
+
     if _plot_ok:
         return True
+
     try:
         import matplotlib.pyplot as _mp
         import numpy as _np
@@ -25,11 +30,14 @@ def _ensure_plot_deps():
         numpy = _np
         matplot = _mp
         _plot_ok = True
+
         return True
+
     except ImportError:
         numpy = None
         matplot = None
         _plot_ok = False
+
         return False
 
 
@@ -49,11 +57,14 @@ def _probeFrameRate(fileName, streamSpec, mediaType):
         ],
         t="probe",
     )
+
     out, _ = proc.communicate(timeout=30)
+
     if proc.returncode != 0 or not out:
         return None
 
     streamElem = ET.parse(BytesIO(out)).find(".//stream")
+
     if streamElem is None:
         return None
 
@@ -74,22 +85,39 @@ def _probeFrameRate(fileName, streamSpec, mediaType):
             ],
             t="probe",
         )
+
         frameOut, _ = procFrame.communicate(timeout=15)
+
         if procFrame.returncode == 0 and frameOut:
             frameElem = ET.parse(BytesIO(frameOut)).find(".//frame")
+
             duration = (
                 frameElem.get("pkt_duration_time") if frameElem is not None else None
             )
+
             if duration:
-                return 1.0 / float(duration)
+                try:
+                    return 1.0 / float(duration)
+                except (TypeError, ValueError, ZeroDivisionError):
+                    return None
+
         return None
 
-    for attr in ("avg_frame_rate", "r_frame_rate"):
+    for attr in (
+        "avg_frame_rate",
+        "r_frame_rate",
+    ):
         ratio = streamElem.get(attr) or ""
+
         if ratio and ratio != "0/0" and "/" in ratio:
             dividend, divisor = ratio.split("/", 1)
-            if float(divisor):
-                return float(dividend) / float(divisor)
+
+            try:
+                if float(divisor):
+                    return float(dividend) / float(divisor)
+            except (TypeError, ValueError, ZeroDivisionError):
+                continue
+
     return None
 
 
@@ -98,7 +126,14 @@ def _probeFrameXml(fileName, streamSpec):
     proc = _spawn(
         [
             "-show_entries",
-            "frame=pict_type,pkt_size,best_effort_timestamp_time,pkt_pts_time,pkt_duration_time",
+            (
+                "frame="
+                "pict_type,"
+                "pkt_size,"
+                "best_effort_timestamp_time,"
+                "pkt_pts_time,"
+                "pkt_duration_time"
+            ),
             "-select_streams",
             streamSpec,
             "-v",
@@ -109,28 +144,59 @@ def _probeFrameXml(fileName, streamSpec):
         ],
         t="probe",
     )
+
     out, _ = proc.communicate(timeout=30)
+
     if proc.returncode != 0 or not out:
         return None
+
     return out
 
 
-def ShowPlot(bitrate_data, frame_count, fileName, output=None):
-    """Show plot,because show not work using threading"""
+def ShowPlot(
+    bitrate_data,
+    frame_count,
+    fileName,
+    output=None,
+):
+    """Show plot, because show not work using threading."""
     if not _ensure_plot_deps():
         raise ImportError("matplotlib and numpy are required for bitrate plots")
 
     fig = matplot.figure()
+
     try:
         fig.canvas.manager.set_window_title(fileName)
-    except Exception as exc:
-        from QGIS_FMV.utils.logging import log
 
-        log.debug("matplotlib window title failed: %s", exc)
-    matplot.title(QCoreApplication.translate("QgsFmvPlayer", "Stream Bitrate vs Time"))
-    matplot.xlabel(QCoreApplication.translate("QgsFmvPlayer", "Time (sec)"))
-    matplot.ylabel(QCoreApplication.translate("QgsFmvPlayer", "Frame Bitrate (kbit/s)"))
+    except Exception as exc:
+        log.debug(
+            "matplotlib window title failed: %s",
+            exc,
+        )
+
+    matplot.title(
+        QCoreApplication.translate(
+            "QgsFmvPlayer",
+            "Stream Bitrate vs Time",
+        )
+    )
+
+    matplot.xlabel(
+        QCoreApplication.translate(
+            "QgsFmvPlayer",
+            "Time (sec)",
+        )
+    )
+
+    matplot.ylabel(
+        QCoreApplication.translate(
+            "QgsFmvPlayer",
+            "Frame Bitrate (kbit/s)",
+        )
+    )
+
     matplot.grid(True)
+
     frame_type_color = {
         "A": "yellow",
         "I": "red",
@@ -141,19 +207,31 @@ def ShowPlot(bitrate_data, frame_count, fileName, output=None):
     global_peak_bitrate = 0.0
     global_mean_bitrate = 0.0
 
-    for frame_type in ["I", "P", "B", "A"]:
+    for frame_type in [
+        "I",
+        "P",
+        "B",
+        "A",
+    ]:
         if frame_type not in bitrate_data:
             continue
 
         frame_list = bitrate_data[frame_type]
+
+        if not frame_list:
+            continue
+
         frame_array = numpy.array(frame_list)
 
         peak_bitrate = frame_array.max(0)[1]
+
         if peak_bitrate > global_peak_bitrate:
             global_peak_bitrate = peak_bitrate
 
         mean_bitrate = frame_array.mean(0)[1]
-        global_mean_bitrate += mean_bitrate * (len(frame_list) / frame_count)
+
+        if frame_count:
+            global_mean_bitrate += mean_bitrate * (len(frame_list) / frame_count)
 
         matplot.vlines(
             frame_array[:, 0],
@@ -164,12 +242,19 @@ def ShowPlot(bitrate_data, frame_count, fileName, output=None):
         )
 
     peak_text_x = matplot.xlim()[1] * 0.15
+
     peak_text_y = global_peak_bitrate + (
         (matplot.ylim()[1] - matplot.ylim()[0]) * 0.015
     )
+
     peak_text = "peak ({:.0f})".format(global_peak_bitrate)
 
-    matplot.axhline(global_peak_bitrate, linewidth=2, color="black")
+    matplot.axhline(
+        global_peak_bitrate,
+        linewidth=2,
+        color="black",
+    )
+
     matplot.text(
         peak_text_x,
         peak_text_y,
@@ -180,12 +265,19 @@ def ShowPlot(bitrate_data, frame_count, fileName, output=None):
     )
 
     mean_text_x = matplot.xlim()[1] * 0.85
+
     mean_text_y = global_mean_bitrate + (
         (matplot.ylim()[1] - matplot.ylim()[0]) * 0.015
     )
+
     mean_text = "mean ({:.0f})".format(global_mean_bitrate)
 
-    matplot.axhline(global_mean_bitrate, linewidth=2, color="black")
+    matplot.axhline(
+        global_mean_bitrate,
+        linewidth=2,
+        color="black",
+    )
+
     matplot.text(
         mean_text_x,
         mean_text_y,
@@ -196,10 +288,12 @@ def ShowPlot(bitrate_data, frame_count, fileName, output=None):
     )
 
     matplot.legend()
+
     if output is not None:
         matplot.savefig(output)
     else:
         matplot.show()
+
     return matplot
 
 
@@ -208,11 +302,18 @@ class CreatePlotsBitrate(QObject):
 
     def __init__(self):
         super().__init__()
+
         self.bitrate_data = {}
         self.frame_count = 0
         self.output = None
 
-    def CreatePlot(self, task, fileName, output, t):
+    def CreatePlot(
+        self,
+        task,
+        fileName,
+        output,
+        t,
+    ):
         """Extract frame bitrates via ffprobe and store them for plotting."""
         if not _ensure_plot_deps():
             return {
@@ -222,29 +323,48 @@ class CreatePlotsBitrate(QObject):
 
         try:
             task.setProgress(10)
+
             self.bitrate_data = {}
             self.frame_count = 0
             self.output = output
 
             if t == "audio":
                 streamSpec = "a"
+
             elif t == "video":
                 streamSpec = "V"
+
             else:
                 return None
 
-            frameRate = _probeFrameRate(fileName, streamSpec, t)
+            frameRate = _probeFrameRate(
+                fileName,
+                streamSpec,
+                t,
+            )
+
             if frameRate is None or frameRate <= 0:
                 return None
 
             task.setProgress(25)
-            rawXml = _probeFrameXml(fileName, streamSpec)
+
+            rawXml = _probeFrameXml(
+                fileName,
+                streamSpec,
+            )
+
             if not rawXml:
                 return None
 
+            # defusedxml is used only for secure XML parsing.
             root = ET.parse(BytesIO(rawXml))
+
             frameTime = 0.0
-            for node in root.findall(".//frame"):
+
+            frames = root.findall(".//frame")
+            total_frames = len(frames)
+
+            for node in frames:
                 self.frame_count += 1
 
                 if t == "audio":
@@ -254,22 +374,39 @@ class CreatePlotsBitrate(QObject):
 
                 try:
                     frameTime = float(node.get("best_effort_timestamp_time"))
+
                 except (TypeError, ValueError):
                     try:
                         frameTime = float(node.get("pkt_pts_time"))
+
                     except (TypeError, ValueError):
                         duration = node.get("pkt_duration_time")
+
                         if duration and self.frame_count > 1:
-                            frameTime += float(duration)
+                            try:
+                                frameTime += float(duration)
+                            except (
+                                TypeError,
+                                ValueError,
+                            ):
+                                pass
 
                 try:
                     pktSize = float(node.get("pkt_size"))
+
                 except (TypeError, ValueError):
                     continue
 
                 frameBitrate = (pktSize * 8 / 1000) * frameRate
-                self.bitrate_data.setdefault(frameType, []).append(
-                    (frameTime, frameBitrate)
+
+                self.bitrate_data.setdefault(
+                    frameType,
+                    [],
+                ).append(
+                    (
+                        frameTime,
+                        frameBitrate,
+                    )
                 )
 
                 if self.frame_count % 100 == 0:
@@ -280,7 +417,10 @@ class CreatePlotsBitrate(QObject):
                             + int(
                                 50
                                 * self.frame_count
-                                / max(len(root.findall(".//frame")), 1)
+                                / max(
+                                    total_frames,
+                                    1,
+                                )
                             ),
                         )
                     )
@@ -289,10 +429,16 @@ class CreatePlotsBitrate(QObject):
                 return None
 
             task.setProgress(80)
+
             if task.isCanceled():
                 return None
+
             return {"task": task.description()}
 
         except Exception as _exc:
-            log.debug("bitrate plot creation failed: %s", _exc)
+            log.debug(
+                "bitrate plot creation failed: %s",
+                _exc,
+            )
+
             return None
