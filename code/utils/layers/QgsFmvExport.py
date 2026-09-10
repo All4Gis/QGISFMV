@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Export telemetry layers to KML / GPX."""
 
-import defusedxml.ElementTree as ET
 from datetime import datetime, timezone
 
+import defusedxml.ElementTree as ET
 from qgis.core import Qgis as QGis
 from qgis.core import (QgsCoordinateReferenceSystem, QgsCoordinateTransform,
                        QgsProject)

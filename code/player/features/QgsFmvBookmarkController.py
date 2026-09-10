@@ -5,9 +5,9 @@ from __future__ import annotations
 
 import csv
 import os
-import defusedxml.ElementTree as ET
 from datetime import datetime, timezone
 
+import defusedxml.ElementTree as ET
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication, QObject
 from QGIS_FMV.geo.QgsFmvSpatial import metadata_lat_lon

@@ -2,7 +2,6 @@
 """Tests for KML/GPX export XML structure (no QGIS runtime)."""
 
 import defusedxml.ElementTree as ET
-
 import pytest
 
 

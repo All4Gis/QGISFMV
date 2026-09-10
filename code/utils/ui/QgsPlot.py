@@ -1,9 +1,9 @@
 # Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
-import defusedxml.ElementTree as ET
 from io import BytesIO
 
+import defusedxml.ElementTree as ET
 from qgis.PyQt.QtCore import QCoreApplication, QObject
 from QGIS_FMV.utils.core.QgsFmvUtils import _spawn
 from QGIS_FMV.utils.logging import log
