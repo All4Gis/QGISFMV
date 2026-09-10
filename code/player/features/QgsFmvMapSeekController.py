@@ -282,8 +282,9 @@ class MapSeekController:
             return
         try:
             pin.setArming(False)
-        except Exception:
-            pass
+        except Exception as exc:
+            log.debug("disarm target pin failed: %s", exc)
+        
         action = getattr(self.player, "actionPin_Target", None)
         if action is not None and action.isChecked():
             action.blockSignals(True)
@@ -445,8 +446,8 @@ class MapSeekController:
                 self._mode = tool_mode
                 try:
                     self.setCursor(Qt.CursorShape.CrossCursor)
-                except Exception:
-                    pass
+                except Exception as exc:
+                    log.debug("map seek tool cursor failed: %s", exc)
 
             def canvasReleaseEvent(self, event):
                 try:

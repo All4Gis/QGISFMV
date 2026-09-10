@@ -308,16 +308,16 @@ class MetadataPipelineController:
                 pos = metadata_lat_lon(data, prefer_frame_center=True)
                 if pos is not None:
                     place.onFrameCenter(pos[0], pos[1])
-            except Exception:
-                pass
+            except Exception as exc:
+                log.debug("place label update failed: %s", exc)
 
         # Target pin cue (range / bearing / FOV enter)
         target_pin = getattr(player, "targetPinController", None)
         if target_pin is not None and target_pin.hasPin():
             try:
                 target_pin.updateFromMetadata(data)
-            except Exception:
-                pass
+            except Exception as exc:
+                log.debug("target pin update failed: %s", exc)
 
         # Build click-to-seek geo/time index
         map_seek = getattr(player, "mapSeekController", None)

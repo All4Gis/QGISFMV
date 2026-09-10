@@ -283,8 +283,9 @@ class GeofenceController:
                     }
                 )
                 layer.renderer().setSymbol(symbol)
-            except Exception:
-                pass
+            except Exception as exc:
+                log.debug("operation failed: %s", exc)
+            
             group = groupName or self.player._videoGroupName()
             addLayerNoCrsDialog(layer, group=group)
             self._aoi_layer = layer
