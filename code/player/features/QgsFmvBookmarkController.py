@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import csv
 import os
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 from datetime import datetime, timezone
 
 from qgis.core import Qgis as QGis

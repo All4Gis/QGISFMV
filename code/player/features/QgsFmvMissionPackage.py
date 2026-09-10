@@ -220,7 +220,7 @@ def _write_group_kml_silent(group_name, out_path):
 
         # Prefer building KML manually from geometries to avoid save dialogs.
         ns = "http://www.opengis.net/kml/2.2"
-        import xml.etree.ElementTree as ET
+        import defusedxml.ElementTree as ET
 
         kml = ET.Element("kml", xmlns=ns)
         doc = ET.SubElement(kml, "Document")

@@ -1,7 +1,7 @@
 # Original Code : https://github.com/zeroepoch/plotbitrate
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
-import xml.etree.ElementTree as etree
+import defusedxml.ElementTree as ET
 from io import BytesIO
 
 from qgis.PyQt.QtCore import QCoreApplication, QObject
@@ -53,7 +53,7 @@ def _probeFrameRate(fileName, streamSpec, mediaType):
     if proc.returncode != 0 or not out:
         return None
 
-    streamElem = etree.parse(BytesIO(out)).find(".//stream")
+    streamElem = ET.parse(BytesIO(out)).find(".//stream")
     if streamElem is None:
         return None
 
@@ -76,7 +76,7 @@ def _probeFrameRate(fileName, streamSpec, mediaType):
         )
         frameOut, _ = procFrame.communicate(timeout=15)
         if procFrame.returncode == 0 and frameOut:
-            frameElem = etree.parse(BytesIO(frameOut)).find(".//frame")
+            frameElem = ET.parse(BytesIO(frameOut)).find(".//frame")
             duration = (
                 frameElem.get("pkt_duration_time") if frameElem is not None else None
             )
@@ -242,7 +242,7 @@ class CreatePlotsBitrate(QObject):
             if not rawXml:
                 return None
 
-            root = etree.parse(BytesIO(rawXml))
+            root = ET.parse(BytesIO(rawXml))
             frameTime = 0.0
             for node in root.findall(".//frame"):
                 self.frame_count += 1
