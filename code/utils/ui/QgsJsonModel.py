@@ -2,8 +2,14 @@
 # Modificated for work in QGIS FMV Plugin
 # -*- coding: utf-8 -*-
 from qgis.core import NULL
-from qgis.PyQt.QtCore import (QAbstractItemModel, QCoreApplication,
-                              QJsonDocument, QJsonParseError, QModelIndex, Qt)
+from qgis.PyQt.QtCore import (
+    QAbstractItemModel,
+    QCoreApplication,
+    QJsonDocument,
+    QJsonParseError,
+    QModelIndex,
+    Qt,
+)
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 

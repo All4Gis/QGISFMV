@@ -4,19 +4,23 @@ from qgis.PyQt.QtGui import QBrush, QColor, QCursor, QMouseEvent, QPalette
 from qgis.PyQt.QtMultimedia import QVideoSink
 from qgis.PyQt.QtWidgets import QWidget as VideoWidgetBase
 from qgis.utils import iface
-from QGIS_FMV.utils.core.QgsFmvUtils import (GetGCPGeoTransform,
-                                             GetImageHeight, qmouse_pos)
+from QGIS_FMV.utils.core.QgsFmvUtils import (
+    GetGCPGeoTransform,
+    GetImageHeight,
+    qmouse_pos,
+)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.media.QgsFmvMultimedia import PlayingState, StoppedState
 from QGIS_FMV.video.playback.QgsVideoCursor import CursorController
 from QGIS_FMV.video.playback.QgsVideoDrawController import VideoDrawController
-from QGIS_FMV.video.playback.QgsVideoObjectTracking import \
-    ObjectTrackingController
+from QGIS_FMV.video.playback.QgsVideoObjectTracking import ObjectTrackingController
 from QGIS_FMV.video.playback.QgsVideoPaintPipeline import VideoPaintPipeline
 from QGIS_FMV.video.playback.QgsVideoRubberBands import RubberBandManager
-from QGIS_FMV.video.playback.QgsVideoState import (FilterState,
-                                                   InteractionState,
-                                                   TrackLockState)
+from QGIS_FMV.video.playback.QgsVideoState import (
+    FilterState,
+    InteractionState,
+    TrackLockState,
+)
 from QGIS_FMV.video.playback.QgsVideoSurface import VideoSinkSurface
 from QGIS_FMV.video.playback.QgsVideoUtils import VideoUtils as vut
 
@@ -86,8 +90,7 @@ class VideoWidget(VideoWidgetBase):
         self._tracker_backend = None
         self._track_id = 0
         self._track_misses = 0
-        from QGIS_FMV.utils.constants import (TRACK_MAX_MISSES,
-                                              TRACK_TIMER_INTERVAL_MS)
+        from QGIS_FMV.utils.constants import TRACK_MAX_MISSES, TRACK_TIMER_INTERVAL_MS
 
         self._track_max_misses = TRACK_MAX_MISSES
         self._track_lock_state = TrackLockState.IDLE

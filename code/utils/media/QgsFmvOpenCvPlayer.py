@@ -10,14 +10,21 @@ except ImportError:
     cv2 = None
 
 from qgis.PyQt.QtCore import QObject, QThread, QTimer, pyqtSignal
-from QGIS_FMV.utils.media.QgsFmvDecodeWorkers import (FfmpegDecodeWorker,
-                                                      FrameDecodeWorker)
-from QGIS_FMV.utils.media.QgsFmvMediaProbe import (_ffmpeg_available,
-                                                   _url_to_path)
-from QGIS_FMV.utils.media.QgsFmvMediaTypes import (EndOfMedia, InvalidMedia,
-                                                   LoadedMedia, LoadingMedia,
-                                                   NoMedia, PausedState,
-                                                   PlayingState, StoppedState)
+from QGIS_FMV.utils.media.QgsFmvDecodeWorkers import (
+    FfmpegDecodeWorker,
+    FrameDecodeWorker,
+)
+from QGIS_FMV.utils.media.QgsFmvMediaProbe import _ffmpeg_available, _url_to_path
+from QGIS_FMV.utils.media.QgsFmvMediaTypes import (
+    EndOfMedia,
+    InvalidMedia,
+    LoadedMedia,
+    LoadingMedia,
+    NoMedia,
+    PausedState,
+    PlayingState,
+    StoppedState,
+)
 
 
 class OpenCvMediaPlayer(QObject):

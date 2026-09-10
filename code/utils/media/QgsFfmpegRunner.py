@@ -36,8 +36,7 @@ def ensure_paths():
         return _ffmpeg_path, _ffprobe_path
 
     try:
-        from QGIS_FMV.utils.settings.QgsFmvSettings import (ffmpeg_binary,
-                                                            ffprobe_binary)
+        from QGIS_FMV.utils.settings.QgsFmvSettings import ffmpeg_binary, ffprobe_binary
 
         ff_bin = ffmpeg_binary()
         fp_bin = ffprobe_binary()

@@ -31,8 +31,7 @@ def _get_measure():
     if _measure is not None:
         return _measure
 
-    from qgis.core import (QgsCoordinateReferenceSystem, QgsDistanceArea,
-                           QgsProject)
+    from qgis.core import QgsCoordinateReferenceSystem, QgsDistanceArea, QgsProject
 
     _measure = QgsDistanceArea()
     try:

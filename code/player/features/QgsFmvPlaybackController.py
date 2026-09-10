@@ -11,15 +11,22 @@ from QGIS_FMV.utils.core.QgsFmvUtils import _seconds_to_time, hasElevationModel
 from QGIS_FMV.utils.layers.QgsFmvLayers import CreateVideoLayers
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.media.QgsFmvKlvReader import StreamMetaReader
-from QGIS_FMV.utils.media.QgsFmvMultimedia import (BufferingMedia, EndOfMedia,
-                                                   InvalidMedia, LoadedMedia,
-                                                   LoadingMedia, PausedState,
-                                                   PlayingState, PlaylistLoop,
-                                                   PlaylistSequential,
-                                                   StalledMedia, StoppedState,
-                                                   getPlaylist, hasVideo)
-from QGIS_FMV.utils.media.QgsFmvStreamUtils import (isStreamUri,
-                                                    streamDisplayName)
+from QGIS_FMV.utils.media.QgsFmvMultimedia import (
+    BufferingMedia,
+    EndOfMedia,
+    InvalidMedia,
+    LoadedMedia,
+    LoadingMedia,
+    PausedState,
+    PlayingState,
+    PlaylistLoop,
+    PlaylistSequential,
+    StalledMedia,
+    StoppedState,
+    getPlaylist,
+    hasVideo,
+)
+from QGIS_FMV.utils.media.QgsFmvStreamUtils import isStreamUri, streamDisplayName
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 

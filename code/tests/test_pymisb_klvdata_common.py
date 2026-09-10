@@ -4,9 +4,15 @@
 from pathlib import Path
 
 import pytest
-from pymisb.klvdata.common import (ber_decode, ber_encode, bytes_to_datetime,
-                                   bytes_to_hexstr, datetime_to_bytes,
-                                   hexstr_to_bytes, packet_checksum)
+from pymisb.klvdata.common import (
+    ber_decode,
+    ber_encode,
+    bytes_to_datetime,
+    bytes_to_hexstr,
+    datetime_to_bytes,
+    hexstr_to_bytes,
+    packet_checksum,
+)
 
 
 class TestDateTime:

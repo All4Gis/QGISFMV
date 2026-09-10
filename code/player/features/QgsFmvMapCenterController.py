@@ -4,8 +4,11 @@
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QActionGroup
 from QGIS_FMV.utils.core.QgsFmvUtils import centerCanvasOnLayer
-from QGIS_FMV.utils.layers.QgsFmvLayers import (Footprint_lyr, FrameCenter_lyr,
-                                                Platform_lyr)
+from QGIS_FMV.utils.layers.QgsFmvLayers import (
+    Footprint_lyr,
+    FrameCenter_lyr,
+    Platform_lyr,
+)
 
 
 class MapCenterController:

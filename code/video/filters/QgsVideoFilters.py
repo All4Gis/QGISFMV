@@ -3,15 +3,19 @@ import numpy as np
 import QGIS_FMV.video.filters.QgsFmvFilterCore as _fcore
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QImage
-from QGIS_FMV.utils.core.QgsImageMat import (convertMatToQImage,
-                                             convertQImageToMat)
+from QGIS_FMV.utils.core.QgsImageMat import convertMatToQImage, convertQImageToMat
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.video.filters.QgsFmvDetectionFilters import FmvDetectionFilters
-from QGIS_FMV.video.filters.QgsFmvFilterCore import (_COLORMAP_NRVI, _HAS_CV2,
-                                                     _MAX_SLOW_FILTER_DIM,
-                                                     FilterCore, _canny_numpy,
-                                                     _clahe_numpy, _conv2d,
-                                                     _get_mog2_subtractor)
+from QGIS_FMV.video.filters.QgsFmvFilterCore import (
+    _COLORMAP_NRVI,
+    _HAS_CV2,
+    _MAX_SLOW_FILTER_DIM,
+    FilterCore,
+    _canny_numpy,
+    _clahe_numpy,
+    _conv2d,
+    _get_mog2_subtractor,
+)
 
 
 class VideoFilters(object):

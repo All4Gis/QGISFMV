@@ -99,7 +99,9 @@ def build_mission_package(player, zip_path):
         if bm is not None and events:
             try:
                 from QGIS_FMV.player.features.QgsFmvBookmarkController import (
-                    write_bookmarks_csv, write_bookmarks_kml)
+                    write_bookmarks_csv,
+                    write_bookmarks_kml,
+                )
 
                 csv_p = os.path.join(tmp, "bookmarks.csv")
                 kml_p = os.path.join(tmp, "bookmarks.kml")
@@ -138,8 +140,7 @@ def build_mission_package(player, zip_path):
 
         # AI detections snapshot
         try:
-            from QGIS_FMV.video.filters.QgsFmvDetectionMap import \
-                last_detections
+            from QGIS_FMV.video.filters.QgsFmvDetectionMap import last_detections
 
             dets = last_detections()
 
@@ -371,8 +372,7 @@ def _write_group_kml_silent(group_name, out_path):
     provide XML construction helpers such as Element() and SubElement().
     """
     try:
-        from QGIS_FMV.utils.layers.QgsFmvExport import (_findVideoGroup,
-                                                        _groupLayers)
+        from QGIS_FMV.utils.layers.QgsFmvExport import _findVideoGroup, _groupLayers
 
         group = _findVideoGroup(group_name)
 

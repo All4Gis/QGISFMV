@@ -11,8 +11,13 @@ them through a module reference (``_base()``) instead of importing by
 value, mirroring the pattern already used by QgsFmvDrawLayers.py.
 """
 
-from qgis.core import (QgsCoordinateReferenceSystem, QgsCoordinateTransform,
-                       QgsPointXY, QgsProject, QgsWkbTypes)
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsPointXY,
+    QgsProject,
+    QgsWkbTypes,
+)
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 # Cinematic (smoothed) follow — module state for lerp between centers.

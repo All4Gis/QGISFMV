@@ -302,8 +302,7 @@ def reset_temporal_filter_state():
     _prev_motion_frame = None
     _mog2_subtractor = None
     try:
-        from QGIS_FMV.video.filters.QgsFmvDetectionFilters import \
-            reset_detection_state
+        from QGIS_FMV.video.filters.QgsFmvDetectionFilters import reset_detection_state
 
         reset_detection_state()
     except Exception as _exc:

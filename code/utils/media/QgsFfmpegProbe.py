@@ -96,8 +96,7 @@ def is_valid_stream(uri, timeout_sec=3.0):
 
     # Fallback: try ffmpeg subprocess to decode a single frame
     try:
-        from QGIS_FMV.utils.media.QgsFfmpegRunner import (available,
-                                                          popen_ffmpeg)
+        from QGIS_FMV.utils.media.QgsFfmpegRunner import available, popen_ffmpeg
 
         if not available():
             return False

@@ -10,9 +10,14 @@ from qgis.PyQt.QtWidgets import QDockWidget
 from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGIS_FMV.player.dialogs.QgsFmvReportGenerator import ReportGenerator
 from QGIS_FMV.player.dialogs.QgsFmvReportMetadata import (
-    _group_metadata_fields, _metadata_dict_from_table)
-from QGIS_FMV.utils.core.QgsFmvUtils import (BurnDrawingsImage,
-                                             _seconds_to_time, askForFiles)
+    _group_metadata_fields,
+    _metadata_dict_from_table,
+)
+from QGIS_FMV.utils.core.QgsFmvUtils import (
+    BurnDrawingsImage,
+    _seconds_to_time,
+    askForFiles,
+)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 

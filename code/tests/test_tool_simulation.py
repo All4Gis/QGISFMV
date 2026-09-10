@@ -10,9 +10,14 @@ from __future__ import annotations
 
 import sys
 import types
-from code.tests.support import (CODE, ensure_qgis_fmv_package,
-                                load_plugin_module, qgis_stub_keys,
-                                restore_modules, snapshot_modules)
+from code.tests.support import (
+    CODE,
+    ensure_qgis_fmv_package,
+    load_plugin_module,
+    qgis_stub_keys,
+    restore_modules,
+    snapshot_modules,
+)
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 

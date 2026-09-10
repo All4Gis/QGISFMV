@@ -513,11 +513,16 @@ def georeferencingVideo(parent):
     global _mosaic_frame_counter
 
     from QGIS_FMV.utils.core.QgsFmvGeoReferencing import (
-        SetImageSize, _affineTransformIsUsable,
-        _refreshAffineFromStoredCorners)
-    from QGIS_FMV.utils.core.QgsFmvUtils import (_syncVideoImageSizeFromParent,
-                                                 _videoFrameImage,
-                                                 getVideoFolder, gv)
+        SetImageSize,
+        _affineTransformIsUsable,
+        _refreshAffineFromStoredCorners,
+    )
+    from QGIS_FMV.utils.core.QgsFmvUtils import (
+        _syncVideoImageSizeFromParent,
+        _videoFrameImage,
+        getVideoFolder,
+        gv,
+    )
     from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
     if parent is None:

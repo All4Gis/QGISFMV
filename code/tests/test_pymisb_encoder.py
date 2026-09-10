@@ -3,8 +3,12 @@
 
 import struct
 
-from pymisb.common.encoder import (bcc_16, build_st0601_packet, encode_signed,
-                                   encode_unsigned)
+from pymisb.common.encoder import (
+    bcc_16,
+    build_st0601_packet,
+    encode_signed,
+    encode_unsigned,
+)
 from pymisb.constants import UAS_LS_KEY
 
 

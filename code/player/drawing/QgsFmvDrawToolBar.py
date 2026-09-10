@@ -15,20 +15,29 @@ call sites (``QgsVideoPaintPipeline``, ``QgsFmvSettings``, ``QgsManager``, ...)
 do not need to change.
 """
 
-from QGIS_FMV.player.drawing.QgsFmvDrawHud import (draw_magnifier_on_video,
-                                                   draw_object_tracking_hud,
-                                                   draw_stamp_on_video)
-from QGIS_FMV.player.drawing.QgsFmvDrawingConfig import (DrawingConfig,
-                                                         drawing_config)
+from QGIS_FMV.player.drawing.QgsFmvDrawHud import (
+    draw_magnifier_on_video,
+    draw_object_tracking_hud,
+    draw_stamp_on_video,
+)
+from QGIS_FMV.player.drawing.QgsFmvDrawingConfig import DrawingConfig, drawing_config
 from QGIS_FMV.player.drawing.QgsFmvDrawingConfig import setValues as _setValues
 from QGIS_FMV.player.drawing.QgsFmvDrawMeasure import (
-    RulerTotalMeasure, draw_measure_area_on_video,
-    draw_measure_distance_on_video, reset_measure_distance)
+    RulerTotalMeasure,
+    draw_measure_area_on_video,
+    draw_measure_distance_on_video,
+    reset_measure_distance,
+)
 from QGIS_FMV.player.drawing.QgsFmvDrawShapes import (
-    draw_censured_on_video, draw_lines_on_video, draw_military_symbol_on_video,
-    draw_point_on_video, draw_polygon_on_video)
-from QGIS_FMV.player.drawing.QgsFmvDrawShapes import \
-    split_at_separators as _split_at_separators
+    draw_censured_on_video,
+    draw_lines_on_video,
+    draw_military_symbol_on_video,
+    draw_point_on_video,
+    draw_polygon_on_video,
+)
+from QGIS_FMV.player.drawing.QgsFmvDrawShapes import (
+    split_at_separators as _split_at_separators,
+)
 
 __all__ = ["DrawToolBar", "DrawingConfig", "drawing_config", "RulerTotalMeasure"]
 

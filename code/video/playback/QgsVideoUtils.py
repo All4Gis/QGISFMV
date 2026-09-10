@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from QGIS_FMV.utils.core.QgsFmvUtils import (GetDemAltAt, GetFrameCenter,
-                                             GetGCPGeoTransform,
-                                             GetImageHeight, GetImageWidth,
-                                             hasElevationModel, qmouse_pos)
+from QGIS_FMV.utils.core.QgsFmvUtils import (
+    GetDemAltAt,
+    GetFrameCenter,
+    GetGCPGeoTransform,
+    GetImageHeight,
+    GetImageWidth,
+    hasElevationModel,
+    qmouse_pos,
+)
 
 
 class VideoUtils(object):

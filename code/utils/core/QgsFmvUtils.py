@@ -13,49 +13,80 @@ from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QPoint, QSettings
 from qgis.PyQt.QtGui import QPainter
 from QGIS_FMV.utils.core.QgsFmvCornerEstimation import (  # noqa: F401
-    CornerEstimationWithOffsets, CornerEstimationWithoutOffsets)
+    CornerEstimationWithOffsets,
+    CornerEstimationWithoutOffsets,
+)
+
 # ---------------------------------------------------------------------------
 # Backward-compat re-exports from domain modules
 # ---------------------------------------------------------------------------
 from QGIS_FMV.utils.core.QgsFmvGeoReferencing import (  # noqa: F401
-    GetDemAltAt, GetFrameCenter, GetGCPGeoTransform, GetGeotransform_affine,
-    GetImageHeight, GetImageWidth, GetLine3DIntersectionWithDEM, GetSensor,
-    SetGCPsToGeoTransform, SetImageSize, _affineTransformIsUsable,
-    _find_homography, _find_homography_numpy, _footprint_inputs_changed,
-    _refreshAffineFromStoredCorners, _update_footprint_beams_gcp,
-    hasElevationModel)
+    GetDemAltAt,
+    GetFrameCenter,
+    GetGCPGeoTransform,
+    GetGeotransform_affine,
+    GetImageHeight,
+    GetImageWidth,
+    GetLine3DIntersectionWithDEM,
+    GetSensor,
+    SetGCPsToGeoTransform,
+    SetImageSize,
+    _affineTransformIsUsable,
+    _find_homography,
+    _find_homography_numpy,
+    _footprint_inputs_changed,
+    _refreshAffineFromStoredCorners,
+    _update_footprint_beams_gcp,
+    hasElevationModel,
+)
 from QGIS_FMV.utils.core.QgsFmvMapCenter import (  # noqa: F401
-    _center_fallback_point, _latest_layer_feature, _layer_center_on_canvas,
-    _layerExtentInCanvasCrs, _transformExtentToCanvas, _transformPointToCanvas,
-    centerCanvasOnLayer, followMapCenter)
+    _center_fallback_point,
+    _latest_layer_feature,
+    _layer_center_on_canvas,
+    _layerExtentInCanvasCrs,
+    _transformExtentToCanvas,
+    _transformPointToCanvas,
+    centerCanvasOnLayer,
+    followMapCenter,
+)
 from QGIS_FMV.utils.core.QgsFmvMosaic import ExtendMosaic  # noqa: F401
-from QGIS_FMV.utils.core.QgsFmvMosaic import (WriteGeoreferencedFrame,
-                                              _dataset_extent_wgs84,
-                                              _footprint_weights_from_mask,
-                                              _gdal_raster_readable,
-                                              _get_wgs84_srs,
-                                              _mosaic_feather_weights,
-                                              _should_accept_mosaic_frame,
-                                              georeferencingVideo,
-                                              resetMosaicFrameCounter)
-from QGIS_FMV.utils.core.QgsFmvVideoSession import (VideoSession,
-                                                    ensure_session,
-                                                    get_active_session,
-                                                    set_active_session)
-from QGIS_FMV.utils.layers.QgsFmvLayers import (SetcrtPltTailNum,
-                                                SetcrtSensorSrc,
-                                                UpdateFrameAxisData,
-                                                UpdateFrameCenterData,
-                                                UpdatePlatformData,
-                                                UpdateTrajectoryData)
+from QGIS_FMV.utils.core.QgsFmvMosaic import (
+    WriteGeoreferencedFrame,
+    _dataset_extent_wgs84,
+    _footprint_weights_from_mask,
+    _gdal_raster_readable,
+    _get_wgs84_srs,
+    _mosaic_feather_weights,
+    _should_accept_mosaic_frame,
+    georeferencingVideo,
+    resetMosaicFrameCounter,
+)
+from QGIS_FMV.utils.core.QgsFmvVideoSession import (
+    VideoSession,
+    ensure_session,
+    get_active_session,
+    set_active_session,
+)
+from QGIS_FMV.utils.layers.QgsFmvLayers import (
+    SetcrtPltTailNum,
+    SetcrtSensorSrc,
+    UpdateFrameAxisData,
+    UpdateFrameCenterData,
+    UpdatePlatformData,
+    UpdateTrajectoryData,
+)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.media import QgsFfmpegRunner as _ffmpeg_runner
 from QGIS_FMV.utils.settings.QgsFmvSettings import get_int, get_layer
-from QGIS_FMV.utils.settings.QgsFmvSettings import \
-    reverse_geocoding_url as _reverse_geocoding_url
+from QGIS_FMV.utils.settings.QgsFmvSettings import (
+    reverse_geocoding_url as _reverse_geocoding_url,
+)
 from QGIS_FMV.utils.ui.QgsFmvFileDialogs import askForFiles  # noqa: F401
-from QGIS_FMV.utils.ui.QgsFmvFileDialogs import (askForFolder, pluginSetting,
-                                                 setPluginSetting)
+from QGIS_FMV.utils.ui.QgsFmvFileDialogs import (
+    askForFolder,
+    pluginSetting,
+    setPluginSetting,
+)
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 settings = QSettings()
@@ -103,8 +134,9 @@ def qmouse_pos(event):
 def _resolve_ffmpeg_binary(folder, exe_name):
     """Resolve an ffmpeg/ffprobe binary, falling back to a 'bin' subfolder
     (common layout of official Windows builds)."""
-    from QGIS_FMV.utils.settings.QgsFmvSettings import \
-        _resolve_ffmpeg_binary as _resolve
+    from QGIS_FMV.utils.settings.QgsFmvSettings import (
+        _resolve_ffmpeg_binary as _resolve,
+    )
 
     result = _resolve(folder, exe_name)
     if result:
@@ -304,8 +336,9 @@ def _coordsFromKlvStream(rawData):
 
 def fetchReverseGeocodeLabel(centerLat, centerLon):
     """Thread-safe reverse geocode (urllib); for QgsTask / worker threads."""
-    from QGIS_FMV.utils.media.QgsFmvGeocode import \
-        fetchReverseGeocodeLabel as _fetch_label
+    from QGIS_FMV.utils.media.QgsFmvGeocode import (
+        fetchReverseGeocodeLabel as _fetch_label,
+    )
 
     return _fetch_label(Reverse_geocoding_url, centerLat, centerLon)
 
@@ -545,15 +578,16 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
 # Mosaic tuning constants (canonical values in utils.constants; mirrored here
 # so QgsFmvSettings.reloadRuntime can mutate the cached module attributes).
 from QGIS_FMV.utils.constants import MOSAIC_FEATHER_PX  # noqa: F401
-from QGIS_FMV.utils.constants import (MOSAIC_FOOTPRINT_GROW_METERS,
-                                      MOSAIC_FOOTPRINT_GROW_RATIO,
-                                      MOSAIC_MAX_FRAME_DIMENSION,
-                                      MOSAIC_MAX_KEPT_FRAMES,
-                                      MOSAIC_MAX_OUTPUT_SIZE,
-                                      MOSAIC_MIN_INTERVAL_SEC,
-                                      MOSAIC_MIN_MOVE_METERS)
-from QGIS_FMV.utils.formatting import \
-    seconds_to_time as _seconds_to_time  # noqa: F401
+from QGIS_FMV.utils.constants import (
+    MOSAIC_FOOTPRINT_GROW_METERS,
+    MOSAIC_FOOTPRINT_GROW_RATIO,
+    MOSAIC_MAX_FRAME_DIMENSION,
+    MOSAIC_MAX_KEPT_FRAMES,
+    MOSAIC_MAX_OUTPUT_SIZE,
+    MOSAIC_MIN_INTERVAL_SEC,
+    MOSAIC_MIN_MOVE_METERS,
+)
+from QGIS_FMV.utils.formatting import seconds_to_time as _seconds_to_time  # noqa: F401
 from QGIS_FMV.utils.formatting import time_to_seconds as _time_to_seconds
 
 

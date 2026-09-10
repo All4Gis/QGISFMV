@@ -2,13 +2,14 @@
 """Object tracking HUD, magnifier and stamp overlay painting."""
 
 from qgis.PyQt.QtCore import QPoint, QPointF, QRectF, Qt
-from qgis.PyQt.QtGui import (QBrush, QColor, QPainter, QPainterPath, QPen,
-                             QPixmap)
+from qgis.PyQt.QtGui import QBrush, QColor, QPainter, QPainterPath, QPen, QPixmap
 from QGIS_FMV.player.drawing import QgsFmvDrawingConfig as _drawing_config_mod
-from QGIS_FMV.player.drawing.QgsFmvDrawingConfig import (drawing_config,
-                                                         ensure_stamp_image,
-                                                         glass_pen,
-                                                         transparent_brush)
+from QGIS_FMV.player.drawing.QgsFmvDrawingConfig import (
+    drawing_config,
+    ensure_stamp_image,
+    glass_pen,
+    transparent_brush,
+)
 
 
 def draw_object_tracking_hud(painter, x, y, w, h, lock_state="locked", label="TRACK"):

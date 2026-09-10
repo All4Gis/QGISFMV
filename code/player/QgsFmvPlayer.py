@@ -5,33 +5,32 @@ from qgis.core import Qgis as QGis
 from qgis.core import QgsApplication
 from qgis.PyQt.QtCore import QCoreApplication, QPoint, QSettings, Qt
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import (QDialog, QDockWidget, QMessageBox, QStyle,
-                                 QStyleOptionSlider, QToolTip)
+from qgis.PyQt.QtWidgets import (
+    QDialog,
+    QDockWidget,
+    QMessageBox,
+    QStyle,
+    QStyleOptionSlider,
+    QToolTip,
+)
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
 from QGIS_FMV.player.dialogs.QgsFmvMetadata import QgsFmvMetadata
 from QGIS_FMV.player.dialogs.QgsFmvSettings import open_fmv_settings
 from QGIS_FMV.player.features.QgsFmvAlerts import AlertManager
-from QGIS_FMV.player.features.QgsFmvBookmarkController import \
-    BookmarkController
+from QGIS_FMV.player.features.QgsFmvBookmarkController import BookmarkController
 from QGIS_FMV.player.features.QgsFmvCloseController import CloseController
 from QGIS_FMV.player.features.QgsFmvContextMenus import ContextMenuController
-from QGIS_FMV.player.features.QgsFmvDrawToolsController import \
-    DrawToolsController
+from QGIS_FMV.player.features.QgsFmvDrawToolsController import DrawToolsController
 from QGIS_FMV.player.features.QgsFmvExportController import ExportController
 from QGIS_FMV.player.features.QgsFmvGeofence import GeofenceController
-from QGIS_FMV.player.features.QgsFmvInstantReplay import \
-    InstantReplayController
-from QGIS_FMV.player.features.QgsFmvMapCenterController import \
-    MapCenterController
+from QGIS_FMV.player.features.QgsFmvInstantReplay import InstantReplayController
+from QGIS_FMV.player.features.QgsFmvMapCenterController import MapCenterController
 from QGIS_FMV.player.features.QgsFmvMapSeekController import MapSeekController
-from QGIS_FMV.player.features.QgsFmvMetadataPipeline import \
-    MetadataPipelineController
-from QGIS_FMV.player.features.QgsFmvMissionPackage import \
-    MissionPackageController
+from QGIS_FMV.player.features.QgsFmvMetadataPipeline import MetadataPipelineController
+from QGIS_FMV.player.features.QgsFmvMissionPackage import MissionPackageController
 from QGIS_FMV.player.features.QgsFmvMosaicController import MosaicController
 from QGIS_FMV.player.features.QgsFmvPlaceLabel import PlaceLabelController
-from QGIS_FMV.player.features.QgsFmvPlaybackController import \
-    PlaybackController
+from QGIS_FMV.player.features.QgsFmvPlaybackController import PlaybackController
 from QGIS_FMV.player.features.QgsFmvRecordController import RecordController
 from QGIS_FMV.player.features.QgsFmvSnapshots import AutoSnapshot
 from QGIS_FMV.player.features.QgsFmvStoryboard import StoryboardController
@@ -39,27 +38,29 @@ from QGIS_FMV.player.features.QgsFmvTargetPin import TargetPinController
 from QGIS_FMV.player.features.QgsFmvTaskResults import TaskResultsController
 from QGIS_FMV.player.filters.FilterManager import FilterManager
 from QGIS_FMV.player.overlays.QgsFmvDistanceRings import DistanceRingsOverlay
+
 # New features
 from QGIS_FMV.player.overlays.QgsFmvHud import HudOverlay
 from QGIS_FMV.player.overlays.QgsFmvSensorCone import SensorConeOverlay
 from QGIS_FMV.utils.constants import SLOW_PLAYBACK_RATE
-from QGIS_FMV.utils.core.QgsFmvUtils import (ResetData, _seconds_to_time,
-                                             getNameSpace)
+from QGIS_FMV.utils.core.QgsFmvUtils import ResetData, _seconds_to_time, getNameSpace
 from QGIS_FMV.utils.core.QgsFmvVideoSession import VideoSession
 from QGIS_FMV.utils.layers.QgsFmvLayers import RemoveGroupByName
 from QGIS_FMV.utils.logging import log
-from QGIS_FMV.utils.media.QgsFmvMultimedia import (PausedState, StoppedState,
-                                                   connectStateChanged,
-                                                   createMediaPlayer,
-                                                   getVolume, setVideoOutput,
-                                                   setVolume)
-from QGIS_FMV.utils.media.QgsFmvStreamUtils import (isStreamUri,
-                                                    streamDisplayName)
+from QGIS_FMV.utils.media.QgsFmvMultimedia import (
+    PausedState,
+    StoppedState,
+    connectStateChanged,
+    createMediaPlayer,
+    getVolume,
+    setVideoOutput,
+    setVolume,
+)
+from QGIS_FMV.utils.media.QgsFmvStreamUtils import isStreamUri, streamDisplayName
 from QGIS_FMV.utils.ui.QgsFmvResources import ICON_PAUSE, ICON_PLAY
 from QGIS_FMV.utils.ui.QgsPlot import CreatePlotsBitrate
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
-from QGIS_FMV.utils.vision.QgsObjectTracker import (cv2_available,
-                                                    has_object_tracking)
+from QGIS_FMV.utils.vision.QgsObjectTracker import cv2_available, has_object_tracking
 
 
 class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
@@ -254,8 +255,13 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         # Sync AI-detections→map toggle with the feature flag (default ON).
         try:
             from QGIS_FMV.video.filters.QgsFmvDetectionMap import (
-                add_detection_listener, is_publish_enabled, is_trail_enabled,
-                set_playhead_provider, set_publish_enabled, set_trail_enabled)
+                add_detection_listener,
+                is_publish_enabled,
+                is_trail_enabled,
+                set_playhead_provider,
+                set_publish_enabled,
+                set_trail_enabled,
+            )
 
             on = is_publish_enabled()
             set_publish_enabled(on)
@@ -1002,8 +1008,7 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
 
     def togglePublishDetections(self, checked):
         """Qt Designer slot — publish AI boxes to the map layer (checkable toggle)."""
-        from QGIS_FMV.video.filters.QgsFmvDetectionMap import \
-            set_publish_enabled
+        from QGIS_FMV.video.filters.QgsFmvDetectionMap import set_publish_enabled
 
         on = set_publish_enabled(bool(checked))
         # Keep menu/toolbar pressed state in sync with the feature flag.

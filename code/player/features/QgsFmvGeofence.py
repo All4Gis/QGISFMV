@@ -7,8 +7,12 @@ import time
 
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication
-from QGIS_FMV.geo.QgsFmvSpatial import (close_ring, detections_inside_ring,
-                                        metadata_lat_lon, point_in_ring)
+from QGIS_FMV.geo.QgsFmvSpatial import (
+    close_ring,
+    detections_inside_ring,
+    metadata_lat_lon,
+    point_in_ring,
+)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
@@ -81,8 +85,9 @@ def footprint_ring_from_session(session=None):
 def footprint_ring_from_layer(group_name):
     """Read footprint polygon vertices from the map layer if present."""
     try:
-        from QGIS_FMV.player.dialogs.QgsFmvReportGeo import \
-            _corners_from_footprint_feature
+        from QGIS_FMV.player.dialogs.QgsFmvReportGeo import (
+            _corners_from_footprint_feature,
+        )
         from QGIS_FMV.utils.layers.QgsFmvLayers import Footprint_lyr
 
         layer = qgsu.selectLayerByName(Footprint_lyr, group_name)
@@ -191,8 +196,7 @@ class GeofenceController:
             return None
         if detections_by_class is None:
             try:
-                from QGIS_FMV.video.filters.QgsFmvDetectionMap import \
-                    last_detections
+                from QGIS_FMV.video.filters.QgsFmvDetectionMap import last_detections
 
                 detections_by_class = last_detections()
             except Exception:
@@ -238,11 +242,19 @@ class GeofenceController:
     def _draw_aoi_layer(self, ring):
         """Show AOI as a memory polygon in the current video group."""
         try:
-            from qgis.core import (QgsFeature, QgsField, QgsFields,
-                                   QgsGeometry, QgsPointXY, QgsVectorLayer)
+            from qgis.core import (
+                QgsFeature,
+                QgsField,
+                QgsFields,
+                QgsGeometry,
+                QgsPointXY,
+                QgsVectorLayer,
+            )
             from qgis.PyQt.QtCore import QVariant
             from QGIS_FMV.utils.layers.QgsFmvLayers import (
-                addLayerNoCrsDialog, groupName)
+                addLayerNoCrsDialog,
+                groupName,
+            )
 
             self._remove_aoi_layer()
             layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "FMV Geofence", "memory")

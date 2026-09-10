@@ -3,8 +3,7 @@ import ast
 import os
 import platform
 
-from qgis.PyQt.QtCore import (QCoreApplication, QEvent, QPoint, QSettings, Qt,
-                              pyqtSlot)
+from qgis.PyQt.QtCore import QCoreApplication, QEvent, QPoint, QSettings, Qt, pyqtSlot
 from qgis.PyQt.QtGui import QIcon
 from QGIS_FMV.utils.settings.QgsFmvSettings import get, load
 
@@ -16,14 +15,17 @@ from qgis.PyQt.QtGui import QAction, QColor
 from qgis.PyQt.QtWidgets import QDockWidget, QMenu, QTableWidgetItem
 from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
 from QGIS_FMV.manager.QgsFmvManagerBgLoad import ManagerBgLoadController
-from QGIS_FMV.manager.QgsFmvManagerPlaylistController import \
-    ManagerPlaylistController
+from QGIS_FMV.manager.QgsFmvManagerPlaylistController import ManagerPlaylistController
 from QGIS_FMV.manager.QgsFmvManagerRows import ManagerRowStore
 from QGIS_FMV.player.drawing.QgsFmvDrawToolBar import DrawToolBar as draw
-from QGIS_FMV.utils.core.QgsFmvUtils import (RemoveVideoFolder,
-                                             RemoveVideoToSettings,
-                                             askForFiles, getNameSpace,
-                                             getVideoManagerList, qmouse_pos)
+from QGIS_FMV.utils.core.QgsFmvUtils import (
+    RemoveVideoFolder,
+    RemoveVideoToSettings,
+    askForFiles,
+    getNameSpace,
+    getVideoManagerList,
+    qmouse_pos,
+)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.media.QgsFmvMultimedia import createPlaylist
 from QGIS_FMV.utils.media.QgsFmvStreamUtils import isStreamUri
@@ -270,8 +272,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             return
 
         is_stream = isStreamUri(filename)
-        from QGIS_FMV.utils.ui.QgsFmvTableProgress import \
-            create_table_progress_widget
+        from QGIS_FMV.utils.ui.QgsFmvTableProgress import create_table_progress_widget
 
         w = create_table_progress_widget(self)
         pbar = w.pbar

@@ -6,13 +6,18 @@ from __future__ import annotations
 import numpy as np
 import QGIS_FMV.video.filters.QgsFmvDetectionGeometry as _geom
 from QGIS_FMV.utils.logging import log
-from QGIS_FMV.video.filters.QgsFmvDetectionGeometry import (_assign_track_ids,
-                                                            _multiscale_score,
-                                                            _nms_boxes,
-                                                            _region_scores)
-from QGIS_FMV.video.filters.QgsFmvFilterCore import (_HAS_NDIMAGE, FilterCore,
-                                                     _get_cv2_module,
-                                                     opencv_available)
+from QGIS_FMV.video.filters.QgsFmvDetectionGeometry import (
+    _assign_track_ids,
+    _multiscale_score,
+    _nms_boxes,
+    _region_scores,
+)
+from QGIS_FMV.video.filters.QgsFmvFilterCore import (
+    _HAS_NDIMAGE,
+    FilterCore,
+    _get_cv2_module,
+    opencv_available,
+)
 
 
 def _clahe_rgb(rgb):
@@ -89,9 +94,11 @@ def _confidence_overlay(
         cov = 100.0 * float(np.mean(weight > weight_gate))
     tint = np.asarray(tint_rgb, dtype=np.float64)
     base = rgb.astype(np.float64)
-    from QGIS_FMV.utils.constants import (CONFIDENCE_BASE_BRIGHTNESS,
-                                          CONFIDENCE_TINT_INTENSITY,
-                                          CONFIDENCE_TINT_RANGE)
+    from QGIS_FMV.utils.constants import (
+        CONFIDENCE_BASE_BRIGHTNESS,
+        CONFIDENCE_TINT_INTENSITY,
+        CONFIDENCE_TINT_RANGE,
+    )
 
     out = base * (
         CONFIDENCE_BASE_BRIGHTNESS + CONFIDENCE_TINT_RANGE * (1.0 - weight[..., None])
@@ -102,8 +109,7 @@ def _confidence_overlay(
     out = np.clip(out, 0, 255).astype(np.uint8)
     nboxes = 0
     if boxes:
-        from QGIS_FMV.video.filters.QgsFmvFilterTuning import \
-            show_box_confidence
+        from QGIS_FMV.video.filters.QgsFmvFilterTuning import show_box_confidence
 
         bc = box_color or (255, 255, 255)
         for idx, (x0, y0, x1, y1) in enumerate(boxes):
@@ -161,8 +167,7 @@ def _opencv_detection_pipeline(
     filter_key=None,
 ):
     """Threshold score map, morph, CC boxes — shared OpenCV detection path."""
-    from QGIS_FMV.video.filters.QgsFmvFilterTuning import \
-        apply_aerial_pipeline_kw
+    from QGIS_FMV.video.filters.QgsFmvFilterTuning import apply_aerial_pipeline_kw
 
     tuned = apply_aerial_pipeline_kw(
         filter_key,
@@ -260,8 +265,7 @@ def _fallback_detection_pipeline(
     filter_key=None,
 ):
     """SciPy/numpy fallback matching the OpenCV detection pipeline."""
-    from QGIS_FMV.video.filters.QgsFmvFilterTuning import \
-        apply_aerial_pipeline_kw
+    from QGIS_FMV.video.filters.QgsFmvFilterTuning import apply_aerial_pipeline_kw
 
     tuned = apply_aerial_pipeline_kw(
         filter_key,
@@ -321,9 +325,10 @@ def _run_detection(
 ):
     """Run OpenCV detection when available, else scipy/numpy fallback."""
     from QGIS_FMV.video.filters.QgsFmvFilterTuning import (
-        clahe_before_detection, dnn_fallback_when_empty)
-    from QGIS_FMV.video.filters.QgsFmvFilterTuning import \
-        ema_alpha as tuned_ema_alpha
+        clahe_before_detection,
+        dnn_fallback_when_empty,
+    )
+    from QGIS_FMV.video.filters.QgsFmvFilterTuning import ema_alpha as tuned_ema_alpha
     from QGIS_FMV.video.filters.QgsFmvFilterTuning import tune_overlay_options
 
     overlay_kwargs = tune_overlay_options(dict(overlay_kwargs))

@@ -135,8 +135,9 @@ class TargetPinController:
         t = float(getattr(self.player, "currentInfo", 0.0) or 0.0)
         footprint = None
         try:
-            from QGIS_FMV.player.features.QgsFmvGeofence import \
-                footprint_ring_from_session
+            from QGIS_FMV.player.features.QgsFmvGeofence import (
+                footprint_ring_from_session,
+            )
 
             footprint = footprint_ring_from_session(
                 getattr(self.player, "session", None)
@@ -221,8 +222,11 @@ class TargetPinController:
     def _to_wgs84(self, canvas, point):
         lon, lat = float(point.x()), float(point.y())
         try:
-            from qgis.core import (QgsCoordinateReferenceSystem,
-                                   QgsCoordinateTransform, QgsProject)
+            from qgis.core import (
+                QgsCoordinateReferenceSystem,
+                QgsCoordinateTransform,
+                QgsProject,
+            )
 
             crs = canvas.mapSettings().destinationCrs()
             if crs.isValid() and crs.authid() != "EPSG:4326":
@@ -296,9 +300,14 @@ class TargetPinController:
         if canvas is None:
             return
         try:
-            from qgis.core import (QgsCoordinateReferenceSystem,
-                                   QgsCoordinateTransform, QgsGeometry,
-                                   QgsPointXY, QgsProject, QgsWkbTypes)
+            from qgis.core import (
+                QgsCoordinateReferenceSystem,
+                QgsCoordinateTransform,
+                QgsGeometry,
+                QgsPointXY,
+                QgsProject,
+                QgsWkbTypes,
+            )
             from qgis.gui import QgsRubberBand
             from qgis.PyQt.QtGui import QColor
 

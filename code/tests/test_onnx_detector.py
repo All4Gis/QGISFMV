@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """Tests for YOLO/ONNX aerial vs COCO class tables."""
 
-from QGIS_FMV.video.dnn.QgsFmvOnnxDetector import (FILTER_COCO_CLASSES,
-                                                   FILTER_VISDRONE_CLASSES,
-                                                   VISDRONE_CLASS_NAMES,
-                                                   class_names_for_model)
+from QGIS_FMV.video.dnn.QgsFmvOnnxDetector import (
+    FILTER_COCO_CLASSES,
+    FILTER_VISDRONE_CLASSES,
+    VISDRONE_CLASS_NAMES,
+    class_names_for_model,
+)
 
 
 def test_visdrone_vehicle_and_person_ids():

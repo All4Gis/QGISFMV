@@ -8,8 +8,13 @@ video.
 """
 
 import mgrs
-from qgis.core import (QgsCoordinateReferenceSystem, QgsCoordinateTransform,
-                       QgsPointXY, QgsProject, QgsWkbTypes)
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsPointXY,
+    QgsProject,
+    QgsWkbTypes,
+)
 from QGIS_FMV.utils.core.QgsFmvUtils import hasElevationModel
 from QGIS_FMV.utils.logging import log
 

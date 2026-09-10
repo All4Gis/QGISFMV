@@ -7,8 +7,7 @@ from html import escape
 
 import defusedxml.ElementTree as ET
 from qgis.core import Qgis as QGis
-from qgis.core import (QgsCoordinateReferenceSystem, QgsCoordinateTransform,
-                       QgsProject)
+from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QFileDialog
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu

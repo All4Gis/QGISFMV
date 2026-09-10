@@ -12,44 +12,80 @@ QgsFmvSettings.reloadRuntime() refreshes those constants with ``setattr``.
 
 import os
 
-from qgis.core import (QgsCoordinateReferenceSystem, QgsFeature, QgsField,
-                       QgsFields, QgsGeometry, QgsLayerTreeLayer,
-                       QgsLineString, QgsMarkerSymbol, QgsPoint, QgsPointXY,
-                       QgsProject, QgsSingleSymbolRenderer,
-                       QgsSvgMarkerSymbolLayer, QgsVectorFileWriter,
-                       QgsVectorLayer)
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsFeature,
+    QgsField,
+    QgsFields,
+    QgsGeometry,
+    QgsLayerTreeLayer,
+    QgsLineString,
+    QgsMarkerSymbol,
+    QgsPoint,
+    QgsPointXY,
+    QgsProject,
+    QgsSingleSymbolRenderer,
+    QgsSvgMarkerSymbolLayer,
+    QgsVectorFileWriter,
+    QgsVectorLayer,
+)
 from qgis.PyQt.QtCore import QCoreApplication, QSettings
 from qgis.PyQt.QtWidgets import QApplication
 from qgis.utils import iface
+
 # Backward-compatible re-exports: default symbology now lives in
 # QgsFmvLayerDefaults.py, kept importable from here for existing callers.
 from QGIS_FMV.utils.layers.QgsFmvLayerDefaults import (  # noqa: E402,F401
-    RestoreDefaultLayerStyles, SetDefaultBeams3DStyle, SetDefaultBeamsStyle,
-    SetDefaultDetectionsStyle, SetDefaultDetectionTrailStyle,
-    SetDefaultFootprint3DStyle, SetDefaultFootprintStyle,
-    SetDefaultFrameAxis3DStyle, SetDefaultFrameAxisStyle,
-    SetDefaultFrameCenter3DStyle, SetDefaultFrameCenterStyle,
-    SetDefaultLineStyle, SetDefaultMeasureAreaStyle,
-    SetDefaultMeasureDistanceStyle, SetDefaultMilitarySymbolStyle,
-    SetDefaultObjectPositionStyle, SetDefaultObjectTrackStyle,
-    SetDefaultPlatform3DStyle, SetDefaultPlatformStyle, SetDefaultPointStyle,
-    SetDefaultPolygonStyle, SetDefaultTrajectory3DStyle,
-    SetDefaultTrajectoryStyle, ensure_fmv_3d_renderers)
-from QGIS_FMV.utils.layers.QgsFmvLayerStyleStore import \
-    apply_or_default as applyLayerStyle
-from QGIS_FMV.utils.layers.QgsFmvLayerStyleStore import \
-    ensure_watch as ensureLayerStyleWatch
+    RestoreDefaultLayerStyles,
+    SetDefaultBeams3DStyle,
+    SetDefaultBeamsStyle,
+    SetDefaultDetectionsStyle,
+    SetDefaultDetectionTrailStyle,
+    SetDefaultFootprint3DStyle,
+    SetDefaultFootprintStyle,
+    SetDefaultFrameAxis3DStyle,
+    SetDefaultFrameAxisStyle,
+    SetDefaultFrameCenter3DStyle,
+    SetDefaultFrameCenterStyle,
+    SetDefaultLineStyle,
+    SetDefaultMeasureAreaStyle,
+    SetDefaultMeasureDistanceStyle,
+    SetDefaultMilitarySymbolStyle,
+    SetDefaultObjectPositionStyle,
+    SetDefaultObjectTrackStyle,
+    SetDefaultPlatform3DStyle,
+    SetDefaultPlatformStyle,
+    SetDefaultPointStyle,
+    SetDefaultPolygonStyle,
+    SetDefaultTrajectory3DStyle,
+    SetDefaultTrajectoryStyle,
+    ensure_fmv_3d_renderers,
+)
+from QGIS_FMV.utils.layers.QgsFmvLayerStyleStore import (
+    apply_or_default as applyLayerStyle,
+)
+from QGIS_FMV.utils.layers.QgsFmvLayerStyleStore import (
+    ensure_watch as ensureLayerStyleWatch,
+)
 from QGIS_FMV.utils.layers.QgsFmvStyles import FmvLayerStyles as S
+
 # Backward-compatible re-exports: telemetry Update* functions and their
 # per-group caches now live in QgsFmvTelemetryLayers.py. The caches are
 # imported by reference (mutable dicts) so existing callers/tests that poke
 # ``QgsFmvLayers._trajectory_active_feature`` etc. directly keep working.
 from QGIS_FMV.utils.layers.QgsFmvTelemetryLayers import (
-    UpdateBeamsData, UpdateFootPrintData, UpdateFrameAxisData,
-    UpdateFrameCenterData, UpdatePlatformData, UpdateTrajectoryData,
-    _beam_feature_ids, _trajectory_active_feature)
-from QGIS_FMV.utils.layers.QgsFmvTelemetryLayers import \
-    reset_caches as _reset_telemetry_caches  # noqa: E402,F401
+    UpdateBeamsData,
+    UpdateFootPrintData,
+    UpdateFrameAxisData,
+    UpdateFrameCenterData,
+    UpdatePlatformData,
+    UpdateTrajectoryData,
+    _beam_feature_ids,
+    _trajectory_active_feature,
+)
+from QGIS_FMV.utils.layers.QgsFmvTelemetryLayers import (
+    reset_caches as _reset_telemetry_caches,
+)  # noqa: E402,F401
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.settings.QgsFmvSettings import get_layer
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
@@ -999,9 +1035,17 @@ def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding=enco
 # Backward-compatible re-exports: these draw/measure helpers now live in
 # QgsFmvDrawLayers.py, kept importable from here for existing callers.
 from QGIS_FMV.utils.layers.QgsFmvDrawLayers import (  # noqa: E402,F401
-    AddDrawLineOnMap, AddDrawMilitarySymbolOnMap, AddDrawPointOnMap,
-    AddDrawPolygonOnMap, RemoveAllDrawLineOnMap,
-    RemoveAllDrawMilitarySymbolOnMap, RemoveAllDrawPointOnMap,
-    RemoveAllDrawPolygonOnMap, RemoveLastDrawMilitarySymbolOnMap,
-    RemoveLastDrawPointOnMap, RemoveLastDrawPolygonOnMap, SyncMeasureAreaOnMap,
-    SyncMeasureDistanceOnMap)
+    AddDrawLineOnMap,
+    AddDrawMilitarySymbolOnMap,
+    AddDrawPointOnMap,
+    AddDrawPolygonOnMap,
+    RemoveAllDrawLineOnMap,
+    RemoveAllDrawMilitarySymbolOnMap,
+    RemoveAllDrawPointOnMap,
+    RemoveAllDrawPolygonOnMap,
+    RemoveLastDrawMilitarySymbolOnMap,
+    RemoveLastDrawPointOnMap,
+    RemoveLastDrawPolygonOnMap,
+    SyncMeasureAreaOnMap,
+    SyncMeasureDistanceOnMap,
+)

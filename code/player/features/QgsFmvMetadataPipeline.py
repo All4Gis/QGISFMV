@@ -9,8 +9,7 @@ from QGIS_FMV.utils.core.QgsFmvThreads import stop_qthread
 from QGIS_FMV.utils.core.QgsFmvUtils import UpdateLayers
 from QGIS_FMV.utils.layers.QgsFmvLayers import beginNewTrajectorySegment
 from QGIS_FMV.utils.logging import log
-from QGIS_FMV.utils.media.QgsFmvKlvReader import (LocalFileMetaReader,
-                                                  StreamMetaReader)
+from QGIS_FMV.utils.media.QgsFmvKlvReader import LocalFileMetaReader, StreamMetaReader
 from QGIS_FMV.utils.media.QgsFmvMetadataWorker import MetadataParseWorker
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 

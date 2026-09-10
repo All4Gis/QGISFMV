@@ -6,16 +6,16 @@ and completion handling that turns a probe result into row state + UI updates.
 import os
 
 from qgis.core import Qgis as QGis
-from qgis.PyQt.QtCore import (QCoreApplication, QObject, QThread, QUrl,
-                              pyqtSignal)
+from qgis.PyQt.QtCore import QCoreApplication, QObject, QThread, QUrl, pyqtSignal
 from qgis.PyQt.QtWidgets import QTableWidgetItem
-from QGIS_FMV.utils.core.QgsFmvUtils import (AddVideoToSettings,
-                                             _coordsFromKlvStream,
-                                             getKlvStreamIndex)
+from QGIS_FMV.utils.core.QgsFmvUtils import (
+    AddVideoToSettings,
+    _coordsFromKlvStream,
+    getKlvStreamIndex,
+)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.media.QgsFfmpegProbe import is_valid_media, is_valid_stream
-from QGIS_FMV.utils.media.QgsFmvKlvReader import (LocalFileMetaReader,
-                                                  StreamMetaReader)
+from QGIS_FMV.utils.media.QgsFmvKlvReader import LocalFileMetaReader, StreamMetaReader
 from QGIS_FMV.utils.media.QgsFmvMultimedia import mediaUrlToContent
 from QGIS_FMV.utils.media.QgsFmvStreamUtils import isStreamUri
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
@@ -73,8 +73,7 @@ class _BgWorker(QObject):
                     if isinstance(firstPacket, (bytes, bytearray)) and firstPacket:
                         coords = _coordsFromKlvStream(firstPacket)
             if coords:
-                from QGIS_FMV.utils.core.QgsFmvUtils import \
-                    fetchReverseGeocodeLabel
+                from QGIS_FMV.utils.core.QgsFmvUtils import fetchReverseGeocodeLabel
 
                 lat, lon = coords[0], coords[1]
                 loc = fetchReverseGeocodeLabel(lat, lon)

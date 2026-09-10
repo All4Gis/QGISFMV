@@ -11,12 +11,20 @@ from qgis.core import QgsPointXY, QgsWkbTypes
 from qgis.PyQt.QtCore import QPoint, QRect, QSize
 from QGIS_FMV.utils.core.QgsFmvUtils import GetGCPGeoTransform, qmouse_pos
 from QGIS_FMV.utils.layers.QgsFmvLayers import (
-    AddDrawLineOnMap, AddDrawMilitarySymbolOnMap, AddDrawPointOnMap,
-    AddDrawPolygonOnMap, RemoveAllDrawLineOnMap,
-    RemoveAllDrawMilitarySymbolOnMap, RemoveAllDrawPointOnMap,
-    RemoveAllDrawPolygonOnMap, RemoveLastDrawMilitarySymbolOnMap,
-    RemoveLastDrawPointOnMap, RemoveLastDrawPolygonOnMap, SyncMeasureAreaOnMap,
-    SyncMeasureDistanceOnMap)
+    AddDrawLineOnMap,
+    AddDrawMilitarySymbolOnMap,
+    AddDrawPointOnMap,
+    AddDrawPolygonOnMap,
+    RemoveAllDrawLineOnMap,
+    RemoveAllDrawMilitarySymbolOnMap,
+    RemoveAllDrawPointOnMap,
+    RemoveAllDrawPolygonOnMap,
+    RemoveLastDrawMilitarySymbolOnMap,
+    RemoveLastDrawPointOnMap,
+    RemoveLastDrawPolygonOnMap,
+    SyncMeasureAreaOnMap,
+    SyncMeasureDistanceOnMap,
+)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.video.playback.QgsVideoState import MOUSE_MOVE_EVENT
 

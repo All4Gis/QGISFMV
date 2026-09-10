@@ -9,12 +9,14 @@ except ImportError:
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot
 from qgis.PyQt.QtGui import QImage
 from QGIS_FMV.utils.logging import log
-from QGIS_FMV.utils.media.QgsFmvMediaProbe import (_ffmpeg_available,
-                                                   _ffmpeg_popen,
-                                                   _probe_video_info,
-                                                   _probeDurationMs,
-                                                   _read_bytes,
-                                                   _validateMediaPath)
+from QGIS_FMV.utils.media.QgsFmvMediaProbe import (
+    _ffmpeg_available,
+    _ffmpeg_popen,
+    _probe_video_info,
+    _probeDurationMs,
+    _read_bytes,
+    _validateMediaPath,
+)
 
 
 class FrameDecodeWorker(QObject):
