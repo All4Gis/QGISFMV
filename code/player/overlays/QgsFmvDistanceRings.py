@@ -16,7 +16,6 @@ from qgis.core import (
 )
 from qgis.PyQt.QtCore import QVariant
 from qgis.PyQt.QtGui import QColor
-
 from QGIS_FMV.geo.QgsGeoUtils import destination as _geo_destination
 from QGIS_FMV.player.overlays._base import VectorOverlayBase
 

@@ -189,7 +189,7 @@ python3 build.py          # UI + resources + i18n (outside QGIS)
 
 ./install_dev.sh          # macOS — symlink + deps → ~/.qgis-fmv-packages
 # install_dev.bat         # Windows
-./debug_qgis.sh           # launch QGIS with FRAN_DEBUG=1 → Attach in Cursor
+./debug_qgis.sh           # launch QGIS with QGISFMV_DEBUG=1 → Attach in Cursor
 ```
 
 

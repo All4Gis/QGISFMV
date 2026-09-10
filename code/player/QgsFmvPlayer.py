@@ -13,7 +13,6 @@ from qgis.PyQt.QtWidgets import (
     QStyleOptionSlider,
     QToolTip,
 )
-
 from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
 from QGIS_FMV.player.dialogs.QgsFmvMetadata import QgsFmvMetadata
 from QGIS_FMV.player.dialogs.QgsFmvSettings import open_fmv_settings

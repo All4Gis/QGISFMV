@@ -18,7 +18,6 @@ from qgis.core import (
     QgsProject,
     QgsWkbTypes,
 )
-
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 # Cinematic (smoothed) follow — module state for lerp between centers.

@@ -8,7 +8,6 @@ import os
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication, QObject, QThread, QUrl, pyqtSignal
 from qgis.PyQt.QtWidgets import QTableWidgetItem
-
 from QGIS_FMV.utils.core.QgsFmvUtils import (
     AddVideoToSettings,
     _coordsFromKlvStream,

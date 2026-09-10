@@ -34,7 +34,6 @@ from qgis.core import (
 from qgis.PyQt.QtCore import QPointF
 from qgis.PyQt.QtGui import QColor, QFont
 from qgis.utils import iface
-
 from QGIS_FMV.utils.layers.QgsFmvStyles import FmvLayerStyles as S
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu

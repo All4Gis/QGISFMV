@@ -7,7 +7,6 @@ single place so paintEvent itself stays a thin dispatch call.
 
 from qgis.PyQt.QtCore import QRect, Qt
 from qgis.PyQt.QtGui import QColor, QFont, QPainter, QPen
-
 from QGIS_FMV.player.drawing.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.utils.core.QgsFmvUtils import GetGCPGeoTransform
 from QGIS_FMV.utils.logging import log

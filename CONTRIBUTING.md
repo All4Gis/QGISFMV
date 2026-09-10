@@ -36,7 +36,7 @@ cd QGISFMV
 | OS | Command | What it does |
 |----|---------|--------------|
 | **macOS** | `./install_dev.sh` | Symlink plugin + deps into `~/.qgis-fmv-packages` (no sudo) |
-| **macOS** | `./debug_qgis.sh` | Start QGIS with `FRAN_DEBUG=1` for Cursor attach |
+| **macOS** | `./debug_qgis.sh` | Start QGIS with `QGISFMV_DEBUG=1` for Cursor attach |
 | **Windows** | `install_dev.bat` | Junction + install requirements |
 
 Deps-only (no symlink):

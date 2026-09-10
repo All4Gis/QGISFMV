@@ -3,7 +3,6 @@
 
 from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtWidgets import QDialog
-
 from QGIS_FMV.gui.ui_FmvBrightnessContrast import Ui_FmvBrightnessContrast
 
 

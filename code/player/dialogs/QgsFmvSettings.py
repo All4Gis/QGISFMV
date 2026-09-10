@@ -16,7 +16,6 @@ from qgis.PyQt.QtWidgets import (
     QStyleOptionSlider,
     QToolTip,
 )
-
 from QGIS_FMV.gui.ui_FmvSettings import Ui_FmvSettings
 from QGIS_FMV.player.drawing.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.utils.core.QgsFmvUtils import getNameSpace

@@ -7,7 +7,6 @@ import os
 from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
-
 from QGIS_FMV.utils.logging import log
 
 SEGMENTATION_FILTER_KEYS: Tuple[str, ...] = (

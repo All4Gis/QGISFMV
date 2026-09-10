@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-
 from QGIS_FMV.utils.core.QgsFmvUtils import (
     GetDemAltAt,
     GetFrameCenter,

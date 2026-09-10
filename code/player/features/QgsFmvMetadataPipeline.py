@@ -4,7 +4,6 @@
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication, Qt, QThread, QTimer
 from qgis.PyQt.QtWidgets import QDockWidget, QTableWidgetItem
-
 from QGIS_FMV.player.dialogs.QgsFmvMetadata import QgsFmvMetadata
 from QGIS_FMV.utils.core.QgsFmvThreads import stop_qthread
 from QGIS_FMV.utils.core.QgsFmvUtils import UpdateLayers

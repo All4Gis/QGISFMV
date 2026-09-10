@@ -10,7 +10,6 @@ from qgis.PyQt.QtCore import (
     QModelIndex,
     Qt,
 )
-
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 

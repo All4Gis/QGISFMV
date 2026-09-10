@@ -2,7 +2,6 @@
 """Shared OpenCV environment and image primitives for video filters."""
 
 import numpy as np
-
 from QGIS_FMV.utils.logging import log
 
 _HAS_SCIPY = False

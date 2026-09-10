@@ -3,7 +3,6 @@ from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication, QRegularExpression
 from qgis.PyQt.QtGui import QIntValidator, QRegularExpressionValidator
 from qgis.PyQt.QtWidgets import QDialog
-
 from QGIS_FMV.gui.ui_FmvOpenStream import Ui_FmvOpenStream
 from QGIS_FMV.utils.media.QgsFmvStreamUtils import (
     buildStreamUri,

@@ -9,7 +9,6 @@ mouse event handlers.
 
 from qgis.core import QgsPointXY, QgsWkbTypes
 from qgis.PyQt.QtCore import QPoint, QRect, QSize
-
 from QGIS_FMV.utils.core.QgsFmvUtils import GetGCPGeoTransform, qmouse_pos
 from QGIS_FMV.utils.layers.QgsFmvLayers import (
     AddDrawLineOnMap,

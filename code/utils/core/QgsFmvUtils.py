@@ -12,7 +12,6 @@ from pymisb.klvdata.streamparser import StreamParser
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QPoint, QSettings
 from qgis.PyQt.QtGui import QPainter
-
 from QGIS_FMV.utils.core.QgsFmvCornerEstimation import (  # noqa: F401
     CornerEstimationWithOffsets,
     CornerEstimationWithoutOffsets,
@@ -135,7 +134,9 @@ def qmouse_pos(event):
 def _resolve_ffmpeg_binary(folder, exe_name):
     """Resolve an ffmpeg/ffprobe binary, falling back to a 'bin' subfolder
     (common layout of official Windows builds)."""
-    from QGIS_FMV.utils.settings.QgsFmvSettings import _resolve_ffmpeg_binary as _resolve
+    from QGIS_FMV.utils.settings.QgsFmvSettings import (
+        _resolve_ffmpeg_binary as _resolve,
+    )
 
     result = _resolve(folder, exe_name)
     if result:

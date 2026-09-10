@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+
 """Tests for export XML builders that do not need a QGIS map canvas."""
 
 import sys
 import types
-import xml.etree.ElementTree as ET
 from code.tests.support import (
     ensure_qgis_fmv_package,
     load_plugin_module,
@@ -12,29 +12,48 @@ from code.tests.support import (
     snapshot_modules,
 )
 
+import defusedxml.ElementTree as ET
 import pytest
 
 
 def _load_export():
     ensure_qgis_fmv_package()
-    keys = qgis_stub_keys("QGIS_FMV.utils.ui.QgsUtils")
+
+    keys = qgis_stub_keys(
+        "QGIS_FMV.utils.ui.QgsUtils",
+    )
+
     saved = snapshot_modules(keys)
 
     for name in keys:
         sys.modules.setdefault(name, types.ModuleType(name))
 
     qgis = sys.modules["qgis"]
+
     qgis.core = sys.modules["qgis.core"]
     qgis.PyQt = sys.modules["qgis.PyQt"]
+
     core = sys.modules["qgis.core"]
+
     core.Qgis = types.SimpleNamespace(
-        MessageLevel=types.SimpleNamespace(Warning=1, Info=0, Success=0)
+        MessageLevel=types.SimpleNamespace(
+            Warning=1,
+            Info=0,
+            Success=0,
+        )
     )
+
     core.QgsProject = types.SimpleNamespace(instance=lambda: None)
+
     core.QgsCoordinateReferenceSystem = object
     core.QgsCoordinateTransform = object
+
     core.QgsWkbTypes = types.SimpleNamespace(
-        GeometryType=types.SimpleNamespace(Point=0, Line=1, Polygon=2),
+        GeometryType=types.SimpleNamespace(
+            Point=0,
+            Line=1,
+            Polygon=2,
+        ),
         LineString=2,
         LineStringZ=1002,
         MultiLineString=5,
@@ -46,11 +65,13 @@ def _load_export():
     )
 
     qtcore = sys.modules["qgis.PyQt.QtCore"]
+
     qtcore.QCoreApplication = types.SimpleNamespace(
         translate=lambda *a, **k: a[-1] if a else ""
     )
 
     qtw = sys.modules["qgis.PyQt.QtWidgets"]
+
     qtw.QFileDialog = object
 
     ui = sys.modules["QGIS_FMV.utils.ui.QgsUtils"]
@@ -67,8 +88,10 @@ def _load_export():
     ui.QgsUtils = QgsUtils
 
     mod = load_plugin_module(
-        "utils/layers/QgsFmvExport.py", "QGIS_FMV.utils.layers.QgsFmvExport"
+        "utils/layers/QgsFmvExport.py",
+        "QGIS_FMV.utils.layers.QgsFmvExport",
     )
+
     return mod, saved
 
 
@@ -78,24 +101,49 @@ def export_mod():
         mod, saved = _load_export()
     except Exception as exc:
         pytest.skip(f"Cannot load export module: {exc}")
+
     try:
         yield mod
     finally:
         restore_modules(saved)
-        sys.modules.pop("QGIS_FMV.utils.layers.QgsFmvExport", None)
+        sys.modules.pop(
+            "QGIS_FMV.utils.layers.QgsFmvExport",
+            None,
+        )
 
 
 class TestBuildGpxDocument:
+
     def test_track_points(self, export_mod, tmp_path):
-        gpx = export_mod._build_gpx_document("demo", [(-3.7, 40.4), (-3.71, 40.41)])
-        assert gpx.tag == "gpx"
-        pts = list(gpx.iter("trkpt"))
+        gpx = export_mod._build_gpx_document(
+            "demo",
+            [
+                (-3.7, 40.4),
+                (-3.71, 40.41),
+            ],
+        )
+
+        assert gpx.tag.endswith("gpx")
+
+        pts = gpx.findall(".//{http://www.topografix.com/GPX/1/1}trkpt")
+
         assert len(pts) == 2
+
         assert pts[0].attrib["lat"] == "40.400000"
         assert pts[0].attrib["lon"] == "-3.700000"
 
         out = tmp_path / "track.gpx"
-        export_mod._write_gpx_file(gpx, str(out))
+
+        export_mod._write_gpx_file(
+            gpx,
+            str(out),
+        )
+
         assert out.is_file()
+
+        # Parse the generated GPX using defusedxml only.
         tree = ET.parse(str(out))
-        assert tree.getroot().tag.endswith("gpx") or tree.getroot().tag == "gpx"
+
+        root = tree.getroot()
+
+        assert root.tag.endswith("gpx") or root.tag == "gpx"

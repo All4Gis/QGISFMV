@@ -36,7 +36,6 @@ from qgis.PyQt.QtGui import (
     QTextTableFormat,
 )
 from qgis.PyQt.QtPrintSupport import QPrinter
-
 from QGIS_FMV.player.dialogs.QgsFmvReportGeo import (
     _create_osm_basemap_layer,
     _extent_from_corners,

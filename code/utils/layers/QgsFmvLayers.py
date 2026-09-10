@@ -83,9 +83,9 @@ from QGIS_FMV.utils.layers.QgsFmvTelemetryLayers import (
     _beam_feature_ids,
     _trajectory_active_feature,
 )
-from QGIS_FMV.utils.layers.QgsFmvTelemetryLayers import (  # noqa: E402,F401
+from QGIS_FMV.utils.layers.QgsFmvTelemetryLayers import (
     reset_caches as _reset_telemetry_caches,
-)
+)  # noqa: E402,F401
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.settings.QgsFmvSettings import get_layer
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu

@@ -1,8 +1,8 @@
 #!/bin/bash
-# Same debug flow as LoadQSS: FRAN_DEBUG=1 + debugpy in QGIS profile + attach in Cursor.
+# Same debug flow as LoadQSS: QGISFMV_DEBUG=1 + debugpy in QGIS profile + attach in Cursor.
 set -e
 
-export FRAN_DEBUG=1
+export QGISFMV_DEBUG=1
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 QGIS_PROFILE="$HOME/Library/Application Support/QGIS/QGIS4/profiles/default"

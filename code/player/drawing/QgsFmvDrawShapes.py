@@ -14,7 +14,6 @@ from qgis.PyQt.QtGui import (
     QPolygonF,
 )
 from qgis.PyQt.QtSvg import QSvgRenderer
-
 from QGIS_FMV.player.dialogs.QgsFmvMilitarySymbols import symbol_svg_path
 from QGIS_FMV.player.drawing.QgsFmvDrawingConfig import (
     black_brush,

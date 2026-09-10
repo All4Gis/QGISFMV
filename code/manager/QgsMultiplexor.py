@@ -3,12 +3,11 @@
 
 import os
 
+import QGIS_FMV.utils.core.QgsFmvUtils as _fmv_utils
 from qgis.core import Qgis as QGis
 from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QDialog
-
-import QGIS_FMV.utils.core.QgsFmvUtils as _fmv_utils
 from QGIS_FMV.gui.ui_FmvMultiplexer import Ui_VideoMultiplexer
 from QGIS_FMV.utils.core.QgsFmvUtils import _ensureFfmpegPaths, askForFiles
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu

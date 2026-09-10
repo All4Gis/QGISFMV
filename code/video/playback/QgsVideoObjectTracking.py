@@ -11,7 +11,6 @@ this controller only owns the logic that mutates it.
 from qgis.core import Qgis as QGis
 from qgis.core import QgsPointXY, QgsWkbTypes
 from qgis.PyQt.QtCore import QCoreApplication, QPoint, QRect, QSize, Qt
-
 from QGIS_FMV.utils.core.QgsImageMat import convertQImageToMat
 from QGIS_FMV.utils.layers.QgsFmvLayers import (
     BeginObjectTrack,

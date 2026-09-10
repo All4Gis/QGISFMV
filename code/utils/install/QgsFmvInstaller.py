@@ -17,7 +17,6 @@ from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtWidgets import QInputDialog, QLineEdit, QMessageBox, QProgressBar
 from qgis.utils import iface
-
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.settings.QgsFmvSettings import (
     ffmpeg_binary,
@@ -237,7 +236,9 @@ def _run_pip(args: Sequence[str]) -> Tuple[bool, str]:
 
 def _bootstrap_python_path() -> None:
     try:
-        from QGIS_FMV.utils.settings.python_deps_bootstrap import bootstrapPythonDepsPath
+        from QGIS_FMV.utils.settings.python_deps_bootstrap import (
+            bootstrapPythonDepsPath,
+        )
 
         bootstrapPythonDepsPath()
     except Exception as exc:

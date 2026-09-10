@@ -7,7 +7,6 @@ from qgis.core import Qgis as QGis
 from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtWidgets import QDockWidget
-
 from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGIS_FMV.player.dialogs.QgsFmvReportGenerator import ReportGenerator
 from QGIS_FMV.player.dialogs.QgsFmvReportMetadata import (

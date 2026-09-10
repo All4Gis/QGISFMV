@@ -627,7 +627,9 @@ class TestSimulateControllersSmoke:
         ],
     )
     def test_controller_smoke(self, stubs, rel_path, cls_name, calls):
-        mod = load_plugin_module(rel_path, "QGIS_FMV." + rel_path.replace("/", ".")[:-3])
+        mod = load_plugin_module(
+            rel_path, "QGIS_FMV." + rel_path.replace("/", ".")[:-3]
+        )
         cls = getattr(mod, cls_name)
         player = _mock_player()
         ctrl = cls(player)

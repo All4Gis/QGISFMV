@@ -7,7 +7,6 @@ import time
 
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication
-
 from QGIS_FMV.geo.QgsFmvSpatial import (
     close_ring,
     detections_inside_ring,
@@ -252,8 +251,10 @@ class GeofenceController:
                 QgsVectorLayer,
             )
             from qgis.PyQt.QtCore import QVariant
-
-            from QGIS_FMV.utils.layers.QgsFmvLayers import addLayerNoCrsDialog, groupName
+            from QGIS_FMV.utils.layers.QgsFmvLayers import (
+                addLayerNoCrsDialog,
+                groupName,
+            )
 
             self._remove_aoi_layer()
             layer = QgsVectorLayer("Polygon?crs=EPSG:4326", "FMV Geofence", "memory")

@@ -8,7 +8,6 @@ from qgis.core import Qgis as QGis
 from qgis.core import QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QFileDialog
-
 from QGIS_FMV.utils.core.QgsFmvUtils import (
     BurnDrawingsImage,
     GetGeotransform_affine,

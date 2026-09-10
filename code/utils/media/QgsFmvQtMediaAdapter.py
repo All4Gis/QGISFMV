@@ -4,7 +4,6 @@
 import os
 
 from qgis.PyQt.QtCore import QObject, QUrl, pyqtSignal
-
 from QGIS_FMV.utils.media.QgsFmvMediaProbe import _url_to_path
 from QGIS_FMV.utils.media.QgsFmvMediaTypes import (
     BufferedMedia,

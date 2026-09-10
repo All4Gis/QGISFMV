@@ -14,7 +14,6 @@ from qgis.core import (
     QgsVectorLayer,
 )
 from qgis.PyQt.QtCore import QVariant
-
 from QGIS_FMV.player.overlays._base import VectorOverlayBase
 
 _SENSOR_CONE_LAYER_NAME = "Sensor Coverage Cone"

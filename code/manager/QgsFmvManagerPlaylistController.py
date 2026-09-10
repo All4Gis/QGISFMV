@@ -10,7 +10,6 @@ from qgis.core import (
     QgsProject,
 )
 from qgis.PyQt.QtCore import Qt
-
 from QGIS_FMV.utils.media.QgsFmvMultimedia import attachPlaylist
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 

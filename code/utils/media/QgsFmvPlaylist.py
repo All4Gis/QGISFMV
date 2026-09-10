@@ -2,7 +2,6 @@
 """Minimal playlist driving OpenCvMediaPlayer / Qt adapters."""
 
 from qgis.PyQt.QtCore import QObject, QUrl
-
 from QGIS_FMV.utils.media.QgsFmvMediaTypes import PlaylistLoop, PlaylistSequential
 
 

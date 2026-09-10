@@ -29,7 +29,6 @@ from qgis.core import QgsApplication
 from qgis.PyQt.QtCore import QCoreApplication, QSettings, Qt, QTimer, QTranslator
 from qgis.PyQt.QtGui import QAction, QIcon
 from qgis.PyQt.QtWidgets import QDialog
-
 from QGIS_FMV.about.QgsFmvAbout import FmvAbout
 from QGIS_FMV.player.dialogs.QgsFmvSettings import open_fmv_settings
 from QGIS_FMV.utils.install.QgsFmvInstaller import run_dependency_setup

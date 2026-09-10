@@ -3,7 +3,6 @@
 
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QDialog, QHeaderView
-
 from QGIS_FMV.gui.ui_FmvVideoInfo import Ui_FmvVideoInfo
 from QGIS_FMV.utils.ui.QgsJsonModel import QJsonModel
 

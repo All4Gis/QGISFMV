@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import QGIS_FMV.video.filters.QgsFmvFilterCore as _fcore
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QImage
-
-import QGIS_FMV.video.filters.QgsFmvFilterCore as _fcore
 from QGIS_FMV.utils.core.QgsImageMat import convertMatToQImage, convertQImageToMat
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.video.filters.QgsFmvDetectionFilters import FmvDetectionFilters

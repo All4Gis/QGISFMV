@@ -17,7 +17,6 @@ import os
 
 from qgis.PyQt.QtCore import QSettings, Qt
 from qgis.PyQt.QtGui import QBrush, QColor, QFont, QImage, QPen, QPixmap
-
 from QGIS_FMV.utils.core.QgsFmvUtils import getNameSpace
 from QGIS_FMV.utils.logging import log
 

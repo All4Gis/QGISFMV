@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import numpy as np
-
 import QGIS_FMV.video.filters.QgsFmvDetectionGeometry as _geom
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.video.filters.QgsFmvDetectionGeometry import (

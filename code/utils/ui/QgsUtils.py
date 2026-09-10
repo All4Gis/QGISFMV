@@ -9,7 +9,6 @@ from qgis.PyQt.QtCore import QSettings, Qt
 from qgis.PyQt.QtGui import QIcon, QPixmap
 from qgis.PyQt.QtWidgets import QMessageBox
 from qgis.utils import iface
-
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsFmvResources import (
     ICON_CRITICAL,

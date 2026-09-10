@@ -5,7 +5,6 @@ import platform
 
 from qgis.PyQt.QtCore import QCoreApplication, QEvent, QPoint, QSettings, Qt, pyqtSlot
 from qgis.PyQt.QtGui import QIcon
-
 from QGIS_FMV.utils.settings.QgsFmvSettings import get, load
 
 settings = QSettings()
@@ -14,7 +13,6 @@ from qgis.core import Qgis as QGis
 from qgis.core import QgsApplication
 from qgis.PyQt.QtGui import QAction, QColor
 from qgis.PyQt.QtWidgets import QDockWidget, QMenu, QTableWidgetItem
-
 from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
 from QGIS_FMV.manager.QgsFmvManagerBgLoad import ManagerBgLoadController
 from QGIS_FMV.manager.QgsFmvManagerPlaylistController import ManagerPlaylistController

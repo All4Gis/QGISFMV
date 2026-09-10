@@ -12,7 +12,6 @@ now lives in sibling modules:
 from __future__ import annotations
 
 import numpy as np
-
 from QGIS_FMV.utils.core.QgsImageMat import convertMatToQImage, convertQImageToMat
 from QGIS_FMV.video.filters.QgsFmvDetectionGeometry import reset_detection_state
 from QGIS_FMV.video.filters.QgsFmvDetectionPipeline import _run_detection

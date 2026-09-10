@@ -7,7 +7,6 @@ from qgis.core import Qgis as QGis
 from qgis.core import QgsTask
 from qgis.PyQt.QtCore import QCoreApplication, Qt, QTimer, QUrl
 from qgis.PyQt.QtWidgets import QApplication
-
 from QGIS_FMV.utils.core.QgsFmvUtils import _seconds_to_time, hasElevationModel
 from QGIS_FMV.utils.layers.QgsFmvLayers import CreateVideoLayers
 from QGIS_FMV.utils.logging import log

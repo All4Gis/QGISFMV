@@ -4,7 +4,6 @@ from qgis.PyQt.QtGui import QBrush, QColor, QCursor, QMouseEvent, QPalette
 from qgis.PyQt.QtMultimedia import QVideoSink
 from qgis.PyQt.QtWidgets import QWidget as VideoWidgetBase
 from qgis.utils import iface
-
 from QGIS_FMV.utils.core.QgsFmvUtils import (
     GetGCPGeoTransform,
     GetImageHeight,

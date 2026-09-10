@@ -7,7 +7,6 @@ import re
 import subprocess
 
 from qgis.PyQt.QtCore import QCoreApplication
-
 from QGIS_FMV.utils.core.QgsFmvUtils import _spawn
 from QGIS_FMV.utils.logging import log
 

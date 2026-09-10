@@ -3,7 +3,6 @@
 
 from qgis.PyQt.QtCore import QPoint, QPointF, QRectF
 from qgis.PyQt.QtGui import QBrush, QColor, QPainter, QPainterPath, QPen, QPolygonF
-
 from QGIS_FMV.geo.QgsGeoUtils import distance as _geo_distance
 from QGIS_FMV.geo.QgsGeoUtils import polygon_area as _geo_polygon_area
 from QGIS_FMV.player.drawing.QgsFmvDrawingConfig import drawing_config

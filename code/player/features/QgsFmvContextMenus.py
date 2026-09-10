@@ -4,7 +4,6 @@
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QMenu, QToolBar
-
 from QGIS_FMV.utils.ui.QgsFmvResources import (
     ICON_CAPTURE_FRAMES,
     ICON_METADATA,

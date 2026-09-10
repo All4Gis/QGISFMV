@@ -9,7 +9,6 @@ from qgis.core import Qgis as QGis
 from qgis.core import QgsProject, QgsRasterLayer, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QFileDialog
-
 from QGIS_FMV.utils.core.QgsFmvUtils import (
     ExtendMosaic,
     getVideoFolder,

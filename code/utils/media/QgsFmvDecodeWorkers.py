@@ -8,7 +8,6 @@ except ImportError:
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot
 from qgis.PyQt.QtGui import QImage
-
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.media.QgsFmvMediaProbe import (
     _ffmpeg_available,

@@ -15,7 +15,6 @@ from qgis.core import (
     QgsProject,
     QgsWkbTypes,
 )
-
 from QGIS_FMV.utils.core.QgsFmvUtils import hasElevationModel
 from QGIS_FMV.utils.logging import log
 

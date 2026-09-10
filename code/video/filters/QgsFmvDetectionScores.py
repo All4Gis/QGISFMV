@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import numpy as np
-
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.video.filters.QgsFmvDetectionPipeline import (
     _detect_fallback_generic,

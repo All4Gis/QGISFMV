@@ -22,7 +22,6 @@ from qgis.core import (
     QgsPolygon,
 )
 from qgis.PyQt.QtCore import QCoreApplication
-
 from QGIS_FMV.utils.layers.QgsFmvLayerDefaults import (
     SetDefaultFootprintStyle,
     SetDefaultFrameAxisStyle,

@@ -16,8 +16,9 @@ import argparse
 import re
 import sys
 import time
-import defusedxml.ElementTree as ET
 from pathlib import Path
+
+import defusedxml.ElementTree as ET
 
 I18N_DIR = Path(__file__).resolve().parent
 

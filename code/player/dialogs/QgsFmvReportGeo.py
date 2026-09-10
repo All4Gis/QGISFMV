@@ -6,7 +6,6 @@ math used by the PDF report, extracted from QgsFmvReportGenerator.py.
 """
 
 from qgis.core import QgsRectangle
-
 from QGIS_FMV.player.dialogs.QgsFmvReportMetadata import (
     _find_metadata_value,
     _metadata_leaf_entries,
