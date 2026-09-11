@@ -6,7 +6,9 @@ from pathlib import Path
 from qgis.PyQt import uic
 
 Ui_FmvBrightnessContrast, _ = uic.loadUiType(
-    str(Path(__file__).resolve().parent.parent.parent / "ui/ui_FmvBrightnessContrast.ui")
+    str(
+        Path(__file__).resolve().parent.parent.parent / "ui/ui_FmvBrightnessContrast.ui"
+    )
 )
 
 

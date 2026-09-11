@@ -8,7 +8,6 @@ resources are no longer supported in Qt6.
 
 from pathlib import Path
 
-
 # Plugin root directory
 _PLUGIN_DIR = Path(__file__).resolve().parent.parent.parent
 
