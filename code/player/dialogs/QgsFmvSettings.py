@@ -15,7 +15,8 @@ from qgis.PyQt.QtWidgets import (
     QStyleOptionSlider,
     QToolTip,
 )
-from QGIS_FMV.gui.ui_FmvSettings import Ui_FmvSettings
+from pathlib import Path
+from qgis.PyQt import uic
 from QGIS_FMV.player.drawing.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.utils.core.QgsFmvUtils import getNameSpace
 from QGIS_FMV.utils.install.QgsFmvInstaller import (
@@ -39,6 +40,10 @@ from QGIS_FMV.utils.settings.QgsFmvSettings import (
     settings_file,
 )
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
+
+Ui_FmvSettings, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent.parent / "ui/ui_FmvSettings.ui")
+)
 
 
 class FmvSettingsDialog(QDialog, Ui_FmvSettings):

@@ -1,7 +1,8 @@
 """Alert-rule dialog — layout defined in ``ui_FmvAlertRule.ui``."""
 
 from qgis.PyQt.QtWidgets import QDialog
-from QGIS_FMV.gui.ui_FmvAlertRule import Ui_FmvAlertRule
+from pathlib import Path
+from qgis.PyQt import uic
 
 # Default MISB-ish fields offered in the combo (editable list for callers).
 DEFAULT_ALERT_FIELDS = (
@@ -14,6 +15,10 @@ DEFAULT_ALERT_FIELDS = (
     "Frame Center Elevation",
     "Sensor Relative Elevation Angle",
     "Sensor Relative Azimuth Angle",
+)
+
+Ui_FmvAlertRule, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent.parent / "ui/ui_FmvAlertRule.ui")
 )
 
 

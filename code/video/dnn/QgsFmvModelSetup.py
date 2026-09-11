@@ -158,11 +158,12 @@ def _export_onnx_subprocess(pt_path: str, dest_onnx: str) -> tuple[bool, str]:
         if not py:
             continue
         try:
-            proc = subprocess.run(
+            proc = subprocess.run(  # nosec B603
                 [py, "-c", script, pt_path, dest_onnx],
                 capture_output=True,
                 text=True,
                 timeout=600,
+                shell=False,
             )
             if proc.returncode == 0 and os.path.isfile(dest_onnx):
                 return True, dest_onnx

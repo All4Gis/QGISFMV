@@ -21,8 +21,6 @@ build/
 # Build artifacts
 deploy/Output/
 deploy/*.zip
-code/gui/ui_*.py
-code/gui/resources_rc.py
 code/i18n/*.qm
 .pytest_packages/
 .coverage

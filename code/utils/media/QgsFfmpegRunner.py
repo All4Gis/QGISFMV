@@ -134,7 +134,8 @@ def spawn(
             except ValueError:
                 log.debug("spawn: -preset ultrafast insertion failed")
 
-    return subprocess.Popen(
+    # cmds is an argv list (ffmpeg/ffprobe + fixed flags); shell=False in kwargs.
+    return subprocess.Popen(  # nosec B603
         cmds,
         **_popen_kwargs(stdin=stdin, stdout=stdout, stderr=stderr, bufsize=bufsize),
     )
@@ -153,7 +154,7 @@ def popen_ffmpeg(
         # Allow bare name on PATH for environments that resolve at exec time.
         if not shutil.which(_ffmpeg_path):
             raise RuntimeError("FFmpeg is not configured")
-    return subprocess.Popen(
+    return subprocess.Popen(  # nosec B603
         [_ffmpeg_path] + list(args),
         **_popen_kwargs(stdin=stdin, stdout=stdout, stderr=stderr, bufsize=bufsize),
     )

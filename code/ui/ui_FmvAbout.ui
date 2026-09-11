@@ -20,8 +20,8 @@
    <string>About</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/status/Information.png</normaloff>:/imgFMV/images/status/Information.png</iconset>
+   <iconset>
+    <normaloff>../images/status/Information.png</normaloff>../images/status/Information.png</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -36,8 +36,5 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
  <connections/>
 </ui>

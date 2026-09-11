@@ -1,7 +1,12 @@
 """Table cell progress bar widget loaded from .ui."""
 
 from qgis.PyQt.QtWidgets import QWidget
-from QGIS_FMV.gui.ui_FmvTableProgress import Ui_FmvTableProgress
+from pathlib import Path
+from qgis.PyQt import uic
+
+Ui_FmvTableProgress, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent.parent / "ui/ui_FmvTableProgress.ui")
+)
 
 
 class TableProgressWidget(QWidget, Ui_FmvTableProgress):

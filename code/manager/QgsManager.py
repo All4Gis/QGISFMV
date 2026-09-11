@@ -12,7 +12,9 @@ from qgis.core import Qgis as QGis
 from qgis.core import QgsApplication
 from qgis.PyQt.QtGui import QAction, QColor
 from qgis.PyQt.QtWidgets import QDockWidget, QMenu, QTableWidgetItem
-from QGIS_FMV.gui.ui_FmvManager import Ui_ManagerWindow
+
+from pathlib import Path
+from qgis.PyQt import uic
 from QGIS_FMV.manager.QgsFmvManagerBgLoad import ManagerBgLoadController
 from QGIS_FMV.manager.QgsFmvManagerPlaylistController import ManagerPlaylistController
 from QGIS_FMV.manager.QgsFmvManagerRows import ManagerRowStore
@@ -45,6 +47,11 @@ def _parse_extensions():
 
         log.warning("Failed to parse [FILES] exts, using defaults")
         return _DEFAULT_EXTS
+
+
+Ui_ManagerWindow, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent / "ui/ui_FmvManager.ui")
+)
 
 
 class FmvManager(QDockWidget, Ui_ManagerWindow):

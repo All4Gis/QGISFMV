@@ -15,7 +15,7 @@ This module owns:
 import os
 
 from qgis.PyQt.QtCore import QSettings, Qt
-from qgis.PyQt.QtGui import QBrush, QColor, QFont, QImage, QPen, QPixmap
+from qgis.PyQt.QtGui import QBrush, QColor, QFont, QPen, QPixmap
 from QGIS_FMV.utils.core.QgsFmvUtils import getNameSpace
 from QGIS_FMV.utils.logging import log
 
@@ -139,22 +139,18 @@ confidential = QPixmap()
 
 
 def ensure_stamp_image():
-    """Lazily load the confidential stamp pixmap (disk first, resource fallback)."""
+    """Lazily load the confidential stamp pixmap from disk."""
     global confidential
     if not confidential.isNull():
         return confidential
     try:
-        from QGIS_FMV.utils.settings.QgsFmvSettings import plugin_root
+        from QGIS_FMV.utils.ui.QgsFmvResources import r
 
-        stamp_path = os.path.join(plugin_root(), "images", "stamp", "confidential.png")
+        stamp_path = r("stamp", "confidential.png")
         if os.path.isfile(stamp_path):
             confidential = QPixmap(stamp_path)
     except Exception as exc:
         log.debug("Stamp image load failed: %s", exc)
-    if confidential.isNull():
-        confidential = QPixmap.fromImage(
-            QImage(":/imgFMV/images/stamp/confidential.png")
-        )
     return confidential
 
 

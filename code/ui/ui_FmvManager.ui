@@ -11,8 +11,8 @@
    </rect>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/misc/manager.png</normaloff>:/imgFMV/images/misc/manager.png</iconset>
+   <iconset>
+    <normaloff>../images/misc/manager.png</normaloff>../images/misc/manager.png</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -204,8 +204,8 @@ color: rgb(56, 95, 107);
   </widget>
   <action name="actionOpen_Stream">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/stream.png</normaloff>:/imgFMV/images/misc/stream.png</iconset>
+    <iconset>
+     <normaloff>../images/misc/stream.png</normaloff>../images/misc/stream.png</iconset>
    </property>
    <property name="text">
     <string>Open &amp;Stream</string>
@@ -213,8 +213,8 @@ color: rgb(56, 95, 107);
   </action>
   <action name="actionOpen_MPEG2_File">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/misb-file.png</normaloff>:/imgFMV/images/export/misb-file.png</iconset>
+    <iconset>
+     <normaloff>../images/export/misb-file.png</normaloff>../images/export/misb-file.png</iconset>
    </property>
    <property name="text">
     <string>Open &amp;Video File</string>
@@ -222,8 +222,8 @@ color: rgb(56, 95, 107);
   </action>
   <action name="actionCreate_MISB_File">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/multiplexer.png</normaloff>:/imgFMV/images/misc/multiplexer.png</iconset>
+    <iconset>
+     <normaloff>../images/misc/multiplexer.png</normaloff>../images/misc/multiplexer.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Create MISB File</string>
@@ -231,17 +231,14 @@ color: rgb(56, 95, 107);
   </action>
   <action name="CloseButton">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/close.png</normaloff>:/imgFMV/images/misc/close.png</iconset>
+    <iconset>
+     <normaloff>../images/misc/close.png</normaloff>../images/misc/close.png</iconset>
    </property>
    <property name="text">
     <string>C&amp;lose</string>
    </property>
   </action>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
  <connections>
   <connection>
    <sender>VManager</sender>

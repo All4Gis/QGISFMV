@@ -177,6 +177,7 @@ def _subprocess_kwargs(env=None, input_bytes=None):
         "stdout": subprocess.PIPE,
         "stderr": subprocess.PIPE,
         "env": env,
+        "shell": False,
     }
     if input_bytes is None:
         kwargs["text"] = True
@@ -202,12 +203,22 @@ def _pip_env(extra_pythonpath: str | None = None) -> dict:
 
 
 def _run_cmd(cmd: Sequence[str], env=None, input_bytes=None) -> tuple[bool, str]:
-    """Run a command; return (ok, message). Prefer stdout on success, stderr on failure."""
+    """Run a command; return (ok, message). Prefer stdout on success, stderr on failure.
+
+    ``cmd`` must be an argv list (never a shell string). Callers only pass
+    plugin-controlled binaries (python/pip/brew/sudo) and fixed package args.
+    """
     if not cmd:
         return False, "No command specified"
+    argv = [str(part) for part in cmd]
+    if not argv[0]:
+        return False, "Empty executable"
 
     try:
-        proc = subprocess.run(list(cmd), **_subprocess_kwargs(env, input_bytes))
+        # Trusted argv list + shell=False; B603 is a review hint, not injection.
+        proc = subprocess.run(  # nosec B603
+            argv, **_subprocess_kwargs(env, input_bytes)
+        )
     except OSError as exc:
         return False, str(exc)
 

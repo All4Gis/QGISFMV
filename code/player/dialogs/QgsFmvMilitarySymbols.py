@@ -6,7 +6,9 @@ from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtGui import QIcon, QPainter, QPixmap
 from qgis.PyQt.QtSvg import QSvgRenderer
 from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox, QListWidgetItem
-from QGIS_FMV.gui.ui_FmvMilitarySymbols import Ui_FmvMilitarySymbols
+
+from pathlib import Path
+from qgis.PyQt import uic
 from QGIS_FMV.utils.settings.QgsFmvSettings import plugin_root
 
 MILITARY_SYMBOLS = (
@@ -69,6 +71,11 @@ def symbol_icon(symbol_id, size=32):
     if cache_key not in _SVG_CACHE:
         _SVG_CACHE[cache_key] = QIcon(_render_svg_pixmap(path, size))
     return _SVG_CACHE[cache_key]
+
+
+Ui_FmvMilitarySymbols, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent.parent / "ui/ui_FmvMilitarySymbols.ui")
+)
 
 
 class MilitarySymbolDialog(QDialog, Ui_FmvMilitarySymbols):

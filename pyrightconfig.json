@@ -5,7 +5,6 @@
   "exclude": [
     "**/__pycache__",
     "code/python_deps",
-    "code/gui/ui_*.py",
     "deploy/**",
     ".pytest_packages/**"
   ],

@@ -2,7 +2,12 @@
 
 from qgis.PyQt.QtCore import Qt, pyqtSignal
 from qgis.PyQt.QtWidgets import QDialog
-from QGIS_FMV.gui.ui_FmvBrightnessContrast import Ui_FmvBrightnessContrast
+from pathlib import Path
+from qgis.PyQt import uic
+
+Ui_FmvBrightnessContrast, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent.parent / "ui/ui_FmvBrightnessContrast.ui")
+)
 
 
 class BrightnessContrastDialog(QDialog, Ui_FmvBrightnessContrast):

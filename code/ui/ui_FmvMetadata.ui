@@ -167,8 +167,8 @@ color: rgb(56, 95, 107);
   </widget>
   <action name="actionSave_as_PDF">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/pdf.png</normaloff>:/imgFMV/images/export/pdf.png</iconset>
+    <iconset>
+     <normaloff>../images/export/pdf.png</normaloff>../images/export/pdf.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Save as PDF</string>
@@ -179,8 +179,8 @@ color: rgb(56, 95, 107);
   </action>
   <action name="actionSave_as_CSV">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/csv.png</normaloff>:/imgFMV/images/export/csv.png</iconset>
+    <iconset>
+     <normaloff>../images/export/csv.png</normaloff>../images/export/csv.png</iconset>
    </property>
    <property name="text">
     <string>Save as &amp;CSV</string>
@@ -190,9 +190,6 @@ color: rgb(56, 95, 107);
    </property>
   </action>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
  <connections>
   <connection>
    <sender>actionSave_as_CSV</sender>

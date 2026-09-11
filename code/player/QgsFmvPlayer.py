@@ -12,7 +12,6 @@ from qgis.PyQt.QtWidgets import (
     QStyleOptionSlider,
     QToolTip,
 )
-from QGIS_FMV.gui.ui_FmvPlayer import Ui_PlayerWindow
 from QGIS_FMV.player.dialogs.QgsFmvMetadata import QgsFmvMetadata
 from QGIS_FMV.player.dialogs.QgsFmvSettings import open_fmv_settings
 from QGIS_FMV.player.features.QgsFmvAlerts import AlertManager
@@ -60,6 +59,12 @@ from QGIS_FMV.utils.ui.QgsFmvResources import ICON_PAUSE, ICON_PLAY
 from QGIS_FMV.utils.ui.QgsPlot import CreatePlotsBitrate
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 from QGIS_FMV.utils.vision.QgsObjectTracker import cv2_available, has_object_tracking
+from pathlib import Path
+from qgis.PyQt import uic
+
+Ui_PlayerWindow, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent / "ui/ui_FmvPlayer.ui")
+)
 
 
 class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
@@ -112,7 +117,11 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         self._setupPlaybackUi()
 
     def _setupDrawToolBar(self):
-        """Configure drawing toolbar defaults (layout lives in ui_FmvPlayer.ui)."""
+        """Configure drawing toolbar defaults (layout lives in ui_FmvPlayer.ui).
+
+        ``uic`` creates nested ``QToolButton`` children but does not call
+        ``QToolBar.addWidget()``, so the toolbar order is rebuilt here.
+        """
         self.btn_stop.setEnabled(False)
         self.PrecisionTimeStamp = ""
 
@@ -121,6 +130,25 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         self.toolBtn_DLine.setDefaultAction(self.actionDraw_Line)
         self.toolBtn_Measure.setDefaultAction(self.actionMeasureDistance)
         self.toolBtn_Cesure.setDefaultAction(self.actionCensure)
+        self.toolBtn_Measure.setMenu(self.menuMeasure)
+
+        # loadUi omits addWidget for toolbar child buttons — restore order.
+        toolbar = self.DrawToolBar
+        toolbar.clear()
+        toolbar.addAction(self.actionMagnifying_glass)
+        toolbar.addSeparator()
+        toolbar.addWidget(self.toolBtn_DPolygon)
+        toolbar.addWidget(self.toolBtn_DPoint)
+        toolbar.addWidget(self.toolBtn_DLine)
+        toolbar.addAction(self.actionMilitary_Symbols)
+        toolbar.addSeparator()
+        toolbar.addWidget(self.toolBtn_Measure)
+        toolbar.addSeparator()
+        toolbar.addWidget(self.toolBtn_Cesure)
+        toolbar.addSeparator()
+        toolbar.addAction(self.actionStamp)
+        toolbar.addSeparator()
+        toolbar.addAction(self.actionObject_Tracking)
 
         self.drawTools._setupMilitarySymbolTool()
 

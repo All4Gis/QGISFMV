@@ -23,8 +23,8 @@
    <bool>false</bool>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/platforms/plat_military_jet.svg</normaloff>:/imgFMV/images/platforms/plat_military_jet.svg</iconset>
+   <iconset>
+    <normaloff>../images/platforms/plat_military_jet.svg</normaloff>../images/platforms/plat_military_jet.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,1,0,0,0">
    <property name="spacing">
@@ -348,9 +348,6 @@ QPushButton:disabled { background-color: #b0bec5; color: #eceff1; }</string>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
  <connections>
   <connection>
    <sender>cmb_category</sender>

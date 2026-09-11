@@ -8,7 +8,6 @@ def _bootstrap_plugin():
     from QGIS_FMV.utils.settings.python_deps_bootstrap import bootstrapPythonDepsPath
 
     bootstrapPythonDepsPath()
-    from QGIS_FMV.gui import resources_rc  # noqa: F401  (registers Qt resources/icons)
 
 
 # Skip heavy imports when pytest loads ``code`` as a parent package (code/tests).

@@ -14,8 +14,8 @@
    <string>Open Stream</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/misc/stream.png</normaloff>:/imgFMV/images/misc/stream.png</iconset>
+   <iconset>
+    <normaloff>../images/misc/stream.png</normaloff>../images/misc/stream.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -122,9 +122,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
  <connections>
   <connection>
    <sender>cmb_protocol</sender>

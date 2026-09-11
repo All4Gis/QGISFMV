@@ -221,7 +221,6 @@ QGISFMV/
 │   │   └── vision/         # Object tracking
 │   ├── geo/                # Geodesy helpers
 │   ├── about/              # About dialog
-│   ├── gui/                # Generated PyQt6 (run build.py)
 │   ├── ui/                 # Qt Designer sources
 │   ├── images/             # Icons, platform SVGs, military symbols
 │   ├── i18n/               # Translations

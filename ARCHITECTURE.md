@@ -36,7 +36,6 @@ that symlink (tools may double-count files).
 | Media I/O | `code/utils/media/` | KLV readers, ffmpeg runner/probe, Qt multimedia |
 | Settings | `code/utils/settings/QgsFmvSettings.py` | `settings.ini` access + `reloadRuntime()` |
 | UI sources | `code/ui/*.ui` | Qt Designer sources (compile via `build.py`) |
-| Generated UI | `code/gui/ui_*.py` | **Do not hand-edit** |
 
 ---
 
@@ -150,9 +149,8 @@ Prefer importing from `QgsFmvMultimedia` for public API stability.
 2. After editing `.ui` / `.qrc` / `.ts`: run `python3 build.py` from the repo root.  
 3. Python may create widgets only when they are dynamic (tables, custom paint,
    runtime overlays) or cannot be expressed in Designer.  
-4. **Never hand-edit `code/gui/ui_*.py`** — regenerate from `.ui` only.  
-5. Alert rules dialog: `ui_FmvAlertRule.ui` + `player/dialogs/QgsFmvAlertRule.py`.  
-6. Timeline is a promoted custom widget in `ui_FmvPlayer.ui` (`TimelineWidget`).  
+4. Alert rules dialog: `ui_FmvAlertRule.ui` + `player/dialogs/QgsFmvAlertRule.py`.  
+5. Timeline is a promoted custom widget in `ui_FmvPlayer.ui` (`TimelineWidget`).  
 
 Sizes / geometry for Metadata and Video Info live in their `.ui` files — do not
 `resize()` / `setMinimumSize()` those dialogs from Python.
