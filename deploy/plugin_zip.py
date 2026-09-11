@@ -26,7 +26,6 @@ EXCLUDE_PATTERNS = [
     "python_deps",  # legacy vendor dir — deps come from requirements.txt
     # File patterns
     "*.sh",
-    "*.ui",
     "*.bat",
     "*.pro",
     "*.ts",
