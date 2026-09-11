@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Telemetry / georeferencing field holder (base for VideoSession)."""
 
 

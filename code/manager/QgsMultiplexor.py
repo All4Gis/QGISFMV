@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Video Multiplexer dialog — build MISB STANAG 4609 videos with pymisb."""
 
 import os

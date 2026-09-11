@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Unified FFmpeg / ffprobe subprocess launcher.
 
 All plugin code that shells out to FFmpeg should go through this module so
@@ -133,7 +132,7 @@ def spawn(
                 cmds.insert(idx, "-preset")
                 cmds.insert(idx + 1, "ultrafast")
             except ValueError:
-                pass
+                log.debug("spawn: -preset ultrafast insertion failed")
 
     return subprocess.Popen(
         cmds,

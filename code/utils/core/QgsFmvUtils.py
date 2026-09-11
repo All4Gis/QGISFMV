@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import json
 import os
 import platform
@@ -12,7 +11,7 @@ from pymisb.klvdata.streamparser import StreamParser
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QPoint, QSettings
 from qgis.PyQt.QtGui import QPainter
-from QGIS_FMV.utils.core.QgsFmvCornerEstimation import (  # noqa: F401
+from QGIS_FMV.utils.core.QgsFmvCornerEstimation import (
     CornerEstimationWithOffsets,
     CornerEstimationWithoutOffsets,
 )
@@ -49,17 +48,9 @@ from QGIS_FMV.utils.core.QgsFmvMapCenter import (  # noqa: F401
     centerCanvasOnLayer,
     followMapCenter,
 )
-from QGIS_FMV.utils.core.QgsFmvMosaic import ExtendMosaic  # noqa: F401
 from QGIS_FMV.utils.core.QgsFmvMosaic import (
-    WriteGeoreferencedFrame,
-    _dataset_extent_wgs84,
-    _footprint_weights_from_mask,
-    _gdal_raster_readable,
-    _get_wgs84_srs,
-    _mosaic_feather_weights,
-    _should_accept_mosaic_frame,
+    ExtendMosaic,  # noqa: F401
     georeferencingVideo,
-    resetMosaicFrameCounter,
 )
 from QGIS_FMV.utils.core.QgsFmvVideoSession import (
     VideoSession,
@@ -77,16 +68,12 @@ from QGIS_FMV.utils.layers.QgsFmvLayers import (
 )
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.media import QgsFfmpegRunner as _ffmpeg_runner
-from QGIS_FMV.utils.settings.QgsFmvSettings import get_int, get_layer
 from QGIS_FMV.utils.settings.QgsFmvSettings import (
     reverse_geocoding_url as _reverse_geocoding_url,
+    get_int,
+    get_layer,
 )
 from QGIS_FMV.utils.ui.QgsFmvFileDialogs import askForFiles  # noqa: F401
-from QGIS_FMV.utils.ui.QgsFmvFileDialogs import (
-    askForFolder,
-    pluginSetting,
-    setPluginSetting,
-)
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 settings = QSettings()
@@ -578,17 +565,7 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
 # Mosaic tuning constants (canonical values in utils.constants; mirrored here
 # so QgsFmvSettings.reloadRuntime can mutate the cached module attributes).
 from QGIS_FMV.utils.constants import MOSAIC_FEATHER_PX  # noqa: F401
-from QGIS_FMV.utils.constants import (
-    MOSAIC_FOOTPRINT_GROW_METERS,
-    MOSAIC_FOOTPRINT_GROW_RATIO,
-    MOSAIC_MAX_FRAME_DIMENSION,
-    MOSAIC_MAX_KEPT_FRAMES,
-    MOSAIC_MAX_OUTPUT_SIZE,
-    MOSAIC_MIN_INTERVAL_SEC,
-    MOSAIC_MIN_MOVE_METERS,
-)
 from QGIS_FMV.utils.formatting import seconds_to_time as _seconds_to_time  # noqa: F401
-from QGIS_FMV.utils.formatting import time_to_seconds as _time_to_seconds
 
 
 def BurnDrawingsImage(source, overlay):

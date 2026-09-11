@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """About dialog."""
 
 from qgis.PyQt.QtCore import Qt, QUrl

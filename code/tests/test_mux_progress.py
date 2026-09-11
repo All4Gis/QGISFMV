@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Unit tests for pymisb mux progress helpers."""
 
 from code.tests.support import ensure_pymisb_installed
@@ -6,7 +5,7 @@ from code.tests.support import ensure_pymisb_installed
 import pytest
 
 
-class _FakeTask(object):
+class _FakeTask:
     def __init__(self):
         self.progress = []
         self.cancelled = False

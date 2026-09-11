@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Dependency checks and optional setup for QGIS FMV (Windows / macOS / Linux)."""
 
 from __future__ import annotations
@@ -10,7 +9,8 @@ import subprocess
 import sys
 import tempfile
 import zipfile
-from typing import Optional, Sequence, Tuple
+from collections.abc import Sequence
+from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from qgis.core import Qgis as QGis
@@ -187,7 +187,7 @@ def _subprocess_kwargs(env=None, input_bytes=None):
     return kwargs
 
 
-def _pip_env(extra_pythonpath: Optional[str] = None) -> dict:
+def _pip_env(extra_pythonpath: str | None = None) -> dict:
     env = os.environ.copy()
     env["PYTHONNOUSERSITE"] = "1"
     pkgs = _fmv_packages_dir()
@@ -201,8 +201,11 @@ def _pip_env(extra_pythonpath: Optional[str] = None) -> dict:
     return env
 
 
-def _run_cmd(cmd: Sequence[str], env=None, input_bytes=None) -> Tuple[bool, str]:
+def _run_cmd(cmd: Sequence[str], env=None, input_bytes=None) -> tuple[bool, str]:
     """Run a command; return (ok, message). Prefer stdout on success, stderr on failure."""
+    if not cmd:
+        return False, "No command specified"
+
     try:
         proc = subprocess.run(list(cmd), **_subprocess_kwargs(env, input_bytes))
     except OSError as exc:
@@ -222,7 +225,7 @@ def _run_cmd(cmd: Sequence[str], env=None, input_bytes=None) -> Tuple[bool, str]
     return proc.returncode == 0, out
 
 
-def _run_pip_env(args: Sequence[str], target: Optional[str] = None) -> Tuple[bool, str]:
+def _run_pip_env(args: Sequence[str], target: str | None = None) -> tuple[bool, str]:
     """Run ``python -m pip …`` with PYTHONNOUSERSITE; optional ``--target``."""
     cmd = [_python_executable(), "-m", "pip", *args]
     if target and "--target" not in cmd:
@@ -230,7 +233,7 @@ def _run_pip_env(args: Sequence[str], target: Optional[str] = None) -> Tuple[boo
     return _run_cmd(cmd, env=_pip_env())
 
 
-def _run_pip(args: Sequence[str]) -> Tuple[bool, str]:
+def _run_pip(args: Sequence[str]) -> tuple[bool, str]:
     return _run_pip_env(args)
 
 
@@ -255,7 +258,7 @@ def _cv2_available() -> bool:
         return False
 
 
-def _try_import(module_name: str) -> Tuple[bool, str]:
+def _try_import(module_name: str) -> tuple[bool, str]:
     """Return (ok, version_or_empty)."""
     try:
         mod = __import__(module_name)
@@ -282,7 +285,7 @@ def _prompt_yes(
 # Progress UI (lazy — no QWidget at import time)
 # ---------------------------------------------------------------------------
 
-_progress_bar: Optional[QProgressBar] = None
+_progress_bar: QProgressBar | None = None
 
 
 def _progress() -> QProgressBar:
@@ -310,16 +313,36 @@ def _clear_progress():
 
 def _download(url: str, dest: str, with_progress: bool = True) -> None:
     """Download ``url`` to ``dest`` with a FMV User-Agent (no global urllib opener)."""
-    req = Request(url, headers={"User-Agent": USER_AGENT})
+    parsed = urlparse(url)
+
+    if parsed.scheme not in {"http", "https"}:
+        raise ValueError(
+            f"Unsupported URL scheme: {parsed.scheme!r}. "
+            "Only HTTP and HTTPS are allowed."
+        )
+
+    if not parsed.netloc:
+        raise ValueError(f"Invalid URL: {url!r}")
+
+    req = Request(
+        url,
+        headers={"User-Agent": USER_AGENT},
+    )
+
     with urlopen(req) as resp, open(dest, "wb") as out:
         total = int(resp.headers.get("Content-Length") or 0)
+
         read = 0
         chunk = 64 * 1024
+
         while True:
             data = resp.read(chunk)
+
             if not data:
                 break
+
             out.write(data)
+
             if with_progress and total > 0:
                 read += len(data)
                 _progress().setValue(int(read * 100 / total))
@@ -358,7 +381,7 @@ def _ensure_pip() -> bool:
         try:
             os.remove(get_pip)
         except OSError:
-            pass
+            log.debug("get-pip: os.remove failed: %s", get_pip)
 
     if not ok:
         return False
@@ -367,12 +390,12 @@ def _ensure_pip() -> bool:
     )[0]
 
 
-def _requirements_path() -> Optional[str]:
+def _requirements_path() -> str | None:
     path = os.path.join(plugin_root(), "requirements.txt")
     return path if os.path.isfile(path) else None
 
 
-def _install_opencv_package() -> Tuple[bool, str]:
+def _install_opencv_package() -> tuple[bool, str]:
     """Install opencv-contrib-python into ~/.qgis-fmv-packages (no sudo)."""
     target = _fmv_packages_dir()
     os.makedirs(target, exist_ok=True)
@@ -394,7 +417,7 @@ def _clean_mac_user_site_packages() -> None:
     _run_pip(["uninstall", "-y", *packages])
 
 
-def check_python_deps() -> Tuple[bool, str]:
+def check_python_deps() -> tuple[bool, str]:
     """Return ``(ok, details)``.
 
     ``pymisb`` is required. OpenCV is recommended on all platforms but optional
@@ -528,7 +551,7 @@ def install_pip_requirements() -> bool:
 # ---------------------------------------------------------------------------
 
 
-def check_ffmpeg() -> Tuple[bool, str]:
+def check_ffmpeg() -> tuple[bool, str]:
     """Return (ok, path_or_message) for the configured FFmpeg binary."""
     path = ffmpeg_binary()
     if path and os.path.isfile(path):
@@ -651,7 +674,7 @@ def install_ffmpeg_mac() -> bool:
     return False
 
 
-def _linux_install_cmd() -> Optional[list]:
+def _linux_install_cmd() -> list | None:
     if shutil.which("apt-get"):
         return ["sudo", "apt-get", "install", "-y", "ffmpeg"]
     if shutil.which("dnf"):

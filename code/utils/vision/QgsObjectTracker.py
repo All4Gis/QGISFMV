@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Object tracking for FMV video — OpenCV MOSSE when available, numpy MOSSE fallback."""
 
 from __future__ import annotations

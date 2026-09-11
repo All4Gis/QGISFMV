@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for pymisb.klvdata.streamparser (migrated from legacy klvdata tests)."""
 
 from pathlib import Path

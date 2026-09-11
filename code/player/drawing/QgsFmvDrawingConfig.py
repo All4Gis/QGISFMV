@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Central mutable drawing configuration + settings loading + stamp asset caching.
 
 This module owns:
@@ -27,34 +26,34 @@ class DrawingConfig:
     """All mutable drawing parameters in one place."""
 
     __slots__ = (
-        "MAX_MAGNIFIER",
-        "MAX_FACTOR",
-        "TYPE_MAGNIFIER",
-        "PolyWidth",
-        "PolyPen",
-        "PolyBrush",
-        "PointRadius",
-        "PointFillColor",
-        "PointOutlineColor",
-        "PointLabelColor",
-        "PointLabelBgColor",
-        "PointPen",
-        "PointFont",
-        "LineWidth",
         "LinePen",
-        "TrackLockColor",
-        "TrackWeakColor",
-        "TrackLostColor",
-        "TrackHudFont",
-        "MeasureWidth",
-        "MeasurePen",
+        "LineWidth",
+        "MAX_FACTOR",
+        "MAX_MAGNIFIER",
         "MeasureBrush",
-        "MeasureLabelBg",
-        "MeasureLabelFg",
-        "MeasureVertexFill",
-        "MeasureVertexOutline",
         "MeasureFont",
         "MeasureGlowPen",
+        "MeasureLabelBg",
+        "MeasureLabelFg",
+        "MeasurePen",
+        "MeasureVertexFill",
+        "MeasureVertexOutline",
+        "MeasureWidth",
+        "PointFillColor",
+        "PointFont",
+        "PointLabelBgColor",
+        "PointLabelColor",
+        "PointOutlineColor",
+        "PointPen",
+        "PointRadius",
+        "PolyBrush",
+        "PolyPen",
+        "PolyWidth",
+        "TYPE_MAGNIFIER",
+        "TrackHudFont",
+        "TrackLockColor",
+        "TrackLostColor",
+        "TrackWeakColor",
     )
 
     def __init__(self):

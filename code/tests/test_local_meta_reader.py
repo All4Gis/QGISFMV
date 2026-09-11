@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """LocalFileMetaReader offset lookup (requires QGIS/PyQt for plugin imports)."""
 
 import bisect

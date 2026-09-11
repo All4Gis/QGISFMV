@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """NATO APP-6D inspired military symbol picker for FMV video annotations."""
 
 import os

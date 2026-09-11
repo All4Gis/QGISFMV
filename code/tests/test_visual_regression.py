@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Advanced visual regression tests for QGIS FMV.
 
@@ -16,9 +15,6 @@ Run inside QGIS::
 
     import pytest; pytest.main(["-xvs", "QGIS_FMV/tests/test_visual_regression.py"])
 """
-
-import os
-import sys
 
 import pytest
 

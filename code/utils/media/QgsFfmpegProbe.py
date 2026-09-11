@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Lightweight ffprobe/ffmpeg helpers (replaces legacy converter/ package)."""
 
 import json
@@ -77,7 +76,7 @@ def is_valid_stream(uri, timeout_sec=3.0):
                 if stream.get("codec_type") in ("video", "audio"):
                     return True
         except (json.JSONDecodeError, UnicodeDecodeError):
-            pass
+            log.debug("is_valid_stream: json.loads failed: %s", data)
 
     # ffprobe on UDP can fail even when ffmpeg can decode — try decoding one frame.
     try:

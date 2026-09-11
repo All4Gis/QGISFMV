@@ -13,7 +13,7 @@ from qgis.PyQt.QtCore import (
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
-class QJsonTreeItem(object):
+class QJsonTreeItem:
     """Json TreeView Class"""
 
     def __init__(self, parent=None):

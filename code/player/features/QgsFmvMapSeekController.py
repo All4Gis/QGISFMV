@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Click-to-seek and Map Time Machine (hover scrub + ghost FOV)."""
 
 from __future__ import annotations
@@ -207,7 +206,7 @@ class MapSeekController:
                 self._uncheck_action(action_name)
         if keep is None or not getattr(self, modes[keep][0], False):
             # Tool will be reinstalled by caller when enabling.
-            pass
+            log.debug("exclusive_off: tool will be reinstalled by caller when enabling")
 
     def setActive(self, active):
         """Enable/disable simple click-to-seek."""
@@ -284,7 +283,7 @@ class MapSeekController:
             pin.setArming(False)
         except Exception as exc:
             log.debug("disarm target pin failed: %s", exc)
-        
+
         action = getattr(self.player, "actionPin_Target", None)
         if action is not None and action.isChecked():
             action.blockSignals(True)
@@ -487,7 +486,7 @@ class MapSeekController:
                     level=0,
                 )
             elif mode == "lookback":
-                pass  # message already shown in setLookback
+                log.debug("lookback message already shown in setLookback")
             return True
         except Exception as exc:
             log.debug("install map seek tool failed: %s", exc)
@@ -546,7 +545,7 @@ class MapSeekController:
                 return p
 
             if footprint and len(footprint) >= 3:
-                rb = QgsRubberBand(canvas, QgsWkbTypes.PolygonGeometry)
+                rb = QgsRubberBand(canvas, QgsWkbTypes.GeometryType.PolygonGeometry)
                 rb.setFillColor(QColor(255, 196, 0, 55))
                 rb.setStrokeColor(QColor(255, 170, 0, 220))
                 rb.setWidth(2)
@@ -554,7 +553,7 @@ class MapSeekController:
                     rb.addPoint(_map_pt(x, y), False)
                 rb.addPoint(_map_pt(footprint[0][0], footprint[0][1]), True)
             else:
-                rb = QgsRubberBand(canvas, QgsWkbTypes.PointGeometry)
+                rb = QgsRubberBand(canvas, QgsWkbTypes.GeometryType.PointGeometry)
                 rb.setColor(QColor(255, 170, 0, 230))
                 rb.setWidth(8)
                 rb.addPoint(_map_pt(lon, lat), True)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Brightness / Contrast slider dialog for numpy-based filter."""
 
 from qgis.PyQt.QtCore import Qt, pyqtSignal

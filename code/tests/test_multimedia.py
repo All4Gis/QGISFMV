@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Multimedia helpers: frame index, media types, probe, playlist (no QGIS GUI)."""
 
 import sys

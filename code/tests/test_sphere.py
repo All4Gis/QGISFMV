@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Tests for geodesic calculations (migrated from sphere.py to QgsGeoUtils).
 
 Pure-Python tests run without QGIS.  Tests marked with ``qgis`` require
 the QGIS runtime for QgsDistanceArea.
 """
-
-import math
 
 import pytest
 

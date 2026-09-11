@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Metadata worker coalescing — exercises the real class with Qt stubs."""
 
 import sys

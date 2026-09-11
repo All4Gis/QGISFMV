@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Qt QMediaPlayer adapter used when neither OpenCV nor FFmpeg are available."""
 
 import os

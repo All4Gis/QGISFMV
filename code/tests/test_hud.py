@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for HUD overlay widget (no QGIS runtime)."""
 
 import pytest
@@ -11,7 +10,6 @@ class TestHudOverlay:
     def hud_class(self):
         """Import HudOverlay class without requiring QGIS."""
         try:
-            from qgis.PyQt.QtWidgets import QApplication
             from QGIS_FMV.player.overlays.QgsFmvHud import HudOverlay
 
             return HudOverlay

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Stamp overlay asset checks."""
 
 from code.tests.support import CODE

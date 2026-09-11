@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Bundle bookmarks, geo index, exports, and mosaic into one mission ZIP."""
 
 from __future__ import annotations

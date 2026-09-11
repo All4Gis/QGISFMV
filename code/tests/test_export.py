@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-
 """Tests for KML/GPX export XML structure (no QGIS runtime)."""
-
-import io
 
 import defusedxml.ElementTree as ET
 import pytest

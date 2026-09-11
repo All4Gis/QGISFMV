@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Timeline bookmarks: add / clear / export / auto-mark from alerts."""
 
 from __future__ import annotations

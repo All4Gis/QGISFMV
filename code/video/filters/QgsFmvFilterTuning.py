@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 """FMV / aerial detection filter tuning (settings.ini [FILTERS])."""
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 
 def _get(section: str, key: str, default: str) -> str:
@@ -43,7 +42,7 @@ def is_aerial_profile() -> bool:
     return filter_profile() in ("aerial", "fmv", "uav", "visdrone")
 
 
-def pipeline_defaults(filter_key: str | None = None) -> Dict[str, Any]:
+def pipeline_defaults(filter_key: str | None = None) -> dict[str, Any]:
     """Shared OpenCV / numpy CC detection defaults."""
     if not is_aerial_profile():
         return {}
@@ -70,7 +69,7 @@ def ema_alpha(default: float) -> float:
     return _float("ema_alpha", default)
 
 
-def overlay_defaults() -> Dict[str, float]:
+def overlay_defaults() -> dict[str, float]:
     """Return overlay confidence thresholds tuned for the active profile."""
     if not is_aerial_profile():
         return {}
@@ -82,7 +81,7 @@ def overlay_defaults() -> Dict[str, float]:
     }
 
 
-def tune_overlay_options(options: Dict[str, Any]) -> Dict[str, Any]:
+def tune_overlay_options(options: dict[str, Any]) -> dict[str, Any]:
     """Merge profile-tuned overlay thresholds into *options*."""
     tuned = dict(options)
     for key, val in overlay_defaults().items():
@@ -122,7 +121,7 @@ def tracking_enabled() -> bool:
 
 def apply_aerial_pipeline_kw(
     filter_key: str | None = None, **kwargs: Any
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Merge FMV-friendly detection kwargs (lower thresholds, smaller min area)."""
     if not is_aerial_profile():
         return dict(kwargs)

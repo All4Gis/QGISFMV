@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """QGIS FMV map layers: group/layer creation, generic layer helpers, object
 tracking, and platform-icon handling.
 
@@ -35,7 +34,7 @@ from qgis.utils import iface
 
 # Backward-compatible re-exports: default symbology now lives in
 # QgsFmvLayerDefaults.py, kept importable from here for existing callers.
-from QGIS_FMV.utils.layers.QgsFmvLayerDefaults import (  # noqa: E402,F401
+from QGIS_FMV.utils.layers.QgsFmvLayerDefaults import (  # noqa: F401
     RestoreDefaultLayerStyles,
     SetDefaultBeams3DStyle,
     SetDefaultBeamsStyle,
@@ -74,18 +73,11 @@ from QGIS_FMV.utils.layers.QgsFmvStyles import FmvLayerStyles as S
 # imported by reference (mutable dicts) so existing callers/tests that poke
 # ``QgsFmvLayers._trajectory_active_feature`` etc. directly keep working.
 from QGIS_FMV.utils.layers.QgsFmvTelemetryLayers import (
-    UpdateBeamsData,
-    UpdateFootPrintData,
-    UpdateFrameAxisData,
-    UpdateFrameCenterData,
-    UpdatePlatformData,
-    UpdateTrajectoryData,
-    _beam_feature_ids,
     _trajectory_active_feature,
 )
 from QGIS_FMV.utils.layers.QgsFmvTelemetryLayers import (
     reset_caches as _reset_telemetry_caches,
-)  # noqa: E402,F401
+)
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.settings.QgsFmvSettings import get_layer
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
@@ -236,7 +228,6 @@ def BeginObjectTrack(track_id, backend=""):
     """Mark that the next UpdateObjectTrack should open a new line feature."""
     if groupName:
         _object_track_active_feature[groupName] = None
-    return None
 
 
 def _add_object_track_segment(trackLyr, point, lon, lat, alt, track_id, backend):
@@ -371,8 +362,7 @@ def _platform_icon_label(filename):
     stem = os.path.splitext(filename)[0]
     if stem == "platform_default":
         return "Default"
-    if stem.startswith("plat_"):
-        stem = stem[5:]
+    stem = stem.removeprefix("plat_")
     return stem.replace("_", " ").replace("-", " ").title()
 
 
@@ -1034,7 +1024,7 @@ def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding=enco
 
 # Backward-compatible re-exports: these draw/measure helpers now live in
 # QgsFmvDrawLayers.py, kept importable from here for existing callers.
-from QGIS_FMV.utils.layers.QgsFmvDrawLayers import (  # noqa: E402,F401
+from QGIS_FMV.utils.layers.QgsFmvDrawLayers import (  # noqa: F401
     AddDrawLineOnMap,
     AddDrawMilitarySymbolOnMap,
     AddDrawPointOnMap,

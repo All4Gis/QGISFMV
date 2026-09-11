@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Object tracking controller extracted from VideoWidget (QgsVideo.py).
 
 Owns the OpenCV tracker lifecycle (init/update/stop) and the rubberband +

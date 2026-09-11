@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os.path
 
 from qgis.core import Qgis as QGis
@@ -182,7 +181,8 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         try:
             self.sliderDuration.sliderMoved.disconnect(self.seek)
         except (TypeError, RuntimeError):
-            pass
+            log.debug("sliderDuration.sliderMoved.disconnect failed")
+
         self.sliderDuration.sliderMoved.connect(self.showMoveTip)
         self.sliderDuration.sliderReleased.connect(
             self.playbackController.sliderDurationReleased
@@ -605,7 +605,6 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
         if self.audioOutput is not None:
             self.playerMuted = not self.playerMuted
             self.player.setMuted(self.playerMuted)
-        return
 
     def stop(self):
         """Stop video"""
@@ -615,8 +614,6 @@ class QgsFmvPlayer(QDockWidget, Ui_PlayerWindow):
 
         # Stop Video
         self.playbackController.fakeStop()
-
-        return
 
     def setVolume(self, volume):
         """Set the audio volume (0-100)."""

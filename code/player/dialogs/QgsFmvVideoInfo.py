@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """FFprobe JSON tree viewer."""
 
 from qgis.PyQt.QtCore import Qt

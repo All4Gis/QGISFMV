@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Background OpenCV filter processing to keep the video UI responsive."""
 
 from qgis.PyQt.QtCore import QObject, QThread, pyqtSignal, pyqtSlot

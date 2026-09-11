@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Unified FMV settings dialog (paths, layers, AI, magnifier, drawings, platform)."""
 
 import os
@@ -131,7 +130,7 @@ class FmvSettingsDialog(QDialog, Ui_FmvSettings):
         self.dsb_onnxConf.setValue(float(get("DNN", "onnx_confidence", "0.35") or 0.35))
         self.dsb_onnxNms.setValue(float(get("DNN", "onnx_nms", "0.45") or 0.45))
         for key, edit in self._dnnClassEdits.items():
-            edit.setText(get("DNN", "dnn_{}_class_ids".format(key), "") or "")
+            edit.setText(get("DNN", f"dnn_{key}_class_ids", "") or "")
         self._refreshDnnStatus()
         self.lbl_settingsFile.setText(
             QCoreApplication.translate(

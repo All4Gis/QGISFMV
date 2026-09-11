@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Storyboard — silent georeferenced frame captures at bookmarks / alerts."""
 
 from __future__ import annotations

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Safe QThread teardown helpers.
 
 Qt aborts (qFatal) if a still-running QThread is destroyed as a QObject child

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for the TrackLockState enum in QgsVideoState.py."""
 
 from code.tests.support import load_plugin_module

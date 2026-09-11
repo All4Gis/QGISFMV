@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Picture-in-picture mini map overlay on the video widget."""
 
 from math import cos, radians, sin

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Live telemetry -> map layer updates, extracted from QgsFmvLayers.py.
 
 Owns the per-KLV-packet Update* functions (footprint, beams, trajectory,
@@ -31,6 +30,7 @@ from QGIS_FMV.utils.layers.QgsFmvLayerDefaults import (
 from QGIS_FMV.utils.layers.QgsFmvLayerStyleStore import (
     apply_or_default as applyLayerStyle,
 )
+from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 # Per-video-group caches. Kept here (not in QgsFmvLayers) per the module split;
@@ -70,7 +70,8 @@ def _corner_point_3d(corner, default_z=0.0):
         try:
             z = float(corner[2])
         except (TypeError, ValueError):
-            pass
+            log.debug("corner_point_3d: z float conversion failed: %s", corner)
+
     return QgsPoint(float(corner[1]), float(corner[0]), z)
 
 

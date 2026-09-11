@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for pymisb ST0601 encoder."""
 
 import struct

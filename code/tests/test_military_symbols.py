@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Military symbol catalog and bundled SVG assets."""
 
 import os

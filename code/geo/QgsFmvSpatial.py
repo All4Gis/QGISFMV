@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
 """Pure spatial helpers (no QGIS dependency) for geofence, seek, and detections."""
 
 from __future__ import annotations
 
 import math
-from typing import Iterable, Optional, Sequence, Tuple
+from collections.abc import Iterable, Sequence
 
-Point2 = Tuple[float, float]
-Sample3 = Tuple[float, float, float]  # lon, lat, time_sec
+Point2 = tuple[float, float]
+Sample3 = tuple[float, float, float]  # lon, lat, time_sec
 
 
 def point_in_ring(lon: float, lat: float, ring: Sequence[Point2]) -> bool:
@@ -76,7 +75,7 @@ def next_lookback_after(
     samples: Sequence,
     after_sec: float,
     cluster_dt: float = 2.0,
-) -> Optional[tuple]:
+) -> tuple | None:
     """First lookback/FOV hit at or after *after_sec*, or ``None``."""
     hits = lookback_samples(lon, lat, samples, cluster_dt=cluster_dt, max_hits=80)
     after = float(after_sec or 0.0)
@@ -135,7 +134,7 @@ def target_cue_state(
 
 def nearest_sample(
     lon: float, lat: float, samples: Sequence[Sample3]
-) -> Optional[Sample3]:
+) -> Sample3 | None:
     """Return the nearest ``(lon, lat, time_sec)`` sample, or None if empty."""
     if not samples:
         return None
@@ -155,7 +154,7 @@ def box_center(box) -> Point2:
     return (0.5 * (float(x0) + float(x1)), 0.5 * (float(y0) + float(y1)))
 
 
-def image_xy_to_latlon(gt, x: float, y: float) -> Optional[Point2]:
+def image_xy_to_latlon(gt, x: float, y: float) -> Point2 | None:
     """Project image pixel through a 3×3 GCP transform → ``(lat, lon)``.
 
     Matches ``VideoUtils.GetTransf`` / ``GetPointCommonCoords`` conventions.
@@ -178,9 +177,7 @@ def image_xy_to_latlon(gt, x: float, y: float) -> Optional[Point2]:
         return None
 
 
-def metadata_lat_lon(
-    metadata_dict, prefer_frame_center: bool = True
-) -> Optional[Point2]:
+def metadata_lat_lon(metadata_dict, prefer_frame_center: bool = True) -> Point2 | None:
     """Extract ``(lat, lon)`` from a MetadataList-style dict."""
     if not metadata_dict:
         return None

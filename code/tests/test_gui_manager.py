@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 GUI tests for FmvManager — the video manager dock widget.
 
@@ -9,9 +8,6 @@ Run inside QGIS Python console::
 
     import pytest; pytest.main(["-xvs", "QGIS_FMV/tests/test_gui_manager.py"])
 """
-
-import os
-import sys
 
 import pytest
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Reverse geocoding helpers (Nominatim-compatible).
 
 Nominatim's usage policy requires an identifying ``User-Agent``.  Background
@@ -56,9 +55,9 @@ def reverseGeocodeLabelFromJson(data):
         )
         country = address.get("country")
         if locality and region:
-            return "{}, {}".format(locality, region)
+            return f"{locality}, {region}"
         if locality and country:
-            return "{}, {}".format(locality, country)
+            return f"{locality}, {country}"
         if locality:
             return locality
         display = data.get("display_name") or ""

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Metadata-formatting helpers for the FMV analysis report.
 
 Owns lookup/normalization of MISB metadata entries and the HTML table

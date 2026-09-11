@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Public façade for the video drawing tools.
 
 The actual implementations live in focused sibling modules:
@@ -39,10 +38,10 @@ from QGIS_FMV.player.drawing.QgsFmvDrawShapes import (
     split_at_separators as _split_at_separators,
 )
 
-__all__ = ["DrawToolBar", "DrawingConfig", "drawing_config", "RulerTotalMeasure"]
+__all__ = ["DrawToolBar", "DrawingConfig", "RulerTotalMeasure", "drawing_config"]
 
 
-class DrawToolBar(object):
+class DrawToolBar:
 
     @staticmethod
     def setValues(options=None):

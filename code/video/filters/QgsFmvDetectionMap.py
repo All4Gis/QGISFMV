@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Publish AI / CV detection boxes onto a georeferenced QGIS point layer."""
 
 from __future__ import annotations
@@ -70,7 +69,7 @@ def remove_detection_listener(callback):
     try:
         _listeners.remove(callback)
     except ValueError:
-        pass
+        log.debug("remove_detection_listener failed: %s", callback)
 
 
 def last_detections(class_name=None):
@@ -139,7 +138,7 @@ def notify_detections(class_name, boxes, track_ids=None, scores=None, time_sec=N
         if _trail_enabled:
             append_detection_trail(key, points, time_sec=_playhead_sec(time_sec))
         _last_publish_ms = now
-        for cb in list(_listeners):
+        for cb in _listeners:
             try:
                 cb(key, points)
             except Exception as exc:

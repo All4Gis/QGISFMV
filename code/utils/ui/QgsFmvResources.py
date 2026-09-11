@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Qt resource paths for plugin icons (prefix ``:/imgFMV/images/``).
 
 Source files are listed in ``ui/resources.qrc`` under subfolders:

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """FMV video player package."""
 
 __all__ = ["QgsFmvPlayer"]

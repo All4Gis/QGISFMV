@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Per-video telemetry / georeferencing session state.
 
 Replaces the former module-global ``gv`` singleton.  Callers should prefer

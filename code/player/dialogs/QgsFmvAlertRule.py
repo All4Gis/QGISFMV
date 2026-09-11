@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Alert-rule dialog — layout defined in ``ui_FmvAlertRule.ui``."""
 
 from qgis.PyQt.QtWidgets import QDialog

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# coding: utf-8
 """Build script for QGIS FMV plugin.
 
 Compiles UI files, resources, and translations for PyQt6 (QGIS 4.0+).
@@ -117,7 +116,7 @@ def _rcc_cmd():
     if rcc:
         return [rcc]
     try:
-        import PySide6  # noqa: F401
+        import PySide6
 
         rcc_path = Path(PySide6.__file__).resolve().parent / "rcc.exe"
         if rcc_path.is_file():

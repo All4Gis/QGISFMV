@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Footprint corner-point estimation, extracted from QgsFmvGeoReferencing.py.
 
 Computes the four footprint corners either from MISB corner-offset fields

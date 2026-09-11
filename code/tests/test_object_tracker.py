@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for object tracking (no QGIS runtime)."""
 
 import importlib.util

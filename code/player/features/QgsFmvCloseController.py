@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Shutdown/teardown orchestration: session cleanup, task cancellation, dock removal."""
 
 from qgis.core import QgsApplication

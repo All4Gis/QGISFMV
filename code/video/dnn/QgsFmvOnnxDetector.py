@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
 """Optional ONNX / YOLO detection via OpenCV DNN (same cv2 as object tracking)."""
 
 from __future__ import annotations
 
 import os
-from typing import Dict, List, Optional, Sequence, Tuple
+from collections.abc import Sequence
 
 import numpy as np
 from QGIS_FMV.utils.logging import log
 
-SEGMENTATION_FILTER_KEYS: Tuple[str, ...] = (
+SEGMENTATION_FILTER_KEYS: tuple[str, ...] = (
     "building",
     "road",
     "vehicle",
@@ -20,7 +19,7 @@ SEGMENTATION_FILTER_KEYS: Tuple[str, ...] = (
 )
 
 # COCO 80 classes (YOLOv5/v8 default training set)
-COCO_CLASS_NAMES: Tuple[str, ...] = (
+COCO_CLASS_NAMES: tuple[str, ...] = (
     "person",
     "bicycle",
     "car",
@@ -104,7 +103,7 @@ COCO_CLASS_NAMES: Tuple[str, ...] = (
 )
 
 # VisDrone DET (aerial / UAV imagery) — standard 10-class ordering.
-VISDRONE_CLASS_NAMES: Tuple[str, ...] = (
+VISDRONE_CLASS_NAMES: tuple[str, ...] = (
     "pedestrian",
     "people",
     "bicycle",
@@ -119,7 +118,7 @@ VISDRONE_CLASS_NAMES: Tuple[str, ...] = (
 
 # Built-in COCO class ids when dnn_<filter>_class_ids is not set in settings.ini.
 # Building / road / fire / smoke / flood need a custom ONNX or explicit class ids.
-FILTER_COCO_CLASSES: Dict[str, Tuple[int, ...]] = {
+FILTER_COCO_CLASSES: dict[str, tuple[int, ...]] = {
     "vehicle": (2, 3, 5, 7),  # car, motorcycle, bus, truck
     "person": (0,),
     "building": (),
@@ -130,7 +129,7 @@ FILTER_COCO_CLASSES: Dict[str, Tuple[int, ...]] = {
 }
 
 # VisDrone defaults for FMV / aerial video (vehicle + person filters).
-FILTER_VISDRONE_CLASSES: Dict[str, Tuple[int, ...]] = {
+FILTER_VISDRONE_CLASSES: dict[str, tuple[int, ...]] = {
     "vehicle": (3, 4, 5, 8, 9),  # car, van, truck, bus, motor
     "person": (0, 1),  # pedestrian, people
     "building": (),
@@ -140,11 +139,11 @@ FILTER_VISDRONE_CLASSES: Dict[str, Tuple[int, ...]] = {
     "flood": (),
 }
 
-_detection_cache: Dict[str, OnnxYoloDetector] = {}
+_detection_cache: dict[str, OnnxYoloDetector] = {}
 _load_failures: set = set()
 
 
-def _forward_outputs(net) -> List[np.ndarray]:
+def _forward_outputs(net) -> list[np.ndarray]:
     """Normalize cv2.dnn forward() return type (list, dict, or single ndarray)."""
     outputs = net.forward()
     if isinstance(outputs, dict):
@@ -156,7 +155,7 @@ def _forward_outputs(net) -> List[np.ndarray]:
     return [outputs]
 
 
-def _nms_indices(idxs) -> List[int]:
+def _nms_indices(idxs) -> list[int]:
     """Normalize cv2.dnn.NMSBoxes return type across OpenCV versions."""
     if idxs is None:
         return []
@@ -171,18 +170,20 @@ def _nms_indices(idxs) -> List[int]:
     except Exception as _exc:
         log.debug("NMS indices reshape failed: %s", _exc)
         return []
-    out: List[int] = []
+    out: list[int] = []
     for raw in flat:
         try:
             out.append(int(raw))
             continue
         except (TypeError, ValueError):
-            pass
+            log.debug("NMS indices int conversion failed: %s", raw)
+
         if isinstance(raw, (list, tuple, np.ndarray)) and len(raw):
             try:
                 out.append(int(raw[0]))
             except (TypeError, ValueError, IndexError):
-                pass
+                log.debug("NMS indices int conversion failed: %s", raw)
+
     return out
 
 
@@ -224,13 +225,13 @@ def _model_profile() -> str:
     return "aerial"
 
 
-def _default_class_map() -> Dict[str, Tuple[int, ...]]:
+def _default_class_map() -> dict[str, tuple[int, ...]]:
     if _model_profile() == "coco":
         return FILTER_COCO_CLASSES
     return FILTER_VISDRONE_CLASSES
 
 
-def class_names_for_model(model_path: str) -> Tuple[str, ...]:
+def class_names_for_model(model_path: str) -> tuple[str, ...]:
     """Return the class name tuple for a given ONNX model path (VisDrone or COCO)."""
     path = (model_path or "").lower()
     if "visdrone" in path:
@@ -243,7 +244,7 @@ def class_names_for_model(model_path: str) -> Tuple[str, ...]:
     return VISDRONE_CLASS_NAMES
 
 
-def _parse_class_ids(raw: str) -> Tuple[int, ...]:
+def _parse_class_ids(raw: str) -> tuple[int, ...]:
     ids = []
     for part in (raw or "").split(","):
         part = part.strip()
@@ -252,7 +253,7 @@ def _parse_class_ids(raw: str) -> Tuple[int, ...]:
     return tuple(ids)
 
 
-def _dnn_base_settings() -> Optional[dict]:
+def _dnn_base_settings() -> dict | None:
     try:
         from QGIS_FMV.utils.settings.QgsFmvSettings import get
 
@@ -273,14 +274,14 @@ def _dnn_base_settings() -> Optional[dict]:
         return None
 
 
-def _model_path_for_filter(filter_key: str) -> Optional[str]:
+def _model_path_for_filter(filter_key: str) -> str | None:
     base = _dnn_base_settings()
     if base is None:
         return None
     try:
         from QGIS_FMV.utils.settings.QgsFmvSettings import get
 
-        override = (get("DNN", "onnx_model_{}".format(filter_key), "") or "").strip()
+        override = (get("DNN", f"onnx_model_{filter_key}", "") or "").strip()
     except Exception as _exc:
         log.debug("DNN filter model override read failed: %s", _exc)
         override = ""
@@ -290,12 +291,12 @@ def _model_path_for_filter(filter_key: str) -> Optional[str]:
     return None
 
 
-def class_ids_for_filter(filter_key: str) -> Tuple[int, ...]:
+def class_ids_for_filter(filter_key: str) -> tuple[int, ...]:
     """Return ONNX class ids for a segmentation filter (settings override COCO defaults)."""
     try:
         from QGIS_FMV.utils.settings.QgsFmvSettings import get
 
-        raw = get("DNN", "dnn_{}_class_ids".format(filter_key), "")
+        raw = get("DNN", f"dnn_{filter_key}_class_ids", "")
         parsed = _parse_class_ids(raw)
         if parsed:
             return parsed
@@ -329,14 +330,12 @@ def dnn_status_text() -> str:
             hint = "vehicle/person use VisDrone class ids when profile=aerial"
         else:
             hint = "vehicle/person use COCO class ids when profile=coco"
-        return "DNN on but no filter ready — set dnn_<filter>_class_ids ({})".format(
-            hint
-        )
+        return f"DNN on but no filter ready — set dnn_<filter>_class_ids ({hint})"
     model = base["global_model"]
     return "DNN ON ({}) filters: {}".format(
         base["model_type"],
         ", ".join(enabled),
-    ) + ("" if not model else " model={}".format(os.path.basename(model)))
+    ) + ("" if not model else f" model={os.path.basename(model)}")
 
 
 class OnnxYoloDetector:
@@ -364,10 +363,10 @@ class OnnxYoloDetector:
     def detect(
         self,
         rgb: np.ndarray,
-        class_ids: Optional[Sequence[int]] = None,
+        class_ids: Sequence[int] | None = None,
         conf_threshold: float = 0.35,
         nms_threshold: float = 0.45,
-    ) -> List[Tuple[int, int, int, int, float, int, str]]:
+    ) -> list[tuple[int, int, int, int, float, int, str]]:
         """Run inference; returns (x0, y0, x1, y1, confidence, class_id, class_name)."""
         h, w = rgb.shape[:2]
         length = max(h, w)
@@ -416,9 +415,9 @@ class OnnxYoloDetector:
         out = cv2.transpose(out)
         allowed = None if class_ids is None else set(int(c) for c in class_ids)
 
-        boxes: List[List[float]] = []
-        scores: List[float] = []
-        cids: List[int] = []
+        boxes: list[list[float]] = []
+        scores: list[float] = []
+        cids: list[int] = []
         for row in out:
             cls_scores = row[4:]
             cid = int(np.argmax(cls_scores))
@@ -527,7 +526,7 @@ class OnnxYoloDetector:
         return results
 
 
-def _get_detector(model_path: str) -> Optional[OnnxYoloDetector]:
+def _get_detector(model_path: str) -> OnnxYoloDetector | None:
     base = _dnn_base_settings()
     if base is None or not model_path:
         return None
@@ -551,13 +550,13 @@ def _get_detector(model_path: str) -> Optional[OnnxYoloDetector]:
 
 
 def boxes_to_score_map(
-    shape: Tuple[int, int],
-    detections: Sequence[Tuple[int, int, int, int, float, int, str]],
-) -> Tuple[np.ndarray, List[Tuple[int, int, int, int]]]:
+    shape: tuple[int, int],
+    detections: Sequence[tuple[int, int, int, int, float, int, str]],
+) -> tuple[np.ndarray, list[tuple[int, int, int, int]]]:
     """Build a float score map and box list from DNN detections."""
     h, w = shape
     score = np.zeros((h, w), dtype=np.float64)
-    boxes: List[Tuple[int, int, int, int]] = []
+    boxes: list[tuple[int, int, int, int]] = []
     for x0, y0, x1, y1, conf, _cid, _name in detections:
         x0, y0 = max(0, x0), max(0, y0)
         x1, y1 = min(w, x1), min(h, y1)
@@ -571,7 +570,7 @@ def boxes_to_score_map(
 def try_dnn_detection(
     rgb: np.ndarray,
     filter_key: str,
-) -> Optional[Tuple[np.ndarray, List[Tuple[int, int, int, int]], str]]:
+) -> tuple[np.ndarray, list[tuple[int, int, int, int]], str] | None:
     """
     Run YOLO ONNX for a segmentation filter.
 

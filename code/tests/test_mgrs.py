@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for MGRS coordinate conversion (uses mgrs PyPI package)."""
 
 import pytest

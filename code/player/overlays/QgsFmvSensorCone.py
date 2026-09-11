@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Sensor Coverage Cone overlay — shows the sensor FOV on the QGIS map canvas."""
 
 import math

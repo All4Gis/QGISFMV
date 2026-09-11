@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Run all GUI / visual tests inside QGIS.
 

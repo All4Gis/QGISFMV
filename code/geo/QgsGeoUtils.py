@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Consolidated geodesic utilities for QGIS_FMV.
 
@@ -12,8 +11,8 @@ safely imported before ``QgsApplication`` is fully initialized.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from math import asin, atan2, cos, degrees, radians, sin
-from typing import Sequence
 
 from QGIS_FMV.utils.logging import log
 

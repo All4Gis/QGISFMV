@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Point / line / polygon / military symbol / censure painting on the video frame."""
 
 import os
@@ -51,7 +50,7 @@ def split_at_separators(draw_list):
         if len(tail) > 1:
             segments.append(tail)
     except ValueError:
-        pass
+        log.debug("split_at_separators failed")
 
     if current and current not in segments:
         segments.append(current)
@@ -170,7 +169,6 @@ def draw_lines_on_video(pt, idx, painter, surface, gt, drawLines):
             painter.drawPoint(end)
         except Exception as exc:
             log.debug("drawLineOnVideo segment failed: %s", exc)
-    return
 
 
 def draw_polygon_on_video(values, painter, surface, gt):
@@ -191,7 +189,6 @@ def draw_polygon_on_video(values, painter, surface, gt):
     painter.fillPath(path, cfg.PolyBrush)
     painter.setPen(white_pen)
     painter.drawPoints(polygon)
-    return
 
 
 def draw_censured_on_video(painter, drawCesure):
@@ -206,4 +203,3 @@ def draw_censured_on_video(painter, drawCesure):
 
     except Exception as exc:
         log.debug("drawCensuredOnVideo failed: %s", exc)
-    return

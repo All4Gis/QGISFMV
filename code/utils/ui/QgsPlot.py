@@ -225,8 +225,7 @@ def ShowPlot(
 
         peak_bitrate = frame_array.max(0)[1]
 
-        if peak_bitrate > global_peak_bitrate:
-            global_peak_bitrate = peak_bitrate
+        global_peak_bitrate = max(global_peak_bitrate, peak_bitrate)
 
         mean_bitrate = frame_array.mean(0)[1]
 
@@ -238,7 +237,7 @@ def ShowPlot(
             [0],
             frame_array[:, 1],
             color=frame_type_color[frame_type],
-            label="{} Frames".format(frame_type),
+            label=f"{frame_type} Frames",
         )
 
     peak_text_x = matplot.xlim()[1] * 0.15
@@ -247,7 +246,7 @@ def ShowPlot(
         (matplot.ylim()[1] - matplot.ylim()[0]) * 0.015
     )
 
-    peak_text = "peak ({:.0f})".format(global_peak_bitrate)
+    peak_text = f"peak ({global_peak_bitrate:.0f})"
 
     matplot.axhline(
         global_peak_bitrate,
@@ -270,7 +269,7 @@ def ShowPlot(
         (matplot.ylim()[1] - matplot.ylim()[0]) * 0.015
     )
 
-    mean_text = "mean ({:.0f})".format(global_mean_bitrate)
+    mean_text = f"mean ({global_mean_bitrate:.0f})"
 
     matplot.axhline(
         global_mean_bitrate,
@@ -389,7 +388,7 @@ class CreatePlotsBitrate(QObject):
                                 TypeError,
                                 ValueError,
                             ):
-                                pass
+                                log.debug("frameTime parse failed: %s", duration)
 
                 try:
                     pktSize = float(node.get("pkt_size"))

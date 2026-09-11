@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Playback / media-status enums and public aliases for FMV multimedia."""
 
 from enum import IntEnum

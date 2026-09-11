@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Cursor geo-label formatting and canvas-cursor helpers extracted from
 VideoWidget (QgsVideo.py).
 

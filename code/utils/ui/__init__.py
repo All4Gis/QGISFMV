@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Reusable UI helpers (messages, JSON model, plots, resources, links)."""
 
 __all__ = ["QgsUtils"]

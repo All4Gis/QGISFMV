@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Background KLV parsing (keeps QGIS main thread responsive during live streams)."""
 
 from pymisb.klvdata.element import UnknownElement

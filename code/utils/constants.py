@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Project-wide named constants for QGIS_FMV.
 
 Replaces magic numbers scattered across the codebase with readable,

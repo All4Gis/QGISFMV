@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Detection geometry helpers: IoU, NMS, region scoring, multiscale, tracking."""
 
 from __future__ import annotations

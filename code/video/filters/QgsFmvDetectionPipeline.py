@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Shared OpenCV / numpy detection engine: temporal smoothing, overlays, CC pipelines."""
 
 from __future__ import annotations
@@ -20,16 +19,37 @@ from QGIS_FMV.video.filters.QgsFmvFilterCore import (
 )
 
 
-def _clahe_rgb(rgb):
+def _clahe_rgb(rgb_image):
     """Light CLAHE on L channel — helps small aerial objects in haze."""
+
     cv2 = _get_cv2_module()
+
     if cv2 is None:
-        return rgb
-    lab = cv2.cvtColor(rgb, cv2.COLOR_RGB2LAB)
-    l, a, b = cv2.split(lab)
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-    l = clahe.apply(l)
-    return cv2.cvtColor(cv2.merge([l, a, b]), cv2.COLOR_LAB2RGB)
+        return rgb_image
+
+    lab_image = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2LAB)
+
+    lightness_channel, green_red_channel, blue_yellow_channel = cv2.split(lab_image)
+
+    clahe_processor = cv2.createCLAHE(
+        clipLimit=2.0,
+        tileGridSize=(8, 8),
+    )
+
+    enhanced_lightness = clahe_processor.apply(lightness_channel)
+
+    enhanced_lab_image = cv2.merge(
+        [
+            enhanced_lightness,
+            green_red_channel,
+            blue_yellow_channel,
+        ]
+    )
+
+    return cv2.cvtColor(
+        enhanced_lab_image,
+        cv2.COLOR_LAB2RGB,
+    )
 
 
 def _ema_score(name, score, alpha=0.40):
@@ -141,7 +161,7 @@ def _confidence_overlay(
         engine = "CV" if opencv_available() else ("SCIPY" if _HAS_NDIMAGE else "NUMPY")
     FilterCore.draw_filter_banner(
         out,
-        f"{str(label)} [{str(engine)}] det:{nboxes} {float(cov):.0f}%",
+        f"{label!s} [{engine!s}] det:{nboxes} {float(cov):.0f}%",
         tint_rgb,
     )
     return out, weight
@@ -327,9 +347,9 @@ def _run_detection(
     from QGIS_FMV.video.filters.QgsFmvFilterTuning import (
         clahe_before_detection,
         dnn_fallback_when_empty,
+        tune_overlay_options,
     )
     from QGIS_FMV.video.filters.QgsFmvFilterTuning import ema_alpha as tuned_ema_alpha
-    from QGIS_FMV.video.filters.QgsFmvFilterTuning import tune_overlay_options
 
     overlay_kwargs = tune_overlay_options(dict(overlay_kwargs))
     ema_alpha = tuned_ema_alpha(ema_alpha)

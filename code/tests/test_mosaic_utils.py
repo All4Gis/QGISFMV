@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """Unit tests for mosaic helpers (pure numpy / optional GDAL; no QGIS GUI)."""
 
-import time
 import types
 from code.tests.support import ensure_qgis_fmv_package, load_plugin_module
 from unittest.mock import MagicMock

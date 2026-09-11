@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Path / duration / stream-info helpers for FMV media backends."""
 
 import json

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Player attach/playback orchestration: create or reuse the FMV player dock
 for the video selected in the Manager, and center the map on its start point.
 """

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Instant Replay — on alert/sentinel, pause and rewind a few seconds."""
 
 from __future__ import annotations

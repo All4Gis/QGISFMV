@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """PDF report generation, extracted from QgsFmvMetadata.py.
 
 Owns the ReportGenerator class used to render the multi-section FMV

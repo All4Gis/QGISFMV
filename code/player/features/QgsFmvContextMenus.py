@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Right-click context menus for the video surface and menu bar, plus toolbar toggling."""
 
 from qgis.PyQt.QtCore import QCoreApplication

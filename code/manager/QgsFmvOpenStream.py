@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QCoreApplication, QRegularExpression
 from qgis.PyQt.QtGui import QIntValidator, QRegularExpressionValidator

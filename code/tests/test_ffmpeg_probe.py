@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for FFmpeg probe utilities (requires qgis.PyQt stubs or QGIS)."""
 
 import pytest

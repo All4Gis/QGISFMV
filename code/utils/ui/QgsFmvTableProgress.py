@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Table cell progress bar widget loaded from .ui."""
 
 from qgis.PyQt.QtWidgets import QWidget

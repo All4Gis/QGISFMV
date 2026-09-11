@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for pure georeferencing math (homography / affine checks)."""
 
 import sys

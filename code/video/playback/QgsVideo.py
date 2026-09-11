@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtCore import QBasicTimer, QEvent, QPoint, QPointF, Qt, QTimer
 from qgis.PyQt.QtGui import QBrush, QColor, QCursor, QMouseEvent, QPalette
 from qgis.PyQt.QtMultimedia import QVideoSink

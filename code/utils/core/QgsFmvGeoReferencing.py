@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Georeferencing utilities: GCP transforms, corner estimation, DEM intersection."""
 
 from math import isfinite, pi, sqrt
@@ -420,8 +419,6 @@ def SetGCPsToGeoTransform(
         qgsu.showUserAndLogMessage(
             "", "Unable to extract a geotransform.", onlyLog=True
         )
-
-    return
 
 
 def _update_footprint_beams_gcp(packet, ul, ur, lr, ll, frame_center, ele):

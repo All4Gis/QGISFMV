@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Drawing-tool toggles: magnifier, stamp, drawers, measures, military symbols."""
 
 from qgis.PyQt.QtCore import Qt

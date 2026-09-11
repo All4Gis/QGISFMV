@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 GUI / Visual testing harness for QGIS FMV.
 
@@ -142,7 +141,6 @@ class GUITestHarness:
 
         # Ensure QGIS app is running
         if QgsApplication.instance() is None:
-            import sys
 
             QgsApplication.setPrefixPath("/Applications/QGIS.app/Contents/MacOS", True)
             self._qgs_app = QgsApplication([], False)

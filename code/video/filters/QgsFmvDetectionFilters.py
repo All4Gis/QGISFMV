@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """AI / CV detection filters (building, road, vehicle, person, fire, smoke, flood).
 
 This module is a thin, backward-compatible façade. The actual implementation

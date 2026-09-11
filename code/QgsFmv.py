@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  QGIS Full Motion Video (FMV)
@@ -54,9 +53,7 @@ class Fmv:
         localeSetting = QSettings().value("locale/userLocale")
         if localeSetting:
             locale = localeSetting[0:2]
-            localePath = os.path.join(
-                self.plugin_dir, "i18n", "qgisfmv_{}.qm".format(locale)
-            )
+            localePath = os.path.join(self.plugin_dir, "i18n", f"qgisfmv_{locale}.qm")
             if os.path.exists(localePath):
                 self.translator = QTranslator()
                 self.translator.load(localePath)

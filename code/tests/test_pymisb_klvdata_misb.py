@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for pymisb MISB local sets (migrated from legacy klvdata tests)."""
 
 from pathlib import Path

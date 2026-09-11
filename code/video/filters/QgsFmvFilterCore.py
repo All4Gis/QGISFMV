@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Shared OpenCV environment and image primitives for video filters."""
 
 import numpy as np
@@ -10,7 +9,7 @@ try:
 
     _HAS_SCIPY = True
 except ImportError:
-    pass
+    log.debug("scipy import failed")
 
 _HAS_NDIMAGE = False
 try:

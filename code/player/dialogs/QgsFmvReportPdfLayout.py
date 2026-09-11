@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """PDF page/layout helpers for the FMV analysis report.
 
 Owns the report color palette and the pure sizing helpers used to lay out

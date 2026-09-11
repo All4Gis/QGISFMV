@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Playback transport, media-status handling, and slider/duration synchronization."""
 
 import os.path
@@ -222,7 +221,6 @@ class PlaybackController:
         player = self._player
         player.btn_CaptureFrame.setEnabled(available)
         player.gb_PlayerControls.setEnabled(available)
-        return
 
     def pauseAt(self, pos):
         """Seek to *pos* (ms) and pause playback."""
@@ -280,7 +278,6 @@ class PlaybackController:
         if hasVideo(player.player):
             player.player.setPosition(player.player.duration())
             player.videoWidget.update()
-        return
 
     def StartMedia(self):
         """Button start video position"""
@@ -288,7 +285,6 @@ class PlaybackController:
         if hasVideo(player.player):
             player.player.setPosition(0)
             player.videoWidget.update()
-        return
 
     def forwardMedia(self):
         """Button forward Video"""
@@ -314,7 +310,6 @@ class PlaybackController:
         pl = getPlaylist(player.player)
         if pl is not None:
             pl.setPlaybackMode(PlaylistLoop if checked else PlaylistSequential)
-        return
 
     def durationChanged(self, duration):
         """Duration video change signal

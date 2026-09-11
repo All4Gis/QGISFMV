@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtGui import QColor, qRgba
 
 
@@ -22,7 +21,7 @@ def _platform_style(svg_name, outline="255, 255, 255, 220", size="20"):
     }
 
 
-class FmvLayerStyles(object):
+class FmvLayerStyles:
 
     # ── Sensor styles (ImageSourceSensor) ──
     S = {

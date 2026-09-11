@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Geo/map helpers for the FMV analysis report.
 
 Owns footprint/sensor-position lookups and the mini-map extent/projection
@@ -146,7 +145,8 @@ def _sensor_position_from_layer(group_name):
                 lat = float(feature["latitude"])
                 lon = float(feature["longitude"])
             except (TypeError, ValueError):
-                pass
+                log.debug("Platform latitude/longitude parse failed: %s", feature)
+
         if lat is None or lon is None:
             geometry = feature.geometry()
             if geometry is not None and not geometry.isEmpty():
@@ -187,7 +187,7 @@ def _sensor_position_for_report(data):
             else:
                 lon = float(raw)
         except (TypeError, ValueError):
-            pass
+            log.debug("Sensor position parse failed: %s", raw)
 
     if lat is None or lon is None:
         try:
@@ -226,7 +226,8 @@ def _sensor_position_for_report_with_group(data, group_name=None, player=None):
             if lon is None and packet.SensorLongitude is not None:
                 lon = float(packet.SensorLongitude)
         except (TypeError, ValueError, AttributeError):
-            pass
+            log.debug("Sensor position from packet failed: %s", packet)
+
     return lat, lon
 
 
