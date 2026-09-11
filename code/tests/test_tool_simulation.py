@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Simulate FMV tool entry points without launching QGIS GUI.
 
 This is a regression harness: it instantiates controllers with a mock player,
@@ -19,7 +18,7 @@ from code.tests.support import (
     snapshot_modules,
 )
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 

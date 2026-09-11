@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from enum import Enum
 
 # Shared constant for drawing list sentinel markers
@@ -14,7 +13,7 @@ class TrackLockState(Enum):
     LOST = "lost"
 
 
-class InteractionState(object):
+class InteractionState:
     """Tracks which drawing/measurement tool is currently active."""
 
     def __init__(self):
@@ -49,7 +48,7 @@ class InteractionState(object):
         self.__init__()
 
 
-class FilterState(object):
+class FilterState:
     """Tracks which video filters are currently active."""
 
     def __init__(self):

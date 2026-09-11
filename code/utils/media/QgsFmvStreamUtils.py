@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Network stream URI helpers for FMV live playback."""
 
 import os

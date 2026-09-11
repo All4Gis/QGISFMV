@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Player feature controllers (mosaic, record, metadata pipeline, map-center, timeline,
 alerts, snapshots, playback transport, close/teardown, task-result routing, export,
 context menus, draw-tool toggles) extracted from the QgsFmvPlayer god-class.

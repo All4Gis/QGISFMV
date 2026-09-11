@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Center-on-map action group: keep the canvas following platform/footprint/target."""
 
 from qgis.PyQt.QtCore import QCoreApplication

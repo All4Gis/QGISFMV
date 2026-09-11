@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Tests for geodesic calculations in QgsGeoUtils.
 
@@ -6,8 +5,6 @@ The ``destination()`` function is pure Python and can run without QGIS.
 The ``distance()``, ``bearing()``, and ``polygon_area()`` functions
 require the QGIS runtime (QgsDistanceArea).
 """
-
-import math
 
 import pytest
 

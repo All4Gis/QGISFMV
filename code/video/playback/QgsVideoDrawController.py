@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Drawing/measurement tool controller extracted from VideoWidget (QgsVideo.py).
 
 Owns the draw-list mutations (points, lines, polygons, censure, military

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Map-drawing sync helpers extracted from QgsFmvLayers.py.
 
 Owns the Add/Remove draw point/line/polygon/military-symbol functions and the
@@ -107,7 +106,7 @@ def AddDrawLineOnMap(drawLines):
         points = []
         if k is False:
             list1 = list(v)
-            for i in range(0, len(list1)):
+            for i in range(len(list1)):
                 pt = QgsPointXY(list1[i][0], list1[i][1])
                 points.append(pt)
             polyline = QgsGeometry.fromPolylineXY(points)
@@ -155,7 +154,7 @@ def AddDrawPolygonOnMap(poly_coordinates):
     # create  float polygon --> construcet out of 'point'
 
     list_polygon = QPolygonF()
-    for x in range(0, len(poly_coordinates)):
+    for x in range(len(poly_coordinates)):
         if x % 2 == 0:
             point.setX(poly_coordinates[x])
             point.setY(poly_coordinates[x + 1])

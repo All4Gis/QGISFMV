@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
 """Cross-platform path helper tests (Mac / Linux / Windows)."""
 
 import os
-import platform
 from code.tests.support import load_plugin_module
 
 

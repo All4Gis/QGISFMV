@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Telemetry HUD painted directly on the video widget (no overlay QWidget)."""
 
 import time

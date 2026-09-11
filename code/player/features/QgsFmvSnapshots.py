@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
 """Automatic frame snapshots — capture frames on metadata change or interval."""
 
 import os
 
 from qgis.PyQt.QtCore import QTimer
 from QGIS_FMV.utils.core.QgsFmvUtils import getVideoFolder
+from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
@@ -94,7 +94,7 @@ class AutoSnapshot:
                     self._last_lat = lat
                     self._last_lon = lon
                 except (TypeError, ValueError):
-                    pass
+                    log.debug("position change check failed")
 
         self._count += 1
         filename = os.path.join(self._output_dir, f"snapshot_{self._count:05d}.png")

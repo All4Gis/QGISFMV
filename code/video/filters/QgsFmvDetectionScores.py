@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Per-class detection scorers (building, road, vehicle, person, fire, smoke, flood)."""
 
 from __future__ import annotations

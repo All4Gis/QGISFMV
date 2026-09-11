@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Small QGIS UI helpers used across FMV (messages, icons, folders, canvas)."""
 
 import os
@@ -97,7 +96,6 @@ class QgsUtils:
             log.warning(text)
         elif level == QGis.MessageLevel.Critical:
             log.error(text)
-        return
 
     @staticmethod
     def SetShortcutForPluginFMV(text, value="Alt+F"):

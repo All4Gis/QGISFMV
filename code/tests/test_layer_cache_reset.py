@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Unit tests for per-group layer cache reset helpers."""
 
 from code.tests.support import load_plugin_module as _load_plugin_module

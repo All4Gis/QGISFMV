@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for video state classes (no QGIS runtime)."""
 
 from code.tests.support import load_plugin_module

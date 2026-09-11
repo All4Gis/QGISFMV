@@ -1,10 +1,14 @@
-# -*- coding: utf-8 -*-
 """FFprobe JSON tree viewer."""
 
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QDialog, QHeaderView
-from QGIS_FMV.gui.ui_FmvVideoInfo import Ui_FmvVideoInfo
 from QGIS_FMV.utils.ui.QgsJsonModel import QJsonModel
+from pathlib import Path
+from qgis.PyQt import uic
+
+Ui_FmvVideoInfo, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent / "ui/ui_FmvVideoInfo.ui")
+)
 
 
 class VideoInfoDialog(QDialog, Ui_FmvVideoInfo):

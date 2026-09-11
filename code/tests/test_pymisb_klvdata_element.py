@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for pymisb.klvdata.element (migrated from legacy klvdata tests)."""
 
 from pymisb.klvdata.element import UnknownElement

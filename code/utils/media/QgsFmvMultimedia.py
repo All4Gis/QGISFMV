@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Video playback for QGIS FMV.
 

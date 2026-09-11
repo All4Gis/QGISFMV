@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Video manager dock and supporting controllers.
 
 - ``QgsManager`` — ``FmvManager`` dock façade (UI slots)

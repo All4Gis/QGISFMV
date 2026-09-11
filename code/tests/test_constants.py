@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for QGIS_FMV.utils.constants — verify all constants are defined and sane."""
 
 from code.tests.support import ensure_qgis_fmv_package, load_plugin_module

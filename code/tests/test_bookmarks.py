@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Bookmark export helpers + controller behaviour (no QGIS GUI)."""
 
 import sys

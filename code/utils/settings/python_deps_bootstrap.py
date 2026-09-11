@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Runtime Python environment tweaks for QGIS FMV.
 
 On macOS, guards against broken user-site wheels in signed QGIS builds.

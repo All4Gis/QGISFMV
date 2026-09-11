@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Manages video filter toggles, unchecking other filters when one is activated."""
 
 from QGIS_FMV.video.filters.QgsBrightnessContrast import BrightnessContrastDialog

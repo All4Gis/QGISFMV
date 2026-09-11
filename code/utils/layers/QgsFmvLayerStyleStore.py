@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Persist FMV map layer symbology in QGIS user settings."""
 
 from qgis.core import QgsMapLayerStyle

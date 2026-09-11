@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """KLV telemetry ingestion pipeline: worker-thread wiring, packet dedup, and layer sync."""
 
 from qgis.core import Qgis as QGis

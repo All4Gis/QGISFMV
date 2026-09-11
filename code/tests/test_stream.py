@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Stream URI helpers (no QGIS runtime)."""
 
 import sys

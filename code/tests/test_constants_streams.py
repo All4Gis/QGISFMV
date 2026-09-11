@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Tests for geodesic constants and stream utilities (no QGIS runtime).
 
 Geographic constants are now in QgsGeoUtils (previously in constants.py).
 Stream utilities are in QgsFmvStreamUtils.
 """
-
-import math
 
 import pytest
 

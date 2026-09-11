@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 
 Video rendering surface for QGIS FMV (Qt6 / QGIS 4).
@@ -20,7 +18,7 @@ from QGIS_FMV.video.filters import VideoFilters
 from QGIS_FMV.video.filters.QgsFilterWorker import FilterThreadPool
 
 
-class _SinkFormat(object):
+class _SinkFormat:
     """Tiny stand-in for QVideoSurfaceFormat.sizeHint()."""
 
     def __init__(self, size):
@@ -32,7 +30,7 @@ class _SinkFormat(object):
         return self._size
 
 
-class VideoSinkSurface(object):
+class VideoSinkSurface:
     """QVideoSink based surface. Filters run in ``_on_frame`` so paint stays fast
 
     and ``currentFrame()`` is always available for mosaic capture."""

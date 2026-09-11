@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Download and configure YOLO ONNX models for FMV segmentation filters."""
 
 from __future__ import annotations
@@ -8,7 +7,7 @@ import shutil
 import ssl
 import subprocess
 import sys
-from typing import Callable, Optional, Tuple
+from collections.abc import Callable
 from urllib.request import Request, urlopen
 
 from QGIS_FMV.utils.logging import log
@@ -54,7 +53,7 @@ def default_visdrone_onnx_path() -> str:
 
 
 def _download(
-    url: str, dest: str, progress: Optional[Callable[[int, int], None]] = None
+    url: str, dest: str, progress: Callable[[int, int], None] | None = None
 ) -> None:
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     req = Request(url, headers={"User-Agent": USER_AGENT})
@@ -91,14 +90,15 @@ def _download_model(url, dest, min_size, label, progress=None):
             if os.path.isfile(dest + ".part"):
                 os.remove(dest + ".part")
         except OSError:
-            pass
+            log.debug("download_model: os.remove failed: %s", dest + ".part")
+
         return False, str(exc)
 
 
 def download_yolov8n(
-    dest: Optional[str] = None,
-    progress: Optional[Callable[[int, int], None]] = None,
-) -> Tuple[bool, str]:
+    dest: str | None = None,
+    progress: Callable[[int, int], None] | None = None,
+) -> tuple[bool, str]:
     """Download YOLOv8n COCO ONNX into ~/.qgis-fmv-models/. Returns (ok, message)."""
     return _download_model(
         YOLOV8N_URL, dest or default_yolov8n_path(), 1_000_000, "YOLOv8n", progress
@@ -106,9 +106,9 @@ def download_yolov8n(
 
 
 def download_visdrone_pt(
-    dest: Optional[str] = None,
-    progress: Optional[Callable[[int, int], None]] = None,
-) -> Tuple[bool, str]:
+    dest: str | None = None,
+    progress: Callable[[int, int], None] | None = None,
+) -> tuple[bool, str]:
     """Download VisDrone YOLOv8n PyTorch weights. Returns (ok, path_or_error)."""
     return _download_model(
         VISDRONE_PT_URL,
@@ -119,7 +119,7 @@ def download_visdrone_pt(
     )
 
 
-def _export_onnx_inprocess(pt_path: str, dest_onnx: str) -> Tuple[bool, str]:
+def _export_onnx_inprocess(pt_path: str, dest_onnx: str) -> tuple[bool, str]:
     try:
         from ultralytics import YOLO
     except ImportError:
@@ -138,7 +138,7 @@ def _export_onnx_inprocess(pt_path: str, dest_onnx: str) -> Tuple[bool, str]:
         return False, str(exc)
 
 
-def _export_onnx_subprocess(pt_path: str, dest_onnx: str) -> Tuple[bool, str]:
+def _export_onnx_subprocess(pt_path: str, dest_onnx: str) -> tuple[bool, str]:
     script = (
         "import os, shutil, sys\n"
         "from ultralytics import YOLO\n"
@@ -158,26 +158,27 @@ def _export_onnx_subprocess(pt_path: str, dest_onnx: str) -> Tuple[bool, str]:
         if not py:
             continue
         try:
-            proc = subprocess.run(
+            proc = subprocess.run(  # nosec B603
                 [py, "-c", script, pt_path, dest_onnx],
                 capture_output=True,
                 text=True,
                 timeout=600,
+                shell=False,
             )
             if proc.returncode == 0 and os.path.isfile(dest_onnx):
                 return True, dest_onnx
             err = (proc.stderr or proc.stdout or "").strip()
             if err:
-                errors.append("{}: {}".format(py, err[-400:]))
+                errors.append(f"{py}: {err[-400:]}")
         except Exception as exc:
-            errors.append("{}: {}".format(py, exc))
+            errors.append(f"{py}: {exc}")
     return False, "; ".join(errors) if errors else "ultralytics not available"
 
 
 def export_visdrone_onnx(
-    pt_path: Optional[str] = None,
-    dest_onnx: Optional[str] = None,
-) -> Tuple[bool, str]:
+    pt_path: str | None = None,
+    dest_onnx: str | None = None,
+) -> tuple[bool, str]:
     """Export VisDrone .pt to ONNX (requires ultralytics on system Python)."""
     pt_path = pt_path or default_visdrone_pt_path()
     dest_onnx = dest_onnx or default_visdrone_onnx_path()
@@ -194,8 +195,8 @@ def export_visdrone_onnx(
     return False, (
         "Could not export VisDrone ONNX automatically. Install ultralytics and run:\n"
         "  pip install ultralytics\n"
-        "  yolo export model={} format=onnx imgsz=640 opset=12\n"
-        "Then set onnx_model to {} in FMV Settings.".format(pt_path, dest_onnx)
+        f"  yolo export model={pt_path} format=onnx imgsz=640 opset=12\n"
+        f"Then set onnx_model to {dest_onnx} in FMV Settings."
     )
 
 
@@ -207,8 +208,8 @@ def apply_dnn_settings(
     input_size: int = 640,
     confidence: float = 0.35,
     nms: float = 0.45,
-    class_ids: Optional[dict] = None,
-    model_profile: Optional[str] = None,
+    class_ids: dict | None = None,
+    model_profile: str | None = None,
 ) -> None:
     """Write [DNN] section to settings.ini."""
     set_value("DNN", "use_dnn_detection", "true" if enabled else "false")
@@ -232,7 +233,7 @@ def apply_dnn_settings(
         val = ""
         if class_ids and key in class_ids:
             val = class_ids[key] or ""
-        set_value("DNN", "dnn_{}_class_ids".format(key), val)
+        set_value("DNN", f"dnn_{key}_class_ids", val)
     save()
 
 
@@ -251,7 +252,7 @@ def _reload_dnn_runtime() -> None:
         log.debug("Failed to reload DNN runtime settings: %s", _exc)
 
 
-def configure_default_dnn(model_path: Optional[str] = None) -> Tuple[bool, str]:
+def configure_default_dnn(model_path: str | None = None) -> tuple[bool, str]:
     """Enable DNN with YOLOv8n COCO (ground-level imagery)."""
     path = model_path or default_yolov8n_path()
     if not os.path.isfile(path):
@@ -273,8 +274,8 @@ def configure_default_dnn(model_path: Optional[str] = None) -> Tuple[bool, str]:
 
 
 def configure_aerial_dnn(
-    progress: Optional[Callable[[int, int], None]] = None,
-) -> Tuple[bool, str]:
+    progress: Callable[[int, int], None] | None = None,
+) -> tuple[bool, str]:
     """
     Download VisDrone YOLOv8n, export ONNX, and enable aerial class ids
     for Vehicle/Person filters (recommended for FMV / UAV video).
@@ -305,7 +306,7 @@ def configure_aerial_dnn(
     return True, onnx_path
 
 
-def ensure_default_dnn_assets(quiet: bool = True) -> Tuple[bool, str]:
+def ensure_default_dnn_assets(quiet: bool = True) -> tuple[bool, str]:
     """
     On first run: download VisDrone (aerial) model and enable DNN if settings
     have no model yet. Does not override an existing user configuration.

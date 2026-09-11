@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Row-id / row-metadata lookups and active-row status text for the Manager table.
 
 The manager table's column 0 holds the row id (hidden), which keys into the

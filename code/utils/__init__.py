@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 """Shared utilities for the QGIS FMV plugin."""
 
-__all__ = ["log", "QgsUtils"]
+__all__ = ["QgsUtils", "log"]
 
 
 def __getattr__(name):

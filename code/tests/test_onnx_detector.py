@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for YOLO/ONNX aerial vs COCO class tables."""
 
 from QGIS_FMV.video.dnn.QgsFmvOnnxDetector import (

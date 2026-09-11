@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Export telemetry layers to KML / GPX."""
 
 from datetime import datetime, timezone
@@ -85,27 +83,27 @@ def _extract_points_from_geom(geom):
     wkb = geom.wkbType()
 
     if wkb in (
-        QgsWkbTypes.LineString,
-        QgsWkbTypes.LineStringZ,
+        QgsWkbTypes.Type.LineString,
+        QgsWkbTypes.Type.LineStringZ,
     ):
         return [(pt.x(), pt.y()) for pt in geom.asPolyline()]
 
     if wkb in (
-        QgsWkbTypes.MultiLineString,
-        QgsWkbTypes.MultiLineStringZ,
+        QgsWkbTypes.Type.MultiLineString,
+        QgsWkbTypes.Type.MultiLineStringZ,
     ):
         return [(pt.x(), pt.y()) for part in geom.asMultiPolyline() for pt in part]
 
     if wkb in (
-        QgsWkbTypes.Point,
-        QgsWkbTypes.PointZ,
+        QgsWkbTypes.Type.Point,
+        QgsWkbTypes.Type.PointZ,
     ):
         pt = geom.asPoint()
         return [(pt.x(), pt.y())]
 
     if wkb in (
-        QgsWkbTypes.MultiPoint,
-        QgsWkbTypes.MultiPointZ,
+        QgsWkbTypes.Type.MultiPoint,
+        QgsWkbTypes.Type.MultiPointZ,
     ):
         return [(pt.x(), pt.y()) for pt in geom.asMultiPoint()]
 
@@ -148,10 +146,7 @@ def _build_gpx_document(name, points):
 
     for lon, lat in points:
         track_points.append(
-            '      <trkpt lat="{:.6f}" lon="{:.6f}" />'.format(
-                float(lat),
-                float(lon),
-            )
+            f'      <trkpt lat="{float(lat):.6f}" lon="{float(lon):.6f}" />'
         )
 
     track_points_text = "\n".join(track_points)
@@ -160,26 +155,19 @@ def _build_gpx_document(name, points):
         '<?xml version="1.0" encoding="utf-8"?>\n'
         '<gpx version="1.1" '
         'creator="QGIS FMV" '
-        'xmlns="{}" '
-        'xmlns:xsi="{}">\n'
+        f'xmlns="{gpx_ns}" '
+        f'xmlns:xsi="{xsi_ns}">\n'
         "  <metadata>\n"
-        "    <name>{}</name>\n"
-        "    <time>{}</time>\n"
+        f"    <name>{safe_name}</name>\n"
+        f"    <time>{timestamp}</time>\n"
         "  </metadata>\n"
         "  <trk>\n"
-        "    <name>{}</name>\n"
+        f"    <name>{safe_name}</name>\n"
         "    <trkseg>\n"
-        "{}\n"
+        f"{track_points_text}\n"
         "    </trkseg>\n"
         "  </trk>\n"
         "</gpx>\n"
-    ).format(
-        gpx_ns,
-        xsi_ns,
-        safe_name,
-        timestamp,
-        safe_name,
-        track_points_text,
     )
 
     # Validate the generated XML using defusedxml.
@@ -304,7 +292,7 @@ def exportGroupToKML(group_name=None):
 
     kml_lines = [
         '<?xml version="1.0" encoding="utf-8"?>',
-        '<kml xmlns="{}">'.format(ns),
+        f'<kml xmlns="{ns}">',
         "  <Document>",
         "    <name>FMV Export</name>",
     ]
@@ -382,7 +370,7 @@ def exportGroupToKML(group_name=None):
                 )
             )
 
-            kml_lines.append("        <{}>".format(kml_tag))
+            kml_lines.append(f"        <{kml_tag}>")
 
             kml_lines.append(
                 "          <coordinates>{}</coordinates>".format(
@@ -393,7 +381,7 @@ def exportGroupToKML(group_name=None):
                 )
             )
 
-            kml_lines.append("        </{}>".format(kml_tag))
+            kml_lines.append(f"        </{kml_tag}>")
 
             # Extended data with all attributes
             kml_lines.append("        <ExtendedData>")
@@ -412,9 +400,9 @@ def exportGroupToKML(group_name=None):
                         quote=True,
                     )
 
-                    kml_lines.append('          <Data name="{}">'.format(field_name))
+                    kml_lines.append(f'          <Data name="{field_name}">')
 
-                    kml_lines.append("            <value>{}</value>".format(value))
+                    kml_lines.append(f"            <value>{value}</value>")
 
                     kml_lines.append("          </Data>")
 

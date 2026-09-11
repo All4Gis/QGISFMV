@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import json
 import os
 import platform
@@ -578,17 +577,8 @@ def UpdateLayers(packet, parent=None, mosaic=False, group=None):
 # Mosaic tuning constants (canonical values in utils.constants; mirrored here
 # so QgsFmvSettings.reloadRuntime can mutate the cached module attributes).
 from QGIS_FMV.utils.constants import MOSAIC_FEATHER_PX  # noqa: F401
-from QGIS_FMV.utils.constants import (
-    MOSAIC_FOOTPRINT_GROW_METERS,
-    MOSAIC_FOOTPRINT_GROW_RATIO,
-    MOSAIC_MAX_FRAME_DIMENSION,
-    MOSAIC_MAX_KEPT_FRAMES,
-    MOSAIC_MAX_OUTPUT_SIZE,
-    MOSAIC_MIN_INTERVAL_SEC,
-    MOSAIC_MIN_MOVE_METERS,
-)
 from QGIS_FMV.utils.formatting import seconds_to_time as _seconds_to_time  # noqa: F401
-from QGIS_FMV.utils.formatting import time_to_seconds as _time_to_seconds
+from QGIS_FMV.utils.formatting import time_to_seconds as _time_to_seconds  # noqa: F401
 
 
 def BurnDrawingsImage(source, overlay):

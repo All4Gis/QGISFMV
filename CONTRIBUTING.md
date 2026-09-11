@@ -69,7 +69,7 @@ pip install -r requirements-dev.txt
 python3 build.py
 ```
 
-`build.py` compiles all `code/ui/*.ui` (manager, player, metadata, settings, military symbols, multiplexer, streams, about, brightness/contrast), `resources.qrc`, and `code/i18n/*.ts`. It finds `pyuic6`, `pyside6-rcc`, and `pyside6-lrelease` even when pip script folders are not on `PATH`. On Linux you can alternatively install `qt6-tools-dev` / `pyqt6-dev-tools`.
+`build.py` compiles all `code/ui/*.ui` (manager, player, metadata, settings, military symbols, multiplexer, streams, about, brightness/contrast), and `code/i18n/*.ts`. It finds `pyuic6`, `pyside6-rcc`, and `pyside6-lrelease` even when pip script folders are not on `PATH`. On Linux you can alternatively install `qt6-tools-dev` / `pyqt6-dev-tools`.
 
 ### 5. Reload in QGIS
 
@@ -127,16 +127,15 @@ code/
 ├── about/                  # About dialog
 ├── settings.ini            # Runtime config (gitignored; use FMV Settings UI)
 ├── settings.sample.ini     # Template with comments
-├── gui/                    # Generated PyQt6 — do not hand-edit
 ├── ui/                     # Qt Designer .ui — edit these
-├── images/                 # Icons (bundled via resources.qrc)
+├── images/                 # Icons
 ├── i18n/                   # Translations (.ts → .qm via build.py)
 └── requirements.txt        # Runtime deps for QGIS Python
 ```
 
 Root `QGIS_FMV` → symlink to `code/` (QGIS plugin name). Edit/lint `code/` only.
 
-**UI workflow:** edit `code/ui/*.ui` → `python3 build.py` → never edit `code/gui/ui_*.py` directly.
+**UI workflow:** edit `code/ui/*.ui`.
 Prefer Designer for dialog chrome; Python only for dynamic/custom-painted widgets.
 
 `build.py` post-patches `pyuic6` output for QGIS 4 / PyQt6 (`qgis.PyQt` imports, `QDockWidget.DockWidgetFeature`, `QToolButton` menus instead of invalid `addSeparator()`).
@@ -146,7 +145,6 @@ Prefer Designer for dialog chrome; Python only for dynamic/custom-painted widget
 - Toolbar PNGs: `code/images/`
 - Platform SVGs: `code/images/platforms/`
 - Military symbols: `code/images/military/`
-- Bundle: `code/ui/resources.qrc` → `python3 build.py`
 
 ---
 

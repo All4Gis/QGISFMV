@@ -20,8 +20,8 @@
    <string>FMV Settings</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/misc/custom-options.png</normaloff>:/imgFMV/images/misc/custom-options.png</iconset>
+   <iconset>
+    <normaloff>../images/misc/custom-options.png</normaloff>../images/misc/custom-options.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -1838,11 +1838,11 @@
            <string>Default</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/platform_default.svg</normaloff>:/imgFMV/images/platforms/platform_default.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/platform_default.svg</normaloff>../images/platforms/platform_default.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/platform_default.svg</string>
+           <string>../images/platforms/platform_default.svg</string>
           </property>
          </item>
          <item>
@@ -1850,11 +1850,11 @@
            <string>Super Puma</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_super_puma.svg</normaloff>:/imgFMV/images/platforms/plat_super_puma.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_super_puma.svg</normaloff>../images/platforms/plat_super_puma.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_super_puma.svg</string>
+           <string>../images/platforms/plat_super_puma.svg</string>
           </property>
          </item>
          <item>
@@ -1862,11 +1862,11 @@
            <string>N97826</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_N97826.svg</normaloff>:/imgFMV/images/platforms/plat_N97826.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_N97826.svg</normaloff>../images/platforms/plat_N97826.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_N97826.svg</string>
+           <string>../images/platforms/plat_N97826.svg</string>
           </property>
          </item>
          <item>
@@ -1874,11 +1874,11 @@
            <string>VH ZXX</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_VH-ZXX.svg</normaloff>:/imgFMV/images/platforms/plat_VH-ZXX.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_VH-ZXX.svg</normaloff>../images/platforms/plat_VH-ZXX.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_VH-ZXX.svg</string>
+           <string>../images/platforms/plat_VH-ZXX.svg</string>
           </property>
          </item>
          <item>
@@ -1886,11 +1886,11 @@
            <string>ADS15</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_ADS15.svg</normaloff>:/imgFMV/images/platforms/plat_ADS15.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_ADS15.svg</normaloff>../images/platforms/plat_ADS15.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_ADS15.svg</string>
+           <string>../images/platforms/plat_ADS15.svg</string>
           </property>
          </item>
          <item>
@@ -1898,11 +1898,11 @@
            <string>Dji</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_dji.svg</normaloff>:/imgFMV/images/platforms/plat_dji.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_dji.svg</normaloff>../images/platforms/plat_dji.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_dji.svg</string>
+           <string>../images/platforms/plat_dji.svg</string>
           </property>
          </item>
          <item>
@@ -1910,11 +1910,11 @@
            <string>Military Jet</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_military_jet.svg</normaloff>:/imgFMV/images/platforms/plat_military_jet.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_military_jet.svg</normaloff>../images/platforms/plat_military_jet.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_military_jet.svg</string>
+           <string>../images/platforms/plat_military_jet.svg</string>
           </property>
          </item>
          <item>
@@ -1922,11 +1922,11 @@
            <string>Military Heli</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_military_heli.svg</normaloff>:/imgFMV/images/platforms/plat_military_heli.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_military_heli.svg</normaloff>../images/platforms/plat_military_heli.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_military_heli.svg</string>
+           <string>../images/platforms/plat_military_heli.svg</string>
           </property>
          </item>
          <item>
@@ -1934,11 +1934,11 @@
            <string>Uav Fw</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_uav_fw.svg</normaloff>:/imgFMV/images/platforms/plat_uav_fw.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_uav_fw.svg</normaloff>../images/platforms/plat_uav_fw.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_uav_fw.svg</string>
+           <string>../images/platforms/plat_uav_fw.svg</string>
           </property>
          </item>
          <item>
@@ -1946,11 +1946,11 @@
            <string>Reaper</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_reaper.svg</normaloff>:/imgFMV/images/platforms/plat_reaper.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_reaper.svg</normaloff>../images/platforms/plat_reaper.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_reaper.svg</string>
+           <string>../images/platforms/plat_reaper.svg</string>
           </property>
          </item>
          <item>
@@ -1958,11 +1958,11 @@
            <string>Tank</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_tank.svg</normaloff>:/imgFMV/images/platforms/plat_tank.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_tank.svg</normaloff>../images/platforms/plat_tank.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_tank.svg</string>
+           <string>../images/platforms/plat_tank.svg</string>
           </property>
          </item>
          <item>
@@ -1970,11 +1970,11 @@
            <string>Ship</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_ship.svg</normaloff>:/imgFMV/images/platforms/plat_ship.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_ship.svg</normaloff>../images/platforms/plat_ship.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_ship.svg</string>
+           <string>../images/platforms/plat_ship.svg</string>
           </property>
          </item>
          <item>
@@ -1982,11 +1982,11 @@
            <string>Copter News</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/platforms/plat_copter_news.svg</normaloff>:/imgFMV/images/platforms/plat_copter_news.svg</iconset>
+           <iconset >
+            <normaloff>../images/platforms/plat_copter_news.svg</normaloff>../images/platforms/plat_copter_news.svg</iconset>
           </property>
           <property name="toolTip">
-           <string>:/imgFMV/images/platforms/plat_copter_news.svg</string>
+           <string>../images/platforms/plat_copter_news.svg</string>
           </property>
          </item>
         </widget>
@@ -2031,9 +2031,6 @@
    <header>qgscolorbutton.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
  <connections>
   <connection>
    <sender>btn_ffmpegBrowse</sender>

@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
 from qgis.PyQt.QtGui import QColor, qRgba
+
+from QGIS_FMV.utils.ui.QgsFmvResources import r
 
 
 def _sensor_style(color, outline, width="1.8"):
@@ -13,16 +14,16 @@ def _sensor_style(color, outline, width="1.8"):
 
 
 def _platform_style(svg_name, outline="255, 255, 255, 220", size="20"):
-    """Create a platform symbol style dict."""
+    """Create a platform symbol style dict (filesystem SVG path)."""
     return {
-        "NAME": f":/imgFMV/images/platforms/{svg_name}",
+        "NAME": r("platforms", svg_name),
         "OUTLINE": outline,
         "OUTLINE_WIDTH": "0.8",
         "SIZE": size,
     }
 
 
-class FmvLayerStyles(object):
+class FmvLayerStyles:
 
     # ── Sensor styles (ImageSourceSensor) ──
     S = {

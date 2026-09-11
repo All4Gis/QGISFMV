@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """End-to-end pymisb KLV parsing using MISB ST 0902.5 sample packets."""
 
 from pathlib import Path

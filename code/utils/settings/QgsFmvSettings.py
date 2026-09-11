@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Central access to ``settings.ini`` with reload support."""
 
 import os

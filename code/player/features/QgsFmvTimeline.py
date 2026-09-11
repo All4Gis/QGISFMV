@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Timeline widget showing event markers / bookmarks along the video duration."""
 
 from qgis.PyQt.QtCore import QRectF, Qt, pyqtSignal
@@ -9,7 +8,7 @@ from qgis.PyQt.QtWidgets import QToolTip, QWidget
 class TimelineEvent:
     """One event marker on the timeline (optionally georeferenced)."""
 
-    __slots__ = ("time_sec", "label", "color", "lat", "lon", "alt")
+    __slots__ = ("alt", "color", "label", "lat", "lon", "time_sec")
 
     def __init__(self, time_sec, label="", color=None, lat=None, lon=None, alt=None):
         self.time_sec = float(time_sec)

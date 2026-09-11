@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Timeline bookmark helpers (no full QWidget paint required)."""
 
 import sys

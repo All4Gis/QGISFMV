@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
 """YOLO / ONNX detection (OpenCV DNN)."""
 
 __all__ = [
+    "configure_aerial_dnn",
     "dnn_status_text",
+    "ensure_default_dnn_assets",
     "reset_dnn_cache",
     "try_dnn_detection",
-    "configure_aerial_dnn",
-    "ensure_default_dnn_assets",
 ]
 
 

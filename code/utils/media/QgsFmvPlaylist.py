@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 """Minimal playlist driving OpenCvMediaPlayer / Qt adapters."""
 
 from qgis.PyQt.QtCore import QObject, QUrl
 from QGIS_FMV.utils.media.QgsFmvMediaTypes import PlaylistLoop, PlaylistSequential
 
 
-class _MediaShim(object):
+class _MediaShim:
     """Thin wrapper providing a ``canonicalUrl()`` for playlist compatibility."""
 
     def __init__(self, url):

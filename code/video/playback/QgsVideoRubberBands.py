@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Rubber-band management extracted from VideoWidget (QgsVideo.py).
 
 Owns every QRubberBand (video-widget overlay) and QgsRubberBand (map-canvas)

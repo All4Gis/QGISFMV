@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Video package: playback, filters, and DNN detection.
 
@@ -8,4 +7,4 @@ Subpackages:
   dnn/       — YOLO ONNX (VisDrone) setup and inference
 """
 
-__all__ = ["playback", "filters", "dnn"]
+__all__ = ["dnn", "filters", "playback"]

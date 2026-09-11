@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Live georeferenced mosaic capture, blending, and extension."""
 
 import os
@@ -646,7 +645,8 @@ def ExtendMosaic(task, out_path, new_frames, base_path=None):
         try:
             os.remove(out_path)
         except OSError:
-            pass
+            log.debug("ExtendMosaic: os.remove failed: %s", out_path)
+
         return None
 
     if not os.path.isfile(out_path) or os.path.getsize(out_path) == 0:

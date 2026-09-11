@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """File/folder picker dialogs, extracted from QgsFmvUtils.py.
 
 Remembers the last-used path per dialog-owning widget class in QSettings

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """QMediaPlayer-compatible player driven by OpenCV or FFmpeg decode workers."""
 
 import os

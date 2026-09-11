@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
 """Rule-based alerts — notify when telemetry conditions are met."""
 
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QObject, pyqtSignal
 from qgis.PyQt.QtWidgets import QDialog
 from QGIS_FMV.player.dialogs.QgsFmvAlertRule import FmvAlertRuleDialog
+from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 
@@ -38,7 +38,8 @@ class AlertRule:
                     if self.OPS[self.op](actual, threshold):
                         return True, actual
                 except (TypeError, ValueError, IndexError, KeyError):
-                    pass
+                    log.debug("AlertRule: check failed: %s", val)
+
         return False, None
 
 

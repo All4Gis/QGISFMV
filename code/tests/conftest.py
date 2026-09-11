@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 """Pytest fixtures for QGIS FMV tests."""
 
 import importlib.util
 import os
-import sys
 
 import pytest
 

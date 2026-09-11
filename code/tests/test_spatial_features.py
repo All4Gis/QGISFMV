@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Pure spatial helpers + mission/bookmark geo enrichment (no QGIS GUI)."""
 
 from __future__ import annotations
@@ -14,7 +13,6 @@ from code.tests.support import (
     restore_modules,
     snapshot_modules,
 )
-from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
@@ -302,7 +300,7 @@ class TestMissionPackageHelpers:
             player.bookmarkController = MagicMock()
             player.mapSeekController = MagicMock(index=Idx())
             player.mosaic = MagicMock(active_path=None)
-            player.geofenceController = MagicMock(rules=lambda: [])
+            player.geofenceController = MagicMock(rules=list)
             player._videoGroupName = MagicMock(return_value="g")
 
             # Stub silent kml to no-op

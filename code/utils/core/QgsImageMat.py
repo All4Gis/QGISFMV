@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """QImage ↔ numpy conversion (no dependency on layers / video playback)."""
 
 import numpy as np

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Unified FMV settings dialog (paths, layers, AI, magnifier, drawings, platform)."""
 
 import os
@@ -16,7 +15,8 @@ from qgis.PyQt.QtWidgets import (
     QStyleOptionSlider,
     QToolTip,
 )
-from QGIS_FMV.gui.ui_FmvSettings import Ui_FmvSettings
+from pathlib import Path
+from qgis.PyQt import uic
 from QGIS_FMV.player.drawing.QgsFmvDrawToolBar import DrawToolBar as draw
 from QGIS_FMV.utils.core.QgsFmvUtils import getNameSpace
 from QGIS_FMV.utils.install.QgsFmvInstaller import (
@@ -40,6 +40,10 @@ from QGIS_FMV.utils.settings.QgsFmvSettings import (
     settings_file,
 )
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
+
+Ui_FmvSettings, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent.parent / "ui/ui_FmvSettings.ui")
+)
 
 
 class FmvSettingsDialog(QDialog, Ui_FmvSettings):
@@ -131,7 +135,7 @@ class FmvSettingsDialog(QDialog, Ui_FmvSettings):
         self.dsb_onnxConf.setValue(float(get("DNN", "onnx_confidence", "0.35") or 0.35))
         self.dsb_onnxNms.setValue(float(get("DNN", "onnx_nms", "0.45") or 0.45))
         for key, edit in self._dnnClassEdits.items():
-            edit.setText(get("DNN", "dnn_{}_class_ids".format(key), "") or "")
+            edit.setText(get("DNN", f"dnn_{key}_class_ids", "") or "")
         self._refreshDnnStatus()
         self.lbl_settingsFile.setText(
             QCoreApplication.translate(

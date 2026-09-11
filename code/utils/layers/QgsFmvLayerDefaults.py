@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Default layer symbology, extracted from QgsFmvLayers.py.
 
 Owns every ``SetDefault*Style`` function (2D + 3D), the data-driven style
@@ -220,7 +219,7 @@ def _label_point(layer, style):
         float(style.get("LABEL_OFFSET_X", 2.0)),
         float(style.get("LABEL_OFFSET_Y", -2.0)),
     )
-    layer_settings.offsetUnit = QgsUnitTypes.RenderMillimeters
+    layer_settings.offsetUnit = QgsUnitTypes.RenderUnit.RenderMillimeters
 
     quadrant = getattr(QgsPalLayerSettings, "QuadrantAboveRight", None)
     if quadrant is None and hasattr(QgsPalLayerSettings, "QuadrantOffset"):
@@ -243,7 +242,7 @@ def _apply_military_symbol(layer):
         symbol_svg_path,
     )
 
-    default_sym = QgsSymbol.defaultSymbol(QgsWkbTypes.PointGeometry)
+    default_sym = QgsSymbol.defaultSymbol(QgsWkbTypes.GeometryType.PointGeometry)
     renderer = QgsRuleBasedRenderer(default_sym)
     root = renderer.rootRule()
     root.removeChildAt(0)
@@ -254,8 +253,8 @@ def _apply_military_symbol(layer):
             continue
         svg_layer = QgsSvgMarkerSymbolLayer(svg_path)
         svg_layer.setSize(8)
-        svg_layer.setSizeUnit(QgsUnitTypes.RenderMillimeters)
-        point_symbol = QgsSymbol.defaultSymbol(QgsWkbTypes.PointGeometry)
+        svg_layer.setSizeUnit(QgsUnitTypes.RenderUnit.RenderMillimeters)
+        point_symbol = QgsSymbol.defaultSymbol(QgsWkbTypes.GeometryType.PointGeometry)
         point_symbol.deleteSymbolLayer(0)
         point_symbol.appendSymbolLayer(svg_layer)
         rule = QgsRuleBasedRenderer.Rule(point_symbol)

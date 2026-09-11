@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Live georeferenced mosaic orchestration for QgsFmvPlayer."""
 
 import glob
@@ -19,6 +18,7 @@ from QGIS_FMV.utils.layers.QgsFmvLayers import (
     addLayerNoCrsDialog,
     frames_g,
 )
+from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.settings.QgsFmvSettings import get as settings_get
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
@@ -115,7 +115,7 @@ class MosaicController:
                     try:
                         os.remove(old)
                     except OSError:
-                        pass
+                        log.debug("apply_runtime_settings: os.remove failed: %s", old)
 
             CreateGroupByName(visible=True)
         elif self.folder is not None:
@@ -146,7 +146,7 @@ class MosaicController:
                 if old and os.path.isfile(old):
                     os.remove(old)
             except OSError:
-                pass
+                log.debug("prune_old_frames: os.remove failed: %s", old)
 
     def rebuild(self):
         """Extend the mosaic with all pending frames (non-blocking)."""

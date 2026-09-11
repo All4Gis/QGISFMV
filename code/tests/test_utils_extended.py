@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for utility time helpers and spawn (spawn still needs ffmpeg/QGIS env)."""
 
 from code.tests.support import ensure_qgis_fmv_package, load_plugin_module

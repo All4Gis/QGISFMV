@@ -1,9 +1,13 @@
-# -*- coding: utf-8 -*-
 """About dialog."""
 
 from qgis.PyQt.QtCore import Qt, QUrl
 from qgis.PyQt.QtWidgets import QDialog
-from QGIS_FMV.gui.ui_FmvAbout import Ui_FmvAbout
+from pathlib import Path
+from qgis.PyQt import uic
+
+Ui_FmvAbout, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent / "ui/ui_FmvAbout.ui")
+)
 
 
 class FmvAbout(QDialog, Ui_FmvAbout):

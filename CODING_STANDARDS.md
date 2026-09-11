@@ -76,7 +76,7 @@ Plugin namespace: **`QGIS_FMV`** (`code/metadata.txt` → `internal_name`).
 |-------|------|
 | Toolkit | **QGIS 4 / PyQt6** (`qgis.PyQt`) |
 | UI source | `code/ui/*.ui` only |
-| Build | `python3 build.py` from repo root → compiles `code/ui/*.ui`, `resources.qrc`, `code/i18n/*.ts` |
+| Build | `python3 build.py` from repo root → compiles `code/ui/*.ui`, `code/i18n/*.ts` |
 | i18n | `QCoreApplication.translate("Context", "text")` |
 | Signals | Connect in `.ui` or `__init__` — stay consistent per dialog |
 
@@ -125,9 +125,8 @@ Keep `QgsFmvPlayer` as a thin composition root + Qt Designer slot delegates.
 1. Static dialog layouts live in `code/ui/*.ui` — not built in Python.
 2. Python may create widgets only for dynamic / custom-painted content.
 3. After `.ui` / `.qrc` / `.ts` changes: `python3 build.py`.
-4. **Never hand-edit `code/gui/ui_*.py`** — regenerate from `.ui` only.
-5. The root `QGISFMV` symlink points at `code/` — exclude it from lint/tools.
-6. Prefer Designer properties for size/geometry; avoid `resize()` / `setMinimumSize()` in Python for dialogs that already define them in `.ui`.
+4. The root `QGISFMV` symlink points at `code/` — exclude it from lint/tools.
+5. Prefer Designer properties for size/geometry; avoid `resize()` / `setMinimumSize()` in Python for dialogs that already define them in `.ui`.
 
 ---
 

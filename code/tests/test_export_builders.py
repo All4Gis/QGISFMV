@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Tests for export XML builders that do not need a QGIS map canvas."""
 
 import sys

@@ -1,4 +1,3 @@
-# # -*- coding: utf-8 -*-
 # """Tests for video filter pure-numpy implementations (no QGIS runtime)."""
 
 # import numpy as np

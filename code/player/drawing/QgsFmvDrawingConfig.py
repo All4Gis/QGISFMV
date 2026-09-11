@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Central mutable drawing configuration + settings loading + stamp asset caching.
 
 This module owns:
@@ -16,7 +15,7 @@ This module owns:
 import os
 
 from qgis.PyQt.QtCore import QSettings, Qt
-from qgis.PyQt.QtGui import QBrush, QColor, QFont, QImage, QPen, QPixmap
+from qgis.PyQt.QtGui import QBrush, QColor, QFont, QPen, QPixmap
 from QGIS_FMV.utils.core.QgsFmvUtils import getNameSpace
 from QGIS_FMV.utils.logging import log
 
@@ -27,34 +26,34 @@ class DrawingConfig:
     """All mutable drawing parameters in one place."""
 
     __slots__ = (
-        "MAX_MAGNIFIER",
-        "MAX_FACTOR",
-        "TYPE_MAGNIFIER",
-        "PolyWidth",
-        "PolyPen",
-        "PolyBrush",
-        "PointRadius",
-        "PointFillColor",
-        "PointOutlineColor",
-        "PointLabelColor",
-        "PointLabelBgColor",
-        "PointPen",
-        "PointFont",
-        "LineWidth",
         "LinePen",
-        "TrackLockColor",
-        "TrackWeakColor",
-        "TrackLostColor",
-        "TrackHudFont",
-        "MeasureWidth",
-        "MeasurePen",
+        "LineWidth",
+        "MAX_FACTOR",
+        "MAX_MAGNIFIER",
         "MeasureBrush",
-        "MeasureLabelBg",
-        "MeasureLabelFg",
-        "MeasureVertexFill",
-        "MeasureVertexOutline",
         "MeasureFont",
         "MeasureGlowPen",
+        "MeasureLabelBg",
+        "MeasureLabelFg",
+        "MeasurePen",
+        "MeasureVertexFill",
+        "MeasureVertexOutline",
+        "MeasureWidth",
+        "PointFillColor",
+        "PointFont",
+        "PointLabelBgColor",
+        "PointLabelColor",
+        "PointOutlineColor",
+        "PointPen",
+        "PointRadius",
+        "PolyBrush",
+        "PolyPen",
+        "PolyWidth",
+        "TYPE_MAGNIFIER",
+        "TrackHudFont",
+        "TrackLockColor",
+        "TrackLostColor",
+        "TrackWeakColor",
     )
 
     def __init__(self):
@@ -140,22 +139,18 @@ confidential = QPixmap()
 
 
 def ensure_stamp_image():
-    """Lazily load the confidential stamp pixmap (disk first, resource fallback)."""
+    """Lazily load the confidential stamp pixmap from disk."""
     global confidential
     if not confidential.isNull():
         return confidential
     try:
-        from QGIS_FMV.utils.settings.QgsFmvSettings import plugin_root
+        from QGIS_FMV.utils.ui.QgsFmvResources import r
 
-        stamp_path = os.path.join(plugin_root(), "images", "stamp", "confidential.png")
+        stamp_path = r("stamp", "confidential.png")
         if os.path.isfile(stamp_path):
             confidential = QPixmap(stamp_path)
     except Exception as exc:
         log.debug("Stamp image load failed: %s", exc)
-    if confidential.isNull():
-        confidential = QPixmap.fromImage(
-            QImage(":/imgFMV/images/stamp/confidential.png")
-        )
     return confidential
 
 

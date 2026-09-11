@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """QGIS FMV map layers: group/layer creation, generic layer helpers, object
 tracking, and platform-icon handling.
 
@@ -236,7 +235,6 @@ def BeginObjectTrack(track_id, backend=""):
     """Mark that the next UpdateObjectTrack should open a new line feature."""
     if groupName:
         _object_track_active_feature[groupName] = None
-    return None
 
 
 def _add_object_track_segment(trackLyr, point, lon, lat, alt, track_id, backend):
@@ -343,7 +341,7 @@ def SetcrtPltTailNum():
     _cached_platform_icon_path = None
 
 
-# Must match code/ui/resources.qrc and Platform tab items in ui_FmvSettings.ui
+# Platform tab items in ui_FmvSettings.ui
 PLATFORM_ICON_FILES = (
     "platform_default.svg",
     "plat_super_puma.svg",
@@ -362,8 +360,10 @@ PLATFORM_ICON_FILES = (
 
 
 def platform_icon_resource(filename):
-    """Qt resource path for a platform SVG (embedded via resources.qrc)."""
-    return ":/imgFMV/images/platforms/%s" % filename
+    """Return the filesystem path for a platform SVG under ``images/platforms``."""
+    from QGIS_FMV.utils.ui.QgsFmvResources import r
+
+    return r("platforms", filename)
 
 
 def _platform_icon_label(filename):
@@ -371,23 +371,22 @@ def _platform_icon_label(filename):
     stem = os.path.splitext(filename)[0]
     if stem == "platform_default":
         return "Default"
-    if stem.startswith("plat_"):
-        stem = stem[5:]
+    stem = stem.removeprefix("plat_")
     return stem.replace("_", " ").replace("-", " ").title()
 
 
 def _is_platform_icon_path(icon_path):
-    """True if path is a Qt resource or an existing file."""
+    """True if path is an existing filesystem SVG/PNG (legacy ``:/`` qrc rejected)."""
     if not icon_path:
         return False
     path = str(icon_path)
     if path.startswith(":/"):
-        return True
+        return False
     return os.path.isfile(path)
 
 
 def list_platform_icon_choices():
-    """Return platform icons from Qt resources (same set as FMV Settings / qrc)."""
+    """Return platform icons from ``images/platforms`` (same set as FMV Settings)."""
     return [
         {
             "label": _platform_icon_label(filename),
@@ -412,7 +411,7 @@ def get_user_platform_icon(settings=None):
     if icon_path:
         icon_path = str(icon_path)
         base = os.path.basename(icon_path)
-        # Prefer Qt resources (works after plugin install / zip); migrate old file paths.
+        # Migrate old qrc / absolute paths to current images/platforms files.
         if base in PLATFORM_ICON_FILES:
             icon_path = platform_icon_resource(base)
         if _is_platform_icon_path(icon_path):
@@ -1034,7 +1033,7 @@ def newVectorLayer(filename, fields, geometryType, crs, name=None, encoding=enco
 
 # Backward-compatible re-exports: these draw/measure helpers now live in
 # QgsFmvDrawLayers.py, kept importable from here for existing callers.
-from QGIS_FMV.utils.layers.QgsFmvDrawLayers import (  # noqa: E402,F401
+from QGIS_FMV.utils.layers.QgsFmvDrawLayers import (  # noqa: F401
     AddDrawLineOnMap,
     AddDrawMilitarySymbolOnMap,
     AddDrawPointOnMap,

@@ -26,17 +26,14 @@
    <string>Player</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
-    <normaloff>:/imgFMV/images/misc/icon.png</normaloff>:/imgFMV/images/misc/icon.png</iconset>
+   <iconset >
+    <normaloff>../images/misc/icon.png</normaloff>../images/misc/icon.png</iconset>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates" />
-  </property>
-  <property name="features">
-   <set>DockWidgetClosable|DockWidgetMovable|DockWidgetFloatable</set>
   </property>
   <property name="allowedAreas">
    <set>AllDockWidgetAreas</set>
@@ -172,8 +169,8 @@
            <string />
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/misc/record.png</normaloff>:/imgFMV/images/misc/record.png</iconset>
+           <iconset >
+            <normaloff>../images/misc/record.png</normaloff>../images/misc/record.png</iconset>
           </property>
           <property name="shortcut">
            <string>Ctrl+R</string>
@@ -198,8 +195,8 @@
            <string />
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/misc/mosaic.png</normaloff>:/imgFMV/images/misc/mosaic.png</iconset>
+           <iconset >
+            <normaloff>../images/misc/mosaic.png</normaloff>../images/misc/mosaic.png</iconset>
           </property>
           <property name="shortcut">
            <string>Ctrl+M</string>
@@ -296,8 +293,8 @@
            <string />
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/misc/screenshot.png</normaloff>:/imgFMV/images/misc/screenshot.png</iconset>
+           <iconset >
+            <normaloff>../images/misc/screenshot.png</normaloff>../images/misc/screenshot.png</iconset>
           </property>
           <property name="shortcut">
            <string>Ctrl+Q</string>
@@ -330,10 +327,10 @@
                  height: 13px;
             }  
            QGroupBox::indicator:unchecked {
-                 image: url(:/imgFMV/images/misc/up.png);
+                 image: url(../images/misc/up.png);
             }
            QGroupBox::indicator:checked {
-               image: url(:/imgFMV/images/misc/down.png);
+               image: url(../images/misc/down.png);
                 }</string>
        </property>
        <property name="title">
@@ -358,8 +355,8 @@
            <string />
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/player/skip-previous.png</normaloff>:/imgFMV/images/player/skip-previous.png</iconset>
+           <iconset >
+            <normaloff>../images/player/skip-previous.png</normaloff>../images/player/skip-previous.png</iconset>
           </property>
           <property name="shortcut">
            <string>Ctrl+Left</string>
@@ -381,8 +378,8 @@
            <string />
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/player/fast-rewind.png</normaloff>:/imgFMV/images/player/fast-rewind.png</iconset>
+           <iconset >
+            <normaloff>../images/player/fast-rewind.png</normaloff>../images/player/fast-rewind.png</iconset>
           </property>
           <property name="shortcut">
            <string>Left</string>
@@ -407,8 +404,8 @@
            <string />
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/player/stop.png</normaloff>:/imgFMV/images/player/stop.png</iconset>
+           <iconset >
+            <normaloff>../images/player/stop.png</normaloff>../images/player/stop.png</iconset>
           </property>
           <property name="shortcut">
            <string>Ctrl+S</string>
@@ -430,8 +427,8 @@
            <string />
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/player/play-arrow.png</normaloff>:/imgFMV/images/player/play-arrow.png</iconset>
+           <iconset >
+            <normaloff>../images/player/play-arrow.png</normaloff>../images/player/play-arrow.png</iconset>
           </property>
           <property name="shortcut">
            <string>Ctrl+P</string>
@@ -453,8 +450,8 @@
            <string />
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/player/fast-forward.png</normaloff>:/imgFMV/images/player/fast-forward.png</iconset>
+           <iconset >
+            <normaloff>../images/player/fast-forward.png</normaloff>../images/player/fast-forward.png</iconset>
           </property>
           <property name="shortcut">
            <string>Right</string>
@@ -482,8 +479,8 @@
            <string />
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/player/skip-next.png</normaloff>:/imgFMV/images/player/skip-next.png</iconset>
+           <iconset >
+            <normaloff>../images/player/skip-next.png</normaloff>../images/player/skip-next.png</iconset>
           </property>
           <property name="shortcut">
            <string>Ctrl+Right</string>
@@ -505,8 +502,8 @@
            <string />
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/imgFMV/images/player/repeat.png</normaloff>:/imgFMV/images/player/repeat.png</iconset>
+           <iconset >
+            <normaloff>../images/player/repeat.png</normaloff>../images/player/repeat.png</iconset>
           </property>
           <property name="shortcut">
            <string>Ctrl+L</string>
@@ -558,8 +555,8 @@
              <string />
             </property>
             <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/imgFMV/images/player/volume_up.png</normaloff>:/imgFMV/images/player/volume_up.png</iconset>
+             <iconset >
+              <normaloff>../images/player/volume_up.png</normaloff>../images/player/volume_up.png</iconset>
             </property>
             <property name="shortcut">
              <string>Ctrl+U</string>
@@ -749,132 +746,144 @@
     <addaction name="separator" />
     <addaction name="menuTools" />
    </widget>
-   <widget class="QStatusBar" name="statusbar" />
-   <widget class="QToolBar" name="DrawToolBar">
-    <property name="windowTitle">
-     <string>Utils ToolBar</string>
-    </property>
-    <property name="toolTip">
-     <string>Utils ToolBar</string>
-    </property>
-    <attribute name="toolBarArea">
-     <enum>TopToolBarArea</enum>
-    </attribute>
-    <attribute name="toolBarBreak">
-     <bool>false</bool>
-    </attribute>
-    <addaction name="actionMagnifying_glass" />
-    <addaction name="separator" />
-    <widget class="QToolButton" name="toolBtn_DPolygon">
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="text">
-      <string />
-     </property>
-     <property name="autoExclusive">
-      <bool>false</bool>
-     </property>
-     <property name="popupMode">
-      <enum>QToolButton::MenuButtonPopup</enum>
-     </property>
-     <property name="autoRaise">
-      <bool>false</bool>
-     </property>
-     <addaction name="actionDraw_Polygon" />
-     <addaction name="actionDraw_Polygon_remove_last" />
-     <addaction name="actionDraw_Polygon_remove_all" />
-    </widget>
-    <widget class="QToolButton" name="toolBtn_DPoint">
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="text">
-      <string />
-     </property>
-     <property name="autoExclusive">
-      <bool>false</bool>
-     </property>
-     <property name="popupMode">
-      <enum>QToolButton::MenuButtonPopup</enum>
-     </property>
-     <property name="autoRaise">
-      <bool>false</bool>
-     </property>
-     <addaction name="actionDraw_Pinpoint" />
-     <addaction name="actionRemove_Last_Pinpoint" />
-     <addaction name="actionRemove_All_Pinpoint" />
-    </widget>
-    <widget class="QToolButton" name="toolBtn_DLine">
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="text">
-      <string />
-     </property>
-     <property name="popupMode">
-      <enum>QToolButton::MenuButtonPopup</enum>
-     </property>
-     <addaction name="actionDraw_Line" />
-     <addaction name="actionLast_Segment_Line" />
-     <addaction name="actionRemove_Last_Line" />
-     <addaction name="actionRemove_All_Line" />
-    </widget>
-    <addaction name="actionMilitary_Symbols" />
-    <addaction name="separator" />
-    <widget class="QToolButton" name="toolBtn_Measure">
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="text">
-      <string />
-     </property>
-     <property name="autoExclusive">
-      <bool>false</bool>
-     </property>
-     <property name="popupMode">
-      <enum>QToolButton::MenuButtonPopup</enum>
-     </property>
-     <property name="autoRaise">
-      <bool>false</bool>
-     </property>
-     <addaction name="actionMeasureDistance" />
-     <addaction name="actionMeasureArea" />
-     <addaction name="separator" />
-     <addaction name="actionRemove_Last_MeasureDistance" />
-     <addaction name="actionRemove_All_MeasureDistance" />
-     <addaction name="separator" />
-     <addaction name="actionRemove_Last_MeasureArea" />
-     <addaction name="actionRemove_All_MeasureArea" />
-    </widget>
-    <addaction name="separator" />
-    <widget class="QToolButton" name="toolBtn_Cesure">
-     <property name="cursor">
-      <cursorShape>OpenHandCursor</cursorShape>
-     </property>
-     <property name="text">
-      <string />
-     </property>
-     <property name="popupMode">
-      <enum>QToolButton::MenuButtonPopup</enum>
-     </property>
-     <addaction name="actionCensure" />
-     <addaction name="actionRemove_Last_censured" />
-     <addaction name="actionRemove_All_censured" />
-    </widget>
-    <addaction name="separator" />
-    <addaction name="actionStamp" />
-    <addaction name="separator" />
-    <addaction name="actionObject_Tracking" />
-   </widget>
+<widget class="QStatusBar" name="statusbar" />
+<widget class="QToolBar" name="DrawToolBar">
+ <property name="windowTitle">
+  <string>Utils ToolBar</string>
+ </property>
+ <property name="toolTip">
+  <string>Utils ToolBar</string>
+ </property>
+ <attribute name="toolBarArea">
+  <enum>TopToolBarArea</enum>
+ </attribute>
+ <attribute name="toolBarBreak">
+  <bool>false</bool>
+ </attribute>
+
+ <addaction name="actionMagnifying_glass" />
+ <addaction name="separator" />
+
+ <widget class="QToolButton" name="toolBtn_DPolygon">
+  <property name="cursor">
+   <cursorShape>PointingHandCursor</cursorShape>
+  </property>
+  <property name="text">
+   <string />
+  </property>
+  <property name="autoExclusive">
+   <bool>false</bool>
+  </property>
+  <property name="popupMode">
+   <enum>QToolButton::MenuButtonPopup</enum>
+  </property>
+  <property name="autoRaise">
+   <bool>false</bool>
+  </property>
+  <addaction name="actionDraw_Polygon" />
+  <addaction name="actionDraw_Polygon_remove_last" />
+  <addaction name="actionDraw_Polygon_remove_all" />
+ </widget>
+
+ <widget class="QToolButton" name="toolBtn_DPoint">
+  <property name="cursor">
+   <cursorShape>PointingHandCursor</cursorShape>
+  </property>
+  <property name="text">
+   <string />
+  </property>
+  <property name="autoExclusive">
+   <bool>false</bool>
+  </property>
+  <property name="popupMode">
+   <enum>QToolButton::MenuButtonPopup</enum>
+  </property>
+  <property name="autoRaise">
+   <bool>false</bool>
+  </property>
+  <addaction name="actionDraw_Pinpoint" />
+  <addaction name="actionRemove_Last_Pinpoint" />
+  <addaction name="actionRemove_All_Pinpoint" />
+ </widget>
+
+ <widget class="QToolButton" name="toolBtn_DLine">
+  <property name="cursor">
+   <cursorShape>PointingHandCursor</cursorShape>
+  </property>
+  <property name="text">
+   <string />
+  </property>
+  <property name="popupMode">
+   <enum>QToolButton::MenuButtonPopup</enum>
+  </property>
+  <addaction name="actionDraw_Line" />
+  <addaction name="actionLast_Segment_Line" />
+  <addaction name="actionRemove_Last_Line" />
+  <addaction name="actionRemove_All_Line" />
+ </widget>
+
+ <addaction name="actionMilitary_Symbols" />
+ <addaction name="separator" />
+
+ <widget class="QToolButton" name="toolBtn_Measure">
+  <property name="cursor">
+   <cursorShape>PointingHandCursor</cursorShape>
+  </property>
+  <property name="text">
+   <string />
+  </property>
+  <property name="autoExclusive">
+   <bool>false</bool>
+  </property>
+  <property name="popupMode">
+   <enum>QToolButton::MenuButtonPopup</enum>
+  </property>
+  <property name="autoRaise">
+   <bool>false</bool>
+  </property>
+  <widget class="QMenu" name="menuMeasure">
+   <addaction name="actionMeasureDistance" />
+   <addaction name="actionMeasureArea" />
+   <addaction name="separator" />
+   <addaction name="actionRemove_Last_MeasureDistance" />
+   <addaction name="actionRemove_All_MeasureDistance" />
+   <addaction name="separator" />
+   <addaction name="actionRemove_Last_MeasureArea" />
+   <addaction name="actionRemove_All_MeasureArea" />
   </widget>
+ </widget>
+
+ <addaction name="separator" />
+
+ <widget class="QToolButton" name="toolBtn_Cesure">
+  <property name="cursor">
+   <cursorShape>OpenHandCursor</cursorShape>
+  </property>
+  <property name="text">
+   <string />
+  </property>
+  <property name="popupMode">
+   <enum>QToolButton::MenuButtonPopup</enum>
+  </property>
+  <addaction name="actionCensure" />
+  <addaction name="actionRemove_Last_censured" />
+  <addaction name="actionRemove_All_censured" />
+ </widget>
+
+ <addaction name="separator" />
+ <addaction name="actionStamp" />
+ <addaction name="separator" />
+ <addaction name="actionObject_Tracking" />
+
+</widget>
+</widget>
   <action name="actionGray">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/grayscale.png</normaloff>:/imgFMV/images/misc/grayscale.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/grayscale.png</normaloff>../images/misc/grayscale.png</iconset>
    </property>
    <property name="text">
     <string>Gray Scale</string>
@@ -882,8 +891,8 @@
   </action>
   <action name="actionCapture_Current_Frame">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/screenshot.png</normaloff>:/imgFMV/images/misc/screenshot.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/screenshot.png</normaloff>../images/misc/screenshot.png</iconset>
    </property>
    <property name="text">
     <string>Capture Current Frame</string>
@@ -897,8 +906,8 @@
   </action>
   <action name="actionExtract_All_Frames">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/capture_all_frames.png</normaloff>:/imgFMV/images/misc/capture_all_frames.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/capture_all_frames.png</normaloff>../images/misc/capture_all_frames.png</iconset>
    </property>
    <property name="text">
     <string>Extract All Frames</string>
@@ -912,8 +921,8 @@
   </action>
   <action name="actionShow_Metadata">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/show-metadata.png</normaloff>:/imgFMV/images/export/show-metadata.png</iconset>
+    <iconset >
+     <normaloff>../images/export/show-metadata.png</normaloff>../images/export/show-metadata.png</iconset>
    </property>
    <property name="text">
     <string>Show Metadata</string>
@@ -927,8 +936,8 @@
   </action>
   <action name="actionConverter_Video">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/video-converter.png</normaloff>:/imgFMV/images/export/video-converter.png</iconset>
+    <iconset >
+     <normaloff>../images/export/video-converter.png</normaloff>../images/export/video-converter.png</iconset>
    </property>
    <property name="text">
     <string>Converter Video</string>
@@ -936,8 +945,8 @@
   </action>
   <action name="actionSave_Video_Info">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/save-video-info.png</normaloff>:/imgFMV/images/export/save-video-info.png</iconset>
+    <iconset >
+     <normaloff>../images/export/save-video-info.png</normaloff>../images/export/save-video-info.png</iconset>
    </property>
    <property name="text">
     <string>Save Video Info to Json</string>
@@ -945,8 +954,8 @@
   </action>
   <action name="actionAudio">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/show-bitrate.png</normaloff>:/imgFMV/images/export/show-bitrate.png</iconset>
+    <iconset >
+     <normaloff>../images/export/show-bitrate.png</normaloff>../images/export/show-bitrate.png</iconset>
    </property>
    <property name="text">
     <string>Show Audio</string>
@@ -954,8 +963,8 @@
   </action>
   <action name="actionVideo">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/show-bitrate.png</normaloff>:/imgFMV/images/export/show-bitrate.png</iconset>
+    <iconset >
+     <normaloff>../images/export/show-bitrate.png</normaloff>../images/export/show-bitrate.png</iconset>
    </property>
    <property name="text">
     <string>Show Video</string>
@@ -968,8 +977,8 @@
   </action>
   <action name="actionSave_Audio">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/save-bitrate.png</normaloff>:/imgFMV/images/export/save-bitrate.png</iconset>
+    <iconset >
+     <normaloff>../images/export/save-bitrate.png</normaloff>../images/export/save-bitrate.png</iconset>
    </property>
    <property name="text">
     <string>Save Audio</string>
@@ -977,8 +986,8 @@
   </action>
   <action name="actionSave_Video">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/save-bitrate.png</normaloff>:/imgFMV/images/export/save-bitrate.png</iconset>
+    <iconset >
+     <normaloff>../images/export/save-bitrate.png</normaloff>../images/export/save-bitrate.png</iconset>
    </property>
    <property name="text">
     <string>Save Video</string>
@@ -991,8 +1000,8 @@
   </action>
   <action name="actionShow_Video_Info">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/export/video-info.png</normaloff>:/imgFMV/images/export/video-info.png</iconset>
+    <iconset >
+     <normaloff>../images/export/video-info.png</normaloff>../images/export/video-info.png</iconset>
    </property>
    <property name="text">
     <string>Show Video Info</string>
@@ -1003,8 +1012,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/invert-colors.png</normaloff>:/imgFMV/images/misc/invert-colors.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/invert-colors.png</normaloff>../images/misc/invert-colors.png</iconset>
    </property>
    <property name="text">
     <string>Invert Color</string>
@@ -1015,8 +1024,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/mono.png</normaloff>:/imgFMV/images/misc/mono.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/mono.png</normaloff>../images/misc/mono.png</iconset>
    </property>
    <property name="text">
     <string>Mono Filter</string>
@@ -1027,8 +1036,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/canny.png</normaloff>:/imgFMV/images/misc/canny.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/canny.png</normaloff>../images/misc/canny.png</iconset>
    </property>
    <property name="text">
     <string>Canny edge detection</string>
@@ -1039,8 +1048,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/magnifier-glass.png</normaloff>:/imgFMV/images/misc/magnifier-glass.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/magnifier-glass.png</normaloff>../images/misc/magnifier-glass.png</iconset>
    </property>
    <property name="text">
     <string>Magnifying glass</string>
@@ -1051,8 +1060,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/automatic-contrast.png</normaloff>:/imgFMV/images/misc/automatic-contrast.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/automatic-contrast.png</normaloff>../images/misc/automatic-contrast.png</iconset>
    </property>
    <property name="text">
     <string>Auto Contrast Filter</string>
@@ -1060,8 +1069,8 @@
   </action>
   <action name="actionCreate_Mosaic">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/mosaic.png</normaloff>:/imgFMV/images/misc/mosaic.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/mosaic.png</normaloff>../images/misc/mosaic.png</iconset>
    </property>
    <property name="text">
     <string>Create Mosaic</string>
@@ -1072,8 +1081,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/draw-point.png</normaloff>:/imgFMV/images/draw/draw-point.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/draw-point.png</normaloff>../images/draw/draw-point.png</iconset>
    </property>
    <property name="text">
     <string>Draw Pinpoint</string>
@@ -1084,8 +1093,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/draw-polyline.png</normaloff>:/imgFMV/images/draw/draw-polyline.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/draw-polyline.png</normaloff>../images/draw/draw-polyline.png</iconset>
    </property>
    <property name="text">
     <string>Draw Line</string>
@@ -1096,8 +1105,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/draw-polygon.png</normaloff>:/imgFMV/images/draw/draw-polygon.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/draw-polygon.png</normaloff>../images/draw/draw-polygon.png</iconset>
    </property>
    <property name="text">
     <string>Draw Polygon</string>
@@ -1114,8 +1123,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/object-tracking.png</normaloff>:/imgFMV/images/misc/object-tracking.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/object-tracking.png</normaloff>../images/misc/object-tracking.png</iconset>
    </property>
    <property name="text">
     <string>Object Tracking</string>
@@ -1126,8 +1135,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/rubber-stamp.png</normaloff>:/imgFMV/images/misc/rubber-stamp.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/rubber-stamp.png</normaloff>../images/misc/rubber-stamp.png</iconset>
    </property>
    <property name="text">
     <string>Stamp</string>
@@ -1138,8 +1147,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/ruler.png</normaloff>:/imgFMV/images/overlays/ruler.png</iconset>
+    <iconset >
+     <normaloff>../images/overlays/ruler.png</normaloff>../images/overlays/ruler.png</iconset>
    </property>
    <property name="text">
     <string>Measure Distance</string>
@@ -1150,8 +1159,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/ruler_surface.png</normaloff>:/imgFMV/images/overlays/ruler_surface.png</iconset>
+    <iconset >
+     <normaloff>../images/overlays/ruler_surface.png</normaloff>../images/overlays/ruler_surface.png</iconset>
    </property>
    <property name="text">
     <string>Measure Area</string>
@@ -1159,8 +1168,8 @@
   </action>
   <action name="actionRemove_Last_MeasureDistance">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/ruler-remove-last.svg</normaloff>:/imgFMV/images/overlays/ruler-remove-last.svg</iconset>
+    <iconset >
+     <normaloff>../images/overlays/ruler-remove-last.svg</normaloff>../images/overlays/ruler-remove-last.svg</iconset>
    </property>
    <property name="text">
     <string>Remove Last Distance</string>
@@ -1171,8 +1180,8 @@
   </action>
   <action name="actionRemove_All_MeasureDistance">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/ruler-remove-all.svg</normaloff>:/imgFMV/images/overlays/ruler-remove-all.svg</iconset>
+    <iconset >
+     <normaloff>../images/overlays/ruler-remove-all.svg</normaloff>../images/overlays/ruler-remove-all.svg</iconset>
    </property>
    <property name="text">
     <string>Remove All Distances</string>
@@ -1183,8 +1192,8 @@
   </action>
   <action name="actionRemove_Last_MeasureArea">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/ruler-remove-last.svg</normaloff>:/imgFMV/images/overlays/ruler-remove-last.svg</iconset>
+    <iconset >
+     <normaloff>../images/overlays/ruler-remove-last.svg</normaloff>../images/overlays/ruler-remove-last.svg</iconset>
    </property>
    <property name="text">
     <string>Remove Last Area</string>
@@ -1195,8 +1204,8 @@
   </action>
   <action name="actionRemove_All_MeasureArea">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/ruler-remove-all.svg</normaloff>:/imgFMV/images/overlays/ruler-remove-all.svg</iconset>
+    <iconset >
+     <normaloff>../images/overlays/ruler-remove-all.svg</normaloff>../images/overlays/ruler-remove-all.svg</iconset>
    </property>
    <property name="text">
     <string>Remove All Areas</string>
@@ -1210,8 +1219,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/HandDraw.png</normaloff>:/imgFMV/images/draw/HandDraw.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/HandDraw.png</normaloff>../images/draw/HandDraw.png</iconset>
    </property>
    <property name="text">
     <string>Hand Draw</string>
@@ -1222,8 +1231,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/mirrored.png</normaloff>:/imgFMV/images/misc/mirrored.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/mirrored.png</normaloff>../images/misc/mirrored.png</iconset>
    </property>
    <property name="text">
     <string>Horizontal Mirrored</string>
@@ -1234,8 +1243,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/censure-pencil.png</normaloff>:/imgFMV/images/draw/censure-pencil.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/censure-pencil.png</normaloff>../images/draw/censure-pencil.png</iconset>
    </property>
    <property name="text">
     <string>Censure</string>
@@ -1246,8 +1255,8 @@
   </action>
   <action name="actionRemove_Last_censured">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/censure-pencil-remove-last.png</normaloff>:/imgFMV/images/draw/censure-pencil-remove-last.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/censure-pencil-remove-last.png</normaloff>../images/draw/censure-pencil-remove-last.png</iconset>
    </property>
    <property name="text">
     <string>Remove Last</string>
@@ -1255,8 +1264,8 @@
   </action>
   <action name="actionRemove_All_censured">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/censure-pencil-remove-all.png</normaloff>:/imgFMV/images/draw/censure-pencil-remove-all.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/censure-pencil-remove-all.png</normaloff>../images/draw/censure-pencil-remove-all.png</iconset>
    </property>
    <property name="text">
     <string>Remove All</string>
@@ -1267,8 +1276,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/draw-polygon-remove-last.png</normaloff>:/imgFMV/images/draw/draw-polygon-remove-last.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/draw-polygon-remove-last.png</normaloff>../images/draw/draw-polygon-remove-last.png</iconset>
    </property>
    <property name="text">
     <string>Remove Last Polygon</string>
@@ -1285,8 +1294,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/draw-polygon-remove-all.png</normaloff>:/imgFMV/images/draw/draw-polygon-remove-all.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/draw-polygon-remove-all.png</normaloff>../images/draw/draw-polygon-remove-all.png</iconset>
    </property>
    <property name="text">
     <string>Remove All Polygon</string>
@@ -1303,8 +1312,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/draw-point-remove-last.png</normaloff>:/imgFMV/images/draw/draw-point-remove-last.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/draw-point-remove-last.png</normaloff>../images/draw/draw-point-remove-last.png</iconset>
    </property>
    <property name="text">
     <string>Remove Last Pinpoint</string>
@@ -1318,8 +1327,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/draw-point-remove-all.png</normaloff>:/imgFMV/images/draw/draw-point-remove-all.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/draw-point-remove-all.png</normaloff>../images/draw/draw-point-remove-all.png</iconset>
    </property>
    <property name="text">
     <string>Remove All Pinpoint</string>
@@ -1333,8 +1342,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/draw-polyline-remove-all.png</normaloff>:/imgFMV/images/draw/draw-polyline-remove-all.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/draw-polyline-remove-all.png</normaloff>../images/draw/draw-polyline-remove-all.png</iconset>
    </property>
    <property name="text">
     <string>Remove All</string>
@@ -1348,8 +1357,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/draw-polyline-remove-last-segment.png</normaloff>:/imgFMV/images/draw/draw-polyline-remove-last-segment.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/draw-polyline-remove-last-segment.png</normaloff>../images/draw/draw-polyline-remove-last-segment.png</iconset>
    </property>
    <property name="text">
     <string>Remove Last Segment</string>
@@ -1363,8 +1372,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/draw/draw-polyline-remove-last.png</normaloff>:/imgFMV/images/draw/draw-polyline-remove-last.png</iconset>
+    <iconset >
+     <normaloff>../images/draw/draw-polyline-remove-last.png</normaloff>../images/draw/draw-polyline-remove-last.png</iconset>
    </property>
    <property name="text">
     <string>Remove Last Line</string>
@@ -1381,8 +1390,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/center_platform.png</normaloff>:/imgFMV/images/overlays/center_platform.png</iconset>
+    <iconset >
+     <normaloff>../images/overlays/center_platform.png</normaloff>../images/overlays/center_platform.png</iconset>
    </property>
    <property name="text">
     <string>Center on Platform</string>
@@ -1396,8 +1405,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/center_footprint.png</normaloff>:/imgFMV/images/overlays/center_footprint.png</iconset>
+    <iconset >
+     <normaloff>../images/overlays/center_footprint.png</normaloff>../images/overlays/center_footprint.png</iconset>
    </property>
    <property name="text">
     <string>Center on Footprint</string>
@@ -1411,8 +1420,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/center_target.png</normaloff>:/imgFMV/images/overlays/center_target.png</iconset>
+    <iconset >
+     <normaloff>../images/overlays/center_target.png</normaloff>../images/overlays/center_target.png</iconset>
    </property>
    <property name="text">
     <string>Center on Target</string>
@@ -1423,8 +1432,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/brightness-contrast.png</normaloff>:/imgFMV/images/misc/brightness-contrast.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/brightness-contrast.png</normaloff>../images/misc/brightness-contrast.png</iconset>
    </property>
    <property name="text">
     <string>Brightness / Contrast</string>
@@ -1435,8 +1444,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/clahe.svg</normaloff>:/imgFMV/images/filters/clahe.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/clahe.svg</normaloff>../images/filters/clahe.svg</iconset>
    </property>
    <property name="text">
     <string>CLAHE (Adaptive Contrast)</string>
@@ -1447,8 +1456,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/sharpen.svg</normaloff>:/imgFMV/images/filters/sharpen.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/sharpen.svg</normaloff>../images/filters/sharpen.svg</iconset>
    </property>
    <property name="text">
     <string>Sharpen (Unsharp Mask)</string>
@@ -1459,8 +1468,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/sobel.svg</normaloff>:/imgFMV/images/filters/sobel.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/sobel.svg</normaloff>../images/filters/sobel.svg</iconset>
    </property>
    <property name="text">
     <string>Sobel Edge Detection</string>
@@ -1471,8 +1480,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/road.svg</normaloff>:/imgFMV/images/filters/road.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/road.svg</normaloff>../images/filters/road.svg</iconset>
    </property>
    <property name="text">
     <string>Road &amp; Structure Enhancement</string>
@@ -1483,8 +1492,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/motion.svg</normaloff>:/imgFMV/images/filters/motion.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/motion.svg</normaloff>../images/filters/motion.svg</iconset>
    </property>
    <property name="text">
     <string>Motion Detection</string>
@@ -1495,8 +1504,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/bgsub.svg</normaloff>:/imgFMV/images/filters/bgsub.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/bgsub.svg</normaloff>../images/filters/bgsub.svg</iconset>
    </property>
    <property name="text">
     <string>Background Subtraction (MOG2)</string>
@@ -1507,8 +1516,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/hotspot.svg</normaloff>:/imgFMV/images/filters/hotspot.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/hotspot.svg</normaloff>../images/filters/hotspot.svg</iconset>
    </property>
    <property name="text">
     <string>Hotspot Detection</string>
@@ -1519,8 +1528,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/falsecolor.svg</normaloff>:/imgFMV/images/filters/falsecolor.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/falsecolor.svg</normaloff>../images/filters/falsecolor.svg</iconset>
    </property>
    <property name="text">
     <string>False Color (Turbo LUT)</string>
@@ -1531,8 +1540,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/exg.svg</normaloff>:/imgFMV/images/filters/exg.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/exg.svg</normaloff>../images/filters/exg.svg</iconset>
    </property>
    <property name="text">
     <string>ExG (Excess Green)</string>
@@ -1546,8 +1555,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/exr.svg</normaloff>:/imgFMV/images/filters/exr.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/exr.svg</normaloff>../images/filters/exr.svg</iconset>
    </property>
    <property name="text">
     <string>ExR (Excess Red)</string>
@@ -1561,8 +1570,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/vari.svg</normaloff>:/imgFMV/images/filters/vari.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/vari.svg</normaloff>../images/filters/vari.svg</iconset>
    </property>
    <property name="text">
     <string>VARI</string>
@@ -1576,8 +1585,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/dehaze.svg</normaloff>:/imgFMV/images/filters/dehaze.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/dehaze.svg</normaloff>../images/filters/dehaze.svg</iconset>
    </property>
    <property name="text">
     <string>Dehaze (CLAHE Enhancement)</string>
@@ -1588,8 +1597,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/nrvi.svg</normaloff>:/imgFMV/images/filters/nrvi.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/nrvi.svg</normaloff>../images/filters/nrvi.svg</iconset>
    </property>
    <property name="text">
     <string>NRVI (Vegetation Index)</string>
@@ -1603,8 +1612,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/building.svg</normaloff>:/imgFMV/images/filters/building.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/building.svg</normaloff>../images/filters/building.svg</iconset>
    </property>
    <property name="text">
     <string>Building Segmentation (CV + AI)</string>
@@ -1618,8 +1627,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/roadseg.svg</normaloff>:/imgFMV/images/filters/roadseg.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/roadseg.svg</normaloff>../images/filters/roadseg.svg</iconset>
    </property>
    <property name="text">
     <string>Road Segmentation (CV + AI)</string>
@@ -1633,8 +1642,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/vehicle.svg</normaloff>:/imgFMV/images/filters/vehicle.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/vehicle.svg</normaloff>../images/filters/vehicle.svg</iconset>
    </property>
    <property name="text">
     <string>Vehicle Segmentation (YOLO AI)</string>
@@ -1648,8 +1657,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/person.svg</normaloff>:/imgFMV/images/filters/person.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/person.svg</normaloff>../images/filters/person.svg</iconset>
    </property>
    <property name="text">
     <string>Person Segmentation (YOLO AI)</string>
@@ -1663,8 +1672,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/fire.svg</normaloff>:/imgFMV/images/filters/fire.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/fire.svg</normaloff>../images/filters/fire.svg</iconset>
    </property>
    <property name="text">
     <string>Fire Segmentation (CV + AI)</string>
@@ -1678,8 +1687,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/smoke.svg</normaloff>:/imgFMV/images/filters/smoke.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/smoke.svg</normaloff>../images/filters/smoke.svg</iconset>
    </property>
    <property name="text">
     <string>Smoke Segmentation (CV + AI)</string>
@@ -1693,8 +1702,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/filters/flood.svg</normaloff>:/imgFMV/images/filters/flood.svg</iconset>
+    <iconset >
+     <normaloff>../images/filters/flood.svg</normaloff>../images/filters/flood.svg</iconset>
    </property>
    <property name="text">
     <string>Flood Segmentation (CV + AI)</string>
@@ -1705,8 +1714,8 @@
   </action>
   <action name="actionCapture_Georeferenced_Frame">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/save_geoframe.png</normaloff>:/imgFMV/images/misc/save_geoframe.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/save_geoframe.png</normaloff>../images/misc/save_geoframe.png</iconset>
    </property>
    <property name="text">
     <string>Capture Georeferenced Frame</string>
@@ -1718,7 +1727,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/export/show-metadata.png</normaloff>
+     <normaloff>../images/export/show-metadata.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1733,8 +1742,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/misc/mini-map.png</normaloff>:/imgFMV/images/misc/mini-map.png</iconset>
+    <iconset >
+     <normaloff>../images/misc/mini-map.png</normaloff>../images/misc/mini-map.png</iconset>
    </property>
    <property name="text">
     <string>Mini Map</string>
@@ -1751,8 +1760,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/sensor-cone.svg</normaloff>:/imgFMV/images/overlays/sensor-cone.svg</iconset>
+    <iconset >
+     <normaloff>../images/overlays/sensor-cone.svg</normaloff>../images/overlays/sensor-cone.svg</iconset>
    </property>
    <property name="text">
     <string>Sensor Coverage Cone</string>
@@ -1766,8 +1775,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/distance-rings.svg</normaloff>:/imgFMV/images/overlays/distance-rings.svg</iconset>
+    <iconset >
+     <normaloff>../images/overlays/distance-rings.svg</normaloff>../images/overlays/distance-rings.svg</iconset>
    </property>
    <property name="text">
     <string>Distance Rings</string>
@@ -1781,8 +1790,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/platforms/plat_military_jet.svg</normaloff>:/imgFMV/images/platforms/plat_military_jet.svg</iconset>
+    <iconset >
+     <normaloff>../images/platforms/plat_military_jet.svg</normaloff>../images/platforms/plat_military_jet.svg</iconset>
    </property>
    <property name="text">
     <string>Military Symbols</string>
@@ -1797,7 +1806,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/screenshot.png</normaloff>
+     <normaloff>../images/misc/screenshot.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1813,7 +1822,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/status/Warning.png</normaloff>
+     <normaloff>../images/status/Warning.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1823,7 +1832,7 @@
   <action name="actionAdd_Alert">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/status/Information.png</normaloff>
+     <normaloff>../images/status/Information.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1833,7 +1842,7 @@
   <action name="actionClear_Alerts">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/delete.png</normaloff>
+     <normaloff>../images/misc/delete.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1843,7 +1852,7 @@
   <action name="actionAdd_Bookmark">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/status/Information.png</normaloff>
+     <normaloff>../images/status/Information.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1859,7 +1868,7 @@
   <action name="actionClear_Bookmarks">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/delete.png</normaloff>
+     <normaloff>../images/misc/delete.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1869,7 +1878,7 @@
   <action name="actionExport_Bookmarks">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/save_geoframe.png</normaloff>
+     <normaloff>../images/misc/save_geoframe.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1882,7 +1891,7 @@
   <action name="actionExport_KML">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/save_geoframe.png</normaloff>
+     <normaloff>../images/misc/save_geoframe.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1895,7 +1904,7 @@
   <action name="actionExport_GPX">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/stream.png</normaloff>
+     <normaloff>../images/misc/stream.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1908,7 +1917,7 @@
   <action name="actionSet_Geofence">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/status/Warning.png</normaloff>
+     <normaloff>../images/status/Warning.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1921,7 +1930,7 @@
   <action name="actionClear_Geofence">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/delete.png</normaloff>
+     <normaloff>../images/misc/delete.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1936,8 +1945,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/ai-detections.svg</normaloff>:/imgFMV/images/overlays/ai-detections.svg</iconset>
+    <iconset >
+     <normaloff>../images/overlays/ai-detections.svg</normaloff>../images/overlays/ai-detections.svg</iconset>
    </property>
    <property name="text">
     <string>Watch Detections in Geofence</string>
@@ -1952,7 +1961,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/object-tracking.png</normaloff>
+     <normaloff>../images/misc/object-tracking.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -1970,8 +1979,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/time-machine.svg</normaloff>:/imgFMV/images/overlays/time-machine.svg</iconset>
+    <iconset >
+     <normaloff>../images/overlays/time-machine.svg</normaloff>../images/overlays/time-machine.svg</iconset>
    </property>
    <property name="text">
     <string>Map Time Machine</string>
@@ -1988,8 +1997,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/center_target.png</normaloff>:/imgFMV/images/overlays/center_target.png</iconset>
+    <iconset >
+     <normaloff>../images/overlays/center_target.png</normaloff>../images/overlays/center_target.png</iconset>
    </property>
    <property name="text">
     <string>Lookback — What did we see here?</string>
@@ -2009,8 +2018,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/ai-detections.svg</normaloff>:/imgFMV/images/overlays/ai-detections.svg</iconset>
+    <iconset >
+     <normaloff>../images/overlays/ai-detections.svg</normaloff>../images/overlays/ai-detections.svg</iconset>
    </property>
    <property name="text">
     <string>AI Detections on Map</string>
@@ -2025,7 +2034,7 @@
   <action name="actionExport_Mission_Package">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/save_geoframe.png</normaloff>
+     <normaloff>../images/misc/save_geoframe.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -2044,7 +2053,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/overlays/center_target.png</normaloff>
+     <normaloff>../images/overlays/center_target.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -2062,8 +2071,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/ai-detections.svg</normaloff>:/imgFMV/images/overlays/ai-detections.svg</iconset>
+    <iconset >
+     <normaloff>../images/overlays/ai-detections.svg</normaloff>../images/overlays/ai-detections.svg</iconset>
    </property>
    <property name="text">
     <string>Detection Heat Trail</string>
@@ -2078,7 +2087,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/stream.png</normaloff>
+     <normaloff>../images/misc/stream.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -2097,7 +2106,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/object-tracking.png</normaloff>
+     <normaloff>../images/misc/object-tracking.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -2116,7 +2125,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/save_geoframe.png</normaloff>
+     <normaloff>../images/misc/save_geoframe.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -2134,8 +2143,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/imgFMV/images/overlays/center_target.png</normaloff>:/imgFMV/images/overlays/center_target.png</iconset>
+    <iconset >
+     <normaloff>../images/overlays/center_target.png</normaloff>../images/overlays/center_target.png</iconset>
    </property>
    <property name="text">
     <string>Pin Target on Map</string>
@@ -2150,7 +2159,7 @@
   <action name="actionJump_Next_Target_FOV">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/object-tracking.png</normaloff>
+     <normaloff>../images/misc/object-tracking.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -2166,7 +2175,7 @@
   <action name="actionClear_Target_Pin">
    <property name="icon">
     <iconset>
-     <normaloff>:/imgFMV/images/misc/delete.png</normaloff>
+     <normaloff>../images/misc/delete.png</normaloff>
     </iconset>
    </property>
    <property name="text">
@@ -2198,9 +2207,6 @@
    </slots>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="resources.qrc" />
- </resources>
  <connections>
   <connection>
    <sender>gb_PlayerControls</sender>

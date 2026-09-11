@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Measure distance/area painting: labels, vertices and running totals."""
 
 from qgis.PyQt.QtCore import QPoint, QPointF, QRectF

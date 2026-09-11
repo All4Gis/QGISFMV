@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for pymisb.klvdata.common (BER, datetime, hex helpers)."""
 
 from pathlib import Path

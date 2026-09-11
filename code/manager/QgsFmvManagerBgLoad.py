@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Background media/telemetry probing for the Manager: worker/thread lifecycle
 and completion handling that turns a probe result into row state + UI updates.
 """
@@ -128,7 +127,7 @@ class ManagerBgLoadController:
             try:
                 manager._bg_jobs.remove(job)
             except ValueError:
-                pass
+                log.debug("forget_job failed: %s", job)
 
         thread.finished.connect(_forget_job)
         thread.finished.connect(worker.deleteLater)

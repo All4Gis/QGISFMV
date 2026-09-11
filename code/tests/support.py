@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Test helpers (import paths, plugin module loader)."""
 
 import importlib.util
@@ -101,8 +100,7 @@ def load_plugin_module(relative_path, module_name=None):
     ensure_qgis_fmv_package()
     if module_name is None:
         rel = relative_path.replace("\\", "/")
-        if rel.endswith(".py"):
-            rel = rel[:-3]
+        rel = rel.removesuffix(".py")
         module_name = "QGIS_FMV." + rel.replace("/", ".")
     file_path = CODE / relative_path
     spec = importlib.util.spec_from_file_location(module_name, file_path)

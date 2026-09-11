@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Background frame decode workers (OpenCV VideoCapture and FFmpeg pipe)."""
 
 try:

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Map-canvas centering/follow helpers, extracted from QgsFmvUtils.py.
 
 Owns the "follow platform / footprint / frame center" logic used by the
@@ -113,7 +112,7 @@ def _layer_center_on_canvas(layer, iface):
     if feature is not None and feature.isValid():
         geom = feature.geometry()
         if geom is not None and not geom.isEmpty():
-            if geom.type() == QgsWkbTypes.PointGeometry:
+            if geom.type() == QgsWkbTypes.GeometryType.PointGeometry:
                 point = geom.asPoint()
             else:
                 point = geom.centroid().asPoint()

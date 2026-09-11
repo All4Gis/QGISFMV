@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Drawing tools rendered on the video surface.
 
 - ``QgsFmvDrawToolBar`` — ``DrawToolBar`` façade (``drawOnVideo`` dispatcher)

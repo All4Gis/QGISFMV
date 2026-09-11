@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for unified FFmpeg subprocess runner."""
 
 from code.tests.support import load_plugin_module

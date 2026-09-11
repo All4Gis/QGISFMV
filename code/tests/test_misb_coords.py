@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for MISB packet coordinate extraction."""
 
 from pathlib import Path

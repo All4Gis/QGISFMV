@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
 """OpenCV video widget, surface, state, draw/track/cursor controllers, and utilities."""
 
 __all__ = [
-    "VideoWidget",
-    "VideoSinkSurface",
+    "MOUSE_MOVE_EVENT",
     "FilterState",
     "InteractionState",
-    "MOUSE_MOVE_EVENT",
-    "TrackLockState",
-    "VideoUtils",
     "RubberBandManager",
+    "TrackLockState",
+    "VideoSinkSurface",
+    "VideoUtils",
+    "VideoWidget",
 ]
 
 

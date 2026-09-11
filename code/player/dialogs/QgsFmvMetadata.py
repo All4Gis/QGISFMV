@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
 import csv
 import os
 import platform
+from pathlib import Path
 
+from qgis.PyQt import uic
 from qgis.core import Qgis as QGis
 from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtWidgets import QDockWidget
-from QGIS_FMV.gui.ui_FmvMetadata import Ui_FmvMetadata
 from QGIS_FMV.player.dialogs.QgsFmvReportGenerator import ReportGenerator
 from QGIS_FMV.player.dialogs.QgsFmvReportMetadata import (
     _group_metadata_fields,
@@ -28,6 +28,10 @@ from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 # ---------------------------------------------------------------------------
 # QgsFmvMetadata — dock widget (public API unchanged)
 # ---------------------------------------------------------------------------
+
+Ui_FmvMetadata, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent.parent / "ui/ui_FmvMetadata.ui")
+)
 
 
 class QgsFmvMetadata(QDockWidget, Ui_FmvMetadata):

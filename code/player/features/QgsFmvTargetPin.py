@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Target Pin / Cue — pin a map point; HUD shows range, bearing, next FOV hit."""
 
 from __future__ import annotations
@@ -198,7 +197,8 @@ class TargetPinController:
                 try:
                     fn(False)
                 except Exception:
-                    pass
+                    log.debug("disarm_map_seek: %s failed", method)
+
         for name in (
             "actionClick_to_Seek",
             "actionTime_Machine",
@@ -260,7 +260,7 @@ class TargetPinController:
                 try:
                     self.setCursor(Qt.CursorShape.CrossCursor)
                 except Exception:
-                    pass
+                    log.debug("target pin map tool cursor failed")
 
             def canvasReleaseEvent(self, event):
                 try:
@@ -319,7 +319,8 @@ class TargetPinController:
                 rb.setIcon(QgsRubberBand.IconType.ICON_CROSS)
                 rb.setIconSize(18)
             except Exception:
-                pass
+                log.debug("target pin map tool icon failed")
+
             pt = QgsPointXY(lon, lat)
             crs = canvas.mapSettings().destinationCrs()
             if crs.isValid() and crs.authid() != "EPSG:4326":

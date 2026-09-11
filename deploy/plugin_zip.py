@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-# coding: utf-8
 """Create QGIS Plugin Zip for upload to QGIS Repository."""
 
-import os
-from configparser import ConfigParser
-from fnmatch import fnmatch
-from pathlib import Path
 import ast
+import os
 import shutil
 import sys
 import zipfile
+from configparser import ConfigParser
+from fnmatch import fnmatch
+from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
@@ -73,7 +72,7 @@ def optimize_pngs(directory):
 def optimize_svgs(directory):
     """Optimize SVG files by stripping metadata and comments."""
     try:
-        from scour.scour import scourString, parse_args
+        from scour.scour import parse_args, scourString
     except ImportError:
         print("  [skip] scour not installed, SVG optimization skipped")
         return 0
@@ -146,7 +145,7 @@ def strip_python_comments(directory):
                         continue
 
                 if in_docstring:
-                    if docstring_quote in stripped:
+                    if docstring_quote in stripped:  # pyright: ignore[reportOperatorIssue]
                         in_docstring = False
                     continue
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Spatial geofence rules — alert when frame-center enters / leaves an AOI."""
 
 from __future__ import annotations
@@ -285,7 +284,7 @@ class GeofenceController:
                 layer.renderer().setSymbol(symbol)
             except Exception as exc:
                 log.debug("operation failed: %s", exc)
-            
+
             group = groupName or self.player._videoGroupName()
             addLayerNoCrsDialog(layer, group=group)
             self._aoi_layer = layer

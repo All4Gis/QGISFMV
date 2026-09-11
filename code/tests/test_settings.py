@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for settings.ini helpers (no QGIS runtime)."""
 
 import os

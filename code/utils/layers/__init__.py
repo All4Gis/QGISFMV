@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """QGIS map layers for FMV.
 
 - ``QgsFmvLayers`` — group/layer creation, factories (compat façade)

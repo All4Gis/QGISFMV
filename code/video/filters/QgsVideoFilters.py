@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import numpy as np
 import QGIS_FMV.video.filters.QgsFmvFilterCore as _fcore
 from qgis.PyQt.QtCore import Qt
@@ -18,7 +17,7 @@ from QGIS_FMV.video.filters.QgsFmvFilterCore import (
 )
 
 
-class VideoFilters(object):
+class VideoFilters:
     """Video frame filters applied frame-by-frame."""
 
     _SLOW_FLAGS = (

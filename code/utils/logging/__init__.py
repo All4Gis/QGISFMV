@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Centralized logging for QGIS FMV (stdlib ``logging`` — no extra pip package).
 
@@ -41,7 +40,7 @@ if not log.handlers:
         log.addHandler(_fh)
     except Exception as _exc:
         print(
-            "[QGIS_FMV] Warning: could not create log file: {}".format(_exc),
+            f"[QGIS_FMV] Warning: could not create log file: {_exc}",
             file=sys.stderr,
         )
 

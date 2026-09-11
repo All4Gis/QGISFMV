@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Common QgsTask on_finished handling shared by every player background task."""
 
 import os.path

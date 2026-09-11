@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Paint pipeline extracted from VideoWidget.paintEvent (QgsVideo.py).
 
 Keeps the z-order painting logic (background, drawings, overlays, HUD) in a

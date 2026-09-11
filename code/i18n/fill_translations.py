@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Fill QGIS FMV .ts translation files for Transifex upload.
 
@@ -71,7 +70,7 @@ KEEP_LITERAL = re.compile(
     r"\d+[,.]?\d*\s*(MB|ms|px|m|km|%|°)|"
     r"about:blank|\{\}|\.ts|\.onnx|\.csv|\.txt|\.log|"
     r"3,4,5,8,9|0,1|2,3,5,7|0\.15|0\.45|640)$",
-    re.I,
+    re.IGNORECASE,
 )
 
 # Curated overrides per language (high-visibility UI + AI strings)

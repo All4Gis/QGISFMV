@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Frame/mosaic/video export, format conversion, bitrate plots, and audio probing."""
 
 import os.path
@@ -327,7 +326,6 @@ class ExportController:
                     flags=QgsTask.Flag.CanCancel,
                 )
             )
-        return
 
     def SaveAllFrames(self, task, fileName, directory):
         """Extract and save all video frames into directory"""

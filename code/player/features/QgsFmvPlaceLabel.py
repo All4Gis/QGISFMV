@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Live place name under the frame-center (reverse geocode → HUD)."""
 
 from __future__ import annotations

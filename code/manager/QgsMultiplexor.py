@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Video Multiplexer dialog — build MISB STANAG 4609 videos with pymisb."""
 
 import os
@@ -8,9 +7,14 @@ from qgis.core import Qgis as QGis
 from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication
 from qgis.PyQt.QtWidgets import QDialog
-from QGIS_FMV.gui.ui_FmvMultiplexer import Ui_VideoMultiplexer
 from QGIS_FMV.utils.core.QgsFmvUtils import _ensureFfmpegPaths, askForFiles
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
+from pathlib import Path
+from qgis.PyQt import uic
+
+Ui_VideoMultiplexer, _ = uic.loadUiType(
+    str(Path(__file__).resolve().parent.parent / "ui/ui_VideoMultiplexer.ui")
+)
 
 
 class Multiplexor(QDialog, Ui_VideoMultiplexer):

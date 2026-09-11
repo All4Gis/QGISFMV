@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 GUI tests for QgsFmvPlayer — the video player window.
 
@@ -13,9 +12,6 @@ Run via::
     # Or via pytest (requires QGIS runtime):
     cd QGIS_FMV && python -m pytest tests/test_gui_player.py -v
 """
-
-import os
-import sys
 
 import pytest
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import bisect
 import threading
 import time
@@ -171,8 +170,7 @@ class LocalFileMetaReader:
     def _timestampToOffset(self, unixTs):
         if self._videoStart is not None:
             offsetSec = unixTs - self._videoStart
-            if offsetSec < 0:
-                offsetSec = 0
+            offsetSec = max(offsetSec, 0)
             return offsetSec
         return float(unixTs)
 

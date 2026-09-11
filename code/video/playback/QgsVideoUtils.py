@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import numpy as np
 from QGIS_FMV.utils.core.QgsFmvUtils import (
     GetDemAltAt,
@@ -11,7 +10,7 @@ from QGIS_FMV.utils.core.QgsFmvUtils import (
 )
 
 
-class VideoUtils(object):
+class VideoUtils:
 
     @staticmethod
     def GetNormalizedWidth(surface):

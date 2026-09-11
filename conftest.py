@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Root conftest — prevent the local ``code/`` package from shadowing
 Python's stdlib ``code`` module (used by ``pdb`` and ``_pytest.debugging``).
 
@@ -9,7 +8,6 @@ module by absolute path, bypassing sys.path which includes our ``code/`` dir.
 import importlib.util
 import sys
 import sysconfig
-import types
 
 
 def _ensure_stdlib_code():

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Record button blink animation and background video-segment recording."""
 
 import os.path
@@ -14,6 +13,7 @@ from QGIS_FMV.utils.core.QgsFmvUtils import (
     buildRecordFfmpegArgs,
     recordSaveExtensions,
 )
+from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.ui.QgsFmvResources import ICON_RECORD, RECORD_GIF
 
 
@@ -63,7 +63,8 @@ class RecordController:
         try:
             self.RecGIF.frameChanged.disconnect(self.ReciconUpdate)
         except (TypeError, RuntimeError):
-            pass
+            log.debug("RecordController: frameChanged.disconnect failed")
+
         self.RecGIF.stop()
         self._recordBlinkOn = False
         btn = self.player.btn_Rec
