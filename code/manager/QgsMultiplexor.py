@@ -13,7 +13,7 @@ from pathlib import Path
 from qgis.PyQt import uic
 
 Ui_VideoMultiplexer, _ = uic.loadUiType(
-    str(Path(__file__).resolve().parent.parent / "ui/ui_VideoMultiplexer.ui")
+    str(Path(__file__).resolve().parent.parent / "ui/ui_FmvMultiplexer.ui")
 )
 
 
