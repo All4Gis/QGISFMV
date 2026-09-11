@@ -608,6 +608,4 @@ try:
 
     _apply_mosaic_settings(__import__(__name__))
 except Exception as e:
-    from QGIS_FMV.utils.logging import log
-
     log.debug("Mosaic settings import failed (non-critical): %s", e)
