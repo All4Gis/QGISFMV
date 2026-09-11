@@ -7,6 +7,7 @@ session for backward compatibility.
 """
 
 from QGIS_FMV.utils.core.QgsFmvUtilsState import globalVariablesState
+from QGIS_FMV.utils.logging import log
 
 # Active session for the currently focused player (single-video default).
 _active_session = None
@@ -72,8 +73,8 @@ def _sync_legacy_gv():
         import QGIS_FMV.utils.core.QgsFmvUtils as utils
 
         utils.gv = _active_session
-    except Exception:
-        pass
+    except Exception as exc:
+        log.debug("Failed to sync legacy gv alias: %s", exc)
 
 
 # Alias kept for readability at call sites / docs.

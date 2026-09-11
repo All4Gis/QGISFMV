@@ -283,8 +283,13 @@ def _apply_mosaic_settings(fmv_utils):
     from QGIS_FMV.utils import constants as mosaic_cfg
 
     section = "MOSAIC"
-    _float = lambda k: float(get(section, k, default(section, k)))
-    _int = lambda k: int(get(section, k, default(section, k)))
+
+    def _float(k):
+        return float(get(section, k, default(section, k)))
+
+    def _int(k):
+        return int(get(section, k, default(section, k)))
+
     values = {
         "MOSAIC_MIN_INTERVAL_SEC": _float("min_interval_sec"),
         "MOSAIC_MIN_MOVE_METERS": _float("min_move_meters"),

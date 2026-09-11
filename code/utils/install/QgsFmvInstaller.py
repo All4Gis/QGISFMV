@@ -41,7 +41,8 @@ WINDOWS = platform.system() == "Windows"
 DARWIN = platform.system() == "Darwin"
 LINUX = platform.system() == "Linux"
 
-_Tr = lambda text: QCoreApplication.translate("QgsFmvInstaller", text)
+def _Tr(text):
+    return QCoreApplication.translate("QgsFmvInstaller", text)
 
 
 # ---------------------------------------------------------------------------
@@ -340,7 +341,8 @@ def _download(url: str, dest: str, with_progress: bool = True) -> None:
         headers={"User-Agent": USER_AGENT},
     )
 
-    with urlopen(req) as resp, open(dest, "wb") as out:
+    # Scheme already restricted to http/https above.
+    with urlopen(req, timeout=120) as resp, open(dest, "wb") as out:  # nosec B310
         total = int(resp.headers.get("Content-Length") or 0)
 
         read = 0

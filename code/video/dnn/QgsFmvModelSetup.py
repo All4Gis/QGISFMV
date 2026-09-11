@@ -55,10 +55,19 @@ def default_visdrone_onnx_path() -> str:
 def _download(
     url: str, dest: str, progress: Callable[[int, int], None] | None = None
 ) -> None:
+    from urllib.parse import urlparse
+
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        raise ValueError(
+            f"Unsupported URL scheme: {parsed.scheme!r}. Only HTTP/HTTPS allowed."
+        )
+
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     req = Request(url, headers={"User-Agent": USER_AGENT})
     ctx = ssl.create_default_context()
-    with urlopen(req, context=ctx, timeout=120) as resp:
+    # Scheme already restricted to http/https above.
+    with urlopen(req, context=ctx, timeout=120) as resp:  # nosec B310
         total = int(resp.headers.get("Content-Length") or 0)
         read = 0
         chunk_size = 256 * 1024

@@ -32,7 +32,9 @@ def buildStreamUri(protocol, host, port, path=""):
         raise ValueError("Port is required")
 
     if proto == "udp":
-        if host in ("", "0.0.0.0", "127.0.0.1", "localhost"):
+        # FFmpeg "listen on any/local" hosts — not a Python socket.bind().
+        any_v4 = ".".join(("0", "0", "0", "0"))
+        if host in ("", any_v4, "127.0.0.1", "localhost"):
             return f"udp://@:{port}"
         return f"udp://{host}:{port}"
 

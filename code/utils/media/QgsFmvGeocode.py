@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import urllib.error
+import urllib.parse
 import urllib.request
 
 try:
@@ -86,6 +87,9 @@ def fetchReverseGeocodeJson(url_template, centerLat, centerLon, timeout=8):
         url = normalizeReverseGeocodeUrl(
             url_template.format(str(centerLat), str(centerLon))
         )
+        parsed = urllib.parse.urlparse(url)
+        if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+            raise ValueError(f"Unsupported geocode URL: {url!r}")
         req = urllib.request.Request(
             url,
             headers={
@@ -93,7 +97,8 @@ def fetchReverseGeocodeJson(url_template, centerLat, centerLon, timeout=8):
                 "Accept": "application/json",
             },
         )
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        # http/https only (validated above).
+        with urllib.request.urlopen(req, timeout=timeout) as response:  # nosec B310
             return json.loads(response.read().decode("utf-8", errors="replace"))
     except (
         urllib.error.URLError,
