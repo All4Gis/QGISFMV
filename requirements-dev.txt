@@ -11,7 +11,7 @@ pytest>=8.3.0
 numpy>=2.5.2
 pymisb==2.0.1
 # Debugging / hot reload (optional local workflow)
-debugpy>=1.8.21
+debugpy>=1.8.22
 watchdog>=6.0.0
 defusedxml==0.7.1
 
