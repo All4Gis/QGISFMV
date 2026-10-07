@@ -9,7 +9,7 @@ flake8>=7.4.1
 # Tests
 pytest>=8.3.0
 numpy>=2.5.3
-pymisb==2.0.1
+pymisb==2.0.2
 # Debugging / hot reload (optional local workflow)
 debugpy>=1.8.22
 watchdog>=6.0.0

@@ -79,7 +79,8 @@ class TestBootstrapPackagesPath:
         # Ensure append happens with joined path.
         before = list(boot.sys.path)
         boot.bootstrapPythonDepsPath()
-        expected = os.path.join(str(home), ".qgis-fmv-packages")
+        expected = boot.fmvPackagesDir()
+        assert expected == os.path.join(str(home), ".qgis-fmv-packages")
         assert expected in boot.sys.path
         # Restore path for other tests.
         boot.sys.path[:] = before

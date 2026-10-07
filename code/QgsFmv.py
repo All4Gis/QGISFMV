@@ -29,7 +29,6 @@ from qgis.PyQt.QtCore import QCoreApplication, QSettings, Qt, QTimer, QTranslato
 from qgis.PyQt.QtGui import QAction, QIcon
 from qgis.PyQt.QtWidgets import QDialog
 from QGIS_FMV.about.QgsFmvAbout import FmvAbout
-from QGIS_FMV.player.dialogs.QgsFmvSettings import open_fmv_settings
 from QGIS_FMV.utils.install.QgsFmvInstaller import run_dependency_setup
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.settings.QgsFmvSettings import reloadRuntime, repair_ffmpeg_setting
@@ -62,6 +61,7 @@ class Fmv:
 
         self._FMVManager = None
         self._depsWarned = False
+        self._background_tasks = []
         self.toolbar = None
         self._aboutToQuitHooked = False
 
@@ -133,6 +133,19 @@ class Fmv:
         except Exception as exc:
             log.debug("DNN auto-setup skipped: %s", exc)
 
+        QTimer.singleShot(0, self._startBackgroundDeps)
+
+    def _startBackgroundDeps(self):
+        """Install remaining pip packages (OpenCV, matplotlib) without blocking GUI."""
+        try:
+            from QGIS_FMV.utils.install.QgsFmvInstaller import (
+                start_background_dependency_install,
+            )
+
+            start_background_dependency_install(self)
+        except Exception as exc:
+            log.debug("background dep install skipped: %s", exc)
+
     def _onAboutToQuit(self):
         """QGIS is exiting — tear down threads before dock widgets are destroyed."""
         self._teardownRuntime()
@@ -184,6 +197,8 @@ class Fmv:
 
     def openSettings(self):
         """Open unified FMV settings dialog."""
+        from QGIS_FMV.player.dialogs.QgsFmvSettings import open_fmv_settings
+
         player = None
         if self._FMVManager is not None:
             player = getattr(self._FMVManager, "_PlayerDlg", None)
@@ -232,8 +247,8 @@ class Fmv:
                 QCoreApplication.translate(
                     "QgsFmv",
                     "Open FMV Settings from the toolbar to set the FFmpeg folder "
-                    "and install Python packages, or run ./install_dev.sh "
-                    "(macOS/Linux) / install_dev.bat (Windows).",
+                    "or retry Python package install (needs network; pip times out "
+                    "after a few minutes).",
                 ),
                 level=QGis.MessageLevel.Warning,
                 duration=12,

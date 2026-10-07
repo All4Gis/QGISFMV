@@ -42,6 +42,14 @@ EXCLUDE_PATTERNS = [
     "requirements-dev.txt",
 ]
 
+# First-run pip install reads these from the installed plugin folder.
+REQUIRED_IN_ZIP = (
+    "metadata.txt",
+    "__init__.py",
+    "QgsFmv.py",
+    "requirements.txt",
+)
+
 
 def optimize_pngs(directory):
     """Optimize PNG images using Pillow (lossy reduction)."""
@@ -183,6 +191,10 @@ def copy_project_structure(patterns):
         shutil.rmtree(OUTPUT_DIR)
 
     shutil.copytree(CODE_DIR, OUTPUT_DIR, ignore=make_ignore_fn(patterns))
+    missing = [name for name in REQUIRED_IN_ZIP if not (OUTPUT_DIR / name).is_file()]
+    if missing:
+        print(f"Error: plugin copy is missing {missing}")
+        sys.exit(1)
 
     print(f"  -> {OUTPUT_DIR}")
 

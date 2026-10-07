@@ -5,9 +5,6 @@ import shutil
 import time
 from math import radians, sin
 
-import pymisb.klvdata  # noqa: F401  (register ST0601 parsers)
-from pymisb.klvdata.element import UnknownElement
-from pymisb.klvdata.streamparser import StreamParser
 from qgis.core import Qgis as QGis
 from qgis.PyQt.QtCore import QPoint, QSettings
 from qgis.PyQt.QtGui import QPainter
@@ -319,7 +316,17 @@ def getKlvStreamIndex(videoPath, quiet=False):
     return 0
 
 
+def _pymisb_klv():
+    """Lazy pymisb import so plugin load can finish before first-run pip."""
+    import pymisb.klvdata  # noqa: F401  (register ST0601 parsers)
+    from pymisb.klvdata.element import UnknownElement
+    from pymisb.klvdata.streamparser import StreamParser
+
+    return UnknownElement, StreamParser
+
+
 def _coordsFromKlvStream(rawData):
+    UnknownElement, StreamParser = _pymisb_klv()
     for packet in StreamParser(rawData):
         if isinstance(packet, UnknownElement):
             continue
