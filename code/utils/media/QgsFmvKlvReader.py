@@ -1,4 +1,5 @@
 import bisect
+import subprocess
 import threading
 import time
 from collections import deque
@@ -65,6 +66,56 @@ def _extractKlvPackets(rawData):
     return packets
 
 
+def peek_first_klv_packet(video_path, klv_index=0, timeout=20):
+    """Return the first KLV packet, or ``b''``.
+
+    A duration limit (``-t``) often yields nothing: MISB data packets are not
+    timed like video frames, so the read stops at the first complete packet.
+    """
+    proc = None
+    timer = None
+    try:
+        proc = _spawn(
+            [
+                "-i",
+                video_path,
+                "-map",
+                "0:d:" + str(klv_index),
+                "-f",
+                "data",
+                "-",
+            ],
+            stdin=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        timer = threading.Timer(timeout, proc.kill)
+        timer.daemon = True
+        timer.start()
+        raw = b""
+        while True:
+            chunk = proc.stdout.read(65536)
+            if not chunk:
+                break
+            raw += chunk
+            packets = _extractKlvPackets(raw)
+            if packets:
+                return packets[0]
+        packets = _extractKlvPackets(raw)
+        return packets[0] if packets else b""
+    except Exception as exc:
+        log.debug("peek_first_klv_packet failed: %s", exc)
+        return b""
+    finally:
+        if timer is not None:
+            timer.cancel()
+        if proc is not None and proc.poll() is None:
+            try:
+                proc.kill()
+                proc.wait(timeout=2)
+            except Exception as kill_exc:
+                log.debug("peek_first_klv_packet kill failed: %s", kill_exc)
+
+
 _extractKlvPackets._logOnce = True
 
 
@@ -90,7 +141,7 @@ def _parseTimestampFromKlv(packet):
 class LocalFileMetaReader:
     """Pre-reads metadata from a local MISB video via a single ffmpeg process."""
 
-    def __init__(self, videoPath, klvIndex=0, preload=True):
+    def __init__(self, videoPath, klvIndex=0, preload=True, on_loaded=None):
         self.videoPath = videoPath
         self.klvIndex = klvIndex
         self._offsets = []
@@ -101,6 +152,8 @@ class LocalFileMetaReader:
         self._loadError = None
         self._stop = False
         self._loadThread = None
+        self._on_loaded = on_loaded
+        self._notified = False
         if preload:
             self._loadThread = threading.Thread(target=self._loadAll, daemon=True)
             self._loadThread.start()
@@ -108,7 +161,13 @@ class LocalFileMetaReader:
             self._loadAll()
 
     def _loadAll(self):
+        proc = None
         try:
+            from QGIS_FMV.utils.core.QgsFmvUtils import _pymisb_klv
+
+            # Parsers are registered by importing pymisb.klvdata. The plugin
+            # defers that import so startup can finish before first-run pip.
+            _pymisb_klv()
             proc = _spawn(
                 [
                     "-i",
@@ -118,13 +177,13 @@ class LocalFileMetaReader:
                     "-f",
                     "data",
                     "-",
-                ]
+                ],
+                stdin=subprocess.DEVNULL,
             )
-            rawData, _ = proc.communicate(timeout=120)
+            rawData, _ = proc.communicate(timeout=600)
 
             if not rawData:
                 log.info("LocalFileMetaReader: no KLV data found.")
-                self._loaded = True
                 return
 
             packets = _extractKlvPackets(rawData)
@@ -150,7 +209,6 @@ class LocalFileMetaReader:
             entries = self._finalizeEntries(entries)
             self._offsets = [item[0] for item in entries]
             self._packets = [item[1] for item in entries]
-            self._loaded = True
             log.info(
                 "LocalFileMetaReader: indexed {} metadata entries (span {:.2f}s).".format(
                     len(self._packets),
@@ -163,9 +221,30 @@ class LocalFileMetaReader:
             )
 
         except Exception as exc:
+            if proc is not None and proc.poll() is None:
+                try:
+                    proc.kill()
+                    proc.wait(timeout=2)
+                except Exception as kill_exc:
+                    log.debug("LocalFileMetaReader kill after failure: %s", kill_exc)
             self._loadError = str(exc)
             log.error("LocalFileMetaReader load failed: %s", exc)
-            self._loaded = True
+        finally:
+            self._notify_loaded()
+
+    def _notify_loaded(self):
+        """Mark the index finished and invoke ``on_loaded`` once."""
+        if self._notified:
+            return
+        self._notified = True
+        self._loaded = True
+        callback = self._on_loaded
+        if callback is None:
+            return
+        try:
+            callback(self)
+        except Exception as exc:
+            log.debug("LocalFileMetaReader on_loaded failed: %s", exc)
 
     def _timestampToOffset(self, unixTs):
         if self._videoStart is not None:
@@ -256,6 +335,7 @@ class LocalFileMetaReader:
                     "csv=p=0",
                 ],
                 t="probe",
+                stdin=subprocess.DEVNULL,
             )
             out, _ = proc.communicate(timeout=15)
             if out:
@@ -325,6 +405,7 @@ class LocalFileMetaReader:
         if getattr(self, "_disposed", False):
             return
         self._disposed = True
+        self._on_loaded = None
         self._stop = True
         if self._loadThread is not None:
             self._loadThread.join(timeout=1.0)

@@ -36,29 +36,43 @@ def probe_json(path, timeout_sec=None):
         args.extend(["-analyzeduration", "10000000", "-probesize", "10000000"])
     args.append(path)
 
-    proc = _spawn(args, t="probe")
+    proc = None
     try:
-        communicate_timeout = (
-            timeout_sec if timeout_sec else (3.0 if is_stream else None)
-        )
+        proc = _spawn(args, t="probe", stdin=subprocess.DEVNULL)
+        # Local files must not wait forever: a stuck ffprobe leaves the
+        # manager row on "Indexing telemetry".
+        if timeout_sec is not None:
+            communicate_timeout = timeout_sec
+        elif is_stream:
+            communicate_timeout = 3.0
+        else:
+            communicate_timeout = 45.0
         out, _ = proc.communicate(timeout=communicate_timeout)
     except subprocess.TimeoutExpired:
         try:
-            proc.kill()
-            proc.wait(timeout=2)
+            if proc is not None:
+                proc.kill()
+                proc.wait(timeout=2)
         except Exception as kill_exc:
             log.debug("ffprobe kill after timeout failed: %s", kill_exc)
         return None
     except Exception as exc:
         try:
-            proc.kill()
-            proc.wait(timeout=2)
+            if proc is not None:
+                proc.kill()
+                proc.wait(timeout=2)
         except Exception as kill_exc:
             log.debug("ffprobe kill after error failed: %s", kill_exc)
         log.debug("ffprobe failed for %s: %s", path, exc)
         return None
-    if proc.returncode != 0 or not out:
+    if not out:
+        log.debug("ffprobe exit %s with empty stdout for %s", proc.returncode, path)
         return None
+    # MISB transport streams often print valid JSON and then exit non-zero.
+    if proc.returncode != 0:
+        log.debug(
+            "ffprobe exit %s for %s; using JSON stdout", proc.returncode, path
+        )
     return out
 
 

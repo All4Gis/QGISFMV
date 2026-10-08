@@ -10,22 +10,37 @@
     <height>620</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="minimumSize">
    <size>
-    <width>640</width>
-    <height>520</height>
+    <width>520</width>
+    <height>400</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>FMV Settings</string>
   </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
   <property name="windowIcon">
    <iconset>
     <normaloff>../images/misc/custom-options.png</normaloff>../images/misc/custom-options.png</iconset>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,0">
    <item>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>1</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -348,9 +363,15 @@
       <attribute name="title">
        <string>Dependencies</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayoutDeps">
+      <layout class="QVBoxLayout" name="verticalLayoutDeps" stretch="1,0,0">
        <item>
         <widget class="QLabel" name="lbl_status">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>1</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -773,6 +794,12 @@
        </property>
        <item>
         <widget class="QScrollArea" name="scrollAiDetection">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>1</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -1780,7 +1807,7 @@
       <attribute name="title">
        <string>Platform</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_platform">
+      <layout class="QVBoxLayout" name="verticalLayout_platform" stretch="0,0,1,0">
        <item>
         <widget class="QLabel" name="lbl_platform_icon">
          <property name="font">
@@ -1806,10 +1833,16 @@
        </item>
        <item>
         <widget class="QListWidget" name="lw_platform_icons">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>1</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>220</height>
+           <height>120</height>
           </size>
          </property>
          <property name="iconSize">

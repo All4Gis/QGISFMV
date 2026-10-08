@@ -13,11 +13,20 @@
   <property name="minimumSize">
    <size>
     <width>420</width>
-    <height>480</height>
+    <height>560</height>
    </size>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Military Symbols</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
   </property>
   <property name="modal">
    <bool>false</bool>
@@ -29,6 +38,9 @@
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,1,0,0,0">
    <property name="spacing">
     <number>8</number>
+   </property>
+   <property name="sizeConstraint">
+    <enum>QLayout::SetMinimumSize</enum>
    </property>
    <property name="leftMargin">
     <number>12</number>
@@ -287,7 +299,7 @@ QPushButton:disabled { background-color: #b0bec5; color: #eceff1; }</string>
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>180</height>
+           <height>72</height>
           </size>
          </property>
          <property name="iconSize">
@@ -322,6 +334,18 @@ QPushButton:disabled { background-color: #b0bec5; color: #eceff1; }</string>
      </property>
      <item>
       <widget class="QPushButton" name="btn_removeLast">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>32</height>
+        </size>
+       </property>
        <property name="text">
         <string>Remove last</string>
        </property>
@@ -329,6 +353,18 @@ QPushButton:disabled { background-color: #b0bec5; color: #eceff1; }</string>
      </item>
      <item>
       <widget class="QPushButton" name="btn_removeAll">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>32</height>
+        </size>
+       </property>
        <property name="text">
         <string>Remove all</string>
        </property>

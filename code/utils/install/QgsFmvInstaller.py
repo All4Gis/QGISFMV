@@ -14,6 +14,7 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from qgis.core import Qgis as QGis
+from qgis.core import QgsApplication, QgsTask
 from qgis.PyQt.QtCore import QCoreApplication, Qt
 from qgis.PyQt.QtWidgets import QInputDialog, QLineEdit, QMessageBox, QProgressBar
 from qgis.utils import iface
@@ -26,6 +27,14 @@ from QGIS_FMV.utils.settings.QgsFmvSettings import (
     save,
     set_value,
 )
+from QGIS_FMV.utils.settings.python_deps_bootstrap import (
+    DEFAULT_PYMISB_SPEC,
+    fmvPackagesDir,
+    parseRequirementSpecs,
+    specsNeedingInstall,
+    stampMatches,
+    writeInstallStamp,
+)
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 # ---------------------------------------------------------------------------
@@ -36,10 +45,15 @@ CREATE_NO_WINDOW = 0x08000000
 FFMPEG_WIN_URL = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 GET_PIP_URL = "https://bootstrap.pypa.io/get-pip.py"
 USER_AGENT = "QGIS-FMV/1.17"
+PIP_LIGHT_TIMEOUT = 120
+PIP_FULL_TIMEOUT = 300
+_bg_tasks: list = []
+_ffmpeg_install_started = False
 
 WINDOWS = platform.system() == "Windows"
 DARWIN = platform.system() == "Darwin"
 LINUX = platform.system() == "Linux"
+
 
 def _Tr(text):
     return QCoreApplication.translate("QgsFmvInstaller", text)
@@ -108,6 +122,7 @@ def _windows_qgis_python_candidates(bin_dir: str):
     # OSGeo4W layouts often keep python one level up from bin/apps.
     parent = os.path.dirname(bin_dir)
     for rel in (
+        ("apps", "Python313", "python.exe"),
         ("apps", "Python312", "python.exe"),
         ("apps", "Python311", "python.exe"),
         ("apps", "Python39", "python.exe"),
@@ -126,11 +141,46 @@ def _is_usable_python(path: str) -> bool:
     return os.access(path, os.X_OK)
 
 
+def _python_from_embedded() -> str:
+    """Python next to the interpreter that QGIS actually embeds.
+
+    When the plugin runs inside QGIS, ``sys.executable`` is often ``qgis-bin``
+    / ``qgis.exe``. ``sys.prefix`` / ``PYTHONHOME`` still point at the real
+    Python (e.g. ``…/apps/Python312/python.exe`` on Windows).
+    """
+    names = (
+        ("python.exe", "python3.exe", "python3", "python")
+        if WINDOWS
+        else ("python3", "python")
+    )
+    prefixes = (
+        sys.prefix,
+        getattr(sys, "base_prefix", "") or "",
+        os.environ.get("PYTHONHOME", "") or "",
+    )
+    for prefix in prefixes:
+        if not prefix:
+            continue
+        for name in names:
+            for candidate in (
+                os.path.join(prefix, name),
+                os.path.join(prefix, "bin", name),
+                os.path.join(prefix, "Scripts", name),
+            ):
+                if _is_usable_python(candidate):
+                    return candidate
+    return ""
+
+
 def _python_executable() -> str:
     """Return a real Python interpreter (never qgis-bin, which relaunches QGIS)."""
     env_py = os.environ.get("QGIS_PY", "").strip()
     if env_py and _is_usable_python(env_py):
         return env_py
+
+    embedded = _python_from_embedded()
+    if embedded:
+        return embedded
 
     if DARWIN:
         for candidate in _mac_qgis_python_candidates():
@@ -170,7 +220,7 @@ def _python_executable() -> str:
 
 
 def _fmv_packages_dir() -> str:
-    return os.path.join(os.path.expanduser("~"), ".qgis-fmv-packages")
+    return fmvPackagesDir()
 
 
 def _subprocess_kwargs(env=None, input_bytes=None):
@@ -203,7 +253,9 @@ def _pip_env(extra_pythonpath: str | None = None) -> dict:
     return env
 
 
-def _run_cmd(cmd: Sequence[str], env=None, input_bytes=None) -> tuple[bool, str]:
+def _run_cmd(
+    cmd: Sequence[str], env=None, input_bytes=None, timeout: int | None = None
+) -> tuple[bool, str]:
     """Run a command; return (ok, message). Prefer stdout on success, stderr on failure.
 
     ``cmd`` must be an argv list (never a shell string). Callers only pass
@@ -218,8 +270,11 @@ def _run_cmd(cmd: Sequence[str], env=None, input_bytes=None) -> tuple[bool, str]
     try:
         # Trusted argv list + shell=False; B603 is a review hint, not injection.
         proc = subprocess.run(  # nosec B603
-            argv, **_subprocess_kwargs(env, input_bytes)
+            argv, timeout=timeout, **_subprocess_kwargs(env, input_bytes)
         )
+    except subprocess.TimeoutExpired:
+        secs = timeout if timeout is not None else 0
+        return False, f"Timed out after {secs} seconds"
     except OSError as exc:
         return False, str(exc)
 
@@ -237,12 +292,16 @@ def _run_cmd(cmd: Sequence[str], env=None, input_bytes=None) -> tuple[bool, str]
     return proc.returncode == 0, out
 
 
-def _run_pip_env(args: Sequence[str], target: str | None = None) -> tuple[bool, str]:
+def _run_pip_env(
+    args: Sequence[str],
+    target: str | None = None,
+    timeout: int | None = None,
+) -> tuple[bool, str]:
     """Run ``python -m pip …`` with PYTHONNOUSERSITE; optional ``--target``."""
     cmd = [_python_executable(), "-m", "pip", *args]
     if target and "--target" not in cmd:
         cmd.extend(["--target", target])
-    return _run_cmd(cmd, env=_pip_env())
+    return _run_cmd(cmd, env=_pip_env(), timeout=timeout)
 
 
 def _run_pip(args: Sequence[str]) -> tuple[bool, str]:
@@ -256,6 +315,9 @@ def _bootstrap_python_path() -> None:
         )
 
         bootstrapPythonDepsPath()
+        import importlib
+
+        importlib.invalidate_caches()
     except Exception as exc:
         log.debug("Python deps bootstrap failed: %s", exc)
 
@@ -368,14 +430,16 @@ def _download(url: str, dest: str, with_progress: bool = True) -> None:
 
 def _ensure_pip() -> bool:
     """Make ``python -m pip`` available (ensurepip or get-pip into packages dir)."""
-    ok, _ = _run_pip(["--version"])
+    ok, _ = _run_pip_env(["--version"], timeout=60)
     if ok:
         return True
 
     python = _python_executable()
     env = _pip_env()
-    ok, _ = _run_cmd([python, "-m", "ensurepip", "--upgrade"], env=env)
-    if ok and _run_pip(["--version"])[0]:
+    ok, _ = _run_cmd(
+        [python, "-m", "ensurepip", "--upgrade"], env=env, timeout=60
+    )
+    if ok and _run_pip_env(["--version"], timeout=60)[0]:
         return True
 
     target = _fmv_packages_dir()
@@ -386,6 +450,7 @@ def _ensure_pip() -> bool:
         ok, _ = _run_cmd(
             [python, get_pip, "--target", target, "--no-warn-script-location"],
             env=env,
+            timeout=120,
         )
     except Exception as exc:
         log.debug("get-pip download/install failed: %s", exc)
@@ -399,7 +464,9 @@ def _ensure_pip() -> bool:
     if not ok:
         return False
     return _run_cmd(
-        [python, "-m", "pip", "--version"], env=_pip_env(extra_pythonpath=target)
+        [python, "-m", "pip", "--version"],
+        env=_pip_env(extra_pythonpath=target),
+        timeout=60,
     )[0]
 
 
@@ -412,7 +479,11 @@ def _install_opencv_package() -> tuple[bool, str]:
     """Install opencv-contrib-python into ~/.qgis-fmv-packages (no sudo)."""
     target = _fmv_packages_dir()
     os.makedirs(target, exist_ok=True)
-    return _run_pip_env(["install", "opencv-contrib-python==4.13.0.92"], target=target)
+    return _run_pip_env(
+        ["install", "--upgrade", "--no-warn-script-location", "opencv-contrib-python==4.13.0.92"],
+        target=target,
+        timeout=PIP_FULL_TIMEOUT,
+    )
 
 
 def _clean_mac_user_site_packages() -> None:
@@ -456,14 +527,81 @@ def check_python_deps() -> tuple[bool, str]:
     return pymisb_ok, ", ".join(details)
 
 
-def install_pymisb() -> bool:
-    """Install pymisb from PyPI into the FMV packages dir."""
+def _pymisb_spec() -> str:
+    req = _requirements_path()
+    if req:
+        for spec in parseRequirementSpecs(req, excludeHeavy=True):
+            if spec.lower().startswith("pymisb"):
+                return spec
+    return DEFAULT_PYMISB_SPEC
+
+
+def _requirement_specs(exclude_heavy: bool) -> list[str]:
+    req = _requirements_path()
+    if req:
+        return parseRequirementSpecs(req, excludeHeavy=exclude_heavy)
+    return [_pymisb_spec()] if exclude_heavy else []
+
+
+def _install_specs_silent(
+    specs: Sequence[str], timeout: int
+) -> tuple[bool, str]:
+    """pip install specs into ~/.qgis-fmv-packages (no Qt widgets)."""
+    if not specs:
+        return True, ""
     target = _fmv_packages_dir()
     os.makedirs(target, exist_ok=True)
-    ok, msg = _run_pip_env(["install", "pymisb==2.0.0"], target=target)
+    if not _ensure_pip():
+        return False, "pip is not available"
+    log.info("pip install into %s: %s", target, ", ".join(specs))
+    ok, msg = _run_pip_env(
+        [
+            "install",
+            "--upgrade",
+            "--disable-pip-version-check",
+            "--no-warn-script-location",
+            *specs,
+        ],
+        target=target,
+        timeout=timeout,
+    )
+    _remove_numpy_from_target(target)
+    _bootstrap_python_path()
+    return ok, msg
+
+
+def ensure_pymisb_blocking() -> tuple[bool, str]:
+    """Install light pins (pymisb, defusedxml, mgrs) on the GUI thread.
+
+    Called from ``classFactory``. Does not install OpenCV/matplotlib.
+    """
+    _bootstrap_python_path()
+    needed = specsNeedingInstall(_requirement_specs(exclude_heavy=True))
+    if not needed:
+        return True, ""
+
+    log.info("Installing required FMV packages: %s", ", ".join(needed))
+    ok, msg = _install_specs_silent(needed, PIP_LIGHT_TIMEOUT)
+    if not ok:
+        return False, msg or "pip install failed"
+    if not _try_import("pymisb")[0]:
+        return False, "pymisb is still not importable after pip"
+    return True, ""
+
+
+def ensure_required_packages() -> bool:
+    """Back-compat: blocking pymisb/light install. True if pymisb imports."""
+    ok, _msg_text = ensure_pymisb_blocking()
+    return ok or _try_import("pymisb")[0]
+
+
+def install_pymisb() -> bool:
+    """Install pymisb from PyPI into the FMV packages dir."""
+    ok, msg = _install_specs_silent([_pymisb_spec()], PIP_LIGHT_TIMEOUT)
     if not ok:
         _msg(_Tr("pymisb install failed"), msg, QGis.MessageLevel.Critical)
-    return ok
+        return False
+    return _try_import("pymisb")[0]
 
 
 def _remove_numpy_from_target(target: str) -> None:
@@ -519,14 +657,21 @@ def install_pip_requirements() -> bool:
         )
         return False
 
-    _run_pip_env(["install", "--upgrade", "pip", "setuptools", "wheel"], target=target)
-    ok, err = _run_pip_env(["install", "-r", req], target=target)
+    _run_pip_env(
+        ["install", "--upgrade", "pip", "setuptools", "wheel"],
+        target=target,
+        timeout=PIP_LIGHT_TIMEOUT,
+    )
+    ok, err = _run_pip_env(
+        ["install", "-r", req], target=target, timeout=PIP_FULL_TIMEOUT
+    )
     if not ok:
         _msg(
             _Tr("pip install failed"),
             err
             or _Tr(
-                "Try from the repo (no sudo):\n"
+                "Timed out, proxy/SSL error, or no network.\n"
+                "Open FMV Settings to retry, or from the repo:\n"
                 "  bash scripts/install_plugin_requirements.sh"
             ),
             QGis.MessageLevel.Critical,
@@ -556,6 +701,7 @@ def install_pip_requirements() -> bool:
     else:
         _msg(_Tr("Dependencies installed"), target, QGis.MessageLevel.Success)
 
+    writeInstallStamp(_requirement_specs(exclude_heavy=False))
     return True
 
 
@@ -756,71 +902,224 @@ def install_ffmpeg() -> bool:
     return install_ffmpeg_linux()
 
 
+def _auto_install_ffmpeg() -> bool:
+    """Install FFmpeg with no prompts (Windows zip / macOS brew / Linux PATH)."""
+    global _ffmpeg_install_started
+    if _ffmpeg_install_started:
+        return check_ffmpeg()[0]
+    _ffmpeg_install_started = True
+    found = shutil.which("ffmpeg") or shutil.which("ffmpeg.exe")
+    if found:
+        _save_ffmpeg_dir(os.path.dirname(os.path.realpath(found)))
+        return True
+    if WINDOWS:
+        return install_ffmpeg_windows()
+    if DARWIN:
+        if shutil.which("brew"):
+            return install_ffmpeg_mac()
+        return False
+    return False
+
+
+# ---------------------------------------------------------------------------
+# Background remaining deps (OpenCV / matplotlib / FFmpeg)
+# ---------------------------------------------------------------------------
+
+
+def _bg_install_task(task):
+    """QgsTask worker: remaining requirements.txt packages (no Qt widgets)."""
+    _bootstrap_python_path()
+    specs = _requirement_specs(exclude_heavy=False)
+    if stampMatches(specs):
+        return {"ok": True, "installed": [], "task": "FMV deps"}
+    needed = specsNeedingInstall(specs)
+    if not needed:
+        writeInstallStamp(specs)
+        return {"ok": True, "installed": [], "task": "FMV deps"}
+    if task.isCanceled():
+        return None
+    task.setProgress(15)
+    ok, err = _install_specs_silent(needed, PIP_FULL_TIMEOUT)
+    if task.isCanceled():
+        return None
+    if not ok:
+        return {"ok": False, "error": err or "pip install failed", "task": "FMV deps"}
+    writeInstallStamp(specs)
+    task.setProgress(100)
+    return {"ok": True, "installed": list(needed), "task": "FMV deps"}
+
+
+def _bg_install_finished(e, result=None):
+    """Main-thread slot after background pip; then auto-install FFmpeg."""
+    if e is not None:
+        _msg(
+            _Tr("FMV package install failed"),
+            str(e),
+            QGis.MessageLevel.Critical,
+            duration=12,
+        )
+    elif result is None:
+        return
+    elif not result.get("ok"):
+        _msg(
+            _Tr("FMV package install failed"),
+            result.get("error")
+            or _Tr(
+                "Timed out, proxy/SSL error, or no network. Retry from FMV Settings."
+            ),
+            QGis.MessageLevel.Critical,
+            duration=12,
+        )
+    elif result.get("installed"):
+        _msg(
+            _Tr("FMV Python packages installed"),
+            ", ".join(result["installed"]),
+            QGis.MessageLevel.Success,
+            duration=8,
+        )
+
+    repair_ffmpeg_setting()
+    ff_ok, _ = check_ffmpeg()
+    if not ff_ok:
+        _auto_install_ffmpeg()
+        repair_ffmpeg_setting()
+        ff_ok, _ = check_ffmpeg()
+    if not ff_ok:
+        _msg(
+            _Tr("FFmpeg required"),
+            _Tr(
+                "Open FMV Settings (toolbar) and set the FFmpeg folder, "
+                "or install FFmpeg manually."
+            ),
+            QGis.MessageLevel.Warning,
+            duration=8,
+        )
+
+
+def start_background_dependency_install(owner=None):
+    """Queue remaining pip packages + FFmpeg after the plugin UI is up."""
+    _bootstrap_python_path()
+    specs = _requirement_specs(exclude_heavy=False)
+    needed = [] if stampMatches(specs) else specsNeedingInstall(specs)
+    ff_ok, _ = check_ffmpeg()
+    if not needed:
+        if not ff_ok:
+            _auto_install_ffmpeg()
+        return None
+
+    task = QgsTask.fromFunction(
+        QCoreApplication.translate("QgsFmvInstaller", "FMV dependency install"),
+        _bg_install_task,
+        on_finished=_bg_install_finished,
+        flags=QgsTask.Flag.CanCancel,
+    )
+    _bg_tasks.append(task)
+    if owner is not None:
+        tasks = getattr(owner, "_background_tasks", None)
+        if isinstance(tasks, list):
+            tasks.append(task)
+    QgsApplication.taskManager().addTask(task)
+    if needed:
+        try:
+            _msg(
+                _Tr("Installing FMV Python packages…"),
+                ", ".join(needed),
+                QGis.MessageLevel.Info,
+                duration=8,
+            )
+        except Exception as exc:
+            log.debug("Could not show install progress: %s", exc)
+    return task
+
+
 # ---------------------------------------------------------------------------
 # Orchestration
 # ---------------------------------------------------------------------------
 
 
 def run_dependency_setup(interactive: bool = True) -> bool:
-    """Check and optionally install Python + FFmpeg dependencies."""
-    if not interactive:
-        pymisb_ok, _ = _try_import("pymisb")
-        if not pymisb_ok:
-            return False
-        return check_python_deps()[0] and check_ffmpeg()[0]
+    """Check and optionally install Python + FFmpeg dependencies.
+
+    ``interactive=False`` only reports / fills FFmpeg if still missing.
+    Python packages are installed from ``classFactory`` (pymisb) and a
+    background QgsTask (the rest).
+    """
+    _bootstrap_python_path()
 
     pymisb_ok, _ = _try_import("pymisb")
     if not pymisb_ok:
-        if not _prompt_yes(
-            "QGIS FMV",
-            _Tr("pymisb is not installed."),
-            _Tr("Install pymisb from PyPI?"),
-        ):
-            return False
-        if not install_pymisb():
-            return False
+        if interactive:
+            if not _prompt_yes(
+                "QGIS FMV",
+                _Tr("pymisb is not installed."),
+                _Tr("Install pymisb from PyPI?"),
+            ):
+                return False
+            if not install_pymisb():
+                return False
+        else:
+            ok, err = ensure_pymisb_blocking()
+            if not ok:
+                _msg(
+                    _Tr("pymisb install failed"),
+                    err
+                    or _Tr(
+                        "Timed out, proxy/SSL error, or no network. "
+                        "Retry from FMV Settings."
+                    ),
+                    QGis.MessageLevel.Critical,
+                    duration=12,
+                )
+                return False
 
     py_ok, _ = check_python_deps()
     if not py_ok:
-        if DARWIN:
-            _clean_mac_user_site_packages()
-        if _prompt_yes(
-            "QGIS FMV",
-            _Tr("Missing required Python package (pymisb)."),
-            _Tr(
-                "Install code/requirements.txt into {} now?\n"
-                "(No admin rights — does not modify QGIS.app)\n"
-                "OpenCV is recommended but optional."
-            ).format(_fmv_packages_dir()),
-        ):
-            if not install_pip_requirements():
-                return False
-        else:
-            _msg(
+        if interactive:
+            if DARWIN:
+                _clean_mac_user_site_packages()
+            if _prompt_yes(
+                "QGIS FMV",
                 _Tr("Missing required Python package (pymisb)."),
                 _Tr(
-                    "From the repo (no sudo):\n"
-                    "  ./install_dev.sh   # macOS / Linux\n"
-                    "  install_dev.bat    # Windows\n"
-                    "or:\n"
-                    "  bash scripts/install_plugin_requirements.sh"
-                ),
-                QGis.MessageLevel.Warning,
-                duration=12,
-            )
-        py_ok, _ = check_python_deps()
-        if not py_ok:
+                    "Install code/requirements.txt into {} now?\n"
+                    "(No admin rights — does not modify QGIS.app)\n"
+                    "OpenCV is recommended but optional."
+                ).format(_fmv_packages_dir()),
+            ):
+                if not install_pip_requirements():
+                    return False
+            else:
+                _msg(
+                    _Tr("Missing required Python package (pymisb)."),
+                    _Tr(
+                        "From the repo (no sudo):\n"
+                        "  ./install_dev.sh   # macOS / Linux\n"
+                        "  install_dev.bat    # Windows\n"
+                        "or:\n"
+                        "  bash scripts/install_plugin_requirements.sh"
+                    ),
+                    QGis.MessageLevel.Warning,
+                    duration=12,
+                )
+            py_ok, _ = check_python_deps()
+            if not py_ok:
+                return False
+        else:
             return False
 
     repair_ffmpeg_setting()
     ff_ok, ff_msg = check_ffmpeg()
     if not ff_ok:
-        if _prompt_yes(
-            "QGIS FMV",
-            _Tr("FFmpeg was not found."),
-            ff_msg + "\n" + _Tr("Try automatic setup?"),
-        ):
-            install_ffmpeg()
+        if interactive:
+            if _prompt_yes(
+                "QGIS FMV",
+                _Tr("FFmpeg was not found."),
+                ff_msg + "\n" + _Tr("Try automatic setup?"),
+            ):
+                install_ffmpeg()
+                repair_ffmpeg_setting()
+        else:
+            _auto_install_ffmpeg()
             repair_ffmpeg_setting()
         ff_ok, _ = check_ffmpeg()
 
