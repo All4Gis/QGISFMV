@@ -237,14 +237,19 @@ def _klvIndexFromProbe(videoPath):
             return None
         info = json.loads(data.decode("utf-8", errors="replace"))
         data_idx = 0
+        untagged = []
         for stream in info.get("streams") or []:
             if stream.get("codec_type") != "data":
                 continue
             codec = (stream.get("codec_name") or "").lower()
             tag = (stream.get("codec_tag_string") or "").upper()
-            if codec == "klv" or tag == "KLVA":
+            if codec == "klv" or "klv" in tag:
                 return data_idx
+            untagged.append(data_idx)
             data_idx += 1
+        # One data stream and no klv label: that stream is the telemetry.
+        if len(untagged) == 1:
+            return untagged[0]
     except Exception as e:
         from QGIS_FMV.utils.logging import log
 
@@ -273,36 +278,22 @@ def getKlvStreamIndex(videoPath, quiet=False):
         _klv_index_cache[videoPath] = probed
         return probed
 
-    for i in range(6):
-        for cmd in (
-            ["-i", videoPath, "-t", "1", "-map", "0:d:" + str(i), "-f", "data", "-"],
-            [
-                "-i",
-                videoPath,
-                "-ss",
-                "00:00:00",
-                "-to",
-                "00:00:01",
-                "-map",
-                "0:d:" + str(i),
-                "-f",
-                "data",
-                "-",
-            ],
-        ):
-            p = _spawn(cmd)
-            stdout_data, _ = p.communicate(timeout=15)
-            if not _klvDataLooksValid(stdout_data):
-                continue
-            if len(_klv_index_cache) >= _KLV_CACHE_MAX:
-                _klv_index_cache.clear()
-            _klv_index_cache[videoPath] = i
-            return i
+    # ``-t`` on a data stream often yields no bytes, so a duration cut
+    # cannot tell a KLV track from an empty one. Read until the first packet.
+    from QGIS_FMV.utils.media.QgsFmvKlvReader import peek_first_klv_packet
 
-        if not quiet:
-            qgsu.showUserAndLogMessage(
-                "", "skipping stream " + str(i) + " not a klv stream.", onlyLog=True
-            )
+    for i in range(6):
+        packet = peek_first_klv_packet(videoPath, i, timeout=12)
+        if not _klvDataLooksValid(packet):
+            if not quiet:
+                qgsu.showUserAndLogMessage(
+                    "", "skipping stream " + str(i) + " not a klv stream.", onlyLog=True
+                )
+            continue
+        if len(_klv_index_cache) >= _KLV_CACHE_MAX:
+            _klv_index_cache.clear()
+        _klv_index_cache[videoPath] = i
+        return i
 
     if not quiet:
         qgsu.showUserAndLogMessage(
@@ -371,10 +362,15 @@ def _syncVideoImageSizeFromParent(parent):
         SetImageSize(img.width(), img.height())
 
 
-def _spawn(cmds, t="ffmpeg"):
-    """Spawn ffmpeg/ffprobe (delegates to :mod:`QgsFfmpegRunner`)."""
+def _spawn(cmds, t="ffmpeg", **kwargs):
+    """Spawn ffmpeg/ffprobe (delegates to :mod:`QgsFfmpegRunner`).
+
+    Extra keywords (``stdin``, ``stdout``, ``stderr``, ``bufsize``) are
+    forwarded. Callers that pass them must not be dropped: a TypeError here
+    makes every probe look like FFmpeg failed to load.
+    """
     global ffmpeg_path, ffprobe_path
-    proc = _ffmpeg_runner.spawn(cmds, t=t)
+    proc = _ffmpeg_runner.spawn(cmds, t=t, **kwargs)
     ffmpeg_path, ffprobe_path = _ffmpeg_runner.ensure_paths()
     return proc
 
