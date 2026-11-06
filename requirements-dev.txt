@@ -7,7 +7,7 @@ isort>=9.0.2
 flake8>=7.4.1
 
 # Tests
-pytest>=8.3.0
+pytest>=9.2.0
 numpy>=2.5.4
 pymisb==2.0.2
 # Debugging / hot reload (optional local workflow)
