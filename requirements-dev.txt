@@ -12,7 +12,7 @@ numpy>=2.5.4
 pymisb==2.0.2
 # Debugging / hot reload (optional local workflow)
 debugpy>=1.8.22
-watchdog>=6.0.0
+watchdog>=7.0.0
 defusedxml==0.7.1
 
 # Build tools — only needed when running build.py outside QGIS
