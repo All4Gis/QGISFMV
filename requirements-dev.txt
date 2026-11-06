@@ -17,5 +17,5 @@ defusedxml==0.7.1
 
 # Build tools — only needed when running build.py outside QGIS
 # (QGIS 4 bundles PyQt6 internally; these are for standalone dev builds)
-PyQt6>=6.5.0
+PyQt6>=6.12.0
 PySide6>=6.12.0  # optional fallback for rcc resource compilation
