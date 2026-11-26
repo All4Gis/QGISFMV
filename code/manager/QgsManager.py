@@ -30,7 +30,7 @@ from QGIS_FMV.utils.core.QgsFmvUtils import (
 from QGIS_FMV.utils.logging import log
 from QGIS_FMV.utils.media.QgsFmvMultimedia import createPlaylist
 from QGIS_FMV.utils.media.QgsFmvStreamUtils import isStreamUri
-from QGIS_FMV.utils.ui.QgsFmvResources import ICON_DELETE
+from QGIS_FMV.utils.ui.QgsFmvResources import ICON_DELETE, ICON_INFORMATION
 from QGIS_FMV.utils.ui.QgsUtils import QgsUtils as qgsu
 
 load()
@@ -94,6 +94,15 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             self,
         )
         self.removeAct.triggered.connect(self.remove)
+
+        self.validateAct = QAction(
+            QIcon(ICON_INFORMATION),
+            QCoreApplication.translate(
+                "ManagerDock", "Validate metadata (misb-check)"
+            ),
+            self,
+        )
+        self.validateAct.triggered.connect(self.validateMetadata)
 
         # Per-column widths are not expressible in .ui for QTableWidget.
         self.VManager.setColumnWidth(1, 250)
@@ -183,6 +192,7 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
             return
         menu = QMenu()
         menu.addAction(self.removeAct)
+        menu.addAction(self.validateAct)
         menu.exec(self.VManager.mapToGlobal(position))
 
     def remove(self):
@@ -218,6 +228,69 @@ class FmvManager(QDockWidget, Ui_ManagerWindow):
 
             # remove from playlist
             self.playlist.removeMedia(idx)
+
+    def validateMetadata(self):
+        """Validate the selected row's KLV metadata with ``misb-check``.
+
+        Optional, external checker (https://github.com/Mattbusel/misb): when
+        the binary is not installed the user gets install hints instead of an
+        error. Runs synchronously — misb-check scans even multi-GB files in
+        seconds, and a wait cursor marks the wait.
+        """
+        from qgis.PyQt.QtWidgets import QApplication, QMessageBox
+        from QGIS_FMV.utils.media.QgsFmvMisbCheck import (
+            MisbCheckError,
+            MisbCheckUnavailable,
+            format_report,
+            run_misb_check,
+        )
+
+        title = QCoreApplication.translate("ManagerDock", "Validate metadata")
+
+        row = self.VManager.currentRow()
+        item = self.VManager.item(row, 3) if row >= 0 else None
+        if item is None:
+            return
+        filename = item.text()
+
+        if isStreamUri(filename):
+            qgsu.showUserAndLogMessage(
+                title,
+                QCoreApplication.translate(
+                    "ManagerDock",
+                    "misb-check validates local video or KLV files, not live streams.",
+                ),
+                level=QGis.MessageLevel.Info,
+            )
+            return
+
+        if not os.path.isfile(filename):
+            qgsu.showUserAndLogMessage(
+                title,
+                QCoreApplication.translate(
+                    "ManagerDock", "File does not exist: " + filename
+                ),
+                level=QGis.MessageLevel.Warning,
+            )
+            return
+
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        try:
+            report = run_misb_check(filename)
+        except MisbCheckUnavailable as exc:
+            QMessageBox.information(self, title, str(exc))
+            return
+        except MisbCheckError as exc:
+            QMessageBox.warning(self, title, str(exc))
+            return
+        finally:
+            QApplication.restoreOverrideCursor()
+
+        text = format_report(report)
+        if report.passed:
+            QMessageBox.information(self, title, text)
+        else:
+            QMessageBox.warning(self, title, text)
 
     def closeFMV(self):
         """Close FMV"""
