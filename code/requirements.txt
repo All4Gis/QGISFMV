@@ -3,5 +3,5 @@ pymisb==2.0.2
 matplotlib==3.11.2
 defusedxml==0.7.1
 # contrib includes the base OpenCV modules plus legacy trackers (MOSSE, etc.)
-opencv-contrib-python==4.13.0.92
+opencv-contrib-python==5.1.0.95
 mgrs==1.7.0
